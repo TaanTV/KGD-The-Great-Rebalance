@@ -1,0 +1,364 @@
+﻿tradition_mobile_guards = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = mena
+		4 = forest.dds
+	}
+
+	#Replaces Stand and Fight
+	is_shown = {
+		has_cultural_pillar = heritage_israelite
+		NOT = { has_cultural_tradition = tradition_stand_and_fight }
+	}
+	can_pick = {
+	}
+	
+	parameters = {
+		unlock_maa_shomer = yes
+	}
+	character_modifier = {
+		maa_toughness_mult = 0.1
+		heavy_infantry_toughness_mult = 0.15	#prev 0.2
+		#heavy_infantry_maintenance_mult = 0.1
+		#heavy_cavalry_toughness_mult = 0.2
+		#heavy_cavalry_maintenance_mult = 0.1
+		#pikemen_toughness_mult = 0.2
+		#pikemen_maintenance_mult = 0.1
+		hard_casualty_modifier = 0.2		#prev 0.25
+		#ADDED
+		levy_toughness = 2
+		skirmishers_toughness_mult = 0.15		#prev 0.2
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOT = {
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = skirmishers
+								value >= 800
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_head_skirmishers_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_mobile_guards }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOR = {
+					culture_has_heavy_infantry_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+					culture_has_pikemen_maa = yes
+				}
+				OR = {
+					culture_has_skirmisher_maa = yes
+					culture_has_archer_maa = yes
+					culture_has_light_cavalry_maa = yes
+					culture_has_archer_cavalry_maa = yes
+					scope:character = {
+						mpo_can_recruit_nomad_maa_trigger = yes
+					}
+				}
+			}
+			multiply = 0.25
+		}
+	}
+}
+
+tradition_forest_wardens = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = western
+		4 = forest.dds
+	}
+
+	#Replaces Forest Folk
+	is_shown = {
+		OR = {
+			has_cultural_pillar = heritage_balto_finnic
+			has_cultural_pillar = heritage_volga_finnic
+			has_cultural_pillar = heritage_ugro_permian
+			has_cultural_pillar = heritage_baltic
+		}
+		NOT = { has_cultural_tradition = tradition_forest_folk }
+	}
+	can_pick = {
+		OR = {
+			has_cultural_pillar = heritage_balto_finnic
+			has_cultural_pillar = heritage_volga_finnic
+			has_cultural_pillar = heritage_ugro_permian
+			has_cultural_pillar = heritage_baltic
+		}
+		custom_description = {
+			text = culture_in_forest_desc
+			any_culture_county = {
+				county_has_province_with_terrain = {
+					terrain = forest
+					terrain = taiga
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		unlock_maa_metsanvartija = yes
+		logging_camps_building_bonuses = yes
+		can_recruit_forest_specialist = yes
+		forest_fighter_trait_more_common = yes
+		forest_hunt_success_chance = yes
+		#watermills_forestries_unlock = yes
+	}
+	character_modifier = {
+		forest_travel_danger = forest_high_danger_reduction
+		taiga_travel_danger = taiga_high_danger_reduction
+	}
+	county_modifier = {
+		forest_development_growth_factor = 0.15
+		taiga_development_growth_factor = 0.2		#prev 0.15
+	}
+	province_modifier = {
+		forest_construction_gold_cost = -0.1
+		taiga_construction_gold_cost = -0.1
+		forest_holding_construction_gold_cost = -0.1
+		taiga_holding_construction_gold_cost = -0.1
+	}
+
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_stoic_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.3
+							county_has_province_with_terrain = {
+								terrain = forest
+								terrain = taiga
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = forest_percentage_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_forest_wardens }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							culture = scope:character.culture
+							county_has_province_with_terrain = {
+								terrain = forest
+								terrain = taiga
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+tradition_amharic_highlanders = { #Ethiopian Unique Tradition, replaces hill dwellers, Unlocks MAA innovation & Castration
+	category = realm
+
+	layers = {
+		0 = steward
+		1 = mena
+		4 = mountain.dds
+	}
+
+	is_shown = {
+		NOT = { has_cultural_tradition = tradition_hill_dwellers }
+		OR = {
+			this = culture:ethiopian
+			any_parent_culture_or_above = {
+				this = culture:ethiopian
+			}
+		}
+	}
+	can_pick = {
+		NOT = { has_cultural_tradition = tradition_hill_dwellers }
+		OR = {
+			this = culture:ethiopian
+			any_parent_culture_or_above = {
+				this = culture:ethiopian
+			}
+		}
+		custom_description = {
+			text = culture_in_hills_desc
+			any_culture_county = {
+				county_has_province_with_terrain = {
+					terrain = hills
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		unlock_sarawit_innovation = yes
+		can_castrate_prisoners = yes
+		hill_farms_building_bonuses = yes
+	}
+	county_modifier = {
+		hills_development_growth_factor = 0.25			#prev 0.2
+	}
+	province_modifier = {
+		hills_construction_gold_cost = -0.1
+		hills_holding_construction_gold_cost = -0.1
+	}
+	character_modifier = {
+		hills_advantage = 5
+		hills_travel_danger = hills_high_danger_reduction
+		mountains_travel_danger = mountains_low_danger_reduction
+		desert_mountains_travel_danger = desert_mountains_low_danger_reduction
+	}
+
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOT = {
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.3
+							county_has_province_with_terrain = {
+								terrain = hills
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = hill_percentage_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_amharic_highlanders }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							percent >= 0.2
+							culture = scope:character.culture
+							county_has_province_with_terrain = {
+								terrain = hills
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}

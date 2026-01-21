@@ -1,0 +1,12 @@
+﻿l_russian:
+ #restore_backwater_counties_decision: "Восстановить владение [ROOT.Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
+ #restore_backwater_counties_decision_desc: "За прошедшие века владение [ROOT.Char.GetPrimaryTitle.GetNameNoTier] растеряло былой блеск и представляет собой постыдную тень некогда яркой славы.\n\nНо мы неустанно трудились, возрождая земли предков. Слава владения [ROOT.Char.GetPrimaryTitle.GetNameNoTierNoTooltip] воссияет вновь!"
+ restore_backwater_counties_decision_tooltip: "Удаляет [Concept('county_modifier', 'модификатор')|E] «[GetModifier('backwater_county_modifier').GetNameWithTooltip]» из всех [Concept('counties', 'графств')|E] с [Concept('development', 'уровнем развития')|E] #V [ROOT.ScriptValue('backwater_development_value')|V0]#! и выше"
+ #restore_backwater_counties_decision_confirm: "Подтвердить"
+ greek_backwater_modifier_removal_tt: "Каждое [Concept('county', 'графство')|E] с модификатором «[GetModifier('backwater_county_modifier').GetNameWithTooltip]» и [Concept('development', 'развитием')|E] выше #HIGH [root_scope.MakeScope.ScriptValue('backwater_development_value')|V0]#! потеряет этот [Concept('county_modifier', 'модификатор')|E]"
+ #no_backwater_counties_meet_criteria_tt: "@alert_icon! #alert_trial Нет графств, отвечающих этому критерию!#!"
+ #greek_backwater_modifier_region: "Греция"
+ backwater_county_eligible_modifier_removal_tt: "[Concept( 'development', 'Развитие' )|E] хотя бы одного [Concept( 'county', 'графства' )|E] с [Concept( 'county_modifier', 'модификатором' )|E] «[GetModifier('backwater_county_modifier').GetName]» в этой части державы не ниже #V [root_scope.MakeScope.ScriptValue('backwater_development_value')|V0]#!"
+ #restored_greek_theme_modifier: "Возрожденная фема"
+ #restored_greek_theme_modifier_desc: "Этот персонаж вернул феме величие, какого она не видела даже в былые прекрасные времена.\n[Concept('governor_efficiency', 'Эффективность губернатора')|E]: @governor_efficiency!#P +10%#!"
+ 

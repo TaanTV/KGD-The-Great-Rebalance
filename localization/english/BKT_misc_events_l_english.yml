@@ -1,0 +1,10 @@
+﻿l_english:
+ bkt_misc_events.0001.opening: "[rejected_betrothal_owner.Custom2('AppropriateGreetingNegative', ROOT.Char)]"
+ bkt_misc_events.0001.desc: " You foolishly expect me to help you in your wars after what you've done? I know better."
+ bkt_misc_events.0001.desc.rivalry: " And I will show you."
+ bkt_misc_events.0001.a: "Oops..."
+ 
+ bkt_misc_events.0010.opening: "[rich_mercenary_leader.Custom2('AppropriateGreeting', ROOT.Char)]"
+ bkt_misc_events.0010.desc: " I am seeking a place to found a castle of my own. Grant me the lands of [barony_to_construct_at.GetNameNoTier] and I will serve you until my last breath!"
+ bkt_misc_events.0010.a: "Those lands are now yours"
+ bkt_misc_events.0010.b: "I have my own plans for [barony_to_construct_at.GetNameNoTier]"

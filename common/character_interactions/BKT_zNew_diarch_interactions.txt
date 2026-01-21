@@ -1,0 +1,882 @@
+﻿
+# Bolster Legitimacy
+# Yes, i know, the loc doesnt match.
+foster_legitimacy_diarch_interaction = {
+	icon = icon_scheme_foster_legitimacy
+	interface_priority = -1
+	common_interaction = yes
+	category = interaction_category_diarch
+	
+	desc = foster_legitimacy_diarch_interaction_desc
+	
+	ignores_pending_interaction_block = yes
+
+	ai_targets = {
+		ai_recipients = liege
+	}
+ 
+	ai_frequency_by_tier = {
+		barony = 18
+		county = 18
+		duchy = 18
+		kingdom = 18
+		empire = 18
+		hegemony = 0
+	}
+	
+	is_shown = {
+		NOT = {
+			scope:recipient = scope:actor
+		}
+		scope:actor = {
+			liege = scope:recipient
+			is_diarch_of_target = scope:recipient
+			is_adult = yes
+			is_imprisoned = no
+		}
+		scope:recipient = {
+			has_legitimacy = yes
+			#Only for this one FOR NOW
+			has_diarchy_type = regency
+		}
+		NAND = {
+			scope:actor = { government_allows = administrative }
+			scope:recipient = { government_allows = administrative }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient.legitimacy_level < 5
+		scope:actor = { is_available_adult = yes }
+		custom_tooltip = {
+			text = foster_legitimacy_diarch_interactions_cooldown_tt
+			NOR = { 
+				scope:actor = { has_variable = legitimacy_diarch_interactions_cooldown }
+			}
+		}
+	}
+	
+	
+	# Attempt Methods
+	send_options_exclusive = yes
+	## Duel for it.
+	send_option = {
+		# You can always try to duel for it.
+		flag = foster_damage_legitimacy_diarch_interaction_diplomacy
+	}
+	## Duel for it 2.
+	send_option = {
+		flag = foster_damage_legitimacy_diarch_interaction_intrigue
+	}
+	## Pay full prestige.
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				prestige >= medium_prestige_value
+			}
+		}
+		flag = foster_damage_legitimacy_diarch_interaction_prestige
+	}
+
+	on_send = {
+		if = {
+			limit = { scope:actor = { is_ai = yes } }
+			scope:actor = {
+				if = {
+					limit = {
+						highest_skill = diplomacy
+						diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_diplomacy
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						highest_skill = intrigue
+						intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_intrigue
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_diplomacy
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_intrigue
+						value = yes
+					}
+				}
+				else = {
+					save_scope_value_as = {
+						name = ai_prestige
+						value = yes
+					}
+				}
+			}
+			if = {
+				limit = { 
+					always = no 	#this is muh debugging tool. There're many like it, but this one is mine
+				}
+				###DEBUG###
+				save_scope_value_as = {
+					name = swing
+					value = scope:recipient.diarchy_swing
+				}
+				save_scope_value_as = {
+					name = diplomacy
+					value = scope:actor.diplomacy
+				}
+				save_scope_value_as = {
+					name = intrigue
+					value = scope:actor.intrigue
+				}
+				debug_log = "AI diarch used Foster Legitimacy"
+				debug_log_scopes = yes
+				debug_log_date = yes
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			if = {
+				limit = {
+					trigger_if = {
+						limit = { is_ai = no }
+						scope:foster_damage_legitimacy_diarch_interaction_diplomacy = yes 
+					}
+					trigger_else = {
+						exists = scope:ai_diplomacy
+					}
+				}
+				#custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+				duel = {
+					skill = diplomacy
+					value = 12
+					# Victory! A claim for you.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = 3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_diplomacy.tt.success
+						custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.success.t
+							#right_icon = liege
+							scope:recipient = {
+								add_legitimacy = minor_legitimacy_gain 
+								add_opinion = {
+									target = scope:actor
+									modifier = pleased_opinion
+									opinion = 15
+								}
+							}
+							if = { limit = { has_legitimacy = yes } add_legitimacy = miniscule_legitimacy_gain }
+							update_diarchy_swing_with_perspective_effect = {
+								SWING = medium_sop_swing_value
+								LIEGE = scope:recipient
+							}
+						} 
+						hidden_effect = {
+							scope:recipient = {
+								send_interface_message = {
+									type = msg_mandate_results_neutral_effect
+									title = foster_legitimacy_diarch_interaction.success.liege.t
+									right_icon = diarch
+									show_as_tooltip = {
+										add_legitimacy = minor_legitimacy_gain 
+										add_opinion = {
+											target = scope:actor
+											modifier = pleased_opinion
+											opinion = 15
+										}
+										scope:actor = { if = { limit = { has_legitimacy = yes } add_legitimacy = miniscule_legitimacy_gain } }
+										update_diarchy_swing_with_perspective_effect = {
+											SWING = medium_sop_swing_value
+											LIEGE = scope:recipient
+										}
+									}
+								}
+							}
+						}
+					}
+					# Defeat! Into the loser's bin you go.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = -3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_diplomacy.tt.failure
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.failure.t
+							#right_icon = diarch
+							add_prestige = minor_prestige_loss
+							scope:recipient = {
+								add_opinion = {
+									target = scope:actor
+									modifier = pleased_opinion
+									opinion = 5
+								}
+							}
+						}
+						hidden_effect = {
+							scope:recipient = {
+								send_interface_message = {
+									type = msg_mandate_results_neutral_effect
+									title = foster_legitimacy_diarch_interaction.failure.liege.t
+									right_icon = diarch
+									show_as_tooltip = {
+										scope:actor = { add_prestige = minor_prestige_loss }
+										add_opinion = {
+											target = scope:actor
+											modifier = pleased_opinion
+											opinion = 5
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { 
+					trigger_if = {
+						limit = { is_ai = no }
+						scope:foster_damage_legitimacy_diarch_interaction_intrigue = yes 
+					}
+					trigger_else = {
+						exists = scope:ai_intrigue
+					}
+				}
+				#custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+				duel = {
+					skill = intrigue
+					value = 12
+					# Victory! A claim for you.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = 3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_intrigue.tt.success
+						custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.success.t
+							#right_icon = diarch
+							scope:recipient = { add_legitimacy = minor_legitimacy_gain }
+							update_diarchy_swing_with_perspective_effect = {
+								SWING = medium_sop_swing_value
+								LIEGE = scope:recipient
+							}
+						}
+					}
+					# Defeat! Into the loser's bin you go.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = -3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_intrigue.tt.failure
+						send_interface_toast = {
+							type = event_toast_effect_bad
+							title = foster_damage_legitimacy_diarch_interaction.success.t
+							#right_icon = diarch
+							change_strife_opinion = medium_strife_value
+						}
+					}
+				}
+			}
+			else = {
+				scope:recipient = {
+					send_interface_message = {
+						type = msg_mandate_results_neutral_effect
+						title = foster_legitimacy_diarch_interaction.success.liege.t
+						right_icon = diarch
+						add_legitimacy = minor_legitimacy_gain 
+						add_opinion = {
+							target = scope:actor
+							modifier = pleased_opinion
+							opinion = 10
+						}
+						scope:actor = {
+							if = { limit = { has_legitimacy = yes } add_legitimacy = miniscule_legitimacy_gain } 
+							add_prestige = minor_prestige_loss
+							change_strife_opinion = medium_strife_value
+						}
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = medium_sop_swing_value
+							LIEGE = scope:recipient
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				set_variable = {
+					name = legitimacy_diarch_interactions_cooldown
+					years = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		NOR = {
+			is_pool_character = yes
+			is_pool_guest = yes
+		}
+		liege = { 
+			has_active_diarchy = yes 
+		}
+		is_diarch_of_target = liege
+		OR = {
+			diarch_loyalty >= diarch_loyalty_visibly_loyal_threshold
+			liege.diarchy_swing < 96
+		}
+		OR = {
+			diplomacy > { value = liege.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			intrigue > { value = liege.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			AND = {
+				prestige >= medium_prestige_value
+				strife_opinion < 50
+			}
+		}
+		liege = { diarchy_swing <= 90 }		#dont waste your cooldowns
+	}
+	
+	auto_accept = yes
+
+	ai_will_do = {
+		base = 100		#Since this is strictly benefitial to them
+		
+		#Maybe dont nuke your prestige too hard
+		modifier = {
+			add = -25
+			NOR = {
+				diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+				intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			}
+		}
+
+		# Relationships
+		modifier = {
+			factor = 0.5
+			has_any_mild_bad_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+			NOT = { has_trait = deceitful } 
+		}
+
+		modifier = {
+			factor = 0
+			has_any_moderate_bad_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+			NOT = { has_trait = deceitful } 
+		}
+
+		#Situational diarchs dont care for raising legitimacy if liege is already good OR they can't be ousted and dont like liege much
+		modifier = {
+			factor = 0
+			diarch_loyalty < diarch_loyalty_visibly_loyal_threshold
+			OR = {
+				scope:recipient.legitimacy_level >= 4
+				AND = {
+					scope:recipient = { has_diarchy_active_parameter = regency_cant_be_ended_above_this_point }
+					"scope:actor.opinion(scope:recipient)" < 25
+				}
+			}
+		}
+
+		#Disloyal diarchs only care for this if they CAN be ousted 
+		modifier = {
+			factor = 0
+			diarch_loyalty <= diarch_loyalty_visibly_disloyal_threshold
+			scope:recipient = { 
+				can_leave_diarchy_trigger = yes 
+				NOT = { has_diarchy_active_parameter = regency_free_end_below_this_point }
+			}
+		}
+	}
+}
+
+# Damage Legitimacy
+damage_legitimacy_diarch_interaction = {
+	icon = icon_scheme_damage_legitimacy
+	interface_priority = -2
+	common_interaction = yes
+	category = interaction_category_diarch
+	
+	desc = damage_legitimacy_diarch_interaction_desc
+	
+	ignores_pending_interaction_block = yes
+
+	ai_targets = {
+		ai_recipients = liege
+	}
+
+	ai_frequency_by_tier = {
+		barony = 18
+		county = 18
+		duchy = 18
+		kingdom = 18
+		empire = 18
+		hegemony = 0
+	}
+	
+	is_shown = {
+		NOT = {
+			scope:recipient = scope:actor
+		}
+		scope:actor = {
+			liege = scope:recipient
+			is_diarch_of_target = scope:recipient
+			is_adult = yes
+			is_imprisoned = no
+		}
+		scope:recipient = {
+			has_legitimacy = yes
+			#Only for this one FOR NOW
+			has_diarchy_type = regency
+		}
+		NAND = {
+			scope:actor = { government_allows = administrative }
+			scope:recipient = { government_allows = administrative }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient.legitimacy_level > 0
+		scope:actor = { is_available_adult = yes }
+		custom_tooltip = {
+			text = damage_legitimacy_diarch_interactions_cooldown_tt
+			NOR = { 
+				scope:actor = { has_variable = legitimacy_diarch_interactions_cooldown }
+			}
+		}
+	}
+
+	# Attempt Methods
+	send_options_exclusive = yes
+	## Duel for it.
+	send_option = {
+		# You can always try to duel for it.
+		flag = foster_damage_legitimacy_diarch_interaction_diplomacy
+	}
+	## Duel for it 2.
+	send_option = {
+		flag = foster_damage_legitimacy_diarch_interaction_intrigue
+	}
+	## Pay full prestige.
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				prestige >= medium_prestige_value
+			}
+		}
+		flag = foster_damage_legitimacy_diarch_interaction_prestige
+	}
+
+	on_send = {
+		if = {
+			limit = { scope:actor = { is_ai = yes } }
+			scope:actor = {
+				if = {
+					limit = {
+						highest_skill = intrigue
+						intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_intrigue
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						highest_skill = diplomacy
+						diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_diplomacy
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_intrigue
+						value = yes
+					}
+				}
+				else_if = {
+					limit = {
+						diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+					}
+					save_scope_value_as = {
+						name = ai_diplomacy
+						value = yes
+					}
+				}
+				else = {
+					save_scope_value_as = {
+						name = ai_prestige
+						value = yes
+					}
+				}
+			}
+			if = {
+				limit = { 
+					always = no 	#this is muh debugging tool. There're many like it, but this one is mine
+				}
+				###DEBUG###
+				save_scope_value_as = {
+					name = swing
+					value = scope:recipient.diarchy_swing
+				}
+				save_scope_value_as = {
+					name = diplomacy
+					value = scope:actor.diplomacy
+				}
+				save_scope_value_as = {
+					name = intrigue
+					value = scope:actor.intrigue
+				}
+				debug_log = "AI diarch used Damage Legitimacy"
+				debug_log_scopes = yes
+				debug_log_date = yes
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			if = {
+				limit = {
+					trigger_if = {
+						limit = { is_ai = no }
+						scope:foster_damage_legitimacy_diarch_interaction_diplomacy = yes 
+					}
+					trigger_else = {
+						exists = scope:ai_diplomacy
+					}
+				}
+				#custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+				duel = {
+					skill = diplomacy
+					value = 12
+					# Victory! A claim for you.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = 3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_diplomacy.tt.success
+						custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.success.t
+							#right_icon = liege
+							scope:recipient = {
+								add_legitimacy = minor_legitimacy_loss 
+								add_opinion = {
+									target = scope:actor
+									modifier = suspicion_opinion
+									opinion = -10
+								}
+								scope:actor = { if = { limit = { has_legitimacy = yes } add_legitimacy = miniscule_legitimacy_loss } }
+							}
+							update_diarchy_swing_with_perspective_effect = {
+								SWING = medium_sop_swing_value
+								LIEGE = scope:recipient
+							}
+						} 
+						hidden_effect = {
+							scope:recipient = {
+								send_interface_message = {
+									type = msg_mandate_results_neutral_effect
+									title = damage_legitimacy_diarch_interaction.success.liege.t
+									right_icon = diarch
+									show_as_tooltip = {
+										add_legitimacy = minor_legitimacy_loss 
+										add_opinion = {
+											target = scope:actor
+											modifier = suspicion_opinion
+											opinion = -10
+										}
+										scope:actor = { if = { limit = { has_legitimacy = yes } add_legitimacy = miniscule_legitimacy_loss } }
+										update_diarchy_swing_with_perspective_effect = {
+											SWING = medium_sop_swing_value
+											LIEGE = scope:recipient
+										}
+									}
+								}
+							}
+						}
+					}
+					# Defeat! Into the loser's bin you go.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = -3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_diplomacy.tt.failure
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.failure.t
+							#right_icon = diarch
+							add_prestige = minor_prestige_loss
+							scope:recipient = {
+								add_opinion = {
+									target = scope:actor
+									modifier = suspicion_opinion
+									opinion = -5
+								}
+							}
+						}
+						hidden_effect = {
+							scope:recipient = {
+								send_interface_message = {
+									type = msg_mandate_results_neutral_effect
+									title = damage_legitimacy_diarch_interaction.failure.liege.t
+									right_icon = diarch
+									show_as_tooltip = {
+										scope:actor = { add_prestige = minor_prestige_loss }
+										add_opinion = {
+											target = scope:actor
+											modifier = suspicion_opinion
+											opinion = -5
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { 
+					trigger_if = {
+						limit = { is_ai = no }
+						scope:foster_damage_legitimacy_diarch_interaction_intrigue = yes 
+					}
+					trigger_else = {
+						exists = scope:ai_intrigue
+					}
+				}
+				#custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+				duel = {
+					skill = intrigue
+					value = 12
+					# Victory! A claim for you.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = 3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_intrigue.tt.success
+						custom_tooltip = foster_damage_legitimacy_diarch_interaction.swing_affects_success_chance.tt
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = foster_damage_legitimacy_diarch_interaction.success.t
+							#right_icon = diarch
+							scope:recipient = { add_legitimacy = minor_legitimacy_loss }
+							update_diarchy_swing_with_perspective_effect = {
+								SWING = medium_sop_swing_value
+								LIEGE = scope:recipient
+							}
+						}
+					}
+					# Defeat! Into the loser's bin you go.
+					50 = {
+						compare_modifier = {
+							value = {
+								value = scope:duel_value
+								add = {
+									value = scope:recipient.diarchy_swing
+									multiply = 0.2
+								}
+							}
+							multiplier = -3
+							min = -45
+						}
+						#desc = foster_damage_legitimacy_diarch_interaction_intrigue.tt.failure
+						send_interface_toast = {
+							type = event_toast_effect_bad
+							title = foster_damage_legitimacy_diarch_interaction.failure.t
+							#right_icon = diarch
+							change_strife_opinion = medium_strife_value
+						}
+					}
+				}
+			}
+			else = {
+				scope:recipient = {
+					send_interface_message = {
+						type = msg_mandate_results_neutral_effect
+						title = foster_legitimacy_diarch_interaction.success.liege.t
+						right_icon = diarch
+						add_legitimacy = minor_legitimacy_loss 
+						add_opinion = {
+							target = scope:actor
+							modifier = angry_opinion
+							opinion = -15
+						}
+						scope:actor = {
+							if = { limit = { has_legitimacy = yes } add_legitimacy = minor_legitimacy_loss } 
+							add_prestige = minor_prestige_loss
+							change_strife_opinion = medium_strife_value
+						}
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = medium_sop_swing_value
+							LIEGE = scope:recipient
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				set_variable = {
+					name = legitimacy_diarch_interactions_cooldown
+					years = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		NOR = {
+			is_pool_character = yes
+			is_pool_guest = yes
+		}
+		liege = { 
+			has_active_diarchy = yes 
+			NOT = { has_diarchy_type = temporary_regency }	#temporary regents shouldnt shoot themselves in a foot.
+		}
+		is_diarch_of_target = liege
+		diarch_loyalty < diarch_loyalty_visibly_loyal_threshold
+		OR = {
+			diplomacy > { value = liege.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			intrigue > { value = liege.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			AND = {
+				prestige >= medium_prestige_value
+				strife_opinion < 50
+			}
+		}
+		liege = { diarchy_swing <= 90 }		#dont waste your cooldowns
+	}
+	
+	auto_accept = yes
+
+	ai_will_do = {
+		base = 100		#Since this is somewhat benefitial to them
+		
+		#Maybe dont nuke your prestige too hard
+		modifier = {
+			add = -25
+			NOR = {
+				diplomacy > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+				intrigue > { value = scope:recipient.diarchy_swing multiply = -0.2 add = 12 min = 2 }
+			}
+		}
+
+		# Relationships
+		modifier = {
+			factor = 0.5
+			has_any_mild_good_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+			NOT = { has_trait = deceitful } 
+		}
+
+		modifier = {
+			factor = 0
+			has_any_moderate_good_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+			NOT = { has_trait = deceitful } 
+		}
+
+		#Situational diarchs wont do this much if they somewhat like their liege
+		modifier = {
+			factor = 0.33
+			diarch_loyalty > diarch_loyalty_visibly_disloyal_threshold
+			"scope:actor.opinion(scope:recipient)" > 25
+		}
+
+		#Situational and disloyal diarchs wont do this while they CAN be ousted
+		modifier = {
+			factor = 0
+			#diarch_loyalty > diarch_loyalty_visibly_disloyal_threshold
+			scope:recipient = { 
+				can_leave_diarchy_trigger = yes 
+				NOT = { has_diarchy_active_parameter = regency_free_end_below_this_point }
+			}
+		}
+
+		#Loyal diarchs will never do this (even though this is covered by ai_potential)
+		modifier = {
+			factor = 0
+			diarch_loyalty >= diarch_loyalty_visibly_loyal_threshold
+		}
+	}
+}

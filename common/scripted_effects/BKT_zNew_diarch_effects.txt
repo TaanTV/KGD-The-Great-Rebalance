@@ -1,0 +1,67 @@
+﻿#miniscule_sop_swing_liege_gain
+give_sop_swing_to_liege_for_completed_activity_effect = {
+	if = {
+		limit = {
+			this = scope:host
+			has_active_diarchy = yes
+			exists = diarch					#just in case?
+			has_diarchy_type = regency		#for now.
+			diarchy_swing > 0
+		}
+		hidden_effect = {
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect
+				title = give_sop_swing_to_liege_for_completed_activity_effect.liege.tt
+				left_icon = diarch
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = $SWING$
+					LIEGE = this
+				}
+			} 
+			diarch = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect
+					title = give_sop_swing_to_liege_for_completed_activity_effect.diarch.tt
+					left_icon = liege
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = $SWING$
+							LIEGE = liege
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#keep this in sync with diarch_changed_own_contract_effect somehow?..
+bkt_diarch_changed_own_contract_effect = {
+	scope:recipient = {
+		custom_tooltip = bkt_diarch_changed_own_contract_effect_tt #liege_modify_vassal_contract_interaction.tt.diarch_powers_used
+		# Co-rulers lose a fair bit less & can change multiple times.
+		if = {
+			limit = {
+				diarch ?= scope:actor
+				has_diarchy_active_parameter = diarchy_is_co_rulership
+			}
+			add_opinion = {
+				target = scope:actor
+				modifier = abused_position_of_trust_opinion
+				opinion = -10
+			}
+		}
+		# Everyone else loses much more.
+		else = {
+			add_to_variable_list = {
+				name = diarch_contract_rights_used_list
+				target = scope:actor
+			}
+			add_opinion = {
+				target = scope:actor
+				modifier = abused_position_of_trust_opinion
+				opinion = -40
+			}
+		}
+	}
+}

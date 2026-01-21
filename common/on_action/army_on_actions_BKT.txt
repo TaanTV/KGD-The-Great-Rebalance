@@ -1,0 +1,49 @@
+﻿
+# called for armies whenever they enter a province
+# root is the owner of the army
+# scope:army is the army
+
+on_army_enter_province = {
+	#ADDED THIS IS AN OVERWRITE OF THE EFFECT
+	effect = {
+		#ADDED - now with an IF so it's a bit less cheesy.
+		if = {
+			limit = {
+				scope:army.army_owner = { is_at_war = yes }
+			}
+			# Commander trait leveling
+			scope:army.army_commander ?= {
+				if = {
+					limit = {
+						has_trait = logistician
+					}
+					add_trait_xp = {
+						trait = logistician
+						value = {
+							value = 0.2
+							add = {
+								value = martial
+								divide = 20
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_trait = organizer
+					}
+					add_trait_xp = {
+						trait = organizer
+						value = {
+							value = 0.2
+							add = {
+								value = martial
+								divide = 20
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

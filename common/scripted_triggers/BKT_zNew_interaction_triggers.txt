@@ -1,0 +1,5 @@
+﻿actor_recipient_both_players_special_treatment_trigger = {
+	scope:actor = { is_ai = no }
+	scope:recipient = { is_ai = no }
+	has_game_rule = bkt_mp_special_rules_enabled
+}

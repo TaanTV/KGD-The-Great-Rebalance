@@ -1,0 +1,9 @@
+﻿l_russian:
+ pillage_intent_nomadic_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 40%#!\n\t\t$BULLET$[herd_i][Concept('herd', 'Стада')|E]: #P 200%#!"
+ pillage_intent_tribal_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 80%#!\n\t\t$BULLET$[prestige_i][Concept('prestige', 'Престиж')|E]: #V 100%#!"
+ pillage_intent_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 80%#!\n\t\t$BULLET$[prestige_i][Concept('prestige', 'Престиж')|E]: #N -150%#!"
+ capture_intent_nomadic_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 20%#!\n\t\t$BULLET$[herd_i][Concept('herd', 'Стада')|E]: #V 100%#!"
+ capture_intent_norse_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'золото')|E]: #V 40%#!"
+ plunder_intent_nomadic_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #P 80%#!\n\t\t$BULLET$[herd_i][Concept('herd', 'Стада')|E]: #P 300%#!"
+ adventure_intent_nomadic_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 40%#!\n\t\t$BULLET$[herd_i][Concept('herd', 'Стада')|E]: #P 200%#!"
+ adventure_intent_viking_loot: "#bol Виды добычи:#!\n\t\t$BULLET$[gold_i][Concept('gold', 'Золото')|E]: #V 80%#!\n\t\t$BULLET$[prestige_i][Concept('prestige', 'Престиж')|E]: #V 100%#!"

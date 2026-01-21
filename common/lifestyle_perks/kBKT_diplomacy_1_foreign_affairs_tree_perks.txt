@@ -1,0 +1,73 @@
+﻿
+defensive_negotiations_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = foreign_affairs
+	position = { 4 1.25 }
+	icon = node_diplomacy
+	
+	parent = thoughtful_perk
+	
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		character_travel_safety_mult = 0.1
+		knight_effectiveness_mult = 0.1
+	}
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		invert_check = yes
+		independent_ruler_opinion = 5	#prev 15
+		fellow_vassal_opinion = 5 		#prev 15
+		fellow_tributary_opinion = 5	#prev 15
+	}
+	government_character_modifier = {
+		flag = government_is_nomadic
+		fellow_confederation_member_opinion = 15
+	}
+
+	effect = {
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_is_landless_adventurer }
+			}
+			custom_description_no_bullet = { text = defensive_negotiations_perk_effect }
+		}
+		else = {
+			custom_tooltip = { text = adventurer_defensive_negotiations_perk_effect }
+		}
+	}
+}
+
+embassies_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = foreign_affairs
+	position = { 4 2.5 }
+	icon = node_diplomacy
+	
+	parent = defensive_negotiations_perk
+	
+	effect = {
+		custom_description_no_bullet = {
+			text = embassies_perk_effect
+		}
+		hidden_effect = {
+			update_embassies_effect = yes
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}	
+			custom_tooltip = {
+				text = adventurer_embassies_perk_effect
+			}
+		}
+	}
+	
+	character_modifier = {
+		learn_language_scheme_phase_duration_add = monumental_scheme_phase_duration_bonus_value
+	}
+	
+	government_character_modifier = {
+		flag = government_is_administrative
+		owned_political_scheme_success_chance_add = 20
+	}
+}

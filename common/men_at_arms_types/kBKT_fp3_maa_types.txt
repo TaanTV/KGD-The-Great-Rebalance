@@ -1,0 +1,242 @@
+﻿# standard costs
+@maa_buy_cost = 150
+@maa_low_maintenance_cost = 1.0
+@maa_high_maintenance_cost = 5.0
+@cultural_maa_extra_ai_score = 60 # Equivalent to having 6 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
+
+# Must be synced between files with the values located at "# Provisions Costs #".
+@provisions_cost_infantry_cheap = 4
+@provisions_cost_infantry_moderate = 10
+@provisions_cost_infantry_expensive = 18
+@provisions_cost_infantry_bankrupting = 24
+
+@provisions_cost_cavalry_cheap = 12
+@provisions_cost_cavalry_moderate = 26
+@provisions_cost_cavalry_expensive = 34
+@provisions_cost_cavalry_bankrupting = 48
+@provisions_cost_cavalry_elephants = 64
+
+@provisions_cost_special_cheap = 10
+@provisions_cost_special_moderate = 18
+@provisions_cost_special_expensive = 28
+@provisions_cost_special_bankrupting = 36
+
+# My idea of rebalance: All costs x1.5
+# Skirmishers use @provisions_cost_infantry_cheap unless very strong
+# Archers use @provisions_cost_infantry_moderate
+# Pikemen use @provisions_cost_infantry_expensive
+# Heavy Infantry uses @provisions_cost_infantry_bankrupting 
+
+# Light cavalry uses @provisions_cost_cavalry_moderate 
+# Heavy cavalry uses @provisions_cost_cavalry_expensive
+# Horse archers type uses @provisions_cost_cavalry_expensive
+# Horse archers specifically use @provisions_cost_cavalry_moderate 
+
+asawira = { #Iranian knights in early caliphal armies. Can be restored as a military unit with Khvarenah 4 dynasty legacy perk. 
+	type = archer_cavalry
+	
+	damage = 100	#90
+	toughness = 40	#35
+	pursuit = 35
+	screen = 10
+	
+	terrain_bonus = {
+		plains = { damage = 30 }
+		drylands = { damage = 30 }
+		desert_mountains = { damage = 10 pursuit = 10 }
+		hills = { damage = -10 }
+		mountains = { damage = -50 }
+		wetlands = { damage = -50 toughness = -15 pursuit = -20 }
+	}
+
+	counters = {
+		skirmishers = 2
+		heavy_infantry = 2
+	}
+
+	winter_bonus = {
+		normal_winter = { damage = -15 toughness = -5 }
+		harsh_winter = { damage = -30 toughness = -10 }
+	}
+	
+	can_recruit = {
+		dynasty ?= {
+			has_dynasty_perk = fp3_khvarenah_legacy_4
+		}	
+	}
+
+	buy_cost = { gold = asawira_recruitment_cost }
+	low_maintenance_cost = { gold = asawira_low_maint_cost }
+	high_maintenance_cost = { gold = asawira_high_maint_cost }
+	provision_cost = @provisions_cost_cavalry_expensive
+	
+	stack = 20
+	ai_quality = { 
+		value = @[cultural_maa_extra_ai_score + 30] 
+		#ADDED
+		add = counter_synergy_ai_weight_archer_cavalry
+	}
+	icon = asawira
+}
+
+tarkhan = {
+	type = heavy_cavalry
+	
+	damage = 110
+	toughness = 30
+	pursuit = 30
+	screen = 10
+	
+	terrain_bonus = {
+		oasis = { damage = 30 }
+		drylands = { damage = 25 }
+		desert = { damage = 10 pursuit = 10 }
+		mountains = { damage = -30 }
+		wetlands = { damage = -80 toughness = -15 pursuit = -20 }
+	}
+
+	counters = {
+		heavy_infantry = 1
+		heavy_cavalry = 0.5
+		gunpowder = 1
+		# No archer cavalry countrting for you either
+	}
+
+	winter_bonus = {
+		normal_winter = { damage = -10 toughness = -5 }
+		harsh_winter = { damage = -20 toughness = -5 }
+	}
+	
+	can_recruit = {
+		OR = {
+			AND = {
+				has_government = landless_adventurer_government
+				has_perk = planned_cultivation_perk
+				location.culture ?= { has_cultural_parameter = unlock_maa_tarkhan }
+			}
+			culture = { has_cultural_parameter = unlock_maa_tarkhan }
+		}
+		#ADDED
+		NOT = {
+			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
+		}
+	}
+
+	buy_cost = { gold = cataphract_recruitment_cost }
+	low_maintenance_cost = { gold = cataphract_low_maint_cost }
+	high_maintenance_cost = { gold = cataphract_high_maint_cost }
+	provision_cost = @provisions_cost_cavalry_expensive
+	
+	stack = 20
+	ai_quality = { 
+		value = @[cultural_maa_extra_ai_score + 20] 
+		#ADDED
+		add = counter_synergy_ai_weight_heavy_cavalry
+	}
+	icon = tarkhan
+
+}
+
+zupin_warrior = {
+	type = pikemen
+	
+	damage = 18			#prev: 16
+	toughness = 20		#prev: 16
+	pursuit = 0
+	screen = 10
+	
+	can_recruit = {
+		OR = {
+			AND = {
+				has_government = landless_adventurer_government
+				has_perk = planned_cultivation_perk
+				location.culture ?= { has_cultural_parameter = unlock_maa_zupin_warrior }
+			}
+			culture = { has_cultural_parameter = unlock_maa_zupin_warrior }
+		}
+	}
+	
+	terrain_bonus = {
+		mountains = { toughness = 16 }							#prev: 12
+		desert_mountains = { toughness = 16 }					#prev: 12
+		hills = { damage = 12 toughness = 16 }					#prev: 4 8
+		forest = { damage = 12 toughness = 16 pursuit = 12 }	#prev: 4 8 4
+	}
+
+	counters = {
+		heavy_cavalry = 0.5
+		heavy_infantry = 1
+		light_cavalry = 1
+	}
+
+	winter_bonus = {
+		normal_winter = { damage = 10 pursuit = 10 }		#prev: 4 5
+		# ADDED
+		harsh_winter = { damage = 12 pursuit = 12 }
+	}
+
+	buy_cost = { gold = bondi_recruitment_cost }
+	low_maintenance_cost = { gold = bondi_low_maint_cost }
+	high_maintenance_cost = { gold = bondi_high_maint_cost }
+	provision_cost = @provisions_cost_infantry_moderate
+	
+	stack = 40
+	ai_quality = { 
+		value = @[cultural_maa_extra_ai_score + 20] 
+		#ADDED
+		add = counter_synergy_ai_weight_pikemen
+	}
+	icon = zupin_spearmen
+}
+
+tawashi = {
+	type = light_cavalry
+	
+	damage = 26		#prev 25
+	toughness = 16	#prev 15
+	pursuit = 30
+	screen = 30
+	
+	terrain_bonus = {
+		plains = { damage = 10 }
+		drylands = { damage = 10 }
+		hills = { damage = 10 }
+		mountains = { damage = 10 pursuit = 10 }
+		desert_mountains = { damage = 10 pursuit = 10 }
+		wetlands = { damage = -15 toughness = -10 pursuit = -30 screen = -30 }
+	}
+
+	counters = {
+		archers = 1
+		heavy_infantry = 1
+		gunpowder = 1
+	}
+
+	can_recruit = {
+		OR = {
+			AND = {
+				has_government = landless_adventurer_government
+				has_perk = planned_cultivation_perk
+				location.culture ?= { has_cultural_parameter = unlock_maa_tawashi }
+			}
+			culture = { has_cultural_parameter = unlock_maa_tawashi }
+		}
+	}
+
+	winter_bonus = {
+		harsh_winter = { damage = -5 toughness = -3 }
+	}
+
+	buy_cost = { gold = tawashi_recruitment_cost }
+	low_maintenance_cost = { gold = tawashi_low_maint_cost }
+	high_maintenance_cost = { gold = tawashi_high_maint_cost }
+	provision_cost = @provisions_cost_cavalry_moderate
+
+	stack = 40
+	ai_quality = { 
+		value = @[cultural_maa_extra_ai_score + 40] 
+		#ADDED
+		add = counter_synergy_ai_weight_light_cavalry
+	}
+	icon = tawashi
+}

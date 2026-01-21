@@ -1,0 +1,45 @@
+﻿has_any_crime_related_opinion_of_character = {
+	$CHARACTER$ = { save_temporary_scope_as = opinion_target }
+	OR = {
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = murdered_close_family_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = attempted_murder_close_family_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = attempted_murder_me_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = abducted_close_family_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = attempted_abduct_close_family_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = attempted_abduct_me_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = murdered_someone_close_to_me_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = executed_close_family_crime
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = tortured_family_member
+		}
+		has_opinion_modifier = {
+			target = scope:opinion_target
+			modifier = tortured_me
+		}
+	}
+}

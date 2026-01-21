@@ -1,0 +1,501 @@
+﻿#ai_compassion
+#ai_boldness 
+#ai_honor 
+#ai_greed 
+#ai_rationality 
+#ai_zeal 
+#ai_energy 
+#ai_vengefulness 
+
+# Triggered from story
+# scopes: story_owner, story
+# this = story
+ai_goal_manager_roll_the_direction = {
+	clear_main_ai_goal_variables = yes
+	random_list = {
+		#Diplomatic - allies
+		10 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:allies }
+				ai_main_goal_allies_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_rationality divide = 5 floor = yes min = 0 }
+			}
+			modifier = {
+				factor = 2
+				story_owner = { has_trait = craven }
+			}
+			modifier = {
+				factor = 0.5
+				story_owner = { has_trait = brave }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:allies
+			}
+			# like +100 acceptance for allies of similar strength. And that's basically it.
+		}
+		#Diplomatic - children
+		10 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:children }
+				story_owner = { can_marry_trigger = yes }
+				ai_main_goal_children_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_rationality divide = 5 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:children
+			}
+			# Bang everything that moves if not chaste. Bang partner even if chaste.
+		}
+		#Diplomatic - keep good relations with liege
+		10 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:liege_opinion }
+				ai_main_goal_liege_opinion_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_rationality divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_honor divide = 10 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:liege_opinion
+			}
+			# Gifts if not greedy and sway. Maybe try for an alliance? 
+		}
+		#Diplomatic - keep good relations with vassals
+		10 = {
+			trigger = {
+				always = no
+				NOT = { has_variable = vassal_opinion_goal_block }
+				NOT = { var:last_ai_goal ?= flag:vassal_opinion }
+				story_owner = {
+					dread < low_dread
+					OR = {
+						has_personality_malicious_trigger = no
+						average_vassal_opinion < -25
+					}
+				}
+				ai_main_goal_vassal_opinion_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_rationality divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_greed divide = -10 floor = yes min = 0 }
+			}
+			modifier = {
+				story_owner.average_vassal_opinion < 0
+				factor = 1.5
+			}
+			modifier = {
+				story_owner.average_vassal_opinion < -25
+				factor = 2
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:vassal_opinion
+			}
+			# Should throw gifts if not greedy to powerful vassals and sway the rest
+			set_variable = {
+				name = dread_goal_block
+				years = 30
+			}
+			
+		}
+		#Diplomatic - keep up the dread!
+		10 = {
+			trigger = {
+				always = no
+				NOT = { has_variable = dread_goal_block }
+				NOT = { var:last_ai_goal ?= flag:dread }
+				story_owner = { 
+					has_personality_benevolent_trigger = no
+					dread > 5
+				}
+				ai_main_goal_dread_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_greed divide = 10 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:dread
+			}
+			# Should script-execute prisoners for min 5 dread, try to imprison vassals who are weak or craven
+			set_variable = {
+				name = vassal_opinion_goal_block
+				years = 30
+			}
+			
+		}
+		#Diplomatic - deal with rivals
+		10 = {
+			trigger = {
+				always = no 		#temporary disabled
+				NOT = { var:last_ai_goal ?= flag:rivals }
+				ai_main_goal_rivals_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_energy divide = 5 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:rivals
+			}
+			# Depending on compassion level - kill, imprison, increase taxes, idk
+		}
+		#Diplomatic - support landed dynasty members
+		10 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:landed_dynasty }
+				ai_main_goal_landed_dynasty_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_compassion divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_greed divide = -10 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:landed_dynasty
+			}
+			# Throw gifts? Join wars, if can?
+		}
+		#Economic - construct buildings
+		5 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:construct_buildings }
+				story_owner = { gold > minor_gold_value }
+				ai_main_goal_construct_buildings_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_greed divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_energy divide = -5 floor = yes min = 0 }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:construct_buildings
+			}
+			# Should probably just plug that into the builder personality and that's it.
+		}
+		#Economic - construct holdings
+		5 = {
+			trigger = {
+				always = no
+				NOT = { var:last_ai_goal ?= flag:construct_holdings }
+				story_owner = { 
+					gold > monumental_gold_value
+					NOT = { government_has_flag = government_is_tribal }
+				}
+				ai_main_goal_construct_holdings_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_greed divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_energy divide = -5 floor = yes min = 0 }
+			}
+			modifier = {
+				factor = 2
+				story_owner = { gold > monumental_gold_value }
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:construct_holdings
+			}
+			# Just decrease the treasury by 400 and build a semi-random holding in the capital and then in the other ones.
+		}
+		#War! - own de jure
+		10 = {
+			trigger = {
+				always = no 		#temporary disabled
+				NOT = { var:last_ai_goal ?= flag:conquer_own_de_jure }
+				story_owner = {
+					save_temporary_scope_as = story_owner_scope
+					primary_title = {
+						is_titular = no
+						any_de_jure_county = {
+							holder = {
+								story_owner_scope_can_attack_this = yes
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				add = { value = story_owner.ai_boldness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_honor divide = 10 floor = yes min = 0 }
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes }
+				factor = 2
+			}
+			modifier = {
+				story_owner = { is_independent_ruler = no }
+				factor = 0.75
+			}
+			modifier = {
+				story_owner = { government_has_flag = government_is_tribal }
+				factor = 1.5
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:conquer_own_de_jure
+			}
+			# Declare best wars on weaker people through script. Maybe break alliances too?
+		}
+		#War! - own culture
+		10 = {
+			trigger = {
+				NOT = { var:last_ai_goal ?= flag:conquer_own_culture }
+				story_owner = {
+					save_temporary_scope_as = story_owner_scope
+					OR = {
+						is_independent_ruler = yes
+						highest_held_title_tier >= tier_empire
+					}
+					any_sub_realm_county = {
+						culture = scope:story_owner_scope.culture
+					}
+					OR = {
+						liege = {
+							any_vassal = {
+								any_sub_realm_county = { culture = scope:story_owner_scope.culture }
+								NOT = { this = scope:story_owner_scope }
+								story_owner_scope_can_attack_this = yes
+							}
+						}
+						any_neighboring_top_liege_realm_owner = {
+							any_sub_realm_county = {
+								culture = scope:story_owner_scope.culture
+							}
+							story_owner_scope_can_attack_this = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				add = { value = story_owner.ai_boldness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes }
+				factor = 1.5
+			}
+			modifier = {
+				story_owner = { is_independent_ruler = no }
+				factor = 0.5
+			}
+			modifier = {
+				story_owner = { government_has_flag = government_is_tribal }
+				factor = 1.5
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:conquer_own_culture
+			}
+			# Declare best wars on weaker people through script. Maybe break alliances too?
+		}
+		#War! - higher up de jure
+		10 = {
+			trigger = {
+				NOT = { var:last_ai_goal ?= flag:conquer_higher_de_jure }
+				story_owner = {
+					save_temporary_scope_as = story_owner_scope
+					highest_held_title_tier < tier_empire
+					primary_title = {
+						is_titular = no
+						de_jure_liege = {
+							any_de_jure_county = {
+								holder = {
+									story_owner_scope_can_attack_this = yes
+								}
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				add = { value = story_owner.ai_boldness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_honor divide = 10 floor = yes min = 0 }
+				add = { value = story_owner.ai_compassion divide = -2.5 floor = yes }
+				factor = 0.75
+			}
+			modifier = {
+				story_owner = { is_independent_ruler = no }
+				factor = 0.25
+			}
+			modifier = {
+				story_owner = { government_has_flag = government_is_tribal }
+				factor = 1.5
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:conquer_higher_de_jure
+			}
+			# Declare best wars on weaker people through script 
+		}
+		#War! - own heritage
+		10 = {
+			trigger = {
+				NOT = { var:last_ai_goal ?= flag:conquer_own_heritage }
+				story_owner = {
+					save_temporary_scope_as = story_owner_scope
+					highest_held_title_tier >= tier_kingdom
+					OR = {
+						is_independent_ruler = yes
+						highest_held_title_tier = tier_empire
+					}
+					any_sub_realm_county = {
+						culture = { has_same_culture_heritage = scope:story_owner_scope.culture }
+					}
+					OR = {
+						liege = {
+							any_vassal = {
+								any_sub_realm_county = { culture = { has_same_culture_heritage = scope:story_owner_scope.culture } }
+								NOT = { this = scope:story_owner_scope }
+								story_owner_scope_can_attack_this = yes
+							}
+						}
+						any_neighboring_top_liege_realm_owner = {
+							any_sub_realm_county = {
+								culture = { has_same_culture_heritage = scope:story_owner_scope.culture }
+							}
+							story_owner_scope_can_attack_this = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				add = { value = story_owner.ai_boldness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes }
+			}
+			modifier = {
+				story_owner = { is_independent_ruler = no }
+				factor = 0.25
+			}
+			modifier = {
+				story_owner = { government_has_flag = government_is_tribal }
+				factor = 1.5
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:conquer_own_heritage
+			}
+			# Declare best wars on weaker people through script. Maybe break alliances too?
+		}
+		#War! - under same liege
+		10 = {
+			trigger = {
+				NOT = { var:last_ai_goal ?= flag:conquer_same_liege }
+				ai_main_goal_conquer_same_liege_check = yes
+			}
+			modifier = {
+				add = { value = story_owner.ai_boldness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_vengefulness divide = 5 floor = yes min = 0 }
+				add = { value = story_owner.ai_compassion divide = -5 floor = yes }
+				factor = 4
+			}
+			modifier = {
+				story_owner = { government_has_flag = government_is_tribal }
+				factor = 1.5
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:conquer_same_liege
+			}
+			# Declare best wars on weaker people through script. Maybe break alliances too?
+		}
+		#Just do nothing
+		5 = {
+			modifier = {
+				var:last_ai_goal ?= flag:doing_nothing
+				add = -4
+			}
+			set_variable = {
+				name = ai_main_goal
+				value = flag:doing_nothing
+			}
+			set_variable = ai_main_goal_completed
+		}
+	}
+	set_variable = {
+		name = random_goal_change_preventor
+		years = 25
+	}
+	set_variable = {
+		name = hard_goal_change_preventor
+		years = 5
+	}
+}
+
+clear_main_ai_goal_variables = {
+	remove_variable = last_ai_goal
+	remove_variable = sway_change_cooldown
+	remove_variable = war_tries_block
+	remove_variable = ai_main_goal_completed
+	remove_variable = random_goal_change_preventor
+	remove_variable = hard_goal_change_preventor
+	if = {
+		limit = {
+			has_variable = ai_main_goal
+		}
+		set_variable = {
+			name = last_ai_goal 
+			value = var:ai_main_goal
+		}
+		remove_variable = ai_main_goal
+	}
+}
+
+ai_main_goal_competion_check = {
+	switch = {
+		trigger = var:ai_main_goal 
+		flag:allies = { if = { limit = { NOT = { ai_main_goal_allies_check = yes } } mark_goal_as_completed = yes } }
+		flag:children = { if = { limit = { NOT = { ai_main_goal_children_check = yes } } mark_goal_as_completed = yes } }
+		flag:liege_opinion = { if = { limit = { NOT = { ai_main_goal_liege_opinion_check = yes } } mark_goal_as_completed = yes } }
+		flag:vassal_opinion = { if = { limit = { NOT = { ai_main_goal_vassal_opinion_check = yes } } mark_goal_as_completed = yes } }
+		flag:dread = { if = { limit = { NOT = { ai_main_goal_dread_check = yes } } mark_goal_as_completed = yes } }
+		flag:rivals = { if = { limit = { NOT = { ai_main_goal_rivals_check = yes } } mark_goal_as_completed = yes } }
+		flag:landed_dynasty = { if = { limit = { NOT = { ai_main_goal_landed_dynasty_check = yes } } mark_goal_as_completed = yes } }
+		flag:construct_buildings = { if = { limit = { NOT = { ai_main_goal_construct_buildings_check = yes } } mark_goal_as_completed = yes } }
+		flag:construct_holdings = { if = { limit = { NOT = {  ai_main_goal_construct_holdings_check = yes } } mark_goal_as_completed = yes } }
+		flag:conquer_own_de_jure = { if = { limit = { ai_main_goal_conquer_own_de_jure_check = yes } mark_goal_as_completed = yes } }
+		flag:conquer_own_culture = { if = { limit = { ai_main_goal_conquer_own_culture_check = yes } mark_goal_as_completed = yes } }
+		#flag:conquer_higher_de_jure = { }
+		#flag:conquer_own_heritage = { }
+		flag:conquer_same_liege = { if = { limit = { story_owner = { is_independent_ruler = yes } } set_variable = ai_main_goal_completed } else_if = { limit = { ai_main_goal_conquer_same_liege_check = yes } mark_goal_as_completed = yes } }
+		flag:doing_nothing = { }
+		fallback = { }	# do nothing i suppose?	
+	}
+}
+ 
+mark_goal_as_completed = {
+	set_variable = ai_main_goal_completed
+	story_owner = {
+		add_stress = medium_stress_loss
+		random = {
+			chance = 10
+			random_list = {
+				1 = { add_diplomacy_skill = 1 }
+				1 = { add_martial_skill = 1 }
+				1 = { add_stewardship_skill = 1 }
+				1 = { add_intrigue_skill = 1 }
+				1 = { add_learning_skill = 1 }
+			}
+		}
+	}
+}

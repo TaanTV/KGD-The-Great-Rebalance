@@ -1,0 +1,790 @@
+﻿# Just the rewards.
+
+#Rewards for Famed Legends
+legend_ending_rewards_famed_heroic_effect = {
+	#add_legitimacy = medium_legitimacy_gain
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_famed_legend_var
+		set_variable = finished_heroic_legend_var
+	}
+}
+
+legend_ending_rewards_famed_holy_effect = {
+	#add_legitimacy = medium_legitimacy_gain
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_famed_legend_var
+		set_variable = finished_holy_legend_var
+	}
+}
+
+legend_ending_rewards_famed_legitimizing_effect = {
+	#add_legitimacy = {
+	#	value = medium_legitimacy_gain
+	#	multiply = 2
+	#}
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_famed_legend_var
+		set_variable = finished_legitimizing_legend_var
+	}
+}
+
+#Rewards for Illustrious Legends
+legend_ending_rewards_illustrious_heroic_effect = {
+	#add_legitimacy = major_legitimacy_gain
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_illustrious_legend_var
+		set_variable = finished_heroic_legend_var
+	}
+}
+
+legend_ending_rewards_illustrious_holy_effect = {
+	#add_legitimacy = major_legitimacy_gain
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_illustrious_legend_var
+		set_variable = finished_holy_legend_var
+	}
+}
+
+legend_ending_rewards_illustrious_legitimizing_effect = {
+	#add_legitimacy = {
+	#	value = major_legitimacy_gain
+	#	multiply = 2
+	#}
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_illustrious_legend_var
+		set_variable = finished_legitimizing_legend_var
+	}
+}
+
+#Rewards for Mythical Legends
+legend_ending_rewards_mythical_heroic_effect = {
+	#add_legitimacy = massive_legitimacy_gain
+	# Chance to become a Living Legend
+	if = {
+		limit = {
+			dynasty ?= {
+				ce1_heroic_track_perks >= 4
+			}
+		}
+		add_trait = legend
+	}
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_mythical_legend_var
+		set_variable = finished_heroic_legend_var
+	}
+}
+
+legend_ending_rewards_mythical_holy_effect = {
+	#add_legitimacy = massive_legitimacy_gain
+	# Chance to become a Saint
+	if = {
+		limit = {
+			dynasty ?= {
+				ce1_heroic_track_perks >= 3
+			}
+		}
+		add_trait = saint
+		if = {
+			limit = { NOT = { has_global_variable = num_of_saints_var } }
+			set_global_variable = {
+				name = num_of_saints_var
+				value = 1
+			}
+		}
+		else = {
+			change_global_variable = {
+				name = num_of_saints_var
+				add = 1
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			add_achievement_global_variable_effect = {
+				VARIABLE = ce1_canonized_achievement_unlocked
+				VALUE = yes
+			}
+		}
+	}
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_mythical_legend_var
+		set_variable = finished_holy_legend_var
+	}
+}
+
+legend_ending_rewards_mythical_legitimizing_effect = {
+	#add_legitimacy = {
+	#	value = massive_legitimacy_gain
+	#	multiply = 2
+	#}
+	if = {
+		limit = { exists = promoted_legend }
+		set_variable = finished_mythical_legend_var
+		set_variable = finished_legitimizing_legend_var
+	}
+}
+
+
+
+#Rewards for all Heroic Legends
+legend_ending_rewards_heroic_effect = {
+	# Legitimacy gain based on Legend Protagonist
+	disburse_legend_protagonist_legitimacy_effect = yes
+	# Available decision
+	custom_tooltip = legend_ending_decision_tt
+	hidden_effect = {
+		create_character_memory = {
+			type = ce1_completed_my_heroic_legend
+			participants = {
+				owner = root
+				protagonist = scope:legend_protagonist
+			}
+		}
+	}
+}
+
+#Rewards for all Legitimizing Legends
+legend_ending_rewards_legitimizing_effect = {
+	# Legitimacy gain based on Legend Protagonist
+	disburse_legend_protagonist_legitimacy_effect = yes
+	# We let you diverge if it's an Ancient People legend
+	if = {
+		limit = {
+			exists = scope:legendary_culture
+			has_dlc_feature = diverge_culture # Don't mislead players who don't have access to divergence
+		}
+		custom_tooltip = { 
+			text = can_select_legendary_culture_pillars_tt
+			set_variable = {
+				name = legendary_culture
+				value = scope:legendary_culture
+			}
+		}
+	}
+	if = { #Roman Heritage legend without a Roman Empire
+		limit = {
+			scope:title_claim = title:h_roman_empire
+			NOT = {
+				exists = global_var:flag_restored_roman_empire
+			}
+		}
+		title:d_latium.empire = { #Italy
+			add_to_list = roman_heritage_claims
+		}
+		title:d_tunis.kingdom = { #North Africa
+			add_to_list = roman_heritage_claims
+		}
+		title:d_thrace.empire = { #Byz
+			add_to_list = roman_heritage_claims 
+		}
+		title:d_alexandria.kingdom = { #Egypt
+			add_to_list = roman_heritage_claims 
+		}
+		title:d_antioch.kingdom = { #Syria
+			add_to_list = roman_heritage_claims 
+		}
+		title:d_palestine.kingdom = { #Palestine
+			add_to_list = roman_heritage_claims 
+		}
+		custom_tooltip = {
+			text = legend_title_does_not_exist_sub_realm_claims_given_tt
+		}
+		hidden_effect = {
+			every_in_list = {
+				list = roman_heritage_claims
+
+				if = {
+					limit = {
+						exists = this.holder
+						NOT = {
+							this.holder = root
+						}
+					}
+					root = {
+						add_pressed_claim = prev
+						add_to_variable_list = {
+							name = legendary_claims
+							target = prev
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						this.tier > tier_county
+					}
+					hidden_effect = {
+						legend_distribute_claims_in_de_jure = yes
+					}
+				}
+			}
+		}
+
+	}
+	else_if = {
+		limit = {
+			exists = scope:title_claim.holder
+			scope:title_claim.holder != root
+		}
+		add_pressed_claim = scope:title_claim
+		add_to_variable_list = {
+			name = legendary_claims
+			target = scope:title_claim
+		}
+	}
+	else_if = {
+		limit = {
+			scope:title_claim.tier > tier_county
+		}
+		custom_tooltip = {
+			text = legend_title_does_not_exist_sub_realm_claims_given_tt
+		}
+		hidden_effect = {
+			scope:title_claim = {
+				legend_distribute_claims_in_de_jure = yes
+			}
+		}
+	}
+	# Available decision
+	custom_tooltip = legend_ending_decision_tt
+	promoted_legend ?= { set_variable = finished_legend_var }
+	hidden_effect = {
+		create_character_memory = {
+			type = ce1_completed_my_legitimizing_legend
+			participants = {
+				owner = root
+				protagonist = scope:legend_protagonist
+			}
+		}
+	}
+}
+
+#Rewards for all Holy Legends
+legend_ending_rewards_holy_effect = {
+	# Legitimacy gain based on Legend Protagonist
+	disburse_legend_protagonist_legitimacy_effect = yes
+	# Available decision
+	custom_tooltip = legend_ending_decision_tt
+	promoted_legend ?= { set_variable = finished_legend_var }
+	hidden_effect = {
+		create_character_memory = {
+			type = ce1_completed_my_holy_legend
+			participants = {
+				owner = root
+				protagonist = scope:legend_protagonist
+			}
+		}
+	}
+}
+
+# Mythical Legends guaranteed access to Legendary Buildings
+
+give_legendary_building_mythical_holy_tooltip_effect = {
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	give_legendary_building_location_holy_effect = yes
+	#}
+	#set_variable = {
+	#	name = legendary_reward_location
+	#	value = scope:legendary_locale
+	#}
+	#set_variable = {
+	#	name = legendary_figure
+	#	value = scope:protagonist
+	#}
+	#ADDED - moved
+	give_legendary_building_location_holy_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+give_legendary_building_mythical_heroic_tooltip_effect = {
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	give_legendary_building_location_heroic_effect = yes
+	#}
+	#set_variable = {
+	#	name = legendary_reward_location
+	#	value = scope:legendary_locale
+	#}
+	#set_variable = {
+	#	name = legendary_figure
+	#	value = scope:protagonist
+	#}
+	#ADDED - moved
+	give_legendary_building_location_heroic_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+give_legendary_building_mythical_legitimizing_tooltip_effect = {
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	give_legendary_building_location_legitimizing_effect = yes
+	#}
+	#set_variable = {
+	#	name = legendary_reward_location
+	#	value = scope:legendary_locale
+	#}
+	#set_variable = {
+	#	name = legendary_figure
+	#	value = scope:protagonist
+	#}
+	#ADDED - moved
+	give_legendary_building_location_legitimizing_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+# Famed/Illustrious have a 50% chance
+
+give_legendary_building_holy_tooltip_effect = { #50% chance
+	# Chance to get legendary building
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	random = {
+	#		chance = {
+	#			value = 50
+	#		}
+	#		give_legendary_building_location_holy_effect = yes
+	#	}
+	#}
+	#set_variable = {
+	#	name = legendary_reward_location
+	#	value = scope:legendary_locale
+	#}
+	#set_variable = {
+	#	name = legendary_figure
+	#	value = scope:protagonist
+	#}
+	#ADDED - moved
+	give_legendary_building_location_holy_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+give_legendary_building_heroic_tooltip_effect = { #50% chance
+	# Chance to get legendary building
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	random = {
+	#		chance = {
+	#			value = 50
+	#		}
+	#		give_legendary_building_location_heroic_effect = yes
+	#		set_variable = {
+	#			name = legendary_reward_location
+	#			value = scope:legendary_locale
+	#		}
+	#		set_variable = {
+	#			name = legendary_figure
+	#			value = scope:protagonist
+	#		}
+	#	}
+	#}
+	#ADDED - moved
+	give_legendary_building_location_heroic_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+give_legendary_building_legitimizing_tooltip_effect = { #50% chance
+	# Chance to get legendary building
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			root = {
+	#				locale_valid_for_legendary_buildings = yes
+	#			}
+	#			capital_province = { has_special_building_slot = no }
+	#			any_sub_realm_barony = {
+	#				title_province = { has_special_building_slot = no }
+	#			}
+	#		}
+	#	}
+	#	random = {
+	#		chance = {
+	#			value = 50
+	#		}
+	#		give_legendary_building_location_legitimizing_effect = yes
+	#	}
+	#}
+	#set_variable = {
+	#	name = legendary_reward_location
+	#	value = scope:legendary_locale
+	#}
+	#set_variable = {
+	#	name = legendary_figure
+	#	value = scope:protagonist
+	#}
+	#ADDED - moved
+	give_legendary_building_location_legitimizing_effect = yes
+	if = {
+		limit = { exists = scope:legendary_locale }
+		set_variable = {
+			name = legendary_reward_location
+			value = scope:legendary_locale
+		}
+		set_variable = {
+			name = legendary_figure
+			value = scope:protagonist
+		}
+	}
+}
+
+give_legendary_building_location_standard_effect = {
+	if = { # Prioritize the location of the legend if possible
+		limit = {
+			root = {
+				locale_valid_for_legendary_buildings = yes
+			}
+		}
+		scope:location = { save_scope_as = legendary_locale }
+	}
+	else_if = { # Otherwise, get the capital
+		limit = {
+			capital_province = { has_special_building_slot = no }
+		}
+		capital_province = { save_scope_as = legendary_locale }
+	}
+	else_if = { # Otherwise, prioritize a title you hold directly
+		limit = {
+			any_held_title = {
+				tier = tier_county
+				title_province = { has_special_building_slot = no }
+			}
+		}
+		random_held_title = {
+			limit = {
+				tier = tier_county
+				title_province = { has_special_building_slot = no }
+			}
+			title_province = { save_scope_as = legendary_locale }
+		}
+	}
+	else_if = { #Otherwise, prioritize a barony that you hold directly
+		limit = {
+			#ADDED
+			always = no
+			any_held_title = {
+				tier = tier_barony
+				title_province = {
+					has_special_building_slot = no
+				}
+			}
+		}
+		random_held_title = {
+			limit = {
+				tier = tier_barony
+				title_province = {
+					has_special_building_slot = no
+				}
+			}
+			title_province = {
+				save_scope_as = legendary_locale
+			}
+		}
+
+	}
+	else_if = { # Otherwise, prioritize a barony within a title you hold
+		limit = {
+			#ADDED
+			always = no
+			any_held_title = {
+				tier = tier_county
+				any_county_province = { has_special_building_slot = no }
+			}
+		}
+		random_held_title = {
+			limit = {
+				tier = tier_county
+				any_county_province = { has_special_building_slot = no }
+			}
+			random_county_province = {
+				limit = {
+					has_special_building_slot = no
+				}
+				save_scope_as = legendary_locale
+			}
+		}
+	}
+	#ADDED
+	else_if = { # Try to find a direct vassal
+		limit = {
+			save_temporary_scope_as = legend_owner_scope
+			any_sub_realm_county = {		#prev any_sub_realm_barony
+				OR = {
+					holder = scope:legend_owner_scope
+					holder.liege = scope:legend_owner_scope
+				}
+				title_province = {
+					has_special_building_slot = no
+					has_holding_type = castle_holding
+				}
+			}
+		}
+		save_temporary_scope_as = legend_owner_scope
+		random_sub_realm_county = {		#prev random_sub_realm_barony
+			limit = {
+				#ADDED - try for capital first
+				holder.capital_province = title_province
+				OR = {
+					holder = scope:legend_owner_scope
+					holder.liege = scope:legend_owner_scope
+				}
+				title_province = {
+					has_special_building_slot = no
+					has_holding_type = castle_holding
+				}
+			}
+			#ADDED
+			alternative_limit = {
+				OR = {
+					holder = scope:legend_owner_scope
+					holder.liege = scope:legend_owner_scope
+				}
+				title_province = {
+					has_special_building_slot = no
+					has_holding_type = castle_holding
+				}
+			}
+			title_province = { save_scope_as = legendary_locale }
+		}
+	}
+	else_if = { # Find a feudal barony...
+		limit = {
+			any_sub_realm_county = {		#prev any_sub_realm_barony
+				title_province = {
+					has_special_building_slot = no
+					has_holding_type = castle_holding
+				}
+			}
+		}
+		random_sub_realm_county = {		#prev random_sub_realm_barony
+			limit = {
+				title_province = {
+					has_special_building_slot = no
+					has_holding_type = castle_holding
+				}
+			}
+			title_province = { save_scope_as = legendary_locale }
+		}
+	}
+	else_if = { # Find a province with a holding
+		limit = {
+			any_sub_realm_county = {		#prev any_sub_realm_barony
+				title_province = {
+					has_special_building_slot = no
+					has_holding = yes
+				}
+			}
+		}
+		random_sub_realm_county = {		#prev random_sub_realm_barony
+			limit = {
+				title_province = {
+					has_special_building_slot = no
+					has_holding = yes
+				}
+			}
+			title_province = { save_scope_as = legendary_locale }
+		}
+	}
+	else = { # Final fallback, just any barony in your realm
+		#random_sub_realm_barony = {
+		#	title_province = { save_scope_as = legendary_locale }
+		#}
+		#ADDED 		Nope! Just tell the player there's no valid county
+		custom_tooltip = give_legendary_building_location_standard_effect_failed_tt
+		save_scope_as = no_location_found
+	}
+	#ADDED - moved to IF statement
+	if = {
+		limit = { NOT = { exists = scope:no_location_found } }
+		#ADDED - if-else_if-else_if chain for tooltips and stuff
+		if = {
+			limit = { exists = scope:this_is_holy_effect }
+			custom_tooltip = {
+				text = can_build_legendary_shrine_tt
+				add_character_flag = legendary_shrine_flag
+			}
+		}
+		else_if = {
+			limit = { exists = scope:this_is_heroic_effect }
+			custom_tooltip = {
+				text = can_build_legendary_statue_tt
+				add_character_flag = legendary_statue_flag
+			}
+		}
+		else_if = {
+			limit = { exists = scope:this_is_legitimizing_effect }
+			custom_tooltip = {
+				text = can_build_legendary_palace_tt
+				add_character_flag = legendary_palace_flag
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					exists = scope:beast
+					has_trait_xp = {
+						trait = lifestyle_hunter
+						track = hunter
+						value >= 62
+					}
+					has_trait_xp = {
+						trait = lifestyle_hunter
+						track = falconer
+						value >= 62
+					}
+					culture ?= {
+						has_cultural_parameter = always_unlock_legendary_hunting_lodge
+					}
+				}
+			}
+			custom_tooltip = {
+				text = can_build_legendary_hunting_lodge_tt
+				add_character_flag = legendary_hunting_lodge_flag
+			}
+		}
+		if = {
+			limit = {
+				dynasty ?= { ce1_heroic_track_perks >= 5 }
+			}
+			custom_tooltip = {
+				text = can_build_legendary_watchtower_tt
+				add_character_flag = legendary_watchtower_flag
+			}
+		}
+	}
+}
+
+give_legendary_building_location_holy_effect = {
+	#ADDED
+	save_scope_as = this_is_holy_effect
+	give_legendary_building_location_standard_effect = yes
+	#custom_tooltip = {
+	#	text = can_build_legendary_shrine_tt
+	#	add_character_flag = legendary_shrine_flag
+	#}
+}
+
+give_legendary_building_location_heroic_effect = {
+	#ADDED
+	save_scope_as = this_is_heroic_effect
+	give_legendary_building_location_standard_effect = yes
+	#custom_tooltip = {
+	#	text = can_build_legendary_statue_tt
+	#	add_character_flag = legendary_statue_flag
+	#}
+}
+
+give_legendary_building_location_legitimizing_effect = {
+	#ADDED
+	save_scope_as = this_is_legitimizing_effect
+	give_legendary_building_location_standard_effect = yes
+	#custom_tooltip = {
+	#	text = can_build_legendary_palace_tt
+	#	add_character_flag = legendary_palace_flag
+	#}
+}

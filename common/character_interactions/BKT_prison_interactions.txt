@@ -1,0 +1,4035 @@
+﻿imprison_interaction = {
+	interface_priority = 120
+	common_interaction = yes
+	icon = prison
+
+	category = interaction_category_hostile
+	highlighted_reason = {
+		triggered_desc = {
+			trigger = {
+				scope:actor = {
+					has_title = title:e_minister_of_justice
+					NOT = { has_imprisonment_reason = scope:recipient }
+				}
+			}
+			desc = HIGHLIGHTED_MINISTER_IMPRISONMENT_REASON
+		}
+		triggered_desc = {
+			trigger = {
+				scope:actor = {
+					has_imprisonment_reason = scope:recipient
+				}
+			}
+			desc = HIGHLIGHTED_HAS_IMPRISONMENT_REASON
+		}
+	}
+	ai_maybe = yes
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+	can_send_despite_rejection = yes
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	desc = imprison_interaction_desc
+
+	greeting = negative
+	notification_text = REQUEST_ARREST_NOTIFICATION_TEXT
+	pre_answer_maybe_key = ANSWER_MIGHT_SUCCEED
+	pre_answer_no_key = ANSWER_CANT_SUCCEED
+	pre_answer_yes_key = ANSWER_WILL_SUCCEED
+	pre_answer_maybe_breakdown_key = ANSWER_SUM_CHANCE
+
+	on_decline_summary = {
+		triggered_desc = {
+			trigger = {
+				scope:recipient = {
+					NOR = {
+						AND = {
+							has_government = landless_adventurer_government
+							reverse_has_opinion_modifier = {
+								target = scope:actor
+								modifier = eviction_ignored_opinion
+							}
+						}
+						scope:actor = {
+							has_title = title:e_minister_of_justice
+						}
+						scope:recipient = {
+							is_landed = no
+							any_held_title = {
+								is_noble_family_title = yes
+							}
+						}
+					}
+				}
+			}
+			desc = imprison_decline_summary
+		}
+	}
+
+	ai_potential = {
+		trigger_if = {
+			limit = { has_realm_law_flag = imprisonment_toggle_enable }
+			has_realm_law_flag = imprisonment_toggle_on
+		}
+		is_imprisoned = no
+	}
+
+	is_shown = {
+		scope:actor != scope:recipient
+		scope:actor = {
+			OR = {
+				AND = {
+					has_title = title:e_minister_of_justice
+					scope:recipient = {
+						tgp_is_any_minister = no
+						liege = {
+							basic_allowed_to_imprison_character_trigger = {
+								CHARACTER = scope:recipient
+							}
+						}
+					}
+				}
+				basic_allowed_to_imprison_character_trigger = {
+					CHARACTER = scope:recipient
+				}
+			}
+		}
+		# Scope:recipient can't be visiting elsewhere.
+		trigger_if = {
+			limit = {
+				scope:recipient = { is_courtier_of = scope:actor }
+			}
+			NOT = {
+				scope:recipient.host = {
+					any_foreign_court_guest = { this = scope:recipient }
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			trigger_if = {
+				limit = {
+					has_title = title:e_minister_of_justice
+					scope:recipient = {
+						tgp_is_any_minister = no
+					}
+					NOT = {
+						allowed_to_imprison_character_trigger = { CHARACTER = scope:recipient }
+					}
+				}
+				top_liege = {
+					allowed_to_imprison_character_trigger = { CHARACTER = scope:recipient }
+				}
+			}
+			trigger_else = {
+				allowed_to_imprison_character_trigger = { CHARACTER = scope:recipient }
+			}
+			trigger_if = {
+				limit = {
+					government_has_flag = government_is_nomadic
+				}
+				NOT = { has_realm_law = nomadic_authority_1 }
+			}
+			trigger_if = {
+				limit = {
+					has_title = title:e_minister_of_justice
+				}
+				scope:recipient = {
+					NOT = {
+						is_close_or_extended_family_of = scope:actor.top_liege
+					}
+				}
+			}
+		}
+		imprison_neutral_is_valid_showing_failures_only_triggers_trigger = yes
+		custom_tooltip = {
+			text = cannot_take_overt_hostile_actions_against_diarch.tt
+			NOT = { scope:recipient ?= scope:actor.diarch }
+		}
+	}
+
+	can_send = {
+		scope:actor = {
+			custom_description = {
+				text = "character_interactions_hostile_actions_disabled_delay"
+				NOT = { has_character_flag = flag_hostile_actions_disabled_delay }
+			}
+			trigger_if = {
+				limit = {
+					is_ai = no
+				}
+				scope:recipient = {
+					trigger_if = {
+						limit = {
+							has_government = landless_adventurer_government
+							reverse_has_opinion_modifier = {
+								target = scope:actor
+								modifier = eviction_ignored_opinion
+							}
+						}
+						is_travelling = no
+					}
+				}
+			}
+			trigger_else = {
+				OR = {
+					has_imprisonment_reason = scope:recipient
+					any_character_struggle = {
+						involvement = involved
+					}
+				}
+			}
+		}
+	}
+
+	is_highlighted = {
+		scope:recipient = {
+			is_imprisoned = no
+		}
+		scope:actor = {
+			OR = {
+				has_imprisonment_reason = scope:recipient
+				has_title = title:e_minister_of_justice
+			}
+		}
+	}
+
+	#Use hook
+	send_option = {
+		is_valid = {
+			exists = scope:recipient
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	cost = {
+		# Usually, this action is free, but during certain diarchies, we want it to cost.
+		prestige = liege_diarchy_surcharge_interaction_imprison_interaction_value
+		treasury = {
+			if = {
+				limit = {
+					scope:actor = {
+						has_title = title:e_minister_of_justice
+					}
+					scope:recipient = {
+						NOT = { is_courtier_of = scope:actor }
+					} 
+				}
+				value = {
+					value = 0
+					desc = BASE
+				}
+				add = {
+					value = scope:actor.major_treasury_value
+					desc = IMPRISON_MINISTER_OF_JUSTICE_TREASURY_COST
+				}
+			}
+		}
+	}
+
+	on_send = {
+		scope:actor = {
+			add_character_flag = {
+				flag = flag_hostile_actions_disabled_delay
+				days = 10
+			}
+		}
+	}
+
+	on_auto_accept = {
+		# the rest of the necessary logic is covered by auto_accept also triggering on_accept below
+		scope:recipient = {
+			trigger_event = char_interaction.0233
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			if = {
+				limit = {	
+					has_title = title:e_minister_of_justice
+				}
+				if = {
+					limit = {
+						NOR = {
+							has_imprisonment_reason = scope:recipient
+							scope:recipient.liege = {
+								has_imprisonment_reason = scope:recipient
+							}
+							scope:hook = yes
+						}
+						any_character_situation = {
+							situation_type = dynastic_cycle
+							situation_top_has_catalyst = catalyst_minister_imprison
+						}
+					}
+					save_scope_value_as = {
+						name = use_strife_not_tyranny
+						value = yes
+					}
+					situation:dynastic_cycle = {
+						trigger_situation_catalyst = {
+							catalyst = catalyst_minister_imprison
+							character = scope:recipient
+						}
+					}
+				}
+				if = {
+					limit = {
+						government_allows = merit
+					}
+					change_merit = {
+						value = minor_merit_gain
+						multiply = scope:recipient.highest_held_title_tier
+					}
+				}
+				if = {
+					limit = {
+						government_has_flag = government_has_influence
+					}
+					change_influence = {
+						value = minor_influence_gain
+						multiply = scope:recipient.highest_held_title_tier
+					}
+				}
+				scope:recipient.liege = {
+					if = {
+						limit = { has_imprisonment_reason = scope:recipient }
+						consume_imprisonment_reasons = scope:recipient
+					}
+				}
+			}
+		}
+		if = {
+			limit = { scope:hook = yes }
+			scope:actor = { use_hook = scope:recipient }
+		}
+		illegal_imprisonment_dread_effect = yes
+		imprison_court_chaplain_consequences_effect = yes
+		imprison_HoF_consequences_effect = yes
+		scope:recipient = {
+			if = {
+				limit = {
+					is_a_faction_member = yes
+					liege = scope:actor
+				}
+				joined_faction = { save_scope_as = retaliating_faction }
+			}
+		}
+		imprison_character_effect = {
+			TARGET = scope:recipient
+			IMPRISONER = scope:actor
+		}
+		# If they recently revoked your title, or asked for your excommunication, they become your rival
+		imprison_attempt_escalates_rivalry_effect = yes
+		scope:actor = {
+			trigger_event = char_interaction.0231
+			if = {
+				limit = {
+					has_imprisonment_reason = scope:recipient
+				}
+				stress_impact = {
+					compassionate = minor_stress_impact_gain
+					forgiving = minor_stress_impact_gain
+				}
+			}
+			else = {
+				stress_impact = {
+					just = medium_stress_impact_gain
+					compassionate = medium_stress_impact_gain
+				}
+				if = {
+					limit = { exists = scope:retaliating_faction}
+					scope:retaliating_faction = {
+						imprisonment_retribution_start_faction_war_if_valid = yes
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:actor = { has_character_flag = flag_hostile_actions_disabled_delay }
+			}
+			scope:actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
+		}
+
+		# If we're a clan this interaction affects unity
+		if = { # If you don't have an imprisonment reason, and the target is landed, you lose more unity
+			limit = {
+				NOT = { scope:actor = { has_imprisonment_reason = scope:recipient } }
+				scope:recipient = { is_landed_or_landless_administrative = yes }
+			}
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = major_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+		else_if = { # If you don't have an imprisonment reason, and the target is unlanded, you lose slightly less unity
+			limit = {
+				NOT = { scope:actor = { has_imprisonment_reason = scope:recipient } }
+				scope:recipient = { is_landed_or_landless_administrative = no }
+			}
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = medium_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+		else = { # If you have a valid reason, you lose only a tiny bit of unity (criminal or not, they are still family)
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = minor_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+
+		# Harrying logic.
+		scope:actor = {
+			if = {
+				limit = {
+					character_is_valid_for_harrying_of_the_north_trigger = yes
+					scope:recipient = {
+						character_is_valid_for_harrying_of_the_north_trigger = yes
+						is_important_or_vip_struggle_character = yes
+					}
+					culture != scope:recipient.culture
+				}
+				global_var:harrying_of_the_north = { save_scope_as = story }
+				if = {
+					limit = {
+						character_is_valid_norman_for_harrying_of_the_north_trigger = yes
+						scope:recipient = { character_is_valid_anglo_saxon_for_harrying_of_the_north_trigger = yes }
+					}
+					ep3_increase_pacification_effect = { AMOUNT = harrying_minor_increase_value }
+				}
+				else_if = {
+					limit = {
+						character_is_valid_anglo_saxon_for_harrying_of_the_north_trigger = yes
+						scope:recipient = { character_is_valid_norman_for_harrying_of_the_north_trigger = yes }
+					}
+					ep3_increase_resistance_effect = { AMOUNT = harrying_minor_increase_value }
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		if = {
+			limit = {
+				scope:recipient = {
+					has_government = landless_adventurer_government
+					reverse_has_opinion_modifier = {
+						target = scope:actor
+						modifier = eviction_ignored_opinion
+					}
+				}
+			}
+			scope:recipient = {
+				if = {
+					limit = { current_military_strength >= ep3_interactions_events_0500_troops_count_value }
+					start_war = {
+						cb = ep3_laamp_apprehend_adventurer_cb
+						target = scope:actor
+					}
+				}
+				else = {
+					# Remove them immediately.
+					remove_laamp_from_exiled_county_automatically_effect = {
+						PROVINCE = scope:recipient.location
+						LAAMP = scope:recipient
+					}
+				}
+			}
+		}
+		else = {
+			scope:actor = {
+				imprison_HoF_consequences_effect = yes
+				imprison_tyranny_effect = yes
+			}
+			scope:recipient = {
+				#If target is count or higher, start war.
+				if = {
+					limit = {
+						is_playable_character = yes
+						primary_title.tier > tier_barony
+						#ADDED - catch this case later.
+						NOT = { scope:actor = { has_legitimacy_flag = vassals_refuse_imprisonment_with_no_war } }
+					}
+					if = {
+						limit = {
+							is_a_faction_member = yes
+							liege = scope:actor
+							joined_faction = {
+								faction_target = scope:actor
+								NOT = { faction_is_type = populist_faction }
+							}
+						}
+						joined_faction = {
+							save_scope_as = retaliating_faction # For loc
+							imprisonment_retribution_start_faction_war_if_valid = yes
+						}
+						hidden_effect = {
+							if = {
+								limit = { NOT = { exists = joined_faction.faction_war } }
+								war_for_imprison_effect = yes
+							}
+						}
+					}
+					else = {
+						war_for_imprison_effect = yes
+					}
+				}
+				#ADDED - this else_if
+				else_if = {
+					limit = {
+						is_ruler = yes
+						scope:actor = { has_legitimacy_flag = vassals_refuse_imprisonment_with_no_war }
+					}
+					scope:actor = {
+						add_prestige = medium_prestige_loss
+					}
+					add_opinion = {
+						target = scope:actor
+						modifier = attempted_arrest_opinion
+					}
+				}
+				#If target is a baron or unlanded, have them escape.
+				else = {
+					if = { #To block them from being instantly rehired
+						limit = {
+							is_councillor_of = scope:actor
+							can_be_fired_from_council_trigger = { COURT_OWNER = scope:actor }
+						}
+						set_variable = {
+							name = escaped_imprisonment_from
+							value = scope:actor
+							years = 20
+						}
+					}
+					imprison_court_chaplain_consequences_effect = yes
+					if = {
+						limit = {
+							is_landed_or_landless_administrative = yes
+						}
+						depose_effect = { DEPOSER = scope:actor }
+					}
+					else_if  = {
+						limit = {
+							is_hostage = yes
+							warden = scope:actor
+						}
+						save_scope_as = imprison_failure
+						save_scope_as = hostage
+						warden = { save_scope_as = warden }
+						home_court = { save_scope_as = home_court }
+						scope:warden = { trigger_event = bp2_hostage_system.0400 }
+						scope:home_court = { trigger_event = bp2_hostage_system.0401 }
+						return_hostage = yes
+					}
+					else_if = {
+						limit = {
+							is_landed_or_landless_administrative = no
+							trigger_if = {
+								limit = {
+									is_councillor = yes
+								}
+								can_be_fired_from_council_trigger = { COURT_OWNER = scope:recipient.liege }
+							}
+							trigger_if = {
+								limit = {
+									exists = scope:actor.faith.religious_head
+								}
+								scope:actor.faith.religious_head != scope:recipient
+							}
+						}
+						select_and_move_to_pool_effect = yes
+					}
+					add_opinion = {
+						target = scope:actor
+						modifier = attempted_imprisonment_opinion
+					}
+				}
+			}
+
+			if = {
+				limit = {
+					scope:actor = { has_realm_law_flag = vassal_refusal_is_treason }
+				}
+				scope:actor = {
+					add_opinion = {
+						target = scope:recipient
+						modifier = treasonous_imprison_refusal
+					}
+				}
+			}
+		}
+
+		#Remove them as guardian/ward for any courtier (feedback given in char_interaction.0230)
+		scope:actor = {
+			if = {
+				limit = {
+					any_courtier = {
+						has_relation_guardian = scope:recipient
+					}
+				}
+				every_courtier = {
+					limit = {
+						has_relation_guardian = scope:recipient
+					}
+					save_scope_as = ward
+					scope:recipient = { remove_relation_ward = scope:ward }
+
+					scope:ward = {
+						if = {
+							limit = {
+								host != liege
+							}
+							return_to_court = yes
+						}
+						guardian_remove_opinion_effect = {
+							GUARDIAN = scope:recipient
+							WARD = this
+							WARD_LIEGE = scope:actor
+						}
+					}
+
+					add_to_list = ward_children
+				}
+			}
+			if = {
+				limit = {
+					any_courtier = {
+						has_relation_ward = scope:recipient
+					}
+				}
+				random_courtier = {
+					limit = {
+						has_relation_ward = scope:recipient
+					}
+					save_scope_as = guardian
+					scope:guardian = { remove_relation_ward = scope:recipient }
+
+					scope:guardian = {
+						if = {
+							limit = {
+								host != liege
+							}
+							return_to_court = yes
+						}
+						guardian_remove_opinion_effect = {
+							GUARDIAN = this
+							WARD = scope:recipient
+							WARD_LIEGE = scope:actor
+						}
+					}
+
+					add_to_list = guardian_list
+				}
+
+				hidden_effect = {
+					scope:guardian = {
+						send_interface_message = {
+							type = event_childhood_neutral
+							title = remove_guardian_interaction_notification
+							left_icon = scope:recipient
+							right_icon = scope:guardian
+							remove_guardian_effect = {
+								GUARDIAN = scope:guardian
+								WARD = scope:recipient
+								RETURN_WARD = yes
+								HIDE_OPINION = no
+							}
+						}
+					}
+				}
+			}
+		}
+
+		scope:actor = {
+			if = {
+				limit = {
+					scope:recipient = {
+						OR = {
+							is_playable_character = no
+							AND = {
+								is_playable_character = yes
+								primary_title.tier = tier_barony
+							}
+						}
+					}
+				}
+				trigger_event = char_interaction.0230
+			}
+		}
+
+		if = {
+			limit = {
+				scope:actor = { has_character_flag = flag_hostile_actions_disabled_delay }
+			}
+			scope:actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
+		}
+
+		# If we're a clan this interaction affects unity
+		if = { # If you don't have an imprisonment reason, and the target is landed, you lose more unity
+			limit = {
+				NOT = {
+					scope:actor = { has_imprisonment_reason = scope:recipient }
+				}
+				scope:recipient = { is_landed_or_landless_administrative  = yes }
+			}
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = major_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+		else_if = { # If you don't have an imprisonment reason, and the target is unlanded, you lose slightly less unity
+			limit = {
+				NOT = {
+					scope:actor = { has_imprisonment_reason = scope:recipient }
+				}
+				scope:recipient = { is_landed_or_landless_administrative  = no }
+			}
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = medium_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+		else = { # If you have a valid reason, you lose only a tiny bit of unity (criminal or not, they are still family)
+			add_clan_unity_interaction_effect = {
+				CHARACTER = scope:actor
+				TARGET = scope:recipient
+				VALUE = miniscule_unity_loss
+				DESC = clan_unity_imprison.desc
+				REVERSE_NON_HOUSE_TARGET = no
+			}
+		}
+	}
+
+	auto_accept = {
+		# OR does not display properly here
+		trigger_if = {
+			limit = {
+				scope:actor = {
+					has_title = title:e_minister_of_justice
+				}
+			}
+			custom_description = {
+				text = you_are_the_minister_of_justice
+				scope:actor = {
+					has_title = title:e_minister_of_justice
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				scope:recipient = {
+					is_landed = no
+					any_held_title = {
+						is_noble_family_title = yes
+					}
+				}				
+			}
+			custom_description = {
+				text = noble_family_head_cannot_refuse_your_power
+				scope:recipient = {
+					is_landed = no
+					any_held_title = {
+						is_noble_family_title = yes
+					}
+				}
+			}
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	ai_accept = {
+		base = 0 # Try to make it 0 for most interactions
+
+		modifier = {
+			add = {
+				value = scope:actor.intrigue
+				multiply = 1
+			}
+			desc = IMPRISON_INTRIGUE_ACTOR
+		}
+		modifier = {
+			add = {
+				value = scope:recipient.intrigue
+				multiply = -2
+			}
+			desc = IMPRISON_INTRIGUE_RECIPIENT
+		}
+
+		modifier = {
+			add = 30
+			scope:hook = yes
+			desc = SCHEME_HOOK_USED
+		}
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+		ai_value_modifier = {
+			who = scope:recipient
+			ai_boldness = {
+				if = {
+					limit = {
+						scope:recipient = { NOT = { ai_boldness = 0 } }
+					}
+					value = -0.5
+				}
+			}
+			ai_honor = {
+				if = {
+					limit = {
+						scope:recipient = { #If AI is honorable and the law compels to obey the liege, AI will be more likely to obey.
+							ai_honor > 0
+						}
+						scope:actor = {
+							has_imprisonment_reason = scope:recipient
+							has_realm_law_flag = vassal_refusal_is_treason
+						}
+					}
+					value = 0.75
+				}
+			}
+		}
+		modifier = {
+			add = 20
+			scope:actor = {
+				any_vassal_or_below = { this = scope:recipient }
+				has_realm_law_flag = vassal_refusal_is_treason
+			}
+			desc = AI_REFUSAL_IS_TREASON
+		}
+		modifier = {
+			add = 50
+			scope:actor = {
+				has_perk = prison_feudal_complex_perk
+			}
+			desc = AI_PRISON_FEUDAL_COMPLEX_PERK
+		}
+		modifier = { #I am a King!
+			desc = offer_vassalization_interaction_aibehavior_hightier_tt
+			scope:recipient = { highest_held_title_tier = tier_kingdom }
+			add = -40
+		}
+		modifier = { #Courtiers.
+			desc = AI_REFUSAL_COURTIER
+			scope:recipient = { is_ruler = no }
+			add = 50
+		}
+		modifier = { # Your young children can't really stop you
+			desc = AI_REFUSAL_YOUNG_CHILD
+			scope:recipient = {
+				is_child_of = scope:actor
+				is_courtier_of = scope:actor
+				is_adult = no
+			}
+			add = 200
+		}
+		modifier = { #They're a claimant against you
+			desc = AI_CLAIMANT_PENALTY
+			scope:actor = {
+				OR = {
+					any_targeting_faction = {
+						faction_type = claimant_faction
+						faction_is_at_war = yes
+						special_character ?= scope:recipient
+					}
+					AND = {
+						exists = var:claimant_faction_sent_demand
+						var:claimant_faction_sent_demand = scope:recipient
+					}
+				}
+			}
+			add = -70
+		}
+		modifier = { #Rank difference.
+			desc = AI_REFUSAL_RANK_DIFFERENCE
+			scope:recipient = {
+				is_ruler = yes
+				is_landed = yes
+				highest_held_title_tier < tier_kingdom
+			}
+			add = {
+				value = -15
+				if = {
+					limit = {
+						scope:actor = {
+							tier_difference = {
+								target = scope:recipient
+								value >= 2
+							}
+						}
+					}
+					add = 5
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							tier_difference = {
+								target = scope:recipient
+								value >= 3
+							}
+						}
+					}
+					add = 5
+				}
+				if = { #King asking Baron, modifier becomes positive.
+					limit = {
+						scope:actor = {
+							tier_difference = {
+								target = scope:recipient
+								value >= 4
+							}
+						}
+					}
+					add = 10
+				}
+			}
+		}
+		modifier = {
+			add = intimidated_halved_reason_value
+			scope:recipient = {
+				target_is_liege_or_above = scope:actor
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 1
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+		modifier = {
+			add = cowed_halved_reason_value
+			scope:recipient = {
+				target_is_liege_or_above = scope:actor
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 2
+				}
+			}
+			desc = COWED_REASON
+		}
+
+		modifier = {
+			add = intimidated_external_reason_value
+			scope:recipient = {
+				NOT = { target_is_liege_or_above = scope:actor }
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 1
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+		modifier = {
+			add = cowed_external_reason_value
+			scope:recipient = {
+				NOT = { target_is_liege_or_above = scope:actor }
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 2
+				}
+			}
+			desc = COWED_REASON
+		}
+		modifier = { #Comparative military strength.
+			desc = offer_vassalization_interaction_aibehavior_power_tt
+			trigger = {
+				scope:actor = { is_ruler = yes }
+				scope:recipient = { is_ruler = yes }
+			}
+			add = {
+				value = 1
+				subtract = {
+					value = scope:recipient.current_military_strength
+					divide = { value = scope:actor.current_military_strength min = 1 }
+				}
+				multiply = 100
+				min = -1000
+				# This max needs to match the loc in offer_vassalization_interaction_aibehavior_power_tt
+				max = 20
+			}
+		}
+		modifier = { #Rivalry modifier.
+			desc = offer_vassalization_interaction_aibehavior_rival_tt
+			trigger = {
+				scope:recipient = {
+					has_relation_rival = scope:actor
+					NOT = { has_relation_nemesis = scope:actor }
+				}
+			}
+			add = -50
+		}
+		modifier = { #Nemesis modifier.
+			desc = offer_vassalization_interaction_aibehavior_nemesis_tt
+			trigger = {
+				scope:recipient = {
+					has_relation_nemesis = scope:actor
+				}
+			}
+			add = -100
+		}
+		modifier = {
+			add = 10
+			scope:actor = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+				is_liege_or_above_of = scope:recipient
+				court_grandeur_current_level >= 7
+				court_grandeur_current_level < 9
+			}
+			desc = GRANDEUR_REASON
+		}
+		modifier = {
+			add = 20
+			scope:actor = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+				is_liege_or_above_of = scope:recipient
+				court_grandeur_current_level >= 9
+			}
+			desc = GRANDEUR_REASON
+		}
+		modifier = { # Legalistic tradition
+			desc = tradition_legalistic_name
+			scope:actor = {
+				has_imprisonment_reason = scope:recipient
+				culture = { has_cultural_parameter = vassals_more_likely_accept_punishments }
+			}
+			add = legalistic_vassal_punishment_acceptance
+		}
+		modifier = { # AI Mongols, tyranny wars just delay the inevitable fun!
+			scope:actor = {
+				is_ai = yes
+				OR = {
+					has_trait = greatest_of_khans
+					has_character_modifier = the_great_khan_modifier
+				}
+			}
+			scope:recipient = {
+				is_ai = yes
+			}
+			add = 500
+		}
+		# Thug accolade increases imprison chance because they scary
+		modifier = {
+			scope:actor = {
+				any_active_accolade = {
+					accolade_parameter = accolade_imprisonment_chance
+				}
+			}
+			desc = THUG_REASON
+			add = accolade_imprisonment_chance_value
+		}
+		modifier = {
+			scope:actor = {
+				any_active_accolade = {
+					accolade_parameter = accolade_imprisonment_chance_high
+				}
+			}
+			desc = THUG_REASON_HIGH
+			add = accolade_imprisonment_chance_value_high
+		}
+		evaluate_action_decreasing_house_unity = {
+			VALUE = 100
+		}
+		modifier = {
+			add = -25
+			scope:recipient = {
+				culture = { has_cultural_parameter = vassals_more_likely_to_refuse_demands }
+			}
+			desc = VASSALS_REFUSAL_indomitable_azatani
+		}
+		modifier = {
+			add = 10
+			scope:recipient = { has_character_modifier = ach_intent_imprisonment_modifier }
+			desc = ach_host_intent_imprison_reason
+		}
+		
+		#ADDED
+		modifier = {
+			add = {
+				value = -75
+				if = {
+					limit = { scope:recipient = { is_theocratic_lessee = yes } }
+					value = -20
+				}
+			}
+			scope:recipient = {
+				is_courtier_of = scope:actor
+				is_adult = yes
+				gold > 100
+				gold <= 500
+			}
+			desc = I_HAVE_GOLD
+		}
+		#ADDED
+		modifier = {
+			add = {
+				value = -250
+				if = {
+					limit = { scope:recipient = { is_theocratic_lessee = yes } }
+					value = -35
+				}
+			}
+			scope:recipient = {
+				is_courtier_of = scope:actor
+				is_adult = yes
+				gold > 500
+			}
+			desc = I_HAVE_A_LOT_OF_GOLD
+		}
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = vassals
+		chance = 0.5
+	}
+	ai_targets = {
+		ai_recipients = courtiers
+		chance = 0.25
+	}
+	
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 36
+		duchy = 12		#prev 10
+		kingdom = 10
+		empire = 10
+		hegemony = 10
+	}
+
+	ai_will_do = {
+		base = -100
+
+		modifier = { # Make sure the AI uses hooks for this as it's % based
+			scope:hook = yes
+			add = 50	#prev 1
+		}
+
+		modifier = { # Default imprisonment reason weight
+			add = 200
+			scope:actor = {
+				has_imprisonment_reason = scope:recipient
+			}
+		}
+		
+		modifier = { # More likely to imprison criminal Soryo's if Ritsuryo
+			add = 200
+			scope:actor = {
+				has_imprisonment_reason = scope:recipient
+				government_has_flag = government_is_japan_administrative
+			}
+			scope:recipient = {
+				government_has_flag = government_is_japan_feudal
+			}
+		}
+		
+		modifier = { # Even more imprisonment reason if you are a danger to the Kampaku
+			add = 400
+			scope:actor = {
+				primary_title = title:e_japan
+				has_imprisonment_reason = scope:recipient
+			}
+			scope:recipient = {
+				exists = house.house_confederation
+				house.house_confederation.combined_military_strength > scope:actor.current_military_strength
+			}
+		}
+
+		modifier = { # Avoid Tyranny wars at inopportune times
+			add = -500	#prev -190
+			scope:actor = {
+				ai_rationality > -100 # Lunatics can do whatever, let the world burn...
+				is_at_war = yes
+			}
+			scope:recipient = {
+				is_playable_character = yes
+			}
+		}
+
+		modifier = { # Avoid imprisonments in certain circumstances
+			add = -240	#prev -190
+			scope:actor = {
+				ai_rationality > -100 # Lunatics can do whatever, let the world burn...
+				NOR = {
+					AND = {
+						intrigue > scope:recipient.intrigue
+						intrigue >= 12
+					}
+					has_perk = prison_feudal_complex_perk
+					scope:recipient = {
+						has_dread_level_towards = {
+							target = scope:actor
+							level >= 1
+						}
+					}
+					culture = { has_cultural_parameter = vassals_more_likely_accept_punishments }
+					current_military_strength >= scope:recipient.twice_current_military_strength
+					scope:recipient.ai_boldness <= -100
+				}
+			}
+			scope:recipient = {
+				is_playable_character = yes
+			}
+		}
+
+		modifier = { # If the AI is not very bold, avoid imprisoning people unless you're more powerful
+			add = -240	#prev -190
+			scope:actor.ai_rationality > -100 # Lunatics can do whatever, let the world burn...
+			scope:actor.ai_boldness <= 25
+			scope:actor.current_military_strength < scope:recipient.one_and_a_half_times_current_military_strength
+		}
+
+		modifier = { # Avoid imprisoning people that would destroy you
+			add = -240	#prev -190
+			scope:actor.ai_rationality > -100 # Lunatics can do whatever, let the world burn...
+			scope:actor.current_military_strength < scope:recipient.current_military_strength
+		}
+
+		modifier = { # Do not imprison when the chance of success if exceedingly low
+			add = -240	#prev -190
+			scope:actor.ai_rationality > -100 # Lunatics can do whatever, let the world burn...
+			scope:recipient = {
+				is_playable_character = yes
+			}
+			NOT = {
+				scope:recipient = {
+					highest_held_title_tier = tier_barony
+				}
+			}
+			scope:actor = {
+				gold < minimum_ai_gold_value_for_tyranny_wars
+			}
+		}
+
+		modifier = { # Don't imprison people you like
+			scope:actor = {
+				NOT = {
+					has_trait = sadistic
+				}
+				OR = {
+					has_secret_relation_lover = scope:recipient
+					has_relation_lover = scope:recipient
+					has_relation_soulmate = scope:recipient
+					has_relation_friend = scope:recipient
+					has_relation_best_friend = scope:recipient
+					opinion = {
+						target = scope:recipient
+						value > very_high_positive_opinion
+					}
+				}
+			}
+			add = -1000
+		}
+
+		modifier = { # Don't imprison your own children... unless they're your rival/nemesis
+			scope:recipient = {
+				is_child_of = scope:actor
+				NOR = {
+					has_relation_rival = scope:actor
+					has_relation_nemesis = scope:actor
+				}
+			}
+			add = -1000
+		}
+
+		modifier = { # Don't imprison your spouse, unless they're your rival/have cheated on you
+			scope:recipient = {
+				is_spouse_of = scope:actor
+				NOR = {
+					has_relation_rival = scope:actor
+					has_relation_nemesis = scope:actor
+					exposed_cheating_on_spouse_trigger = { SPOUSE = scope:actor }
+				}
+			}
+			add = -1000
+		}
+
+		modifier = { # Try to avoid pointless imprisonments
+			scope:recipient = {
+				NOR = {
+					scope:actor = { # Sadists want people to torture
+						has_trait = sadistic
+					}
+					AND = { # Imprisoning vassals you have revoke reasons on is relevant
+						is_playable_character = yes
+						scope:actor = { has_revoke_title_reason = scope:recipient }
+					}
+					is_a_faction_member = yes
+					has_relation_rival = scope:actor
+					has_relation_nemesis = scope:actor
+					exposed_cheating_on_spouse_trigger = { SPOUSE = scope:actor }
+					scope:actor = { # Scheme Agents should be imprisoned indiscriminately
+						any_targeting_scheme = {
+							hostile_scheme_trigger = yes
+							is_scheme_agent_exposed = scope:recipient
+						}
+					}
+					AND = { # Zealots will imprison characters of other faiths
+						scope:actor.ai_zeal >= medium_positive_ai_value
+						scope:actor.faith != scope:recipient.faith
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = murdered_close_family_crime
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = attempted_murder_close_family_crime
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = executed_close_family
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = slept_with_spouse_discovered_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = slept_with_spouse_exposed_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = unfaithful_spouse_discovered_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = unfaithful_spouse_exposed_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = refused_to_renounce_lover_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = betrayed_our_promise
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = botched_my_treatment_crime_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = botched_treatment_of_kin_crime_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = smeared_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = insulted_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = mocked_me_in_time_of_need
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = loved_one_dungeon_death
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = abandoned_me_opinion
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = reason_child_died
+							target = scope:recipient
+						}
+					}
+					scope:actor = {
+						has_opinion_modifier = {
+							modifier = falsely_accused
+							target = scope:recipient
+						}
+					}
+				}
+			}
+			add = -1000
+		}
+
+		modifier = {
+			exists = scope:recipient.primary_title
+			add = scope:recipient.primary_title.tier
+		}
+
+		# Agenda impact
+		modifier = {
+			scope:recipient = {
+				is_important_or_vip_struggle_character = yes
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_important
+							}
+							has_character_flag = agenda_towards_escalation
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_important
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+		modifier = {
+			scope:recipient = {
+				has_trait = fp3_struggle_supporter
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_supporter
+							}
+							has_trait = fp3_struggle_detractor
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_supporter
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+		modifier = {
+			scope:recipient = {
+				has_trait = fp3_struggle_detractor
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_detractor
+							}
+							has_trait = fp3_struggle_supporter
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_imprison_detractor
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+
+		# TGP Be more careful with blocs generally
+		house_bloc_tyranny_war_modifiers = yes
+
+		evaluate_action_decreasing_house_unity = {
+			VALUE = 100
+		}
+
+		#ADDED - moved down because it's a factor.
+		modifier = { # Avoid triggering Tyranny wars mid-grand activity
+			factor = 0
+			scope:actor = {
+				has_ongoing_grand_activity_trigger = yes
+			}
+			scope:recipient = {
+				highest_held_title_tier >= tier_county
+			}
+		}
+	}
+}
+
+ransom_interaction = {
+	interface_priority = 50
+	common_interaction = no
+	use_diplomatic_range = no
+	category = interaction_category_prison
+	special_interaction = ransom_interaction
+	icon = icon_gold
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+			if = {
+				limit = {
+					is_ruler = no
+					exists = liege
+				}
+				liege = {
+					save_scope_as = recipient
+				}
+			}
+		}
+	}
+
+	desc = ransom_interaction_desc
+
+	notification_text = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = scope:recipient
+				}
+				desc = OFFER_RANSOM_PROPOSAL_PERSONAL
+			}
+			desc = OFFER_RANSOM_PROPOSAL
+		}
+	}
+
+	is_shown = {
+		scope:secondary_recipient = {
+			#exists = liege
+			is_imprisoned_by = scope:actor
+		}
+		scope:actor != scope:recipient
+	}
+
+	is_valid_showing_failures_only = {
+		trigger_if = {
+			limit = {
+				scope:invalid = yes
+			}
+			always = no
+		}
+		scope:secondary_recipient = {
+			custom_description = {
+				text = "currently_being_tortured"
+				NOT = { has_character_flag = is_being_tortured }
+			}
+		}
+		cannot_release_former_regent_whilst_old_regent_holds_power_trigger = {
+			PRISONER = scope:recipient
+			REGENT = scope:recipient.var:imprisoned_by_diarch
+		}
+		custom_tooltip = {
+			text = is_currently_being_purged_tt
+			scope:secondary_recipient = {
+				NOT = {
+					has_character_flag = is_currently_being_purged
+				}
+			}
+		}
+	}
+
+	cost = {
+		influence = {
+			value = 0
+			if = {
+				limit = { scope:influence_send_option = yes }
+				add = scope:actor.medium_influence_value
+				desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+			}
+		}
+	}
+
+	on_accept = {
+		if = {
+			limit = { scope:recipient = { has_character_modifier = allowed_to_go_outside } }
+			scope:recipient = { remove_character_modifier = allowed_to_go_outside }
+		}
+		if = {
+			limit = { scope:recipient = { has_character_modifier = moldy_gruel_diet } }
+			scope:recipient = { remove_character_modifier = moldy_gruel_diet }
+		}
+		# Set up event scopes and trigger the exchange.
+		if = {
+			limit = { scope:secondary_recipient = { is_imprisoned_by = scope:actor } } # To prevent simultaneous release-shenanigans
+			scope:secondary_recipient = {
+				save_scope_as = prisoner
+			}
+			scope:recipient = {
+				save_scope_as = payer
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+					}
+					scope:prisoner = {
+						save_scope_value_as = {
+							name = new_ransom_value
+							value = haggler_ransom_cost_modifier
+						}
+					}
+					custom_tooltip = has_person_haggler_decrease_ransom_cost
+				}
+				# If the recipient doesn't have enough funds to pay the full amount and we're only requesting their current funds, save how much they've agreed to pay.
+				if = {
+					limit = {
+						OR = {
+							exists = scope:current_gold
+							exists = scope:extortionate_current_gold
+						}
+					}
+					save_scope_value_as = {
+						name = ransom_saved_gold_value
+						value = scope:payer.current_gold_value
+					}
+				}
+			}
+			scope:actor = {
+				save_scope_as = imprisoner
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+					}
+					scope:recipient = {
+						scope:prisoner = {
+							save_scope_value_as = {
+								name = new_ransom_value
+								value = haggler_ransom_cost_modifier
+							}
+						}
+						custom_tooltip = has_person_haggler_increase_ransom_cost
+					}
+				}
+
+				#Save scopes for portraits
+				scope:recipient = { save_scope_as = portrait_first }
+				if = {
+					limit = {
+						scope:portrait_first != scope:prisoner
+					}
+					scope:prisoner = { save_scope_as = portrait_second }
+					# Must come after we save the payment value, or the payer won't know how much they need to pay.
+					send_interface_message = {
+						type = event_prison_good
+						title = msg_ransom_prisoner
+						right_icon = scope:portrait_first
+						left_icon = scope:portrait_second
+						ransom_interaction_effect = yes
+					}
+				}
+				else = {
+					# Must come after we save the payment value, or the payer won't know how much they need to pay.
+					send_interface_message = {
+						type = event_prison_good
+						title = msg_ransom_prisoner
+						right_icon = scope:portrait_first
+						ransom_interaction_effect = yes
+					}
+				}
+
+				# Struggle Catalyst
+				if = {
+					limit = {
+						any_character_struggle = {
+							involvement = involved
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:secondary_recipient
+							}
+						}
+					}
+					every_character_struggle = {
+						involvement = involved
+						limit = {
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:secondary_recipient
+							}
+						}
+						activate_struggle_catalyst = {
+							catalyst = catalyst_ransom_important
+							character = scope:actor
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		# If a player declines this ransom offer, wait 10 years before sending another one (they presumably will ransom that character themselves when they want them back).
+		if = {
+			limit = { scope:recipient = { is_ai = no } }
+			scope:secondary_recipient = {
+				add_character_flag = {
+					flag = character_ransom_refused_by_player
+					years = 10
+				}
+			}
+		}
+
+		# Trigger notification event
+		scope:actor = {
+			trigger_event = char_interaction.0131
+		}
+	}
+
+	# Pay me an extortionate amount!
+	send_option = {
+		is_shown = {
+			scope:actor = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:recipient ?= {
+				gold >= scope:secondary_recipient.increased_ransom_cost_value
+			}
+		}
+		flag = extortionate_gold
+		localization = "RANSOM_EXTORTIONATE_GOLD_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have (extort version)!
+	send_option = {
+		is_shown = {
+			scope:actor = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:recipient ?= {
+				gold < scope:secondary_recipient.increased_ransom_cost_value
+				gold >= 1
+			}
+		}
+		flag = extortionate_current_gold
+		localization = "RANSOM_EXTORTIONATE_CURRENT_GOLD_OPTION"
+	}
+
+	# Pay me what they're worth!
+	send_option = {
+		is_shown = {
+			scope:actor = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:recipient ?= {
+				gold >= scope:secondary_recipient.ransom_cost_value
+			}
+		}
+		flag = gold
+		localization = "RANSOM_GOLD_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have!
+	send_option = {
+		is_shown = {
+			scope:actor = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:recipient ?= {
+				gold < scope:secondary_recipient.ransom_cost_value
+				gold >= 1
+			}
+		}
+		flag = current_gold
+		localization = "RANSOM_CURRENT_GOLD_OPTION"
+	}
+
+	send_option = {
+		is_shown = {
+			trigger_if = { # in the mass action ransom we only want to do it for gold
+				limit = { exists = scope:mass_action }
+				scope:mass_action = no
+			}
+		}
+		is_valid = {
+			scope:actor = {
+				can_add_hook = { #To match the hook added through ransom_interaction_effect
+					target = scope:recipient
+					type = favor_hook
+				}
+			}
+		}
+		flag = favor
+		localization = "RANSOM_FAVOR_OPTION"
+	}
+
+	send_option = { # EP3 Influence
+		is_shown = { # Actor must have a government that uses influence 
+			trigger_if = { # in the mass action ransom we only want to do it for gold
+				limit = { exists = scope:mass_action }
+				scope:mass_action = no
+			}
+			scope:actor = {
+				government_has_flag = government_has_influence
+			}
+		}
+		is_valid = {
+			# Actor has enough influence
+			scope:actor = { influence >= medium_influence_value }
+			# Both characters are within the same top realm
+			custom_tooltip = {
+				text = not_same_realm_tt
+				scope:recipient.top_liege = scope:actor.top_liege
+			}
+		}
+		flag = influence_send_option
+		localization = TRADE_INFLUENCE_FOR_BETTER_AI_ACCEPTANCE
+	}
+	
+	# MPO Herd
+	send_option = {
+		is_shown = { # Actor must have a government that uses Herd 
+			scope:actor = {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+				is_ai = no
+			}
+			# Recipient must care about Herd
+			scope:recipient ?= {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+			}
+		}
+		is_valid = {
+			# Recipient has enough Herd
+			scope:recipient = { domicile.herd >= domicile.medium_herd_value }
+		}
+		flag = herd_send_option
+		localization = RANSOM_HERD_OPTION
+	}
+
+	localization_values = {
+		EXTORTIONATE_RANSOM_COST = scope:secondary_recipient.increased_ransom_cost_value
+		RANSOM_COST = scope:secondary_recipient.ransom_cost_value
+		CURRENT_GOLD = scope:recipient.gold
+		RANSOM_HERD_COST = ransom_herd_value_recipient
+	}
+
+	ai_accept = {
+		base = 0
+		modifier = { # Greedy characters can have their greed get the better of them...
+			add = {
+				value = scope:recipient.ai_greed
+				multiply = -0.5
+			}
+			scope:recipient.ai_greed >= medium_positive_ai_value
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+			scope:recipient != scope:secondary_recipient
+			desc = AI_VALUE_MODIFIER_GREED
+		}
+		modifier = { # Generous characters are more willing to pay
+			add = {
+				value = scope:recipient.ai_greed
+				multiply = -0.10
+			}
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+			scope:recipient != scope:secondary_recipient
+			scope:recipient.ai_greed <= medium_negative_ai_value
+			desc = AI_VALUE_MODIFIER_GENEROUS
+		}
+		modifier = {
+			add = -10
+			scope:recipient != scope:secondary_recipient
+			scope:recipient = {
+				NOR = {
+					is_spouse_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+					has_relation_lover = scope:secondary_recipient
+					has_relation_friend = scope:secondary_recipient
+					has_secret_relation_lover = scope:secondary_recipient
+					has_relation_soulmate = scope:secondary_recipient
+					has_relation_best_friend = scope:secondary_recipient
+					is_parent_of = scope:secondary_recipient
+				}
+			}
+			desc = "UNIMPORTANT_CHAR_REASON"
+		}
+		modifier = {
+			add = 100
+			scope:recipient = scope:secondary_recipient
+			desc = "WANTS_FREEDOM_REASON"
+		}
+		modifier = { # Acceptance boon for lovers, friends, etc
+			add = 25
+			scope:recipient != scope:secondary_recipient
+			scope:recipient = {
+				OR = {
+					is_spouse_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+					has_relation_lover = scope:secondary_recipient
+					has_relation_friend = scope:secondary_recipient
+					has_secret_relation_lover = scope:secondary_recipient
+				}
+				NOR = {
+					has_relation_soulmate = scope:secondary_recipient
+					has_relation_best_friend = scope:secondary_recipient
+					is_parent_of = scope:secondary_recipient
+				}
+			}
+			desc = "DEAR_TO_ME_REASON"
+		}
+		modifier = { # Massive acceptance boon for Soulmates and Best Friends
+			add = 200
+			scope:recipient = {
+				OR = {
+					has_relation_soulmate = scope:secondary_recipient
+					has_relation_best_friend = scope:secondary_recipient
+					is_parent_of = scope:secondary_recipient
+				}
+				NOR = {
+					is_spouse_of = scope:secondary_recipient
+					AND = {
+						NOT = {
+							is_parent_of = scope:secondary_recipient
+						}
+						is_close_or_extended_family_of = scope:secondary_recipient
+					}
+					has_relation_lover = scope:secondary_recipient
+					has_relation_friend = scope:secondary_recipient
+					has_secret_relation_lover = scope:secondary_recipient
+				}
+			}
+			desc = "DEAR_TO_ME_REASON"
+		}
+		modifier = { # Say no to rivals
+			add = -200
+			scope:recipient = {
+				has_relation_rival = scope:secondary_recipient
+			}
+			desc = "RIVAL_TO_ME_REASON"
+		}
+		modifier = { # Say no to rivals
+			add = -500
+			scope:recipient = {
+				has_relation_nemesis = scope:secondary_recipient
+			}
+			desc = "NEMESIS_TO_ME_REASON"
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				NOR = {
+					this = scope:secondary_recipient
+					is_spouse_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+					has_relation_lover = scope:secondary_recipient
+					has_relation_soulmate = scope:secondary_recipient
+					has_secret_relation_lover = scope:secondary_recipient
+				}
+				NOR = {
+					has_relation_rival = scope:secondary_recipient
+					has_relation_nemesis = scope:secondary_recipient
+				}
+			}
+			scope:recipient.dynasty = scope:secondary_recipient.dynasty
+			desc = "MY_DYNASTY_REASON"
+		}
+		modifier = { # An Intimidated recipient is significantly more likely to accept an offer from the liege
+			add = intimidated_reason_value
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 1
+					}
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+
+		modifier = { # An Cowed recipient is significantly more likely to accept an offer from the liege
+			add = cowed_reason_value
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 2
+					}
+				}
+			}
+			desc = COWED_REASON
+		}
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = prisoners
+	}
+	ai_frequency_by_tier = {
+		barony = 36
+		county = 12		#prev 6
+		duchy = 6
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+
+	ai_potential = {
+		always = yes
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = {
+			add = 100
+			OR = {
+				OR = {
+					scope:gold = yes
+					scope:extortionate_gold = yes
+				}
+				AND = {
+					scope:recipient = {
+						gold >= 25
+					}
+					scope:secondary_recipient = {
+						time_in_prison = { years > 1 }
+					}
+					scope:current_gold = yes
+				}
+			}
+		}
+
+		modifier = {
+			add = ai_greed
+			ai_greed > 0
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+		}
+
+		modifier = {
+			add = -100
+			has_relation_rival = scope:secondary_recipient
+		}
+
+		modifier = {
+			add = -300
+			has_relation_nemesis = scope:secondary_recipient
+		}
+
+		modifier = {
+			add = 100
+			scope:favor = yes
+			scope:recipient = {
+				OR = {
+					is_vassal_of = scope:actor
+					liege ?= scope:actor
+				}
+			}
+		}
+
+		# Struggle Agenda
+		modifier = {
+			scope:secondary_recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			scope:actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+							has_character_flag = agenda_towards_escalation
+						}
+					}
+					add = -100
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+						}
+					}
+					add = 200
+				}
+			}
+		}
+
+		modifier = { # Do not ransom at war
+			factor = 0
+			scope:actor = { is_at_war = yes }
+		}
+
+		modifier = { # Don't annoy players
+			factor = 0
+			scope:recipient = { is_ai = no }
+			OR = {
+				scope:recipient = { is_at_war = yes }
+				scope:secondary_recipient = { has_character_flag = character_ransom_refused_by_player }
+			}
+		}
+
+		#don't ransom if they are tied with a prison break contract, we don't want it invalidating all the time
+		modifier = {
+			factor = 0
+			scope:secondary_recipient = {
+				has_character_flag = being_prisonbroken_by_laamp
+			}
+		}
+
+		#ADDED - keep the ones you have revoke reasons against
+		modifier = {
+			factor = 0
+			scope:secondary_recipient = {
+				is_ruler = yes
+				top_liege != this
+				liege = scope:actor
+				NOT = { vassal_contract_has_flag = vassal_contract_cannot_revoke_titles }
+				time_in_prison = { years < 5 }
+			}
+			scope:actor = { 
+				has_revoke_title_reason = scope:secondary_recipient 
+				has_realm_law_flag = title_revocation_allowed
+			}
+		}
+	}
+
+	# Needs to be after all other send options so we only default to it if everything else is blocked
+	send_option = {
+		is_shown = { # When doing the mass ransom, its possible for no option to be valid for the gold costs, so instead of defaulting wrong we explitly fail it
+			exists = scope:mass_action
+			scope:mass_action = yes
+		}
+		flag = invalid
+		localization = "INVALID"
+	}
+}
+
+#For lieges to ransom their courtiers
+pay_ransom_interaction = {
+	interface_priority = 50
+	common_interaction = no
+	use_diplomatic_range = no
+	category = interaction_category_prison
+	icon = icon_gold
+
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+			if = {
+				limit = {
+					exists = imprisoner
+				}
+				imprisoner = { save_scope_as = recipient }
+			}
+		}
+	}
+
+	desc = pay_ransom_interaction_desc
+
+	cost = {
+		influence = {
+			value = 0
+			if = {
+				limit = { scope:influence_send_option = yes }
+				add = scope:actor.medium_influence_value
+				desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+			}
+		}
+	}
+
+	greeting = positive
+	notification_text = PAY_RANSOM_PROPOSAL
+
+	is_shown = {
+		exists = scope:recipient
+		scope:secondary_recipient = {
+			this != scope:actor
+			is_imprisoned_by = scope:recipient
+			OR = {
+				liege ?= scope:actor # You can ransom anyone you have in your court
+				is_close_family_of = scope:actor # And anyone who is your close family
+				dynasty ?= { # And anyone from your Dynasty
+					this ?= scope:actor.dynasty
+				}
+				any_spouse = { # And anyone married to one of your close kin or dynasty members
+					OR = {
+						is_close_family_of = scope:actor
+						dynasty ?= {
+							this ?= scope:actor.dynasty
+						}
+					}
+				}
+				has_relation_lover = scope:actor # And Lovers
+				has_relation_friend = scope:actor # And Friends
+			}
+		}
+		scope:actor != scope:recipient
+	}
+
+	is_valid_showing_failures_only = {
+		scope:secondary_recipient = {
+			custom_description = {
+				text = "currently_being_tortured"
+				NOT = { has_character_flag = is_being_tortured }
+			}
+		}
+		cannot_release_former_regent_whilst_old_regent_holds_power_trigger = {
+			PRISONER = scope:recipient
+			REGENT = scope:recipient.var:imprisoned_by_diarch
+		}
+	}
+
+	on_accept = {
+		# Set up event scopes and trigger the exchange.
+		if = {
+			limit = { scope:secondary_recipient = { is_imprisoned_by = scope:recipient } }
+			scope:secondary_recipient = {
+				save_scope_as = prisoner
+			}
+			scope:recipient = {
+				save_scope_as = imprisoner
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+					}
+					custom_tooltip = has_person_haggler_increase_ransom_cost
+				}
+			}
+			scope:actor = {
+				save_scope_as = payer
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+
+					}
+					scope:prisoner = {
+						save_scope_value_as = {
+							name = new_ransom_value
+							value = haggler_ransom_cost_modifier
+						}
+					}
+					custom_tooltip = has_person_haggler_decrease_ransom_cost
+				}
+				# Stress impacts
+				if = {
+					limit = {
+						scope:prisoner = { # Stress impact for random courtiers
+							NOR = {
+								is_vassal_of = scope:actor
+								is_consort_of = scope:actor
+								is_close_family_of = scope:actor
+								dynasty ?= {
+									this ?= scope:actor.dynasty
+								}
+								any_spouse = {
+									OR = {
+										is_close_family_of = scope:actor
+										dynasty ?= {
+											this ?= scope:actor.dynasty
+										}
+									}
+								}
+								has_relation_lover = scope:actor
+								has_relation_friend = scope:actor
+							}
+						}
+					}
+					stress_impact = {
+						compassionate = minor_stress_impact_loss
+						generous = medium_stress_impact_loss
+					}
+				}
+				else_if = { # Stress impact for 'relevant' ransoms; in other words, everyone but random courtiers
+					limit = {
+						scope:prisoner = {
+							OR = {
+								is_vassal_of = scope:actor
+								is_consort_of = scope:actor
+								is_close_family_of = scope:actor
+								dynasty ?= {
+									this ?= scope:actor.dynasty
+								}
+								any_spouse = {
+									OR = {
+										is_close_family_of = scope:actor
+										dynasty ?= {
+											this ?= scope:actor.dynasty
+										}
+									}
+								}
+								has_relation_lover = scope:actor
+								has_relation_friend = scope:actor
+							}
+						}
+					}
+					stress_impact = {
+						compassionate = medium_stress_impact_loss
+						generous = minor_stress_impact_loss
+						just = minor_stress_impact_loss
+					}
+				}
+
+				if = { # Lustful characters want their lovers back
+					limit = {
+						scope:prisoner = {
+							has_relation_lover = scope:actor
+						}
+					}
+					stress_impact = {
+						lustful = major_stress_impact_loss
+					}
+				}
+
+				if = { # Loyal characters want to free their friends and lovers
+					limit = {
+						scope:prisoner = {
+							OR = {
+								has_relation_friend = scope:actor
+								has_relation_lover = scope:actor
+							}
+						}
+					}
+					stress_impact = {
+						loyal = major_stress_impact_loss
+					}
+				}
+
+				if = { # Family should be free!
+					limit = {
+						scope:prisoner = {
+							is_close_family_of = scope:payer
+						}
+					}
+					stress_impact = {
+						family_first = miniscule_stress_impact_loss
+					}
+				}
+
+				# If the payer doesn't have enough funds to pay the full amount and we're only requesting their current funds, save how much they've agreed to pay.
+				if = {
+					limit = {
+						OR = {
+							exists = scope:current_gold
+							exists = scope:extortionate_current_gold
+						}
+					}
+					save_scope_value_as = {
+						name = ransom_saved_gold_value
+						value = scope:payer.current_gold_value
+					}
+				}
+
+				# Must come after we save the payment value, or the payer won't know how much they need to pay.
+				trigger_event = char_interaction.0140
+			}
+			hidden_effect = {
+				scope:prisoner = {
+					send_interface_toast = {
+						type = event_toast_effect_good
+						title = ransomed_by_someone
+						left_icon = scope:payer
+						show_as_tooltip = {
+							scope:imprisoner = {
+								ransom_interaction_effect = yes
+							}
+						}
+					}
+				}
+				scope:prisoner = {
+					if = {
+						limit = {
+							liege ?= {
+								is_ai = no
+								NOR = {
+									this = scope:payer
+									this = scope:imprisoner
+								}
+								OR = {
+									is_close_or_extended_family_of = scope:prisoner
+									is_consort_of = scope:prisoner
+									has_relation_lover = scope:prisoner
+									has_relation_friend = scope:prisoner
+								}
+							}
+						}
+						liege = {
+							save_scope_as = prisoner_liege_scope
+							send_interface_toast = {
+								type = event_toast_effect_good
+								title = ransomed_by_someone_third_party
+								left_icon = scope:payer
+								right_icon = scope:prisoner
+								custom_tooltip = ransomed_by_someone_third_party_desc
+							}
+						}
+					}
+				}
+			}
+			scope:imprisoner = {
+				send_interface_message = {
+					type = event_prison_neutral
+					title = recipient_released_from_prison
+					right_icon = scope:prisoner
+					left_icon = scope:imprisoner
+					ransom_interaction_effect = yes
+				}
+
+				# Struggle Catalyst
+				if = {
+					limit = {
+						any_character_struggle = {
+							involvement = involved
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:prisoner
+							}
+						}
+					}
+					every_character_struggle = {
+						involvement = involved
+						limit = {
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:prisoner
+							}
+						}
+						activate_struggle_catalyst = {
+							catalyst = catalyst_ransom_important
+							character = scope:imprisoner
+						}
+					}
+				}
+				if = {
+					limit = {
+						fp3_struggle_involves_one_supporter_and_one_detractor = {
+							FIRST = scope:imprisoner
+							SECOND = scope:prisoner
+						}
+						any_character_struggle = {
+							involvement = involved
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_supporter_detractor
+								CHAR = scope:prisoner
+							}
+						}
+					}
+					every_character_struggle = {
+						involvement = involved
+						limit = {
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_supporter_detractor
+								CHAR = scope:prisoner
+							}
+						}
+						activate_struggle_catalyst = {
+							catalyst = catalyst_ransom_supporter_detractor
+							character = scope:imprisoner
+						}
+						log_debug_variable_for_persian_struggle_effect = { VAR = concession_catalyst_ransom_supporter_detractor }
+					}
+				}
+			}
+			if = {
+				limit = { scope:hook = yes }
+				scope:actor = {
+					use_hook = scope:recipient
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:actor
+			TARGET = scope:prisoner
+			VALUE = medium_unity_gain
+			DESC = clan_unity_ransom.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	on_decline = {
+		# If a player declines this ransom offer, wait 10 years before sending another one (they presumably have reasons for keeping that character in prison).
+		if = {
+			limit = { scope:recipient = { is_ai = no } }
+			scope:secondary_recipient = {
+				add_character_flag = {
+					flag = character_ransom_refused_by_player
+					years = 10
+				}
+			}
+		}
+
+		# Trigger notification event
+		scope:actor = {
+			trigger_event = char_interaction.0141
+		}
+	}
+
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+		}
+		is_valid = {
+			exists = scope:recipient
+			scope:actor = {
+				gold >= scope:secondary_recipient.increased_ransom_cost_value
+			}
+		}
+		starts_enabled = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:actor = {
+				gold >= scope:secondary_recipient.increased_ransom_cost_value
+			}
+		}
+		flag = extortionate_gold
+		localization = "RANSOM_EXTORTIONATE_GOLD_IMPRISONED_PERSPECTIVE_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have (extort version)!
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:actor = {
+				gold < scope:secondary_recipient.increased_ransom_cost_value
+				gold > 0
+			}
+		}
+		starts_enabled = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:actor = {
+				gold < scope:secondary_recipient.increased_ransom_cost_value
+				gold > 0
+			}
+		}
+		flag = extortionate_current_gold
+		localization = "RANSOM_EXTORTIONATE_CURRENT_GOLD_IMPRISONED_PERSPECTIVE_OPTION"
+	}
+
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+		}
+		is_valid = {
+			exists = scope:recipient
+			scope:actor = {
+				gold >= scope:secondary_recipient.ransom_cost_value
+			}
+		}
+		starts_enabled = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:actor = {
+				gold >= scope:secondary_recipient.ransom_cost_value
+			}
+		}
+		flag = gold
+		localization = "RANSOM_GOLD_PAY_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have!
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:actor = {
+				gold < scope:secondary_recipient.ransom_cost_value
+				gold > 0
+			}
+		}
+		starts_enabled = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:actor = {
+				gold < scope:secondary_recipient.ransom_cost_value
+				gold > 0
+			}
+		}
+		flag = current_gold
+		localization = "RANSOM_CURRENT_PAY_GOLD_OPTION"
+	}
+
+	send_option = {
+		is_valid = {
+			exists = scope:recipient
+			scope:recipient = {
+				can_add_hook = { #To match the hook added through ransom_interaction_effect
+					target = scope:actor
+					type = favor_hook
+				}
+			}
+		}
+		flag = favor
+		localization = "RANSOM_OWE_FAVOR_OPTION"
+	}
+
+	send_option = { # EP3 Influence
+		is_shown = { # Actor must have a government that uses influence 
+			scope:actor = {
+				government_has_flag = government_has_influence
+			}
+		}
+		is_valid = {
+			# Actor has enough influence
+			scope:actor = { influence >= medium_influence_value }
+			# Both characters are within the same top realm
+			custom_tooltip = {
+				text = not_same_realm_tt
+				scope:recipient.top_liege = scope:actor.top_liege
+			}
+		}
+		flag = influence_send_option
+		localization = TRADE_INFLUENCE_FOR_BETTER_AI_ACCEPTANCE
+	}
+	
+	send_option = { # MPO Herd
+		is_shown = { # Actor must have a government that uses Herd 
+			scope:actor = {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+				is_ai = no
+			}
+			# Recipient must care about Herd
+			scope:recipient = {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+			}
+		}
+		is_valid = {
+			# Actor has enough Herd
+			scope:actor = { domicile.herd >= domicile.medium_herd_value }
+		}
+		flag = herd_send_option
+		localization = PAY_FOR_BETTER_AI_ACCEPTANCE
+	}
+
+	#Use hook
+	send_option = {
+		is_valid = {
+			exists = scope:recipient
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	localization_values = {
+		EXTORTIONATE_RANSOM_COST = scope:secondary_recipient.increased_ransom_cost_value
+		RANSOM_COST = scope:secondary_recipient.ransom_cost_value
+		CURRENT_GOLD = scope:actor.gold
+		RANSOM_HERD_COST = ransom_herd_value_actor
+	}
+
+	ai_accept = {
+		base = 0
+		modifier = {
+			add = 50
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+		modifier = { # Accept more than half the ransom (unless greedy)
+			add = 25
+			scope:current_gold = yes
+			AND = {
+				scope:actor = { gold >= scope:secondary_recipient.half_ransom_cost_value }
+				NOT = { scope:recipient.ai_greed >= medium_positive_ai_value }
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+		modifier = { # Accept more than half the ransom (unless greedy)
+			add = 25
+			scope:extortionate_current_gold = yes
+			AND = {
+				scope:actor = { gold >= scope:secondary_recipient.half_increased_ransom_cost_value }
+				NOT = { scope:recipient.ai_greed >= medium_positive_ai_value }
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+		modifier = {
+			add = 50
+			scope:favor = yes
+			scope:recipient.top_liege = scope:actor.top_liege
+			desc = "FAVOR_POSITIVE_REASON"
+		}
+		modifier = {
+			add = 0
+			scope:favor = yes
+			scope:recipient.top_liege != scope:actor.top_liege
+			desc = "NO_USE_FOR_A_FAVOR_REASON"
+		}
+		modifier = { # For clarification
+			add = 0
+			OR = {
+				scope:current_gold = yes
+				scope:extortionate_current_gold = yes
+			}
+			OR = {
+				scope:actor = { gold < scope:secondary_recipient.half_ransom_cost_value }
+				scope:recipient.ai_greed >= medium_positive_ai_value
+			}
+			desc = "WANTS_MORE_GOLD"
+		}
+		modifier = { # Say no to rivals
+			add = -100		#prev -55
+			scope:recipient = {
+				has_relation_rival = scope:secondary_recipient
+			}
+			desc = "RIVAL_TO_ME_REASON"
+		}
+		modifier = { # Say no to rivals
+			add = -300
+			scope:recipient = {
+				has_relation_nemesis = scope:secondary_recipient
+			}
+			desc = "NEMESIS_TO_ME_REASON"
+		}
+		modifier = { # At war
+			add = -300
+			scope:recipient = {
+				is_at_war_with = scope:actor
+			}
+			desc = "IS_AT_WAR_REASON"
+		}
+		modifier = { # At war
+			add = -300
+			scope:recipient = {
+				is_at_war = yes
+				any_primary_war_enemy = {
+					scope:secondary_recipient = {
+						liege ?= prev
+					}
+				}
+			}
+			desc = "IS_POW_REASON"
+		}
+		modifier = { # At war
+			add = -300
+			scope:recipient = {
+				is_at_war_with = scope:secondary_recipient
+			}
+			desc = "IS_AT_WAR_WITH_TARGET_REASON"
+		}
+		#opinion_modifier = { # A lot more likely if Recipient likes Actor
+		#	who = scope:recipient
+		#	opinion_target = scope:actor
+		#	multiplier = 1.0
+		#	desc = AI_OPINION_REASON
+		#}
+		#opinion_modifier = { # A lot more likely if Recipient likes secondary_recipient/prisoner
+		#	who = scope:recipient
+		#	opinion_target = scope:secondary_recipient
+		#	multiplier = 1.0
+		#	desc = AI_OPINION_REASON
+		#}
+		modifier = {
+			scope:hook = yes
+			add = 125			#prev 100
+			desc = SCHEME_WEAK_HOOK_USED
+		}
+		modifier = { # An Intimidated recipient is significantly more likely to accept an offer from the liege
+			add = 40
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 1
+					}
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+
+		modifier = { # An Cowed recipient is significantly more likely to accept an offer from the liege
+			add = 100
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 2
+					}
+				}
+			}
+			desc = COWED_REASON
+		}
+
+		modifier = {
+			add = 25
+			scope:influence_send_option = yes
+			desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+		}
+		
+		modifier = {
+			add = 25
+			scope:herd_send_option = yes
+			desc = HERD_INTERACTION_ACCEPTANCE_SEND_OPTION
+		}
+
+		#ADDED - don't accept if you have title revoke reason vs vassal
+		modifier = { 
+			add = {
+				value = -50
+				if = {
+					limit = {
+						scope:recipient = {
+							NOR = {
+								has_trait = compassionate
+								has_trait = forgiving
+								has_trait = generous
+							}
+						}
+					}
+					add = -50
+				}
+			}
+			scope:secondary_recipient = {
+				is_ruler = yes
+				top_liege != this
+				liege = scope:recipient
+				scope:recipient = { 
+					has_revoke_title_reason = scope:secondary_recipient 
+					has_realm_law_flag = title_revocation_allowed
+				}
+				NOT = { vassal_contract_has_flag = vassal_contract_cannot_revoke_titles }
+				time_in_prison = { years < 5 }
+			}
+			desc = HAS_TITLE_REVOKE_REASON_VS_SECONDARY_RECIPIENT
+		}
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook = yes
+			scope:actor = { has_strong_hook = scope:recipient }
+		}
+	}
+
+
+	# AI
+	ai_targets = {
+		ai_recipients = family
+		ai_recipients = spouses
+		ai_recipients = scripted_relations
+		ai_recipients = liege
+	}
+	ai_targets = {
+		ai_recipients = neighboring_rulers
+		ai_recipients = peer_vassals
+		ai_recipients = top_realm_domicile_owners
+		max = 5
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 12		#prev 6
+		duchy = 6
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+
+	ai_potential = {
+		gold >= 25
+	}
+
+	ai_target_quick_trigger = {
+		prison = yes
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = {
+			add = 100
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:secondary_recipient = {
+						time_in_prison = { years > 1 }
+					}
+					OR = {
+						scope:current_gold = yes
+						scope:extortionate_current_gold = yes
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = -100
+			has_relation_rival = scope:secondary_recipient
+		}
+
+		modifier = {
+			add = -300
+			has_relation_nemesis = scope:secondary_recipient
+		}
+
+		modifier = {
+			add = 100
+			scope:favor = yes
+			scope:recipient = {
+				OR = {
+					is_vassal_of = scope:actor
+					liege ?= scope:actor
+				}
+			}
+		}
+
+		modifier = { # Ransom your primary heir first
+			add = 10
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:secondary_recipient = {
+						time_in_prison = { years > 1 }
+					}
+					OR = {
+						scope:current_gold = yes
+						scope:extortionate_current_gold = yes
+					}
+				}
+				AND = {
+					scope:favor = yes
+					scope:recipient = {
+						OR = {
+							is_vassal_of = scope:actor
+							liege ?= scope:actor
+						}
+					}
+				}
+			}
+			scope:secondary_recipient = {
+				is_primary_heir_of = scope:actor
+			}
+		}
+
+		modifier = { # Only ransom people you care about... unless you're very compassionate
+			factor = 0
+			ai_compassion < high_positive_ai_value
+			scope:secondary_recipient = {
+				NOR = {
+					is_heir_of = scope:actor
+					is_child_of = scope:actor
+					is_grandchild_of = scope:actor
+					is_great_grandchild_of = scope:actor
+					is_consort_of = scope:actor
+					is_parent_of = scope:actor
+					is_grandparent_of = scope:actor
+					is_great_grandparent_of = scope:actor
+					has_relation_friend = scope:actor
+					has_relation_lover = scope:actor
+					has_secret_relation_lover = scope:actor
+					any_spouse = {
+						OR = {
+							is_heir_of = scope:actor
+							is_child_of = scope:actor
+							is_grandchild_of = scope:actor
+							is_great_grandchild_of = scope:actor
+							is_parent_of = scope:actor
+							is_grandparent_of = scope:actor
+							is_great_grandparent_of = scope:actor
+							has_relation_friend = scope:actor
+						}
+					}
+				}
+			}
+		}
+
+		modifier = { # If you're very compassionate, well, then you ransom most people you can!
+			factor = 0
+			ai_compassion >= high_positive_ai_value
+			scope:secondary_recipient = {
+				NOR = {
+					is_heir_of = scope:actor
+					is_close_or_extended_family_of = scope:actor
+					is_consort_of = scope:actor
+					has_relation_friend = scope:actor
+					has_relation_lover = scope:actor
+					has_secret_relation_lover = scope:actor
+					any_spouse = {
+						OR = {
+							is_heir_of = scope:actor
+							is_close_or_extended_family_of = scope:actor
+							has_relation_friend = scope:actor
+						}
+					}
+				}
+			}
+		}
+
+		modifier = { # If you're very greedy... then they're a little bit more restrictive!
+			factor = 0
+			ai_greed >= high_positive_ai_value
+			scope:secondary_recipient = {
+				NOR = { # Very Greedy rulers only ransom people in their own realm, or their heir
+					is_courtier_of = scope:actor
+					is_vassal_or_below_of = scope:actor
+					is_heir_of = scope:actor
+				}
+				NOR = {
+					is_heir_of = scope:actor
+					is_close_or_extended_family_of = scope:actor
+					is_consort_of = scope:actor
+					has_relation_friend = scope:actor
+					has_relation_lover = scope:actor
+					has_secret_relation_lover = scope:actor
+					any_spouse = {
+						OR = {
+							is_heir_of = scope:actor
+							is_close_or_extended_family_of = scope:actor
+							has_relation_friend = scope:actor
+						}
+					}
+				}
+			}
+		}
+
+		# Some exceptions!
+		modifier = { # Lustful characters want to ransom lovers
+			add = 100
+			has_trait = lustful
+			ai_greed <= 50
+			scope:secondary_recipient = {
+				has_relation_lover = scope:actor
+			}
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:secondary_recipient = {
+						time_in_prison = { years > 1 }
+					}
+					OR = {
+						scope:current_gold = yes
+						scope:extortionate_current_gold = yes
+					}
+				}
+			}
+		}
+
+		modifier = { # Loyal characters want to ransom their relations
+			add = 100
+			has_trait = loyal
+			scope:secondary_recipient = {
+				OR = {
+					has_relation_lover = scope:actor
+					has_relation_friend = scope:actor
+				}
+			}
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:secondary_recipient = {
+						time_in_prison = { years > 1 }
+					}
+					OR = {
+						scope:current_gold = yes
+						scope:extortionate_current_gold = yes
+					}
+				}
+			}
+		}
+
+		modifier = { # Certain characters will try to ransom their liege!
+			add = 100
+			ai_greed <= very_high_negative_ai_value
+			ai_compassion >= very_high_negative_ai_value
+			NOT = { exists = joined_faction }
+			is_at_war = no
+			OR = {
+				has_trait = loyal
+				ai_honor >= high_positive_ai_value
+			}
+			scope:secondary_recipient = {
+				is_liege_or_above_of = scope:actor
+			}
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				# They won't offer current gold, only full ransoms
+			}
+		}
+
+		modifier = { # Favors only relevant within the realm
+			add = -100
+			scope:favor = yes
+			scope:recipient = {
+				NOR = {
+					is_vassal_of = scope:actor
+					liege ?= scope:actor
+				}
+			}
+		}
+
+		modifier = { # Don't spam the player with cheapskate offers
+			add = -100
+			scope:current_gold = yes
+			scope:recipient = {
+				is_ai = no
+			}
+			scope:secondary_recipient = {
+				highest_held_title_tier >= tier_duchy
+			}
+		}
+
+		# Struggle Agenda
+		modifier = {
+			scope:secondary_recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			scope:actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+							has_character_flag = agenda_towards_escalation
+						}
+					}
+					add = -100
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+						}
+					}
+					add = 200
+				}
+			}
+		}
+
+		evaluate_action_increasing_house_unity = {
+			VALUE = 100
+		}
+
+		modifier = { # Don't give away prisoners for free
+			factor = 0
+			NOR = {
+				scope:favor = yes
+				scope:extortionate_gold = yes
+				scope:extortionate_current_gold = yes
+				scope:gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:current_gold = yes
+				}
+			}
+		}
+
+		modifier = { # Don't annoy players
+			factor = 0
+			scope:recipient = { is_ai = no }
+			OR = {
+				scope:recipient = { is_at_war = yes }
+				scope:secondary_recipient = { has_character_flag = character_ransom_refused_by_player }
+			}
+		}
+
+		#don't ransom prisoners that are tied with a prison break contract, we don't want it invalidating all the time
+		modifier = {
+			factor = 0
+			scope:secondary_recipient = {
+				has_character_flag = being_prisonbroken_by_laamp
+			}
+		}
+	}
+}
+
+#To ransom yourself
+ransom_me_interaction = {
+	interface_priority = 50
+	common_interaction = yes
+	use_diplomatic_range = no
+	category = interaction_category_prison
+	icon = icon_gold
+
+	greeting = positive
+	notification_text = PAY_RANSOM_PROPOSAL_PERSONAL
+
+	desc = ransom_me_interaction_desc
+
+	redirect = { # So that users can ransom themselves by clicking on their portrait
+		if = {
+			limit = {
+				scope:actor = scope:recipient
+				exists = scope:actor.imprisoner
+			}
+			scope:actor.imprisoner = { save_scope_as = recipient }
+		}
+	}
+
+	is_shown = {
+		scope:actor = {
+			is_imprisoned_by = scope:recipient
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			custom_description = {
+				text = "currently_being_tortured"
+				NOT = { has_character_flag = is_being_tortured }
+			}
+		}
+		cannot_release_former_regent_whilst_old_regent_holds_power_trigger = {
+			PRISONER = scope:recipient
+			REGENT = scope:recipient.var:imprisoned_by_diarch
+		}
+		custom_tooltip = {
+			text = is_currently_being_purged_tt
+			scope:recipient = {
+				NOT = {
+					has_character_flag = is_currently_being_purged
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		if = {
+			limit = { scope:actor = { is_imprisoned_by = scope:recipient } }
+			scope:actor = {
+				save_scope_as = prisoner
+			}
+			scope:recipient = {
+				save_scope_as = imprisoner
+			}
+			scope:actor = {
+				save_scope_as = payer
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+					}
+					save_scope_value_as = {
+						name = new_ransom_value
+						value = haggler_ransom_cost_modifier
+					}
+					custom_tooltip = has_person_haggler_decrease_ransom_cost
+				}
+
+				# If the payer doesn't have enough funds to pay the full amount and we're only requesting their current funds, save how much they've agreed to pay.
+				if = {
+					limit = {
+						OR = {
+							exists = scope:current_gold
+							exists = scope:extortionate_current_gold
+						}
+					}
+					save_scope_value_as = {
+						name = ransom_saved_gold_value
+						value = scope:payer.current_gold_value
+					}
+				}
+
+				# Must come after we save the payment value, or the payer won't know how much they need to pay.
+				trigger_event = char_interaction.0150
+			}
+			scope:imprisoner = {
+				if = {
+					limit = {
+						employs_court_position = person_haggler_camp_officer
+						is_asking_for_gold_in_ransom_trigger = yes
+					}
+					random_court_position_holder = {
+						type = person_haggler_camp_officer
+						save_scope_as = haggler
+					}
+					scope:actor = {
+						custom_tooltip = has_person_haggler_increase_ransom_cost
+					}
+				}
+				send_interface_message = {
+					type = event_prison_neutral
+					title = recipient_released_from_prison
+					right_icon = scope:prisoner
+					left_icon = scope:imprisoner
+					ransom_interaction_effect = yes
+				}
+
+				# Struggle Catalyst
+				if = {
+					limit = {
+						any_character_struggle = {
+							involvement = involved
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:prisoner
+							}
+						}
+					}
+					every_character_struggle = {
+						involvement = involved
+						limit = {
+							activate_struggle_catalyst_secondary_character_involvement_involved_trigger = {
+								CATALYST = catalyst_ransom_important
+								CHAR = scope:prisoner
+							}
+						}
+						activate_struggle_catalyst = {
+							catalyst = catalyst_ransom_important
+							character = scope:imprisoner
+						}
+					}
+				}
+			}
+			if = {
+				limit = { always = scope:hook }
+				scope:actor = {
+					use_hook = scope:recipient
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		# If a player declines this ransom offer, wait 10 years before sending another one (they presumably have reasons for keeping you in prison).
+		if = {
+			limit = { scope:recipient = { is_ai = no } }
+			scope:actor = {
+				add_character_flag = {
+					flag = character_ransom_refused_by_player
+					years = 10
+				}
+			}
+		}
+
+		# Trigger notification event
+		scope:actor = {
+			trigger_event = char_interaction.0151
+		}
+	}
+
+	cost = {
+		influence = {
+			value = 0
+			if = {
+				limit = { scope:influence_send_option = yes }
+				add = scope:actor.medium_influence_value
+				desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+			}
+		}
+	}
+
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+		}
+		is_valid = {
+			scope:actor = {
+				gold >= increased_ransom_cost
+			}
+		}
+		flag = extortionate_gold
+		localization = "RANSOM_EXTORTIONATE_GOLD_IMPRISONED_PERSPECTIVE_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have (extort version)!
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				dynasty ?= {
+					has_dynasty_perk = fp1_pillage_legacy_3
+				}
+			}
+			scope:actor = {
+				gold < increased_ransom_cost
+				gold > 0
+			}
+		}
+		flag = extortionate_current_gold
+		localization = "RANSOM_EXTORTIONATE_CURRENT_GOLD_IMPRISONED_PERSPECTIVE_OPTION"
+	}
+
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+		}
+		is_valid = {
+			scope:actor = {
+				gold >= ransom_cost
+			}
+		}
+		flag = gold
+		localization = "RANSOM_GOLD_OPTION"
+	}
+
+	# If you don't have what they're worth, pay me what you have!
+	send_option = {
+		is_shown = {
+			exists = scope:recipient
+			scope:recipient = {
+				OR = {
+					is_lowborn = yes
+					NOT = {
+						dynasty = {
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			scope:actor = {
+				gold < ransom_cost
+				gold > 0
+			}
+		}
+		flag = current_gold
+		localization = "RANSOM_CURRENT_GOLD_OPTION"
+	}
+
+	send_option = {
+		is_valid = {
+			scope:recipient = {
+				can_add_hook = { #To match the hook added through ransom_interaction_effect
+					target = scope:actor
+					type = favor_hook
+				}
+			}
+		}
+		flag = favor
+		localization = "RANSOM_FAVOR_OPTION"
+	}
+
+	send_option = { # EP3 Influence
+		is_shown = { # Actor must have a government that uses influence 
+			scope:actor = {
+				government_has_flag = government_has_influence
+			}
+		}
+		is_valid = {
+			# Actor has enough influence
+			scope:actor = { influence >= medium_influence_value }
+			# Both characters are within the same top realm
+			custom_tooltip = {
+				text = not_same_realm_tt
+				scope:recipient.top_liege = scope:actor.top_liege
+			}
+		}
+		flag = influence_send_option
+		localization = TRADE_INFLUENCE_FOR_BETTER_AI_ACCEPTANCE
+	}
+	
+	send_option = { # MPO Herd
+		is_shown = { # Actor must have a government that uses Herd 
+			scope:actor = {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+			}
+			# Recipient must care about Herd
+			scope:recipient = {
+				government_has_flag = government_is_nomadic
+				exists = domicile
+			}
+		}
+		is_valid = {
+			# Actor has enough Herd
+			scope:actor = { domicile.herd >= domicile.medium_herd_value }
+		}
+		flag = herd_send_option
+		localization = PAY_FOR_BETTER_AI_ACCEPTANCE
+	}
+
+	#Use hook
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	localization_values = {
+		EXTORTIONATE_RANSOM_COST = scope:actor.increased_ransom_cost_value
+		RANSOM_COST = scope:actor.ransom_cost_value
+		CURRENT_GOLD = scope:actor.gold
+		RANSOM_HERD_COST = ransom_herd_value_actor
+	}
+
+	ai_accept = {
+		base = 0
+		modifier = {
+			add = 50
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+
+		modifier = { # Accept more than half the ransom (unless greedy)
+			add = 25
+			scope:current_gold = yes
+			AND = {
+				scope:actor = { gold >= half_ransom_cost_value }
+				NOT = { scope:recipient.ai_greed >= medium_positive_ai_value }
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+
+		modifier = { # Accept more than half the ransom (unless greedy)
+			add = 25
+			scope:extortionate_current_gold = yes
+			AND = {
+				scope:actor = { gold >= half_increased_ransom_cost_value }
+				NOT = { scope:recipient.ai_greed >= medium_positive_ai_value }
+			}
+			desc = "GOLD_POSITIVE_REASON"
+		}
+
+		modifier = {
+			add = 50
+			scope:favor = yes
+			scope:recipient.top_liege = scope:actor.top_liege
+			desc = "FAVOR_POSITIVE_REASON"
+		}
+
+		modifier = {
+			add = -50
+			scope:favor = yes
+			NOR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+			}
+			OR = {
+				scope:recipient.top_liege != scope:actor.top_liege
+				scope:recipient.ai_greed >= medium_positive_ai_value
+			}
+			desc = "NO_USE_FOR_A_FAVOR_REASON"
+		}
+
+		modifier = { # For clarification
+			add = 0
+			OR = {
+				scope:current_gold = yes
+				scope:extortionate_current_gold = yes
+			}
+			OR = {
+				scope:actor = { gold < half_ransom_cost_value }
+				scope:recipient.ai_greed >= medium_positive_ai_value
+			}
+			desc = "WANTS_MORE_GOLD"
+		}
+
+		#opinion_modifier = { # A lot more likely if Recipient likes Actor
+		#	who = scope:recipient
+		#	opinion_target = scope:actor
+		#	multiplier = 1.0
+		#	desc = AI_OPINION_REASON
+		#}
+
+		modifier = { # Say no to rivals
+			add = -100			#prev -55
+			scope:recipient = {
+				has_relation_rival = scope:actor
+			}
+			desc = "ACTOR_RIVAL_TO_ME_REASON"
+		}
+		modifier = { # Say no to nemesis
+			add = -300
+			scope:recipient = {
+				has_relation_nemesis = scope:actor
+			}
+			desc = "ACTOR_NEMESIS_TO_ME_REASON"
+		}
+
+
+		modifier = { # At war
+			add = -300
+			scope:recipient = {
+				is_at_war_with = scope:actor
+			}
+			desc = "IS_AT_WAR_REASON"
+		}
+
+		modifier = {
+			scope:hook = yes
+			add = 125			#prev 100
+			desc = SCHEME_WEAK_HOOK_USED
+		}
+
+		modifier = { # An Intimidated recipient is significantly more likely to accept an offer from the liege
+			add = intimidated_reason_value
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 1
+					}
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+
+		modifier = { # A Cowed recipient is significantly more likely to accept an offer from the liege
+			add = cowed_reason_value
+			trigger = {
+				scope:recipient = {
+					target_is_liege_or_above = scope:actor
+					has_dread_level_towards = {
+						target = scope:actor
+						level = 2
+					}
+				}
+			}
+			desc = COWED_REASON
+		}
+		modifier = { # Family Feud
+			add = -50
+			trigger = {
+				scope:recipient = {
+					house_has_feud_relation_with_trigger = { TARGET = scope:actor }
+
+				}
+			}
+			desc = INTERACTION_FAMILY_FEUD_REVERSE_REASON
+		}
+
+		modifier = {
+			add = 25
+			scope:influence_send_option = yes
+			desc = INFLUENCE_INTERACTION_ACCEPTANCE_SEND_OPTION
+		}
+		
+		modifier = {
+			add = 25
+			scope:herd_send_option = yes
+			desc = HERD_INTERACTION_ACCEPTANCE_SEND_OPTION
+		}
+
+		#ADDED - don't accept if you have title revoke reason vs vassal
+		modifier = { 
+			add = {
+				value = -50
+				if = {
+					limit = {
+						scope:recipient = {
+							NOR = {
+								has_trait = compassionate
+								has_trait = forgiving
+								has_trait = generous
+							}
+						}
+					}
+					add = -50
+				}
+			}
+			scope:actor = {
+				is_ruler = yes
+				top_liege != this
+				liege = scope:recipient
+				scope:recipient = { 
+					has_revoke_title_reason = scope:actor 
+					has_realm_law_flag = title_revocation_allowed
+				}
+				NOT = { vassal_contract_has_flag = vassal_contract_cannot_revoke_titles }
+				time_in_prison = { years < 5 }
+			}
+			desc = HAS_TITLE_REVOKE_REASON_VS_ACTOR
+		}
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook = yes
+			scope:actor = { has_strong_hook = scope:recipient }
+		}
+	}
+
+	# AI
+	ai_frequency_by_tier = {
+		barony = 72
+		county = 24
+		duchy = 24
+		kingdom = 12
+		empire = 12
+		hegemony = 12
+	}
+
+	ai_targets = {
+		ai_recipients = self
+	}
+
+	ai_potential = {
+		always = yes
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = {
+			add = 100
+			OR = {
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					OR = {
+						time_in_prison = { years > 1 }
+						has_trait = impatient #LET ME OUT! I want out! NOW!
+					}
+					OR = {
+						scope:current_gold = yes
+						scope:extortionate_current_gold = yes
+					}
+				}
+				scope:herd_send_option = yes
+			}
+		}
+
+		modifier = {
+			add = 100
+			scope:favor = yes
+			scope:recipient = {
+				OR = {
+					is_vassal_of = scope:actor
+					liege ?= scope:actor
+				}
+			}
+		}
+
+		modifier = {
+			add = -100
+			scope:favor = yes
+			scope:recipient = {
+				NOR = {
+					is_vassal_of = scope:actor
+					liege ?= scope:actor
+				}
+			}
+		}
+
+		# Struggle Agenda
+		modifier = {
+			scope:recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			scope:actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+							has_character_flag = agenda_towards_escalation
+						}
+					}
+					add = -100
+				}
+				else_if = {
+					limit = {
+						scope:actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_ransom_important
+							}
+						}
+					}
+					add = 200
+				}
+			}
+		}
+
+		modifier = { # Don't give away prisoners for free
+			factor = 0
+			NOR = {
+				scope:favor = yes
+				scope:gold = yes
+				scope:extortionate_gold = yes
+				scope:current_gold = yes
+				scope:herd_send_option = yes
+				AND = {
+					scope:actor = {
+						gold >= 25
+					}
+					scope:current_gold = yes
+				}
+			}
+		}
+
+		modifier = { # Don't annoy players
+			factor = 0
+			scope:recipient = { is_ai = no }
+			OR = {
+				scope:recipient = { is_at_war = yes }
+				scope:actor = { has_character_flag = character_ransom_refused_by_player }
+			}
+		}
+
+		#don't do it if you are tied with a prison break contract, we don't want it invalidating all the time
+		modifier = {
+			factor = 0
+			scope:actor = {
+				has_character_flag = being_prisonbroken_by_laamp
+			}
+		}
+	}
+}

@@ -1,0 +1,82 @@
+﻿bkt_marriage_interaction_appendage = {
+	if = {
+		limit = {
+			always = no
+			scope:secondary_actor = { 
+				OR = {
+					is_lowborn = yes 
+					AND = {
+						exists = dynasty
+						dynasty.dynasty_prestige_level <= 1
+					}
+				}
+			}
+			scope:secondary_recipient = { 
+				exists = dynasty 
+				NOR = {
+					dynasty.dynasty_prestige_level <= 1
+					government_has_flag = government_is_landless_adventurer
+					has_relation_lover = scope:secondary_actor
+					has_relation_soulmate = scope:secondary_actor
+				}
+			}
+		}
+		scope:recipient = {
+			if = {
+				limit = { 
+					scope:secondary_actor = { is_lowborn = yes }
+				}
+				scope:secondary_recipient.dynasty = {
+					#custom_tooltip = secondary_recipient_dynasty
+					add_dynasty_prestige = minor_dynasty_prestige_loss
+				}
+			}
+			else = {
+				scope:secondary_recipient.dynasty = {
+					#custom_tooltip = secondary_recipient_dynasty
+					add_dynasty_prestige = miniscule_dynasty_prestige_loss
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			always = no
+			scope:secondary_recipient = { 
+				OR = {
+					is_lowborn = yes 
+					AND = {
+						exists = dynasty
+						dynasty.dynasty_prestige_level <= 1
+					}
+				}
+			}
+			scope:secondary_actor = { 
+				exists = dynasty 
+				NOR = {
+					dynasty.dynasty_prestige_level <= 1
+					government_has_flag = government_is_landless_adventurer
+					has_relation_lover = scope:secondary_recipient
+					has_relation_soulmate = scope:secondary_recipient
+				}
+			}
+		}
+		scope:actor = {
+			if = {
+				limit = { 
+					scope:secondary_recipient = { is_lowborn = yes }
+				}
+				scope:secondary_actor.dynasty = {
+					#custom_tooltip = secondary_actor_dynasty
+					add_dynasty_prestige = minor_dynasty_prestige_loss
+				}
+			}
+			else = {
+				scope:secondary_actor.dynasty = {
+					#custom_tooltip = secondary_actor_dynasty
+					add_dynasty_prestige = miniscule_dynasty_prestige_loss
+				}
+			}
+		}
+	}
+}

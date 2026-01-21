@@ -1,0 +1,3 @@
+﻿became_vassal = {
+	opinion = 40	#prev 10
+}

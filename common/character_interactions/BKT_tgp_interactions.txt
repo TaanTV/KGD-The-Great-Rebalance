@@ -1,0 +1,365 @@
+﻿# Default Request Great Project Contribution
+# REFERENCED BY CODE, DO NOT REMOVE OR RENAME
+request_great_project_contribution_interaction = {
+	special_interaction = request_great_project_contribution
+	hidden = yes
+
+	on_accept = {
+		scope:actor = {
+			send_interface_toast = {
+				left_icon = scope:recipient
+				title = request_great_project_contribution.accept
+				scope:recipient = {
+					fund_great_project_contribution = {
+						contribution = scope:great_project_contribution
+						check_can_contribute = no
+					}
+				}
+			}
+			# Mandala Trickster
+			if = {
+				limit = { always = scope:mandala_serenity }
+				set_variable = {
+					name = mandala_serenity_force_request_cooldown
+					years = mandala_serenity_force_request_cooldown_value
+				}
+			}
+			# Admin realms
+			if = {
+				limit = { always = scope:offer_influence }
+				scope:actor = {
+					change_influence = major_influence_loss
+				}
+				scope:recipient = {
+					change_influence = major_influence_gain
+				}
+			}
+			# Offer Hook
+			if = {
+				limit = { always = scope:offer_hook }
+				stress_impact = {
+					base = minor_stress_impact_gain
+					paranoid = major_stress_impact_gain
+				}
+				scope:recipient = {
+					add_hook = {
+						type = favor_hook
+						target = scope:actor
+					}
+				}
+			}
+			# Offer Strong Hook
+			if = {
+				limit = { always = scope:offer_hook_strong }
+				stress_impact = { base = major_stress_impact_gain }
+				scope:recipient = {
+					add_hook = {
+						type = strong_favor_hook
+						target = scope:actor
+					}
+				}
+			}
+			# Use Hook
+			if = {
+				limit = { always = scope:hook }
+				use_hook = scope:recipient
+			}
+		}
+		scope:recipient = {
+			set_variable = {
+				name = recently_contributed_via_request
+				years = mandala_recently_contributed_via_request_value
+			}
+		}
+	}
+
+	ai_accept = {
+		base = -50
+
+		modifier = {
+			#ADDED - just disable that for mandalas for now, it seems unfinished
+			NOT = { scope:actor = { government_has_flag = government_is_mandala } }
+			add = "ai_will_do_contribution(scope:great_project_contribution)"
+			desc = base_contribution_desire
+		}
+		
+		#ADDED - help AI out A BIT
+		modifier = {
+			scope:actor = { 
+				government_has_flag = government_is_mandala 
+				is_ai = yes
+			}
+			add = 25
+			desc = base_contribution_desire
+		}
+
+		#Your Radiance
+		modifier = {
+			scope:actor = { has_mandala_capital_trigger = yes }
+			add = scope:actor.mandala_radiance_value
+			desc = actor_positive_mandala_radiance
+		}
+
+		modifier = {
+			scope:actor = {
+				has_realm_law_flag = tributaries_more_likely_to_contribute_to_GPs
+			}
+			add = 25
+			desc = actor_has_realm_flag_tributaries_more_likely_to_contribute
+		}
+
+		modifier = {
+			scope:recipient = { has_variable = recently_contributed_via_request }
+			add = -1000
+			desc = recipient_recently_contributed_via_request
+		}
+
+		#Personality
+		modifier = { # the greedier they are, the less likely they will agree to this
+			scope:recipient = { 
+				is_tributary_of = scope:actor
+				ai_greed > 0 
+			}
+			add = {
+				value = scope:recipient.ai_greed
+				multiply = -1
+				divide = 3
+			}
+			desc = TRIBUTARY_GREED_REASON
+		}
+
+		#Do they have enough gold?
+		modifier = {
+			scope:actor = {
+				any_great_project = {
+					great_project_type = mandala_capital_05
+					great_project_construction_phase_is = planned
+					great_project_owner = scope:actor
+				}
+			}
+			scope:recipient = { gold <= mandala_contribution_high_gold_cost }
+			add = -25
+			desc = recipient_has_low_funds
+		}
+		modifier = {
+			scope:actor = {
+				any_great_project = {
+					great_project_construction_phase_is = planned
+					great_project_owner = scope:actor
+					OR = {
+						great_project_type = mandala_capital_04
+						great_project_type = mandala_capital_03
+					}
+				}
+			}
+			scope:recipient = { gold <= mandala_contribution_mid_gold_cost }
+			add = -25
+			desc = recipient_has_low_funds
+		}
+		modifier = {
+			scope:actor = {
+				any_great_project = {
+					great_project_construction_phase_is = planned
+					great_project_owner = scope:actor
+					OR = {
+						great_project_type = mandala_capital_02
+						great_project_type = mandala_capital_01
+					}
+				}
+			}	
+			scope:recipient = { gold <= mandala_contribution_low_gold_cost }
+			add = -25
+			desc = recipient_has_low_funds
+		}
+
+		#Dynasty Legacy
+		modifier = {
+			scope:actor = {
+				dynasty ?= { has_dynasty_perk = tgp_sea_legacy_3 }
+			}
+			add = tgp_sea_legacy_gp_contribution_value
+			desc = tgp_sea_legacy_tributaries_likely_to_contribute
+		}
+
+		#Are they a competing Mandala?
+		modifier = {
+			#Here we don't check if its ruined, if they have one then they are likely not wanting to contribute to yours even if they need to rebuild it.
+			scope:recipient = { has_mandala_capital_trigger = yes }
+			add = -1000
+			desc = recipient_is_competing_mandala
+		}
+
+		#Differing Aspects
+		modifier = {
+			scope:recipient = {
+				government_has_flag = government_is_mandala
+				has_mandala_aspect_trigger = yes
+			}
+			NOT = {
+				same_mandala_aspect_trigger = { FIRST_CHAR = scope:actor SECOND_CHAR = scope:recipient }
+			}
+			add = -15
+			desc = recipient_not_same_aspect
+		}
+
+		#Are you Disbelieved?
+		modifier = {
+			scope:actor = { has_character_modifier = disbelieved_mandala_modifier }
+			desc = is_disbelieved_mandala
+			add = -25
+		}
+
+		## Paid Influence
+		modifier = {
+			add = 50
+			scope:offer_influence ?= yes
+			desc = INFLUENCE_USED
+		}
+		## Offer a hook on yourself.
+		modifier = {
+			add = 20
+			scope:offer_hook ?= yes
+			exists = scope:recipient
+			desc = SCHEME_WITH_OFFER_HOOK
+		}
+		## Offer a strong hook on yourself.
+		modifier = {
+			add = 50
+			scope:offer_hook_strong ?= yes
+			exists = scope:recipient
+			desc = SCHEME_WITH_OFFER_HOOK_STRONG
+		}
+		## Used a hook.
+		modifier = {
+			add = 100
+			scope:hook ?= yes
+			desc = SCHEME_WEAK_HOOK_USED
+		}
+		# Opinion
+		opinion_modifier = {
+			opinion_target = scope:actor
+			who = scope:recipient
+			multiplier = 0.5
+		}
+	}
+
+	auto_accept = {
+		trigger_if = {
+			limit = { scope:mandala_serenity = yes }
+			custom_tooltip = {
+				text = mandala_can_force_request
+				always = yes
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				scope:hook = yes
+				scope:actor = { has_strong_hook = scope:recipient }
+			}
+			custom_description = {
+				text = "spending_hook"
+				subject = scope:actor
+				object = scope:recipient
+				always = yes
+			}
+		}
+		trigger_else = { always = no }
+	}
+
+	options_heading = invite_agent_to_scheme_interaction.t.options_header
+	# Everyone
+	## Mandala Serenity Aspect
+	send_option = {
+		flag = mandala_serenity
+		is_shown = {
+			scope:actor = {
+				government_has_flag = government_is_mandala
+				house ?= { has_house_head_parameter = can_force_request_contribution }
+				is_house_head = yes
+			}
+		}
+		is_valid = {
+			scope:actor = {
+				custom_tooltip = {
+					text = mandala_serenity_force_is_on_cooldown
+					NOT = { has_variable = mandala_serenity_force_request_cooldown }
+				}
+				custom_tooltip = {
+					text = not_two_overrides
+					trigger_if = {
+						limit = { scope:hook = yes }
+						NOT = {
+							scope:actor = { has_strong_hook = scope:recipient }
+						}
+					}
+				}
+			}
+		}
+		localization = mandala_can_force_request
+		current_description = {
+			# Triggered desc so that we don't get a weird double tooltip.
+			triggered_desc = {
+				trigger = {
+					NOT = { has_variable = mandala_serenity_force_request_cooldown }
+				}
+				desc = mandala_can_force_request_valid
+			}
+		}
+	}
+	## Offer Influence
+	send_option = {
+		flag = offer_influence
+		is_shown = {
+			scope:actor = { government_allows = administrative }
+			scope:recipient = { government_allows = administrative }
+		}
+		localization = OFFER_INFLUENCE
+	}
+	## Offer a hook
+	send_option = {
+		flag = offer_hook
+		is_valid = {
+			custom_tooltip = {
+				text = offer_hook.tt.cannot_offer_both_hooks
+				scope:offer_hook_strong = no
+			}
+			NOT = {
+				scope:recipient = { has_hook = scope:actor }
+			}
+		}
+		localization = SCHEME_AGENT_HOOK
+	}
+	## Offer a strong hook
+	send_option = {
+		flag = offer_hook_strong
+		is_valid = {
+			custom_tooltip = {
+				text = offer_hook.tt.cannot_offer_both_hooks
+				scope:offer_hook = no
+			}
+			NOT = {
+				scope:recipient = { has_strong_hook = scope:actor }
+			}
+		}
+		localization = SCHEME_AGENT_HOOK_STRONG
+	}
+	## Use hook.
+	### Strong hook is in the auto_accept block.
+	send_option = {
+		flag = hook
+		is_valid = {
+			scope:actor = { has_usable_hook = scope:recipient }
+			custom_tooltip = {
+				text = not_two_overrides
+				trigger_if = {
+					limit = {
+						scope:actor = { has_strong_hook = scope:recipient }
+					}
+					scope:mandala_serenity = no
+				}
+			}
+		}
+		localization = SCHEME_HOOK_EXPLICIT
+	}
+	send_options_exclusive = no
+}

@@ -1,0 +1,272 @@
+﻿story_ai_goal_manager = {
+	
+	on_setup = {
+		if = {
+			limit = { story_owner = { highest_held_title_tier < tier_duchy } }
+			end_story = yes
+		}
+		story_owner = { set_variable = { name = ai_goal_manager value = scope:story } }
+		set_variable = {
+			name = claims_gained
+			value = 0
+		}
+		if = {
+			limit = { story_owner = { is_ai = no } }
+			set_variable = manager_frozen_because_player
+		}
+		else = {
+			# Roll the direction!
+			set_variable = last_ai_goal
+			ai_goal_manager_roll_the_direction = yes
+			if = {
+				limit = { story_owner = { is_at_war_as_defender = yes } }
+				set_variable = manager_frozen_because_defensive_war
+			}
+		}
+	}
+	
+	on_end = {
+		story_owner = { remove_variable = ai_goal_manager }
+	}
+	
+	on_owner_death = {
+		end_story = yes
+	}
+	
+	# Maintanance group
+	effect_group = {
+		days = 365		#prev 270
+	
+		trigger = {
+			always = yes
+		}
+		
+		# Kill story if not eligeble 
+		triggered_effect = {
+			trigger = { 
+				story_owner = { 
+					#NOT = { is_valid_for_ai_goals_system = yes }
+					always = yes	#turn that poor thing off.
+				}
+			}
+			effect = {
+				end_story = yes
+			}
+		}
+		# Unfreeze 
+		triggered_effect = {
+			trigger = { 
+				has_variable = manager_frozen_because_player
+				story_owner = { is_ai = yes }
+			}
+			effect = {
+				remove_variable = manager_frozen_because_player
+				ai_goal_manager_roll_the_direction = yes
+			}
+		}
+		
+		triggered_effect = {
+			trigger = { 
+				story_owner = { is_ai = no }
+				NOT = { has_variable = manager_frozen_because_player }
+			}
+			effect = {
+				set_variable = manager_frozen_because_player
+			}
+		}
+		
+		triggered_effect = {
+			trigger = { 
+				story_owner = { is_at_war_as_defender = yes }
+				NOT = { has_variable = manager_frozen_because_defensive_war }
+			}
+			effect = {
+				set_variable = manager_frozen_because_defensive_war
+			}
+		}
+		
+		triggered_effect = {
+			trigger = { 
+				story_owner = { is_at_war_as_defender = no }
+				has_variable = manager_frozen_because_defensive_war
+			}
+			effect = {
+				remove_variable = manager_frozen_because_defensive_war
+			}
+		}
+		
+		
+		triggered_effect = {
+			trigger = { 
+				story_owner = { ai_has_conqueror_personality = yes }
+				NOT = { has_variable = manager_frozen_because_conqueror }
+			}
+			effect = {
+				set_variable = manager_frozen_because_conqueror
+			}
+		}
+		
+		triggered_effect = {
+			trigger = { 
+				story_owner = { ai_has_conqueror_personality = no }
+				has_variable = manager_frozen_because_conqueror
+			}
+			effect = {
+				remove_variable = manager_frozen_because_conqueror
+			}
+		}
+		#
+		triggered_effect = {
+			trigger = { 
+				has_variable = ai_main_goal
+				NOT = { has_variable = random_goal_change_preventor }
+				NOR = { 
+					has_variable = manager_frozen_because_defensive_war
+					has_variable = manager_frozen_because_player
+					has_variable = manager_frozen_because_conqueror
+				}
+			}
+			effect = {
+				random = {
+					chance = 35
+					ai_goal_manager_roll_the_direction = yes
+				}
+			}
+		}
+		triggered_effect = {
+			trigger = { 
+				has_variable = ai_main_goal
+				has_variable = ai_main_goal_completed
+				NOT = { has_variable = hard_goal_change_preventor }
+				NOR = { 
+					has_variable = manager_frozen_because_defensive_war
+					has_variable = manager_frozen_because_player
+					has_variable = manager_frozen_because_conqueror
+				}
+			}
+			effect = {
+				random = {
+					chance = 90
+					ai_goal_manager_roll_the_direction = yes
+				}
+			}
+		}
+		triggered_effect = {
+			trigger = {
+				has_variable = claims_gained
+				var:claims_gained > 0
+			}
+			effect = {
+				random = {
+					chance = 15
+					change_variable = {
+						name = claims_gained
+						subtract = 1
+						min = 0
+					}
+				}
+			}
+		}
+	}
+	 
+	# Something happens - random events
+	effect_group = {
+		days = { 130 210 }	#roughly every half a year
+	
+		trigger = {
+			NOR = { 
+				has_variable = manager_frozen_because_defensive_war
+				has_variable = manager_frozen_because_player
+				has_variable = manager_frozen_because_conqueror
+			}
+			story_owner = { 
+				highest_held_title_tier >= tier_duchy 
+				is_landed = yes
+				is_imprisoned = no
+			}
+		}
+		
+		# Check if goals are met and throw out rewards
+		triggered_effect = {
+			trigger = { 
+				always = yes
+			}
+			effect = {
+				ai_main_goal_competion_check = yes
+			}
+		}
+		
+		# Kick AI to do things.
+		triggered_effect = {
+			trigger = { 
+				NOT = { has_variable = ai_main_goal_completed }
+			}
+			effect = {
+				if = {
+					limit = { 
+						story_owner = {
+							highest_held_title_tier = tier_duchy
+							is_independent_ruler = no
+						}
+					}
+					random = {
+						chance = 75
+						ai_main_goal_competion_kick = yes
+					}
+				}
+				else = {
+					ai_main_goal_competion_kick = yes
+				}
+			}
+		}
+	}
+	
+	effect_group = {
+		days = 365
+		
+		trigger = {
+			NOR = {
+				story_owner = { ai_has_economical_boom_personality = yes }
+				has_variable = temporary_forced_builder_ai
+				has_variable = manager_frozen_because_conqueror
+				has_variable = manager_frozen_because_player
+			}
+		}
+		
+		triggered_effect = {
+			trigger = {
+				story_owner = { 
+					is_landed = yes
+					is_at_war = no
+					gold > medium_gold_value 
+				} 
+			}
+			effect = {
+				random = {
+					chance = 3.5		#MTTH a bit over 20 years
+					modifier = {
+						story_owner = { gold > massive_gold_value }
+						NOT = { has_variable = forced_builder_ai_soft_cooldown }
+						add = 2.5
+					}
+					modifier = {
+						has_variable = forced_builder_ai_soft_cooldown
+						add = -2.5
+					}
+					set_variable = {
+						name = temporary_forced_builder_ai
+						years = 7
+					}
+					set_variable = {
+						name = forced_builder_ai_soft_cooldown
+						years = 17
+					}
+					#story_owner = { save_temporary_scope_as = story_owner_scope }
+					#debug_log = "Forced AI into builder mode"
+					#debug_log_scopes = yes
+					#debug_log_date = yes
+				}
+			}
+		}
+	}
+}

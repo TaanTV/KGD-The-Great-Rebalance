@@ -1,0 +1,87 @@
+﻿#############
+# Diarchy Scripted Triggers
+#############
+
+##################################################
+# General Triggers
+
+character_hates_scope_due_to_strife_guts_trigger = {
+	# We've got to share a direct liege for strife to be valid.
+	exists = liege
+	exists = $TARGET$.liege
+	liege = $TARGET$.liege
+	# And $TARGET$ must have accumulated enough strife to aggravate me (which we modulate up or down a little with some traits).
+	$TARGET$.strife_opinion >= strife_harm_threshold_value
+	# Finally, there has to be at least _some_ love lost.
+	opinion = {
+		target = $TARGET$
+		value < -25		#prev 0
+	}
+}
+
+
+regency_for_personal_reasons_trigger = {
+	custom_tooltip = {
+		text = regency_for_personal_reasons_trigger.tt.cannot_govern_by_themselves
+		OR = {
+			AND = {
+				is_adult = no
+				NOT = {
+					liege ?= { has_diarchy_parameter = diarchy_type_is_junior_emperorship }
+				}
+			}
+			is_incapable = yes
+			#has_character_modifier = isolating_modifier
+		}
+	}
+}
+
+diarch_coup_attempt_is_valid_trigger = {
+	# Diarchy checks.
+	is_diarch = yes
+	#$LIEGE$ = { has_diarchy_active_parameter = regents_can_try_to_overthrow_present_lieges }
+	#ADDED - relaxed this a bit since you still need the param above to be able to invite someone into the coup
+	$LIEGE$ = { has_diarchy_active_parameter = regency_cant_be_ended_above_this_point }
+	## Liege must be physically present to overthrow. You can't coup them whilst they're abroad.
+	$LIEGE$ = {
+		#ADDED - CHANGED, relaxed a bunch of those, kept the war because it might cause weirdness
+		#is_imprisoned = no
+		#is_travelling = no
+		is_at_war = no
+		#custom_tooltip = {
+		#	text = custom.not_attending_activity
+		#	NOT = { exists = involved_activity }
+		#}
+		age >= 5
+	}
+	# Support checks.
+	## Have you gathered enough support from the realm's powerful vassals and/or councillors?
+	custom_tooltip = {
+		text = diarch_attempt_to_overthrow_liege.tt.majority_powerful_vassal_support
+		subject = root
+		has_variable_list = coup_pv_supporters_list
+		any_in_list = {
+			variable = coup_pv_supporters_list
+			count >= pv_overthrow_threshold_value
+			# Double check they're still valid.
+			diarch_coup_valid_conspiracy_culmination_vassals_trigger = { LIEGE = $LIEGE$ }
+		}
+	}
+	# As a speed-bump, we check how long this diarchy has been on for.
+	OR = {
+		# Either, you've been a diarch for a good long ways.
+		years_as_diarch >= 5		#prev 8
+		# Or, you haven't been but everyone is kinda used to the concept of a diarch.
+		AND = {
+			years_as_diarch >= 3	#prev 4
+			$LIEGE$ = { years_in_diarchy >= 8 }	#prev 10
+		}
+		# OR, you've laid the groundwork for such a coup already
+		custom_tooltip = {
+			text = diarch_attempt_to_overthrow_liege_bypass
+			has_character_flag = laid_coup_groundwork_flag
+		}
+	}
+	# And finally, for ease of sanity, your liege must be of a certain size.
+	$LIEGE$.sub_realm_size >= tiny_realm_size		#prev minor_realm_size
+}

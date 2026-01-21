@@ -1,0 +1,68 @@
+﻿# province scope
+has_any_main_economic_building = {
+	OR = {
+		has_building_or_higher = farm_estates_01
+		has_building_or_higher = cereal_fields_01
+		has_building_or_higher = logging_camps_01
+		has_building_or_higher = hill_farms_01
+		has_building_or_higher = peat_quarries_01
+		has_building_or_higher = quarries_01
+		has_building_or_higher = orchards_01
+		has_building_or_higher = plantations_01
+		has_building_or_higher = paddy_fields_01
+		has_building_or_higher = paddy_fields_01
+		has_building_or_higher = paddy_fields_01
+		AND = {
+			terrain = steppe
+			has_building_or_higher = pastures_01
+		}
+		has_building_or_higher = windmills_01
+		has_building_or_higher = watermills_01
+		has_building_or_higher = caravanserai_01
+	}
+}
+
+# province scope
+has_any_basic_military_building = {
+	OR = {
+		has_building_or_higher = regimental_grounds_01
+		has_building_or_higher = military_camps_01
+		has_building_or_higher = stables_01
+		has_building_or_higher = barracks_01
+	}
+}
+
+# province scope
+has_any_tribal_military_building = {
+	OR = {
+		has_building = palisades_01
+		has_building = palisades_02
+		has_building = war_camps_01
+		has_building = war_camps_02
+	}
+}
+
+# province scope
+has_bad_for_raiding_region = {
+	OR = {
+		geographical_region = world_africa_west
+		geographical_region = world_steppe
+	}
+}
+
+# province scope
+has_any_wanua_economic_building = {
+	OR = {
+		has_building_or_higher = kora_kora_yards_01
+		has_building_or_higher = water_temples_01
+		has_building_or_higher = stilted_granaries_01
+	}
+}
+
+# province scope
+has_any_wanua_military_building = {
+	OR = {
+		has_building_or_higher = idjang_forts_01
+		has_building_or_higher = wantilan_01
+	}
+}

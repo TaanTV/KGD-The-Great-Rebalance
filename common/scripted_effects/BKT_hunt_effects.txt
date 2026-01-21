@@ -1,0 +1,299 @@
+﻿
+hunt_animal_melee_kill_effect = {
+	save_scope_as = melee_kill
+	play_sound_effect = "event:/DLC/EP2/SFX/Events/Grand_Activities/Hunts/ConstructionKits/ep2_event_grand_hunt_ck_spear_impact"
+	hunt_animal_kill_effect = { DEATH = $DEATH$ VAR = $VAR$ }
+	hunter_progress_point_gain_effect = { CHANGE = 3 RANDOM_CHANGE = 1 } #Gives Hunter Lifestyle XP
+	# Determine who could be wounded
+	scope:activity ?= {
+		random_attending_character = {
+			limit = { is_alive = yes }
+			save_scope_as = injury_target
+			hunt_wound_select_effect = yes
+		}
+	}
+	save_scope_as = injury_target
+	hunt_wound_select_effect = yes
+	duel = {
+		skill = prowess
+		value = hunt_melee_kill_prowess_value
+		50 = {
+			desc = hunt_kill_success_melee
+			#ADDED
+			compare_modifier = {
+				value = scope:duel_value
+				min = 0
+				multiplier = 2
+			}
+			hunt_kill_melee_modifiers = yes # SPEAR
+			hunt_kill_hunter_modifiers = yes # HUNTER
+			if = { #chance_to_gain_prowess_during_bear_hunts parameter check
+				limit = {
+					faith = { has_doctrine_parameter = chance_to_gain_prowess_during_bear_hunts }
+					scope:activity.var:animal_type = flag:bear
+				}
+				add_prowess_skill = 1
+				add_martial_skill = 1
+			}
+			send_interface_toast = {
+				title = {
+					first_valid = {
+						triggered_desc = {
+							trigger = { scope:animal_slayer ?= root }
+							desc = hunt_kill_success_melee_root
+						}
+						desc = hunt_kill_success_melee_guest
+					}
+				}
+				left_icon = scope:animal_slayer
+				scope:activity ?= {
+					add_activity_log_entry = {
+						key = hunt_melee_log
+						tags = { kill }
+						score = 100
+
+						character = scope:animal_slayer
+
+						#Effect
+						scope:animal_slayer ?= {
+							add_prestige = hunt_prestige_melee_value
+							# Complete activity intent if relevant
+							if = {
+								limit = {
+									AND = {
+										scope:hunt_kill_death_chance = flag:yes
+										NOT = {
+											hunt_small_game_trigger = { VAR = $VAR$ }
+										}
+									}
+								}
+								hunt_animal_slayer_memory_effect = yes
+							}
+						}
+					}
+				}
+			}
+			save_scope_as = melee_success
+		}
+		1 = { # Injury
+			desc = hunt_kill_failure_melee
+			compare_modifier = {
+				value = scope:duel_value
+				multiplier = -3.5
+				min = 5
+			}
+			modifier = {
+				hunt_small_game_trigger = { VAR = $VAR$ }
+				factor = 0.05
+			}
+			modifier = { add = hunt_melee_danger_value }
+			# Effect
+			hidden_effect = {
+				scope:injury_target = {
+					if = {
+						limit = {
+							hunt_animal_type_dangerous_trigger = { VAR = $VAR$ }
+						}
+						hunt_wound_apply_effect = { SEVERE = yes }
+					}
+					else = {
+						hunt_wound_apply_effect = { SEVERE = no }
+					}
+				}
+			}
+			scope:activity ?= {
+				add_activity_log_entry = {
+					key = hunt_melee_log
+					tags = { kill }
+					score = 100
+
+					character = scope:animal_slayer
+
+					#Effects
+					scope:animal_slayer ?= {
+						add_prestige = hunt_prestige_melee_wound_value
+						# Complete activity intent if relevant
+						if = {
+							limit = {
+								AND = {
+									scope:hunt_kill_death_chance = flag:yes
+									NOT = {
+										hunt_small_game_trigger = { VAR = $VAR$ }
+									}
+								}
+							}
+							hunt_animal_slayer_memory_effect = yes
+						}
+					}
+				}
+				hidden_effect = {
+					add_activity_log_entry = {
+						key = hunt_melee_wounded_log
+						score = 75
+						tags = { kill }
+						character = scope:injury_target
+						scope:injury_target = { hunt_wound_tooltip_effect = yes }
+					}
+				}
+			}
+			if = {
+				limit = { scope:severe ?= yes }
+				custom_tooltip = hunt_character_wound_tt
+			}
+			else = {
+				show_as_tooltip = {
+					increase_wounds_no_death_effect = { REASON = fight }
+				}
+			}
+			save_scope_as = melee_failure
+		}
+		1 = { # Death
+			desc = hunt_kill_critical_failure_melee
+			trigger = {
+				scope:hunt_kill_death_chance = flag:yes
+				NOT = {
+					hunt_small_game_trigger = { VAR = $VAR$ }
+				}
+			}
+			compare_modifier = {
+				value = scope:duel_value
+				multiplier = -3.5
+				min = -5	#prev 5
+			}
+			modifier = { add = hunt_melee_kill_prowess_value }
+			scope:activity ?= {
+				add_activity_log_entry = {
+					key = hunt_melee_killed_log
+					score = 75
+					tags = { kill }
+					character = scope:animal_slayer
+
+					# Effect
+					scope:animal_slayer = {
+						hunt_animal_death_effect = { VAR = $VAR$ }
+					}
+				}
+			}
+			save_scope_as = melee_critical
+		}
+	}
+	# Outcome
+	scope:animal_slayer ?= {
+		if = {
+			limit = { has_activity_intent = slay_beast_intent }
+			show_as_tooltip = { complete_activity_intent = yes }
+		}
+		hunt_complete_slay_beast_intent_effect = yes # Complete activity intent if relevant
+	}
+	scope:activity ?= {
+		every_attending_character = {
+			limit = { is_ai = no }
+			trigger_event = hunt.1201
+		}
+	}
+}
+
+# Unified effect for adding sightings to counties
+hunt_create_sighting_effect = {
+	if = {
+        limit = { NOT = { exists = scope:sighting_county } }
+        save_scope_as = sighting_county
+    }
+	# Track who can use the sighting
+	set_variable = {
+		name = animal_type
+		years = 5		#prev 3
+		value = $ANIMAL$
+	}
+	# Track who can use the sighting
+	set_variable = {
+		name = sighting_owner
+		years = 5		#prev 3
+		value = $OWNER$
+	}
+	# Stop sightings in the same place too regularly
+	set_variable = {
+		name = recent_sighting
+		years = 10
+	}
+	# Add sighting modifier
+	add_county_modifier = {
+		modifier = hunt_sighting_$TYPE$_modifier
+		years = 5		#prev 3
+		desc = hunt_sighting_$TYPE$_modifier_custom_desc
+	}
+}
+
+nerge_progression_effect = {
+	save_temporary_scope_as = root_scope
+	save_scope_value_as = {
+		name = amount_of_players
+		value = {
+			value = 1
+			scope:activity = {
+				every_attending_character = {
+					limit = {
+						is_ai = no
+					}
+					add = 1
+				}
+				subtract = 1
+			}
+			min = 1
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				is_ai = no
+				#AND = {
+				#	NOT = {
+				#		involved_activity = { any_attending_character = { is_ai = no } }
+				#	}
+				#	scope:root_scope = involved_activity.activity_host
+				#}
+				#ADDED - wtf is this thing above? Ew. Why does the player have to carry AI?
+				scope:root_scope = involved_activity.activity_host
+			}
+		}
+		scope:activity ?= {
+			if = {
+				limit = {
+					exists = var:activity_special_type_progression
+				}
+				change_variable = {
+					name = activity_special_type_progression
+					add = {
+						value = $VALUE$
+						multiply = nerge_score_multiplier_value
+						divide = scope:amount_of_players
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				$VALUE$ <= 2
+			}
+			custom_tooltip = nerge_outcome_boost_tiny
+		}
+		else_if = {
+			limit = {
+				$VALUE$ <= 5
+			}
+			custom_tooltip = nerge_outcome_boost_small
+		}
+		else_if = {
+			limit = {
+				$VALUE$ <= 9
+			}
+			custom_tooltip = nerge_outcome_boost_medium
+		}
+		else_if = {
+			limit = {
+				$VALUE$ >= 13
+			}
+			custom_tooltip = nerge_outcome_boost_large
+		}
+	}
+}

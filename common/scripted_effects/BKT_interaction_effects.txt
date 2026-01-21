@@ -1,0 +1,1713 @@
+﻿
+torture_interaction_actor_effect = {
+	scope:actor = {
+		###SECRETS###
+		custom_tooltip = torture_interaction_actor_effects.secrets.tt
+
+
+		###STRESS###
+
+		#Stress loss if they are my rival I hate them
+		if = {
+			limit = { has_relation_rival = scope:recipient }
+
+			if = {
+				limit = {
+					NOR = {
+						has_trait = sadistic
+						has_trait = vengeful
+						has_trait = compassionate
+						has_trait = forgiving
+					}
+				}
+				add_stress = medium_stress_loss
+			}
+			else = {
+				stress_impact = {
+					sadistic = major_stress_impact_loss
+					vengeful = massive_stress_impact_loss
+					compassionate = minor_stress_impact_gain
+					forgiving = minor_stress_impact_gain
+				}
+			}
+		}
+		else_if = { # Torturing infidels is relaxing
+			limit = {
+				has_trait = zealous
+				scope:actor.faith != scope:recipient.faith
+			}
+
+			if = {
+				limit = {
+					NOR = {
+						has_trait = sadistic
+						has_trait = compassionate
+						has_trait = forgiving
+					}
+				}
+				add_stress = medium_stress_loss
+			}
+			else = {
+				stress_impact = {
+					sadistic = major_stress_impact_loss
+					compassionate = minor_stress_impact_gain
+					forgiving = minor_stress_impact_gain
+				}
+			}
+		}
+		#ADDED - torturer negates most penalties for, well, torture!
+		else_if = {
+			limit = { has_trait = torturer }
+			if = {
+				limit = {
+					has_trait = sadistic
+				}
+				stress_impact = {
+					torturer = minor_stress_impact_loss
+					sadistic = medium_stress_impact_loss
+					compassionate = medium_stress_impact_gain
+					forgiving = medium_stress_impact_gain
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_trait = compassionate
+						has_trait = forgiving
+					}
+				}
+				stress_impact = {
+					torturer = minor_stress_impact_loss
+					compassionate = medium_stress_impact_gain
+					forgiving = medium_stress_impact_gain
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_trait = sadistic
+				}
+				scope:recipient = {
+					OR = {
+						is_child_of = scope:actor
+						is_grandchild_of = scope:actor
+						is_great_grandchild_of = scope:actor
+					}
+				}
+			}
+			stress_impact = {
+				#base = medium_stress_impact_loss
+				compassionate = massive_stress_impact_gain
+				craven = major_stress_impact_gain
+				just = medium_stress_impact_gain
+				forgiving = major_stress_impact_gain
+				#generous = medium_stress_impact_gain
+				#trusting = minor_stress_impact_gain
+				#content = minor_stress_impact_gain
+				family_first = minor_stress_impact_gain
+			}
+		}
+		else = {
+			stress_impact = {
+				sadistic = medium_stress_impact_loss
+				compassionate = major_stress_impact_gain
+				craven = major_stress_impact_gain
+				just = medium_stress_impact_gain
+				forgiving = medium_stress_impact_gain
+				#generous = medium_stress_impact_gain
+				#trusting = minor_stress_impact_gain
+				#content = minor_stress_impact_gain
+			}
+		}
+
+		###DREAD###
+		if = {
+			limit = {
+				scope:recipient = {
+					OR = {
+						is_powerful_vassal_of = scope:actor # Is your powerful vassal
+						AND = { # Is an Emperor
+							exists = primary_title
+							primary_title.tier >= tier_empire
+						}
+						target_is_vassal_or_below = scope:actor # Your liege/s
+						scope:actor.faith.religious_head = scope:recipient # Your head of faith
+					}
+				}
+			}
+			add_dread = torture_interaction_massive_dread_gain
+		}
+		else_if = {
+			limit = {
+				scope:recipient = {
+					OR = {
+						AND = { # Is your vassal, and higher than Baron
+							is_vassal_of = scope:actor
+							primary_title.tier > tier_barony
+						}
+						AND = { # Is a King
+							exists = primary_title
+							primary_title.tier >= tier_kingdom
+						}
+					}
+				}
+			}
+			add_dread = torture_interaction_major_dread_gain
+		}
+		else_if = {
+			limit = {
+				scope:recipient = {
+					OR = {
+						scope:actor = { # Torturing close family of your vassals is dreadful...
+							any_vassal = {
+								is_close_family_of = scope:recipient
+							}
+						}
+						scope:actor = { # Torturing close family of your liege/s is the same...
+							any_liege_or_above = {
+								is_close_family_of = scope:recipient
+							}
+						}
+						AND = { # Peer Vassals
+							exists = primary_title
+							primary_title.tier > tier_barony
+							liege ?= scope:actor.liege
+						}
+						AND = { # Is a Duke
+							exists = primary_title
+							primary_title.tier >= tier_duchy
+						}
+					}
+				}
+			}
+			add_dread = torture_interaction_medium_dread_gain
+		}
+		else_if = {
+			limit = {
+				scope:recipient = {
+					OR = {
+						is_spouse_of = scope:actor # Your own spouse
+						is_close_or_extended_family_of = scope:actor # Your own family
+						AND = {
+							exists = primary_title
+							primary_title.tier >= tier_county # Is a Count
+						}
+						scope:actor = { # Torturing extended family of your vassals is dreadful...
+							any_vassal = {
+								is_extended_family_of = scope:recipient
+							}
+						}
+						scope:actor = { # Torturing extended family of your liege/s is the same...
+							any_liege_or_above = {
+								is_extended_family_of = scope:recipient
+							}
+						}
+					}
+				}
+			}
+			add_dread = torture_interaction_minor_dread_gain
+		}
+
+
+		###OPINIONS###
+		torture_blind_castrate_disfigure_opinion_effect = { VERB = tortured }
+
+		###CHURCH OPINION & PIETY###
+		if = {
+			limit = {
+				NOR = {
+					faith = { has_doctrine = tenet_exaltation_of_pain }
+
+					# Divine Retribution cancels out faith-based penalties
+					has_perk = divine_retribution_perk
+				}
+			}
+			add_piety = medium_piety_loss
+
+			if = {
+				limit = {
+					any_learning_councillor = {
+						opinion = {
+							target = scope:recipient
+							value >= neutral_opinion
+						}
+					}
+				}
+				random_learning_councillor = {
+					add_opinion = {
+						modifier = impious_opinion
+						opinion = -10
+						target = scope:actor
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				faith = { has_doctrine = tenet_exaltation_of_pain }
+			}
+			add_piety = medium_piety_gain
+		}
+	}
+}
+
+blind_castrate_and_disfigure_effect = {
+	###STRESS##
+	scope:actor = {
+		if = {
+			limit = { has_relation_rival = scope:recipient }
+
+			if = {
+				limit = {
+					NOR = {
+						has_trait = sadistic #Extra stress
+						has_trait = vengeful #Extra stress
+						has_trait = compassionate #Lessened impact
+						has_trait = forgiving #Lessened impact
+					}
+				}
+				add_stress = medium_stress_loss
+			}
+			else = {
+				stress_impact = {
+					sadistic = major_stress_impact_loss
+					vengeful = major_stress_impact_loss
+					compassionate = minor_stress_impact_gain
+					forgiving = minor_stress_impact_gain
+				}
+			}
+		}
+		#Regular stress
+		else = {
+			stress_impact = {
+				sadistic = minor_stress_impact_loss
+				compassionate = massive_stress_impact_gain
+				craven = major_stress_impact_gain
+				just = medium_stress_impact_gain
+				forgiving = medium_stress_impact_gain
+				#generous = medium_stress_impact_gain
+				#trusting = minor_stress_impact_gain
+				gregarious = minor_stress_impact_gain
+				calm = minor_stress_impact_gain
+				content = minor_stress_impact_gain
+				honest = minor_stress_impact_gain
+			}
+		}
+
+		###DREAD###
+		if = {
+			limit = {
+				OR = {
+					is_spouse_of = scope:recipient
+					is_close_family_of = scope:recipient
+					scope:recipient = { tier_or_related_liege_tier_greater_or_equal_trigger = { TIER = tier_kingdom } } #Kingdom & empire
+				}
+			}
+			add_dread = medium_dread_gain		#prev major_dread_gain
+		}
+		else_if = {
+			limit = {
+				OR = {
+					scope:recipient = { tier_or_related_liege_tier_equal_trigger = { TIER = tier_duchy } }
+					scope:recipient = { tier_or_related_liege_tier_equal_trigger = { TIER = tier_county } }
+				}
+			}
+			add_dread = minor_dread_gain		#prev medium_dread_gain
+		}
+		else = {
+			#add_dread = minor_dread_gain
+		}
+	}
+}
+
+offer_vassalization_interaction_effect = {
+	create_title_and_vassal_change = {
+		type = swear_fealty
+		save_scope_as = change
+	}
+	scope:recipient = {
+		change_liege = {
+			liege = scope:actor
+			change = scope:change
+		}
+		add_opinion = {
+			modifier = became_vassal
+			target = scope:actor
+			opinion = 40	#prev 10
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	# Special terms for feudal contracts
+	scope:recipient = {
+		if = {
+			limit = {
+				government_has_flag = government_is_feudal
+			}
+			if = {
+				limit = { scope:high_obligations = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 3 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 3 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = high_obligations_taxes
+				custom_tooltip = high_obligations_levies
+			}
+			else_if = {
+				limit = { scope:low_obligations = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 1 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 1 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = low_obligations_taxes
+				custom_tooltip = low_obligations_levies
+			}
+			else_if = {
+				limit = { scope:religious_exemption = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 2 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 1 }
+						#vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+						#ADDED - both
+						set_subject_contract_modification_blocked = yes
+						if = {
+							limit = {
+								scope:actor.faith = {
+									OR = {
+										has_doctrine = tenet_tax_nonbelievers
+										has_doctrine = special_doctrine_jizya
+									}
+								}
+							}
+							vassal_contract_set_obligation_level = { type = jizya_special_rights level = 1 }
+						}
+						else = {
+							vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+						}
+					}
+				}
+				custom_tooltip = normal_obligations_taxes
+				custom_tooltip = low_obligations_levies
+				custom_tooltip = religious_protection_tt
+			}
+			else = {
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 2 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 2 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = normal_obligations_taxes
+				custom_tooltip = normal_obligations_levies
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_clan
+				scope:religious_exemption_clan = yes
+			}
+			hidden_effect = {
+				if = {
+					limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+					#vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+					#ADDED
+					set_subject_contract_modification_blocked = yes
+					if = {
+						limit = {
+							scope:actor.faith = {
+								OR = {
+									has_doctrine = tenet_tax_nonbelievers
+									has_doctrine = special_doctrine_jizya
+								}
+							}
+						}
+						vassal_contract_set_obligation_level = { type = jizya_special_rights level = 1 }
+					}
+					else = {
+						vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+					}
+				}
+			}
+			custom_tooltip = religious_protection_tt
+		}
+	}
+
+	# Struggle catalysts.
+	hidden_effect = {
+		fp3_struggle_apply_independent_vassalage_catalyst_effect = {
+			NEW_LIEGE = scope:actor
+			NEW_VASSAL = scope:recipient
+		}
+	}
+}
+
+
+@starting_subject_standing_value = 10
+
+# Effect to start a tributary relationship, can be called directly without a war or from start_tributary_from_war_effect
+# $TRIBUTARY$ = the new tributary
+# $SUZERAIN$ = their suzerain
+start_tributary_interaction_effect = {
+	# Setup truces depending on how the tributary relationship was created
+	$TRIBUTARY$ = { save_scope_as = tributary_loc }
+	$SUZERAIN$ = { save_scope_as = suzerain_loc }
+
+	#Mandala Tributaries
+	if = {
+		limit = {
+			should_be_mandala_tributary_trigger = { 
+				SUZERAIN = $SUZERAIN$ 
+				TRIBUTARY = $TRIBUTARY$ 
+			}
+			trigger_if = {
+				limit = { exists = scope:tributary_war }
+				$SUZERAIN$ = {
+					AND = {
+						house = { has_house_head_parameter = can_make_mandala_tributaries_via_war }
+						is_house_head = yes
+					}
+				}
+			}
+		}
+		$TRIBUTARY$ = {
+			if = {
+				limit = { government_has_flag = government_is_tribal }
+				start_tributary = {
+					contract_group = tributary_mandala_tribal
+					suzerain = $SUZERAIN$
+				}
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 3
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_prestige
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 3
+							}
+						}
+					}
+					custom_tooltip = high_mandala_tribute_taxes
+					custom_tooltip = high_mandala_tribute_prestige
+					custom_tooltip = high_mandala_tribute_levies
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 0
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_prestige
+								level = 0
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 0
+							}
+						}
+					}
+					custom_tooltip = exempt_mandala_tribute_taxes
+					custom_tooltip = low_mandala_tribute_prestige
+					custom_tooltip = exempt_mandala_tribute_levies
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_prestige
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 1
+							}
+						}
+					}
+					custom_tooltip = normal_mandala_tribute_taxes
+					custom_tooltip = normal_mandala_tribute_prestige
+					custom_tooltip = low_mandala_tribute_levies
+				}
+
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					tributary_contract_set_obligation_level = {
+						type = mandala_suzerain_war_participation_guarantee
+						level = 1
+					}
+				}
+			}
+			else = {
+				start_tributary = {
+					contract_group = tributary_mandala
+					suzerain = $SUZERAIN$
+				}
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 3
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_piety
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 3
+							}
+						}
+					}
+					custom_tooltip = high_mandala_tribute_taxes
+					custom_tooltip = high_mandala_tribute_piety
+					custom_tooltip = high_mandala_tribute_levies
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 0
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_piety
+								level = 0
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 0
+							}
+						}
+					}
+					custom_tooltip = exempt_mandala_tribute_taxes
+					custom_tooltip = low_mandala_tribute_piety
+					custom_tooltip = exempt_mandala_tribute_levies
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_taxes
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_piety
+								level = 2
+							}
+							tributary_contract_set_obligation_level = {
+								type = mandala_government_levies
+								level = 1
+							}
+						}
+					}
+					custom_tooltip = normal_mandala_tribute_taxes
+					custom_tooltip = normal_mandala_tribute_piety
+					custom_tooltip = low_mandala_tribute_levies
+				}
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					tributary_contract_set_obligation_level = {
+						type = mandala_suzerain_war_participation_guarantee
+						level = 1
+					}
+				}
+			}
+		}
+	}
+	# Wanua Tributaries
+	else_if = {
+		limit = {
+			should_be_wanua_tributary_trigger = { 
+				SUZERAIN = $SUZERAIN$ 
+				TRIBUTARY = $TRIBUTARY$ 
+			}
+		}
+		$TRIBUTARY$ = {
+			start_tributary = {
+				contract_group = tributary_wanua
+				suzerain = $SUZERAIN$
+			}
+			if = {
+				limit = {
+					OR = {
+						scope:high_obligations ?= yes
+						exists = scope:tributary_war
+					}
+				}
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = {
+							type = barter_goods_obligations
+							level = 3
+						}
+						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+					}
+				}
+				custom_tooltip = high_wanua_tribute_barter_goods
+				custom_tooltip = high_subjugated_tribute_taxes
+				custom_tooltip = normal_subjugated_tribute_prestige
+			}
+			else_if = {
+				limit = { scope:low_obligations ?= yes }
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = {
+							type = barter_goods_obligations
+							level = 1
+						}
+						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+					}
+				}
+				custom_tooltip = low_wanua_tribute_barter_goods
+				custom_tooltip = low_subjugated_tribute_taxes
+				custom_tooltip = none_subjugated_tribute_prestige
+			}
+			else = {
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = {
+							type = barter_goods_obligations
+							level = 2
+						}
+						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+					}
+				}
+				custom_tooltip = medium_wanua_tribute_barter_goods
+				custom_tooltip = low_subjugated_tribute_taxes
+			}
+		}
+	}
+	# Nomadic Tributaries
+	else_if = {
+		limit = {
+			$SUZERAIN$ = { has_government = nomad_government }
+		}
+		$TRIBUTARY$ = {
+			if = {
+				limit = {
+					OR = {
+						has_government = nomad_government
+						has_government = herder_government
+					}
+				}
+				start_tributary = {
+					contract_group = tributary_nomadic
+					suzerain = $SUZERAIN$
+				}
+			}
+			else = {
+				start_tributary = {
+					contract_group = tributary_settled
+					suzerain = $SUZERAIN$
+				}
+			}
+
+			# Special terms depending on which options were set
+			if = { # settled tributary
+				limit = {
+					NOR = {
+						has_government = nomad_government
+						has_government = herder_government
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 2 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 2 }
+						}
+					}
+					custom_tooltip = high_feudal_tribute_taxes
+					custom_tooltip = high_feudal_tribute_levies
+					custom_tooltip = high_nomad_tribute_prestige
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 0 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 0 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 0 }
+						}
+					}
+					custom_tooltip = low_feudal_tribute_taxes
+					custom_tooltip = low_feudal_tribute_levies
+					custom_tooltip = none_nomad_tribute_prestige
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 1 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+						}
+					}
+					custom_tooltip = normal_feudal_tribute_taxes
+					custom_tooltip = normal_feudal_tribute_levies
+					custom_tooltip = normal_nomad_tribute_prestige
+				}
+			}
+			else = { # nomadic tributary
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = nomad_government_herd level = 3 } #herd_tax_high
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 2 }
+						}
+					}
+					custom_tooltip = high_nomad_tribute_herd
+					custom_tooltip = high_nomad_tribute_prestige
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = nomad_government_herd level = 1 } #herd_tax_low
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 0 }
+						}
+					}
+					custom_tooltip = low_nomad_tribute_herd
+					custom_tooltip = none_nomad_tribute_prestige
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = nomad_government_herd level = 2 } #herd_tax_normal
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 1 }
+						}
+					}
+					custom_tooltip = normal_nomad_tribute_herd
+					custom_tooltip = normal_nomad_tribute_prestige
+				}
+			}
+			if = {
+				limit = { is_tributary = yes } # suppress error logging
+				tributary_contract_set_obligation_level = { type = suzerain_war_participation_guarantee level = 0 }
+				tributary_contract_set_obligation_level = { type = tributary_war_participation_obligation level = 0 }
+				custom_tooltip = no_tributary_war_obligations
+				custom_tooltip = no_suzerain_guarantee
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			$SUZERAIN$ = { has_government = steppe_admin_government }
+		}
+		$TRIBUTARY$ = {
+			if = {
+				limit = {
+					OR = {
+						has_government = nomad_government
+						has_government = herder_government
+					}
+				}
+				start_tributary = {
+					contract_group = tributary_steppe
+					suzerain = $SUZERAIN$
+				}
+			}
+			else = {
+				start_tributary = {
+					contract_group = tributary_settled
+					suzerain = $SUZERAIN$
+				}
+			}
+
+			# Special terms depending on which options were set
+			if = { # settled tributary
+				limit = {
+					NOR = {
+						has_government = nomad_government
+						has_government = herder_government
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 2 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 2 }
+						}
+					}
+					custom_tooltip = high_feudal_tribute_taxes
+					custom_tooltip = high_feudal_tribute_levies
+					custom_tooltip = high_nomad_tribute_prestige
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 0 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 0 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 0 }
+						}
+					}
+					custom_tooltip = low_feudal_tribute_taxes
+					custom_tooltip = low_feudal_tribute_levies
+					custom_tooltip = none_nomad_tribute_prestige
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+							#tributary_contract_set_obligation_level = { type = default_tributary_levies level = 1 }
+							tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+						}
+					}
+					custom_tooltip = normal_feudal_tribute_taxes
+					custom_tooltip = normal_feudal_tribute_levies
+					custom_tooltip = normal_nomad_tribute_prestige
+				}
+			}
+			else = { # steppe tributary
+				if = {
+					limit = {
+						OR = {
+							scope:high_obligations ?= yes
+							exists = scope:tributary_war
+						}
+					}
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 2 }
+						}
+					}
+					custom_tooltip = high_nomad_tribute_herd
+					custom_tooltip = high_nomad_tribute_prestige
+				}
+				else_if = {
+					limit = { scope:low_obligations ?= yes }
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 0 }
+						}
+					}
+					custom_tooltip = low_nomad_tribute_herd
+					custom_tooltip = none_nomad_tribute_prestige
+				}
+				else = {
+					if = {
+						limit = { is_tributary = yes } # suppress error logging
+						hidden_effect = {
+							tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+							tributary_contract_set_obligation_level = { type = nomad_government_prestige level = 1 }
+						}
+					}
+					custom_tooltip = normal_nomad_tribute_herd
+					custom_tooltip = normal_nomad_tribute_prestige
+				}
+			}
+			if = {
+				limit = { 
+					is_tributary = yes # suppress error logging
+					government_has_flag = government_is_nomadic
+					NOT = { government_has_flag = government_is_herder }
+				}
+				tributary_contract_set_obligation_level = { type = suzerain_war_participation_guarantee level = 0 }
+				tributary_contract_set_obligation_level = { type = tributary_war_participation_obligation level = 1 }
+				custom_tooltip = tributary_war_obligations
+				custom_tooltip = no_suzerain_guarantee
+			}
+			else_if = {
+				limit = { 
+					is_tributary = yes # suppress error logging
+				}
+				tributary_contract_set_obligation_level = { type = suzerain_war_participation_guarantee level = 0 }
+				tributary_contract_set_obligation_level = { type = tributary_war_participation_obligation level = 0 }
+				custom_tooltip = no_tributary_war_obligations
+				custom_tooltip = no_suzerain_guarantee
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			$SUZERAIN$ = {
+				has_government = celestial_government
+				highest_held_title_tier >= tier_hegemony
+			}
+		}
+		$TRIBUTARY$ = {
+			start_tributary = {
+				contract_group = tributary_celestial
+				suzerain = $SUZERAIN$
+			}
+
+			if = {
+				limit = {
+					OR = {
+						scope:high_obligations ?= yes
+						exists = scope:tributary_war
+					}
+				}
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = celestial_tribute_gold level = 2 }
+						tributary_contract_set_obligation_level = { type = celestial_tribute_prestige level = 2 }
+					}
+				}
+				custom_tooltip = normal_celestial_tribute_taxes
+				custom_tooltip = normal_celestial_tribute_prestige
+			}
+			else_if = {
+				limit = { scope:low_obligations ?= yes }
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = celestial_tribute_gold level = 0 }
+						tributary_contract_set_obligation_level = { type = celestial_tribute_prestige level = 0 }
+					}
+				}
+				custom_tooltip = no_celestial_tribute_taxes
+				custom_tooltip = no_celestial_tribute_prestige
+			}
+			else = {
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = celestial_tribute_gold level = 1 }
+						tributary_contract_set_obligation_level = { type = celestial_tribute_prestige level = 1 }
+					}
+				}
+				custom_tooltip = low_celestial_tribute_taxes
+				custom_tooltip = low_celestial_tribute_prestige
+			}
+
+			add_subject_standing = @starting_subject_standing_value
+			custom_tooltip = expected_to_pay_tribute
+		}
+	}
+	else_if = {
+		limit = {
+			$SUZERAIN$ = { highest_held_title_tier = tier_hegemony }
+		}
+		$TRIBUTARY$ = {
+			start_tributary = {
+				contract_group = tributary_hegemonic
+				suzerain = $SUZERAIN$
+			}
+
+			if = {
+				limit = {
+					OR = {
+						scope:high_obligations ?= yes
+						exists = scope:tributary_war
+					}
+				}
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_gold level = 2 }
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_prestige level = 2 }
+					}
+				}
+				custom_tooltip = normal_hegemonic_tribute_taxes
+				custom_tooltip = normal_hegemonic_tribute_prestige
+			}
+			else_if = {
+				limit = { scope:low_obligations ?= yes }
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_gold level = 0 }
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_prestige level = 0 }
+					}
+				}
+				custom_tooltip = no_hegemonic_tribute_taxes
+				custom_tooltip = no_hegemonic_tribute_prestige
+			}
+			else = {
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_gold level = 1 }
+						tributary_contract_set_obligation_level = { type = hegemonic_tribute_prestige level = 1 }
+					}
+				}
+				custom_tooltip = low_hegemonic_tribute_taxes
+				custom_tooltip = low_hegemonic_tribute_prestige
+			}
+
+			add_subject_standing = @starting_subject_standing_value
+			custom_tooltip = expected_to_pay_tribute
+		}
+	}
+	else = { # subjugated tributary
+		$TRIBUTARY$ = {
+			start_tributary = {
+				contract_group = tributary_subjugated
+				suzerain = $SUZERAIN$
+			}
+			if = {
+				limit = { scope:low_obligations ?= yes }
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 0 }
+					}
+				}
+				custom_tooltip = low_subjugated_tribute_taxes
+				custom_tooltip = none_subjugated_tribute_prestige
+			}
+			else = {
+				if = {
+					limit = { is_tributary = yes } # suppress error logging
+					hidden_effect = {
+						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+						tributary_contract_set_obligation_level = { type = suzerain_war_participation_guarantee level = 1 }
+						tributary_contract_set_obligation_level = { type = tributary_war_participation_obligation level = 0 }
+					}
+				}
+				custom_tooltip = high_subjugated_tribute_taxes
+				custom_tooltip = normal_subjugated_tribute_prestige
+			}
+			custom_tooltip = suzerain_guarantee
+			custom_tooltip = no_tributary_war_obligations
+		}
+	}
+	setup_tributary_truces_effect = { SUZERAIN = $SUZERAIN$ TRIBUTARY = $TRIBUTARY$ }
+}
+
+offer_fealty_interaction_effect = {
+	create_title_and_vassal_change = {
+		type = swear_fealty
+		save_scope_as = change
+	}
+	scope:actor = {
+		change_liege = {
+			liege = scope:recipient
+			change = scope:change
+		}
+		#ADDED - why wasn't this here?
+		add_opinion = {
+			modifier = became_vassal
+			target = scope:recipient
+			opinion = 40	#prev 10
+		}
+
+		stress_impact = {
+			ambitious = medium_stress_impact_gain
+			arrogant = medium_stress_impact_gain
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	scope:actor = {
+		# Special terms for feudal contracts
+		if = {
+			limit = {
+				government_has_flag = government_is_feudal
+			}
+			if = {
+				limit = { scope:high_obligations = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 3 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 3 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = high_obligations_taxes
+				custom_tooltip = high_obligations_levies
+			}
+			else_if = {
+				limit = { scope:low_obligations = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 1 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 1 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = low_obligations_taxes
+				custom_tooltip = low_obligations_levies
+			}
+			else_if = {
+				limit = { scope:religious_taxation = yes }
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 3 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 2 }
+						#vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+						#ADDED - both
+						set_subject_contract_modification_blocked = yes
+						if = {
+							limit = {
+								scope:actor.faith = {
+									OR = {
+										has_doctrine = tenet_tax_nonbelievers
+										has_doctrine = special_doctrine_jizya
+									}
+								}
+							}
+							vassal_contract_set_obligation_level = { type = jizya_special_rights level = 1 }
+						}
+						else = {
+							vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+						}
+					}
+				}
+				custom_tooltip = high_obligations_taxes
+				custom_tooltip = normal_obligations_levies
+				if = {
+					limit = { scope:recipient.faith = { has_doctrine_parameter = unlock_jizya_contract } }
+					custom_tooltip = jizya_religious_protection_tt
+				}
+				else = { custom_tooltip = religious_protection_tt }
+			}
+			else = {
+				hidden_effect = {
+					if = {
+						limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+						vassal_contract_set_obligation_level = { type = feudal_government_taxes level = 2 }
+						vassal_contract_set_obligation_level = { type = feudal_government_levies level = 2 }
+						#ADDED
+						set_subject_contract_modification_blocked = yes
+					}
+				}
+				custom_tooltip = normal_obligations_taxes
+				custom_tooltip = normal_obligations_levies
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_clan
+				scope:religious_exemption_clan = yes
+			}
+			hidden_effect = {
+				if = {
+					limit = { top_liege != this } # To avoid errors during tooltip generation (prior to the contract being generated)
+					#vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+					#ADDED
+					set_subject_contract_modification_blocked = yes
+					if = {
+						limit = {
+							scope:actor.faith = {
+								OR = {
+									has_doctrine = tenet_tax_nonbelievers
+									has_doctrine = special_doctrine_jizya
+								}
+							}
+						}
+						vassal_contract_set_obligation_level = { type = jizya_special_rights level = 1 }
+					}
+					else = {
+						vassal_contract_set_obligation_level = { type = religious_rights level = 1 }
+					}
+				}
+			}
+			custom_tooltip = religious_protection_tt
+		}
+	}
+
+	# Struggle catalysts.
+	hidden_effect = {
+		fp3_struggle_apply_independent_vassalage_catalyst_effect = {
+			NEW_LIEGE = scope:recipient
+			NEW_VASSAL = scope:actor
+		}
+	}
+}
+
+revoke_title_interaction_effect = {
+	if = {
+		limit = {
+			scope:recipient = {
+				faith = scope:actor.faith
+				government_has_flag = government_is_theocracy
+			}
+			scope:actor != scope:actor.faith.religious_head #No loss if actor is head of faith themselves
+		}
+		scope:actor = {
+			add_piety = major_piety_loss
+		}
+		if = {
+			limit = {
+				exists = scope:actor.faith.religious_head
+			}
+			scope:actor.faith.religious_head = {
+				add_opinion = {
+					target = scope:actor
+					modifier = impious_opinion
+					opinion = -20
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:actor.faith.religious_head
+			scope:recipient = scope:actor.faith.religious_head
+		}
+		scope:actor = {
+			add_piety_level = -2
+		}
+	}
+	if = {
+		limit = {
+			scope:landed_title.tier != tier_barony
+			scope:recipient = {
+				NOT = { government_has_flag = government_is_herder }
+			}
+		}
+		scope:actor = {
+			revocation_tyranny_effect = { VASSAL = scope:recipient }
+			title_revocation_stress_effect = { VASSAL = scope:recipient }
+			consume_revoke_title_reason = scope:recipient
+		}
+		scope:recipient = {
+			if = {
+				limit = {
+					NOT = { exists = scope:administrative_revocation }
+					is_landed_or_landless_administrative = no
+				}
+				add_pressed_claim = scope:landed_title
+			}
+			if = {
+				limit = {
+					is_a_faction_member = yes
+				}
+				add_joined_faction_discontent = 25
+			}
+		}
+
+		if = {
+			limit = { scope:landed_title.tier = tier_county }
+			scope:landed_title = {
+				change_county_control = {
+					value = -30
+					if = {
+						limit = {
+							scope:recipient.culture != scope:actor.culture
+							scope:recipient.culture = this.culture
+						}
+						multiply = 1.5
+					}
+					if = {
+						limit = {
+							scope:recipient.faith != scope:actor.faith
+							scope:recipient.faith = this.faith
+						}
+						multiply = 1.5
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				scope:actor.culture = { has_cultural_parameter = penalty_for_revoking_titles_from_house_members }
+				exists = scope:actor.house
+				exists = scope:recipient.house
+				scope:actor.house = scope:recipient.house
+			}
+			if = {
+				limit = {
+					scope:landed_title.tier = tier_county
+				}
+				scope:actor = {
+					add_prestige = medium_prestige_loss
+				}
+			}
+			else_if = {
+				limit = {
+					scope:landed_title.tier = tier_duchy
+				}
+				scope:actor = {
+					add_prestige = major_prestige_loss
+				}
+			}
+			else_if = { #Empire
+				limit = {
+					scope:landed_title.tier = tier_kingdom
+				}
+				scope:actor = {
+					add_prestige = massive_prestige_loss
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				scope:actor.culture = { has_cultural_parameter = penalty_for_revoking_titles_from_close_family }
+				exists = scope:actor
+				exists = scope:recipient
+				scope:actor = {
+					is_close_family_of = scope:recipient
+				}
+			}
+			if = {
+				limit = {
+					scope:landed_title.tier = tier_county
+				}
+				scope:actor = {
+					add_prestige = medium_prestige_loss
+				}
+			}
+			else_if = {
+				limit = {
+					scope:landed_title.tier = tier_duchy
+				}
+				scope:actor = {
+					add_prestige = major_prestige_loss
+				}
+			}
+			else_if = { #Empire
+				limit = {
+					scope:landed_title.tier = tier_kingdom
+				}
+				scope:actor = {
+					add_prestige = massive_prestige_loss
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				scope:actor.culture = { has_cultural_parameter = piety_penalty_for_revoking_titles_from_house_members }
+				exists = scope:actor.house
+				exists = scope:recipient.house
+				scope:actor.house = scope:recipient.house
+			}
+			if = {
+				limit = {
+					scope:landed_title.tier = tier_county
+				}
+				scope:actor = {
+					add_piety = medium_piety_loss
+				}
+			}
+			else_if = {
+				limit = {
+					scope:landed_title.tier = tier_duchy
+				}
+				scope:actor = {
+					add_piety = major_piety_loss
+				}
+			}
+			else = { #Can't revoke empire titles anyway
+				limit = {
+					scope:landed_title.tier = tier_kingdom
+				}
+				scope:actor = {
+					add_piety = massive_piety_loss
+				}
+			}
+		}
+		# If we're a clan this interaction affects unity
+		if = {
+			limit = {
+				scope:actor = { government_has_flag = government_is_clan }
+				scope:recipient = { government_has_flag = government_is_clan }
+				exists = scope:actor.house
+				exists = scope:recipient.house
+				scope:actor.house = scope:recipient.house
+				scope:landed_title.tier >= tier_county
+			}
+			scope:actor.house = {
+				if = {
+					limit = {
+						scope:landed_title.tier = tier_county
+					}
+					save_scope_value_as = {
+						name = revoke_title_unity_loss
+						value = minor_unity_loss
+					}
+				}
+				if = {
+					limit = {
+						scope:landed_title.tier = tier_duchy
+					}
+					save_scope_value_as = {
+						name = revoke_title_unity_loss
+						value = medium_unity_loss
+					}
+				}
+				else_if = {
+					limit = {
+						scope:landed_title.tier = tier_kingdom
+					}
+					save_scope_value_as = {
+						name = revoke_title_unity_loss
+						value = major_unity_loss
+					}
+				}
+				if = {
+					limit = { exists = scope:revoke_title_unity_loss }
+					add_clan_unity_interaction_effect = {
+						CHARACTER = scope:actor
+						TARGET = scope:recipient
+						VALUE = scope:revoke_title_unity_loss
+						DESC = clan_unity_title_revoked.desc
+						REVERSE_NON_HOUSE_TARGET = no
+					}
+				}
+			}
+		}
+		# EP3 - Become Adventurer - Revocation
+		scope:recipient = {
+			if = {
+				limit = {
+					has_ep3_dlc_trigger = yes
+					is_valid_for_laampdom = yes
+				}
+				# Plus for our memory variable.
+				primary_title = { save_scope_as = lost_primary_title }
+				custom_tooltip = {
+					text = laamp_may_become_adventurer_tt
+					trigger_event = {
+						id = ep3_laamps.0041
+						delayed = yes
+					}
+				}
+			}
+		}
+	}
+	else = {
+		#ADDED - no you can't just cycle barons like that!
+		if = {
+			limit = {
+				scope:landed_title.tier = tier_barony
+				scope:actor  = { 
+					title_revocation_is_tyrannical_trigger = { VASSAL = scope:recipient }
+					NOT = { government_has_flag = government_is_nomadic }
+					is_ai = no	#dont nuke AIs plz
+				}
+			}
+			scope:actor = { 
+				add_tyranny = 5 
+			}
+			scope:landed_title = {
+				change_county_control = -10
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = scope:revoke_title_interaction }
+			}
+			custom_tooltip = IS_ALLOWED_TO_REVOKE_TITLE_BARONY_DESC
+			scope:actor = {
+				if = {
+					limit = {
+						any_vassal = {
+							vassal_stance = barons_and_minor_landholders
+						}
+					}
+					custom_tooltip = barons_and_minor_landholders_disapproves_baron_revocations
+					hidden_effect = {
+						every_vassal = {
+							vassal_stance = barons_and_minor_landholders
+							add_opinion = {
+								target = scope:actor
+								modifier = barons_and_minor_landholders_disapproves_baron_revocations_opinion
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	scope:actor = {
+		if = {
+			limit = {
+				scope:hook = yes
+				scope:recipient = { is_alive = yes }
+			}
+			use_hook = scope:recipient
+		}
+		if = {
+			limit = {
+				scope:hook_liege ?= yes
+				scope:intermediary = { is_alive = yes }
+			}
+			use_hook = scope:intermediary
+		}
+	}
+	if = {
+		limit = {
+			scope:recipient = { government_has_flag = government_is_herder }
+		}
+		scope:recipient = {
+			add_opinion = {
+				target = scope:actor
+				opinion = -10 # Herders don't care much
+				modifier = revoked_title
+			}
+		}
+	}
+	else = {
+		scope:recipient = {
+			add_opinion = {
+				target = scope:actor
+				modifier = revoked_title
+			}
+			if = { #If they recently imprisoned you, or asked for your excommunication, they become your rival
+				limit = {
+					OR = {
+						has_opinion_modifier = {
+							target = scope:actor
+							modifier = released_from_prison
+						}
+						AND = {
+							exists = var:requested_my_excommunication
+							var:requested_my_excommunication = scope:actor
+						}
+					}
+					NOT = {
+						has_relation_rival = scope:actor
+					}
+				}
+				if = {
+					limit = {
+						has_relation_potential_rival = scope:actor
+					}
+					remove_relation_potential_rival = scope:actor
+				}
+				set_relation_rival = {
+					target = scope:actor
+					reason = rival_revoked_title_reversed
+				}
+			}
+			else = {
+				progress_towards_rival_effect = {
+					CHARACTER = scope:actor
+					REASON = rival_revoked_title_progress
+					OPINION = 0
+				}
+			}
+			# HOUSE RELATION
+			house ?= {
+				if = {
+					limit = { NOT = { this = scope:actor.house } }
+					change_house_relation_effect = {
+						HOUSE = scope:actor.house
+						VALUE = house_relation_damage_medium_value
+						REASON = title_revocation
+						CHAR = scope:actor
+						TARGET_CHAR = scope:recipient
+						TITLE = scope:landed_title
+					}
+				}
+			}
+		}
+	}
+
+	# Penalty for taking the Party Baron's last title. I mean, come on...
+	if = {
+		limit = {
+			scope:recipient = {
+				has_character_flag = is_party_baron
+				NOT = {
+					any_held_title = {
+						this != scope:landed_title
+					}
+				}
+			}
+		}
+		scope:actor = {
+			add_character_modifier = {
+				modifier = party_baron_ended_the_party_modifier
+				years = 10
+			}
+			random_owned_story = {
+				type = story_party_baron
+				end_story = yes
+			}
+		}
+	}
+}

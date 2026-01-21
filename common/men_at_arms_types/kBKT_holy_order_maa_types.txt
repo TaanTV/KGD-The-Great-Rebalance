@@ -1,0 +1,60 @@
+﻿@maa_buy_cost = 150
+
+# Must be synced between files with the values located at "# Provisions Costs #".
+@provisions_cost_infantry_cheap = 4
+@provisions_cost_infantry_moderate = 10
+@provisions_cost_infantry_expensive = 18
+@provisions_cost_infantry_bankrupting = 24
+
+@provisions_cost_cavalry_cheap = 12
+@provisions_cost_cavalry_moderate = 26
+@provisions_cost_cavalry_expensive = 34
+@provisions_cost_cavalry_bankrupting = 48
+@provisions_cost_cavalry_elephants = 64
+
+@provisions_cost_special_cheap = 10
+@provisions_cost_special_moderate = 18
+@provisions_cost_special_expensive = 28
+@provisions_cost_special_bankrupting = 36
+
+# My idea of rebalance: All costs x1.5
+# Skirmishers use @provisions_cost_infantry_cheap unless very strong
+# Archers use @provisions_cost_infantry_moderate
+# Pikemen use @provisions_cost_infantry_expensive
+# Heavy Infantry uses @provisions_cost_infantry_bankrupting 
+
+# Light cavalry uses @provisions_cost_cavalry_moderate 
+# Heavy cavalry uses @provisions_cost_cavalry_expensive
+# Horse archers type uses @provisions_cost_cavalry_expensive
+# Horse archers specifically use @provisions_cost_cavalry_moderate 
+
+teutonic_knights = { # Actually all Christian knightly orders, not just the Teutons.
+	type = heavy_infantry
+
+	special_recruit_only = yes
+	
+	# Slightly stronger than normal Heavy Infantry MaA, to represent zeal & dedication to the cause.
+	# Note: a bunch stronger due to lack of stationing
+	damage = 46			#prev 36 
+	toughness = 32		#prev 26
+	pursuit = 0
+	screen = 0
+
+	buy_cost = { gold = heavy_infantry_recruitment_cost }
+	low_maintenance_cost = { gold = heavy_infantry_low_maint_cost }
+	high_maintenance_cost = { gold = heavy_infantry_high_maint_cost }
+	provision_cost = @provisions_cost_infantry_expensive
+	
+	# ADDED to all heavy infantry
+	terrain_bonus = {
+		wetlands = { damage = -26 toughness = -16 }
+	}
+		
+	counters = {
+		pikemen = 1
+		peasant_militia = 2
+	}
+
+	stack = 40
+	icon = heavy_infantry
+}

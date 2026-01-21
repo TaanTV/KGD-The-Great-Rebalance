@@ -1,0 +1,74 @@
+﻿# LEGENDS LEGACIES
+
+ce1_heroic_legacy_1 = { # Heroes of Old
+	legacy = ce1_heroic_track
+
+	can_be_picked = {
+		has_dlc_feature = legends_of_the_dead
+	}
+
+	effect = {
+		show_as_tooltip = {
+			create_legend_seed = {
+				type = legitimizing
+				quality = famed
+				chronicle = great_deed_dynasty
+				properties = {
+					founder = house.house_founder
+					dynasty = dynasty
+					title = primary_title
+				}
+			}
+		}
+		custom_tooltip = ce1_heroic_legacy_1_useable_once
+	}
+
+	ai_chance = {
+		value = 5			#prev 11
+		if = {
+			limit = {
+				dynasty = {
+					dynasty_prestige_level >= high_dynasty_prestige_level
+				}
+			}
+			multiply = 4	#prev 2
+		}
+		if = {
+			limit = {
+				can_start_new_legacy_track_trigger = no
+			}
+			multiply = 0
+		}
+	}
+}
+
+ce1_legitimacy_legacy_1 = { # Sons of our Fathers
+	legacy = ce1_legitimacy_legacy_track
+
+	can_be_picked = {
+		has_dlc_feature = legends_of_the_dead
+	}
+
+	character_modifier = {
+		county_opinion_add = 5
+		monthly_county_control_growth_add = 0.1
+	}
+
+	ai_chance = {
+		value = 5			#prev 11
+		if = {
+			limit = {
+				dynasty = {
+					dynasty_prestige_level >= high_dynasty_prestige_level
+				}
+			}
+			multiply = 20	#prev 10
+		}
+		if = {
+			limit = {
+				can_start_new_legacy_track_trigger = no
+			}
+			multiply = 0
+		}
+	}
+}

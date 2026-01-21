@@ -1,0 +1,210 @@
+﻿@celibacy_cooldown_time = 365
+@sale_of_titles_cooldown_time = 1825
+@sale_of_titles_prestige_cost = 1000		#500
+@extort_subjects_cooldown_time = 3650		#1825
+@commission_epic_cooldown_time = 3650
+@hold_mystical_communion_cooldown_time = 1825
+@draw_maps_cooldown_time = 1825
+@local_adjudicate_cooldown_time = 1825
+
+### Sale of Titles
+# by Petter Vilberg
+# Unlocked by: At Any Cost
+### Sell Trivial Titles ###
+sale_of_titles_decision = {
+	picture = {
+		trigger = {
+			culture = {
+				has_graphical_east_asia_culture_group_trigger = yes
+			}
+		}
+		reference = "gfx/interface/illustrations/decisions/tgp_debate.dds"
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_spend_money.dds"
+	}
+	desc = sale_of_titles_decision_desc
+
+	selection_tooltip = sale_of_titles_decision_tooltip
+
+	cooldown = { days = @sale_of_titles_cooldown_time }
+
+	is_shown = {
+		is_landed = yes
+		OR = {
+			#has_perk = at_any_cost_perk
+			AND = {
+				highest_held_title_tier >= tier_kingdom
+				any_character_struggle = {
+					involvement = involved
+					has_struggle_phase_parameter = unlocks_sell_minor_title_for_kings_and_higher
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+	}
+
+	is_valid = {
+		OR = {
+			has_perk = at_any_cost_perk
+			AND = {
+				highest_held_title_tier >= tier_kingdom
+				any_character_struggle = {
+					involvement = involved
+					has_struggle_phase_parameter = unlocks_sell_minor_title_for_kings_and_higher
+				}
+			}
+		}
+	}
+
+	cost = {
+		prestige = @sale_of_titles_prestige_cost
+	}
+
+	effect = {
+		hidden_effect = {
+			random = {
+				chance = 2
+				modifier = {
+					add = 3
+					has_trait = greedy
+				}
+				send_interface_toast = {
+					type = event_toast_effect_neutral
+					title = sell_titles_nickname_gained
+					left_icon = root
+					set_nickname_effect = {
+						NICKNAME = nick_the_greedy
+					}
+				}
+			}
+		}
+
+		add_gold = major_gold_value
+
+		custom_tooltip = sale_of_titles_side_effects_tt
+
+		trigger_event = {
+			on_action = sell_titles_side_effect_events
+			days = 5
+		}
+	}
+	
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 72
+		kingdom = 72
+		empire = 72
+		hegemony = 72
+	}
+	
+	ai_potential = {
+		OR = {
+			ai_greed >= medium_positive_ai_value
+			gold < medium_gold_value
+		}
+	}
+
+	ai_will_do = {
+		base = 30
+		
+		modifier = {
+			add = 70
+			ai_greed >= high_positive_ai_value
+		}
+	}
+}
+
+
+### Extort Subjects
+# by Petter Vilberg
+# Unlocked by: It Is MY Domain
+### Extort Subjects ###
+extort_subjects_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_spend_money.dds"
+	}
+	desc = extort_subjects_decision_desc
+
+	selection_tooltip = extort_subjects_decision_tooltip
+
+	cooldown = { days = @extort_subjects_cooldown_time }
+
+	is_shown = {
+		is_landless_adventurer = no
+		OR = {
+			#has_perk = it_is_my_domain_perk	#nope!
+			has_character_modifier = fp3_justification_for_taxation_modifier
+			has_character_modifier = fp3_excuses_for_extortion_modifier
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_landed = yes
+		is_available_adult = yes
+		custom_description = {
+			text = has_count_vassals_or_higher
+			any_vassal = {
+				highest_held_title_tier >= tier_county
+			}
+		}
+	}
+
+	is_valid = {
+		OR = {
+			has_perk = it_is_my_domain_perk
+			has_character_modifier = fp3_justification_for_taxation_modifier
+			has_character_modifier = fp3_excuses_for_extortion_modifier
+		}
+	}
+
+	effect = {
+
+		custom_description = {
+			text = extort_subjects_effect
+		}
+		
+		trigger_event = {
+			id = subject_extortion.9999
+			days = { 3 5 }
+		}
+
+		stress_impact = {
+			generous = major_stress_gain
+		}
+	}
+	
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 72
+		kingdom = 72
+		empire = 72
+		hegemony = 72
+	}
+	
+	ai_potential = {
+		ai_greed >= medium_positive_ai_value
+		OR = {
+			ai_honor <= medium_negative_ai_value
+			ai_greed >= 100
+		}
+	}
+
+	ai_will_do = {
+		base = 10
+		
+		modifier = {
+			add = 45
+			ai_greed >= high_positive_ai_value
+		}
+		modifier = {
+			add = 45
+			ai_honor <= high_negative_ai_value
+		}
+	}
+}

@@ -1,0 +1,101 @@
+﻿### Shamelessly stolen from the amazing MND mod. ###
+bkt_old_difficulty = {
+	
+	categories = {
+		difficulty ai
+	}
+	
+	default = roleplay_difficulty
+
+	bkt_normal_difficulty = {
+		flag = GG_can_change_rule
+	}
+
+	roleplay_difficulty_ai = {
+		apply_modifier = ai:roleplay_difficulty_ai
+		flag = GG_can_change_rule
+	}
+
+	roleplay_difficulty_player = {
+		apply_modifier = player:roleplay_difficulty_player
+		flag = GG_can_change_rule
+	}
+
+	roleplay_difficulty = {
+		apply_modifier = player:roleplay_difficulty_player
+		apply_modifier = ai:roleplay_difficulty_ai
+		flag = GG_can_change_rule
+	}
+	
+	rolehard_difficulty = {
+		apply_modifier = player:rolehard_difficulty_player
+		apply_modifier = ai:rolehard_difficulty_ai
+		flag = GG_can_change_rule
+	}
+	
+	rolehard_difficulty_player = {
+		apply_modifier = player:rolehard_difficulty_player
+		flag = GG_can_change_rule
+	}
+}
+
+bkt_difficulty = {
+	
+	categories = {
+		balance difficulty ai
+	}
+	
+	default = bkt_difficulty_disabled
+	#dlc = "The Northern Lords"
+	bkt_difficulty_disabled = { flag = GG_can_change_rule }
+	bkt_difficulty_higher = { 
+		flag = GG_can_change_rule 
+		apply_modifier = player:bkt_difficulty_higher_player
+		apply_modifier = ai:bkt_difficulty_higher_ai
+	}
+}
+
+bkt_accolades = {
+	
+	categories = {
+		balance difficulty ai
+	}
+	
+	default = bkt_accolades_enabled
+	#dlc = "The Northern Lords"
+	bkt_accolades_enabled = { flag = GG_can_change_rule }
+	bkt_accolades_disabled_player = {
+		flag = GG_can_change_rule 
+		apply_modifier = player:bkt_accolades_disabled
+	}
+	bkt_accolades_disabled_all = {
+		flag = GG_can_change_rule 
+		apply_modifier = player:bkt_accolades_disabled
+		apply_modifier = ai:bkt_accolades_disabled
+	}
+}
+
+bkt_additional_content = {
+	
+	categories = {
+		tweaks
+	}
+	
+	default = bkt_additional_content_enabled
+	#dlc = "The Northern Lords"
+	bkt_additional_content_enabled = { flag = GG_can_change_rule }
+	bkt_additional_content_disabled = { flag = GG_can_change_rule }
+}
+
+
+bkt_mp_special_rules = {
+	
+	categories = {
+		tweaks
+	}
+	
+	default = bkt_mp_special_rules_disabled
+	#dlc = "The Northern Lords"
+	bkt_mp_special_rules_enabled = { flag = GG_can_change_rule }
+	bkt_mp_special_rules_disabled = { flag = GG_can_change_rule }
+}

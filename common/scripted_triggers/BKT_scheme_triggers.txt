@@ -1,0 +1,211 @@
+﻿
+# This trigger is a bit contrived in some way to ensure absolutely everyone gets evaluated without any early-outing
+# It should always return true
+# We use "count = all" and trigger_ifs to ensure that all have to be evaluated, and that all return
+build_murder_targets_trigger = {
+	any_relation = { # Rivals are good targets for murder schemes
+		type = rival
+		count = all
+		trigger_if = {
+			limit = {
+				root = {
+					trigger_if = {
+						limit = {
+							has_relation_nemesis = prev
+						}
+						ai_honor <= medium_positive_ai_value
+					}
+					trigger_else = {
+						ai_honor <= low_positive_ai_value
+					}
+					can_start_scheme = {
+						target_character = prev
+						type = murder
+					}
+				}
+			}
+			add_to_temporary_list = murder_targets
+		}
+	}
+	trigger_if = { # Greedy people have no qualms murdering their way up the succession...
+		limit = {
+			ai_greed >= low_positive_ai_value
+			exists = dynasty
+		}
+		dynasty = {
+			any_dynasty_member = {
+				count = all
+				trigger_if = {
+					limit = {
+						is_good_familial_murder_target_trigger = yes
+					}
+					add_to_temporary_list = murder_targets
+				}
+			}
+		}
+		any_close_or_extended_family_member = {
+			count = all
+			trigger_if = {
+				limit = {
+					NOT = { is_in_list = murder_targets }
+					is_good_familial_murder_target_trigger = yes
+				}
+				add_to_temporary_list = murder_targets
+			}
+		}
+	}
+	trigger_if = { # Greedy people want to murder their liege's high aptitude tax collector...
+		limit = {
+			ai_greed >= low_positive_ai_value
+			top_liege != this
+			government_has_flag = government_is_clan
+			liege ?= {
+				any_tax_collector = {
+					any_tax_collector_vassal = {
+						this = root
+					}
+					tax_collector_aptitude = {
+						target = clan_tax_slot
+						value >= 4
+					}
+					add_to_temporary_list = murder_targets
+				}
+			}
+		}
+	}
+	trigger_if = { # Some Clan members want to murder Extolled people out of pure spite and malice
+		limit = {
+			ai_greed >= 0
+			ai_vengefulness >= 0
+			ai_compassion <= medium_negative_ai_value
+			house.house_head ?= {
+				is_ruler = yes
+				government_has_flag = government_is_clan
+			}
+			ai_wants_low_unity = yes
+		}
+		house = {
+			any_house_member = {
+				has_trait = extolled
+				add_to_temporary_list = murder_targets
+			}
+		}
+	}
+	any_consort = { # Unfaithful spouses
+		trigger_if = {
+			limit = {
+				root = {
+					ai_compassion <= 0
+					can_start_scheme = {
+						target_character = prev
+						type = murder
+					}
+				}
+				exposed_cheating_on_spouse_trigger = { SPOUSE = root }
+				add_to_temporary_list = murder_targets
+			}
+		}
+	}
+	trigger_if = { # Certain vassals will plot against their liege under certain conditions
+		limit = {
+			highest_held_title_tier > tier_barony
+			exists = liege
+			#liege = {
+			#	tyranny >= medium_tyranny
+			#}
+			opinion = {
+				target = liege
+				value <= high_negative_opinion
+			}
+			#ai_rationality >= medium_positive_ai_value
+			#ADDED - half-rewritten all that stuff lol
+			is_independent_ruler = no 	#liege check is faulty because you are your own liege if independent
+			OR = {
+				AND = {
+					ai_boldness >= medium_positive_ai_value
+					ai_vengefulness >= very_high_positive_ai_value
+					ai_compassion <= low_negative_ai_value
+					ai_honor <= 35
+				}
+				AND = {
+					is_powerful_vassal = yes
+					is_councillor = no
+					ai_honor <= 50
+				}
+				AND = {		#keep the vanilla logic 
+					ai_rationality >= medium_positive_ai_value
+					liege = { tyranny >= medium_tyranny }
+				}
+				AND = {
+					is_councillor = yes
+					liege.cp:councillor_spymaster = this
+					ai_boldness >= very_low_positive_ai_value
+					ai_honor <= 90
+				}
+				AND = {
+					has_any_crime_related_opinion_of_character = { CHARACTER = liege }
+				}
+			}
+					
+		}
+		liege = {
+			add_to_temporary_list = murder_targets
+		}
+	}
+	trigger_if = { # Murdering troublesome claimants is something you want to do...
+		limit = {
+			is_landed = yes
+			primary_title.tier >= tier_duchy
+			any_targeting_faction = {
+			  	faction_type = claimant_faction
+				special_character = {
+					add_to_temporary_list = murder_targets
+				}
+			}
+		}
+	}
+	trigger_if = { # Paranoid characters want to murder claimants to their titles
+		limit = {
+			ai_compassion <= low_negative_ai_value
+			ai_rationality <= 0
+			is_landed = yes
+			has_trait = paranoid
+			primary_title.tier >= tier_duchy
+			any_held_title = {
+				any_claimant = {
+					add_to_temporary_list = murder_targets
+				}
+			}
+		}
+	}
+	any_spouse = { # Murder infertile spouses if you've yet to have an heir (and you're heartless...)
+		trigger_if = {
+			limit = {
+				fertility < 0.1
+				OR = {
+					is_ai = yes
+					reverse_opinion = {
+						target = prev
+						value < -50
+					}
+				}
+				root = {
+					ai_compassion <= 0
+					ai_honor <= 0
+					fertility > 0.1
+					is_playable_character = yes
+					NOT = {
+						any_child = {
+							is_heir_of = root
+						}
+					}
+					can_start_scheme = {
+						target_character = prev
+						type = murder
+					}
+				}
+				add_to_temporary_list = murder_targets
+			}
+		}
+	}
+}

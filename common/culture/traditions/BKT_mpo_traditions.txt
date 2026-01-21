@@ -1,0 +1,194 @@
+﻿#######################
+# CULTURAL TRADITIONS #
+#######################
+
+######################
+# MPO Traditions 	 #
+######################
+
+tradition_devoted_horsemanship = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = steppe
+		4 = horses.dds
+	}
+
+	is_shown = {
+		OR = {
+			has_cultural_pillar = heritage_mongolic
+			has_cultural_pillar = heritage_turkic
+			has_cultural_pillar = heritage_magyar
+			scope:character = {
+				mpo_can_recruit_nomad_maa_trigger = yes
+			}
+			#ADDED - for some reason missing here?...
+			scope:character = {
+				has_trait = nomadic_philosophy
+			}
+		}
+	}
+
+	can_pick = {
+		OR = {
+			has_cultural_pillar = heritage_mongolic
+			has_cultural_pillar = heritage_turkic
+			has_cultural_pillar = heritage_magyar
+			scope:character = {
+				mpo_can_recruit_nomad_maa_trigger = yes
+			}
+			scope:character = {
+				has_trait = nomadic_philosophy
+			}
+		}
+	}
+
+	parameters = {
+		unlock_maa_horse_archers = yes
+		can_recruit_open_specialist = yes
+		unlock_horse_pastures_building = yes
+		unlock_voluntary_laampdom = yes
+		stewardship_traits_give_out_cav_bonus = yes
+		#unlock_maa_tarkhan = yes
+	}
+
+	character_modifier = {
+		movement_speed = 0.05				#prev 0.1
+		character_travel_speed_mult = 0.2
+		movement_speed_land_raiding = 0.05	#prev 0.2
+	}
+
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				multiply = 2
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_or_communal_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_devoted_horsemanship }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+
+	ai_will_do = {
+		value = 400
+	}
+}
+
+tradition_mpo_northern_tribes = {
+	category = regional
+
+	layers = {
+		0 = steward
+		1 = steppe
+		4 = northern_tribes.dds
+	}
+
+	can_pick_for_hybridization = {
+		custom_tooltip = {
+			text = cannot_hybridize_northern_tribes
+			always = no
+		}	
+	}
+
+	is_shown = {
+		has_mpo_dlc_trigger = yes
+		any_culture_county = {
+			OR = {
+				has_county_modifier = mpo_siberian_permafrost_modifier	
+				has_county_modifier = mpo_siberian_permafrost_modifier_bad
+			}
+		}
+	}
+	can_pick = {
+		any_culture_county = {
+			percent >= 0.2
+			has_county_modifier = mpo_siberian_permafrost_modifier_bad
+		}
+	}
+	
+	parameters = {
+		unlock_maa_maturkan_warriors = yes
+		permafrost_modifier_mechanic = yes
+		permafrost_modifier_removal_condition = yes
+		permafrost_unlock_tribal_building = yes
+		#permafrost_cannot_become_feudal = yes	
+	}
+	character_modifier = {
+		taiga_advantage = 6						#prev 4
+		winter_advantage = 6					#prev 4
+		taiga_travel_danger = taiga_medium_danger_reduction
+		hills_travel_danger = hills_medium_danger_reduction
+		taiga_construction_gold_cost = -0.1		#prev -0.2
+		forest_construction_gold_cost = -0.1	#prev -0.2
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				multiply = 2
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_mpo_northern_tribes }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.5
+							OR = {
+								has_county_modifier = mpo_siberian_permafrost_modifier
+								has_county_modifier = mpo_siberian_permafrost_modifier_bad
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = mpo_northern_tribes_percentage_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 0 #ai either has it on game start or should not pursue it
+	}
+}

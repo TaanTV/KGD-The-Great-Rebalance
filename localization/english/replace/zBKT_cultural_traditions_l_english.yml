@@ -1,0 +1,3 @@
+﻿l_english:
+ culture_parameter_romance_scheme_bonuses:2 "Successfully executing a [GetScheme('courting').GetTypeName] [scheme|E] against [close_family_members|E] of [rulers|E] of similar [rank|E] gives [dynasty_prestige_i][dynasty_prestige|E]"
+ #culture_parameter_romance_scheme_penalty:1 "Failing a [GetScheme('courting').GetTypeName] [scheme|E] gives [stress|E]"

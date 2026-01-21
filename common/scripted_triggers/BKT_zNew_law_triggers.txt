@@ -1,0 +1,9 @@
+﻿every_vassal_has_more_than_value_opinion_trigger = {
+	any_vassal = {
+		count = all
+		OR = {
+			highest_held_title_tier = tier_barony	#you dont matter, sorry
+			"opinion(liege)" > $VALUE$
+		}
+	}
+}

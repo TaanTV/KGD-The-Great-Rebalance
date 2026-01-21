@@ -1,0 +1,11 @@
+﻿
+#hold_court.6131
+6131_mapped_wilderness_county_modifier = {
+	icon = compass_positive
+	monthly_county_control_growth_factor = 0.5		#prev 0.05
+	development_growth_factor = 0.1	
+	#ADDED
+	monthly_county_control_decline_factor = -0.5
+	county_opinion_add = 5
+	travel_danger = -15
+}

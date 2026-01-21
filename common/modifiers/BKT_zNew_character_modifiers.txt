@@ -1,0 +1,52 @@
+﻿fully_autonomous_vassals_bkt_character_modifier = {
+	icon = economy_negative
+	vassal_opinion = 60
+	vassal_tax_contribution_mult = -0.8
+	vassal_levy_contribution_mult = -0.8
+}
+
+recently_converted_character_modifier = {
+	icon = piety_mixed
+	stacking = yes
+	#different_faith_county_opinion_mult = 0.2
+	faith_conversion_piety_cost_mult = 3
+	faith_creation_piety_cost_mult = 3
+}
+
+landless_renown_equalisier_modifier = {
+	icon = camp_mixed
+	monthly_dynasty_prestige = -0.5
+}
+
+broke_betrothal_of_war_ally = {
+	icon = wedding_negative
+	general_opinion = -15
+}
+
+former_mercenary_leader_modifier = {
+	icon = camp_positive
+	martial = 3
+	prowess = 4
+	same_culture_mercenary_hire_cost_mult = -0.25
+	mercenary_hire_time_mult = 0.66
+	
+	ai_boldness = 10
+	ai_war_chance = 0.25
+}
+
+true_heresiarch_modifier = {
+	icon = flame_positive
+	same_faith_opinion = 20
+	advantage_against_coreligionists = 5
+	health = 1
+	domain_tax_same_faith_mult = 0.1
+	levy_reinforcement_rate_same_faith = 0.25
+	levy_maintenance = -0.35
+	men_at_arms_maintenance = -0.35
+	monthly_county_control_growth_add = 0.5
+	enemy_hostile_scheme_phase_duration_add = 40
+	enemy_hostile_scheme_success_chance_max_add = -20
+	
+	ai_energy = 10
+	ai_war_cooldown = -0.5
+}

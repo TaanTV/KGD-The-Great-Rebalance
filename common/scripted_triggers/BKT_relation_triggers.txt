@@ -1,0 +1,29 @@
+﻿########################
+# AI RELATIONSHIP CAPS #
+########################
+
+# Soft caps, mostly for schemes
+
+is_below_ai_friend_soft_cap_trigger = {
+	trigger_if = {
+		limit = { is_ai = yes }
+
+		trigger_if = {
+			limit = {
+				OR = {
+					highest_held_title_tier >= tier_kingdom
+					has_trait = gregarious
+				}
+			}
+			num_of_relation_friend < 6	#prev 3
+		}
+		trigger_else = {
+			num_of_relation_friend < 3	#prev 1
+		}
+	}
+	trigger_else = {
+		always = yes
+	}
+}
+
+#is_below_ai_lover_soft_cap_trigger also exists but idk about that one

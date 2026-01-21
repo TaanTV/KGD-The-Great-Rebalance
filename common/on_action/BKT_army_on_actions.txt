@@ -1,0 +1,310 @@
+﻿# On actions for army events, triggered automatically by the game
+
+
+# called when a county is (fully) occupied. Does not fire on reoccupation by province owner
+# root is the occupant
+# scope:county is the county title
+# scope:barony is the barony title that got occupied
+# scope:previous_controller is the previous controller of the county
+# scope:war is the war causing the previous controller and the occupant to be hostile
+on_county_occupied = {
+	on_actions = {
+		BKT_occupied_opinions
+		delay = { days = 1 }
+		BKT_recently_occupied_county_modifier
+	}
+}
+
+BKT_occupied_opinions = {
+	trigger = {
+		scope:county.holder = { 
+			is_independent_ruler = no 
+		}
+	}
+	effect = {
+		scope:county.holder = {
+			ordered_liege_or_above = {
+				limit = { is_participant_in_war = scope:war }
+				order_by = { 
+					value = 6
+					subtract = highest_held_title_tier
+				}
+				save_temporary_scope_as = nasty_liege
+			}
+			if = {
+				limit = { exists = scope:nasty_liege }
+				if = {
+					limit = { 
+						NOT = { is_participant_in_war = scope:war } 
+					}
+					if = {
+						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = -20
+						}
+					}
+					else = {
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = -40
+						}
+					}
+				}
+				every_liege_or_above = {
+					limit = { 
+						is_independent_ruler = no 
+						any_liege_or_above = {
+							this = scope:nasty_liege
+						}
+						NOT = { is_participant_in_war = scope:war }
+					}
+					if = {
+						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = -10
+						}
+					}
+					else = {
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = -20
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+BKT_recently_occupied_county_modifier = {
+	trigger = {
+		NOT = { scope:county.title_province = { has_holding_type = nomad_holding } }
+	}
+	effect = {
+		scope:county = {
+			if = {
+				limit = { has_county_modifier = recently_occupied_county_modifier }
+				remove_county_modifier = recently_occupied_county_modifier
+				add_county_modifier = {
+					modifier = recently_occupied_county_modifier
+					years = 10		#prev 15
+				}
+			}
+			else_if = {
+				limit = { 
+					scope:county = {
+						any_county_province = { has_holding_type = tribal_holding }
+					}
+				}
+				add_county_modifier = {
+					modifier = recently_occupied_county_modifier
+					years = 3		#prev 5
+				}
+			}
+			else = {
+				add_county_modifier = {
+					modifier = recently_occupied_county_modifier
+					years = 7		#prev 10
+				}
+			}
+		}
+	}
+}
+
+# called when a siege completes. Does *not* fire on reoccupation by province order
+# root is the occupant
+# scope:barony is the barony title that got occupied
+# scope:county is the county title for the barony
+# scope:previous_controller is the previous controller of the county
+# scope:war is the war causing the previous controller and the occupant to be hostile
+# occupied_baronies is a list of all baronies that the siege caused the occupier to control (I.E., can include baronies with no fort level)
+on_siege_completion = {
+	on_actions = {
+		BKT_on_siege_completion
+	}
+}
+
+BKT_on_siege_completion = {
+	effect = {
+		scope:barony = {
+			title_province = {
+				every_army_in_location = {
+					add_supply = { value = scope:barony.county.development_level divide = 20 ceiling = yes multiply = 5 min = 5 }
+				}	
+			}
+			scope:barony.county = { change_development_progress_with_overflow = { value = development_level multiply = -10 } }
+		}
+	}
+}
+
+# Called when a siege loots a holding
+# root is sieging character
+# scope:barony is the barony title that got looted
+# scope:county is the county title for the barony
+# scope:previous_controller is the previous controller
+on_siege_looting = {
+	on_actions = {
+		BKT_on_siege_looting
+	}
+}
+	
+BKT_on_siege_looting = {
+	effect = {
+		scope:barony.title_province = {
+			# Depricated.
+			#if = {
+			#	limit = { has_province_modifier = somewhat_recently_looted_modifier }
+			#	#if = {
+			#	#	has_county_modifier_duration_remaining
+			#	#}
+			#	remove_province_modifier = somewhat_recently_looted_modifier
+			#	scope:barony.county = {
+			#		change_development_progress_with_overflow = { 
+			#			integer_range = { min = 1 max = 10 }
+			#			multiply = -10
+			#		}
+			#	}
+			#	add_province_modifier = {
+			#		modifier = somewhat_recently_looted_modifier
+			#		years = 20
+			#	}
+			#}
+			#else = {
+			#	add_province_modifier = {
+			#		modifier = somewhat_recently_looted_modifier
+			#		years = 15
+			#	}
+			#}
+			every_army_in_location = {
+				add_supply = 10
+			}
+		}
+	}
+}
+
+# Called when a raid action finishes
+# root is the raid army
+# scope:raider is the person owning the raid army
+# scope:barony is the barony title that got raided
+# scope:county is the county title for the barony
+on_raid_action_completion = {
+	on_actions = {
+		BKT_on_raid_action_completion
+		delay = { days = 1 }
+		BKT_recently_raided_county_modifier
+	}
+}
+
+BKT_on_raid_action_completion = {
+	effect = {
+		scope:county = {
+			#this part is just copied from vanilla
+			if = {
+				limit = {
+					holder = {
+						NOT = { has_perk = enduring_hardships_perk }
+					}
+				}
+				#change_county_control = raid_county_control_loss_value
+				random_list = {
+					25 = {
+						change_development_progress_with_overflow = -4	#prev -2
+					}
+					25 = {
+						change_development_progress_with_overflow = -6	#prev -3
+					}
+					25 = {
+						change_development_progress_with_overflow = -9	#prev -4
+					}
+					25 = {
+						change_development_progress_with_overflow = 10	#prev -5
+					}
+				}
+			}
+			if = {
+				limit = { scope:county.holder = { is_independent_ruler = no } }
+				scope:county.holder = {
+					if = {
+						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						add_opinion = {
+							target = liege
+							modifier = let_me_be_raided
+							opinion = -5
+						}
+					}
+					else = {
+						add_opinion = {
+							target = liege
+							modifier = let_me_be_raided
+							opinion = -20
+						}
+					}
+					every_liege_or_above = {
+						limit = { is_independent_ruler = no }
+						if = {
+							limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						}
+						else = {
+							add_opinion = {
+								target = liege
+								modifier = let_me_be_raided
+								opinion = -10
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+BKT_recently_raided_county_modifier = {
+	trigger = {
+		NOT = { scope:county.title_province = { has_holding_type = nomad_holding } }
+	}
+	effect = {
+		scope:county = {
+			if = {
+				limit = {
+					any_county_province = {
+						count = all
+						OR = {
+							has_holding = no
+							has_province_modifier = recently_looted_modifier
+						}
+					}
+				}
+				if = {
+					limit = { has_county_modifier = recently_raided_county_modifier }
+					remove_county_modifier = recently_raided_county_modifier
+					add_county_modifier = {
+						modifier = recently_raided_county_modifier
+						years = 10			#prev 15
+					}
+				}
+				else_if = {
+					limit = { any_county_province = { has_holding_type = tribal_holding } }
+					if = {
+						limit = { development_level > 7 }
+						add_county_modifier = {
+							modifier = recently_raided_county_modifier
+							years = 3		#prev 5
+						}
+					}
+				}
+				else = {
+					add_county_modifier = {
+						modifier = recently_raided_county_modifier
+						years = 7			#prev 10
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,198 @@
+﻿# My own mod, so stealing is fine.
+
+diplomacy_adventurer_focus = {
+	lifestyle = diplomacy_lifestyle
+	
+	is_shown = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	is_valid = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	
+	modifier = {
+		general_opinion = 5						#10
+		character_travel_speed_mult = 0.25		#0.3
+		diplomacy_scheme_phase_duration = -10 	#-15
+		#diplomacy = 1
+	}
+
+	desc = {
+		desc = diplomacy_adventurer_focus_desc
+		desc = line_break
+	}
+
+	auto_selection_weight = {
+		value = 5000
+		if = {
+			limit = {
+				has_education_diplomacy_trigger = yes
+			}
+			add = 50000
+		}
+		if = {		#ADDED
+			limit = {
+				has_completed_target_lifestyle_trigger = { TARGET = diplomacy }
+			}
+			multiply = 0
+		}
+	}
+}
+
+martial_adventurer_focus = {
+	lifestyle = martial_lifestyle
+	
+	is_shown = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	is_valid = {
+		government_has_flag = government_is_landless_adventurer
+	}
+
+	desc = {
+		desc = martial_adventurer_focus_desc
+		desc = line_break
+	}
+	
+	modifier = {
+		advantage = 5							#10
+		maa_toughness_mult = 0.1				#0.15
+		martial_scheme_phase_duration = -10		#-15
+		#martial = 1
+	}
+
+	auto_selection_weight = {
+		value = 5000
+		if = {
+			limit = {
+				has_education_martial_trigger = yes
+			}
+			add = 50000
+		}
+		if = {		#ADDED
+			limit = {
+				has_completed_target_lifestyle_trigger = { TARGET = martial }
+			}
+			multiply = 0
+		}
+	}
+}
+
+intrigue_adventurer_focus = {
+	lifestyle = intrigue_lifestyle
+	
+	is_shown = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	is_valid = {
+		government_has_flag = government_is_landless_adventurer
+	}
+
+	desc = {
+		desc = intrigue_adventurer_focus_desc
+		desc = line_break
+	}
+	
+	modifier = {
+		owned_hostile_scheme_success_chance_growth_add = 2	#2.5
+		owned_scheme_secrecy_add = 10						#20
+		intrigue_scheme_phase_duration = -10				#-15
+		prowess_scheme_phase_duration = -10					#-15
+		#intrigue = 1
+	}
+
+	auto_selection_weight = {
+		value = 5000
+		if = {
+			limit = {
+				has_education_intrigue_trigger = yes
+			}
+			add = 50000
+		}
+		if = {		#ADDED
+			limit = {
+				has_completed_target_lifestyle_trigger = { TARGET = intrigue }
+			}
+			multiply = 0
+		}
+	}
+}
+
+stewardship_adventurer_focus = {
+	lifestyle = stewardship_lifestyle
+	
+	is_shown = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	is_valid = {
+		government_has_flag = government_is_landless_adventurer
+	}
+
+	desc = {
+		desc = stewardship_adventurer_focus_desc
+		desc = line_break
+	}
+	
+	modifier = {
+		owned_contract_scheme_success_chance_growth_add = 2.5
+		stewardship_scheme_phase_duration = -10					#-15
+		provisions_gain_mult = 0.1								#0.25
+		#stewardship = 1
+	}
+
+	auto_selection_weight = {
+		value = 5000
+		if = {
+			limit = {
+				has_education_stewardship_trigger = yes
+			}
+			add = 50000
+		}
+		if = {		#ADDED
+			limit = {
+				has_completed_target_lifestyle_trigger = { TARGET = stewardship }
+			}
+			multiply = 0
+		}
+	}
+}
+
+learning_adventurer_focus = {
+	lifestyle = learning_lifestyle
+	
+	is_shown = {
+		government_has_flag = government_is_landless_adventurer
+	}
+	is_valid = {
+		government_has_flag = government_is_landless_adventurer
+	}
+
+	desc = {
+		desc = learning_adventurer_focus_desc
+		desc = line_break
+	}
+	
+	modifier = {
+		learning_scheme_phase_duration = -10			#-15
+		#stress_gain_mult = -0.2
+		stress_loss_mult = 0.2							# Added instead of stress gain loss coz that's a bit much.
+		character_travel_safety = 5						#10
+		#learning = 1
+	}
+
+	auto_selection_weight = {
+		value = 5000
+		if = {
+			limit = {
+				has_education_learning_trigger = yes
+			}
+			add = 50000
+		}
+		if = {		#ADDED
+			limit = {
+				has_completed_target_lifestyle_trigger = { TARGET = learning }
+			}
+			multiply = 0
+		}
+	}
+}

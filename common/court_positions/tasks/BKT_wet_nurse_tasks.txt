@@ -1,0 +1,83 @@
+﻿### Wet Nurse Tasks ###
+
+wet_nurse_instill_virtue = {
+	court_position_types = { wet_nurse_court_position }
+
+	# Monthly cost for the task
+	cost = {
+		round = no
+		prestige = {
+			add = {
+				value = monthly_court_position_task_cost
+				desc = COURT_POSITION_TASK_COST_BREAKDOWN_BASE
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		faith = scope:liege.faith
+	}
+
+	employee_modifier = {
+		child_opinion = 10
+	}
+
+	on_start = {
+		custom_tooltip = wet_nurse_instill_virtue_fallback_tt
+	}
+
+	on_monthly = {
+		save_scope_as = wetnurse_trait_giver
+		liege_or_court_owner = { save_scope_as = notification_character }
+		scope:notification_character = {
+			every_courtier_or_guest = {
+				limit = {
+					is_adult = no
+					age >= 6
+					number_of_personality_traits < 3
+					trigger_if = {
+						limit = {
+							any_relation = { type = guardian }
+						}
+						any_relation = {
+							type = guardian
+							NOT = { this = scope:notification_character }
+						}
+					}
+				}
+				random = {
+					chance = {
+						value = 0.5			#prev 1
+						add = {
+							value = "scope:wetnurse_trait_giver.aptitude(wet_nurse_court_position)"
+							multiply = 0.3		#prev 0.2
+						}
+					}
+					instill_virtue_trait_effect = yes
+				}
+			}
+			if = {
+				limit = {
+					is_adult = no
+					number_of_personality_traits < 3
+					age >= 6
+				}
+				random = {
+					chance = {
+						value = 1
+						add = {
+							value = "scope:wetnurse_trait_giver.aptitude(court_tutor_court_position)"
+							multiply = 0.8		#prev 1.5
+						}
+					}
+					instill_virtue_trait_effect = yes
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = 0 # Never used by AI
+	}
+}

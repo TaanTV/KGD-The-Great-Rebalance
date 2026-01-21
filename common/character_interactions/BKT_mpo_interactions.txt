@@ -1,0 +1,1218 @@
+﻿
+# Steal Herd
+steal_herd_interaction = {
+	icon = icon_scheme_steal_herd
+	interface_priority = 90
+	common_interaction = yes
+	category = interaction_category_hostile
+
+	send_name = START_SCHEME
+
+	scheme = steal_herd
+	ignores_pending_interaction_block = yes
+	
+	#ADDED
+	cooldown = { years = 3 }
+
+	is_shown = {
+		scope:recipient != scope:actor
+		scope:actor = {
+			is_landed = yes
+			is_adult = yes
+			is_imprisoned = no
+			government_has_flag = government_is_nomadic
+			in_diplomatic_range = scope:recipient
+			trigger_if = {
+				limit = {
+					is_ai = yes
+				}
+				NOR = {
+					is_tributary_of_suzerain_or_above = scope:recipient
+					is_vassal_or_below_of = scope:recipient
+					scope:recipient = {
+						is_ai = no
+						any_targeting_scheme = {
+							scheme_type = steal_herd
+						}
+					}
+				}
+			}
+		}
+		scope:recipient = {
+			is_landed = yes
+			is_adult = yes
+			government_has_flag = government_is_nomadic
+			highest_held_title_tier >= tier_county
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			can_start_scheme = {
+				type = steal_herd
+				target_character = scope:recipient
+			}
+		}
+		scope:recipient = { NOT = { has_strong_hook = scope:actor } }
+		trigger_if = {
+			limit = { scope:actor = { has_variable = no_scheming_allowed_var } }
+			custom_tooltip = {
+				text = no_scheming_allowed_var_tt
+				scope:actor.var:no_scheming_allowed_var != scope:recipient
+			}
+		}
+	}
+
+	desc = {
+		triggered_desc = {
+			trigger = {
+				scope:actor = {
+					can_start_scheme = {
+						type = steal_herd
+						target_character = scope:recipient
+					}
+				}
+			}
+			desc = scheme_interaction_tt_steal_herd_approved
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			stress_impact = {
+				compassionate = minor_stress_impact_gain
+				honest = minor_stress_impact_gain
+				craven = minor_stress_impact_gain
+				content = minor_stress_impact_gain
+			}
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = steal_herd_interaction_notification
+
+				left_icon = scope:actor
+				right_icon = scope:recipient
+
+				begin_scheme_basic_effect = {
+					SCHEME_TYPE = steal_herd
+					TARGET_TYPE = target_character
+					TARGET_SCOPE = scope:recipient
+				}
+
+				if = {
+					limit = {
+						domicile ?= { herd >= ninety_percent_herd_value }
+					}
+					custom_tooltip = steal_herd_interaction_tt.warning
+				}
+				scope:new_scheme ?= {
+					if = {
+						limit = {
+							scope:steal_herd_low ?= yes
+						}
+						set_variable = steal_herd_low
+					}
+					else_if = {
+						limit = {
+							scope:steal_herd_normal ?= yes
+						}
+						set_variable = steal_herd_normal
+					}
+					else_if = {
+						limit = {
+							scope:steal_herd_high ?= yes
+						}
+						set_variable = steal_herd_high
+					}
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		prestige >= medium_prestige_value # In case they fail
+		trigger_if = {
+			limit = {
+				NOT = {
+					domicile ?= {
+						has_domicile_building_or_higher = steal_herd_yurt_01
+					}
+				}
+			}
+			ai_honor <= 50
+		}
+		NOR = {
+			scheme_generic_ai_blocker_trigger = yes
+			primary_title = {
+				is_mercenary_company = yes
+			}
+		}
+		prestige >= major_prestige_value 	#prev medium_prestige_value # In case they fail
+	}
+
+	auto_accept = yes
+	
+	ai_will_do = {
+		base = -30
+
+		modifier = {
+			add = 20
+			domicile ?= { herd <= twenty_percent_herd_value }
+		}
+
+		modifier = {
+			add = 20
+			domicile ?= { herd <= sixty_percent_herd_value }
+		}
+		
+		modifier = {
+			add = {
+				value = intrigue
+				multiply = 3
+			}
+		}
+		
+		modifier = {
+			add = {
+				value = ai_greed
+				multiply = -1
+			}
+		}
+		modifier = {
+			add = {
+				value = ai_honor
+				multiply = -0.25
+			}
+		}
+		modifier = {
+			scope:actor = {
+				has_trait = schemer
+			}
+			add = 60
+		}
+		modifier = {
+			scope:actor = {
+				has_relation_rival = scope:recipient
+			}
+			add = 60
+		}
+		modifier = {
+			scope:actor = {
+				has_relation_nemesis = scope:recipient
+			}
+			add = 150
+		}
+		modifier = {
+			scope:actor = {
+				opinion = {
+					target = scope:recipient
+					value >= low_positive_opinion
+				}
+				ai_greed <= high_positive_ai_value
+			}
+			factor = 0
+		}
+		modifier = {
+			scope:recipient = {
+				OR = {
+					has_relation_friend = scope:actor
+					has_relation_lover = scope:actor
+					is_obedient_to = scope:actor
+				}
+			}
+			factor = 0
+		}
+		start_hostile_scheme_ai_base_modifiers = yes # At the end so Cowed can block it completely
+	}
+
+	ai_targets = {
+		ai_recipients = scripted_relations
+		ai_recipients = neighboring_rulers
+		ai_recipients = peer_vassals
+	}
+
+	# Options
+	options_heading = schemes.t.herd_amount
+	send_options_exclusive = yes
+	## Steal a little herd
+	send_option = {
+		flag = steal_herd_low
+		current_description = steal_herd_interaction.tt.low
+	}
+	## Steal a moderate amount of herd
+	send_option = {
+		flag = steal_herd_normal
+		current_description = steal_herd_interaction.tt.normal
+	}
+	## Steal a lot of herd
+	send_option = {
+		flag = steal_herd_high
+		current_description = steal_herd_interaction.tt.high
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+}
+
+
+### Demand Obedience
+mpo_demand_obedience_interaction = {
+	category = interaction_category_vassal
+	icon = demand_obedience
+	desc = mpo_demand_obedience_interaction_desc
+	interface_priority = 80
+	common_interaction = yes
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 24
+		duchy = 8		#prev 4
+		kingdom = 4
+		empire = 4
+		hegemony = 4
+	}
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	is_shown = {
+		scope:actor = {
+			government_allows = obedience
+		}
+		scope:recipient = {
+			is_ai = yes
+			obedience_target ?= scope:actor
+			is_obedient = no
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			age >= 16
+			is_physically_able = yes
+			NOT = {
+				is_at_war_with = scope:recipient
+			}
+		}
+		scope:actor = { dread >= medium_dread_value }
+	}
+
+	cost = { prestige = minor_prestige_value }
+
+	ai_potential = {
+		government_allows = obedience
+		primary_title.tier >= tier_duchy
+	}
+
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+
+	send_options_exclusive = no
+
+	ai_accept = {
+		base = -60		#prev -50
+		
+		#ADDED
+		modifier = { # Opinion Factor
+			add = {
+				if = {  # Duke
+					limit = { scope:actor.highest_held_title_tier = tier_duchy }
+					add = -15
+				}
+				else_if = {  # King
+					limit = { scope:actor.highest_held_title_tier = tier_kingdom }
+					add = -40
+				}
+				else_if = {  # Emperor
+					limit = { scope:actor.highest_held_title_tier = tier_empire }
+					add = -65
+				}
+			}
+			scope:actor.highest_held_title_tier >= tier_duchy
+			desc = YOUR_TITLE_TIER_MODIFIER
+		}
+		#ADDED
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+		modifier = {
+			trigger = {
+				scope:hook ?= yes
+			}
+			add = 50	#prev 100
+			desc = MIGRATION_HOOK_USED
+		}
+		modifier = {
+			add = 10
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_2
+					has_realm_law = meritocratic_bureaucracy_1
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 20
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_3
+					has_realm_law = meritocratic_bureaucracy_2
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 35	#prev 50
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_4
+					has_realm_law = meritocratic_bureaucracy_3
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 75	#prev 100
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = -20
+			scope:actor = { legitimacy_level = 1 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 5		#prev 10
+			scope:actor = { legitimacy_level = 3 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 15	#prev 25
+			scope:actor = { legitimacy_level = 4 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 25	#prev 50
+			scope:actor = { legitimacy_level = 5 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = {
+				value = ai_boldness
+				multiply = -1
+				divide = 2		#prev 4
+			}
+			NOT = { ai_boldness = 0 }
+			desc = ARTIFACT_BOLDNESS_REASON
+		}
+		modifier = {
+			add = -20
+			scope:recipient = {
+				has_trait = brave
+			}
+			desc = BLACKMAIL_INTERACTION_BRAVE_ACCEPTANCE
+		}
+		modifier = {
+			add = -50
+			scope:recipient = {
+				has_trait = arrogant
+			}
+			desc = BLACKMAIL_INTERACTION_ARROGANT_ACCEPTANCE
+		}
+		modifier = {
+			add = -50
+			scope:recipient = {
+				has_trait = disloyal
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DISLOYAL_ACCEPTANCE
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				has_trait = craven
+			}
+			desc = BLACKMAIL_INTERACTION_CRAVEN_ACCEPTANCE
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				has_trait = content
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_CONTENT_ACCEPTANCE
+		}
+		modifier = {
+			add = 25
+			any_character_situation = {
+				any_situation_sub_region = {
+					has_sub_region_phase_parameter = the_great_steppe_easier_obedience
+					any_situation_sub_region_participant_group = {
+						participant_group_type = nomad_rulers_capital
+						participant_group_has_character = scope:recipient 	#prev actor
+					}
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_ZUD_ACCEPTANCE
+		}
+		#ADDED - those 2
+		modifier = { # Rival 
+			desc = offer_vassalization_interaction_aibehavior_rival_tt
+			has_relation_rival = scope:actor
+			NOT = { has_relation_nemesis = scope:actor }
+			add = -200
+		}
+		modifier = { # Nemesis
+			desc = offer_vassalization_interaction_aibehavior_nemesis_tt
+			has_relation_nemesis = scope:actor
+			add = -1000
+		}
+		bp2_hostage_dread_modifier = yes
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			scope:actor = { dread >= major_dread_value }
+			add = 25
+		}
+		modifier = {
+			scope:actor = {
+				any_councillor = {
+					is_kurultai_trigger = yes
+					NOT = { is_obedient_to = prev }
+					#ADDED
+					this = scope:recipient
+				}
+			}
+			add = 75		#prev 25
+		}
+		modifier = {
+			scope:recipient = { is_child_of = scope:actor }
+			add = 75
+		}
+	}
+
+	cooldown_against_recipient = { years = 10 }
+
+	ai_targets = {
+		ai_recipients = vassals
+		ai_recipients = courtiers
+		ai_recipients = tributaries
+		chance = 0.25
+	}
+
+	ai_targets = { # They will try to get a Stable Succession
+		ai_recipients = councillors
+		#ADDED
+		ai_recipients = children
+	}
+
+	on_accept = {
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_good
+				title = mpo_demand_obedience_interaction_toast
+				left_icon = scope:recipient
+				#ADDED 
+				add_dread = -5
+				scope:recipient = {
+					add_opinion = {
+						target = scope:actor
+						modifier = obedience_opinion
+					}
+				}
+				# Belligerent Vassal Opinion
+				if = {
+					limit = {
+						any_vassal = { has_vassal_stance = belligerent }
+					}
+					every_vassal = {
+						limit = { has_vassal_stance = belligerent }
+						custom = every_belligerent_vassal
+						add_opinion = {
+							modifier = impressed_opinion
+							target = scope:actor
+							opinion = 15
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+mpo_vassal_to_tributary_interaction = {
+	category = interaction_category_vassal
+	icon = become_tributary_interaction
+	common_interaction = yes
+
+	desc = mpo_vassal_to_tributary_interaction_desc
+
+	#ai_frequency = 0
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 48
+		duchy = 24
+		kingdom = 24
+		empire = 120
+		hegemony = 0
+	}
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	is_shown = {
+		scope:actor = {
+			is_ai = no
+			is_vassal_of = scope:recipient
+			government_has_flag = government_is_nomadic
+			#ADDED
+			scope:recipient = { is_independent_ruler = yes }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_imprisoned = no
+		}
+		scope:actor = {
+			is_imprisoned = no
+			NOR = {
+				is_at_war_with = scope:recipient
+				exists = involved_activity
+				is_travelling = yes
+			}
+		}
+	}
+
+	is_highlighted = {
+		always = yes
+	}
+
+	# Start with higher taxes
+	send_option = {
+		flag = high_obligations
+		localization = VASSAL_TO_TRIBUTARY_HIGHER_OBLIGATIONS
+	}
+
+	#Use hook
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	on_accept = {
+		scope:actor = {
+			show_as_tooltip = {
+				break_subject_contract_and_establish_tributary_effect = { SUZERAIN = scope:recipient TRIBUTARY = scope:actor }
+			}
+		}
+		scope:actor = {
+			trigger_event = mpo_interactions_events.0010
+		}
+	}
+
+	on_decline = {
+		scope:actor = {
+			#Letter response, they get a bit pissed
+			trigger_event = mpo_interactions_events.0011
+		}
+	}
+
+	ai_accept = {
+		base = 0
+
+		modifier = {
+			add = -100		#prev -50
+			desc = BASE_RELUCTANCE
+		}
+
+		# Do they like you?
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 1
+			desc = AI_OPINION_REASON
+		}
+		
+		# If you're friends
+		modifier = {
+			add = 50
+			scope:recipient = {
+				has_relation_friend = scope:actor
+			}
+			desc = AI_FRIEND_REASON
+		}
+
+		# If you're lovers
+		modifier = {
+			add = 50
+			scope:recipient = {
+				has_relation_lover = scope:actor
+			}
+			desc = AI_YOUR_LOVER
+		}
+
+		# You're using a hook
+		modifier = {
+			add = 100
+			desc = SCHEME_WEAK_HOOK_USED
+			scope:hook = yes
+		}
+
+		# You promised higher taxes
+		modifier = {
+			add = 25
+			desc = AI_HIGHER_OBLIGATIONS_REASON
+			scope:high_obligations = yes
+		}
+
+		# Are they Nomadic
+		modifier = {
+			add = 25
+			desc = game_concept_nomadic_government
+			scope:recipient = { government_has_flag = government_is_nomadic }
+		}
+	}
+
+	ai_will_do = {
+		base = 5					#prev 0
+	}
+
+	ai_targets = {
+		ai_recipients = liege		#prev suzerain
+	}
+}
+
+
+### Negotiate Obedience
+mpo_negotiate_obedience_interaction = {
+	category = interaction_category_vassal
+	icon = demand_obedience
+	desc = mpo_negotiate_obedience_interaction_desc
+	interface_priority = 80
+	common_interaction = yes
+
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 24
+		duchy = 12		#prev 6
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	is_shown = {
+		scope:actor = {
+			government_allows = obedience
+		}
+		scope:recipient = {
+			is_ai = yes
+			obedience_target ?= scope:actor
+			is_obedient = no
+		}
+	}
+	
+	cost = {
+		prestige = {
+			value = medium_prestige_value
+			if = {
+				limit = {
+					scope:actor = { 
+						OR = {
+							has_realm_law = nomadic_authority_2
+							has_realm_law = meritocratic_bureaucracy_1
+						}
+					}
+				}
+				multiply = 1.25
+			}
+			else_if = {
+				limit = {
+					scope:actor = { 
+						OR = {
+							has_realm_law = nomadic_authority_3
+							has_realm_law = meritocratic_bureaucracy_2
+						}
+					}
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					scope:actor = { 
+						OR = {
+							has_realm_law = nomadic_authority_4
+							has_realm_law = meritocratic_bureaucracy_3
+						}
+					}
+				}
+				multiply = 1.75
+			}
+			else_if = {
+				limit = {
+					scope:actor = { has_realm_law = nomadic_authority_5 }
+				}
+				multiply = 2
+			}
+			#ADDED
+			if = {
+				limit = { 
+					scope:actor = { is_ai = yes }
+					scope:recipient = { is_ai = yes }
+				}
+				multiply = 0.5
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_imprisoned = no
+			NOT = {
+				is_at_war_with = scope:recipient
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:recipient = { is_landed = yes top_liege != this }
+			}
+			scope:recipient = { is_vassal_or_below_of = scope:actor }		
+		}
+		trigger_else_if = {
+			limit = {
+				scope:recipient = { is_independent_ruler = yes }
+			}
+			scope:actor = {
+				custom_tooltip = {
+					text = mpo_interaction_not_neighbouring_tt
+					any_land_neighboring_realm_with_tributaries_owner = { 
+						this = scope:recipient
+					}
+				}
+			}
+		}
+		trigger_else = {}
+	}
+
+	ai_potential = {
+		government_allows = obedience
+		primary_title.tier >= tier_duchy
+		prestige >= major_prestige_value
+	}
+
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				gold >= medium_gold_value
+			}
+		}
+		flag = gold
+		localization = OFFER_GOLD_FOR_BETTER_AI_ACCEPTANCE
+	}
+	
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				trigger_if = {
+					limit = { government_has_flag = government_is_nomadic }
+					domicile ?= {
+						herd >= medium_herd_value
+					}
+				}
+				trigger_else = {
+					government_has_flag = government_is_nomadic
+				}
+			}
+		}
+		flag = herd
+		localization = OFFER_HERD_FOR_BETTER_AI_ACCEPTANCE
+	}
+
+	send_options_exclusive = no
+
+	ai_accept = {
+		base = -60		#prev -50
+		
+		#ADDED
+		modifier = { # Opinion Factor
+			add = {
+				if = {  # Duke
+					limit = { scope:actor.highest_held_title_tier = tier_duchy }
+					add = -15
+				}
+				else_if = {  # King
+					limit = { scope:actor.highest_held_title_tier = tier_kingdom }
+					add = -40
+				}
+				else_if = {  # Emperor
+					limit = { scope:actor.highest_held_title_tier = tier_empire }
+					add = -65
+				}
+			}
+			scope:actor.highest_held_title_tier >= tier_duchy
+			desc = YOUR_TITLE_TIER_MODIFIER
+		}
+		#ADDED
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			max = 0
+			desc = AI_OPINION_REASON
+		}
+		#ADDED
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			min = 0
+			desc = AI_OPINION_REASON
+		}
+		modifier = {
+			trigger = {
+				scope:hook ?= yes
+			}
+			add = 125	#prev 100
+			desc = MIGRATION_HOOK_USED
+		}
+		modifier = {
+			trigger = {
+				scope:gold ?= yes
+			}
+			add = 75	#prev 100
+			desc = TRADE_GOLD_FOR_BETTER_AI_ACCEPTANCE_TT
+		}
+		modifier = {
+			trigger = {
+				scope:herd ?= yes
+			}
+			add = 75	#prev 100
+			desc = TRADE_HERD_FOR_BETTER_AI_ACCEPTANCE_TT
+		}
+		modifier = {
+			add = 5
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_2
+					has_realm_law = meritocratic_bureaucracy_1
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 10
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_3
+					has_realm_law = meritocratic_bureaucracy_2
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 20
+			scope:actor = {
+				OR = {
+					has_realm_law = nomadic_authority_4
+					has_realm_law = meritocratic_bureaucracy_3
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = 50		#prev 100
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_DOMINANCE_ACCEPTANCE
+		}
+		modifier = {
+			add = -30
+			scope:actor = { legitimacy_level = 1 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = -20
+			scope:actor = { legitimacy_level = 2 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 5
+			scope:actor = { legitimacy_level = 3 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 15
+			scope:actor = { legitimacy_level = 4 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = 25	#prev 30
+			scope:actor = { legitimacy_level = 5 }
+			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
+		}
+		modifier = {
+			add = {
+				value = ai_boldness
+				multiply = -1
+				divide = 4		#prev 2
+			}
+			NOT = { ai_boldness = 0 }
+			desc = ARTIFACT_BOLDNESS_REASON
+		}
+		modifier = {
+			add = {
+				value = ai_greed
+				multiply = -1
+				divide = 2
+				#ADDED
+				if = {
+					limit = {
+						OR = {
+							scope:gold = yes
+							scope:herd = yes
+						}
+					}
+					divide = 2
+				}
+			}
+			ai_greed > 0
+			desc = ARTIFACT_GREED_REASON
+		}
+		modifier = {
+			add = {
+				value = ai_honor
+				divide = 4
+			}
+			NOT = { ai_honor = 0 }
+			desc = ARTIFACT_HONOR_REASON
+		}
+		modifier = {
+			add = -20
+			scope:recipient = {
+				has_trait = brave
+			}
+			desc = BLACKMAIL_INTERACTION_BRAVE_ACCEPTANCE
+		}
+		modifier = {
+			add = -50
+			scope:recipient = {
+				has_trait = arrogant
+			}
+			desc = BLACKMAIL_INTERACTION_ARROGANT_ACCEPTANCE
+		}
+		modifier = {
+			add = 25
+			scope:recipient = {
+				has_trait = trusting
+			}
+			desc = BLACKMAIL_INTERACTION_TRUSTING_ACCEPTANCE
+		}
+		modifier = {
+			add = -50
+			scope:recipient = {
+				has_trait = disloyal
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_DISLOYAL_ACCEPTANCE
+		}
+		modifier = {
+			add = -500
+			scope:actor = { government_has_flag = government_is_nomadic }
+			scope:recipient = {
+				exists = domicile
+				domicile.herd >= 100
+				domicile.herd > scope:actor.domicile.herd
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_HERD_ACCEPTANCE
+		}
+		modifier = {
+			add = -500
+			scope:recipient = {
+				current_military_strength >= 100
+				current_military_strength > scope:actor.current_military_strength
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_MILITARY_MIGHT_ACCEPTANCE
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				has_trait = craven
+			}
+			desc = BLACKMAIL_INTERACTION_CRAVEN_ACCEPTANCE
+		}
+		modifier = {
+			add = 10
+			scope:recipient = {
+				has_trait = content
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_CONTENT_ACCEPTANCE
+		}
+		modifier = {
+			add = 25
+			any_character_situation = {
+				any_situation_sub_region = {
+					has_sub_region_phase_parameter = the_great_steppe_easier_obedience
+					any_situation_sub_region_participant_group = {
+						participant_group_type = nomad_rulers_capital
+						participant_group_has_character = scope:recipient 	#prev actor
+					}
+				}
+			}
+			desc = DEMAND_OBEDIENCE_INTERACTION_ZUD_ACCEPTANCE
+		}
+		#ADDED - those 2
+		modifier = { # Rival 
+			desc = offer_vassalization_interaction_aibehavior_rival_tt
+			has_relation_rival = scope:actor
+			NOT = { has_relation_nemesis = scope:actor }
+			add = -200
+		}
+		modifier = { # Nemesis
+			desc = offer_vassalization_interaction_aibehavior_nemesis_tt
+			has_relation_nemesis = scope:actor
+			add = -1000
+		}
+		#bp2_hostage_dread_modifier = yes
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			scope:herd ?= yes
+			add = -75			#prev -1
+		}
+		modifier = {
+			scope:gold ?= yes
+			add = -75			#prev -1
+		}
+		modifier = {
+			scope:hook ?= yes
+			add = -10			#prev -1
+		}
+		modifier = {
+			scope:recipient = {
+				is_kurultai_trigger = yes
+			}
+			add = 100
+		}
+		#ADDED - all of the below
+		modifier = {
+			scope:recipient = { 
+				is_child_of = scope:actor 
+				liege ?= scope:actor
+				NOT = { is_kurultai_trigger = yes }
+			}
+			add = 100
+		}
+		modifier = {
+			scope:actor.health < 3
+			add = 45
+		}
+		modifier = {
+			scope:actor.age > 45
+			add = 45
+		}
+	}
+	
+	cooldown_against_recipient = { years = 10 }
+	
+	ai_targets = { # They will try to get a Stable Succession
+		ai_recipients = councillors
+		#ADDED
+		ai_recipients = children
+	}
+
+	on_accept = {
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_good
+				title = mpo_demand_obedience_interaction_toast
+				left_icon = scope:recipient
+				# Pay what you need to pay first
+				if = {
+					limit = { scope:hook = yes }
+					use_hook = scope:recipient
+				}
+				if = {
+					limit = { scope:gold = yes }
+					pay_short_term_gold = {
+						target = scope:recipient
+						gold = medium_gold_value
+					}
+				}
+				if = {
+					limit = { scope:herd = yes }
+					if = {
+						limit = { exists = scope:recipient.domicile }
+						pay_herd = {
+							target = scope:recipient
+							value = domicile.medium_herd_value
+						}
+					}
+					else = { # For a nice tooltip
+						show_as_tooltip = {
+							pay_herd = {
+								target = scope:recipient
+								value = domicile.medium_herd_value
+							}
+						}
+						#hidden_effect = { domicile = { change_herd = medium_herd_loss } }
+						#ADDED
+						hidden_effect = { 
+							domicile = { change_herd = medium_herd_loss } 
+							scope:recipient = {
+								add_gold = {
+									value = scope:actor.domicile.medium_herd_value
+									multiply = 0.1
+								}
+							}
+						}
+					}
+				}
+				scope:recipient = {
+					add_opinion = {
+						target = scope:actor
+						modifier = obedience_opinion
+					}
+				}
+			}
+		}
+	}
+}

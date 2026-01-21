@@ -1,0 +1,227 @@
+﻿
+# Called when diarch changes. Diarchy already has new diarch
+# root - liege whos diarch changed
+# scope:old_diarch - character who was the diarch
+# scope:reason is the reason for change
+## scope:reason = flag:death means the prior diarch died
+## scope:reason = flag:depose means the prior diarch was deposed via the depose_diarch effect
+## scope:reason = flag:invalid means the prior diarch invalidated out
+## scope:reason = flag:inheritance when character changed diarchy during inheritance when going up the rank
+## scope:reason = flag:regular default reason, should not really be used, but rather help catch special cases
+on_diarch_change = {
+	effect = {
+		# Save some scopes for easy loc.
+		save_scope_as = liege
+		diarch = {
+			save_scope_as = diarch
+			# And if you weren't the old diarch also, then you get the starting event.
+			if = {
+				limit = {
+					this != scope:old_diarch
+				}
+				trigger_event = diarchy.0021
+				# If appropriate, set the co-ruler flag.
+				trigger_event = {
+					id = diarchy.0023
+					days = 1
+				}
+			}
+		}
+		# First, check what kind of change we're dealing with.
+		## Death.
+		if = {
+			limit = { scope:reason = flag:death }
+			# Notify the liege.
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+				title = on_diarch_change.notification.liege.death.t
+				left_icon = root.diarch
+				#desc = on_diarch_change.notification.liege.death.desc
+				#ADDED - kick diarchy swing down a bit
+				custom_tooltip = on_diarch_change.notification.liege.death.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = medium_sop_swing_liege_gain
+					LIEGE = scope:liege
+				}
+			}
+			# Notify the liege's vassals.
+			every_vassal_or_below = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+					title = on_diarch_change.notification.vassal.death.t
+					left_icon = root.diarch
+					#desc = on_diarch_change.notification.vassal.death.desc
+					#ADDED - kick diarchy swing down a bit
+					custom_tooltip = on_diarch_change.notification.vassal.death.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = medium_sop_swing_liege_gain
+							LIEGE = scope:liege
+						}
+					}
+				}
+			}
+		}
+		## Deposition.
+		else_if = {
+			limit = { scope:reason = flag:depose }
+			# Notify the liege.
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+				title = on_diarch_change.notification.liege.deposition.t
+				left_icon = root.diarch
+				#desc = on_diarch_change.notification.liege.deposition.desc
+				#ADDED - kick diarchy swing down a bit
+				custom_tooltip = on_diarch_change.notification.liege.deposition.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = minor_sop_swing_liege_gain
+					LIEGE = scope:liege
+				}
+			}
+			# Notify the liege's vassals.
+			every_vassal_or_below = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+					title = on_diarch_change.notification.vassal.deposition.t
+					left_icon = root.diarch
+					#desc = on_diarch_change.notification.vassal.deposition.desc
+					#ADDED - kick diarchy swing down a bit
+					custom_tooltip = on_diarch_change.notification.vassal.deposition.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = minor_sop_swing_liege_gain
+							LIEGE = scope:liege
+						}
+					}
+				}
+			}
+		}
+		## Invalidation.
+		else_if = {
+			limit = { scope:reason = flag:invalid }
+			# Notify the liege.
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+				title = on_diarch_change.notification.liege.invalidation.t
+				left_icon = root.diarch
+				#desc = on_diarch_change.notification.liege.invalidation.desc
+				#ADDED - kick diarchy swing down a bit
+				custom_tooltip = on_diarch_change.notification.liege.invalidation.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = minor_sop_swing_liege_gain
+					LIEGE = scope:liege
+				}
+			}
+			# Notify the liege's vassals.
+			every_vassal_or_below = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+					title = on_diarch_change.notification.vassal.invalidation.t
+					left_icon = root.diarch
+					#desc = on_diarch_change.notification.vassal.invalidation.desc
+					#ADDED - kick diarchy swing down a bit
+					custom_tooltip = on_diarch_change.notification.vassal.invalidation.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = minor_sop_swing_liege_gain
+							LIEGE = scope:liege
+						}
+					}
+				}
+			}
+		}
+		## Inheritance.
+		else_if = {
+			limit = { scope:reason = flag:inheritance }
+			# Notify the liege.
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+				title = on_diarch_change.notification.liege.inheritance.t
+				left_icon = root.diarch
+				#desc = on_diarch_change.notification.liege.inheritance.desc
+				#ADDED - kick diarchy swing down a bit
+				custom_tooltip = on_diarch_change.notification.liege.inheritance.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = medium_sop_swing_liege_gain
+					LIEGE = scope:liege
+				}
+			}
+			# Notify the liege's vassals.
+			every_vassal_or_below = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect	#prev msg_mandate_results_neutral_text
+					title = on_diarch_change.notification.vassal.inheritance.t
+					left_icon = root.diarch
+					#desc = on_diarch_change.notification.vassal.inheritance.desc
+					#ADDED - kick diarchy swing down a bit
+					custom_tooltip = on_diarch_change.notification.vassal.inheritance.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = medium_sop_swing_liege_gain
+							LIEGE = scope:liege
+						}
+					}
+				}
+			}
+		}
+		## Fallback.
+		else = {
+			# Notify the liege.
+			send_interface_message = {
+				type = msg_mandate_results_neutral_text
+				title = on_diarch_change.notification.liege.fallback.t
+				left_icon = root.diarch
+				desc = on_diarch_change.notification.liege.fallback.desc
+				#ADDED - kick diarchy swing down a bit
+				custom_tooltip = on_diarch_change.notification.liege.fallback.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = minor_sop_swing_liege_gain
+					LIEGE = scope:liege
+				}
+			}
+			# Notify the liege's vassals.
+			every_vassal_or_below = {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_text
+					title = on_diarch_change.notification.vassal.fallback.t
+					left_icon = root.diarch
+					desc = on_diarch_change.notification.vassal.fallback.desc
+					#ADDED - kick diarchy swing down a bit
+					custom_tooltip = on_diarch_change.notification.vassal.fallback.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = minor_sop_swing_liege_gain
+							LIEGE = scope:liege
+						}
+					}
+				}
+			}
+		}
+		scope:old_diarch ?= {
+			# If scope:old_diarch is still around and was plotting a coup, clear their conspirator list.
+			diarch_clean_up_conspiracy_variables_effect = yes
+			# Reset the cooldown on the intro event.
+			if = {
+				limit = { is_alive = yes }
+				trigger_event = {
+					id = diarchy.0022
+					days = 1
+				}
+				# Remove any extravagance modifiers.
+				vizierate_remove_extravagance_modifiers_effect = yes
+				# Remove their co-ruler title.
+				remove_variable = use_co_ruler_title
+			}
+		}
+		# Invalidate grand weddings
+		invalidate_diarch_grand_wedding_effect = yes
+		# Make sure that the Grand Secretariat ends when Hegemony of China no longer exist
+		if = {
+			limit = {
+				has_diarchy_type = grand_secretariat
+				NOT = { has_title = title:h_china }
+			}
+			end_diarchy = yes
+		}
+	}
+}

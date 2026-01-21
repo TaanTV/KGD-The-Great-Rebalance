@@ -1,0 +1,245 @@
+﻿# Called every Jan 1st
+# Root does not exist
+yearly_global_pulse = {
+	on_actions = {
+		BKT_global_development_update_pulse
+		BKT_landless_renown_fix
+		delay = { days = 1 }
+		BKT_mercenary_castles_pulse
+	}
+}
+
+BKT_landless_renown_fix = {
+	trigger = {
+		has_global_variable_list = laamps_tally
+	}
+	effect = {
+		every_in_global_list = {
+			variable = laamps_tally
+			holder = {
+				if = {
+					limit = { NOT = { dynasty.dynast ?= this } }
+					remove_character_modifier = landless_renown_equalisier_modifier
+					add_character_modifier = {
+						modifier = landless_renown_equalisier_modifier
+						days = 370
+					}
+				}		
+			}
+		}
+	}
+}
+
+BKT_global_development_update_pulse = {
+	effect = {
+		#every_county = {
+		#	remove_county_modifier = development_county_modifier
+		#	add_county_modifier = development_county_modifier
+		#}
+	}
+}
+
+BKT_mercenary_castles_pulse = {
+	effect = {
+		every_mercenary_company = { 
+			limit = {
+				mercenary_company_expiration_days = 0	#Not hired
+				mercenary_company_leader.gold > main_building_tier_1_cost
+			} 
+			mercenary_company_leader = {
+				random = {
+					chance = 2
+					modifier = {
+						has_trait = ambitious
+						factor = 2
+					}
+					modifier = {
+						gold > 1000
+						factor = 3
+					}
+					PREV = { save_scope_as = mercenary_company_scope }
+					mercenary_castles_pulse_effect = yes
+				} 
+			}		
+		}
+	}
+}
+
+random_yearly_playable_pulse = {
+	on_actions = {
+		currencies_loss_pulse
+	}
+}
+	
+currencies_loss_pulse_non_playable = {
+	trigger = {
+		is_ruler = no
+	}
+	on_actions = {
+		currencies_loss_pulse
+	}
+}
+
+currencies_loss_pulse = {
+	on_actions = {
+		BKT_herd_decay
+		delay = { days = 1 }
+		BKT_prestige_convertion
+		delay = { days = 2 }
+		BKT_piety_convertion
+	}
+}
+
+BKT_prestige_convertion = {
+	trigger = {
+		prestige < -100
+		age > 12
+	}
+	effect = {
+		save_scope_value_as = {
+			name = currency_to_add
+			value = {
+				value = prestige		#Keep in mind this should be negative
+				divide = 50
+				#floor = yes
+				multiply = 0.75
+				ceiling = yes
+				multiply = 50
+				max = 750
+				multiply = -1
+			}
+		}
+		save_scope_value_as = {
+			name = currency_xp_to_add
+			value = {
+				value = scope:currency_to_add
+				multiply = -1
+				multiply = {
+					value = prestige_level
+					min = 0.33
+				}
+				if = {		#Make AI a bit less dead
+					limit = { is_ai = yes }
+					multiply = 0.66
+					floor = yes
+				}
+			}
+		}
+		send_interface_toast = {
+			type = send_interface_message_bad
+			title = negative_prestige_convertion_title
+			#desc = negative_prestige_convertion_desc
+			right_icon = root
+			custom_tooltip = negative_prestige_convertion_tooltip
+			add_prestige_no_experience = scope:currency_to_add
+			add_prestige_experience = scope:currency_xp_to_add
+		}
+	}
+}
+
+BKT_piety_convertion = {
+	trigger = {
+		piety < -100
+		age > 12
+	}
+	effect = {
+		save_scope_value_as = {
+			name = currency_to_add
+			value = {
+				value = piety		#Keep in mind this should be negative
+				divide = 50
+				#floor = yes
+				multiply = 0.75
+				ceiling = yes
+				multiply = 50
+				max = 750
+				multiply = -1
+			}
+		}
+		save_scope_value_as = {
+			name = currency_xp_to_add
+			value = {
+				value = scope:currency_to_add
+				multiply = -1
+				multiply = {
+					value = piety_level
+					min = 0.33
+				}
+				if = {		#Make AI a bit less dead
+					limit = { is_ai = yes }
+					multiply = 0.66
+					floor = yes
+				}
+			}
+		}
+		send_interface_toast = {
+			type = send_interface_message_bad
+			title = negative_piety_convertion_title
+			#desc = negative_piety_convertion_desc
+			right_icon = root
+			custom_tooltip = negative_piety_convertion_tooltip
+			add_piety_no_experience = scope:currency_to_add
+			add_piety_experience = scope:currency_xp_to_add
+		}
+	}
+}
+
+BKT_herd_decay = {
+	trigger = {
+		has_government = nomad_government
+		domicile ?= { is_domicile_type = yurt }
+		NOR = { 
+			domicile.herd < 1000		#that's kind of mean
+			has_trait = greatest_of_khans 
+			has_character_modifier = the_great_khan_modifier
+		}
+	}
+	effect = {
+		save_scope_value_as = {
+			name = herd_value
+			value = {
+				value = domicile.herd
+				multiply = {
+					fixed_range = {
+						min = 5
+						max = 6
+					}
+					multiply = {
+						value = 1
+						domicile ?= {
+							#Sorry for legacy naming, it's in fact not 1/10th of a percent per level :<
+							#It was supposed to be absolute but trying to convey that in a tooltip is too hard
+							switch = {
+								trigger = has_domicile_parameter
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_1 = { add = -0.015 }
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_2 = { add = -0.03  }
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_3 = { add = -0.045 }
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_4 = { add = -0.06  }
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_5 = { add = -0.08  }
+								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_6 = { add = -0.1	  }
+							}
+						}
+					}
+					multiply = -0.01
+				}
+				floor = yes
+			}
+		}
+		send_interface_message = {
+			type = send_interface_message_bad
+			title = yearly_herd_decay_title
+			#desc = negative_piety_convertion_desc
+			right_icon = root
+			custom_tooltip = yearly_herd_decay_tooltip
+			domicile = { change_herd = scope:herd_value }
+		}
+	}
+}
+
+# Called from code once every five years for all characters.
+# Root is the character
+five_year_everyone_pulse = {
+	on_actions = {
+		currencies_loss_pulse_non_playable
+	}
+}

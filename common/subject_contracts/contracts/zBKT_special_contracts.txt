@@ -1,0 +1,743 @@
+﻿@ai_standard_liege_desire = 2
+@ai_standard_vassal_desire = 1
+# Everything below this line is 'Fine Print'
+
+special_contract = {
+	display_mode = radiobutton
+	is_shown = {
+		scope:subject.primary_title.tier >= tier_county
+	}
+	obligation_levels = {
+		special_contract_none = {
+			position = { 0 1 }
+			default = yes
+			score = 0
+
+			ai_subject_desire = {
+				value = 0
+				if = {
+					limit = {
+						scope:subject = {
+							vassal_contract_has_flag = has_scutage_contract
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									vassal_contract_obligation_level:feudal_government_taxes >= feudal_tax_normal_level
+								}
+							}
+						}
+					}
+					add = @ai_standard_vassal_desire
+				}
+			}
+
+
+			ai_liege_desire = {
+				value = 0
+				if = {
+					limit = {
+						scope:subject = {
+							vassal_contract_has_flag = has_scutage_contract
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+				if = {
+					limit = {
+						scope:subject = {
+							vassal_contract_has_flag = has_march_contract
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+				if = {
+					limit = {
+						scope:subject = {
+							vassal_contract_has_flag = has_palatinate_contract
+
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									OR = {
+										vassal_contract_obligation_level:feudal_government_taxes >= feudal_tax_normal_level
+										vassal_contract_obligation_level:feudal_government_levies >= feudal_levies_normal_level
+									}
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+			}
+		}
+		special_contract_scutage = {
+			is_shown = {
+				scope:subject.primary_title.tier >= tier_duchy
+				scope:subject = { government_has_flag = government_is_feudal }
+			}
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_scutage
+				}
+			}
+			parent = special_contract_none
+			position = { 1 1 }
+			score = -1		#prev 0
+
+			tax_factor = scutage_contract_tax
+			levies_factor = scutage_contract_levies		#prev -0.75
+
+			subject_modifier = {
+				men_at_arms_maintenance = -0.2
+			}
+
+			flag = has_scutage_contract
+			flag = obligation_high_taxes
+
+			ai_liege_desire = {
+				value = 0	#prev @ai_standard_liege_desire
+				if = {
+					limit = {
+						scope:subject = {
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									vassal_contract_obligation_level:feudal_government_taxes >= feudal_tax_normal_level
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+				if = {
+					limit = {
+						scope:liege = {
+							ai_should_focus_on_building_in_their_capital = yes
+						}
+					}
+					add = 10
+				}
+			}
+			ai_subject_desire = -2
+		}
+		special_contract_march = {
+			is_shown = {
+				scope:subject.primary_title.tier >= tier_duchy
+			}
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_bannus
+				}
+				custom_tooltip = {
+					text = special_contract_march_border_trigger
+					scope:subject = {
+						OR = {
+							vassal_contract_has_flag = has_march_contract
+							primary_title = { has_variable = historical_margrave }
+							any_sub_realm_county = {
+								any_neighboring_county = {
+									holder.top_liege != scope:subject.top_liege
+								}
+							}
+						}
+					}
+				}
+			}
+			parent = special_contract_none
+			position = { 1 0 }
+			score = 1		#prev 0
+
+			tax_factor = march_contract_taxes
+			#ADDED
+			subject_opinion = 15
+
+			subject_modifier = {
+				levy_size = 0.2
+				army_maintenance_mult = -0.1	#prev -0.2
+				garrison_size = 0.2
+				levy_reinforcement_rate = 0.2
+				controlled_province_advantage = 5
+				#ADDED
+				additional_fort_level = 1
+			}
+
+			flag = has_march_contract
+			#ADDED
+			flag = cares_less_about_being_occcupied_raided
+			flag = vassal_contract_allow_raiding
+
+			ai_liege_desire = {
+				value = 0
+				if = {
+					limit = {
+						scope:subject = {
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									OR = {
+										vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+										vassal_contract_obligation_level:feudal_government_levies > feudal_levies_normal_level
+									}
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+			}
+			#ADDED
+			ai_subject_desire = {
+				value = 0
+				if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = glory_hound }
+					}
+					add = 10
+				}
+			}
+		}
+		special_contract_castellan = {
+			is_shown = {
+				scope:subject.primary_title.tier = tier_county
+			}
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_bannus
+				}
+			}
+			parent = special_contract_none
+			position = { 1 0 }
+			score = 1		#prev 0
+
+			tax_factor = march_contract_taxes
+			levies_factor = castellan_contract_levies	#prev 0.5
+			#ADDED
+			subject_opinion = 15
+
+			subject_modifier = {
+				levy_size = 0.2
+				army_maintenance_mult = -0.1	#prev -0.2
+				garrison_size = 0.2
+				levy_reinforcement_rate = 0.2
+				controlled_province_advantage = 5
+				#ADDED
+				additional_fort_level = 1
+			}
+
+			flag = has_castellan_contract
+			flag = obligation_high_levies
+			#ADDED
+			flag = cares_less_about_being_occcupied_raided
+			flag = vassal_contract_allow_raiding
+
+			ai_liege_desire = {
+				value = 0
+				if = {
+					limit = {
+						scope:subject = {
+							OR = {
+								government_has_flag = government_is_clan
+								AND = {
+									government_has_flag = government_is_feudal
+									OR = {
+										vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+										vassal_contract_obligation_level:feudal_government_levies > feudal_levies_normal_level
+									}
+								}
+							}
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+			}
+			ai_subject_desire = {
+				value = 0
+				if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = glory_hound }
+					}
+					add = 10
+				}
+			}
+		}
+		special_contract_palatinate = {
+			is_shown = { scope:subject = { government_has_flag = government_is_feudal } }
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_divine_right
+				}
+			}
+			parent = special_contract_none
+			position = { 1 2 }
+			score = 0
+
+			tax_factor = palatinate_contract_taxes
+			levies_factor = palatinate_contract_levies
+			#ADDED
+			subject_opinion = 15
+
+			liege_modifier = {
+				monthly_prestige_gain_mult = 0.05
+			}
+
+			subject_modifier = {
+				monthly_prestige_gain_mult = 0.2
+				fellow_vassal_opinion = 15
+				owned_personal_scheme_success_chance_add = 10
+				owned_hostile_scheme_success_chance_add = 10
+				#ADDED
+				domain_limit = 1
+			}
+
+			flag = has_palatinate_contract
+
+			ai_liege_desire = {
+				value = 0
+				if = {
+					limit = {
+						scope:subject = {
+							government_has_flag = government_is_feudal
+							vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_low_level
+							vassal_contract_obligation_level:feudal_government_levies < feudal_levies_low_level
+						}
+					}
+					add = @ai_standard_liege_desire
+				}
+			}
+			ai_subject_desire = {
+				value = 0
+				if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = courtly }
+					}
+					add = 10
+				}
+			}
+		}
+	}
+}
+
+
+religious_rights = {
+	display_mode = checkbox
+	is_shown = {
+		scope:subject.faith != scope:liege.faith
+		OR = {
+			NOT = {
+				scope:liege.faith = {
+					OR = {
+						has_doctrine = tenet_tax_nonbelievers
+						has_doctrine = special_doctrine_jizya
+					}
+				}
+			}
+			AND = {
+				scope:liege.faith = {
+					OR = {
+						has_doctrine = tenet_tax_nonbelievers
+						has_doctrine = special_doctrine_jizya
+					}
+				}
+				scope:subject = {
+					NOT = {
+						vassal_contract_has_flag = vassal_contract_cannot_revoke_titles
+					}
+					vassal_contract_has_flag = religiously_protected
+				}
+			}
+		}
+	}
+	obligation_levels = {
+		religious_rights_none = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		religious_rights_protected = {
+			is_valid = {
+				scope:subject.faith != scope:liege.faith
+			}
+			parent = religious_rights_none
+			position = { 1 0 }
+
+			subject_opinion = 20		#prev 5
+
+			subject_modifier = {
+				county_opinion_add = 5
+			}
+
+			flag = religiously_protected
+
+			ai_liege_desire = 0
+			ai_subject_desire = 10
+			score = 3
+		}
+	}
+}
+
+fortification_rights = {
+	display_mode = checkbox
+	is_shown = {
+		scope:liege.culture = {
+			has_innovation = innovation_battlements
+		}
+	}
+	obligation_levels = {
+		fortification_rights_none = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		fortification_rights_granted = {
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_battlements
+				}
+			}
+			parent = fortification_rights_none
+			position = { 1 0 }
+
+			liege_modifier = {
+				castle_holding_build_gold_cost = 0.05
+			}
+
+			subject_modifier = {
+				castle_holding_build_gold_cost = -0.1			#prev -0.15
+				castle_holding_holding_build_gold_cost = -0.35	#prev -0.5
+				additional_fort_level = 1
+			}
+
+			tax_factor = fortification_rights_contract_taxes
+			
+			#ADDED
+			subject_opinion = 10
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+			#ADDED - had no score?...
+			score = 1
+		}
+	}
+}
+
+coinage_rights = {
+	display_mode = checkbox
+	is_shown = {
+		scope:liege.culture = {
+			has_innovation = innovation_currency_02
+		}
+	}
+	obligation_levels = {
+		coinage_rights_none = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		coinage_rights_granted = {
+			is_valid = {
+				scope:liege.culture = {
+					has_innovation = innovation_currency_02
+				}
+			}
+			parent = coinage_rights_none
+			position = { 1 0 }
+
+			liege_modifier = {
+				development_growth_factor = -0.04	#prev -0.02
+			}
+			subject_modifier = {
+				character_capital_county_monthly_development_growth_add = 0.05	#prev 0.3
+				#ADDED
+				tax_mult = 0.1
+			}
+			
+			#ADDED
+			subject_opinion = 10
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+			#ADDED - had no score?...
+			score = 1
+		}
+	}
+}
+
+succession_rights = {
+	display_mode = checkbox
+	is_shown = {
+		scope:subject = {
+			can_have_confederate_partition_succession_law_trigger = yes
+			#ADDED - make sure they can have at least one of the non-partition successions.
+			OR = {
+				can_have_single_heir_dynasty_house_trigger = yes
+				can_have_single_heir_youngest_succession_law_trigger = yes
+				can_have_single_heir_succession_law_trigger = yes
+			}
+		}
+	}
+	obligation_levels = {
+		succession_rights_default = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+		}
+		succession_rights_forced_partition = {
+			is_valid = {
+				scope:subject = {
+					can_have_confederate_partition_succession_law_trigger = yes
+				}
+			}
+			score = -1
+			parent = succession_rights_default
+			position = { 1 0 }
+
+			subject_opinion = -10		#prev -5
+
+			flag = locked_to_partition
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+	}
+}
+
+war_declaration_rights = {
+	display_mode = checkbox
+	obligation_levels = {
+		war_declaration_rights_default = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		war_declaration_rights_allowed = {
+			parent = war_declaration_rights_default
+			position = { 1 0 }
+
+			subject_opinion = 10		#prev 5
+			
+			#ADDED
+			liege_modifier = {
+				army_maintenance_mult = 0.02
+			}
+			
+			#ADDED
+			subject_modifier = {
+				monthly_war_income_mult = 0.05
+			}
+
+			flag = vassal_contract_war_override
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+			#ADDED - had no score?...
+			score = 1
+		}
+	}
+}
+
+council_rights = {
+	display_mode = checkbox
+	obligation_levels = {
+		council_rights_none = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		council_rights_guaranteed = {
+			parent = council_rights_none
+			position = { 1 0 }
+
+			subject_opinion = 20		#prev 5
+
+			flag = can_demand_council_seat
+
+			liege_modifier = {
+				powerful_vassal_opinion = -2
+			}
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+			score = 3
+		}
+	}
+}
+
+title_revocation_rights = {
+	display_mode = checkbox
+	is_shown = {
+		OR = {
+			scope:subject.faith = scope:liege.faith
+			NOR = {
+				scope:subject.faith = scope:liege.faith
+				scope:liege.faith = {
+					has_doctrine_parameter = unlock_jizya_contract
+				}
+			}
+		}
+	}
+	obligation_levels = {
+		title_revocation_rights_default = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = 1
+			ai_subject_desire = 0
+		}
+		title_revocation_rights_protected = {
+			is_valid = {
+				OR = {
+					scope:subject.faith = scope:liege.faith
+					NOR = {
+						scope:subject.faith = scope:liege.faith
+						scope:liege.faith = {
+							has_doctrine_parameter = unlock_jizya_contract
+						}
+					}
+				}
+			}
+
+			parent = title_revocation_rights_default
+			position = { 1 0 }
+
+			subject_opinion = 15	#prev 5
+
+			#ADDED
+			tax_factor = -0.1
+			levies_factor = -0.1
+
+			flag = vassal_contract_cannot_revoke_titles
+
+			ai_liege_desire = 0
+			ai_subject_desire = 5	#prev @ai_standard_vassal_desire
+			#ADDED - had no score?...
+			score = 2
+		}
+	}
+}
+
+
+jizya_special_rights = {
+	display_mode = checkbox
+	is_shown = {
+		scope:liege.faith = {
+			OR = {
+				has_doctrine = tenet_tax_nonbelievers
+				has_doctrine = special_doctrine_jizya
+			}
+		}
+		scope:subject.faith != scope:liege.faith
+		scope:subject = {
+			OR = {
+				NOT = {
+					vassal_contract_has_flag = religiously_protected
+				}
+				AND = {
+					vassal_contract_has_flag = religiously_protected
+					vassal_contract_has_flag = vassal_contract_cannot_revoke_titles
+				}
+			}
+		}
+	}
+
+	obligation_levels = {
+		jizya_special_rights_default = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = 1
+			ai_subject_desire = 0
+		}
+		jizya_special_rights_granted = {
+			is_valid = {
+				scope:liege.faith = {
+					OR = {
+						has_doctrine = tenet_tax_nonbelievers
+						has_doctrine = special_doctrine_jizya
+					}
+				}
+				NOT = {	scope:subject.faith = scope:liege.faith }
+			}
+			parent = jizya_special_rights_default
+			position = { 1 0 }
+
+			subject_opinion = 20
+			tax_factor = 0.4
+			levies_factor = -0.4
+
+			subject_modifier = {
+				monthly_prestige = -0.25
+			}
+
+			flag = vassal_contract_cannot_revoke_titles
+			flag = religiously_protected
+			flag = obligation_high_taxes
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+			#ADDED - had no score?...
+			score = 2
+		}
+	}
+}
+
+kurultai_rights = {
+	display_mode = checkbox
+	obligation_levels = {
+		kurultai_rights_none = {
+			default = yes
+			position = { 0 0 }
+
+			ai_liege_desire = @ai_standard_liege_desire
+			ai_subject_desire = 0
+		}
+		kurultai_rights_guaranteed = {
+			parent = kurultai_rights_none
+			position = { 1 0 }
+
+			subject_opinion = 15		#prev 5
+
+			flag = can_demand_kurultai_seat
+
+			liege_modifier = {
+				powerful_vassal_opinion = -2
+			}
+
+			ai_liege_desire = 0
+			ai_subject_desire = @ai_standard_vassal_desire
+			#ADDED - had no score?...
+			score = 3
+		}
+	}
+}
+
+

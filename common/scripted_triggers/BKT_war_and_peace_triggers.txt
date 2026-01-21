@@ -1,0 +1,139 @@
+﻿
+can_potentially_call_ally_trigger = {
+	# Can never call vassals to your own wars (their obligations are met via taxes and levies!)
+	custom_description = {
+		text = cannot_call_vassal_to_war
+		$JOINER$ = {
+			trigger_if = {
+				limit = {
+					NOT = {
+						# Diarchs can join against other vassals.
+						this ?= $WARRIOR$.diarch
+						# Confederation members can join the confederation leader's defensive wars
+						AND = {
+							is_confederation_member = yes
+							$WARRIOR$ = {
+								is_member_of_confederation = $JOINER$.confederation
+							}
+						}
+					}
+					#ADDED - tribes can call each other whenever
+					NAND = {
+						#liege = scope:actor
+						government_has_flag = can_call_vassals_into_wars
+						$WARRIOR$ = { government_has_flag = can_call_vassals_into_wars }
+					}
+				}
+				NOT = {
+					target_is_liege_or_above = $WARRIOR$
+				}
+			}
+		}
+	}
+
+	# Can never call your liege to your own wars (they protect you only from foreign invaders, by being the war target instead of you) -- Unless you have the Nomadic Contract Right
+	custom_description = {
+		text = cannot_call_liege_to_war
+		$JOINER$ = {
+			trigger_if = {
+				limit = {
+					target_is_vassal_or_below = $WARRIOR$
+					$WARRIOR$ = {
+						vassal_contract_has_flag = vassal_contract_liege_forced_war_override
+					}
+				}
+				always = yes
+			}
+			trigger_else_if = {
+				limit = {
+					$JOINER$ = {
+						NOT = {
+							target_is_vassal_or_below = $WARRIOR$
+						}
+					}
+				}
+				always = yes
+			}
+			trigger_else = {
+				always = no
+			}
+		}
+	}
+}
+
+#can_join_war_liege_vassal_check_trigger
+
+#can_use_conquest_cbs_trigger
+
+can_be_commander_now_trigger = {
+	is_available_quick = {
+		alive = yes
+		adult = yes
+		imprisoned = no
+		travel = no
+	}
+
+	OR = { # You can always lead your own armies
+		this = $ARMY_OWNER$
+		can_be_combatant_based_on_gender_trigger = { ARMY_OWNER = $ARMY_OWNER$ }
+	}
+
+	trigger_if = {
+		limit = { $ARMY_OWNER$ = { is_ai = yes } }
+		is_ai = yes
+	}
+	custom_description = {
+		text = ALREADY_IN_ACTIVITY
+		NOR = {
+			exists = involved_activity
+			has_variable = homage_liege_scope
+			has_character_flag = meditation_character_flag
+			has_character_flag = local_shrine_rite
+			has_character_flag = petition_liege_character_flag
+			has_character_flag = holding_court_character_flag
+			is_being_visited_on_tour_strict = yes
+		}
+	}
+	#ADDED
+	NOT = { has_character_modifier = isolating_modifier }
+	NOT = { has_trait_with_flag = can_not_command_armies }
+}
+
+
+# Non-vikings will for the AI just assert it's legal, as the target titles should already have fallen back to only allowing land and sea borders
+neighboring_county_or_viking_conquest_trigger = {
+	OR = {
+		trigger_if = {
+			limit = {
+				$CHARACTER$ = {
+					can_use_viking_invasion_cbs_trigger = yes
+				}
+			}
+			is_coastal_county = yes
+			OR = {
+				$CHARACTER$ = { is_ai = no }
+				is_neighbor_to_realm = $CHARACTER$
+				$CHARACTER$ = {
+					NOT = {
+						any_sub_realm_title = {
+							tier = tier_county
+							NOT = {
+								is_connected_to = {
+									target = $CHARACTER$.capital_province.county
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		#trigger_else = {
+		#	$CHARACTER$ = { is_ai = no }
+		#}
+		any_title_to_title_neighboring_and_across_water_county = {		#prev any_neighboring_county
+			holder = {
+				target_is_same_character_or_above = $CHARACTER$
+			}
+		}
+	}
+}

@@ -1,0 +1,13 @@
+﻿
+marshal_organize_levies_skill_base = {
+	add = martial
+	#multiply = 2
+}
+
+marshal_organize_levies_maintenance_skill_base = {
+	add = martial
+	#ADDED
+	multiply = 0.5
+}
+
+marshal_increase_control_base = 0.3		#prev 0.2

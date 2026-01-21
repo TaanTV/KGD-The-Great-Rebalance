@@ -1,0 +1,7 @@
+﻿#Opinion modifiers applied from various religious interactions
+
+requested_money_opinion = {
+	monthly_change = 0.05		#prev 0.1
+	decaying = yes
+	stacking = yes
+}

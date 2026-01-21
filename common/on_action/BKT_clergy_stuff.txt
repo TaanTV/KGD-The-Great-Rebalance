@@ -1,0 +1,27 @@
+﻿random_yearly_playable_pulse = {
+	on_actions = {
+		BKT_state_clergy_pulse
+	}
+}
+
+BKT_state_clergy_pulse = {
+	trigger = {
+		has_game_rule = bkt_additional_content_enabled
+		faith = {
+			has_doctrine = doctrine_theocracy_temporal
+		}
+		NOR = { 
+			government_has_flag = government_is_theocracy 
+			government_has_flag = government_is_tribal
+			government_has_flag = government_is_nomadic
+		}
+		exists = cp:councillor_court_chaplain
+		NOT = { has_character_flag = had_any_event_bkt_clergy }
+	}
+
+	random_events = {
+		chance_to_happen = 10
+		50 = 0
+		100 = bkt_clergy.1001 # Bishop asks if they can fund construction of a church
+	}
+}

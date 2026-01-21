@@ -1,0 +1,8 @@
+﻿
+diplomacy_foreign_3001_trade_deal_modifier = {
+	icon = economy_positive
+	tax_mult = 0.1		#prev 0.05
+	#ADDED
+	development_growth_factor = 0.1
+	build_gold_cost = -0.05
+}

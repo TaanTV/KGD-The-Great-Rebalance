@@ -1,0 +1,11 @@
+﻿l_russian:
+#[Select_CString(scoped_african.IsFemale, 'Mrs', 'Mr' )]
+ bkt_misc_events.0001.opening: "[rejected_betrothal_owner.Custom2('AppropriateGreetingNegative', ROOT.Char)]"
+ bkt_misc_events.0001.desc: " Вы считаете что я стану помогать Вам в Ваших войнах после того, что вы сделали? Ну уж нет."
+ bkt_misc_events.0001.desc.rivalry: " И я с Вами еще разберусь."
+ bkt_misc_events.0001.a: "Ой..."
+ 
+ bkt_misc_events.0010.opening: "[rich_mercenary_leader.Custom2('AppropriateGreeting', ROOT.Char)]"
+ bkt_misc_events.0010.desc: " Я ищу место, где я [Select_CString(rich_mercenary_leader.IsFemale, 'могла', 'мог' )] бы заложить свой собственный замок. Даруйте мне земли [barony_to_construct_at.GetNameNoTier] и я буду верно служить вам!"
+ bkt_misc_events.0010.a: "Теперь эти земли ваши"
+ bkt_misc_events.0010.b: "У меня другие планы на [barony_to_construct_at.GetNameNoTier]"

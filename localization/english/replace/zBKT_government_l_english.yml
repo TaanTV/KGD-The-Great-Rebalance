@@ -1,0 +1,9 @@
+﻿l_english: 
+ #special_contract_march:0 "March Contract"
+ special_contract_march_desc:2 "\n#emphasis #bold [vassal|E] Privilege:#!#!\nEnables [raiding|E]\n\n#flavor While subject to a $special_contract_march$, the [vassal|E] will receive bonuses to their [levies] and defensive capabilities, but provide #high [EmptyScope.ScriptValue('march_contract_taxes_tooltip')|0]%#! less [tax|E] than what their $feudal_government_taxes$ [obligation|E] dictates.#!"
+ #special_contract_march_border_trigger: "[vassal.GetName] does not border a foreign [realm|E]"
+ #special_contract_palatinate:0 "Palatinate Contract"
+ #special_contract_palatinate_desc:2 "#flavor While subject to a $special_contract_palatinate$, the [vassal|E] enjoys many privileges within the realm, which increases their standing and gives them more political clout. $special_contract_palatinate_short$ [vassals|E] increase their [liege|E]'s [prestige|E] but provide #high [EmptyScope.ScriptValue('palatinate_contract_taxes_tooltip')|0]%#! less [tax|E] and [levies|E] than what their $feudal_government_taxes$ and $feudal_government_levies$ [obligations|E] dictate.#!"
+ #special_contract_castellan: "Castellan Contract"
+ special_contract_castellan_desc: "\n#emphasis #bold [vassal|E] Privilege:#!#!\nEnables [raiding|E]\n\n#flavor While subject to a $special_contract_castellan$, the [vassal|E] will receive bonuses to their [levies] and defensive capabilities. They provide #high [EmptyScope.ScriptValue('march_contract_taxes_tooltip')|0]%#! less [tax|E], but #high [EmptyScope.ScriptValue('castellan_contract_levies_tooltip')0]%#! more [levy|E] than what their $feudal_government_taxes$ [obligation|E] dictates.#!"
+ 

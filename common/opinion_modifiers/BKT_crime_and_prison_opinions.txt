@@ -1,0 +1,219 @@
+﻿#Opinion modifiers connected to murder (and imprisonment reasons)
+
+##############
+# CATEGORIES #
+##############
+
+# Treason
+# Misc Crime
+# Murder
+# Abduction
+# Elopement
+# Execute
+# Torture
+# Blinded
+# Castration
+
+############
+# OPINIONS #
+############
+
+###MURDER###
+
+#Crime opinions
+murdered_close_family_crime = {
+	opinion = -160			#prev -80
+	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
+}
+
+attempted_murder_close_family_crime = {
+	opinion = -150			#prev -70
+	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
+}
+
+attempted_murder_me_crime = {
+	opinion = -200			#prev -100
+	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
+}
+
+abducted_me_crime = {
+	opinion = -150			#prev -60
+	imprisonment_reason = yes
+	banish_reason = yes
+}
+
+abducted_close_family_crime = {
+	opinion = -125			#prev -45
+	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
+}
+
+attempted_abduct_close_family_crime = {
+	opinion = -100			#prev -40
+	imprisonment_reason = yes
+	banish_reason = yes
+}
+
+abducted_close_relation_opinion = {
+	opinion = -75			#prev -30
+	years = 25
+	decaying = yes
+}
+
+attempted_abduct_me_crime = {
+	opinion = -75			#prev -100
+	imprisonment_reason = yes
+	banish_reason = yes
+}
+
+murdered_close_relation_opinion = {
+	opinion = -75			#prev -30
+	years = 25
+	decaying = yes
+}
+
+murdered_someone_close_to_me_crime = {
+	opinion = -75			#prev -50
+	imprisonment_reason = yes
+}
+
+hurt_someone_close_to_me_crime = {
+	opinion = -20
+	imprisonment_reason = yes
+}
+
+murdered_my_vassal_crime = { #Only used in feud event
+	opinion = -35			#prev -20
+	imprisonment_reason = yes
+}
+
+###EXECUTION###
+executed_close_family = {
+	opinion = -100			#prev -50
+	years = 50				#prev 30
+	decaying = yes
+}
+
+executed_close_family_crime = {
+	opinion = -100			#prev -50
+	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
+}
+
+executed_dynasty_member = {
+	opinion = -40			#prev -20
+	years = 20
+	decaying = yes
+}
+
+executed_close_relation_opinion = {
+	opinion = -60			#prev -30
+	years = 30				#prev 25
+	decaying = yes
+}
+
+executed_family_sun_trial_modifier = {
+	opinion = -60			#prev -30
+	years = 50				#prev 20
+	decaying = yes
+}
+
+executed_my_countryman_modifier = {
+	opinion = -25
+	years = 20
+	decaying = yes
+}
+
+executed_guest_modifier = {
+	opinion = -5
+	years = 10
+	decaying = yes
+}
+
+executed_valuable_prisoner_modifier = {
+	opinion = -25
+	years = 10
+	decaying = yes
+}
+
+
+### TORTURE ###
+tortured_family_member = {
+	opinion = -50			#prev -30
+	years = 50				#prev 20
+	decaying = yes
+	imprisonment_reason = yes
+}
+
+tortured_me = {
+	opinion = -100			#prev -75
+	decaying = yes
+	years = 50
+	imprisonment_reason = yes
+}
+
+### DISFIGURED ###
+disfigured_family_member = {
+	opinion = -35			#prev -20
+	decaying = yes
+	years = 35				#prev 20
+}
+
+disfigured_me = {
+	opinion = -75			#prev -50
+	decaying = yes
+	years = 50
+	imprisonment_reason = yes
+}
+
+### MAIMED ###
+maimed_family_member = {
+	opinion = -50			#prev -20
+	decaying = yes
+	years = 25				#prev 20
+}
+
+maimed_me = {
+	opinion = -100			#prev -50
+	decaying = yes
+	years = 50
+	imprisonment_reason = yes
+}
+
+
+### BLINDED ###
+blinded_family_member = {
+	opinion = -35			#prev -20
+	years = 25				#prev 20
+	decaying = yes
+}
+
+blinded_me = {
+	opinion = -50
+	decaying = yes
+	years = 50
+	imprisonment_reason = yes
+}
+
+
+### CASTRATION ###
+castrated_family_member = {
+	opinion = -35			#prev -20
+	years = 20
+	decaying = yes
+}
+
+castrated_me = {
+	opinion = -50
+	decaying = yes
+	years = 50
+	imprisonment_reason = yes
+}

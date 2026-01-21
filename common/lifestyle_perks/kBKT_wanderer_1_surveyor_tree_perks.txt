@@ -1,0 +1,126 @@
+﻿
+local_inspection_perk = {
+	lifestyle = wanderer_lifestyle
+	tree = surveyor
+	position = { 2 1 }
+	icon = node_wanderer
+	
+	parent = mustering_the_troops_perk
+
+	government_character_modifier = {
+		flag = government_is_settled
+		domain_tax_mult = 0.10
+		barons_and_minor_landholders_tax_contribution_mult = 0.05	#prev 0.1
+	}
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = this
+					NOT = { government_has_flag = government_is_settled }
+				}
+				desc = local_inspection_perk_adventurer_name
+			}
+			desc = local_inspection_perk_name
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_settled
+			}
+			custom_description_no_bullet = {
+				text = local_inspection_perk_effect
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_description_no_bullet = {
+				text = local_inspection_perk_2_effect
+			}
+			hidden_effect = {
+				landless_inspector_upgrade_terrain_tier_effect = yes
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_nomadic
+			}
+			custom_description_no_bullet = {
+				text = local_inspection_perk_3_effect
+			}
+			hidden_effect = {
+				landless_inspector_upgrade_terrain_tier_effect = yes
+			}
+		}
+	}
+}
+
+
+local_arbitration_perk = {
+	lifestyle = wanderer_lifestyle
+	tree = surveyor
+	position = { 1 3 }
+	icon = node_wanderer
+	
+	parent = know_your_land_know_your_people_perk
+	parent = no_stone_unturned_perk
+
+	government_character_modifier = {
+		flag = government_is_settled
+		intimidated_vassal_tax_contribution_mult = 0.05	#prev 0.2
+	}
+
+	government_character_modifier = {
+		flag = government_is_nomadic
+		epidemic_resistance = 5
+		monthly_county_control_growth_add = 0.15
+	}
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = local_arbitration_perk_adventurer_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_nomadic }
+				desc = local_arbitration_perk_nomadic_name
+			}
+			desc = local_arbitration_perk_name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_settled
+			}
+			custom_description_no_bullet = {
+				text = local_arbitration_perk_effect
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_description_no_bullet = {
+				text = local_arbitration_perk_2_effect
+			}
+			local_arbitration_boon_logic_purpose_effect = yes
+			switch = {
+				trigger = has_realm_law
+				camp_purpose_wanderers = { custom_description_no_bullet = { text = local_arbitration_wanderers_purpose } }
+				camp_purpose_mercenaries = { custom_description_no_bullet = { text = local_arbitration_mercenaries_purpose } }
+				camp_purpose_scholars = { custom_description_no_bullet = { text = local_arbitration_scholar_purpose } }
+				camp_purpose_explorers = { custom_description_no_bullet = { text = local_arbitration_explorers_purpose } }
+				camp_purpose_brigands = { custom_description_no_bullet = { text = local_arbitration_brigands_purpose } }
+				camp_purpose_legitimists = { custom_description_no_bullet = { text = local_arbitration_legitimists_purpose } }
+			}
+		}
+	}
+}

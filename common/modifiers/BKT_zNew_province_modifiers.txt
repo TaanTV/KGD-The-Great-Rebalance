@@ -1,0 +1,12 @@
+﻿somewhat_recently_looted_modifier = {
+	icon = martial_negative
+	build_speed = 0.25
+	development_growth_factor = -0.15
+	tax_mult = -0.15
+}
+
+recently_built_holding_modifier = {
+	icon = county_modifier_development_negative
+	build_speed = 3
+	tax_mult = -0.9
+}

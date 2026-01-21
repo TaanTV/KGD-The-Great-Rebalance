@@ -1,0 +1,396 @@
+﻿tradition_xenophilic = {
+	category = societal
+
+	layers = {
+		0 = learning
+		1 = mena
+		4 = conversation.dds
+	}
+	
+	can_pick = {
+		custom_tooltip = {
+			text = culture_acceptance_trigger_desc
+			any_culture_global = {
+				count >= xenophilic_nr_of_cultures_value
+				this != prev
+				cultural_acceptance = { target = prev value >= xenophilic_acceptance_value }
+			}
+		}
+	}
+	
+	#ADDED
+	parameters = {
+		less_likely_to_promote_culture = yes
+	}
+	
+	culture_modifier = {
+		cultural_acceptance_gain_mult = 0.25
+	}
+	character_modifier = {
+		different_culture_opinion = 10
+		ignore_negative_opinion_of_culture = yes
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_communal = { is_in_list = traits }
+						culture_pillar:ethos_egalitarian = { is_in_list = traits }
+						#culture_pillar:ethos_bureaucratic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_communal_or_egalitarian_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_global = {
+							count >= xenophilic_nr_of_cultures_cost_value
+							NOT = { this = prev }
+							cultural_acceptance = { target = prev value >= xenophilic_acceptance_cost_value }
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_acceptance_cost_desc
+				}
+			}
+
+			if = {
+				limit = {
+					scope:character = {
+						has_variable = tradition_xenophilic_travel_discount
+					}
+					
+				}
+
+				add = {
+					value = tradition_travel_discount
+					desc = tradition_travel_discount_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_xenophilic }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 100
+		if = {
+			limit = { # Avoid stacking similar traditions
+				culture_tradition:tradition_culture_blending = { is_in_list = traits }
+				culture_tradition:tradition_tgp_religious_hospitality = { is_in_list = traits }
+			}
+			multiply = 0.25
+		}
+		if = {
+			limit = { # If you like to invade people, don't pick this tradition
+				culture_tradition:tradition_malleable_invaders = { is_in_list = traits }
+			}
+			multiply = 0
+		}
+	
+	}
+}
+
+tradition_seafaring = {
+	category = societal
+
+	layers = {
+		0 = martial
+		1 = western
+		4 = ship.dds
+	}
+	
+	can_pick = {
+		custom_description = {
+			text = percentage_of_culture_on_coast_desc
+			any_culture_county = {
+				percent >= 0.5
+				has_coastal_province = yes
+			}
+		}
+		# Shouldn't be combined with the following traditions:
+		custom_tooltip = {
+			text = cannot_have_tradition_fp1_coastal_warriors
+			NOT = { culture_tradition:tradition_fp1_coastal_warriors = { is_in_list = traits } }
+		}
+		custom_tooltip = {
+			text = cannot_have_tradition_maritime_way_of_life
+			NOT = { culture_tradition:tradition_maritime_way_of_life = { is_in_list = traits } }
+		}
+		custom_tooltip = {
+			text = cultrad_not_nomadic_government_type
+			scope:character = {
+				NOT = {
+					government_has_flag = government_is_nomadic
+				}
+			}
+		}
+		custom_tooltip = {
+			text = cultrad_not_nomadic_government_type
+			scope:character = {
+				NOT = {
+					government_has_flag = government_is_nomadic
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		trade_ports_give_control_growth = yes
+		#trade_ports_give_levies = yes
+		can_travel_along_rivers = yes
+		trade_ports_enabled_for_tribals = yes
+	}
+	character_modifier = {
+		embarkation_cost_mult = -0.45		#prev -0.85
+		sea_travel_danger = medium_sea_danger_reduction
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_bureaucratic = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_bureaucratic_or_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.7
+							has_coastal_province = yes
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = high_coastal_percentage_desc
+				}
+			}
+
+			if = {
+				limit = {
+					scope:character = {
+						has_variable = tradition_seafaring_travel_discount
+					}
+					
+				}
+
+				add = {
+					value = tradition_travel_discount
+					desc = tradition_travel_discount_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_seafaring }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200
+		if = { # Make stacking more less common
+			limit = {
+				OR = {
+					culture_tradition:tradition_maritime_mercantilism = { is_in_list = traits }
+					culture_tradition:tradition_fishermen = { is_in_list = traits }
+				}
+			}
+			multiply = 2
+		}
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							percent >= 0.3
+							has_coastal_province = yes
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		else_if = {
+			limit = {
+				any_culture_county = {
+					percent >= 0.6
+					has_coastal_province = yes
+				}
+			}
+			multiply = 2		#prev 8
+		}
+	}
+}
+
+tradition_hard_working = {
+	category = societal
+
+	layers = {
+		0 = diplo
+		1 = indian
+		4 = tools.dds
+	}
+
+	can_pick = {
+		custom_tooltip = {
+			text = cultrad_not_nomadic_government_type
+			scope:character = {
+				NOT = {
+					government_has_flag = government_is_nomadic
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		development_gain_on_building_complete = yes
+		#next_level_w_mills = yes		#Heh. Nope.
+	}
+	character_modifier = {
+		build_speed = -0.15
+		stress_gain_mult = 0.15
+		build_gold_cost = 0.15
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_stoic_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					trigger_if = {
+						limit = {
+							scope:character = {
+								is_ai = no
+							}
+						}
+						NOT = {
+							any_ruler = {
+								count >= 5
+								culture = prev
+								primary_title.tier >= tier_county
+								has_trait = diligent
+							}
+						}
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = rulers_with_diligent_desc
+				}
+			}
+
+			if = {
+				limit = {
+					scope:character = {
+						has_variable = tradition_hard_working_travel_discount
+					}
+				}
+
+				add = {
+					value = tradition_travel_discount
+					desc = tradition_travel_discount_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_hard_working }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200		#prev 400
+		if = {
+			limit = {
+				NOR = {
+					culture_pillar:ethos_stoic = { is_in_list = traits }
+					culture_pillar:ethos_communal = { is_in_list = traits }
+				}
+			}
+			multiply = 0.5
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_economical_boom_personality = yes
+				}
+			}
+			multiply = 4
+		}
+	}
+}

@@ -1,0 +1,54 @@
+﻿#Maybe do the opposite for rivals?..
+
+friend = {
+	corresponding = friend
+	title_grant_target = yes
+	opposites = {
+		rival
+		grudge
+		bully
+		victim
+		nemesis
+		potential_friend
+		potential_rival
+	}
+	opinion = 60
+
+	flags = {
+		has_been_confided_in
+		vizierate_relation
+	}
+	
+	#ADDED
+	modifier = {
+		stress_gain_mult = -0.02
+	}
+}
+
+best_friend = {
+	corresponding = best_friend
+	title_grant_target = yes
+	opposites = {
+		rival
+		nemesis
+		grudge
+		bully
+		victim
+		friend
+		potential_friend
+		potential_rival
+	}
+	relation_aliases = { friend }
+	opinion = 120
+
+	flags = {
+		has_been_confided_in
+		vizierate_relation
+	}
+	
+	#ADDED
+	modifier = {
+		stress_gain_mult = -0.05
+		stress_loss_mult = 0.1
+	}
+}

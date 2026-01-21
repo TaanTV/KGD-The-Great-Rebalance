@@ -1,0 +1,107 @@
+﻿
+tradition_fp1_the_right_to_prove = {
+	category = societal
+
+	layers = {
+		0 = intrigue
+		1 = western
+		4 = shieldmaiden.dds
+	}
+
+	is_shown = {
+		# DLC check.
+		has_fp1_dlc_trigger = yes
+	}
+	
+	can_pick = {
+		custom_tooltip = {
+			text = cannot_have_tradition_fp1_performative_honour
+			NOT = { culture_tradition:tradition_fp1_performative_honour = { is_in_list = traits } }
+		}
+	}
+	
+	parameters = {
+		has_access_to_shieldmaidens = yes
+	}
+
+	character_modifier = {
+		knight_limit = -1				#prev -2
+		knight_effectiveness_mult = 0.2 #prev 0.25
+	}
+	
+	cost = {
+		prestige = {
+			# Base cost.
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			# Ethos requirement.
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+
+						# Egalitarian, provided you're moving *up* the scale. Somewhat less so when moving down.
+						culture_pillar:ethos_egalitarian = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_egalitarian_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							any_courtier = {
+								count >= 5
+								prowess >= 10
+								is_adult = yes
+								NOT = { can_be_knight_trigger = { ARMY_OWNER = prev } }
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = courtiers_with_prowess_who_cant_be_knight_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_fp1_the_right_to_prove }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 100
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_courtier = {
+							count >= 5
+							prowess >= 10
+							is_adult = yes
+							NOT = { can_be_knight_trigger = { ARMY_OWNER = prev } }
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}

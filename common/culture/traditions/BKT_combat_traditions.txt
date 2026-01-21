@@ -1,0 +1,853 @@
+﻿tradition_winter_warriors = {
+	category = combat
+
+	layers = {
+		0 = learning
+		1 = western
+		4 = fight.dds
+	}
+	
+	can_pick = {
+		culture_not_pacifistic_trigger = yes
+		culture_in_winter_geographical_region_trigger = yes
+	}
+	parameters = {
+		winter_soldier_trait_more_common = yes
+		winter_trait_bonuses = yes
+		can_recruit_winter_specialist = yes
+		resistant_to_winter_privation = yes
+	}
+	character_modifier = {
+		taiga_travel_danger = taiga_low_danger_reduction
+	}
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_stoic_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.3
+							any_county_province = {
+								OR = {
+									geographical_region = world_europe_north
+									geographical_region = world_europe_east
+									geographical_region = world_siberia
+									geographical_region = world_asia_north_east
+									geographical_region = world_asia_sakhalin_hokkaido
+									geographical_region = world_steppe
+									geographical_region = world_tibet
+								}
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = winter_percentage_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_winter_warriors }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	ai_will_do = {
+		value = 90		#prev 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							percent >= 0.3
+							culture = scope:character.culture
+							any_county_province = {
+								OR = {
+									geographical_region = world_europe_north
+									geographical_region = world_europe_west
+									geographical_region = world_europe_east
+									geographical_region = world_steppe
+									geographical_region = world_tibet
+								}
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+tradition_only_the_strong = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mena
+		4 = soldiers2.dds
+	}
+	
+	can_pick = {
+		custom_description = {
+			text = culture_not_egalitarian
+			NOT = {
+				culture_pillar:ethos_egalitarian = { is_in_list = traits }
+			}
+		}
+	}
+	
+	parameters = {
+		minimum_prowess_for_knights = yes
+		blademaster_trait_bonuses = yes
+		prowess_from_martial_education = yes
+	}
+	province_modifier = {
+		levy_size = -0.25
+	}
+	character_modifier = {
+		men_at_arms_recruitment_cost = 0.25
+		knight_effectiveness_mult = 1
+		#knight_limit = 2
+		accolade_glory_gain_mult = 0.2
+		men_at_arms_limit = -2
+		men_at_arms_cap = -1
+		maa_damage_mult = 0.35		#prev 0.1
+		maa_toughness_mult = 0.35	#prev 0.15
+		#ADDED
+		men_at_arms_title_limit = -2
+		men_at_arms_title_cap = -1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_or_stoic_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							any_knight = {
+								count >= 6
+								prowess >= 12
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = knights_with_prowess_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_only_the_strong }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200
+		if = {
+			limit = {
+				scope:character = {
+					NOR = {
+						prowess >= 12
+						has_trait = strong
+						has_trait = physique_good
+					}
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+					any_courtier = {
+						count >= 10
+						prowess >= 12
+					}
+				}
+			}
+			multiply = 4
+		}
+	}
+}
+
+tradition_frugal_armorsmiths = {
+	category = combat
+
+	layers = {
+		0 = steward
+		1 = western
+		4 = shield.dds
+	}
+
+	parameters = {
+		frugal_blacksmith_maa_size = yes
+	}
+	
+	character_modifier = {
+		army_maintenance_mult = -0.25
+		men_at_arms_recruitment_cost = -0.25
+		knight_effectiveness_mult = -0.6
+		levy_toughness = -2						#prev -8
+		heavy_cavalry_toughness_mult = -0.5
+		pikemen_toughness_mult = -0.25			#prev -0.15
+		heavy_infantry_toughness_mult = -0.35	#prev -0.25
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_stoic_or_communal_desc
+				}
+			}
+			if = {
+				limit = {	
+					NOT = {
+						scope:character = {	
+							number_maa_soldiers_of_base_type = {
+								type = skirmishers
+								value >= 200		#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = archers
+								value >= 200		#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_head_small_soldiers_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_frugal_armorsmiths }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 20	#prev 5 # The AI shouldn't really pick this very often
+		if = {
+			limit = {
+				scope:character = {
+					OR = {
+						number_maa_soldiers_of_base_type = {
+							type = heavy_infantry
+							value >= 40		#prev 100
+						}	
+						number_maa_soldiers_of_base_type = {
+							type = pikemen
+							value >= 40		#prev 100
+						}	
+						number_maa_soldiers_of_base_type = {
+							type = heavy_cavalry
+							value >= 1
+						}	
+						number_maa_soldiers_of_base_type = {
+							type = elephant_cavalry
+							value >= 1
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				OR = {
+					culture_has_heavy_infantry_maa = yes
+					culture_has_pikemen_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+
+tradition_swords_for_hire = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = indian
+		4 = swords.dds
+	}
+
+	is_shown = {
+		NOT = { has_cultural_tradition = tradition_ep3_audacious_cadets }
+	}
+	
+	can_pick = {
+		
+	}
+	
+	parameters = {
+		wanderers_gain_extra_combat_skills = yes
+		mercenary_courtiers_gain_extra_skills = yes
+		more_likely_to_leave_court = yes
+		unlocks_contract_assistance = yes
+		unlock_voluntary_laampdom = yes
+		more_likely_to_be_laamps = yes
+	}
+	culture_modifier = {
+		mercenary_count_mult = 1
+	}
+	character_modifier = {
+		same_culture_mercenary_hire_cost_mult = -0.3	#prev -0.15
+		character_travel_speed_mult = 0.1
+		character_travel_safety_mult = 0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_courtly_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					trigger_if = {
+						limit = {
+							scope:character = {
+								is_ai = no
+							}
+						}
+						NOT = {
+							any_ruler = {
+								count >= 5
+								culture = prev
+								primary_title.tier >= tier_county
+								has_trait = education_martial_4
+							}
+						}
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = rulers_with_martial_edu_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_swords_for_hire }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 100		#prev 50
+		if = {
+			limit = {
+				has_cultural_pillar = heritage_central_germanic
+			}
+			multiply = 2
+		}
+	}
+}
+
+
+tradition_reverence_for_veterans = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mediterranean
+		4 = knight.dds
+	}
+	
+	parameters = {
+		wounds_and_scars_give_bonuses = yes
+		guardians_can_transfer_commander_traits = yes
+		warrior_lodges_lift_restrictions = yes
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_egalitarian = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_egalitarian_or_stoic_desc
+				}
+			}
+			if = {
+				limit = {
+					trigger_if = {
+						limit = {
+							scope:character = {
+								is_ai = no
+							}
+						}
+						NOT = {
+							any_ruler = {
+								count >= 5
+								culture = prev
+								primary_title.tier >= tier_county
+								OR = {
+									has_trait = scarred
+									has_trait = maimed
+									has_trait = one_eyed
+									has_trait = one_legged
+									has_trait = disfigured
+								}
+							}
+						}
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = rulers_with_scars_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_reverence_for_veterans }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = { # Generally good & flavorful #Euhhhhh.... Not THAT good.
+		value = 100		#prev 400
+	}
+}
+
+tradition_stalwart_defenders = {
+	category = combat
+
+	layers = {
+		0 = intrigue
+		1 = mediterranean
+		4 = shield.dds
+	}
+	
+	parameters = {
+		can_end_defensive_wars_earlier = yes
+		more_fame_for_successful_defensive_wars = yes
+		more_gold_for_successful_defensive_wars = yes
+		next_level_fortification = yes
+		stalwart_defenders_internal_yurt_unlock = yes
+	}
+	character_modifier = {
+		defender_advantage = 3				# prev 5
+		controlled_province_advantage = 3	# prev 5
+		nomadic_horde_toughness_mult = 0.15
+	}
+	province_modifier = {
+		garrison_size = 0.15				#prev 25
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_stoic_or_courtly_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							any_county_province = {
+								has_building_or_higher = march_01
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = march_building_desc
+				}
+			}
+			if = {
+				limit = {
+					has_variable = defensive_traditionalist_discount
+				}
+				add = {
+					value = traditionalist_discount
+					desc = traditionalist_discount_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_stalwart_defenders }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200		#prev 400
+		if = {
+			limit = {
+				NOR = {
+					culture_pillar:ethos_bellicose = { is_in_list = traits }
+					culture_pillar:ethos_stoic = { is_in_list = traits }
+					scope:character = {
+						sub_realm_size <= medium_realm_size
+					}
+				}
+			}
+			multiply = 0.5	#prev 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 2
+		}
+	}
+}
+
+tradition_stand_and_fight = {
+	category = combat
+
+	is_shown = {
+		NOR = { #Replaced by Mobile Guards
+			has_cultural_pillar = heritage_israelite
+			has_cultural_tradition = tradition_mobile_guards
+		}
+	}
+
+	layers = {
+		0 = martial
+		1 = indian
+		4 = battle.dds
+	}
+	
+	character_modifier = {
+		levy_toughness = 2
+		maa_toughness_mult = 0.1
+		heavy_infantry_toughness_mult = 0.15	#prev 0.1
+		heavy_cavalry_toughness_mult = 0.15		#prev 1
+		pikemen_toughness_mult = 0.15			#prev 0.2
+		hard_casualty_modifier = 0.4
+		defender_advantage = 5				#prev 8	
+	}
+
+	parameters = {
+		stand_fight_nomadic_cultrad_stationing_bonus = yes
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_spiritual_or_stoic_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {	
+							number_maa_soldiers_of_base_type = {
+								type = heavy_infantry
+								value >= 200		#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = pikemen
+								value >= 200		#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_head_heavy_inf_and_pikemen_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_stand_and_fight }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200		#prev 400
+		if = {
+			limit = {
+				NOR = {
+					culture_has_heavy_infantry_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+					culture_has_pikemen_maa = yes
+				}
+			}
+			multiply = 0.5	#prev 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 2
+		}
+	}
+}
+
+tradition_longbow_competitions = {
+	category = combat
+	layers = {
+		0 = martial
+		1 = western
+		4 = bow.dds
+	}
+	
+	is_shown = {
+		OR = {
+			has_cultural_pillar = heritage_west_germanic
+			has_cultural_pillar = heritage_brythonic
+			has_cultural_pillar = heritage_goidelic
+		}
+	}
+	can_pick = {
+		OR = {
+			has_cultural_pillar = heritage_west_germanic
+			has_cultural_pillar = heritage_brythonic
+			has_cultural_pillar = heritage_goidelic
+		}
+	}
+	
+	parameters = {
+		unlock_maa_longbowmen = yes
+		archer_era_improvement = yes
+	}
+	character_modifier = {
+		archers_max_size_add = 2		#prev 4
+		heavy_cavalry_max_size_add = -2
+		pikemen_max_size_add = -2
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			# Ethos requirement.
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_bureaucratic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_stoic_or_bureaucratic_desc
+				}
+			}
+			# Certain number of archer MaA requirement.
+			if = {
+				limit = {
+					scope:character = {
+						number_maa_soldiers_of_base_type = {
+							type = archers
+							# Remember to sync the below with longbow_competitions_minimum_archer_maa_value.
+							value < 360		#prev 1200
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_head_lacks_archer_maa_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_longbow_competitions }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200		#prev 800
+		if = {
+			limit = {
+				OR = {
+					culture_has_pikemen_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+				}
+			}
+			multiply = 0
+		}
+	}
+}

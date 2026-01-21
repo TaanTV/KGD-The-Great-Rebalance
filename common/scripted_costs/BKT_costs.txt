@@ -1,0 +1,234 @@
+﻿
+# Cost of repairing an artifact ( restoring durability )
+repair_artifact = {
+	gold = {
+		value = { value = 16 desc = "BASE" }	#prev 25
+		if = {
+			limit = {
+				scope:artifact = {
+					#artifact_durability >= 80
+					#artifact_durability < 100
+					#ADDED
+					artifact_durability_percentage >= 0.8
+					artifact_durability_percentage < 1
+				}
+			}
+			divide = {
+				value = 2
+				desc = reforge_artifact_durability_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					#artifact_durability >= 20
+					#artifact_durability < 50
+					#ADDED
+					artifact_durability_percentage >= 0.2
+					artifact_durability_percentage < 0.5
+				}
+			}
+			multiply = {
+				value = 2
+				desc = reforge_artifact_durability_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					#artifact_durability >= 5
+					#artifact_durability < 20
+					#ADDED
+					artifact_durability_percentage >= 0.5
+					artifact_durability_percentage < 20
+				}
+			}
+			multiply = {
+				value = 3
+				desc = reforge_artifact_durability_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					#artifact_durability < 5
+					#ADDED
+					artifact_durability_percentage < 0.5
+				}
+			}
+			multiply = {
+				value = 4		#prev 5
+				desc = reforge_artifact_durability_desc
+			}
+		}
+		if = {
+			limit = {
+				scope:artifact = {
+					artifact_wealth_quality_average_value >= 75
+				}
+			}
+			multiply = {
+				value = 5
+				desc = reforge_artifact_rarity_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					artifact_wealth_quality_average_value >= 50
+					artifact_wealth_quality_average_value < 75
+				}
+			}
+			multiply = {
+				value = 2
+				desc = reforge_artifact_rarity_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					artifact_wealth_quality_average_value >= 25
+					artifact_wealth_quality_average_value < 50
+				}
+			}
+			multiply = {
+				value = 1		#So we still get the description with the rarity
+				desc = reforge_artifact_rarity_desc
+			}
+		}
+		else_if = {
+			limit = {
+				scope:artifact = {
+					artifact_wealth_quality_average_value < 25
+				}
+			}
+			divide = {
+				value = 2
+				desc = reforge_artifact_rarity_desc
+			}
+		}
+	}
+	piety = {
+		value = {
+			value = 0
+			desc = "BASE"
+		}
+		if = {
+			limit = {
+				scope:artifact.artifact_owner.faith = { has_doctrine_parameter = reforging_artifacts_costs_piety }
+			}
+			add = {
+				value = 50
+				desc = aniconist_tenet_cost
+			}
+			if = {
+				limit = {
+					scope:artifact = {
+						artifact_durability >= 80
+						artifact_durability < 100
+					}
+				}
+				divide = {
+					value = 2
+					desc = reforge_artifact_durability_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_durability >= 20
+						artifact_durability < 50
+					}
+				}
+				multiply = {
+					value = 2
+					desc = reforge_artifact_durability_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_durability >= 5
+						artifact_durability < 20
+					}
+				}
+				multiply = {
+					value = 3
+					desc = reforge_artifact_durability_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_durability < 5
+					}
+				}
+				multiply = {
+					value = 4		#prev 5
+					desc = reforge_artifact_durability_desc
+				}
+			}
+			if = {
+				limit = {
+					scope:artifact = {
+						artifact_wealth_quality_average_value >= 75
+					}
+				}
+				multiply = {
+					value = 5
+					desc = reforge_artifact_rarity_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_wealth_quality_average_value >= 50
+						artifact_wealth_quality_average_value < 75
+					}
+				}
+				multiply = {
+					value = 2
+					desc = reforge_artifact_rarity_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_wealth_quality_average_value >= 25
+						artifact_wealth_quality_average_value < 50
+					}
+				}
+				multiply = {
+					value = 1		#So we still get the description with the rarity
+					desc = reforge_artifact_rarity_desc
+				}
+			}
+			else_if = {
+				limit = {
+					scope:artifact = {
+						artifact_wealth_quality_average_value < 25
+					}
+				}
+				divide = {
+					value = 2
+					desc = reforge_artifact_rarity_desc
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:artifact = { exists = var:relic }
+			}
+			multiply = {
+				value = 2
+				desc = aniconist_reforging_relic
+			}
+		}
+	}
+}
+
+reform_culture_ethos = {
+	prestige = {
+		value = { value = 10000 desc = "BASE" }	#20000
+	}
+}

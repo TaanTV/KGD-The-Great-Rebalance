@@ -1,0 +1,11 @@
+﻿#####
+### Modifiers added by Perk effects
+#####
+
+### Diplomacy
+
+confidants_perk_modifier = {
+	icon = family_positive
+	stress_gain_mult = -0.03		#prev -0.05
+	stacking = yes
+}

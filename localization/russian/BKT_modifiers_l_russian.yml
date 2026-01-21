@@ -1,0 +1,22 @@
+﻿l_russian:
+ somewhat_recently_looted_modifier: "Восстановление после грабежа"
+ filthy_rich_basic_modifier: "Filthy Rich"
+ filthy_rich_basic_modifier_desc: "This character sits on a lot of wealth, making their vassals upset and neighboring rules envy"
+ support_religious_art_bkt_county_modifier: "Поддержаное Религиозное Искусство"
+ fully_autonomous_vassals_bkt_character_modifier: "Первый среди равных" #Совершенно Свободные Вассалы
+ #fully_autonomous_vassals_bkt_character_modifier_desc: "Поражение в войне против Фракции Свободы разрушило власть этого персонажа над их вассалами"
+ recently_built_holding_modifier: "Недавно Построенное Владение"
+ recently_converted_character_modifier: "Недавнее Обращение"    #
+ DEMAND_CONVERSION_RECENTLY_CONVERTED: "$recently_converted_character_modifier$: $VALUE|+0=$"
+ recently_occupied_county_modifier: "Разорено Оккупацией"
+ recently_raided_county_modifier: "Разорено Налетами"
+ #development_county_modifier: "Развитие" 
+ landless_renown_equalisier_modifier: "Не Настоящий Герцог"
+ landless_renown_equalisier_modifier_desc: "Этот модификатор существует для компенсации +0.5 признания за герцогов, потому что игра считает этого персонажа самым обычным герцогом"
+ broke_betrothal_of_war_ally: "Нечестный разрыв помолвки"
+ broke_betrothal_of_war_ally_desc: "Принятие [Concept( 'betrothal', 'помолвки' )|El]: #n -40#!\nПринятие [Concept( 'betrothal', 'помолвки' )|El] с [Concept( 'alliance', 'союзом' )|El]: #n -1000#!"
+ BROKE_BETROTHAL_OF_WAR_ALLY_MODIFIER: "#V Вы#! - Грязный арбузер: $VALUE|+0=$"
+ harsh_climate_county_modifier: "Суровый Климат"
+ former_mercenary_leader_modifier: "Бывший Предводитель Наемников"
+ former_mercenary_leader_modifier_desc: "Этот персонаж когда-то вёл банду наемников, он что-то то знает"
+ true_heresiarch_modifier: "Истинный Ересиарх"

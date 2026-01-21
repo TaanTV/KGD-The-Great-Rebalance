@@ -1,0 +1,174 @@
+﻿# Requires local_var:<obligation_type> to be set for feudal obligations
+# Requires scope:recipient to be set
+# This = Person who's obligation we are checking
+max_contract_changes_vassal = {
+	value = 0
+	if = {
+		limit = { 
+			OR = {
+				always = scope:hook
+				always = scope:diarch
+			}
+		}
+		add = 1
+	}
+	if = {
+		limit = { always = scope:hook }
+		add = 1
+	}
+	if = {
+		limit = { always = scope:diarch }
+		add = 1
+	}
+}
+ 
+# Not very basic but still
+
+average_vassal_opinion = {
+	value = 0
+	if = {
+		limit = {
+			is_landed = yes
+			any_vassal = { exists = this highest_held_title_tier > tier_barony }
+		}
+		every_vassal = {
+			limit = { highest_held_title_tier > tier_barony }
+			add = "opinion(liege)"
+		}
+		divide = {
+			value = {
+				every_vassal = {
+					limit = { highest_held_title_tier > tier_barony }
+					add = 1
+				}
+			}
+			min = 1
+		}	
+		floor = yes
+	}
+	else = {
+		value = 100
+	}
+}
+
+average_vassal_including_barons_opinion = {
+	if = {
+		limit = {
+			is_landed = yes
+			any_vassal = { exists = this }
+		}
+		every_vassal = {
+			add = "opinion(liege)"
+		}
+		divide = {
+			value = {
+				every_vassal = {
+					add = 1
+				}
+			}
+			min = 1
+		}	
+		floor = yes
+	}
+	else = {
+		value = 100
+	}
+}
+
+average_sub_realm_development = {
+	every_sub_realm_county = {
+		add = development_level
+	}
+	divide = {
+		value = sub_realm_size
+		min = 1
+	}
+}
+		
+
+ai_greed_plus_ai_boldness = {
+	value = ai_greed
+	min = -20			#actually dont let mega-generousity ruin crown authorities.
+	add = ai_boldness
+}
+
+thirty_five_percent_of_max_military_strength = {
+	value = {
+		add = max_military_strength
+		multiply = 0.35
+	}
+}
+
+sway_max_value_minus_fifteen = {
+	value = sway_max_value
+	add = -15
+}
+
+council_scaled_monthly_income_non_steward = {
+	add = liege.highest_held_title_tier
+	subtract = 2
+	min = 0.5
+	multiply = 0.5
+}
+
+council_position_lite_locked_value = {
+	value = 15
+}
+
+#Commented ones are here for context.
+#minor_lifestyle_xp = 50
+sub_medium_lifestyle_xp = 75
+#medium_lifestyle_xp = 100
+
+twenty_five_percent_of_sway_max_value = {
+	value = sway_max_value
+	multiply = 0.25
+	floor = yes
+}
+fourty_percent_of_sway_max_value = {
+	value = sway_max_value
+	multiply = 0.4
+	floor = yes
+}
+fifty_five_percent_of_sway_max_value = {
+	value = sway_max_value
+	multiply = 0.55
+	floor = yes
+}
+seventy_percent_of_sway_max_value = {
+	value = sway_max_value
+	multiply = 0.7
+	floor = yes
+}
+eighty_five_percent_of_sway_max_value = {
+	value = sway_max_value
+	multiply = 0.85
+	floor = yes
+}
+
+backwater_development_value = {
+	value = 10
+	root.culture = {
+		if = {
+			limit = { has_cultural_era_or_later = culture_era_late_medieval }
+			multiply = 4
+		}
+		else_if = {
+			limit = { has_cultural_era_or_later = culture_era_high_medieval }
+			multiply = 3
+		}
+		else_if = {
+			limit = { has_cultural_era_or_later = culture_era_early_medieval }
+			multiply = 2
+		}
+	}
+	add = 15
+}
+
+artifact_durability_percentage = {
+	value = artifact_durability
+	divide = {
+		value = artifact_max_durability
+		min = 1
+	}
+}

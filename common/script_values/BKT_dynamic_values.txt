@@ -1,0 +1,10 @@
+﻿# For buildings
+
+#dislikes_maa_value = -9
+#compensate_conflict_maa_bonus = 9
+likes_maa_value = 3						#prev 1
+stationed_maa_bonus = 10				#prev 3
+non_stationed_maa_bonus = -9			#prev -3
+#really_likes_maa_value = 2
+#stacking_bonus_value = 4
+anti_synergy_penalty_value = -19		#prev -9

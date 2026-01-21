@@ -1,0 +1,84 @@
+﻿
+increase_wounds_no_death_effect = {
+	save_temporary_scope_value_as = {
+		name = treatment_type
+		value = flag:$REASON$
+	}
+
+	change_trait_rank = {
+		trait = wounded
+		rank = 1
+		max = 3
+	}
+
+	if = { #Wounds from treatments give no infection and no additional treatment
+		limit = { NOT = { scope:treatment_type = flag:treatment } }
+
+		#CHANCE OF INFECTION
+		hidden_effect = {
+			random = {
+				chance = 10
+				trigger_event = {
+					id = health.0201
+					days = { 30 60 }
+				}
+			}
+		}
+
+		#HANDLE TREATMENT
+		if = { #To send notification message or trigger the right event
+			limit = {
+				has_trait_rank = {
+					trait = wounded
+					rank = 1
+				}
+				court_physician_available_trigger = yes
+				#ADDED - should prevent this from triggering while in combat
+				NOT = { exists = scope:combat_side }
+			}
+			save_scope_as = sick_character
+			safe_wound_treatment_effect = yes #Wounded 1 only gives a "result of treatment" notification" if you have a physician, i.e. you get no events about it.
+		}
+		else_if = {
+			limit = {
+				has_trait_rank = {
+					trait = wounded
+					rank = 2
+				}
+				has_recent_wound_treatment_trigger = no
+			}
+			#A "real" event if you're not receiving treatment
+			#Nothing happens if you're already being treated for wounds
+			trigger_event = {
+				id = health.0102
+				days = { 2 3 }
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait_rank = {
+					trait = wounded
+					rank = 3
+				}
+				has_recent_wound_treatment_trigger = no
+			}
+			#A "real" event if you're not receiving treatment
+			#Nothing happens if you're already being treated for wounds
+			trigger_event = {
+				id = health.0104
+				days = { 2 3 }
+			}
+
+			#Epilepsy risk
+			epilepsy_brain_trauma_risk_effect = { CHANCE = 5 }
+		}
+	}
+
+	# To stop the game from complaining about unused character flags since we only specifically check
+	# the treatment reason for risk of further or infection
+	if = {
+		limit = {
+			exists = flag:$REASON$
+		}
+	}
+}

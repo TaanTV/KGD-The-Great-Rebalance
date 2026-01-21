@@ -1,0 +1,193 @@
+﻿end_court_scheme_effect = {
+	save_temporary_scope_value_as = {
+		name = court_outcome
+		value = flag:$OUTCOME$
+	}
+
+	scope:owner = {
+		# SUCCESS: SOULMATES
+		# (This is the only one which target also needs to see, run it in owner scope in show_as_tooltip first and then execute in target's scope)
+		if = {
+			limit = { scope:court_outcome = flag:success_soulmate }
+			
+			scope:target = { set_relation_soulmate = { reason = $REASON$ target = prev } }
+			if = {
+				limit = {
+					NOR = {
+						has_sexuality = asexual
+						scope:target = { has_sexuality = asexual }
+					}
+				}
+				had_sex_with_effect = { #Run this in target scope because owner has own tooltip
+					CHARACTER = scope:target
+					PREGNANCY_CHANCE = pregnancy_chance
+				}
+			}		
+			reverse_add_opinion = {
+				target = scope:target
+				modifier = romance_scheme_courtship_opinion #Blocks courtship
+			}
+
+			#Maybe break of existing lover relationships
+			hidden_effect = {
+				scope:target = {
+					if = {
+						limit = {
+							has_trait = lustful
+							is_ai = yes
+							any_relation = {
+								type = lover
+								this != scope:owner
+							}
+						}
+						every_relation = {
+							type = lover
+							random = {
+								chance = 90
+								opinion_modifier = { #Less likely if they really like the lover
+									who = scope:target
+									opinion_target = this
+									multiplier = -0.5
+									min = -20
+								}
+								modifier = { #More likely if they have more lovers
+									add = 10
+									scope:target = {
+										any_relation = {
+											type = lover
+											count >= 2
+										}
+									}
+								}
+								#ADDED - temp scope, stolen from UNOP
+								save_temporary_scope_as = lover #Unop ck3-tiger
+								lover_breakup_effect = {
+									BREAKER = scope:target
+									LOVER = scope:lover	#this
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		# SUCCESS: KISS
+		else_if = {
+			limit = { scope:court_outcome = flag:success_kiss }
+			custom_tooltip = court_outcome.kiss.tt
+			reverse_add_opinion = {
+				target = scope:target
+				modifier = romance_scheme_courtship_opinion #Blocks courtship
+			}
+		}
+		# FAILURE: SOFT
+		else_if = {
+			limit = { scope:court_outcome = flag:failure_soft }
+			#Shared effect with Seduce because failure in one scheme should block the other
+			scope:target = { seduction_cooldown_for_character_effect = { CHARACTER = scope:owner } }
+		}
+		# FAILURE: HARD
+		else_if = {
+			limit = { scope:court_outcome = flag:failure_hard }
+			#Shared effect with Seduce because failure in one scheme should block the other
+			scope:target = { seduction_block_character_effect = { CHARACTER = scope:owner } }
+		}
+		
+		# Tradition bonuses
+		if = {
+			limit = {
+				OR = {
+					scope:court_outcome = flag:success_soulmate
+					scope:court_outcome = flag:success_kiss
+				}
+				culture = {
+					has_cultural_parameter = romance_scheme_bonuses
+				}
+				exists = dynasty
+				#ADDED - only once
+				NAND = {
+					has_variable_list = renown_from_romance_cooldown 
+					is_target_in_variable_list = {
+						name = renown_from_romance_cooldown
+						target = scope:target
+					}
+				}
+				#ADDED - only vs relatively relevant people 
+				scope:target = {
+					OR = {
+						scope:owner = { is_ruler = no }
+						scope:owner = { is_landless_ruler = yes }
+						AND = {
+							is_ruler = yes
+							is_landless_ruler = no
+							highest_held_title_tier >= { value = scope:owner.highest_held_title_tier add = -1 }
+						}
+						any_spouse = {
+							is_ruler = yes
+							is_landless_ruler = no
+							highest_held_title_tier >= { value = scope:owner.highest_held_title_tier add = -1 }
+						}
+						any_close_family_member = {
+							is_ruler = yes
+							is_landless_ruler = no
+							highest_held_title_tier >= { value = scope:owner.highest_held_title_tier add = -1 }
+						}
+					}
+				}
+			}
+			dynasty = {
+				add_dynasty_prestige = {
+					value = miniscule_dynasty_prestige_value	#prev minor_dynasty_prestige_gain
+					#ADDED - that whole if.
+					if = {
+						limit = {
+							#Notice now I check for strictly higher, as opposed to non-strict higher - 1 before 
+							scope:target = {
+								OR = {
+									scope:owner = { is_ruler = no }
+									scope:owner = { is_landless_ruler = yes }
+									AND = {
+										is_ruler = yes
+										is_landless_ruler = no
+										highest_held_title_tier > scope:owner.highest_held_title_tier
+									}
+									any_spouse = {
+										is_ruler = yes
+										is_landless_ruler = no
+										highest_held_title_tier > scope:owner.highest_held_title_tier
+									}
+									any_close_family_member = {
+										is_ruler = yes
+										is_landless_ruler = no
+										highest_held_title_tier > scope:owner.highest_held_title_tier
+									}
+								}
+							}
+						}
+						value = minor_dynasty_prestige_gain
+					}
+				}
+			}
+			#ADDED - cooldown
+			custom_tooltip = renown_from_romance_cooldown_tt
+			add_to_variable_list = {
+				name = renown_from_romance_cooldown
+				target = scope:target
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					scope:court_outcome = flag:failure_soft
+					scope:court_outcome = flag:failure_hard
+				}
+				culture = {
+					has_cultural_parameter = romance_scheme_bonuses
+				}
+			}
+			add_stress = medium_stress_impact_gain
+		}
+	}
+
+	scope:scheme = { end_scheme = yes }
+}

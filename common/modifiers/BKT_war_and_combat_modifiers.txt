@@ -1,0 +1,4 @@
+﻿# Applied by code when you lead your own troops
+leading_own_troops_modifier = {
+	advantage = 5
+}

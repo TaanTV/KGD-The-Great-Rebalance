@@ -1,0 +1,172 @@
+﻿######################
+# Legitimacy
+######################
+
+# Base legitimacy calculation - used for game start and in code
+# root - ruler that gets legitimacy
+base_legitimacy_value = { # Split into separate values for easy debugging/visibility
+	value = 0
+
+	# TIER
+	add = base_legitimacy_tier_value
+
+	# COURT GRANDEUR
+	add = base_legitimacy_court_grandeur_value
+
+	# DYNASTY RENOWN
+	add = base_legitimacy_dynasty_prestige_level_value
+
+	# LEGITIMACY BLOODLINE DYNASTY PERKS
+	add = base_legitimacy_track_perks_value
+
+	# COUNTY OPINION - derived from average of held counties
+	add = base_legitimacy_county_opinion_value
+
+	# PREVIOUS HOLDER DYNASTY
+	add = base_legitimacy_dynasty_of_predecessor_value
+
+	# PREVIOUS HOLDER CHILD
+	add = base_legitimacy_relation_to_predecessor_value
+
+	# SIDELINED SEX
+	add = base_legitimacy_sex_value
+
+	# BASTARDRY
+	add = base_legitimacy_bastardry_value
+
+	# YEARS AS RULER - bonus for startup rulers
+	add = base_legitimacy_years_as_ruler_value
+
+	# SPECIAL TRAITS
+	add = base_legitimacy_special_traits_value
+
+	# DIPLOMACY SKILLS
+	add = base_legitimacy_diplomacy_value
+	
+	# ADMINISTRATIVE
+	if = {
+		limit = {
+			exists = this
+			government_allows = administrative
+		}
+		multiply = 0.75 # To reduce the overall base values
+		add = base_legitimacy_admin_value # And add anything admin specific
+	}
+	
+	#ADDED - bonus from current marriage
+	add = {
+		value = 0
+		if = {
+			limit = {
+				is_lowborn = no
+				exists = primary_spouse
+				primary_spouse = { is_lowborn = no }
+				dynasty.dynasty_prestige_level < primary_spouse.dynasty.dynasty_prestige_level
+				NAND = {		#only once per character.
+					has_variable_list = got_legitimacy_for_marrying_those
+					is_target_in_variable_list = {
+						name = got_legitimacy_for_marrying_those
+						target = primary_spouse
+					}
+				}
+			}
+			value = primary_spouse.dynasty.dynasty_prestige_level
+			subtract = dynasty.dynasty_prestige_level
+			multiply = 15	#a bit less than usual because idk this is cheesable
+		}
+	}
+
+	min = 100 # No one starts with Level 0
+	round = yes
+}
+
+# SUCESSION LEGITIMACY CALCULATION - USED AS THE INITIAL LEGITIMACY OF NON GAME START CHARACTERS and in code
+# root - ruler that gets legitimacy
+succession_legitimacy_value = { # Split into separate values for easy debugging/visibility
+	value = 0
+
+	# TIER
+	add = base_legitimacy_tier_value
+
+	# COURT GRANDEUR
+	add = base_legitimacy_court_grandeur_value
+
+	# DYNASTY RENOWN - new value to avoid Splendor bloating
+	add = succession_legitimacy_dynasty_prestige_level_value
+
+	# LEGITIMACY BLOODLINE DYNASTY PERKS
+	add = base_legitimacy_track_perks_value
+
+	# COUNTY OPINION - derived from average of held counties
+	add = base_legitimacy_county_opinion_value
+
+	# PREVIOUS HOLDER DYNASTY
+	add = base_legitimacy_dynasty_of_predecessor_value
+
+	# WHO WAS YOUR PARENT
+	add = succession_legitimacy_ancestor_tier_value
+
+	# PREVIOUS HOLDER CHILD
+	add = base_legitimacy_relation_to_predecessor_value
+
+	# SIDELINED SEX
+	add = base_legitimacy_sex_value
+
+	# BASTARDRY
+	add = base_legitimacy_bastardry_value
+
+	# YEARS AS RULER - bonus for startup rulers
+	add = base_legitimacy_years_as_ruler_value
+
+	# SPECIAL TRAITS
+	add = base_legitimacy_special_traits_value
+
+	# DIPLOMACY SKILLS
+	add = base_legitimacy_diplomacy_value
+	
+	# ADMINISTRATIVE
+	if = {
+		limit = {
+			exists = this
+			government_allows = administrative
+		}
+		multiply = 0.75 # To reduce the overall base values
+		add = base_legitimacy_admin_value # And add anything admin specific
+	}
+
+	# ACH HEIR PREPARATION OATH
+	if = {
+		limit = {
+			has_character_modifier = oath_heir_preparation_heir
+		}
+		multiply = 1.25
+	}
+	
+	#ADDED - bonus from current marriage
+	add = {
+		value = 0
+		if = {
+			limit = {
+				is_lowborn = no
+				exists = primary_spouse
+				primary_spouse = { is_lowborn = no }
+				dynasty.dynasty_prestige_level < primary_spouse.dynasty.dynasty_prestige_level
+				NAND = {		#only once per character.
+					has_variable_list = got_legitimacy_for_marrying_those
+					is_target_in_variable_list = {
+						name = got_legitimacy_for_marrying_those
+						target = primary_spouse
+					}
+				}
+			}
+			value = primary_spouse.dynasty.dynasty_prestige_level
+			subtract = dynasty.dynasty_prestige_level
+			multiply = 15	#a bit less than usual because idk this is cheesable
+		}
+	}
+
+	min = 0
+	round = yes
+}
+
+default_legitimacy_opinion_penalty = -25	#prev -10

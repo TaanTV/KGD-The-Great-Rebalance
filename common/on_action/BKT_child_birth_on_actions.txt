@@ -1,0 +1,36 @@
+﻿# called for the newborn child
+# scope:child is the new born character
+# scope:mother is the pregnant mother
+# scope:father is the family father (not the biological)
+# scope:real_father is the biological father
+# scope:is_bastard, true if a known bastard
+on_birth_child = {
+	on_actions = {
+		delay = { days = 1 }
+		bkt_on_birth_child_nomadic_philosophy
+	}
+}
+
+bkt_on_birth_child_nomadic_philosophy = {
+	trigger = {
+		has_trait = nomadic_philosophy
+	}
+	effect = {
+		# MPO: Nomadic Philosophy Inheritance
+		if = {
+			limit = {
+				OR = {
+					scope:mother ?= {
+						matrilinear_marriage = yes
+						NOT = { has_trait = nomadic_philosophy }
+					}
+					scope:father ?= {
+						patrilinear_marriage = yes
+						NOT = { has_trait = nomadic_philosophy }
+					}
+				}
+			}
+			remove_trait = nomadic_philosophy
+		}
+	}
+}

@@ -1,0 +1,322 @@
+﻿remove_all_filthy_rich_related_modifiers = {
+	remove_character_modifier = filthy_rich_basic_modifier
+}
+
+# THIS = mercenary_company_leader, PREV = mercenary_company. ROOT does not exist.
+mercenary_castles_pulse_effect = {
+	save_scope_as = rich_mercenary_leader
+	if = {
+		limit = {
+			primary_title.title_capital_county = {
+				NOT = { has_variable = rich_mercenary_no_repeats }
+				culture = scope:rich_mercenary_leader.culture
+				faith = scope:rich_mercenary_leader.faith
+				NOT = {
+					title_province = {
+						OR = {
+							has_holding_type = tribal_holding
+							has_holding_type = nomad_holding
+							has_holding_type = herder_holding
+						}
+					}
+				}
+				NOT = {
+					holder = { has_character_flag = got_bkt_misc_events_0010 }
+				}
+				any_county_province = {
+					has_holding = no
+					has_ongoing_construction = no 
+					barony = { barony_cannot_construct_holding = no }
+				}
+				OR = {
+					NOT = {
+						any_county_province = {
+							has_holding_type = castle_holding
+						}
+					}
+					AND = {
+						any_county_province = {
+							has_holding_type = city_holding
+						}
+						any_county_province = {
+							has_holding_type = church_holding
+						}
+						any_county_province = {
+							count < 2		#Dont spam 
+							has_holding_type = castle_holding
+						}
+					}
+				}
+			}
+		}
+		primary_title.title_capital_county = { save_scope_as = chosen_county }
+	}
+	if = {
+		limit = { NOT = { exists = scope:chosen_county } }
+		scope:rich_mercenary_leader.culture = {
+			random_culture_county = {
+				limit = {
+					NOT = { has_variable = rich_mercenary_no_repeats }
+					OR = {
+						faith = scope:rich_mercenary_leader.faith
+						faith = {
+							faith_hostility_level = { 
+								target = scope:rich_mercenary_leader.faith 
+								value <= faith_astray_level
+							}
+						}
+					}
+					NOT = {
+						title_province = {
+							OR = {
+								has_holding_type = tribal_holding
+								has_holding_type = nomad_holding
+								has_holding_type = herder_holding
+							}
+						}
+					}
+					NOT = {
+						holder = { has_character_flag = got_bkt_misc_events_0010 }
+					}
+					any_county_province = {
+						has_holding = no
+						has_ongoing_construction = no 
+						barony = { barony_cannot_construct_holding = no }
+					}
+					OR = {
+						NOT = {
+							any_county_province = {
+								has_holding_type = castle_holding
+							}
+						}
+						AND = {
+							any_county_province = {
+								has_holding_type = city_holding
+							}
+							any_county_province = {
+								has_holding_type = church_holding
+							}
+							any_county_province = {
+								count < 2		#Dont spam 
+								has_holding_type = castle_holding
+							}
+						}
+					}
+				}
+				save_scope_as = chosen_county
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:chosen_county 
+		}
+		scope:chosen_county = {
+			set_variable = {
+				name = rich_mercenary_no_repeats
+				days = 1
+			}
+			holder = {
+				trigger_event = {
+					id = bkt_misc_events.0010
+					days = { 6 30 }
+				}
+			}
+		}
+	}
+}
+
+#give_out_succession_truces = {
+#	save_temporary_scope_as = dying_ruler_scope
+#	every_heir = {
+#		save_temporary_scope_as = some_heir_scope
+#		add_to_list = got_their_truces_already
+#		scope:dying_ruler_scope = {
+#			every_heir = {
+#				limit = { NOT = { is_in_list = got_their_truces_already } }
+#				add_truce_both_ways = {
+#					character = scope:some_heir_scope
+#					override = yes
+#					name = truce_succession
+#					months = 18
+#				}
+#			}
+#		}
+#	}
+#}
+
+additional_heresiarch_effects = {
+	save_temporary_scope_as = heresiarch_scope
+	add_character_modifier = true_heresiarch_modifier
+	scope:origin_faith = {		# Make heresy stronger by itself
+		change_variable = {
+			name = heresy_power
+			add = 5
+			multiply = 1.5
+		}
+	}
+	# All of the below - makes heresiarch stronger.
+	spawn_appropriate_heresiarch_siege_army_effect = yes
+	if = {
+		limit = { highest_held_title_tier >= tier_duchy }
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 300
+			men_at_arms = {
+				type = handpicked_faithful 
+				stacks = 3
+			}
+			men_at_arms = {
+				type = light_horsemen
+				stacks = 4
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 500
+			men_at_arms = {
+				type = bowmen 
+				stacks = 5
+			}
+			men_at_arms = {
+				type = light_footmen 
+				stacks = 4
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+	}
+}
+
+spawn_appropriate_heresiarch_siege_army_effect = {
+	if = {
+		limit = { culture = { has_innovation = innovation_gunpowder } }
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 800
+			men_at_arms = {
+				type = handpicked_faithful 
+				stacks = 8
+			}
+			men_at_arms = {
+				type = bombard 
+				stacks = 8
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+	}
+	else_if = {
+		limit = { culture = { has_innovation = innovation_trebuchet } }
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 650
+			men_at_arms = {
+				type = handpicked_faithful 
+				stacks = 6
+			}
+			men_at_arms = {
+				type = trebuchet 
+				stacks = 6
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+	}
+	else_if = {
+		limit = { culture = { has_innovation = innovation_mangonel } }
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 500
+			men_at_arms = {
+				type = handpicked_faithful 
+				stacks = 5
+			}
+			men_at_arms = {
+				type = mangonel 
+				stacks = 4
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+	}
+	else = {
+		# Yes, even if you dont have them unlocked.
+		spawn_army = {
+			name = event_troop_default_name
+			levies = 350
+			men_at_arms = {
+				type = handpicked_faithful 
+				stacks = 4
+			}
+			men_at_arms = {
+				type = onager 
+				stacks = 3
+			}
+			location = scope:heresiarch_scope.capital_province
+			origin = scope:heresiarch_scope.capital_province
+			inheritable = no
+		}
+	}
+}
+
+fired_from_council_position_prestige_loss_effect = {
+	if = {
+		limit = {
+			exists = root.liege_or_court_owner
+			years_from_game_start >= 1
+		}
+		liege_or_court_owner = {
+			if = {
+				limit = { is_ai = no }
+				add_prestige = major_prestige_loss
+			}
+			else = {		#lets try actually punishing AI a bit for this
+				add_prestige = minor_prestige_loss
+			}
+		}
+	}
+}
+
+fired_from_council_position_prestige_piety_loss_effect = {
+	if = {
+		limit = {
+			exists = root.liege_or_court_owner
+			years_from_game_start >= 1
+		}
+		liege_or_court_owner = {
+			if = {
+				limit = { is_ai = no }
+				add_prestige = major_prestige_loss
+				add_piety = medium_piety_loss
+			}
+			else = {		#lets try actually punishing AI a bit for this
+				add_prestige = minor_prestige_loss
+				add_piety = minor_piety_loss
+			}
+		}
+	}
+}
+
+on_get_position_councillor_firing_cooldown_effect = {
+	if = {
+		limit = { 
+			exists = root.liege_or_court_owner
+			years_from_game_start >= 1 
+		}
+		liege_or_court_owner = {
+			set_variable = {
+				name = block_fire_councillor
+				value = prev
+				years = 5
+			}
+		}
+	}
+}

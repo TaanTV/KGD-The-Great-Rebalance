@@ -1,0 +1,7 @@
+﻿l_english:
+ bkt_clergy.1001.opening: "[court_chaplain_scope.Custom2('GreetingToLiege', liege_scope)]"
+ #bkt_clergy.1001.desc: " I request for the lands of [barony_to_construct_at.GetNameNoTier] to be granted to the [liege_scope.GetFaith.AltPriestTermPlural], for the good of the faith and the glory of [liege_scope.GetFaith.HighGodName]!"
+ #bkt_clergy.1001.a: "For the [liege_scope.GetFaith.HighGodName]!"
+ bkt_clergy.1001.desc: " The lands of [barony_to_construct_at.GetNameNoTier] are vast and empty, yet I find them well suited for a [liege_scope.GetFaith.GetAdjective] Temple. May I request a permission to use them?"
+ bkt_clergy.1001.a: "Your request is granted"
+ bkt_clergy.1001.b: "I have my own plans for [barony_to_construct_at.GetNameNoTier]"

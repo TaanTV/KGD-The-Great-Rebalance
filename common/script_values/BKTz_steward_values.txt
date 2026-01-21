@@ -1,0 +1,16 @@
+﻿
+# This DOES NOT WORK
+steward_collect_taxes_scale_base = {
+	add = stewardship
+	divide = 2
+	#ADDED - not worth it.
+	multiply = 1.5
+}
+
+steward_collect_taxes_perk_bonus_scale = {
+	add = steward_collect_taxes_scale_base
+	multiply = {
+		add = tax_man_perk_percentage
+		divide = 100
+	}
+}

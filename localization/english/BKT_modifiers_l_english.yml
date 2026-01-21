@@ -1,0 +1,23 @@
+﻿l_english:
+ somewhat_recently_looted_modifier: "Recently Sacked"
+ filthy_rich_basic_modifier: "Filthy Rich"
+ filthy_rich_basic_modifier_desc: "This character sits on a lot of wealth, making their vassals upset and neighboring rules envy"
+ support_religious_art_bkt_county_modifier: "Supported Religious Art"
+ fully_autonomous_vassals_bkt_character_modifier: "First Among Equals"        #Truly Autonomous Vassals
+ #fully_autonomous_vassals_bkt_character_modifier_desc: "A devastating loss to a Liberty Faction rendered this character's grip on their vassals practically non-existent"
+ recently_built_holding_modifier: "Recently Built Holding"
+ recently_converted_character_modifier: "Recently Converted"    #Недавнее обращение
+ #CONVERT_COUNTY_SPEED_BONUS:0 "[convert_county|E] Progress Speed: #P +[EmptyScope.ScriptValue('zealous_proselytizer_percentage')|0]%#!"
+ DEMAND_CONVERSION_RECENTLY_CONVERTED: "$recently_converted_character_modifier$: $VALUE|+0=$"
+ recently_occupied_county_modifier: "Devasted by Occupation"
+ recently_raided_county_modifier: "Devasted by Raids"
+ #development_county_modifier: "Development" 
+ landless_renown_equalisier_modifier: "Not a Real Duke"
+ landless_renown_equalisier_modifier_desc: "This modifier exists to offset +0.5 renown per duke, since the game counts this character as a real duke"
+ broke_betrothal_of_war_ally: "Broke Betrothal with War Ally"
+ broke_betrothal_of_war_ally_desc: "[betrothal|E] acceptance: #n -40#!\n[betrothal|E] with [alliance|E] acceptance: #n -1000#!"
+ BROKE_BETROTHAL_OF_WAR_ALLY_MODIFIER: "#V You#! are a Filthy Cheeser: $VALUE|+0=$"
+ harsh_climate_county_modifier: "Harsh Climate"
+ former_mercenary_leader_modifier: "Former Mercenary Leader"
+ former_mercenary_leader_modifier_desc: "This character once led a mercenary band, they learned a thing or two"
+ true_heresiarch_modifier: "True Heresiarch"

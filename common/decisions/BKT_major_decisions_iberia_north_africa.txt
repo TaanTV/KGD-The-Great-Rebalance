@@ -1,0 +1,153 @@
+﻿### Form Portugal ###
+form_portugal_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_found_kingdom.dds"
+	}
+	decision_group_type = major
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 24		#prev 60
+		kingdom = 24	#prev 0
+		empire = 0
+		hegemony = 0
+	}
+	desc = form_portugal_decision_desc
+
+	is_shown = {
+		culture = { has_cultural_pillar = heritage_iberian }
+		NOT = {
+			is_target_in_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:form_portugal_decision
+			}
+		}
+		title:k_portugal = {
+			is_title_created = no
+		}
+	}
+
+	is_valid = {
+		culture = { has_cultural_pillar = heritage_iberian }
+
+		trigger_if = {
+			limit = {
+				has_fp2_dlc_trigger = yes
+				exists = struggle:iberian_struggle
+			}
+			OR = {
+				custom_tooltip = {
+					text = struggle_iberia_form_portugal_decision_correct_phase_tt
+					any_character_struggle = {
+						involvement = involved
+						is_struggle_type = iberian_struggle
+						is_struggle_phase = struggle_iberia_phase_opportunity
+					}
+				}
+				top_liege = this
+			}
+
+		}
+		trigger_else = {
+			top_liege = this
+		}
+
+		#highest_held_title_tier < tier_kingdom
+		#ADDED
+		OR = {
+			highest_held_title_tier < tier_kingdom
+			has_primary_title = title:k_spanish_galicia
+			has_primary_title = title:k_badajoz
+		}
+		
+		#ADDED - now an OR bloc
+		OR = {
+			has_title = title:d_porto
+			has_title = title:d_coimbra
+			has_title = title:d_beja
+			#has_title = title:d_algarve
+		}
+		
+		#ADDED - u gotta control that shit man
+		completely_controls = title:d_porto
+		completely_controls = title:d_coimbra
+		completely_controls = title:d_beja
+		completely_controls = title:d_algarve
+	}
+	
+	is_valid_showing_failures_only = {
+		is_landed = yes
+	}
+
+	effect = {
+		save_scope_as = portugal_former
+		gain_heroic_legend_seed_tooltip_effect = yes
+		show_as_tooltip = { form_portugal_decision_effects = yes } #Actually applied in iberia_north_africa.0001 - title changes, prestige, culture swap etc.
+
+		#Events
+		trigger_event = iberia_north_africa.0001
+		every_player = {
+			limit = {
+				this != scope:portugal_former
+				is_within_diplo_range = { CHARACTER = scope:portugal_former }
+			}
+			trigger_event = iberia_north_africa.0002
+		}
+		every_vassal_or_below = {
+			limit = {
+				is_ai = yes
+				capital_province ?= {
+					county = {
+						any_this_title_or_de_jure_above = {
+							this = title:k_portugal
+						}
+					}
+				}
+			}
+			trigger_event = iberia_north_africa.0002 #So they can convert
+		}
+
+		#Can only happen once
+		add_to_global_variable_list = {
+			name = unavailable_unique_decisions
+			target = flag:form_portugal_decision
+		}
+		set_global_variable = {
+			name = form_portugal_decision
+			value = scope:portugal_former
+		}
+	}
+
+	cost = {
+		gold = {
+			value = 0
+			if = {
+				limit = {
+					has_treasury = no
+				}
+				add = 300
+			}
+		}
+		treasury = {
+			value = 0
+			if = {
+				limit = {
+					has_treasury = yes
+				}
+				add = 300
+			}
+		}
+	}
+
+	ai_potential = {
+		# Only for the AI if independent ruler
+		top_liege = this
+		#ADDED - no idea if that helps with perfomance at all but why not
+		culture = { has_cultural_pillar = heritage_iberian }
+		sub_realm_size < 30
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}

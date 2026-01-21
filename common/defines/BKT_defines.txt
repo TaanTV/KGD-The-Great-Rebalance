@@ -1,0 +1,481 @@
+﻿
+NCharacter = {
+	# How many concubines does a ruler of a given tier desire if their faith allows concubines
+	#DESIRED_CONCUBINES_PER_TIER = { 0 0 0 1 2 3 }
+	PRESTIGE_LOSS_PER_MISSING_CONCUBINE = 0.5	#prev 0.1 # Monthly prestige loss per missing (fertile) concubine
+	RANDOM_CHARACTER_MIN_FERTILITY = 0.2	#prev 0.5
+	RANDOM_CHARACTER_MAX_FERTILITY = 0.5	#prev 0.6
+	BASE_FERTILITY = 0.35	#prev 0.5
+	
+	# experience needed for piety/prestige/influence levels - first/negative level requires 1000, then 350 etc.
+	# evety character by default starts at respective ZERO_LEVEL with enough experience for it
+	# Wtf is paradox saying in those comments? 
+	LEVELS_PIETY = { 1000 1500 3000 6000 12000 16000 22000 30000 }		#prev 1000 1500 2500 4500 8500 13000 17000 22500
+	#LEVELS_PRESTIGE = { 1000 2000 5000 10000 25000 }
+	#LEVELS_INFLUENCE = { 1000 2000 4000 8000 16000 }
+	
+	# when characters drop a level in piety/prestige/influence, they retain progress toward new level, capped by these values
+	LEVEL_DROP_MAX_RETAINED_PROGRESS_PIETY = 0.8		#prev 0.5
+	LEVEL_DROP_MAX_RETAINED_PROGRESS_PRESTIGE = 0.8		#prev 0.5
+	LEVEL_DROP_MAX_RETAINED_PROGRESS_INFLUENCE = 0.8	#prev 0.5
+	LEVEL_DROP_MAX_RETAINED_PROGRESS_MERIT = 0.8		#prev 0.5
+	
+	#Health levels and descriptions for every level
+	HEALTH_STATE_LEVELS_VALUES = {
+		0.0
+		1.0
+		2.75	#prev 3.0
+		5.0
+		7.0
+	}
+	#HEALTH_STATE_LEVELS_TEXTS = {
+	#	"HEALTH_DYING"
+	#	"HEALTH_NEAR_DEATH"
+	#	"HEALTH_POOR"
+	#	"HEALTH_FINE"
+	#	"HEALTH_GOOD"
+	#	"HEALTH_EXCELLENT"
+	#}
+	
+	MARRIAGE_TIER_DIFF_PRESTIGE_MULT = 250		#prev 100
+	
+	RANDOM_CHARACTER_MIN_HEALTH = 3.25		#prev 4.0		#BKT prev: 3
+	RANDOM_CHARACTER_MAX_HEALTH = 4.75		#prev 5.0		#BKT prev: 4
+	
+	MAXIMUM_DIPLOMATIC_RANGE = 900				#prev 1000
+	MAXIMUM_DIPLOMATIC_RANGE_RESTRICTED = 700	#prev 750	# Used if a game rule with the restricted_diplomatic_range flag is used
+	HOOK_COOLDOWN_DURATION_YEARS = 10	#prev 5	# How many years do strong hooks go on cooldown when used?
+	#MAX_COUNTIES_IN_REALM_AS_DUKE = 30						# As a duke or below, the player (but not the AI) will suffer penalties when they go beyond this # of counties in their realm. They can form a kingdom to get the penalties to go away
+	#INCOME_PENALTY_PER_COUNTY_ABOVE_LIMIT = 0.05			# For each county above MAX_COUNTIES_IN_REALM_AS_DUKE, you get 10% less income
+
+	GENDER_PREFERENCE_PROBABILITY = 0.55		#prev 0.75 # chance (0-1) of a character created from pool being from prefered gender of gender preference law
+	
+	MONTHLY_INFLUENCE_GAIN_ALLIED_TO_TOP_LIEGE = 1		#prev 1.5 # Monthly influence gained for admin rulers in admin realm if you are allied to your top liege
+	MONTHLY_INFLUENCE_GAIN_ALLIED_TO_HOUSE_HEAD = 0.35	#prev 1 # Monthly influence gained for admin rulers when are allied to admin ruler house head
+	MONTHLY_INFLUENCE_GAIN_BEING_GOVERNOR = 0.35		#prev 1 # Monthly influence gained in admin realm from being a governor
+
+	DREAD_MONTHLY_CHANGE = 0.4		#prev 0.5	# dread is drifiting changing by this value towards character's base dread value each month
+	
+	#MAX_TYRANNY = 1000				# maximum tyranny value a character can have
+	#TYRANNY_MONTHLY_CHANGE = -0.25	# tyranny is changing by this value each month
+
+	MAX_STRIFE_OPINION = 500				#prev 100	# maximum strife opinion value a character can have
+	STRIFE_OPINION_MONTHLY_CHANGE = -0.5	#prev -0.2	# strife opinion is changing by this value each month
+	
+	BASE_HERD_CONVERSION_RATE = 0.12		#prev 0.15 		# base herd conversion rate
+	GOLD_FROM_HERD_FACTOR = 0.0004			#prev 0.0005 	# The amount of herd that provides monthly gold income
+	
+	MAA_STARTING_EXPENSE_MIN = 0.35					#prev 0.2 # Rulers at game start will start out spending this much (or a bit more, as it'll overshoot) on men at arms
+	MAA_STARTING_EXPENSE_MAX = 0.6					#prev 0.35 # Rulers will never start out spending more than this on men at arms. For poor rulers this can mean they end up under MAA_STARTING_EXPENSE_MIN if one more MaA would put them above the max
+	MAA_STARTING_PRESTIGE_EXPENSE_MIN = 0.55		#prev 0.4 # Rulers at game start will start out spending this much prestige (or a bit more, as it'll overshoot) on men at arms
+	MAA_STARTING_PRESTIGE_EXPENSE_MAX = 0.9			#prev 0.55 # Rulers will never start out spending more than this much prestige on men at arms. For prestige-poor rulers this can mean they end up under MAA_STARTING_PRESTIGE_EXPENSE_MIN if one more MaA would put them above the max
+	MAA_STARTING_TREASURY_EXPENSE_MIN = 0.35		#prev 0.2 # Rulers at game start will start out spending this much treasury (or a bit more, as it'll overshoot) on men at arms
+	MAA_STARTING_TREASURY_EXPENSE_MAX = 0.6			#prev 0.35 # Rulers will never start out spending more than this treasury on men at arms. For treasury-poor rulers this can mean they end up under MAA_STARTING_TREASURY_EXPENSE_MIN if one more MaA would put them above the max
+	MAA_STARTING_BARTER_GOODS_EXPENSE_MIN = 0.3		#prev 0.1 # Rulers at game start will start out spending this much barter goods (or a bit more, as it'll overshoot) on men at arms
+	MAA_STARTING_BARTER_GOODS_EXPENSE_MAX = 0.5		#prev 0.2 # Rulers will never start out spending more than this much barter goods on men at arms. For barter goods-poor rulers this can mean they end up under MAA_STARTING_BARTER_GOODS_EXPENSE_MIN if one more MaA would put them above the max
+}
+
+NOldAge = {
+	HEALTH_PENALTY_PER_YEAR_IN_POOL = 0.04	#BKT prev 0.05	#prev 0.1 # For each year in the pool, your effective health is this much lower. This disappears entirely when you leave the pool
+	# This DIE values are used with a quadratic chance.
+	DIE_HEALTH_TRESHOLD = 2.75		#prev 3.0 # Characters have a chance to die each month they have less health than this
+	#DIE_HEALTH_CHANCE_ZERO = 0.25 	# This is the month chance that a character dies at zero health (or lower)
+}
+
+
+NChildbirth = {
+	BASE_NR_OF_CHILDREN_PER_COUPLE = { 1 2 3 4 5 5 7 }	#prev 1 1 2 3 5 5 8	 # Based on tier of character or parents; whichever is higher Unlanded, Baron, Count, ..., Emperor
+	#FERTILITY_CHANCE_MULTIPLIER = 4.75 # Fertility is an average between the father and the mother (if the mother has 0.3 and the father 0.5, the average is 0.4), this number is then multiplied by this multiplier to produce the percentage chance of impregnation. Impregnation is checked every month.
+	MIN_FERTILITY_CHANCE = 0.5		#prev 1
+	#MAX_FERTILITY_CHANCE = 25
+	FEMALE_CHANCE = 50					#prev 49
+	NEWBORN_HEALTH_BASE = 3.75			#prev 4.5		#BKT prev 4.0
+	NEWBORN_HEALTH_SPAN = 0.75			#prev 0.5
+	#NEWBORN_HEALTH_FEMALE_BONUS = 0.5
+	FERTILITY_LEVELS = {
+		0.0
+		0.1			#prev 0.2
+		0.35		#prev 0.6
+		0.65 		#prev 0.8
+	}	# The thresholds for each fertility level
+	MOTHER_FERTILITY_REDUCTION_PER_PREVIOUS_CHILD = 0.025		#prev 0.05
+	LOW_FERTILITY = 0.075		#prev 0.1
+	NOT_SPOUSE_FERTILITY_MULTIPLIER = 0.75	#prev 1
+	NON_RULER_FERTILITY_MULTIPLIER = 0.9	#prev 0.85	# If neither parent is a ruler, resulting fertility gets multiplied by this
+	
+	EXTRA_CHILDREN_FOR_PLAYERS = 1	#prev 2 # Num of extra children players can have before reaching living child limit
+	
+	EXTRA_FERTILITY_FOR_FIRST_CHILD = 0.05			#prev 0.0 	# Extra fertility if the couple are primary spouses and have no children together
+	#EXTRA_FERTILITY_FOR_FIRST_RULER_CHILD = 0.3			 		# Extra fertility if the couple are primary spouses and have no children together, and at least one of them is a ruler
+}
+
+NCharacterOpinion = {
+	# What penalty to give when at zero culture acceptance. Scales down to 0 at 100% acceptance. So -10 would be -10 at 0%, -5 at 50%, 0 at 100%
+	ZERO_CULTURE_ACCEPTANCE_SAME_REALM = -50	#BKT prev -60		#prev -30
+	ZERO_CULTURE_ACCEPTANCE = -25				#BKT prev -30		#prev -15
+
+	PIOUS = { -15 0 3 5 8 10 13 16 20 }				#prev -10 0 5 10 20 30 40 55 75
+	PRESTIGIOUS = { -20 0 3 5 8 10 }			#prev -10 0 5 10 20 30 
+	PIOUS_MAGNIFICENCE = { -10 0 2 4 6 8 10 13 15 }		#prev -5 0 3 5 10 15 20 25 35 # This is piety for lay clergy
+
+	SHORT_REIGN_YEARS = 15	#prev 10
+	LONG_REIGN_YEARS = 15	#prev 10
+	#SHORT_REIGN_MULTIPLIER = -2
+	#LONG_REIGN_MULTIPLIER = 1
+
+	# The offensive war opinion penalty is applied to all direct vassals
+	# It ticks up if you lead an offensive war that isn't a Great Holy War or a civil war
+	OFFENSIVE_WAR_PENALTY_GRACE_PERIOD = 12		#prev 6		# How many months do you need to be at war before you start getting the offensive war opinion penalty? If you've already got the penalty, the grace period is ignored (E.G., if you go to war for a few years, are at peace for a few months, then go to war again it will immediately start ticking up)
+	#OFFENSIVE_WAR_PENALTY_PER_MONTH = 0.5		# How much of a penalty gets added each month?
+	OFFENSIVE_WAR_PENALTY_DECAY_PER_MONTH = 1	#prev 0.5 	# It's very annoying	# How much of a penalty decays each month when no longer gaining it?
+
+	AT_PEACE_PENALTY_GRACE_PERIOD = 18		#prev 6			# How many months do you need to be at peace before you start getting the at peace opinion penalty? If you've already got the penalty, the grace period is ignored
+	#AT_PEACE_PENALTY_PER_MONTH = 0.5			# How much of a penalty gets added each month?
+	#AT_PEACE_PENALTY_CAP = 30				# The penalty will be capped to this value (the opinion will be at worst -AT_PEACE_PENALTY_CAP)
+
+	#TYRANNY_MULTIPLIER = -1
+
+	HOLDS_CLAIMED_TITLE = -40							#prev -20
+
+	#DEFENDING_ME_IN_CLAIM_WAR = 100
+
+	POWERFUL_VASSAL_WITHOUT_COUNCIL_POSITION = -60		#prev -40
+
+	VIRTUOUS_TRAIT = 5	#prev 10
+	#SINFUL_TRAIT = -10
+
+	DE_JURE_COUNTY = -35		#prev -25
+	DE_JURE_DUCHY = -50			#prev -25
+	DE_JURE_KINGDOM = -100		#prev -30
+	#ENABLE_RIGHTFUL_LIEGE_EXCEPTIONS = yes 		# Dukes won't be upset as the vassal of their dejure emperor
+	#PARTIALLY_NON_RIGHTFUL_LIEGE_TAX_MULT = 0.75 		# Tax mult when partially non-rightful liege (liege doesn't hold dejure liege title of the vassal's primary, or empire for a duke if EMPIRE_IS_VALID_DE_JURE_LIEGE_FOR_DUCHY)
+	#PARTIALLY_NON_RIGHTFUL_LIEGE_LEVY_MULT = 0.75 		# Tax mult when partially non-rightful liege
+	#PARTIALLY_NON_RIGHTFUL_LIEGE_BARTER_GOODS_MULT = 1 	# Barter Goods mult when partially non-rightful liege
+	#NON_RIGHTFUL_LIEGE_TAX_MULT = 0.5 					# Tax mult when non-rightful liege (liege doesn't hold *any* dejure liege title)
+	#NON_RIGHTFUL_LIEGE_LEVY_MULT = 0.5 					# Tax mult when non-rightful liege
+	#NON_RIGHTFUL_LIEGE_BARTER_GOODS_MULT = 0.5 					# Barter Goods mult when non-rightful liege
+	#PARTIALLY_NON_RIGHTFUL_LIEGE_OPINION = -5 			# Opinion penalty for being non-rightful liege
+	NON_RIGHTFUL_LIEGE_OPINION = -20		#prev -5						# Opinion penalty for being partially non-rightful liege
+	#MAX_DUCHIES_BEFORE_PENALTY = 2						# How many duchies are vassals fine with you having? If you're a duke, they don't care; only if you're king or above
+	TOO_MANY_DUCHIES_OPINION = -30		#prev -15						# Penalty per duchy too many
+	COUNT_LIEGE_HOLDS_MY_DUCHY = -15	#prev -25					# Penalty with count vassals for whom you hold their dejure duchy (and you're above duchy tier)
+	#VASSAL_SIZE_ANGER_THRESHOLD = 0.3						# Ratio of counties in vassal's realm (duke or above) compared to liege's full realm in order for the vassal to get angry at liege
+	#VASSAL_SIZE_ANGER_MIN = -5								# Opinion penalty applied at exact threshold
+	VASSAL_SIZE_ANGER_MULT = -200		#prev -100					# Opinion penalty applied for going 100 percentage points over the threshold (impossible unless the threshold is 0, but makes for simple math)
+
+	PREDECESSOR_OPINION_SCALE_POSITIVE = 0.5	#prev 0.25			# How we scale the current opinion if positive for calculating predecessor opinion
+	PREDECESSOR_OPINION_SCALE_NEGATIVE = 0.75	#prev 0.5			# How we scale the current opinion if negative for calculating predecessor opinion
+
+	ACTIVE_ACCLAIMED_KNIGHT = 10		#prev 15						# Opinion bonus for making someone the Acclaimed Knight of an active Accolade
+}
+
+NCombat = {
+	UNRAISED_LEVY_REGIMENTS_SPEED = 15.0	#prev 40.0			# How many distance units do unraised regiments travel per day when gathering
+	
+	BASE_RATIO_CASUALTIES_CONVERSION = 0.25	#prev 0.3			# How many of the soft casualties should be converted to hard casualties during the main phas
+	
+	#COMMANDER_MIN_ROLL = 0
+	COMMANDER_MAX_ROLL = 12					#prev 10
+	MEN_AT_ARMS_MAX_COUNTER = 0.85			#BKT prev 0.8		#prev 0.9			# When RATIO_FOR_MAX_COUNTER is hit, the damage output for the MaA will be reduced by this much. For values lower, it'll be linear between 0 and this value
+	RATIO_FOR_MAX_COUNTER = 1.5				#prev 2.0			# You need this many effective regiment chunks to counter a single regiment chunk. Modified by counter effectiveness (E.G., = 2.0 in the MaA's counter section means twice as effective countering). So if stack size is 100, 50 men from a regiment with 2x counter will produce one point of countering. Thus if the ratio for max counter is 1.0, they'd fully counter a full-strength MaA chunk, or halfway counter two, etc.
+	MIN_DAYS_BEFORE_MANUAL_RETREAT = 8		#prev 14			# Number of days before a retreat can be ordered
+	
+	#Added with BKT
+	MANEUVER_PHASE_DAYS = 2		#prev 3				# How many days should the maneuver phase last
+	LEVY_TOUGHNESS = 12 		#prev 10			# How much toughness does each levy soldier have
+
+	DAMAGE_SCALING_FACTOR = 0.035			#prev 0.03	#BKT prev 0.04	# Scaling factor for dealing damage in combat
+	PURSUIT_STAT_TO_PURSUIT_DAMAGE = 0.75 	#prev 0.5	#KMN prev 0.66	# The pursuit stat is multiplied by this before being turned into actual damage
+	KNIGHT_DAMAGE_PER_PROWESS = 30			#prev 100					# How much "Damage" stat does a knight get per prowess?
+	KNIGHT_TOUGHNESS_PER_PROWESS = 5		#prev 10					# How much "Toughness" stat does a knight get per prowess?
+}
+
+NArmy = {
+	REGIMENT_MONTHLY_REINFORCE_SPEED = 0.02 	#prev 0.03		# Monthly reinforcement percentage of unraised chunks [0-1]
+	GOLD_COST_PER_SOLDIER = 0.002				#prev 0.003		# Gold maintenance cost per soldier
+	REGIMENT_DEFAULT_STACK_SIZE = 40			#prev 100
+	#REGIMENT_DEFAULT_MAX_SIZE = 3				# Number of regiment chunks
+	REGIMENT_MAA_CAP_BY_TIER = { 0 1 1 2 3 3 4 }	#prev 0 1 2 3 4 5 6
+	SUPPLY_LOSS_PER_SOLDIER_ABOVE_LIMIT = 0.002	#prev 0.001		# Each check's supply loss per every soldier over the province's supply limit
+	SUPPLY_OWN_REALM = 0.25						#prev 0.15		# Extra supply within top realm
+	SUPPLY_OWN_SUB_REALM = 0.5					#prev 0.3		# Extra supply within subrealm
+
+	SUPPLY_STATE_LEVELS = {
+		60
+		15	#prev 10
+		0	#prev 0
+	}
+
+	SUPPLY_STATE_ATTRITION = {
+		0.0
+		0.01	#prev 0.0
+		0.05
+	}
+	
+	COUNTY_MOVEMENT_ATTRITION_PERCENTAGE = 0.1	#prev 0.05
+	MINIMUM_COUNTY_MOVEMENT_ATTRITION = 50		#prev 100
+	
+	MAA_PRESTIGE_LOW_COST_MULT = 0.4		#prev 0.7		# If using prestige as gold for MaA, multiply basic maintenance cost by this
+	MAA_PRESTIGE_HIGH_COST_MULT = 0.5		#prev 0.7		# If using prestige as gold for MaA, multiply raised/reinforce cost by this				# If using prestige as gold for MaA, multiply raised/reinforce cost by this
+	#MAA_TREASURY_BUY_COST_MULT = 2							# If using treasury as gold for MaA, multiply buy cost by this
+	MAA_TREASURY_LOW_COST_MULT = 1			#prev 0.7		# If using treasury as gold for MaA, multiply basic maintenance cost by this
+	MAA_TREASURY_HIGH_COST_MULT = 1			#prev 0.7		# If using treasury as gold for MaA, multiply raised/reinforce cost by this
+	#MAA_BARTER_GOODS_LOW_COST_MULT = 0.8					# If using barter goods as gold for MaA, multiply basic maintenance cost by this
+	#MAA_BARTER_GOODS_HIGH_COST_MULT = 0.8	
+
+	REGIMENT_MAX_SIZE = 800				#prev 1000				# The game will avoid making regiments larger than this. Can still happen if a province provides more levies than the cap
+}
+
+NWar = {
+	# Those are sadly often overwritten by the CB
+	ATTACKER_TICKING_WAR_SCORE = 0.08	#prev 0.055		# Default ticking war score per day for attackers. Can be overwritten by CB. Set to 0 to disable
+	#ATTACKER_TICKING_WAR_SCORE_DELAY_DAYS = 0			# Default delay in days before applying ticking war score for attackers. Can be overwritten by CB
+	DEFENDER_TICKING_WAR_SCORE = 0.08	#prev 0.055		# Default ticking war score per day for defenders. Can be overwritten by CB. Set to 0 to disable
+	#DEFENDER_TICKING_WAR_SCORE_DELAY_DAYS = 365		# Default delay in days before applying ticking war score for defenders. Can be overwritten by CB
+	
+	BATTLE_WAR_CONTRIBUTION_MULTIPLIER = 0.3		#prev 0.2		# War contribution from battles are multiplied with this value
+	SIEGE_WAR_CONTRIBUTION_MULTIPLIER = 2			#prev 10			# War contribution from sieges are multiplied with this value
+	OCCUPATION_WAR_CONTRIBUTION_MONTHLY = 0.5		#prev 2			# War contribution from monthly occupation of provinces
+}
+
+NPowerfulVassal = {
+	# The number of vassals that are considered 'powerful' depending on the primary title tier (unlanded, baron, count, duke, king, emperor)
+	NUM_PER_TIER = { 0 0 2 3 4 5 5 }		#prev 0 0 3 4 5 5 5
+
+	# To calculate the value (rank):
+	VALUE_FACTOR = 1.35			#prev 1.25	# Rubber banding value for current powerful vassals
+	#VALUE_MILITARY_MULT = 1					# Multiplier applied to the military strength of the vassal
+	#VALUE_TIER_MULT = 100					# Multiplier applied to the tier of the vassal
+	#VALUE_INCOME_MULT = 50					# Multiplier applied to the income of the vassal
+}
+
+NReligion = {
+	DEFAULT_FERVOR = 55 #so heresies dont pop right away	#prev 50	# Default fervor
+	#TIME_AT_PEACE_FOR_PIETY = 730 # For faiths with a doctrine with piety_from_long_peace, how long do they need to be at peace (in days)
+
+	# Hostility levels start at 0 (same faith or equivalent to same faith)
+	HOSTILITY_OPINION_EFFECTS = {	# The opinion effects of each hostility level
+		0
+		-10
+		-30		#prev -20
+		-60		#prev -30
+	}
+
+	HOSTILITY_COUNTY_OPINION_EFFECTS = {	# The opinion effects of each hostility level on counties. Modified by fervor of the county's faith divided by 100
+		0
+		-15
+		-30
+		-45
+	}	
+	# Maybe up the ones above too?
+	GHW_COST_PIETY_CHANGE_TARGET = 1500		#prev 250  # cost to chagne GHW target. Grows linearly with each change
+	PREFERRED_GENDER_CHANCE = 9				#prev 3 # When deciding if clergy characters should be male or female a 3 here means that the preferred gender will be three times as likely
+}
+
+NTitle = {
+	CREATE_TITLE_PRESTIGE_GAIN = { 0 0 0 450 600 750 900 }	#prev 0 0 0 300 400 500 600
+	CREATE_TITLE_LEGITIMACY_GAIN = { 0 0 0 50 100 150 200 }	#prev 0 0 0 25 50 75 100
+
+	USURP_TITLE_GOLD_COST = { 0 0 0 200 400 800 1600 } 		#prev 0 0 0 250 500 1000 2000	# remember to update action_can_usurp_title in 00_title_actions.txt!
+	#USURP_TITLE_PRESTIGE_GAIN = { 0 0 0 300 400 500 600 }
+
+	REVOKE_LAWS_COST_SCALE = { 0 0 0.75 1.5 2 3 4 }			#prev 0 0 0.1 0.25 0.5 1 2
+}
+
+NSiege = {
+	BASE_DEFENDER_MORALE = 25				#BKT prev 50	#prev 100	# Defender morale with no buildings, garrison etc
+	DEFENDER_MORALE_PER_FORT_LEVEL = 100	#prev 75					# Defender morale added to the base per for level
+	MIN_DAILY_MORALE_LOSS = 0.35							#prev 0.5	# Minimum daily morale loss for the defenders
+	DAILY_MORALE_LOSS_FROM_RELATIVE_ATTACKER_MEN = 0.05		#prev 0.01	# How much morale is lost every day of the siege for extra stack of men defined in RELATIVE_ATTACKER_MEN_STACK_SIZE
+	#RELATIVE_ATTACKER_MEN_STACK_SIZE = 200						# Extra stack size of men to start getting daily morale loss
+	MONTHLY_ATTRITION = 0.02					#prev 0.01		# Monthly attrition during siege
+	#BREACH_ASSAULT_PROGRESS_CHUNK = 100						# How many mens take an impact in the assault (rounds up)
+	BREACH_ASSAULT_PROGRESS_PER_CHUNK = 0.25	#prev 0.2		# How much impact in assault will have every chunk
+	SIEGE_FORT_THRESHOLD_IMPACT = 0.6			#prev 0.7 		# What is the impact of not having enough siege tier? Siege speed is multiplied for this for each missing tier. E.G., if siege tier is 0, and fort level is 4, siege speed is multiplied by 0.5 * 0.5
+}
+
+NCounty = {
+	# What penalty to give when at zero culture acceptance. Scales down to 0 at 100% acceptance. So -10 would be -10 at 0%, -5 at 50%, 0 at 100%
+	COUNTY_OPINION_ZERO_ACCEPTANCE = -25	#prev -15
+}
+
+NProvince = {
+	SUPPLY_PER_DEVELOPMENT = 100	#prev 150
+	RAZE_HOLDING_COOLDOWN_YEARS = 3	#prev 5 	# Sets the cooldown perid in years for nomads razing holdings that they completely control
+}
+
+NDynasty = {
+	MONTHLY_PRESTIGE_GAIN_PER_MEMBER = 0.01				#prev 0.02 # Was 0.2 per year, should be then 0.016 recurring but that is ugly so round to 0.015
+	MAX_MONTHLY_PRESTIGE_GAIN_FROM_ALIVE_MEMBERS = 1	#prev 2 # Cap the above number
+	MONTHLY_PRESTIGE_GAIN_PER_TITLE_TIER = { 0 0.1 0.2 0.4 0.8 1.6 3.2 } 			#prev 0 0.125 0.25 0.5 1 2 4	# When per year was { 0 2 4 6 8 10 }
+	#MONTHLY_PRESTIGE_GAIN_PER_TITLE_TIER_SPOUSE = { 0 0.1 0.2 0.4 0.8 1.6 3.2 } 									# When per year was { 0 2 4 6 8 10 }
+	
+	#Those are just doubled
+	MARRIAGE_PRESTIGE = { -200	0	200	400	600	800	1000	1200	1400	1600 1800 }
+	#Those are x1.5-ed 
+	BIRTH_PRESTIGE = { 0	150	300	450	600	750	900	1050	1200 1350	1500 }
+	
+	MAX_LONG_REIGN = { 10	10	10	15	15	15	20	20	20 25	25 }	#prev 5	10	15	20	25	30	35	40	45 50	55
+	#HEAD_MONTHLY_PRESTIGE_GAIN_PER_TITLE_TIER = { 0 0.01 0.02 0.03 0.04 0.05 0.06 }
+	HEAD_MONTHLY_PRESTIGE_GAIN_PER_MEMBER = 0.001	#prev 0.01
+	HEAD_MONTHLY_PRESTIGE_GAIN_CAP = 2	#prev 3
+}
+
+
+NHouse = {
+	#HEAD_MONTHLY_PRESTIGE_GAIN_PER_TITLE_TIER = { 0 0.02 0.04 0.06 0.08 0.1 0.12 }
+	HEAD_MONTHLY_PRESTIGE_GAIN_PER_MEMBER = 0.005	#prev 0.02
+	HEAD_MONTHLY_PRESTIGE_GAIN_CAP = 3	#prev 5
+}
+
+NHouseRelation = {
+	MAX_CHANGES_TO_REMEMBER = 75			#prev 100   # How many changes to house relations are remembered before the oldest are removed.
+	DECAY_TOWARDS_NEUTRAL_AFTER_YEARS = 20	#prev 50	# Years without change before house relation moves one level towards neutral.
+	CEASE_FROM_NEUTRAL_AFTER_YEARS = 20		#prev 75	# Years without change at neutral level before house relation is removed.
+
+	#IMPROVEMENT_FROM_MARRIAGE = 0.1         # How much a house relation will change from a single marriage.
+}
+
+NDomain = {
+	#Actually scrap that idea, it didnt work this whole time
+	#And i kinda made everything work around it already so whatever
+	#LEVIES_AT_MAX_COUNTY_DEVELOPMENT = 0.5	#prev 1.0		# How many % levies bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100	
+	#TAX_AT_MAX_COUNTY_DEVELOPMENT = 1		#prev 0.5			# How much % tax bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100
+	STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE = 101	#prev 6		 # domain limit += floor( <stewardship skill> / STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE )
+}
+
+NPathFinding = {
+	EMBARK_COST = 50	#prev 30						# This value will be set as pathfinding cost if it goes from land to sea
+	DISEMBARK_COST = 20	#prev 10							# This value will be set as pathfinding cost if it goes from sea to land
+}
+
+NCulture = {
+	MINIMUM_INNOVATIONS_TO_NEXT_ERA = 8		#bkt prev 0.7						#prev 0.5	# Percentage of innovations to be able to go to the next era
+	
+	# base + from exposure + from fascination
+	#INNOVATION_PROGRESS_CHANCE_BASE = 5
+	INNOVATION_PROGRESS_CHANCE_FROM_SPREAD = 35								#prev 40	# if there is any exposure
+	INNOVATION_PROGRESS_CHANCE_SPREAD_AND_FASCINATION_MULTIPLIER = 0.1		#prev 2	# multiply Cultural Acceptance (100-based) by this as bonus multiplier if the current spread innovation is ALSO a fascination
+	
+	# from fascination = base + SKILL_LEVEL_BONUS( max( 0, head relevant skill - HEAD_SKILL_BASE ) )
+	# SKILL_LEVEL_BONUS( SKILL_MOD ) is computed as a sum of contributions that get smaller the higher the skill modifier.
+	# The first 10 (SECTION_SIZE) points may give +1 each, the second 10 may give +0.8 and so on. With these numbers:
+	# Skill mod 15 -> 1 * 10 + 0.9 * 5 = 14.5% bonus from skill.
+	# Skill mod 37 -> 1 * 10 + 0.9 * 10 + 0.8 * 10 + 0.7 * 7 = 27.4
+	# trailing points after the highest section take the last multiplier of the PER_SKILL_SECTION array, which should have at minimum 2 entries
+	# this skill level bonus will not exceed the SKILL_CAP, so a Skill 100 character will still get at most (for example) 30% progress chance from their skill.
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_BASE = 10						# base progress chance bonus if fascination
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_HEAD_SKILL_BASE = 0				# skill level below which no bonus is given
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_SKILL_LEVEL_SECTION_SIZE = 10	# size of each multiplier chunk. with 10, the first 10 bonus point will get the first multiplier and so on
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_SKILL_CAP = 45					# how high can the skill bonus be at most (BASE included)
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_PER_SKILL_SECTION = { 1 0.9 0.8 0.7 0.6 }
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_NO_HEAD_SKILL = 10				# used as the skill value if there is no cultural head
+	#
+	#INNOVATION_PROGRESS_GAIN_FROM_BONUS_FASCINATION = 1.5						# Additional progress rate if the innovation is current fascination AND was selected as bonus_fascination_innovation
+
+	### NOTE: NEW VALUES FEEL WAY TOO SLOW?
+	### OLD VALUE ###
+	#INNOVATION_PROGRESS_CHANCE_FROM_FASCINATION_PER_LEARNING_LEVEL = 0.85	#prev 1
+	
+	# If the random roll succeeds, the innovation will progress by:
+	# base + from development + from eras ahead
+	#INNOVATION_PROGRESS_GAIN_BASE = 0.3
+	#INNOVATION_PROGRESS_GAIN_PER_AVERAGE_DEVELOPMENT_LEVEL = 0.02
+	INNOVATION_PROGRESS_GAIN_PER_ERA_AHEAD = 0.5		#prev 0.2
+	INNOVATION_PROGRESS_DIVIDE_FACTOR_IF_ERA_BEHIND = 4	#prev 5			# the overall progress is divided by this number to achieve a way slower progress for future innovations. 10 would divide the total progress by 10, and this is further divided by the number of eras the culture is behind - so the progress may end up being divided by 30 at most. Set to 0 to disable this behavior.
+	#INNOVATION_PROGRESS_MIN_MULTIPLIER_IF_ERA_BEHIND = 0.01			# the division from the define above may not go lower than this. Ranges between 0 and 1.
+	#INNOVATION_PROGRESS_DIVIDE_FACTOR_PER_AHEAD_OF_TIME_TECH = 2	# divide the progress gain by this number for each ahead-of-time innovation the culture has. Scales exponentially, so 2 would halve the gain when 1 innovation is discovered, divide by 4 after the second is discovered etc. Set to 0 to disable this behavior.
+	#INNOVATION_PROGRESS_MIN_MULTIPLIER_PER_AHEAD_OF_TIME_TECH = 0.01	# The division from the system above won't go below this multiplier. Ranges between 0 and 1.
+	#INNOVATION_MIN_PROGRESS_TO_SHOW_IN_UI = 0.01					# Progress rates below this number will show as "stale" in the UI - this doesn't mean that the culture is not discovering it though
+
+	
+	
+	MAX_ACCEPTANCE_FROM_SHARED_REALMS = 0.75	#prev 0.5 # If 100% of both cultures are in the same realm, acceptance will increase by this much each year. For each realm with both cultures we take the % of each culture that's present in the realm and multiply them with one another. E.G., if a realm has 50% of all Norwegian counties and 40% of all Swedish cultures, that'll contribute 50% * 40% * MAX_ACCEPTANCE_FROM_SHARED_REALMS to acceptance each year
+
+	MAX_YEARLY_ACCEPTANCE_FROM_VASSALS = 0.65	#prev 0.5 # We don't give more than this from vassalage
+	HYBRID_GFX_CHANCE = 0.45	#prev 0.666 # What's the chance that a GFX culture that can be made into a hybrid will be? Used for the AI, the default selection, and when making a culture through script
+	HYBRID_NAMING_CHANCE = 0.5	#prev 0.666 # What's the chance hybrid name lists will be used? Used for the AI, the default selection, and when making a culture through script
+
+	#REFORMATION_PROGRESS_GAIN_BASE = 1.66 # The base monthly progress gain when reforming. Finished at 100. Base speed at 1.66 results in minimum 5 years.
+	REFORMATION_PROGRESS_SLOWDOWN_PER_COUNTY_WITH_CULTURE = 0.1	#prev 0.2 # How much slower is the reformation per county with the culture. The final progress is calculated: (TotalGain) / (NrCounties * SlowdownFactor)
+	#REFORMATION_PROGRESS_REPLACE_TRADITION_MULT = 0.75 # A multiplier to the total progress when replacing traditions.
+	REFORMATION_MAX_YEARS = 20		#prev 30 # The slowdown per county will be capped at a value that limits the max years a reformation can take to this value. Replacing traditions will go over this limit.
+}
+
+NMercenary = {
+	LEVIES = { 100 100 100 }		#BKT prev 250 500 750	#prev 400 800 1200	# The base numbers of levies for levels of mercenary bands
+	MAA_REGIMENTS = { 2 3 4 }		#prev 1 2 3					# The number of MAA regiments for levels of mercenary bands
+	NUM_KNIGHTS = { 4 6 8 }			#prev 2 3 4									# The number of knights for levels of mercenary bands
+	MAA_REGIMENT_SIZES = { 3 3 4 }	#prev 3 3 3		# The base sizes of MAA regiments for levels of mercenary bands, in number of sub-regiments
+	
+	LEVY_COST_PER_100_SOLDIERS = 9.0	#prev 12.0		# The cost of the levy regiment part of mercenary companies, per 100 soldiers for better precision
+	MAA_COST_RATIO = 0.35				#prev 0.5		# The cost of the MAA regiments of mercenary companies as a fraction of what those regiments cost when buying them
+	
+}
+
+NHolyOrder = {
+	# In addition to the holding levies, a holy order has levies according to this formula:
+	# NUM_LEVIES_BASE + <num holdings> * NUM_LEVIES_PER_HOLDING
+	NUM_LEVIES_BASE = 100		#BKT prev 200	#prev 500
+	NUM_LEVIES_PER_HOLDING = 0	#BKT prev 100	#prev 200
+
+	# The holy order starts out with NUM_MAA_BASE Men-At-Arms sub-regiments. These will always try to use the holy_order_maa defined in the religion, if any are available.
+	NUM_MAA_BASE = 3	#prev 2
+	# The holy order also gets NUM_MAA_PER_HOLDING additional Men-At-Arms sub-regiments for each holding leased to it.
+	NUM_MAA_PER_HOLDING = 2				#prev 1
+	# The MaA from this many holdings will all go into the same regiment
+	NUM_HOLDINGS_PER_MAA_REGIMENT = 5	#prev 3
+
+	#LEVY_COST_PER_100_SOLDIERS = 5.0		# The piety cost of the levy regiment part of holy orders, per 100 soldiers for better precision
+	MAA_COST_RATIO = 0.35		#prev 0.2	# The piety cost of the MAA regiments of holy orders as a fraction of what those regiments cost when buying them
+	#REALM_SIZE_MULT = 0.05					# The cost will increase by this many percent multiplied by the square root of the hirer's realm size (# of counties)
+	PATRON_HIRE_COST_MULT = 0.25			# The patron pays only a fraction for hiring a holy order. Set to 0 to make it free.
+	PATRON_STEAL_COST_MULT = 1.5			# But if someone's already hired it, they do have to pay still
+}
+
+NRaid = {
+	RAID_LOOT_PER_SOLDIER = 0.15		#prev 0.1		# How much loot can a single soldier carry? Minimum increment is 0.001
+	MIN_SOLDIERS_TO_RAID = 150			#prev 200		# How small can a raid army be and still be able to loot?
+	MONTHLY_ATTRITION = 0.025			#BKT prev 0.015	#prev 0.01	# How much attrition do you take while looting a province? 0.01 = 1% per month
+	MONTHS_OF_RAID_LOOT = 18			#prev 12		# How many months of holding income (with owner effects discounted) does raiding provide?
+	
+	LESS_MONTHS_OF_RAID_LOOT = 9		#prev 6 		# This is subtracted from MONTHS_OF_RAID_LOOT if you have the goverment 'barter = yes'
+	
+	# Progress cannot be lower than 1/day (except when interrupted by combat)
+	BASE_PROGRESS = 10		#BKT prev 5		#prev 20	# How much base raid action progress do you get per day?
+	#PROGRESS_PER_SOLDIER = 0.01				# How much raid action progress do you get per day per soldier? Minimum resolution is 0.001
+	BASE_DIFFICULTY = 250					#prev 350	# How much base progress is needed?
+	DIFFICULTY_PER_FORT_LEVEL = 200			#prev 350	# How much progress is needed per fort level in the holding?
+	DIFFICULTY_PER_COUNTY_FORT_LEVEL = 150	#prev 250	# How much progress is needed per fort level in the county *outside* the holding?
+	#DAYS_OF_HOSTILITY = 180					# How long after raiding do hostilities last?
+	#DAYS_OF_IMMUNITY = 1825					# How long does raid immunity after defeating a raid army last?
+	#RAID_REALM_AI_COOLDOWN = 1				# How many years the AI should wait before considering raiding again, after any AI raiders have been defeated previously
+	#RAID_MINIMUM_ATTRITON = 0				# How low can the attrition go for raiders in particular?
+}
+
+NRulerDesigner = {
+	#IRONMAN_POINT_MAX = 400 # Above this value achievements are not allowed
+	#AGE_LEVELS = { 10 16 18 20 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 60 70 } # Index into below if <= age
+	#AGE_LEVEL_MULTIPLIERS = { 2 2.25 2.5 2.7 2.9 3 2.9 2.8 2.7 2.6 2.5 2.4 2.3 2.2 2.1 2 1.9 1.8 1.7 1.6 1.5 1.4 1.3 1.2 1.1 1 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0 } # Multiplier on age for points used
+	# The above one is the vanilla one							  			  v - this is 30.
+	AGE_LEVEL_MULTIPLIERS = { 10.0 6.5 5.2 4.5 4.0 3.6 3.4 3.2 3.0 2.8 2.6 2.4 2.2 1.9 1.6 1.3 1.2 1.1 1 0.9 0.7 0.5 0.3 0.3 0.2 0.2 0.1 0.1 0.1 0.0 0.0 0.0 0.0 -0.1 -0.3 -0.5 } # Multiplier on age for points used
+	BASE_HEALTH = 4		#prev 5.0	#BKT prev 4.25
+	DEFAULT_EDUCATION_TRAIT = "education_stewardship_1"	# XD
+}
+
+NDiarchy = {
+	#DIARCHY_SUCCESSION_SIZE = 5 # How many people are in diarchy line of succession. Active or designated diarch takes 1st spot there
+	DIARCHY_MONTHLY_POWER_CHANGE = 0.1		#prev 0.25 # How much scales of power level changes each months towards balance value
+	#DIARCH_APTITUDE_LEVELS = { 20 40 60 80 } # diarchy aptitude value cutoff points
+	#DESIGNATE_DIARCH_INTERVAL_DAYS = 3650 # Length of the cooldown after designating a diarch
+}
+
+NVassalStance = {
+	PREFERRED_HEIR_LEGITIMACY_EXPECTATION_YEARS = 20	#prev 10 # How many years the preferred heir status lasts
+}
+
+NAccolade = {
+	# I HATE THIS SHIT. 
+	SUCCESSION_GLORY_LOSS_SMALL = 0.1	#prev 0.15		# how much glory is lost, in percent, upon accolade succession
+	SUCCESSION_GLORY_LOSS_LARGE = 0.2	#prev 0.30		# how much glory is lost, in percent, upon accolade succession if the successor only fulfils the requirement of one attribute
+}

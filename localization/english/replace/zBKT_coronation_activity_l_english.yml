@@ -1,0 +1,4 @@
+﻿l_english:
+ # Options
+ coronation_small_ceremony_desc: "$EFFECT_LIST_BULLET$Decreased [coronation_magnificence|E]\n$EFFECT_LIST_BULLET$Foreign [rulers|E] will not join the [activity|E]\n$EFFECT_LIST_BULLET$If [coronation_magnificence|E] is below #high 50#! at the Conclusion, you will gain [GetModifier('ach_coronation_low_ceremony_modifier').GetNameWithTooltip] for #high 25 years#!\n\n#weak I am already the sovereign, am I not? Why usher all the realms to this mere formality...?#!"
+ ceremony_feast_type_austere_desc: "$EFFECT_LIST_BULLET$ Decreased [coronation_magnificence|E]\n$EFFECT_LIST_BULLET$If [coronation_magnificence|E] is below #high 50#! at the Conclusion, you will gain [GetModifier('ach_coronation_low_feast_modifier').GetNameWithTooltip] for #high 25 years#!\n\n#weak Is an invitation to this historic occasion not enough of a pleasure...?#!"

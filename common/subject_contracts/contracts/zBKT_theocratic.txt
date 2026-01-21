@@ -1,0 +1,107 @@
+﻿# The idea is - you dont really want to have theocratic vassals, they're priveleged and shit.
+# Unless you're HOF or HOF doesnt exist
+theocracy_government_obligations = {
+	obligation_levels = {
+		default = {
+
+			# Added
+			# Revision: has to be same faith tho? Idk how....
+			#liege_modifier = {
+			#	monthly_piety_gain_mult = 0.05
+			#	religious_head_opinion = 2
+			#}
+			
+			# Added - most general theocracy nerf, churches should still be good
+			subject_modifier = {
+				monthly_income_mult = -0.15
+			}
+			
+			levies = {
+				if = {
+					limit = { 
+						NOT = { scope:liege.faith = scope:subject.faith } 
+						NAND = { 
+							exists = scope:subject.faith.religious_head
+							scope:subject.faith.religious_head = scope:subject
+						}
+					}
+					value = 0			#prev 0.1
+				}
+				else_if = {			# ADDED
+					limit = { scope:liege = scope:subject.faith.religious_head }
+					value = 0.65	#prev 50
+				}
+				else = {
+					value = 0.05		#prev 0.1
+					if = {				# ADDED
+						limit = { 
+							OR = {
+								NOT = { exists = scope:subject.faith.religious_head } 
+								scope:subject.faith.religious_head = scope:subject
+							}
+						}
+						add = 0.05
+						if = {
+							limit = { scope:subject.highest_held_title_tier = scope:subject.faith.religious_head_title.tier }
+							multiply = 2	#Since they're not de-jure
+						}
+					}
+					multiply = scope:liege.piety_level
+				}
+			}
+			tax = {
+				if = {
+					limit = { 
+						NOR = { 
+							scope:liege.faith = scope:subject.faith 
+							scope:subject.faith.religious_head ?= scope:subject
+						} 
+					}
+					value = 0				#prev 0.1
+				}
+				else_if = {			# ADDED
+					limit = { scope:liege = scope:subject.faith.religious_head }
+					value = 0.50
+				}
+				else_if = {			# ADDED
+					limit = { 
+						scope:liege.piety_level >= 1 
+					}
+					add = 0.025				#prev 0.05
+					add = {
+						value = 0.075		#prev 0.1
+						multiply = scope:liege.piety_level
+					}
+					if = {
+						limit = { exists = scope:subject.faith.religious_head }
+						if = {
+							limit = { scope:subject = scope:subject.faith.religious_head }
+							if = {
+								limit = { scope:subject.highest_held_title_tier = scope:subject.faith.religious_head_title.tier }
+								multiply = 2	#Since they're not de-jure
+							}
+						}
+						else = {
+							add = {
+								value = -0.05		#prev 0.1
+								multiply = scope:liege.piety_level
+							}
+						}
+					}
+				}
+				else = {
+					value = 0
+				}
+			}
+			contribution_desc = {
+				first_valid = {
+					triggered_desc = {
+						trigger = { NOT = { scope:liege.faith = scope:subject.faith } }
+						desc = "theocracy_government_vassal_contribution_wrong_faith"
+					}
+					desc = "theocracy_government_vassal_contribution_piety_level"
+				}
+			}
+		}
+	}
+}

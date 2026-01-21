@@ -1,0 +1,16 @@
+﻿on_leave_council = {
+	on_actions = {
+		BKT_demand_council_positiion_cooldown
+	}
+}
+
+BKT_demand_council_positiion_cooldown = {
+	effect = {
+		scope:councillor = {
+			set_variable = {
+				name = request_council_powerful_vassal_interaction_cooldown
+				years = 5
+			}
+		}
+	}
+}

@@ -1,0 +1,414 @@
+﻿
+# Skill modifiers, applied to each character
+# *_with_offset versions first subtract the NCharacter.SKILL_MODIFIER_OFFSET value from the skill
+
+diplomacy_modifier = {
+	ai_amenity_target_baseline = 0.01
+}
+diplomacy_modifier_with_offset = {
+	monthly_prestige_gain_mult = 0.01
+	#herd_gain_mult = 0.01
+	#ADDED
+	owned_scheme_secrecy_add = 0.5
+}
+
+intrigue_modifier_with_offset = {
+	owned_scheme_secrecy_add = 1.5		#prev 2
+}
+
+intrigue_modifier = {
+	enemy_scheme_secrecy_add = -1		#prev -0.5
+	#owned_scheme_secrecy_add = 2
+}
+
+#stewardship_modifier = {
+#	character_travel_speed = 1
+#	monthly_barter_goods_mult = 0.01
+#}
+stewardship_modifier_with_offset = {
+	domain_tax_mult = 0.015				#prev 0.02
+	domicile_monthly_gold_mult = 0.03	#prev 0.04
+	monthly_income_from_herd_mult = 0.02
+	#build_gold_cost = -0.02
+	#holding_build_gold_cost = -0.02
+}
+
+martial_modifier = {
+	character_travel_safety = 0.5	#prev 1
+	knight_limit = 0.2
+}
+martial_modifier_with_offset = {
+	levy_reinforcement_rate = 0.025
+	army_maintenance_mult = -0.005	#prev -0.01
+	#counter_efficiency = -0.02
+	#army_toughness_mult = 0.01
+	herd_conversion = 0.002			#prev 0.005
+}
+
+learning_modifier_with_offset = {
+	county_fertility_growth_mult = 0.02
+	#ADDED
+	owned_scheme_secrecy_add = 0.5
+}
+
+learning_modifier = {
+	monthly_piety = 0.05	#prev 0.1
+	#ADDED
+	character_innovation_progress_chance_from_fascination_add = 0.25
+}
+
+prowess_modifier = {
+	#ADDED
+	character_travel_safety = 0.25
+}
+
+# These modifiers are applied to characters of that tier
+unlanded_modifier = {
+	#ADDED
+	stress_gain_mult = -0.25 #unlanded characters have less reason to be stressed
+}
+
+baron_modifier = {
+	domain_limit = 1
+	# Barons don't get to have knights
+	monthly_treasury_from_liege_mult = -0.6
+	#ADDED
+	stress_gain_mult = -0.2 		# Barons can't destress much.
+	monthly_income = 0.15			# A bit of money
+	diplomatic_range_mult = -0.2	# Consistent with counts
+	knight_limit = -100				# "Barons don't get to have knights"
+}
+
+count_modifier = {
+	domain_limit = 2
+	knight_limit = 1		#in 1.14 - 5
+	tax_slot_add = 1
+	ai_war_chance = -0.4	#prev -0.9
+	monthly_treasury_from_liege_mult = -0.4
+	#ADDED 
+	vassal_tax_contribution_mult = 0.15
+	vassal_levy_contribution_mult = 0.15
+	vassal_herd_contribution_mult = 0.15
+	diplomatic_range_mult = -0.2
+}
+
+duke_modifier = {
+	domain_limit = 2
+	knight_limit = 2		#in 1.14 - 6
+	vassal_limit = 5		#prev 20
+	tax_slot_add = 1
+	mercenary_hire_cost_mult = 0.1
+	enemy_scheme_secrecy_add = -10
+	monthly_treasury_from_liege_mult = -0.3
+	#ADDED 
+	vassal_tax_contribution_mult = 0.05
+	vassal_levy_contribution_mult = 0.05
+	vassal_herd_contribution_mult = 0.05
+}
+
+king_modifier = {
+	domain_limit = 3
+	knight_limit = 3		#in 1.14 - 7
+	vassal_limit = 10		#prev 40
+	active_accolades = 1
+	tax_slot_add = 2
+	mercenary_hire_cost_mult = 0.3
+	enemy_scheme_secrecy_add = -10			#prev -20
+	county_fertility_growth_mult = 0.25
+	monthly_merit_mult = 0.5
+	monthly_treasury_from_liege_mult = -0.15
+	#ADDED 
+	#vassal_tax_contribution_mult = -0.1
+	#vassal_levy_contribution_mult = -0.1
+	#vassal_herd_contribution_mult = -0.1
+	#happy_powerful_vassal_tax_contribution_mult = 0.1
+	#happy_powerful_vassal_levy_contribution_mult = 0.1
+	#happy_powerful_vassal_herd_contribution_mult = 0.1
+	monthly_influence = 0.25
+}
+
+emperor_modifier = {
+	domain_limit = 4
+	knight_limit = 4		#in 1.14 - 8
+	vassal_limit = 15		#prev 60
+	ai_amenity_target_baseline = 0.4
+	active_accolades = 2
+	tax_slot_add = 2
+	mercenary_hire_cost_mult = 0.5			#prev 0.6
+	enemy_scheme_secrecy_add = -15			#prev -30
+	county_fertility_growth_mult = 0.5
+	monthly_merit_mult = 1
+	#ADDED 
+	#vassal_tax_contribution_mult = -0.25
+	#vassal_levy_contribution_mult = -0.25
+	#vassal_herd_contribution_mult = -0.25
+	#happy_powerful_vassal_tax_contribution_mult = 0.25
+	#happy_powerful_vassal_levy_contribution_mult = 0.25
+	#happy_powerful_vassal_herd_contribution_mult = 0.25
+	monthly_influence = 0.5
+}
+
+hegemon_modifier = {
+	domain_limit = 5
+	knight_limit = 5		#prev 9
+	vassal_limit = 25		#prev 80
+	ai_amenity_target_baseline = 0.4
+	active_accolades = 3
+	tax_slot_add = 2
+	mercenary_hire_cost_mult = 0.7		#prev 0.8
+	enemy_scheme_secrecy_add = -20		#prev -40
+	county_fertility_growth_mult = 0.65
+	#ADDED 
+	monthly_influence = 1
+}
+
+# These modifiers are applied to the holder of a title of the respective tier (per title)
+held_barony_modifier = {
+	monthly_prestige = 0.01		#prev 0.02
+}
+held_county_modifier = {
+	monthly_prestige = 0.025	#prev 0.05
+	#county_fertility_growth_mult = 0.15
+}
+held_duchy_modifier = {
+	monthly_prestige = 0.1		#prev 0.2
+}
+held_kingdom_modifier = {
+	monthly_prestige = 0.4		#prev 0.8
+}
+held_empire_modifier = {
+	monthly_prestige = 0.8		#prev 1.6
+}
+held_hegemony_modifier = {
+	monthly_prestige = 1.2		#prev 2.4
+}
+
+# Piety, prestige and stress level that do not modify anything exist for tooltiping
+piety_level_0 = {
+	hide_effects = yes # Custom description will generate the full level information
+	#ADDED
+	different_faith_opinion = 10
+	faith_conversion_piety_cost_mult = -0.33
+}
+piety_level_1 = {
+	hide_effects = yes # Custom description will generate the full level information
+}
+piety_level_2 = {
+	hide_effects = yes # Custom description will generate the full level information
+	#ADDED
+	different_faith_opinion = -3
+}
+piety_level_3 = {
+	hide_effects = yes # Custom description will generate the full level information
+	#ADDED
+	different_faith_opinion = -5
+}
+piety_level_4 = {
+	hide_effects = yes # Custom description will generate the full level information
+	#ADDED
+	different_faith_opinion = -10
+}
+piety_level_5 = {
+	hide_effects = yes # Custom description will generate the full level information
+	#ADDED
+	different_faith_opinion = -20
+}
+piety_level_6 = { #Mandala
+	hide_effects = yes # Custom description will generate the full level information
+	vassal_limit_max = 15
+	monthly_legitimacy_add = 0.2
+	monthly_dynasty_prestige = 0.1
+	#ADDED
+	different_faith_opinion = -20
+}
+piety_level_7 = { #Mandala
+	hide_effects = yes # Custom description will generate the full level information
+	vassal_limit_max = 25
+	monthly_legitimacy_add = 0.3
+	monthly_dynasty_prestige = 0.15
+	#ADDED
+	different_faith_opinion = -20
+}
+piety_level_8 = { #Mandala
+	hide_effects = yes # Custom description will generate the full level information
+	vassal_limit_max = 35
+	monthly_legitimacy_add = 0.4
+	monthly_dynasty_prestige = 0.2
+	#ADDED
+	different_faith_opinion = -20
+}
+
+prestige_level_0 = {
+	icon = icon_prestige_00
+	hide_effects = yes # Custom description will generate the full level information
+	herd_capacity_mult = -0.1
+	knight_limit = -1
+	#ADDED
+	hostile_scheme_phase_duration_add = -20
+}
+prestige_level_1 = {
+	icon = icon_prestige_01
+	hide_effects = yes # Custom description will generate the full level information
+	herd_capacity_mult = 0.1
+	ai_amenity_target_baseline = 0.1
+}
+prestige_level_2 = {
+	icon = icon_prestige_02
+	hide_effects = yes # Custom description will generate the full level information
+	knight_limit = 1
+	herd_capacity_mult = 0.2
+	ai_amenity_target_baseline = 0.2
+	#ADDED
+	enemy_hostile_scheme_phase_duration_add = -3
+}
+prestige_level_3 = {
+	icon = icon_prestige_03
+	hide_effects = yes # Custom description will generate the full level information
+	knight_limit = 2
+	herd_capacity_mult = 0.3
+	ai_amenity_target_baseline = 0.3
+	#ADDED
+	enemy_hostile_scheme_phase_duration_add = -5
+}
+prestige_level_4 = {
+	icon = icon_prestige_04
+	hide_effects = yes # Custom description will generate the full level information
+	knight_limit = 3
+	herd_capacity_mult = 0.4
+	ai_amenity_target_baseline = 0.4
+	#ADDED
+	enemy_hostile_scheme_phase_duration_add = -10
+}
+prestige_level_5 = {
+	icon = icon_prestige_05
+	hide_effects = yes # Custom description will generate the full level information
+	knight_limit = 4
+	herd_capacity_mult = 0.5
+	ai_amenity_target_baseline = 0.5
+	#ADDED
+	enemy_hostile_scheme_phase_duration_add = -20
+}
+
+influence_level_0 = {
+	icon = icon_influence_00
+	hide_effects = yes # Custom description will generate the full level information
+	owned_political_scheme_success_chance_add = -5
+}
+influence_level_1 = {
+	icon = icon_influence_01
+	hide_effects = yes # Custom description will generate the full level information
+}
+influence_level_2 = {
+	icon = icon_influence_02
+	hide_effects = yes # Custom description will generate the full level information
+	owned_political_scheme_success_chance_add = 5
+}
+influence_level_3 = {
+	icon = icon_influence_03
+	hide_effects = yes # Custom description will generate the full level information
+	owned_political_scheme_success_chance_add = 10
+}
+influence_level_4 = {
+	icon = icon_influence_04
+	hide_effects = yes # Custom description will generate the full level information
+	owned_political_scheme_success_chance_add = 15
+}
+influence_level_5 = {
+	icon = icon_influence_05
+	hide_effects = yes # Custom description will generate the full level information
+	owned_political_scheme_success_chance_add = 20
+}
+
+stress_level_0 = {
+}
+stress_level_1 = {
+	fertility = -0.15		#prev -0.1
+	#ADDED
+	health = -0.5
+	monthly_lifestyle_xp_gain_mult = -0.05
+}
+stress_level_2 = {
+	fertility = -0.45		#prev -0.3
+	health = -1
+	#ADDED
+	monthly_lifestyle_xp_gain_mult = -0.1
+}
+stress_level_3 = {
+	fertility = -0.95		#prev -0.5
+	health = -2
+	#ADDED
+	monthly_lifestyle_xp_gain_mult = -0.2
+}
+
+hard_difficulty = {
+	men_at_arms_recruitment_cost = -0.5
+	stress_gain_mult = -0.5
+	#build_gold_cost = -0.25
+	#holding_build_gold_cost = -0.25
+	domicile_build_gold_cost = -0.25
+	build_herd_cost = -0.25
+	build_prestige_cost = -0.25		#prev -0.5
+	levy_reinforcement_rate = 0.5	#prev 1
+	sway_scheme_phase_duration_add = -150
+	tyranny_gain_mult = -0.5
+	embarkation_cost_mult = -1
+	mercenary_hire_cost_mult = -0.3
+	men_at_arms_maintenance = -0.35	#prev -0.25
+	#ADDED
+	army_maintenance_mult = -0.15
+}
+
+hard_difficulty_player = {
+	mercenary_hire_cost_mult = 0.5
+}
+
+very_hard_difficulty = {
+	men_at_arms_recruitment_cost = -0.75
+	stress_gain_mult = -0.75
+	#build_gold_cost = -0.5
+	#holding_build_gold_cost = -0.5
+	domicile_build_gold_cost = -0.5
+	build_herd_cost = -0.5
+	build_prestige_cost = -0.5		#prev -0.75
+	levy_reinforcement_rate = 1		#prev 3
+	sway_scheme_phase_duration_add = -250
+	tyranny_gain_mult = -0.75
+	embarkation_cost_mult = -1
+	mercenary_hire_cost_mult = -0.6
+	men_at_arms_maintenance = -0.75	#prev -0.5
+	led_by_owner_extra_advantage_add = 10
+	#ADDED
+	army_maintenance_mult = -0.3
+}
+
+very_hard_difficulty_player = {
+	owned_hostile_scheme_success_chance_max_add = -50
+	knight_effectiveness_mult = -0.5
+	mercenary_hire_cost_mult = 1.5
+}
+
+
+# Nerfed.
+ai_extreme_conqueror_modifier = {
+	icon = flame_positive
+	health = 2		#prev 3
+	#ADDED
+	negate_health_penalty_add = 2
+	epidemic_resistance = 50
+	enemy_hostile_scheme_phase_duration_add = 75
+	enemy_hostile_scheme_success_chance_max_add = -60
+	enemy_hostile_scheme_success_chance_growth_add = -10
+	#army_siege_value_mult = 1		#Not like that
+	siege_weapon_siege_value_mult = 1.5
+	siege_phase_time = -0.5
+	advantage = 30					#prev 25
+	maa_siege_value_add = 0.2		#prev 1		#No?.. Maybe a bit.
+	monthly_county_control_growth_add = 5
+	#movement_speed = 0.25			#No?
+	domain_limit_min = 5
+	domain_limit_max = 15
+	vassal_limit_min = 50
+	vassal_limit_max = 500
+	#ADDED
+	vassal_limit = 100
+}

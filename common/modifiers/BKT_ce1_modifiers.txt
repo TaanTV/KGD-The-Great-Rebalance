@@ -1,0 +1,119 @@
+﻿ce1_lasting_line = {
+	icon = family_positive
+	legitimacy_gain_mult = 0.25		#prev 0.1
+	#ADDED
+	monthly_legitimacy_add = 0.5
+}
+
+county_epidemic_recovered_minor_modifier = {
+	icon = rat_positive
+	development_growth = 0.5	#BKT prev 0.75	#prev 2
+	#ADDED
+	epidemic_resistance = 25	#prev 15
+	development_growth_factor = 0.5
+}
+
+county_epidemic_recovered_tiny_modifier = {
+	icon = rat_positive
+	development_growth = 0.4	#BKT prev 0.5	#prev 1
+	#ADDED
+	epidemic_resistance = 10	#prev 5
+	development_growth_factor = 0.25
+}
+
+county_epidemic_recovered_medium_modifier = {
+	icon = rat_positive
+	development_growth = 0.75	#BKT prev 1.5	#prev 5
+	#ADDED
+	epidemic_resistance = 35	#prev 25
+	development_growth_factor = 1
+}
+
+county_epidemic_recovered_strong_modifier = {
+	icon = rat_positive
+	development_growth = 1		#BKT prev 3		#prev 10
+	#ADDED
+	epidemic_resistance = 50	#prev 35
+	development_growth_factor = 2
+}
+
+### ARTIFACT MODIFIERS
+artifact_physician_aptitude_1_modifier = {
+	#parameter = artifact_physician_aptitude_1_modifier_desc - TODO_CE1 - uncomment and make sure this works after getting code support for parameters in artifacts.
+	icon = treatment_positive
+	learning = 5 # Makes the Court Physician more useful
+}
+
+mummy_modifier_tier_1 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 1
+	monthly_piety = 0.1						#prev 0.2
+}
+mummy_modifier_tier_2 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 1			#prev 2
+	monthly_piety = 0.1						#prev 0.4
+}
+mummy_modifier_tier_3 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 2			#prev 3
+	monthly_piety = 0.1						#prev 0.6
+}
+mummy_modifier_tier_4 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 2			#prev 4
+	zealot_opinion = 3						#prev 5
+	monthly_piety = 0.2						#prev 0.8
+}
+mummy_modifier_tier_5 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 3			#prev 5
+	zealot_opinion = 5						#prev 10
+	monthly_piety = 0.2						#prev 1
+}
+mummy_modifier_tier_6 = {
+	icon = piety_positive
+	court_grandeur_baseline_add = 4			#prev 10
+	zealot_opinion = 7						#prev 15
+	#learning_per_piety_level = 1
+	legitimacy_gain_mult = 0.05
+	monthly_piety = 0.3						#prev 2
+	#ADDED
+	learning = 1
+}
+
+mummy_jar_modifier_tier_1 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.001
+	monthly_piety = 0.1
+}
+mummy_jar_modifier_tier_2 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.001	#prev 0.002
+	monthly_piety = 0.1								#prev 0.2
+}
+mummy_jar_modifier_tier_3 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.001	#prev 0.002
+	monthly_piety = 0.2								#prev 0.3
+}
+mummy_jar_modifier_tier_4 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.001	#prev 0.002
+	#court_grandeur_baseline_add = 4
+	zealot_opinion = 3								#prev 5
+	monthly_piety = 0.2								#prev 0.6
+}
+mummy_jar_modifier_tier_5 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.001	#prev 0.002
+	zealot_opinion = 5								#prev 10
+	monthly_piety = 0.2								#prev 0.75
+}
+mummy_jar_modifier_tier_6 = {
+	icon = piety_positive
+	monthly_prestige_gain_per_dread_mult = 0.002
+	zealot_opinion = 7								#prev 15
+	legitimacy_gain_mult =  0.05					#prev 0.02
+	monthly_piety = 0.25							#prev 1
+}

@@ -1,0 +1,27 @@
+﻿
+mpo_de_jure_shift = {
+	effect = {
+		#switch = {
+		#	trigger = root.highest_held_title_tier
+		#	tier_empire = {
+		#		de_jure_shifting_effect = {
+		#			UPPER_TIER = empire
+		#			LOWER_TIER = kingdom
+		#		}
+		#	}
+		#	tier_kingdom = {
+		#		de_jure_shifting_effect = {
+		#			UPPER_TIER = kingdom
+		#			LOWER_TIER = duchy
+		#		}
+		#	}
+		#}
+		if = {
+			limit = { highest_held_title_tier >= tier_empire }
+			de_jure_shifting_effect = {
+				UPPER_TIER = empire
+				LOWER_TIER = kingdom
+			}
+		}
+	}
+}

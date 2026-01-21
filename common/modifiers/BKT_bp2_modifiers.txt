@@ -1,0 +1,8 @@
+﻿##################################################
+# #Character modifiers
+
+bp2_listened_elders_modifier = {
+	icon = family_positive
+	stress_gain_mult = -0.05						#prev -0.1
+	monthly_learning_lifestyle_xp_gain_mult = 0.1	#prev 0.2
+}

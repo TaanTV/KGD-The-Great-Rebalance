@@ -1,0 +1,13 @@
+﻿let_me_be_raided = {	#Дали разграбить мои земли
+	monthly_change = 0.3
+	decaying = yes
+	stacking = yes
+	min = -100
+}
+
+let_me_be_occupied = {	#Дали оккупировать мои земли
+	monthly_change = 0.1
+	decaying = yes
+	stacking = yes
+	min = -150
+}

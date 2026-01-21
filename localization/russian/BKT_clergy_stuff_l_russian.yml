@@ -1,0 +1,5 @@
+﻿l_russian:
+ bkt_clergy.1001.opening: "[court_chaplain_scope.Custom2('GreetingToLiege', liege_scope)]"
+ bkt_clergy.1001.desc: " Прошу передать владение [barony_to_construct_at.GetNameNoTier] церкви, ради процветания веры и во имя [liege_scope.GetFaith.HighGodNamePossessive]!"
+ bkt_clergy.1001.a: "За [liege_scope.GetFaith.HighGodNamePossessive]!"
+ bkt_clergy.1001.b: "У меня другие планы на [barony_to_construct_at.GetNameNoTier]"

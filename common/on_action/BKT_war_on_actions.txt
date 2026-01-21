@@ -1,0 +1,139 @@
+﻿# called for when a casus belli resolves in one of the following ways.
+# same scopes are available in these events as in the CBs themselves, this just fires for all CBs instead of a specific CB.
+# note that any events/effects fired here WILL NOT show up in the war summary tooltip; they fire at the same time as the war resolution, but are not actually part of the war resolution itself.
+# Rebalance note: this shit is uglyyyyyy. No other way to do it though.
+
+# NOTE: exists scope:attacker and scope:defender
+on_war_won_attacker = { # As in, won BY attacker. Only one of the two on_actions runs when a war ends.
+	# The war notifications are handled in `effect` instead of `events` due to order of operations.
+	# `effect` fires on THIS tick, `events` fires on the NEXT tick, and the war gets destroyed between this tick and the next.
+	on_actions = {
+		BKT_more_player_truces_attacker
+	}
+}
+
+BKT_more_player_truces_attacker = {
+	trigger = {
+		scope:war = {
+			NOR = {
+				using_cb = undirected_great_holy_war
+				using_cb = directed_great_holy_war
+			}
+			any_war_attacker = { is_ai = no }
+			any_war_defender = { is_ai = no }
+		}
+	}
+	effect = {
+		scope:war = {
+			every_war_attacker = {
+				limit = { 
+					is_ai = no 
+					NOT = { this = scope:war.primary_attacker }
+				}
+				save_temporary_scope_as = some_attacker_scope
+				scope:war = {
+					every_war_defender = {
+						limit = { is_ai = no }
+						scope:some_attacker_scope = {
+							add_truce_one_way = {
+								character = PREV
+								days = standard_truce_duration_days
+								war = scope:war
+								result = victory
+							}
+						}
+					}
+				}
+			}
+			primary_attacker = {
+				if = {
+					limit = { is_ai = no }
+					save_temporary_scope_as = some_attacker_scope
+					scope:war = {
+						every_war_defender = {
+							limit = { 
+								is_ai = no 
+								NOT = { this = scope:war.primary_defender }
+							}
+							scope:some_attacker_scope = {
+								add_truce_one_way = {
+									character = PREV
+									days = standard_truce_duration_days
+									war = scope:war
+									result = victory
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# NOTE: exists scope:attacker and scope:defender
+on_war_won_defender = {
+	on_actions = {
+		BKT_more_player_truces_defender
+	}
+}
+
+
+BKT_more_player_truces_defender = {
+	trigger = {
+		scope:war = {
+			NOR = {
+				using_cb = undirected_great_holy_war
+				using_cb = directed_great_holy_war
+			}
+			any_war_attacker = { is_ai = no }
+			any_war_defender = { is_ai = no }
+		}
+	}
+	effect = {
+		scope:war = {
+			every_war_attacker = {
+				limit = { 
+					is_ai = no 
+					NOT = { this = scope:war.primary_attacker }
+				}
+				save_temporary_scope_as = some_attacker_scope
+				scope:war = {
+					every_war_defender = {
+						limit = { is_ai = no }
+						scope:some_attacker_scope = {
+							add_truce_one_way = {
+								character = PREV
+								days = standard_truce_duration_days
+								war = scope:war
+								result = defeat
+							}
+						}
+					}
+				}
+			}
+			primary_attacker = {
+				if = {
+					limit = { is_ai = no }
+					save_temporary_scope_as = some_attacker_scope
+					scope:war = {
+						every_war_defender = {
+							limit = { 
+								is_ai = no 
+								NOT = { this = scope:war.primary_defender }
+							}
+							scope:some_attacker_scope = {
+								add_truce_one_way = {
+									character = PREV
+									days = standard_truce_duration_days
+									war = scope:war
+									result = defeat
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

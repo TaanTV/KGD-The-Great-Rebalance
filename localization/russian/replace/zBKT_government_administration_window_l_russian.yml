@@ -1,0 +1,2 @@
+﻿l_russian:
+ ADMIN_WINDOW_THEME_GOVERNOR_EFFICIENCY_VALID_TT: "#T [Concept('governor_efficiency', 'Эффективность губернатора')|E]: $ADMIN_WINDOW_THEME_GOVERNOR_EFFICIENCY_VALUE$#!\n#weak (Мин: #N -33%#! - Макс: #P +33%#!)#!\n\nБазовое значение: #N -90#!\n[Character.MakeScope().GetScriptValueDesc( 'governor_efficiency' )]"

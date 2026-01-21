@@ -1,0 +1,68 @@
+﻿#On actions related to religion
+
+# Code on-action: character creates a faith
+# Root is the creator
+# scope:old_faith is the faith they used to have
+on_faith_created = {
+	on_actions = {
+		BKT_on_faith_created_judaic
+		BKT_on_faith_created_courtiers
+	}
+}
+
+BKT_on_faith_created_judaic = {
+	trigger = {
+		scope:old_faith ?= {
+			religion_tag = judaism_religion
+			has_doctrine = special_doctrine_not_allowed_to_hof
+		}
+	}
+	effect = {
+		faith = { add_doctrine = special_doctrine_not_allowed_to_hof }
+	}
+}
+
+BKT_on_faith_created_courtiers = {
+	effect = {
+		save_temporary_scope_as = root_scope
+		every_courtier = {
+			run_interaction = {
+				interaction = ask_for_conversion_interaction
+				actor = scope:root_scope 
+				recipient = this
+				send_threshold = maybe
+			}
+		}
+	}
+}
+
+# Code on-action: character changes faith. Not called when a character gets a faith on birth, creation, and similar
+# Root is the character
+# scope:old_faith is the faith they used to have
+on_character_faith_change = {
+	on_actions = {
+		BKT_on_character_faith_change
+	}
+}
+
+BKT_on_character_faith_change = {
+	effect = {
+		if = {
+			limit = { 
+				age > 7		#Children probably dont have strong religious convictions....
+			}
+			add_character_modifier = {
+				modifier = recently_converted_character_modifier
+				years = 10
+			}
+			#Maybe have a chance to remove cynical?
+		}
+		if = {
+			limit = { 
+				has_character_modifier = true_heresiarch_modifier 
+				NOT = { has_character_flag = new_heresiarch }
+			}
+			remove_character_modifier = true_heresiarch_modifier
+		}
+	}
+}

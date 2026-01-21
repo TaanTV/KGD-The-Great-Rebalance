@@ -1,0 +1,269 @@
+﻿# character just about to die in root scope
+# if a killer is known, it's set as scope:killer
+# Triggered by code
+
+
+on_death = {
+	on_actions = {
+		BKT_landless_gold_inherit
+		BKT_on_death_give_out_MAA
+		BKT_succession_truces
+	}
+}
+
+BKT_on_death_give_out_MAA = {
+	trigger = {
+		always = no
+		is_landed = yes
+		is_landless_ruler = no
+		any_heir = {
+			NOT = { this = prev.primary_heir }
+		}
+		any_maa_regiment = {
+			exists  = this
+		}
+	}
+	effect = {
+		save_scope_as = dying_ruler_scope
+		# None of this works coz size doesnt accept shit
+		### EXAMPLE: scope:actor.maa_regiments_count < scope:actor.maa_regiments_max_count
+		### You can do "count" inside "while"
+		#every_maa_regiment = {
+		#	limit = { NOT = { is_unit_type = siege_weapon } }
+		#	save_scope_as = maa_regiment_temp_scope
+		#	scope:dying_ruler_scope = {
+		#		every_heir = {
+		#			limit = { 
+		#				NOT = { this = scope:dying_ruler_scope.primary_heir } 
+		#				maa_regiments_count < maa_regiments_max_count
+		#			}
+		#			create_maa_regiment = {
+		#				type_of = scope:maa_regiment_temp_scope
+		#				check_can_recruit = no
+		#				size = 1		#scope:maa_regiment_temp_scope.maa_size
+		#			}
+		#		}
+		#	}
+		#}
+		#if = {
+		#	limit = {
+		#		any_heir = {
+		#			NOT = { this = scope:dying_ruler_scope.primary_heir } 
+		#			maa_regiments_count < maa_regiments_max_count 
+		#		}
+		#	}
+		#	every_maa_regiment = {
+		#		limit = { is_unit_type = siege_weapon }
+		#		save_temporary_scope_as = maa_regiment_temp_scope
+		#		scope:dying_ruler_scope = {
+		#			every_heir = {
+		#				limit = { 
+		#					NOT = { this = scope:dying_ruler_scope.primary_heir } 
+		#					maa_regiments_count < maa_regiments_max_count
+		#				}
+		#				create_maa_regiment = {
+		#					type_of = scope:maa_regiment_temp_scope
+		#					check_can_recruit = no
+		#					size = 1		#scope:maa_regiment_temp_scope.maa_size
+		#				}
+		#			}
+		#		}
+		#	}
+		#}
+	}
+}
+
+
+BKT_landless_gold_inherit = {
+	trigger = {		#Condition shamelessly stolen from the mod that does the same thing
+		#NOR = { is_landed_or_landless_administrative = yes }
+		highest_held_title_tier = 0
+		is_clergy = no
+		is_ai = yes
+		gold > 25
+	}
+	effect = {
+		save_temporary_scope_as = dying_courtier_or_whatever
+		save_temporary_scope_value_as = {
+			name = gold_of_character
+			value = gold
+		}
+		remove_short_term_gold = gold
+		# I assume they're dead later down the chain coz that's how it is sometimes
+		# That's why the gold is voided first
+		if = {
+			limit = { any_child = { exists = this } }
+			save_temporary_scope_value_as = {
+				name = gold_to_pay
+				value = {
+					value = scope:gold_of_character
+					divide = {
+						every_child = { add = 1 }
+						min = 1
+					}
+					multiply = 0.8		#20% loss
+					floor = yes
+				}
+			}
+			every_child = {
+				#scope:dying_courtier_or_whatever = {
+				#	pay_short_term_gold = {
+				#		target = PREV
+				#		gold = scope:gold_to_pay
+				#	}
+				#}
+				add_gold = scope:gold_to_pay
+			}
+			#debug_log = "Transferred landless character's gold to children"
+			#debug_log_scopes = yes
+		}
+		else_if = {
+			limit = { 
+				exists = primary_spouse
+				primary_spouse = {
+					is_alive = yes
+				}
+			}
+			#pay_short_term_gold = {
+			#	target = primary_spouse
+			#	gold = { 
+			#		value = gold 
+			#		multiply = 0.8 		#20% loss
+			#		floor = yes 
+			#	}
+			#}
+			primary_spouse = {
+				add_gold = {
+					value = scope:gold_of_character
+					multiply = 0.8 		#20% loss
+					floor = yes
+				}
+				save_temporary_scope_as = spouse_scope
+			}
+			#debug_log = "Transferred landless character's gold to spouse"
+			#debug_log_scopes = yes
+		}
+		else_if = {
+			limit = { 
+				OR = {
+					AND = {
+						exists = location 
+						exists = location.county
+					}
+					AND = {
+						exists = court_owner
+						exists = court_owner.capital_county
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = location 
+					exists = location.county
+				}
+				location.county = { save_temporary_scope_as = county_to_dev_scope }
+			}
+			else = {
+				court_owner.capital_county = { save_temporary_scope_as = county_to_dev_scope }
+			}	
+			scope:county_to_dev_scope = {
+				if = {
+					limit = { 
+						exists = duchy 
+						NOT = { duchy = { has_variable = landless_development_cooldown } }
+					}
+					save_temporary_scope_value_as = {
+						name = dev_value_scope
+						value = {
+							value = scope:gold_of_character
+							multiply = 0.025		#40 to 1 conversion
+							if = {
+								limit = { any_county_province = { has_holding_type = tribal_holding } }
+								multiply = 0.1
+							}
+							# Scrap that. If anything this should scale DOWN with era instead..
+							#if = { 
+							#	limit = { 
+							#		exists = culture
+							#		culture = { has_cultural_era_or_later = culture_era_early_medieval }
+							#	}
+							#	if = {
+							#		limit = { culture = { has_cultural_era_or_later = culture_era_late_medieval } }
+							#		multiply = 4
+							#	}
+							#	else_if = {
+							#		limit = { culture = { has_cultural_era_or_later = culture_era_high_medieval } }
+							#		multiply = 3
+							#	}
+							#	else = {
+							#		multiply = 2
+							#	}
+							#}
+							floor = yes
+							max = 100
+						}
+					}
+					change_development_progress_with_overflow = scope:dev_value_scope
+					duchy = {
+						set_variable = {
+							name = landless_development_cooldown
+							years = 1
+						}
+					}
+					#debug_log = "Sank some gold into the ground"
+					#debug_log_scopes = yes
+				}
+			}
+		}
+	}
+}
+
+BKT_succession_truces = {
+	trigger = {
+		is_landed = yes
+		any_heir = {
+			count > 1
+		}
+	}
+	effect = {
+		#give_out_succession_truces = yes
+		save_temporary_scope_as = dying_ruler_scope
+		every_heir = {
+			add_to_list = list_of_potential_heirs
+		}
+		every_child = {
+			add_to_list = list_of_potential_heirs
+		}
+		primary_heir ?= {
+			add_to_list = list_of_potential_heirs
+		}
+		every_in_list = {		#every_heir doesnt seem to work properly
+			list = list_of_potential_heirs
+			save_temporary_scope_as = some_heir_scope
+			add_to_list = got_their_truces_already
+			every_in_list = {		#every_heir doesnt seem to work properly
+				list = list_of_potential_heirs
+				limit = { NOT = { is_in_list = got_their_truces_already } }
+				add_truce_both_ways = {
+					character = scope:some_heir_scope
+					override = yes
+					name = truce_succession
+					months = 12
+				}
+			}
+			if = {
+				limit = { NOT = { is_primary_heir_of = scope:dying_ruler_scope } }
+				set_variable = {
+					name = post_succession_warlike
+					years = 1
+				}
+			}
+			else = {
+				set_variable = {
+					name = post_succession_warlike
+					months = 6
+				}
+			}
+		}
+	}
+}

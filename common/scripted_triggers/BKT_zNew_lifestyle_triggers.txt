@@ -1,0 +1,40 @@
+﻿has_completed_target_lifestyle_trigger = {
+	save_temporary_scope_value_as = {
+		name = target_lifestyle
+		value = flag:$TARGET$
+	}
+	switch = {
+		trigger = scope:target_lifestyle
+		flag:diplomacy = {
+			has_perk = august_perk
+			has_perk = family_man_perk
+			has_perk = diplomat_perk
+		}
+		flag:martial = {
+			has_perk = gallant_perk
+			has_perk = overseer_perk
+			has_perk = strategist_perk
+		}
+		flag:stewardship = {
+			has_perk = architect_perk
+			has_perk = administrator_perk
+			has_perk = avaricious_perk
+		}
+		flag:intrigue = {
+			has_perk = torturer_perk
+			has_perk = schemer_perk
+			has_perk = seducer_perk
+		}
+		flag:learning = {
+			has_perk = whole_of_body_perk
+			has_perk = scholar_perk
+			has_perk = theologian_perk
+		}
+		flag:wanderer = {
+			has_perk = surveyor_perk
+			has_perk = wayfarer_perk
+			has_perk = voyager_perk
+		}
+		fallback = { always = no }
+	}
+}

@@ -1,0 +1,35 @@
+﻿
+### HOUSE RELATIONS
+house_relation_increased_marriage_acceptance = 20	#prev 25
+house_relation_decreased_marriage_acceptance = -20	#prev -25
+
+#house_relation_improve_minor_value = 0.1
+#house_relation_improve_medium_value = 0.2
+#house_relation_improve_major_value = 0.3
+#house_relation_damage_minor_value = { # Same as above, but negative
+#	value = house_relation_improve_minor_value
+#	multiply = -1
+#}
+#house_relation_damage_medium_value = {
+#	value = house_relation_improve_medium_value
+#	multiply = -1
+#}
+#house_relation_damage_major_value = {
+#	value = house_relation_improve_major_value
+#	multiply = -1
+#}
+#
+#improve_house_relation_calculated_value = {
+#	value = house_relation_improve_major_value
+#	multiply = 4 #Since we know we are in Japan to use the interaction
+#}
+
+innovation_block_printing_development_growth_value_1 = 0.01	#prev 0.02
+innovation_block_printing_development_growth_value_2 = 0.01	#prev 0.03
+innovation_block_printing_development_growth_value_3 = 0.02	#prev 0.04
+innovation_block_printing_development_growth_value_4 = 0.02	#prev 0.05
+
+innovation_coking_development_growth_value_1 = 0			#prev 0.02
+innovation_coking_development_growth_value_2 = 0			#prev 0.03
+innovation_coking_development_growth_value_3 = 0			#prev 0.04
+innovation_coking_development_growth_value_4 = 0			#prev 0.05

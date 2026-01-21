@@ -1,0 +1,16 @@
+﻿
+governance_reduced_troop_levy_modifier = {
+	icon = county_modifier_development_positive
+	development_growth = 0.04	#prev 1
+	county_fertility_growth_mult = medium_county_fertility_growth_gain
+	levy_size = -0.5
+	travel_danger = 5
+}
+
+governance_troops_levied_for_construction_modifier = {
+	icon = county_modifier_development_positive
+	levy_size = -0.25
+	build_gold_cost = -0.05			#prev -0.15
+	build_prestige_cost = -0.05		#prev -0.25
+	build_piety_cost = -0.05		#prev -0.25
+}

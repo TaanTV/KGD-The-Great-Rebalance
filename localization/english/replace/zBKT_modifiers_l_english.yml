@@ -1,0 +1,6 @@
+﻿l_english:
+ #Skill tooltips
+ diplomacy_effect_desc:0 "Increases effectiveness of Diplomacy [schemes|E]\nIncreases [initial_legitimacy|E]\nImpacts ransom costs"
+ #martial_effect_desc:0 "Increases [advantage|E] when commanding armies in combat"
+ #intrigue_effect_desc: "Every [EmptyScope.ScriptValue('scheme_starting_opportunities_per_intrigue_increment_value')] [intrigue|E] above [EmptyScope.ScriptValue('scheme_starting_opportunities_per_intrigue_threshold_value')] gives +1 starting [scheme_opportunity_opportunities|E] to [intrigue] [schemes|E]\nIncreases starting [success_chance|E] of Intrigue [schemes|E]\nIncreases [scheme_growth|E] of Intrigue [schemes|E]\nIncreases chance to successfully [imprison|E] another character"
+ #learning_effect_desc:0 "Reduces the [prestige|E] cost to increase [crown_authority|E]\nOther characters are more likely to accept when you [demand_conversion|E]"

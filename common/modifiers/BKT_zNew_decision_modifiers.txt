@@ -1,0 +1,7 @@
+﻿support_religious_art_bkt_county_modifier = {
+	icon = piety_positive
+	#monthly_piety = 0.5
+	tax_mult = -0.5
+	development_growth = 0.1
+	development_growth_factor = 0.15
+}

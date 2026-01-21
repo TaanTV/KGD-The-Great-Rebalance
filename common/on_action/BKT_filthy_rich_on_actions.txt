@@ -1,0 +1,98 @@
+﻿three_year_playable_pulse = {
+	on_actions = {
+		delay = { days = { 2 30 } }
+		BKT_filthy_rich_playable_pulse
+	}
+}
+
+BKT_filthy_rich_playable_pulse = {
+	trigger = {
+		always = no
+		highest_held_title_tier >= tier_kingdom
+	}
+	effect = {
+		if = {
+			limit = {
+				gold > { value = this.monumental_gold_value min = 750 }
+				NOT = { has_character_modifier = filthy_rich_basic_modifier }
+			}
+			save_temporary_scope_as = this_king
+			debug_log = "Someone is considered to be too rich by the game"
+			debug_log_scopes = yes
+			if = {
+				limit = { NOT = { has_variable = too_rich_marked_for_death } }
+				set_variable = {
+					name = too_rich_marked_for_death
+					days = 1200		#a bit of leeway
+				}
+			}
+			else = {
+				add_character_modifier = filthy_rich_basic_modifier
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = filthy_rich_basic_modifier
+				gold < this.massive_gold_value
+			}
+			if = {
+				limit = { NOT = { has_variable = too_rich_marked_for_redemption } }
+				set_variable = {
+					name = too_rich_marked_for_redemption
+					days = 1200		#a bit of leeway
+				}
+			}
+			else = {
+				remove_all_filthy_rich_related_modifiers = yes
+			}
+		}
+		else_if = {
+			limit = {
+				has_character_modifier = filthy_rich_basic_modifier
+			}
+		}	
+	}
+}
+
+# A title is destroyed
+# root = the holder before destruction
+# scope:landed_title = the title that is being destroyed
+# Does *not* provide scope:transfer_type
+on_title_destroyed = {
+	on_actions = {
+		BKT_filthy_rich_on_title_destroyed
+	}
+}
+
+BKT_filthy_rich_on_title_destroyed = {
+	trigger = {
+		highest_held_title_tier < tier_kingdom
+		has_character_modifier = filthy_rich_basic_modifier
+	}
+	effect = {
+		remove_all_filthy_rich_related_modifiers = yes
+	}
+}
+
+# A title is transferred to a new character
+# root = the new holder
+# scope:title = the title that changes hands
+# scope:previous_holder = previous holder. Might be dead
+on_title_gain = {
+	on_actions = {
+		BKT_filthy_rich_on_title_gain
+	}
+}
+
+BKT_filthy_rich_on_title_gain = {
+	trigger = {
+		scope:previous_holder ?= {
+			is_alive = yes
+			highest_held_title_tier < tier_kingdom
+			has_character_modifier = filthy_rich_basic_modifier
+		}
+	}
+	effect = {
+		scope:previous_holder ?= { remove_all_filthy_rich_related_modifiers = yes }
+	}
+}

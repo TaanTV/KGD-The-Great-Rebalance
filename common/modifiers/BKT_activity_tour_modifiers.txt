@@ -1,0 +1,24 @@
+﻿#Reward modifiers
+itinerant_liege_modifier = {
+	icon = prestige_positive
+	stacking = yes
+	vassal_tax_contribution_mult = 0.05		#prev 0.15
+	character_capital_county_monthly_development_growth_add = 0.03	#prev 0.2
+	#ADDED
+	vassal_opinion = 5
+}
+
+mega_itinerant_liege_modifier = {
+	icon = prestige_positive
+	stacking = yes
+	vassal_limit = 5
+	vassal_tax_contribution_mult = 0.1		#prev 0.2
+	character_capital_county_monthly_development_growth_add = 0.05	#prev 0.3
+	#ADDED
+	vassal_opinion = 10
+}
+
+tours_grounds_sharing_tips_with_friend_modifier = {
+	icon = social_positive
+	monthly_lifestyle_xp_gain_mult = 0.1		#prev 0.3
+}

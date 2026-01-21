@@ -1,0 +1,1209 @@
+﻿#ai_compassion
+#ai_boldness 
+#ai_honor 
+#ai_greed 
+#ai_rationality 
+#ai_zeal 
+#ai_energy 
+#ai_vengefulness 
+
+# Originally Triggered from on_actions
+# but many triggers require story_owner_scope and scope:story
+# this = character
+
+ai_goal_manager_opportunity_pulse_effect = {
+	save_scope_as = root_scope
+	random_list = {
+		5 = {
+			modifier = {
+				add = 40
+				has_trait = lazy
+			}
+			modifier = {
+				factor = {
+					value = ai_energy
+					add = 100 			#0 - 200
+					min = 1
+					multiply = 0.01
+				}
+			}
+		}
+		45 = { 	# Act outs or smth. Lower weight coz War! has conditions to meet.
+			trigger = {
+				#is_adult = yes
+				always = no
+				is_available = yes
+			}
+			random = {
+				chance = 45
+				ai_goal_manager_opportunity_pulse_personality_effect = yes
+			}
+		}
+		100 = {	# War!
+			trigger = {
+				is_adult = yes
+				is_available = yes
+				is_at_war = no
+				gold > major_gold_value
+				prestige > 0
+				piety > 0
+				NOT = {
+					any_targeting_faction = {
+						discontent_per_month > 0
+					}
+				}
+				NOT = { has_trait = compassionate }
+				current_military_strength >= eighty_percent_of_max_military_strength
+			}
+			modifier = {
+				add = { value = ai_greed min = -95 max = 75 }
+			}
+			modifier = {
+				add = 100
+				has_trait = ambitious
+			}
+			modifier = {
+				add = -75
+				has_trait = content
+			}
+			modifier = {
+				factor = 0.001
+				has_variable = stewardship_oath_1	#peace oath
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					has_variable = martial_oath_1		#reconquest oath
+					has_variable = martial_oath_2		#conquest oath
+				}
+			}
+			ai_goal_manager_opportunity_pulse_war_effect = yes
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { any_scheme = { is_scheme_category = personal } }
+				any_scheme = {
+					scheme_type = sway
+					scheme_target_character = {
+						opinion = {
+							target = scope:root_scope
+							value > 75
+						}
+					}
+				}
+			}
+			OR = {		#Characters who eat stress for this prob shouldn't spam it
+				NOR = { 
+					has_trait = gregarious 
+					has_trait = shy
+				}
+				stress < 40
+			}
+		}
+		random_scheme = {
+			limit = {
+				scheme_type = sway
+				scheme_target_character = {
+					opinion = {
+						target = scope:root_scope
+						value > 75
+					}
+				}
+			}
+			end_scheme = yes
+		}
+		ai_goal_manager_opportunity_pulse_sway_effect = yes
+	}
+}
+
+ai_goal_manager_opportunity_pulse_war_effect = {
+	save_scope_as = story_owner_scope
+	random = {
+		chance = 50
+		modifier = {
+			add = {
+				value = ai_greed 
+				add = ai_boldness
+				add = ai_vengefulness
+				subtract = ai_compassion
+				subtract = ai_honor
+				#All of the above is a value between -500 and +500 
+				multiply = 0.05
+				min = -25
+				max = 25
+			}
+		}
+		modifier = {	#Special - opinion of liege reduces the chance
+			factor = {
+				value = 75
+				subtract = "opinion(liege)"
+				max = 100
+				min = 0
+				multiply = 0.01
+			}
+			top_liege != this
+		}
+		modifier = {
+			government_allows = administrative
+			top_liege != this
+			factor = 0.5
+		}
+		save_temporary_scope_as = can_wage_war
+	}
+	random = {
+		chance = 33
+		modifier = {
+			government_allows = administrative
+			add = -23
+		}
+		set_variable = {
+			name = will_attack_tribals
+			days = 1
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:can_wage_war
+			has_personality_benevolent_trigger = yes
+		}
+		ai_start_best_war = {
+			cb = {
+				claim_cb
+				de_jure_cb
+			}
+			is_valid = {
+				save_temporary_scope_as = story_owner_scope
+				#scope:has_hostage = no
+				scope:target_character = {
+					story_owner_scope_can_attack_this = yes
+					current_military_power_this_plus_allies_value < scope:story_owner_scope.current_military_power_this_plus_allies_value
+					OR = {
+						scope:score >= 10000		#prev 3000
+						AND = {
+							NOT = { any_ally = { military_power >= scope:story_owner_scope.a_third_of_current_military_power } } 
+							scope:story_owner_scope.a_third_of_current_military_power >= military_power
+							scope:score > 2000
+						}
+					}
+				}
+				OR = {
+					scope:target_character = { NOT = { government_has_flag = government_is_tribal } }
+					government_has_flag = government_is_tribal
+					has_variable = will_attack_tribals
+				}
+			}
+			on_success = {
+				debug_log = "War declared through ai opportunity pulse!"
+				debug_log_scopes = yes
+				debug_log_date = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:can_wage_war
+		}
+		ai_start_best_war = {
+			cb = {
+				claim_cb
+				religious_war
+				imperial_reconquest_cb
+				invasion_war
+				clan_invasion_war
+				tribal_subjugation_cb
+				de_jure_cb
+			}
+			is_valid = {
+				save_temporary_scope_as = story_owner_scope
+				#scope:has_hostage = no
+				current_military_power_this_plus_allies_value < scope:story_owner_scope.current_military_power_this_plus_allies_value
+				scope:target_character = {
+					story_owner_scope_can_attack_this = yes
+					OR = {
+						scope:score >= 10000		#prev 3000
+						AND = {
+							NOT = { any_ally = { military_power >= scope:story_owner_scope.a_third_of_current_military_power } } 
+							scope:story_owner_scope.a_third_of_current_military_power >= military_power
+							scope:score > 2000
+						}
+					}
+				}
+				OR = {
+					scope:target_character = { NOT = { government_has_flag = government_is_tribal } }
+					government_has_flag = government_is_tribal
+					has_variable = will_attack_tribals
+				}
+			}
+			on_success = {
+				debug_log = "War declared through ai opportunity pulse!"
+				debug_log_scopes = yes
+				debug_log_date = yes
+			}
+		}
+	}
+}
+
+#This has scope:root_scope set beforehand
+ai_goal_manager_opportunity_pulse_sway_effect = {
+	#this will be a long if/else_if chain....
+	#it wasn't, i decided that everyone after
+	#liege is basically on the same level of importance
+	#and could be chosen at random
+	if = {
+		limit = { 
+			exists = cp:councillor_spymaster
+			NOR = {
+				has_relation_nemesis = cp:councillor_spymaster
+			}
+			cp:councillor_spymaster = {
+				save_temporary_opinion_value_as = {
+					name = temp_opinion_scope
+					target = scope:root_scope
+				}
+				scope:temp_opinion_scope < 75
+				OR = {
+					scope:temp_opinion_scope < 35
+					NOT = {
+						has_opinion_modifier = {
+							target = scope:root_scope
+							modifier = scheme_sway_opinion
+						}
+					}
+				}
+				NOT = {
+					has_opinion_modifier = {
+						target = scope:root_scope
+						modifier = scheme_sway_opinion
+						value > sway_max_value_minus_fifteen
+					}
+				}
+			}
+			can_start_scheme = {
+				type = sway
+				target_character = cp:councillor_spymaster
+			}
+		}
+		start_scheme = {
+			type = sway
+			target_character = cp:councillor_spymaster
+		}
+	}
+	else_if = {
+		limit = { 
+			exists = court_position:court_physician_court_position
+			NOR = {
+				has_relation_rival = court_position:court_physician_court_position
+				has_relation_nemesis = court_position:court_physician_court_position
+			}
+			court_position:court_physician_court_position = {
+				save_temporary_opinion_value_as = {
+					name = temp_opinion_scope
+					target = scope:root_scope
+				}
+				scope:temp_opinion_scope < 75
+				OR = {
+					scope:temp_opinion_scope < 35
+					NOT = {
+						has_opinion_modifier = {
+							target = scope:root_scope
+							modifier = scheme_sway_opinion
+						}
+					}
+				}
+				NOT = {
+					has_opinion_modifier = {
+						target = scope:root_scope
+						modifier = scheme_sway_opinion
+						value > sway_max_value_minus_fifteen
+					}
+				}
+			}
+			can_start_scheme = {
+				type = sway
+				target_character = court_position:court_physician_court_position
+			}
+		}
+		start_scheme = {
+			type = sway
+			target_character = court_position:court_physician_court_position
+		}
+	}
+	else_if = {
+		limit = { 
+			exists = primary_spouse
+			NOR = {
+				has_relation_rival = primary_spouse
+				has_relation_nemesis = primary_spouse
+			}
+			primary_spouse = {
+				save_temporary_opinion_value_as = {
+					name = temp_opinion_scope
+					target = scope:root_scope
+				}
+				scope:temp_opinion_scope < 75
+				OR = {
+					scope:temp_opinion_scope < 35
+					NOT = {
+						has_opinion_modifier = {
+							target = scope:root_scope
+							modifier = scheme_sway_opinion
+						}
+					}
+				}
+				NOT = {
+					has_opinion_modifier = {
+						target = scope:root_scope
+						modifier = scheme_sway_opinion
+						value > sway_max_value_minus_fifteen
+					}
+				}
+			}
+			can_start_scheme = {
+				type = sway
+				target_character = primary_spouse
+			}
+		}
+		start_scheme = {
+			type = sway
+			target_character = primary_spouse
+		}
+	}
+	else_if = {
+		limit = { 
+			top_liege != this
+			exists = liege
+			NOR = {
+				has_relation_rival = liege
+				has_relation_nemesis = liege
+			}
+			liege = {
+				save_temporary_opinion_value_as = {
+					name = temp_opinion_scope
+					target = scope:root_scope
+				}
+				scope:temp_opinion_scope < 75
+				OR = {
+					scope:temp_opinion_scope < 35
+					NOT = {
+						has_opinion_modifier = {
+							target = scope:root_scope
+							modifier = scheme_sway_opinion
+						}
+					}
+				}
+				NOT = {
+					has_opinion_modifier = {
+						target = scope:root_scope
+						modifier = scheme_sway_opinion
+						value > sway_max_value_minus_fifteen
+					}
+				}
+			}
+			can_start_scheme = {
+				type = sway
+				target_character = liege
+			}
+		}
+		start_scheme = {
+			type = sway
+			target_character = liege
+		}
+	}
+	else = {
+		random_list = {
+			200 = {		#Powerful vassals
+				modifier = {
+					highest_held_title_tier >= tier_kingdom
+					factor = 3
+				}
+				modifier = {
+					highest_held_title_tier >= tier_empire
+					factor = 5
+				}
+				trigger = {
+					NOT = { government_allows = deny_powerful_vassal }
+					any_powerful_vassal = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_powerful_vassal = {
+					limit = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					
+					}
+					order_by = max_military_strength
+					save_scope_as = target_vassal_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_vassal_scope
+				}
+			}
+			200 = {		#Tributaries
+				modifier = {
+					highest_held_title_tier >= tier_kingdom
+					factor = 3
+				}
+				modifier = {
+					highest_held_title_tier >= tier_empire
+					factor = 5
+				}
+				modifier = {
+					NOT = { government_allows = deny_powerful_vassal }
+					factor = 0.2
+				}
+				trigger = {
+					any_tributary = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_tributary = {
+					limit = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					
+					}
+					order_by = max_military_strength
+					save_scope_as = target_vassal_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_vassal_scope
+				}
+			}
+			200 = {			#Direct vassals
+				modifier = {
+					highest_held_title_tier >= tier_kingdom
+					factor = 3
+				}
+				modifier = {
+					highest_held_title_tier >= tier_empire
+					factor = 5
+				}
+				trigger = {
+					any_vassal = {
+						highest_held_title_tier >= tier_county
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_vassal = {
+					limit = {
+						highest_held_title_tier >= tier_county
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+					order_by = max_military_strength
+					save_scope_as = target_vassal_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_vassal_scope
+				}
+			}
+			400 = {			#Allies!
+				trigger = {
+					any_ally = {
+						is_landed = yes
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 80
+						OR = {
+							scope:temp_opinion_scope < 50
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_ally = {
+					limit = {
+						is_landed = yes
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 80
+						OR = {
+							scope:temp_opinion_scope < 50
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+					order_by = max_military_strength
+					save_scope_as = target_ally_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_ally_scope
+				}
+				if = {
+					limit = {
+						gold >= major_gold_value
+						NOT = { has_trait = greedy }
+						scope:target_ally_scope.current_military_strength > current_military_strength
+						is_character_interaction_valid = {
+							interaction = gift_interaction
+							recipient = scope:target_ally_scope
+						}
+						NOT = {
+							reverse_has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = gift_opinion
+							}
+						}
+					}
+					run_interaction = {
+						interaction = gift_interaction
+						actor = this
+						recipient = scope:target_ally_scope
+						execute_threshold = decline
+					}
+				}
+			}
+			100 = {		#Close family
+				trigger = {
+					any_close_family_member = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				random_close_family_member = {
+					limit = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+					save_scope_as = target_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
+				}
+			}
+			100 = {		#Confederates
+				trigger = {
+					exists = confederation
+					confederation = {
+						any_confederation_member = {
+							NOT = { this = scope:root_scope }
+							save_temporary_opinion_value_as = {
+								name = temp_opinion_scope
+								target = scope:root_scope
+							}
+							scope:temp_opinion_scope < 50
+							OR = {
+								scope:temp_opinion_scope < 25
+								NOT = {
+									has_opinion_modifier = {
+										target = scope:root_scope
+										modifier = scheme_sway_opinion
+									}
+								}
+							}
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+									value > sway_max_value_minus_fifteen
+								}
+							}
+							scope:root_scope = {
+								NOR = {
+									has_relation_rival = PREV
+									has_relation_nemesis = PREV
+								}
+								can_start_scheme = {
+									type = sway
+									target_character = PREV
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					has_trait = ambitious
+					factor = 2
+				}
+				confederation = {
+					random_confederation_member = {
+						limit = {
+							save_temporary_opinion_value_as = {
+								name = temp_opinion_scope
+								target = scope:root_scope
+							}
+							scope:temp_opinion_scope < 75
+							OR = {
+								scope:temp_opinion_scope < 25
+								NOT = {
+									has_opinion_modifier = {
+										target = scope:root_scope
+										modifier = scheme_sway_opinion
+									}
+								}
+							}
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+									value > sway_max_value_minus_fifteen
+								}
+							}
+							scope:root_scope = {
+								NOR = {
+									has_relation_rival = PREV
+									has_relation_nemesis = PREV
+								}
+								can_start_scheme = {
+									type = sway
+									target_character = PREV
+								}
+							}
+						}
+						save_scope_as = target_scope
+					}
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
+				}
+			}
+			100 = {		#Neighbouring rulers
+				trigger = {
+					top_liege = this
+					any_neighboring_top_liege_realm_owner = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 50
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_neighboring_top_liege_realm_owner = {
+					limit = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+					order_by = max_military_strength
+					save_scope_as = target_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
+				}
+			}
+			100 = {		#Fellow vassals
+				modifier = {
+					is_diarch_of_target = liege
+					factor = 4
+				}
+				trigger = {
+					top_liege != this
+					exists = liege
+					liege = {
+						any_vassal = {
+							NOT = { this = scope:root_scope }
+							highest_held_title_tier >= tier_county
+							save_temporary_opinion_value_as = {
+								name = temp_opinion_scope
+								target = scope:root_scope
+							}
+							scope:temp_opinion_scope < 50
+							OR = {
+								scope:temp_opinion_scope < 25
+								NOT = {
+									has_opinion_modifier = {
+										target = scope:root_scope
+										modifier = scheme_sway_opinion
+									}
+								}
+							}
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+									value > sway_max_value_minus_fifteen
+								}
+							}
+							scope:root_scope = {
+								NOR = {
+									has_relation_rival = PREV
+									has_relation_nemesis = PREV
+								}
+								can_start_scheme = {
+									type = sway
+									target_character = PREV
+								}
+							}
+						}
+					}
+				}
+				liege = {
+					ordered_vassal = {
+						limit = {
+							NOT = { this = scope:root_scope }
+							save_temporary_opinion_value_as = {
+								name = temp_opinion_scope
+								target = scope:root_scope
+							}
+							scope:temp_opinion_scope < 50
+							OR = {
+								scope:temp_opinion_scope < 25
+								NOT = {
+									has_opinion_modifier = {
+										target = scope:root_scope
+										modifier = scheme_sway_opinion
+									}
+								}
+							}
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+									value > sway_max_value_minus_fifteen
+								}
+							}
+							scope:root_scope = {
+								NOR = {
+									has_relation_rival = PREV
+									has_relation_nemesis = PREV
+								}
+								can_start_scheme = {
+									type = sway
+									target_character = PREV
+								}
+							}
+						}
+						order_by = max_military_strength
+						save_scope_as = target_scope
+					}
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
+				}
+			}
+			50 = {		#Friends
+				trigger = {
+					any_relation = {
+						type = friend
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 50
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				random_relation = {
+					type = friend
+					limit = {
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 75
+						OR = {
+							scope:temp_opinion_scope < 25
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+					save_scope_as = target_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
+				}
+			}
+		}
+	}
+}
+
+# Zealous should try to revoke religious rights (even for tyranny) if present, ask to convert if someone compassionate, imprison and revoke if not
+#
+ai_goal_manager_opportunity_pulse_personality_effect = {
+	random_list = {
+		10 = { }
+	}
+}

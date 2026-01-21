@@ -1,0 +1,86 @@
+﻿### Court Physician Tasks ###
+
+physician_guard_family = {
+	court_position_types = { court_physician_court_position court_tutor_court_position court_scholar_court_position }
+
+	# Monthly cost for the task
+	cost = {
+		round = no
+		gold = {
+			value = 0
+			if = {
+				limit = {
+					scope:liege = {
+						has_treasury = no
+					}
+				}
+				add = {
+					value = monthly_court_position_task_cost
+					desc = COURT_POSITION_TASK_COST_BREAKDOWN_BASE
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				}
+			}
+		}
+		treasury = {
+			value = 0
+			if = {
+				limit = {
+					scope:liege = {
+						has_treasury = yes
+					}
+				}
+				add = {
+					value = monthly_court_position_task_cost
+					desc = COURT_POSITION_TASK_COST_BREAKDOWN_BASE
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				}
+			}
+		}
+	}
+
+	employee_modifier = {
+		monthly_lifestyle_xp_gain_mult = 0.2
+	}
+
+	scaling_employer_modifiers = {
+		terrible = {
+		 	monthly_lifestyle_xp_gain_mult = 0.01		#prev 0.02
+		}
+		poor = {
+		 	monthly_lifestyle_xp_gain_mult = 0.02		#prev 0.04
+		}
+		average = {
+		 	monthly_lifestyle_xp_gain_mult = 0.03		#prev 0.06
+		}
+		good = {
+		 	monthly_lifestyle_xp_gain_mult = 0.04		#prev 0.08
+		}
+		excellent = {
+		 	monthly_lifestyle_xp_gain_mult = 0.05		#prev 0.1
+		}
+	}
+
+	is_shown = {  }
+	is_valid_showing_failures_only = { }
+
+	on_start = { }
+	on_end = { }
+
+	ai_will_do = {
+		value = 30
+		if = {
+			limit = {
+				has_treasury = no
+				monthly_character_income < monthly_court_position_task_cost_double
+			}
+			add = -1000
+		}
+		else_if = {
+			limit = {
+				has_treasury = yes
+				monthly_character_treasury_income < monthly_court_position_task_cost_double
+			}
+			add = -1000
+		}
+	}
+}

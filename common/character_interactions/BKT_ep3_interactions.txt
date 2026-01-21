@@ -1,0 +1,1662 @@
+﻿# AI ONLY - Interaction is referenced in code, please don't rename it used by AI from code
+support_candidacy_interaction = {
+	icon = support_candidacy
+	common_interaction = yes
+	hidden = yes
+
+	desc = support_candidacy_interaction_desc
+
+	target_type = title
+	target_filter = recipient_de_jure_titles
+
+	can_be_picked_title = {
+		is_appointment_valid_trigger = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+			TOP_LIEGE = scope:recipient
+		}
+	}
+
+	has_valid_target_showing_failures_only = {
+		exists = scope:target
+		exists = scope:recipient
+		scope:actor = {
+			main_administrative_tier <= scope:target.tier
+		}
+		scope:target = {
+			exists = holder
+			is_noble_family_title = no
+			holder.top_liege = scope:recipient
+			OR = {
+				has_title_law_flag = appointment_type_succession
+				holder = {
+					has_realm_law_flag = appointment_type_succession
+				}
+			}
+		}
+		scope:recipient = { government_allows = administrative }
+	}
+
+	is_available = {
+		is_ai = yes
+		NOT = { government_has_flag = government_has_merit }
+
+		# admin rule is already checked in code, no need to duplicate in trigger here
+	}
+
+	is_shown = {
+		scope:secondary_recipient = {
+			top_liege != this
+			government_allows = administrative
+			top_liege = scope:actor.top_liege
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:secondary_recipient ?= {
+			# This is broken out from any_valid_title_to_grant_trigger because of performance reasons
+			# When realms get really large, the AI needs a fixed pool of characters to promote
+			# Otherwise performance tanks significantly in the form of 'stutters'or smaller freezes
+			#ADDED - this if-else if intercepts vanilla logic. Only relevant ppl are included now. The next one was the OG trigger_if
+			trigger_if = {
+				limit = {
+					always = yes
+				}
+				OR = {
+					this = scope:actor
+					scope:actor.primary_heir ?= this
+					scope:actor.house.house_head ?= this
+					is_close_or_extended_family_of = scope:actor
+					#ADDED
+					has_relation_friend = scope:actor
+					has_relation_best_friend = scope:actor
+				}
+			}
+			trigger_else_if = { # First, if the realm is enormous, restrict the candidate pool to the most immediate of family members
+				limit = {
+					scope:actor.top_liege.realm_size >= 250
+					NOR = {
+						this = scope:actor
+						scope:actor.primary_heir ?= this
+						scope:actor.house.house_head ?= this
+						is_close_family_of = scope:actor
+					}
+				}
+				static_group_filter = {
+					group = ai_filter
+					match = {
+						value = 1
+						subtract = {
+							add = scope:actor.top_liege.realm_size
+							multiply = 0.001
+							multiply = 3
+							min = 0.1
+							max = 0.9
+						}
+					}
+				}
+			}
+			trigger_else_if = { # Otherwise, go for close + extended family
+				limit = {
+					scope:actor.top_liege.realm_size >= 150
+					NOR = {
+						this = scope:actor
+						scope:actor.primary_heir ?= this
+						scope:actor.house.house_head ?= this
+						is_close_or_extended_family_of = scope:actor
+					}
+				}
+				static_group_filter = {
+					group = ai_filter
+					match = {
+						value = 1
+						subtract = {
+							add = scope:actor.top_liege.realm_size
+							multiply = 0.001
+							multiply = 3
+							min = 0.1
+							max = 0.9
+						}
+					}
+				}
+			}
+			trigger_else = {
+				always = yes
+			}
+			trigger_if = { # If the realm is large enough, the AI starts ignoring counties in their support
+				limit = {
+					#scope:actor.top_liege.realm_size >= 150
+					#ADDED - dont bother with counties
+					always = yes 
+				}
+				save_temporary_scope_as = candidate_temp
+				custom_tooltip = {
+					text = support_candidacy_can_appoint_for_title_tt
+					scope:recipient.primary_title = {
+						any_in_de_jure_hierarchy = {
+							continue = {
+								tier > tier_duchy
+								tier <= tier_county
+							}
+
+							save_temporary_scope_as = title_temp
+							scope:candidate_temp = { can_appoint_for_title = scope:title_temp }
+						}
+					}
+				}
+			}
+			trigger_else = {
+				save_temporary_scope_as = candidate_temp
+				custom_tooltip = {
+					text = support_candidacy_can_appoint_for_title_tt
+					scope:recipient.primary_title = {
+						any_in_de_jure_hierarchy = {
+							continue = {
+								tier > tier_duchy
+							}
+
+							save_temporary_scope_as = title_temp
+							scope:candidate_temp = { can_appoint_for_title = scope:title_temp }
+						}
+					}
+				}
+			}
+		}
+		scope:actor = {
+			NOT = { is_at_war_with = scope:recipient }
+		}
+	}
+
+	can_send = {
+		is_appointment_valid_trigger = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+			TOP_LIEGE = scope:recipient
+		}
+		# If a currency level is needed, does the candidate have a high enough level?
+		trigger_if = {
+			limit = {
+				scope:target.min_appointment_level > 0
+			}
+			scope:secondary_recipient = {
+				has_appointment_level_for_title = scope:target
+			}
+		}
+	}
+
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+		}
+		scope:actor.top_liege = {
+			save_scope_as = recipient
+		}
+	}
+
+	auto_accept = yes
+
+	send_option = {
+		flag = as_much_as_needed_influence_option
+		localization = as_much_as_needed_influence_option_desc
+	}
+	send_option = {
+		flag = major_influence_option
+		localization = major_influence_option_desc
+	}
+	send_option = {
+		flag = medium_influence_option
+		localization = medium_influence_option_desc
+		starts_enabled = { always = yes }
+	}
+
+	cost = {
+		influence = {
+			# Base cost
+			switch = {
+				trigger = yes
+				scope:as_much_as_needed_influence_option = {
+					add = {
+						value = {
+							add = {
+								value = "scope:target.current_heir.appointment_candidate_score(scope:target)"
+								multiply = 1.1
+							}
+							subtract = "scope:secondary_recipient.appointment_candidate_score(scope:target)"
+							multiply = 5
+							min = 20 # We do this to prevent cases when the default score of the candidate is already much higher than that the heir
+						}
+						desc = BASE
+					}
+				}
+				scope:major_influence_option = {
+					add = {
+						value = appointment_major_influence_cost
+						desc = BASE
+					}
+				}
+				scope:medium_influence_option = {
+					add = {
+						value = appointment_medium_influence_cost
+						desc = BASE
+					}
+				}
+			}
+
+			save_temporary_value_as = calculated_base_cost
+
+			# Gender modifiers
+			if = {
+				limit = {
+					scope:secondary_recipient ?= {
+						top_liege = { has_realm_law = male_preference_law }
+						is_female = yes
+					}
+				}
+				add = { # Double the (base) cost
+					value = scope:calculated_base_cost
+					desc = male_preference_law
+				}
+			}
+			else_if = {
+				limit = {
+					scope:secondary_recipient ?= {
+						top_liege = { has_realm_law = female_preference_law }
+						is_female = no
+					}
+				}
+				add = { # Double the (base) cost
+					value = scope:calculated_base_cost
+					desc = female_preference_law
+				}
+			}
+
+
+			# Local bonuses
+			if = {
+				limit = {
+					scope:actor = {
+						domicile ?= {
+							domicile_location.county = {
+								scope:target ?= { is_de_jure_liege_or_above_target = prev }
+							}
+						}
+					}
+					scope:target ?= { tier < tier_empire }
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = {
+						value = -0.25
+						if = {
+							limit = { # Increase the bonus if you have the "office" estate upgrade
+								scope:actor.domicile ?= { has_domicile_parameter = estate_local_theme_cost_reduction }
+							}
+							add = estate_local_theme_cost_reduction_value
+						}
+						if = {
+							limit = {
+								scope:actor.domicile ?= { has_domicile_parameter = japanese_manor_local_theme_cost_reduction }
+							}
+							add = japanese_manor_local_theme_cost_reduction_value
+						}
+					}
+					desc = estate_location_in_area
+				}
+			}
+
+			# Bureaucracy Legacy Perk Discount
+			if = {
+				limit = {
+					scope:actor.dynasty ?= { has_dynasty_perk = ep3_administrative_legacy_2 }
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = -0.1
+					desc = "[GetDynastyPerk('ep3_administrative_legacy_2').GetName]"
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		switch = {
+			trigger = yes
+			scope:as_much_as_needed_influence_option = {
+				# Save the score value
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = 0
+						if = {
+							limit = { exists = scope:target }
+							add = {
+								value = "scope:target.current_heir.appointment_candidate_score(scope:target)"
+								multiply = 1.1
+							}
+							subtract = "scope:secondary_recipient.appointment_candidate_score(scope:target)"
+						}
+						min = 4 # We do this to prevent cases when the default score of the candidate is already much higher than that the heir
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = 20
+				}
+			}
+			scope:major_influence_option = {
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = appointment_score_major_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = 10
+				}
+			}
+			scope:medium_influence_option = {
+				# Save the score value
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = appointment_score_medium_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = 5
+				}
+			}
+		}
+
+		# HOUSE RELATIONS
+		promote_appointment_house_relation_effect = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+			INVESTOR = scope:actor
+		}
+
+		# Update the score for the corresponding title
+		scope:target = {
+			change_appointment_investment = {
+				target = scope:secondary_recipient
+				investor = scope:actor
+				value = scope:support_candidate_score
+			}
+			if = {
+				limit = { appointment_interactions_recipient_is_suitable_co_emperor_trigger = yes }
+				diarch_promoted_as_administrative_candidate_get_best_tooltip_effect = yes
+			}
+		}
+
+
+		# Notify the supported character (unless they are the actor)
+		scope:secondary_recipient = {
+			if = {
+				limit = {
+					this != scope:actor
+				}
+				hidden_effect = {
+					send_interface_message = {
+						type = msg_candidacy_improved
+						title = supported_candidacy_toast
+						left_icon = scope:actor
+						right_icon = scope:target
+						show_as_tooltip = {
+							scope:target = {
+								change_appointment_investment = {
+									target = scope:secondary_recipient
+									investor = scope:actor
+									value = scope:support_candidate_score
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:secondary_recipient = {
+					NOT = {
+						house ?= scope:actor.house
+					}
+				}
+			}
+			scope:secondary_recipient = {
+				add_opinion = {
+					modifier = supported_candidacy_opinion
+					target = scope:actor
+					opinion = scope:opinion_change_value
+				}
+			}
+		}
+
+		scope:secondary_recipient = {
+			custom_tooltip = support_candidacy_success_reward_tt
+		}
+	}
+
+	# AI
+	# Interaction is used by AI in code, don't change the frequency
+	ai_frequency = 0
+
+	ai_will_do = {
+		base = 5
+
+		# No one promoting... ripe for the taking
+		modifier = {
+			scope:target = {
+				holder = {
+					has_realm_law_flag = appointment_type_succession
+				}
+				current_heir ?= {
+					NOR = {
+						"appointment_candidate_accumulated_score(scope:target)" > 0
+						AND = {
+							exists = house
+							exists = scope:actor.house
+							house = scope:actor.house
+						}
+					}
+				}
+			}
+			add = 150
+		}
+
+		# Spending more influence in one go is better
+		modifier = {
+			scope:major_influence_option = yes
+			factor = 1.1
+		}
+
+		# Promote characters we like
+		modifier = {
+			scope:secondary_recipient ?= house.house_confederation.leading_house.house_head
+			factor = 5
+		}
+		modifier = {
+			scope:secondary_recipient = {
+				is_close_family_of = scope:actor
+			}
+			factor = 3
+		}
+		modifier = {
+			scope:secondary_recipient = {
+				is_extended_family_of = scope:actor
+			}
+			factor = 1.5
+		}
+		modifier = {
+			scope:actor = {
+				has_relation_friend = scope:secondary_recipient
+			}
+			factor = 2
+		}
+		modifier = {
+			scope:actor = {
+				has_relation_best_friend = scope:secondary_recipient
+			}
+			factor = 10
+		}
+
+		# For the imperial title, we want to promote ourselves
+		modifier = {
+			scope:target.tier >= tier_empire
+			scope:actor = scope:secondary_recipient
+			factor = 5
+		}
+
+		# Prefer unlanded relatives
+		modifier = {
+			scope:target.tier < tier_empire
+			scope:secondary_recipient = {
+				is_ruler = no
+			}
+			factor = 2
+		}
+
+		# Prefer titles that are somewhat close to the capital
+		modifier = {
+			#ADDED - turn that off. Distance is an expensive trigger and this just doesnt have enough of an impact anyways
+			always = no 
+			exists = scope:recipient.capital_province # Make sure the top liege has a capital
+			scope:target = {
+				title_capital_county ?= {
+					squared_distance = {
+						target = scope:recipient.capital_province
+						value <= 130000
+					}
+				}
+			}
+			factor = 1.1
+		}
+
+		# Try to avoid promoting the same candidate for multiple titles if they are winning a title already
+		modifier = {
+			scope:secondary_recipient = {
+				any_heir_title = {
+					is_noble_family_title = no
+					holder = {
+						government_allows = administrative
+					}
+				}
+			}
+			factor = 0
+		}
+
+		# Promote only one house member for each title
+		modifier = {
+			#ADDED
+			exists = scope:target
+			scope:target = {
+				holder = {
+					has_realm_law_flag = appointment_type_succession
+				}
+				any_title_heir = {
+					exists = house
+					exists = scope:actor.house
+					house = scope:actor.house
+					"appointment_candidate_accumulated_score(scope:target)" > 0
+				}
+			}
+			scope:secondary_recipient = {
+				exists = house
+				exists = scope:actor.house
+				house = scope:actor.house
+				"appointment_candidate_accumulated_score(scope:target)" <= 0
+			}
+			factor = 0
+		}
+
+		# Don't promote rivals
+		modifier = {
+			scope:actor = {
+				has_relation_rival = scope:secondary_recipient
+			}
+			factor = 0
+		}
+
+		# Don't promote a candidate if your house is first in line
+		modifier = {
+			#ADDED
+			exists = scope:target
+			scope:target = {
+				any_title_heir = {
+					exists = house
+					exists = scope:actor.house
+					house = scope:actor.house
+					scope:target = {
+						place_in_line_of_succession = {
+							target = prev
+							value = 1
+						}
+					}
+				}
+				#ADDED
+				#exists = scope:actor.house
+				#current_heir.house ?= scope:actor.house
+			}
+			factor = 0
+		}
+
+		# Don't promote your candidate if they are first in line
+		modifier = {
+			#ADDED
+			exists = scope:target
+			scope:target = {
+				any_title_heir = {
+					this = scope:secondary_recipient
+					scope:target = {
+						place_in_line_of_succession = {
+							target = prev
+							value = 1
+						}
+					}
+				}
+				#ADDED
+				#current_heir ?= scope:secondary_recipient
+			}
+			factor = 0
+		}
+
+		# Don't promote lowborn or characters of a different house
+		modifier = {
+			NOT = { exists = scope:secondary_recipient.house }
+			factor = 0
+		}
+		modifier = {
+			exists = scope:secondary_recipient.house
+			exists = scope:actor.house
+			scope:actor.house != scope:secondary_recipient.house
+			factor = 0
+		}
+
+		modifier = { # For now
+			scope:actor.top_liege = { has_realm_law = male_preference_law }
+			scope:secondary_recipient = { is_female = yes }
+			factor = 0
+		}
+		modifier = { # For now
+			scope:actor.top_liege = { has_realm_law = female_preference_law }
+			scope:secondary_recipient = { is_male = yes }
+			factor = 0
+		}
+
+		# Don't outcompete someone you like
+		modifier = {
+			#ADDED
+			exists = scope:target
+			scope:target = {
+				any_title_heir = {
+					scope:target = {
+						place_in_line_of_succession = {
+							target = prev
+							value <= 3
+						}
+					}
+					scope:actor = { has_any_good_relationship_with_character_trigger = { CHARACTER = prev } }
+				}
+			}
+			factor = 0
+		}
+
+		# Don't support someone who has renounced their aspirations for the throne
+		modifier = {
+			scope:secondary_recipient = {
+				OR = {
+					has_character_modifier = ep3_admin_renounce_throne_personal
+					house ?= { has_house_modifier = ep3_admin_renounce_throne_house }
+				}
+			}
+			scope:target.tier = scope:recipient.highest_held_title_tier
+			factor = 0
+		}
+		
+		#ADDED - support your heir to your title.
+		modifier = {
+			exists = scope:actor.primary_heir
+			scope:secondary_recipient = scope:actor.primary_heir 
+			scope:target = scope:actor.primary_title
+			factor = 100
+		}
+		
+		#ADDED - promote if you have lots of influence
+		modifier = {
+			scope:actor = { 
+				influence >= 1000 
+				OR = {
+					scope:actor != scope:recipient
+					scope:actor.influence > 2000
+				}
+			}
+			factor = 2.5
+		}
+		
+		#ADDED - dont promote if target is young and healthy
+		modifier = {
+			exists = scope:target.holder
+			scope:target.holder = {
+				age < 25
+				health > 4
+			}
+			factor = 0.5
+		}
+		
+		#ADDED - promote if target is old or dying
+		modifier = {
+			exists = scope:target.holder
+			scope:target.holder = {
+				OR = {
+					age > 45
+					health < 3
+				}
+			}
+			factor = {
+				value = 5
+				if = {
+					limit = {
+						scope:target.holder = {
+							OR = {
+								age > 60
+								health < 2.5
+							}
+						}
+					}
+					add = 5
+				}
+			}	
+		}
+		
+		#ADDED - dont promote if you are the emperor and your influence is low
+		modifier = {
+			scope:actor = scope:recipient
+			scope:actor.influence < 300
+			factor = 0.05
+		}
+	}
+}
+
+
+# AI ONLY - Smear campaign against a character to reduce score
+harm_candidacy_interaction = {
+	icon = harm_candidacy
+	common_interaction = yes
+	hidden = yes
+
+	desc = harm_candidacy_interaction_desc
+
+	target_type = title
+	target_filter = secondary_recipient_de_jure_titles
+
+	can_be_picked_title = {
+		is_candidate_for_title_trigger = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+		}
+	}
+
+	has_valid_target_showing_failures_only = {
+		#ADDED
+		scope:target ?= {
+			tier >= tier_duchy
+			holder ?= {
+				top_liege = scope:recipient
+				has_realm_law_flag = appointment_type_succession
+			}
+		}
+	}
+
+	is_shown = {
+		scope:actor = {
+			government_allows = administrative
+		}
+		scope:secondary_recipient = {
+			top_liege != this
+			government_allows = administrative
+			top_liege = scope:actor.top_liege
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		any_valid_title_to_grant_trigger = {
+			CANDIDATE = scope:secondary_recipient
+			TOP_LIEGE = scope:recipient
+		}
+	}
+
+	can_send = {
+		is_candidate_for_title_trigger = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+		}
+	}
+
+	redirect = {
+		scope:recipient = { save_scope_as = secondary_recipient }
+		scope:actor.top_liege = { save_scope_as = recipient }
+	}
+
+	auto_accept = yes
+
+	send_option = {
+		flag = minor_influence_option
+		localization = minor_influence_option_desc
+		starts_enabled = { always = yes }
+	}
+	send_option = {
+		flag = medium_influence_option
+		localization = medium_influence_option_desc
+	}
+	send_option = {
+		flag = major_influence_option
+		localization = major_influence_option_desc
+	}
+
+	cost = {
+		influence = {
+			# Base cost
+			switch = {
+				trigger = yes
+				scope:minor_influence_option = {
+					add = {
+						value = appointment_minor_influence_cost
+						desc = BASE
+					}
+				}
+				scope:medium_influence_option = {
+					add = {
+						value = appointment_medium_influence_cost
+						desc = BASE
+					}
+				}
+				scope:major_influence_option = {
+					add = {
+						value = appointment_major_influence_cost
+						desc = BASE
+					}
+				}
+			}
+
+			save_temporary_value_as = calculated_base_cost
+
+			# Gender modifiers
+			if = {
+				limit = {
+					scope:secondary_recipient ?= {
+						top_liege = { has_realm_law = male_preference_law }
+						is_female = yes
+					}
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = -0.5
+					desc = male_preference_law
+				}
+			}
+			else_if = {
+				limit = {
+					scope:secondary_recipient ?= {
+						top_liege = { has_realm_law = female_preference_law }
+						is_female = no
+					}
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = -0.5
+					desc = female_preference_law
+				}
+			}
+
+
+			# Local bonuses
+			if = {
+				limit = {
+					scope:actor = {
+						domicile ?= {
+							domicile_location.county = {
+								scope:target ?= { is_de_jure_liege_or_above_target = prev }
+							}
+						}
+					}
+					scope:target ?= { tier < tier_empire }
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = {
+						value = -0.25
+						if = {
+							limit = { # Increase the bonus if you have the "office" estate upgrade
+								scope:actor = {
+									domicile ?= { has_domicile_parameter = estate_local_theme_cost_reduction }
+								}
+							}
+							add = estate_local_theme_cost_reduction_value
+						}
+						if = {
+							limit = {
+								scope:actor.domicile ?= { has_domicile_parameter = japanese_manor_local_theme_cost_reduction }
+							}
+							add = japanese_manor_local_theme_cost_reduction_value
+						}
+					}
+					desc = estate_location_in_area
+				}
+			}
+
+			# Bureaucracy Legacy Perk Discount
+			if = {
+				limit = {
+					scope:actor.dynasty ?= { has_dynasty_perk = ep3_administrative_legacy_2 }
+				}
+				add = {
+					value = scope:calculated_base_cost
+					multiply = -0.1
+					desc = "[GetDynastyPerk('ep3_administrative_legacy_2').GetName]"
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		switch = {
+			trigger = yes
+			scope:minor_influence_option = {
+				# Save the score value
+				save_scope_value_as = {
+					name = harm_candidate_score
+					value = {
+						value = appointment_score_minor_loss_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = -5
+				}
+			}
+			scope:medium_influence_option = {
+				# Save the score value
+				save_scope_value_as = {
+					name = harm_candidate_score
+					value = {
+						value = appointment_score_medium_loss_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = -15
+				}
+			}
+			scope:major_influence_option = {
+				save_scope_value_as = {
+					name = harm_candidate_score
+					value = {
+						value = appointment_score_major_loss_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+					}
+				}
+				save_scope_value_as = {
+					name = opinion_change_value
+					value = -30
+				}
+			}
+		}
+
+		# HOUSE RELATIONS
+		damage_appointment_house_relation_effect = {
+			TITLE = scope:target
+			CANDIDATE = scope:secondary_recipient
+			INVESTOR = scope:actor
+		}
+
+		# Update the score for the corresponding title
+		scope:target = {
+			change_appointment_investment = {
+				target = scope:secondary_recipient
+				investor = scope:actor
+				value = scope:harm_candidate_score
+			}
+		}
+
+		# Handle opinion change and chance for a rivalry
+		if = {
+			limit = {
+				scope:secondary_recipient = { this != scope:actor }
+			}
+			scope:secondary_recipient = {
+				add_opinion = {
+					modifier = harmed_candidacy_opinion
+					target = scope:actor
+					opinion = scope:opinion_change_value
+				}
+				hidden_effect = {
+					send_interface_message = {
+						type = msg_candidacy_harmed
+						title = harmed_candidacy_toast
+						left_icon = scope:actor
+						right_icon = scope:target
+						show_as_tooltip = {
+							scope:target = {
+								change_appointment_investment = {
+									target = scope:secondary_recipient
+									investor = scope:actor
+									value = scope:harm_candidate_score
+								}
+							}
+						}
+					}
+				}
+			}
+			scope:actor = {
+				send_interface_toast = {
+					type = event_toast_effect_bad
+					title = harm_candidate_rival_progress_toast
+					left_icon = scope:secondary_recipient
+					scope:secondary_recipient = {
+						progress_towards_rival_effect = {
+							REASON = rival_harmed_candidacy
+							CHARACTER = scope:actor
+							OPINION = 0
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_targets = {
+		ai_recipients = scripted_relations
+		max = 10
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 48
+		duchy = 24
+		kingdom = 24
+		empire = 24
+		hegemony = 24
+	}
+
+	ai_potential = {
+		influence > major_influence_value
+		government_allows = administrative
+		ai_honor <= 25
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			scope:actor = {
+				has_relation_rival = scope:secondary_recipient
+			}
+			add = 100
+		}
+		modifier = {
+			scope:actor = {
+				has_relation_nemesis = scope:secondary_recipient
+			}
+			add = 150
+		}
+		modifier = {
+			scope:actor = {
+				opinion = {
+					target = scope:secondary_recipient
+					value < medium_positive_opinion
+				}
+			}
+			add = 20
+		}
+		modifier = {
+			scope:secondary_recipient = {
+				is_close_family_of = scope:actor
+			}
+			add = -50
+		}
+		modifier = {
+			scope:secondary_recipient = {
+				is_extended_family_of = scope:actor
+			}
+			add = -25
+		}
+		modifier = {
+			scope:actor = {
+				OR = {
+					has_trait = ambitious
+					has_trait = callous
+					has_trait = fickle
+				}
+			}
+			add = 40
+		}
+		modifier = {
+			scope:actor = {
+				has_usable_hook = scope:secondary_recipient
+			}
+			add = -10
+		}
+		modifier = {
+			scope:actor = {
+				OR = {
+					has_relation_friend = scope:secondary_recipient
+					has_relation_lover = scope:secondary_recipient
+				}
+			}
+			factor = 0
+		}
+		#ADDED - if you are scared of them - dont.
+		modifier = {
+			scope:actor = {
+				dread_modified_ai_boldness = {
+					dreaded_character = scope:secondary_recipient
+					value < -35
+				}
+			}
+			factor = 0
+		}
+		
+		#ADDED - harm if you have lots of influence
+		modifier = {
+			scope:actor = { 
+				influence >= 1000 
+				OR = {
+					scope:actor != scope:recipient
+					scope:actor.influence > 2000
+				}
+			}
+			factor = 5
+		}
+		
+		#ADDED - dont promote if you are the emperor and your influence is low
+		modifier = {
+			scope:actor = scope:recipient
+			scope:actor.influence < 300
+			factor = 0.05
+		}
+	}
+}
+
+
+# Emperor fires Governor - AKA Depose Governor/depose_governor
+governor_removal_interaction = {
+	category = interaction_category_succession
+	filter_tags = { admin_governor }
+	icon = icon_governor_removal
+	common_interaction = no
+	desc = governor_removal_interaction_desc
+	greeting = negative
+	notification_text = GOVERNOR_REMOVAL_NOTIFICATION_TEXT
+	popup_on_receive = yes
+	pause_on_receive = yes
+	cooldown_against_recipient = { years = 5 }
+
+	auto_accept = yes
+
+	is_shown = {
+		scope:actor = {
+			top_liege = this
+			government_allows = administrative
+		}
+		scope:recipient = {
+			this != scope:actor
+			is_governor = yes
+			is_vassal_of = scope:actor
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			NOT = { is_at_war_with = scope:recipient }
+			any_vassal = {
+				is_governor = yes
+				this != scope:actor
+			}
+			is_imprisoned = no
+		}
+		scope:recipient = {
+			trigger_if = {
+				limit = {
+					scope:actor = {
+						has_realm_law_flag = celestial_retirement_law
+					}
+				}
+				tgp_is_above_retirement_age_trigger = {
+					REALM_OWNER = scope:actor
+				}
+			}
+		}
+	}
+
+	is_highlighted = {
+		scope:recipient ?= {
+			any_held_title = {
+				current_heir ?= {
+					OR = {
+						scope:actor ?= this
+						is_close_family_of = scope:actor
+					}
+				}
+			}
+		}
+	}
+
+	highlighted_reason = HIGHLIGHTED_GOVERNOR_REMOVAL_HEIR
+
+	can_send = {
+		scope:recipient != scope:actor
+		custom_tooltip = {
+			text = demand_governor_removal_dominant_family_tt
+			scope:recipient.house ?= { is_dominant_family = no }
+		}
+	}
+
+	cost = {
+		influence = {
+			value = 0
+			if = {
+				limit = { exists = scope:recipient }
+				scope:recipient ?= {
+					if = {
+						limit = {
+							any_held_title = {
+								title_tier = kingdom
+								is_landless_type_title = no
+								is_noble_family_title = no
+							}
+						}
+						add = {
+							every_held_title = {
+								title_tier = kingdom
+								limit = {
+									is_landless_type_title = no
+									is_noble_family_title = no
+								}
+								add = {
+									value = scope:recipient.massive_influence_value
+									multiply = 6	#prev 3
+								}
+							}
+							desc = GOVERNOR_RESIGNATION_KINGDOM_COST
+						}
+					}
+					else_if = {
+						limit = {
+							any_held_title = {
+								title_tier = duchy
+								is_landless_type_title = no
+								is_noble_family_title = no
+							}
+						}
+						add = {
+							every_held_title = {
+								title_tier = duchy
+								limit = {
+									is_landless_type_title = no
+									is_noble_family_title = no
+								}
+								add = scope:recipient.massive_influence_value
+								#ADDED
+								multiply = 2
+							}
+							desc = GOVERNOR_RESIGNATION_DUCHY_COST
+						}
+					}
+					if = {
+						limit = { house ?= { is_powerful_family = yes } }
+						add = {
+							value = scope:recipient.massive_influence_value
+							#ADDED
+							multiply = 2
+							desc = GOVERNOR_RESIGNATION_POWERFUL_COST
+						}
+					}
+					else_if = {
+						limit = { house ?= { is_dominant_family = yes } }
+						add = {
+							value = scope:recipient.monumental_influence_value
+							#ADDED
+							multiply = 2
+							desc = GOVERNOR_RESIGNATION_DOMINANT_COST
+						}
+					}
+					if = {
+						limit = {
+							scope:actor = { is_ai = no } # This cost is only for players due to performance reasons
+						}
+						if = {
+							limit = {
+								scope:recipient.governor_efficiency != 1
+							}
+							add = {
+								value = -100
+								add = {
+									value = scope:recipient.governor_efficiency
+									multiply = 100
+								}
+								desc = GOVERNOR_RESIGNATION_EFFICIENCY_COST
+							}
+						}
+					}
+					if = {
+						limit = {
+							influence_level != 1
+						}
+						add = {
+							value = {
+								value = influence_level
+								subtract = 1
+							}
+							multiply = 100		#prev 50
+							desc = GOVERNOR_RESIGNATION_INFLUENCE_LEVEL_COST
+						}
+					}
+				}
+				scope:actor = {
+					if = {
+						limit = { has_revoke_title_reason = scope:recipient }
+						multiply = {
+							value = 0.5
+							desc = temporal_condemnation_got_revoke_reason # Reused loc
+						}
+					}
+					#ADDED
+					if = {
+						limit = { is_ai = yes }
+						multiply = 0.5
+					}
+				}
+				scope:recipient = {
+					if = {
+						limit = {
+							scope:actor = {
+								has_realm_law_flag = celestial_retirement_law
+							}
+							tgp_is_above_retirement_age_trigger = { REALM_OWNER = scope:actor }
+						}
+						multiply = {
+							value = 0.05
+							desc = recipient_above_retirement_age_desc
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			if = {
+				limit = {
+					has_realm_law_flag = celestial_retirement_law
+					scope:recipient = { tgp_is_above_retirement_age_trigger = { REALM_OWNER = scope:actor } }
+					has_treasury = yes
+				}
+				save_scope_value_as = {
+					name = force_retirement_treasury_cost
+					value = scope:recipient.medium_treasury_value
+				}
+				pay_treasury_to_gold = {
+					target = scope:recipient
+					value = scope:force_retirement_treasury_cost
+				}
+			}
+		}
+		scope:recipient = {
+			if = {
+				limit = {
+					house ?= {
+						OR = {
+							is_powerful_family = yes
+							is_dominant_family = yes
+						}
+					}
+					can_set_relation_rival_trigger = { CHARACTER = scope:actor }
+				}
+				progress_towards_rival_effect = {
+					REASON = rival_deposed_governor
+					CHARACTER = scope:actor
+					OPINION = 0
+				}
+			}
+			add_opinion = {
+				target = scope:actor
+				modifier = demanded_my_resignation_opinion
+			}
+			custom_tooltip = demanded_my_resignation_house_tt
+			hidden_effect = {
+				house ?= {
+					if = {
+						limit = {
+							this != scope:actor.house
+						}
+						every_house_member = {
+							custom = custom.every_house_member_secondary_recipient
+							limit = {
+								is_ai = yes
+								this != scope:recipient
+							}
+							if = {
+								limit = {
+									house = {
+										OR = {
+											is_powerful_family = yes
+											is_dominant_family = yes
+										}
+									}
+								}
+								add_opinion = {
+									target = scope:actor
+									modifier = demanded_my_house_members_resignation_opinion
+									opinion = -20
+								}
+							}
+							else = {
+								add_opinion = {
+									target = scope:actor
+									modifier = demanded_my_house_members_resignation_opinion
+									opinion = -15
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_held_title = {
+						is_noble_family_title = no
+						current_heir ?= {
+							NOR = {
+								this = scope:actor
+								AND = {
+									exists = scope:recipient.house
+									house ?= scope:recipient.house
+								}
+								has_relation_friend = scope:recipient
+								has_relation_best_friend = scope:recipient
+								is_allied_to = scope:recipient
+								has_relation_soulmate = scope:recipient
+								is_spouse_of = scope:recipient
+								is_close_family_of = scope:recipient
+							}
+							opinion = {
+								target = scope:recipient
+								value <= 40
+							}
+						}
+					}
+				}
+				every_held_title = {
+					limit = {
+						is_noble_family_title = no
+						current_heir ?= {
+							NOR = {
+								this = scope:actor
+								AND = {
+									exists = scope:recipient.house
+									house ?= scope:recipient.house
+								}
+								has_relation_friend = scope:recipient
+								has_relation_best_friend = scope:recipient
+								is_allied_to = scope:recipient
+								has_relation_soulmate = scope:recipient
+								is_spouse_of = scope:recipient
+								is_close_family_of = scope:recipient
+							}
+							opinion = {
+								target = scope:recipient
+								value <= 40
+							}
+						}
+					}
+					current_heir = {
+						add_to_list = deposed_title_heirs
+					}
+				}
+				every_in_list = {
+					list = deposed_title_heirs
+					add_opinion = {
+						target = scope:actor
+						modifier = deposed_predecessor_opinion
+					}
+				}
+			}
+			trigger_event = ep3_interactions_events.0630
+			show_as_tooltip = {
+				governor_resignation_title_transfer_effect = yes
+				# Create tooltips
+				every_held_title = {
+					limit = {
+						is_landless_type_title = no
+						is_noble_family_title = no
+						save_temporary_scope_as = liege_title
+						NOT = {
+							scope:resigner = {
+								any_held_title = { is_de_jure_liege_or_above_target = scope:liege_title }
+							}
+						}
+					}
+					save_scope_as = landed_title
+					current_heir = { save_scope_as = next_candidate }
+					if = {
+						limit = { tier >= main_administrative_tier }
+						scope:next_candidate = { custom_tooltip = force_governor_removal_interaction_pass_effect_tt }
+					}
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		scope:recipient = {
+			add_opinion = {
+				target = scope:actor
+				modifier = demanded_my_resignation_opinion
+			}
+		}
+		scope:actor = {
+			send_interface_toast = {
+				title = demand_governor_resignation_declined_toast
+				type = event_toast_effect_bad
+				left_icon = scope:recipient
+				revocation_tyranny_effect = { VASSAL = scope:recipient }
+				title_revocation_stress_effect = { VASSAL = scope:recipient }
+			}
+		}
+		war_for_revoke_effect = {
+			LIEGE = scope:actor
+			REBEL = scope:recipient
+		}
+		scope:actor = {
+			if = {
+				limit = { has_realm_law_flag = vassal_refusal_is_treason }
+				add_opinion = {
+					target = scope:recipient
+					modifier = treasonous_revoke_refusal
+				}
+			}
+		}
+	}
+
+	send_option = {
+		is_valid = {
+			scope:actor = { has_usable_hook = scope:recipient }
+		}
+		flag = hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	can_be_blocked = {
+		custom_description = { #Hook from Recipient can counteract, but only if Actor is not forcing the action via Strong Hook.
+			text = "spending_hook"
+			subject = scope:recipient
+			object = scope:actor
+			scope:recipient = { has_hook = scope:actor }
+			NAND = {
+				scope:hook = yes
+				scope:actor = { has_strong_hook = scope:recipient }
+			}
+		}
+	}
+
+	on_blocked_effect = {
+		scope:recipient = {
+			remove_hook = { target = scope:actor }
+		}
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = vassals
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 36
+		duchy = 12		#prev 6
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_potential = {
+		influence > massive_influence_value
+		is_at_war = no # Don't spend influence when at war in case troops are needed
+	}
+
+	ai_will_do = {
+		base = -10
+		modifier = {
+			scope:actor.house = scope:recipient.house
+			add = -50
+		}
+		modifier = {
+			scope:actor = { has_relation_rival = scope:recipient }
+			add = 30
+		}
+		modifier = { # Get rid of bad governors, but there is no point if the heir is worse
+			scope:recipient = {
+				governor_efficiency <= 0.7
+				governor_efficiency < scope:recipient.primary_heir.governor_efficiency
+			}
+			add = 10
+		}
+		modifier = {
+			scope:recipient = {
+				is_a_faction_member = yes
+			}
+			add = 20
+		}
+		modifier = {
+			scope:recipient = {
+				governor_efficiency >= 1.25
+			}
+			add = -10
+		}
+		modifier = {
+			scope:recipient = {
+				has_trait = loyal
+			}
+			add = -10
+		}
+		modifier = {
+			scope:recipient = {
+				has_trait = disloyal
+			}
+			add = 5
+		}
+		modifier = {
+			scope:recipient = {
+				is_allied_to = scope:actor
+			}
+			add = -100
+		}
+		modifier = {
+			scope:recipient = {
+				any_held_title = {
+					current_heir ?= {
+						house = scope:actor.house
+						this != scope:actor
+					}
+				}
+			}
+			add = 10
+		}
+		opinion_modifier = { # Opinion Factor
+			who = scope:actor
+			opinion_target = scope:recipient
+			multiplier = -0.25
+		}
+	}
+}

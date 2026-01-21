@@ -1,0 +1,41 @@
+﻿recently_occupied_county_modifier = {
+	icon = travel_safety_negative
+	build_speed = 0.75
+	development_growth_factor = -1
+	tax_mult = -0.2
+	development_decline = -0.35
+	development_decline_factor = 0.5
+	travel_danger = 20
+	#1.16
+	county_fertility_growth_add = -0.5
+}
+
+recently_raided_county_modifier = {
+	icon = prison_negative
+	build_speed = 0.35
+	development_growth_factor = -0.5
+	tax_mult = -0.1
+	development_decline = -0.2
+	development_decline_factor = 0.25
+	travel_danger = 10
+	#1.16
+	county_fertility_growth_add = -0.25
+}
+
+#development_county_modifier = {
+#	tax_mult = 0.01
+#	levy_mult = 0.005
+#	scale = {
+#		value = development
+#		desc = MODIFIER_DEFINITION_VALUE_PER_COUNTY_FOLLOWING_FAITH
+#		display_mode = scaled
+#	}
+#}
+
+# For iceland and stuff, less harsh permafrost
+harsh_climate_county_modifier = {
+	icon = cold_mixed
+	defender_holding_advantage = 5
+	development_growth_factor = -1
+	monthly_county_control_growth_factor = -0.25
+}

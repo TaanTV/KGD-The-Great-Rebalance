@@ -1,0 +1,280 @@
+﻿####################
+# MISC GENERAL STUFF
+####################
+
+namespace = bkt_misc_events
+
+#####
+# 0001 - Betrothal broken after you called the owner into a war
+# 0010 - Rich mercenary wants to buy some land off you
+#
+#
+#
+#####
+
+# Betrothal broken after you called the owner into a war
+bkt_misc_events.0001 = {
+	type = letter_event
+	opening = {
+		desc = bkt_misc_events.0001.opening
+	}
+	desc = {
+		desc = bkt_misc_events.0001.desc
+		triggered_desc = {
+			trigger = {
+				exists = scope:very_angry_scope
+			}
+			desc = bkt_misc_events.0001.desc.rivalry
+		}
+	}
+	sender = scope:rejected_betrothal_owner
+	
+	trigger = {
+		exists = scope:rejected_betrothal_owner
+		NOT = { is_allied_to = scope:rejected_betrothal_owner }
+		save_temporary_scope_as = nasty_player_scope_temp
+		scope:rejected_betrothal_owner = { 
+			is_at_war = yes
+			is_ruler = yes 
+			any_character_war = {
+				OR = {
+					AND = {
+						primary_attacker = scope:nasty_player_scope_temp
+						any_war_attacker = { this = scope:rejected_betrothal_owner }
+					}
+					AND = {
+						primary_defender = scope:nasty_player_scope_temp
+						any_war_defender = { this = scope:rejected_betrothal_owner }
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		save_scope_as = nasty_player_scope
+		if = {
+			limit = {
+				scope:rejected_betrothal_owner = {
+					can_set_relation_rival_trigger = { CHARACTER = scope:nasty_player_scope }
+					OR = {
+						ai_vengefulness > 25 
+						ai_honor > 25
+					}
+				}
+			}
+			scope:rejected_betrothal_owner = { save_scope_as = very_angry_scope }
+		}
+		add_character_modifier = {
+			modifier = broke_betrothal_of_war_ally
+			years = 20
+		}
+	}
+
+	option = {		# Oops
+		name = bkt_misc_events.0001.a
+		
+		add_prestige_experience = major_prestige_loss
+		scope:rejected_betrothal_owner = {
+			if = {
+				limit = {
+					exists = scope:very_angry_scope
+				}
+				set_relation_rival = {
+					target = PREV
+					reason = rival_manipulated_me
+				}
+			}
+			add_opinion = {
+				target = PREV
+				modifier = upset_opinion
+				opinion = -100
+			}
+			every_character_war = {
+				limit = {
+					OR = {
+						AND = {
+							primary_attacker = scope:nasty_player_scope
+							any_war_attacker = { this = scope:rejected_betrothal_owner }
+						}
+						AND = {
+							primary_defender = scope:nasty_player_scope
+							any_war_defender = { this = scope:rejected_betrothal_owner }
+						}
+					}
+				}
+				remove_participant = scope:rejected_betrothal_owner
+			}
+		}
+		
+		
+		ai_chance = {
+			base = 100
+		}
+	}
+}
+
+
+# Rich mercenary wants to buy some land off you
+bkt_misc_events.0010 = {
+	type = letter_event
+	opening = {
+		desc = bkt_misc_events.0010.opening
+	}
+	desc = bkt_misc_events.0010.desc
+	sender = scope:rich_mercenary_leader
+	
+	trigger = {
+		exists = scope:rich_mercenary_leader
+		exists = scope:chosen_county
+		scope:rich_mercenary_leader.gold > main_building_tier_1_cost
+		scope:rich_mercenary_leader.culture = scope:chosen_county.culture
+		# Re-validate just in case
+		scope:chosen_county = {
+			NOT = { has_variable = rich_mercenary_no_repeats }
+			OR = {
+				faith = scope:rich_mercenary_leader.faith
+				faith = {
+					faith_hostility_level = { 
+						target = scope:rich_mercenary_leader.faith 
+						value <= faith_astray_level
+					}
+				}
+			}
+			NOT = {
+				title_province = {
+					OR = {
+						has_holding_type = tribal_holding
+						has_holding_type = nomad_holding
+						has_holding_type = herder_holding
+					}
+				}
+			}
+			NOT = {
+				holder = { has_character_flag = got_bkt_misc_events_0010 }
+			}
+			any_county_province = {
+				has_holding = no
+				has_ongoing_construction = no 
+				barony = { barony_cannot_construct_holding = no }
+			}
+			OR = {
+				NOT = {
+					any_county_province = {
+						has_holding_type = castle_holding
+					}
+				}
+				AND = {
+					any_county_province = {
+						has_holding_type = city_holding
+					}
+					any_county_province = {
+						has_holding_type = church_holding
+					}
+					any_county_province = {
+						count < 2		#Dont spam 
+						has_holding_type = castle_holding
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		add_character_flag = {
+			flag = got_bkt_misc_events_0010
+			years = 20
+		}	
+		scope:chosen_county = {
+			random_county_province = {
+				limit = { 
+					has_holding = no 
+					has_ongoing_construction = no 
+					barony = { barony_cannot_construct_holding = no }
+				}
+				save_scope_as = province_to_construct_at
+				barony = { save_scope_as = barony_to_construct_at }	# For loc
+			}
+		}
+		debug_log = "Mercenary bought some land"
+		debug_log_scopes = yes
+		debug_log_date = yes
+	}
+
+	option = {		# Sure whatever
+		name = bkt_misc_events.0010.a
+		
+		scope:rich_mercenary_leader = {
+			add_opinion = {
+				target = PREV
+				modifier = became_vassal
+				opinion = 150
+			}
+			scope:province_to_construct_at = {
+				set_holding_type = castle_holding
+				add_province_modifier = { 
+					modifier = recently_built_holding_modifier 
+					years = 5 
+				}
+			}
+			add_character_modifier = former_mercenary_leader_modifier
+			hidden_effect = {
+				remove_short_term_gold = main_building_tier_1_cost
+				save_temporary_scope_value_as = {
+					name = previous_gold
+					value = gold
+				}
+				depose = yes
+				scope:mercenary_company_scope.mercenary_company_leader = {
+					pay_short_term_gold = {
+						gold = scope:previous_gold
+						target = scope:rich_mercenary_leader
+					}
+				}
+				create_title_and_vassal_change = {
+					type = granted
+					save_scope_as = change
+				}
+			}
+			scope:barony_to_construct_at = {
+				change_title_holder = {
+					holder = scope:rich_mercenary_leader
+					change = scope:change
+				}
+			}
+			custom_tooltip = {
+				text = character_title_cannot_be_revoked_tt
+				scope:rich_mercenary_leader = {
+					add_character_flag = {
+						flag = titles_protected
+						years = 25
+					}
+				}
+			}
+			resolve_title_and_vassal_change = scope:change
+		}
+		
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	option = {		# Hell nah
+		name = bkt_misc_events.0010.b
+		
+		scope:rich_mercenary_leader = {
+			add_opinion = {
+				target = PREV
+				modifier = disappointed_opinion
+				opinion = -20
+			}
+			hidden_effect = {
+				remove_short_term_gold = main_building_tier_1_cost
+			}
+		}
+		
+		ai_chance = {
+			base = 0
+		}
+	}
+}

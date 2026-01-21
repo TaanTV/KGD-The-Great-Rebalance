@@ -1,0 +1,221 @@
+﻿on_game_start = {
+	on_actions = {
+		BKT_loaded_on_action
+		BKT_error_supress_on_action
+		BKT_admin_ghana_fix
+		BKT_on_start_female_pool
+		BKT_on_start_misc
+	}
+}
+
+BKT_loaded_on_action = {
+	effect = {
+		set_global_variable = KGD_the_great_rebalance_is_loaded
+		if = {
+			limit = { always = no }
+			set_global_variable = KGD_schizo_balance_is_loaded
+		}
+	}
+}
+
+BKT_error_supress_on_action = {
+	trigger = {
+		always = no 
+	}
+	effect = {
+		if = { 
+			limit = { has_global_variable = KGD_the_great_rebalance_is_loaded }
+		}
+		random_county = {
+			title_province ?= {
+				if = { limit = { has_province_modifier = somewhat_recently_looted_modifier } }
+			}
+			holder ?= {
+				if = { limit = { has_character_modifier = dummy_mp_rules_description_modifier } }
+			}
+		}
+	}
+}
+
+BKT_admin_ghana_fix = {
+	trigger = {
+		has_game_rule = historicity_extra_admin_ghana_historic_always
+		current_date < 868.1.1
+		exists = title:k_ghana.holder
+	}
+	effect = {
+		title:k_ghana = {
+			holder = {
+				every_sub_realm_county = {
+					limit = {
+						title_province = { has_holding_type = tribal_holding }
+					}
+					title_province = { set_holding_type = castle_holding }
+					if = {
+						limit = {
+							any_county_province = {
+								has_holding = no 
+								NOT = { barony_cannot_construct_holding = yes }
+							}
+						}
+						random = {
+							chance = 25
+							random_list = {
+								10 = {
+									random_county_province = {
+										limit = { 
+											has_holding = no 
+											NOT = { barony_cannot_construct_holding = yes }
+										}
+										set_holding_type = city_holding
+									}
+								}
+								10 = {
+									random_county_province = {
+										limit = { 
+											has_holding = no 
+											NOT = { barony_cannot_construct_holding = yes }
+										}
+										set_holding_type = church_holding
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			create_title_and_vassal_change = {
+				type = created
+				save_scope_as = change
+			}
+			every_in_de_jure_hierarchy = {
+				limit = { 
+					tier = tier_duchy 
+					title:k_ghana.holder = { completely_controls = prev }
+				}
+				change_title_holder = {
+					holder = title:k_ghana.holder
+					change = scope:change
+				}
+			}
+			resolve_title_and_vassal_change = scope:change
+		}
+	}
+}
+
+BKT_on_start_misc = {
+	effect = {
+		culture:russian ?= {
+			add_innovation = innovation_longboats
+		}
+		title:d_iceland ?= {
+			every_in_de_jure_hierarchy = {
+				limit = { tier = tier_county }
+				add_county_modifier = harsh_climate_county_modifier
+			}
+		}
+		title:k_romagna.holder ?= {
+			destroy_title = title:k_romagna
+		}
+		if = {
+			limit = {
+				game_start_date = 1178.10.1
+				exists = title:k_rum
+				exists = title:k_anatolia
+				title:k_rum = { is_titular = no }
+				title:k_anatolia = { is_titular = no }
+			}
+			title:k_anatolia = {
+				every_in_de_jure_hierarchy = {
+					limit = { tier = tier_duchy }
+					set_de_jure_liege_title = title:k_rum
+				}
+			}
+		}
+	}
+}
+
+on_game_start_after_lobby = {
+	on_actions = {
+		BKT_1066_more_buildings
+		BKT_extra_fixes
+	}
+}
+
+BKT_extra_fixes = {
+	effect = {
+		culture:turkmen ?= { set_culture_pillar = head_determination_domain }
+		if = {
+			limit = { NOT = { has_game_rule = sahel_nomad_region_on } } 
+			culture:butr ?= { set_culture_pillar = head_determination_domain }
+			culture:baranis ?= { set_culture_pillar = head_determination_domain }
+			culture:zaghawa ?= { set_culture_pillar = head_determination_domain }
+		}
+		every_ruler = {
+			limit = { prestige < 0 }
+			add_prestige_no_experience = {
+				add = 150	#start with at least 150
+				multiply = { value = highest_held_title_tier add = -1 min = 1 }
+				subtract = prestige
+			}
+		}		
+	}
+}
+
+BKT_1066_more_buildings = {
+	trigger = {
+		game_start_date = 1066.1.1
+	}
+	effect = {
+		every_province = {
+			limit = {
+				has_holding = yes
+			}
+			generate_building = yes
+			if = {
+				limit = {
+					county.development_level >= 12
+				}
+				generate_building = yes
+			}
+			if = {
+				limit = {
+					county.development_level >= 24
+				}
+				generate_building = yes
+			}
+		}
+	}
+}
+
+BKT_on_start_female_pool = {
+	effect = {
+		every_duchy = {
+			title_capital_county ?= {
+				random = {
+					chance = 33
+					
+					save_temporary_scope_as = title_of_origin
+					create_character = {
+						age = { 16 27 }
+						gender = female
+						dynasty = generate
+						location = scope:title_of_origin.title_province
+						faith = scope:title_of_origin.faith
+						culture = scope:title_of_origin.culture
+						random_traits = yes
+						#save_scope_as = bookmaker
+						after_creation = {
+							#debug_log = "generated someone at start"
+							#debug_log_scopes = yes
+							random = {
+								chance = 50
+								dynasty ?= { add_dynasty_prestige_level = 1 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

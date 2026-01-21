@@ -1,0 +1,182 @@
+﻿standard_activity_base_cost = {
+	value = 25		#prev 30
+	multiply = {
+		value = primary_title.tier #Unop ck3-tiger
+		subtract = 1
+		min = 1
+		#ADDED
+		multiply = 0.75		# Scale less aggresively with tier
+	}
+	if = {
+		limit = {
+			government_has_flag = government_is_tribal #Unop ck3-tiger
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			primary_title.tier > tier_duchy #Unop ck3-tiger
+		}
+		add = 35		#prev 50
+		# Wtf? 
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			has_game_rule = hard_difficulty
+		}
+		multiply = 0.5
+	}
+	else_if = {
+		limit = {
+			is_ai = yes
+			has_game_rule = very_hard_difficulty
+		}
+		multiply = 0.25
+	}
+}
+
+######################
+# PLAYDATE STUFF
+######################
+standard_playdate_cooldown_time = 730	#prev 1095 #This is 3 years?
+
+# Activity Cost Scaling Multipliers 
+# use as multiply = activity_cost_scale_by_XXX
+activity_cost_scale_by_era = {
+	value = 0
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				add = 2.25		#prev 3
+				# What? 
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				add = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				add = 1
+			}
+			else = {
+				add = 0.75
+			}
+		}
+	}
+}
+
+
+funeral_end_legitimacy_gain = {
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = funeral_option_ceremony
+					option = funeral_ceremony_bad
+				}
+			}
+		}
+		value = 5		#prev miniscule_legitimacy_gain
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = funeral_option_ceremony
+					option = funeral_ceremony_normal
+				}
+			}
+		}
+		value = miniscule_legitimacy_gain	#prev minor_legitimacy_gain
+		#ADDED
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = funeral_option_ceremony
+					option = funeral_ceremony_good
+				}
+			}
+		}
+		value = minor_legitimacy_gain		#prev medium_legitimacy_gain
+		#ADDED
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					has_holy_building = yes
+				}
+			}
+		}
+		add = 20	#prev 50
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					barony = {
+						is_holy_site_of = scope:host.faith
+					}
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					has_building_or_higher = tower_of_silence_01
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					has_building_or_higher = wawel_cathedral_01
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					scope:host.faith = { has_doctrine_parameter = sky_burials_active }
+					is_mountainous_trigger = yes
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					has_building_or_higher = temple_01
+					faith.religion = scope:host.faith.religion
+				}
+			}
+		}
+		add = 10
+	}
+}

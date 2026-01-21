@@ -1,0 +1,58 @@
+﻿
+ep3_eparch_development_modifier = {
+	icon = county_modifier_development_positive
+	
+	development_growth = 0.02	#prev 0.1
+	
+	scale = {
+		value = eparch_aptitude_modifier_scaling_value
+		desc = MODIFIER_DEFINITION_VALUE_EPARCH_APTITUDE
+		display_mode = scaled
+	}
+}
+
+# Admin Eunuch
+
+admin_eunuch_liege_5_modifier = {
+	icon = stewardship_mixed
+	stewardship = 3
+	#domain_limit = 1
+	stress_gain_mult = -0.2
+	vassal_opinion = -10
+	intrigue = -2
+	#ADDED
+	tax_mult = 0.05
+}
+
+admin_eunuch_liege_6_modifier = {
+	icon = stewardship_mixed
+	stewardship = 4
+	#domain_limit = 1
+	stress_gain_mult = -0.3
+	vassal_opinion = -15
+	intrigue = -3
+	#ADDED
+	tax_mult = 0.05
+}
+
+admin_eunuch_liege_7_modifier = {
+	icon = stewardship_mixed
+	stewardship = 5
+	#domain_limit = 1
+	stress_gain_mult = -0.4
+	vassal_opinion = -20
+	intrigue = -4
+	#ADDED
+	tax_mult = 0.05
+}
+
+admin_eunuch_liege_8_modifier = {
+	icon = stewardship_mixed
+	stewardship = 6
+	#domain_limit = 2
+	stress_gain_mult = -0.5
+	vassal_opinion = -25
+	intrigue = -5
+	#ADDED
+	tax_mult = 0.1
+}

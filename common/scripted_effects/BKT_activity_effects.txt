@@ -1,0 +1,733 @@
+﻿disburse_feast_activity_rewards = {
+	# for the loc
+	save_scope_as = root_scope
+
+	# Rewards based on Activity Options
+
+	# Number of courses
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_courses
+					option = feast_courses_good
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = courses_good_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+
+
+					#Max Food Option will make Courtly Vassals more happy than other guests.
+					#Court Amenities can increase this further.
+
+					every_vassal_or_below = {
+						vassal_stance = courtly
+						limit = {
+							is_participant_in_activity = scope:activity
+						}
+						custom = every_courtly_vassal
+						add_opinion = {
+							modifier = hosted_feast_opinion
+							target = root
+							opinion = feast_opinion_max_food_value
+						}
+					}
+					# Vassal Opinion
+					scope:activity = {
+						every_attending_character = {
+							limit = {
+								this != root
+								trigger_if = {
+									limit = {
+										is_vassal_of = root
+									}
+									NOT = { has_vassal_stance = courtly }
+								}
+							}
+							custom = custom.every_attending_character_but_courtly
+							add_opinion = {
+								target = root
+								modifier = impressed_opinion
+								opinion = feast_opinion_max_food_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_courses
+					option = feast_courses_normal
+				}
+			}
+		}
+		#With Middle Food Option
+		scope:activity = {
+			add_activity_log_entry = {
+				key = courses_normal_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+
+					#With Middle Food Option Courtly vassals have slightly higher opinion gain than others
+					#Very High Court Amenities can increase it slightly.
+
+					# Courtly Vassal Opinion
+					every_vassal_or_below = {
+						vassal_stance = courtly
+						limit = {
+							is_participant_in_activity = scope:activity
+						}
+						custom = every_courtly_vassal
+						add_opinion = {
+							modifier = hosted_feast_opinion
+							target = root
+							opinion = feast_opinion_medium_food_value
+						}
+					}
+					# Vassal Opinion
+					scope:activity = {
+						every_attending_character = {
+							limit = {
+								this != root
+								trigger_if = {
+									limit = {
+										is_vassal_of = root
+									}
+									NOT = { has_vassal_stance = courtly }
+								}
+							}
+							custom = custom.every_attending_character_but_courtly
+							add_opinion = {
+								target = root
+								modifier = impressed_opinion
+								opinion = feast_opinion_medium_food_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		scope:activity = {
+			add_activity_log_entry = {
+				key = courses_bad_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+
+					#With Low food option the opinion gain with Courtly vassals is always lower than for normal guests. Even if you have very high court amenities (though they do mitigate it a bit).
+					every_vassal_or_below = {
+						vassal_stance = courtly
+						limit = {
+							is_participant_in_activity = scope:activity
+						}
+						custom = every_courtly_vassal
+						add_opinion = {
+							modifier = hosted_mediocre_feast_opinion
+							target = root
+							opinion = feast_opinion_mediocre_food_value
+						}
+					}
+
+					# Vassal Opinion
+					scope:activity = {
+						#Other guests
+						every_attending_character = {
+							limit = {
+								this != root
+								trigger_if = {
+									limit = {
+										is_vassal_of = root
+									}
+									NOT = { has_vassal_stance = courtly }
+								}
+							}
+							custom = custom.every_attending_character_but_courtly
+							add_opinion = {
+								target = root
+								modifier = impressed_opinion
+								opinion = feast_opinion_mediocre_food_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# If you have an Estate, with the relevant upgrade, you get additional opinion
+	# This does create a duplicate opinion entry in the list of effects, but is easier for script maintenance
+	if = {
+		limit = {
+			scope:host = {
+				domicile ?= {
+					has_domicile_parameter = estate_improved_feast_opinion
+					domicile_location = scope:activity_location
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = feast_estate_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				root = {
+					scope:activity = {
+						every_attending_character = {
+							limit = {
+								this != root
+							}
+							custom = custom.every_attending_character
+							add_opinion = {
+								target = root
+								modifier = impressed_opinion
+								opinion = 5
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# Dish complexity
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_food
+					option = feast_food_good
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = food_good_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+					add_prestige = {
+						value = 225
+						scope:host = {
+							if = {
+								limit = {
+									has_royal_court = yes
+									has_dlc_feature = royal_court
+									amenity_level = { target = court_food_quality value >= 5 }
+								}
+								multiply = 1.5
+							}
+							multiply = court_brewmaster_multiplier
+						}
+						if = {
+							limit = {
+								culture = {
+									has_cultural_parameter = refined_feasts
+								}
+							}
+							add = major_prestige_gain
+						}
+						if = {
+							limit = {
+								any_character_struggle = {
+									involvement = involved
+									has_struggle_phase_parameter = struggle_prestige_from_feast
+								}
+							}
+							add = medium_prestige_gain
+						}
+						if = {
+							limit = {
+								confederation ?= { has_cohesion_level_parameter = any_member_increased_feast_rewards }
+							}
+							multiply = 1.1
+						}
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_food
+					option = feast_food_normal
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = food_normal_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+					add_prestige = {
+						value = 115
+						scope:host = {
+							if = {
+								limit = {
+									scope:host = {
+										has_royal_court = yes
+										has_dlc_feature = royal_court
+										amenity_level = { target = court_food_quality value >= 5 }
+									}
+								}
+								multiply = 2
+							}
+							else_if = {
+								limit = {
+									scope:host = {
+										has_royal_court = yes
+										has_dlc_feature = royal_court
+										amenity_level = { target = court_food_quality value >= 3 }
+									}
+								}
+								multiply = 1.5
+							}
+							multiply = court_brewmaster_multiplier
+						}
+
+
+						if = {
+							limit = {
+								culture = {
+									has_cultural_parameter = refined_feasts
+								}
+							}
+							add = major_prestige_gain
+						}
+						if = {
+							limit = {
+								any_character_struggle = {
+									involvement = involved
+									has_struggle_phase_parameter = struggle_prestige_from_feast
+								}
+							}
+							add = medium_prestige_gain
+						}
+						if = {
+							limit = {
+								confederation ?= { has_cohesion_level_parameter = any_member_increased_feast_rewards }
+							}
+							multiply = 1.1
+						}
+					}
+				}
+			}
+		}
+	}
+	else = {
+		scope:activity = {
+			add_activity_log_entry = {
+				key = food_bad_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					# Host Rewards
+					add_prestige = {
+						value = 35
+						scope:host = {
+							if = {
+								limit = {
+									scope:host = {
+										has_royal_court = yes
+										has_dlc_feature = royal_court
+										amenity_level = { target = court_food_quality value >= 5 }
+									}
+								}
+								multiply = 2
+							}
+							else_if = {
+								limit = {
+									scope:host = {
+										has_royal_court = yes
+										has_dlc_feature = royal_court
+										amenity_level = { target = court_food_quality value >= 3 }
+									}
+								}
+								multiply = 1.5
+							}
+							multiply = court_brewmaster_multiplier
+						}
+
+						if = {
+							limit = {
+								culture = {
+									has_cultural_parameter = refined_feasts
+								}
+							}
+							add = major_prestige_gain
+						}
+						if = {
+							limit = {
+								any_character_struggle = {
+									involvement = involved
+									has_struggle_phase_parameter = struggle_prestige_from_feast
+								}
+							}
+							add = medium_prestige_gain
+						}
+						if = {
+							limit = {
+								confederation ?= { has_cohesion_level_parameter = any_member_increased_feast_rewards }
+							}
+							multiply = 1.1
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# Estate Unlock: Wine Selection
+	if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_wine
+					option = feast_wine_extensive
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = wine_extensive_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					change_influence = {
+						value = 15
+
+						scope:activity = {
+							every_attending_character = {
+								limit = {
+									NOR = {
+										this = root
+										is_courtier_of = root # Guest shouldn't originate from you own court
+									}
+								}
+								add = 15
+							}
+						}
+						scope:host = { multiply = court_brewmaster_multiplier }
+						#ADDED - cap that crap
+						max = 150
+						if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_3 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_3_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_2 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_2_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_1 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_1_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_wine
+					option = feast_wine_normal
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = wine_normal_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					change_influence = {
+						value = 10
+
+						scope:activity = {
+							every_attending_character = {
+								limit = {
+									NOR = {
+										this = root
+										is_courtier_of = root # Guest shouldn't originate from you own court
+									}
+								}
+								add = 10
+							}
+						}
+						scope:host = { multiply = court_brewmaster_multiplier }
+						#ADDED - cap that crap
+						max = 100
+						if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_3 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_3_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_2 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_2_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_1 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_1_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:activity = {
+				has_activity_option = {
+					category = feast_option_wine
+					option = feast_wine_limited
+				}
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = wine_limited_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				# Effects
+				root = {
+					change_influence = {
+						value = 5
+
+						scope:activity = {
+							every_attending_character = {
+								limit = {
+									NOR = {
+										this = root
+										is_courtier_of = root # Guest shouldn't originate from you own court
+									}
+								}
+								add = 5
+							}
+						}
+						scope:host = { multiply = court_brewmaster_multiplier }
+						#ADDED - cap that crap
+						max = 50
+						if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_3 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_3_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_2 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_2_value
+							}
+						}
+						else_if = {
+							limit = {
+								domicile ?= { has_domicile_parameter = estate_improved_wine_cellar_1 }
+							}
+							multiply = {
+								value = 1
+								add = estate_improved_wine_cellar_1_value
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# We give you the regular rewards
+	hosted_successful_feast_new_effect = yes
+	# We give out the Reveler trait/xp
+	disburse_feast_reveler_rewards = yes
+	#Accolade glory gain
+	accolades_activity_complete_feast_glory_effect = yes
+	#Stress loss
+	if = {
+		limit = {
+			OR = {
+				has_trait = shy
+				has_trait = reclusive
+			}
+		}
+		custom_tooltip = host_feast_decision_desc_shy
+	}
+	else = {
+		if = {
+			limit = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+					amenity_level = { target = court_food_quality value >= 5 }
+			}
+			stress_impact = {
+				base = exotic_feast_stress_loss_value
+				gluttonous = feast_stress_loss_value
+				gregarious = feast_stress_loss_value
+				lifestyle_reveler = feast_stress_loss_value
+				drunkard = feast_stress_loss_value
+				comfort_eater = feast_stress_loss_value
+				generous = feast_stress_loss_value
+				greedy = activity_stress_gain_impact
+			}
+		}
+		else_if = {
+			limit = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+				amenity_level = { target = court_food_quality value >= 4 }
+			}
+			stress_impact = {
+				base = lavish_feast_stress_loss_value
+				gluttonous = feast_stress_loss_value
+				gregarious = feast_stress_loss_value
+				lifestyle_reveler = feast_stress_loss_value
+				drunkard = feast_stress_loss_value
+				comfort_eater = feast_stress_loss_value
+				generous = feast_stress_loss_value
+				greedy = activity_stress_gain_impact
+			}
+		}
+	    else_if = {
+			limit = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+				amenity_level = { target = court_food_quality value >= 3 }
+			}
+			stress_impact = {
+				base = medium_feast_stress_loss_value
+				gluttonous = feast_stress_loss_value
+				gregarious = feast_stress_loss_value
+				lifestyle_reveler = feast_stress_loss_value
+				drunkard = feast_stress_loss_value
+				comfort_eater = feast_stress_loss_value
+				generous = feast_stress_loss_value
+				greedy = activity_stress_gain_impact
+			}
+		}
+		else_if = {
+			limit = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+				amenity_level = { target = court_food_quality value <= 1 }
+			}
+			stress_impact = {
+				base = meager_feast_stress_loss_value
+				gluttonous = feast_stress_loss_value
+				gregarious = feast_stress_loss_value
+				lifestyle_reveler = feast_stress_loss_value
+				drunkard = feast_stress_loss_value
+				comfort_eater = feast_stress_loss_value
+				generous = feast_stress_loss_value
+				greedy = activity_stress_gain_impact
+			}
+		}
+		else = {
+			stress_impact = {
+				base = feast_stress_loss_value
+				gluttonous = activity_stress_loss_impact
+				gregarious = activity_stress_loss_impact
+				lifestyle_reveler = feast_stress_loss_value
+				drunkard = activity_stress_loss_impact
+				comfort_eater = activity_stress_loss_impact
+				generous = activity_stress_loss_impact
+				greedy = activity_stress_gain_impact
+			}
+		}
+	}
+
+	# Remove strife if relevant.
+	remove_strife_per_invited_powerful_vassal_effect = yes
+}

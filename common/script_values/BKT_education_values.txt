@@ -1,0 +1,11 @@
+﻿#Values used in the education of children
+
+#matching_childhood_trait_modifier_value = 20
+#mismatching_childhood_trait_modifier_value = -20
+educator_skill_modifier_factor = 0.5			#prev 0.4
+educator_learning_skill_modifier_factor = 0.15	#prev 0.2
+
+#Values to trigger outcome events from (How well did the child do?)
+education_level_1 = 8	#prev 7 # Required for education rank 2
+education_level_2 = 14	#prev 12 # Required for education rank 3
+education_level_3 = 20	#prev 17 # Required for education rank 4

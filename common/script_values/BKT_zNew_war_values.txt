@@ -1,0 +1,70 @@
+﻿
+current_military_strength_this_plus_allies_value = {
+	value = 0
+	add = current_military_strength
+	every_ally = {
+		limit =	{
+			#ADDED
+			opinion = {
+				target = PREV
+				value > -35
+			}
+		}
+		# Players are unreliable creatures
+		add = {
+			value = current_military_strength
+			if = { limit = { is_ai = no } multiply = 0.2 }
+		}
+	}
+}
+
+# I assume it's CURRENT military power
+current_military_power_this_plus_allies_value = {
+	value = 0
+	add = military_power
+	every_ally = {
+		limit =	{
+			#ADDED
+			opinion = {
+				target = PREV
+				value > -35
+			}
+		}
+		# Players are unreliable creatures
+		add = {
+			value = military_power
+			if = { limit = { is_ai = no } multiply = 0.2 }
+		}
+	}
+}
+
+a_third_of_current_military_power = {
+	value = 0
+	add = military_power
+	multiply = 0.333
+}
+
+current_military_power_this_plus_war_allies_in_target_war_value = {
+	value = 0
+	add = military_power
+	if = {
+		limit = { 
+			is_at_war = yes 
+			exists = scope:target
+		}
+		every_war_ally = {
+			limit = { is_participant_in_war = scope:target }
+			add = military_power
+		}
+	}
+}
+
+double_current_military_power_this_plus_war_allies_in_target_war_value = {
+	value = current_military_power_this_plus_war_allies_in_target_war_value
+	multiply = 2
+}
+
+double_current_military_power_this_plus_allies_value = {
+	value = current_military_power_this_plus_allies_value
+	multiply = 2
+}

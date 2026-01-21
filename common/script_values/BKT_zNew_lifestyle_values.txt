@@ -1,0 +1,4 @@
+﻿bellum_justum_discount_percentage_display = {
+	value = 100
+	subtract = bellum_justum_discount_percentage
+}

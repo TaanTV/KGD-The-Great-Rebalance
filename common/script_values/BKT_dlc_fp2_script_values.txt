@@ -1,0 +1,86 @@
+﻿offer_assistance_interaction_gold_value = {
+	value = 0
+	if = {
+		limit = { exists = scope:contract_assistance_helper }
+		add = scope:contract_assistance_helper.max_military_strength
+	}
+	divide = scope:recipient.max_military_strength
+	#ADDED - this big IF statement
+	if = {
+		limit = { 
+			exists = scope:target 
+		}
+		scope:target = {
+			if = {
+				limit = { primary_defender = scope:recipient }
+				multiply = {
+					value = war_attacker_total_current_strength_value
+					divide = {
+						value = war_defender_total_strength_value
+						min = 1
+					}
+				}
+			}
+			else_if = {
+				limit = { primary_attacker = scope:recipient }
+				multiply = {
+					value = war_defender_total_strength_value
+					divide = {
+						value = war_attacker_total_current_strength_value
+						min = 1
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:contract_assistance_helper
+			scope:contract_assistance_helper.max_military_strength > scope:recipient.max_military_strength
+		}
+		multiply = 120
+	}
+	#ADDED - else_if so adventurers are a bit less F'd + they're mostly professional armies too
+	else_if = {
+		limit = {
+			exists = scope:contract_assistance_helper
+			scope:contract_assistance_helper = { is_landless_ruler = yes } 
+		}
+		multiply = 75
+	}
+	else = {
+		multiply = 60
+	}
+	multiply = {
+		value = 1
+		if = {
+			limit = { exists = scope:contract_assistance_helper }
+			if = {
+				limit = { scope:contract_assistance_helper = { has_trait = greedy } }
+				add = 0.5
+			}
+			else_if = {
+				limit = { scope:contract_assistance_helper = { has_trait = generous } }
+				subtract = 0.5
+			}
+		}
+	}
+	if = {
+		limit = {
+			
+			scope:contract_assistance_helper.domicile ?= { has_domicile_parameter = camp_improved_mercenary_contract_rewards }
+		}
+		multiply = camp_improved_mercenary_contract_rewards_value
+	}
+	if = {
+		limit = {
+			scope:contract_assistance_helper ?= { has_perk = hard_rule_perk }
+		}
+		multiply = adventurer_hard_rule_contract_rewards_value
+	}
+	round = yes
+	#max = gold
+	#ADDED CHANGED
+	max = { value = gold multiply = 0.75 floor = yes }
+	min = 25
+}

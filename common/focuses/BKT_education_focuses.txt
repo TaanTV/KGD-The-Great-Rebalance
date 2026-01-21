@@ -1,0 +1,207 @@
+﻿
+#martial
+education_martial = {
+	type = education
+
+	skill = martial
+	
+	desc = {
+		desc = education_martial_desc
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_martial_education_affinity_childhood_trait_trigger = yes }
+				desc = education_martial_tt.affinity
+			}
+			triggered_desc = {
+				trigger = { has_martial_education_disaffinity_childhood_trait_trigger = yes }
+				desc = education_martial_tt.disaffinity
+			}
+		}
+		triggered_desc = {
+			trigger = {
+				liege = { 
+					OR = { 
+						employs_court_position = court_tutor_court_position
+						employs_court_position = court_guru_court_position
+					}
+				}
+			}
+			desc = education_any_tt.court_tutor
+		}
+		triggered_desc = {
+			trigger = {
+				liege = { employs_court_position = huntperson_camp_officer }
+			}
+			desc = education_martial_tt.huntperson
+		}
+		desc = line_break
+	}
+
+	is_default = {
+		has_trait = rowdy
+		OR = {
+			trigger_if = { # Has the Royal Court and thus can modify pillars
+				limit = {
+					has_dlc_feature = diverge_culture # Can modify pillars
+				}
+				OR = {
+					culture = { has_cultural_parameter = martial_custom_equal_combatant }
+					AND = {
+						culture = { has_cultural_parameter = martial_custom_male_only_combatant }
+						is_male = yes
+					}
+					AND = {
+						culture = { has_cultural_parameter = martial_custom_female_only_combatant }
+						is_female = yes
+					}
+				}
+				
+			}
+			trigger_else = { # Does not have the Royal Court and thus combatant is governed by faith
+				OR = {
+					faith = { has_doctrine_parameter = combatant_can_be_either_gender_if_no_roco }
+					AND = {
+						faith = { has_doctrine_parameter = combatant_must_be_male_if_no_roco }
+						is_male = yes
+					}
+					AND = {
+						faith = { has_doctrine_parameter = combatant_must_be_female_if_no_roco }
+						is_female = yes
+					}
+				}
+			}
+			culture = { has_cultural_parameter = high_prowess_ignores_knight_restrictions }
+			culture = { has_cultural_parameter = has_access_to_shieldmaidens }
+		}
+	}
+
+	is_good_for = {
+		has_martial_education_affinity_childhood_trait_trigger = yes
+	}
+
+	is_bad_for = {
+		has_martial_education_disaffinity_childhood_trait_trigger = yes
+	}
+	
+	on_change_to = {
+		if = {
+			limit = {
+				exists = var:education_point_gain_variable
+			}
+			change_variable = {
+				name = education_point_gain_variable
+				multiply = point_conversion_factor
+			}
+			set_variable = {
+				name = education_martial_variable
+				value = var:education_point_gain_variable
+			}
+			remove_variable = education_point_gain_variable
+		}
+	}
+	
+	on_change_from = {
+		if = {
+			limit = {
+				is_alive = yes
+				is_adult = no
+			}
+			add_character_flag = martial_previous_education
+			if = {
+				limit = {
+					has_variable = education_martial_variable
+				}
+				set_variable = {
+					name = education_point_gain_variable
+					value = var:education_martial_variable
+				}
+				remove_variable = education_martial_variable
+			}
+			else = {
+				set_variable = {
+					name = education_point_gain_variable
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					any_relation = {
+						type = guardian
+						NOT = { is_parent_of = root }
+					}
+				}
+				save_scope_as = ward
+				random_relation = {
+					type = guardian
+					trigger_event = childhood_education.0004
+				}
+			}
+		}
+	}
+		
+	modifier = {
+		martial = 1
+	}
+
+
+	auto_selection_weight = {
+		value = 100
+		if = {
+			limit = {
+				has_martial_education_affinity_childhood_trait_trigger = yes
+			}
+			add = 900
+		}
+		if = {
+			limit = { has_martial_education_disaffinity_childhood_trait_trigger = yes }
+			add = -900
+		}
+		if = { # Life is hard on the steppe
+			limit = {
+				liege ?= { is_ai = yes }
+				government_has_flag = government_is_nomadic
+				can_be_combatant_based_on_gender_trigger = { ARMY_OWNER = root }
+			}
+			add = 10000
+		}
+		if = {
+			limit = {
+				NOR = {		#ADDED - changed.
+					trigger_if = { # Has the Royal Court and thus can modify pillars
+						limit = {
+							has_dlc_feature = diverge_culture # Can modify pillars
+						}
+						OR = {
+							culture = { has_cultural_parameter = martial_custom_equal_combatant }
+							AND = {
+								culture = { has_cultural_parameter = martial_custom_male_only_combatant }
+								is_male = yes
+							}
+							AND = {
+								culture = { has_cultural_parameter = martial_custom_female_only_combatant }
+								is_female = yes
+							}
+						}
+						
+					}
+					trigger_else = { # Does not have the Royal Court and thus combatant is governed by faith
+						OR = {
+							faith = { has_doctrine_parameter = combatant_can_be_either_gender_if_no_roco }
+							AND = {
+								faith = { has_doctrine_parameter = combatant_must_be_male_if_no_roco }
+								is_male = yes
+							}
+							AND = {
+								faith = { has_doctrine_parameter = combatant_must_be_female_if_no_roco }
+								is_female = yes
+							}
+						}
+					}
+					culture = { has_cultural_parameter = high_prowess_ignores_knight_restrictions }
+					culture = { has_cultural_parameter = has_access_to_shieldmaidens }
+				} 
+			}
+			multiply = 0.02		#prev 0.2
+		}
+	}
+}

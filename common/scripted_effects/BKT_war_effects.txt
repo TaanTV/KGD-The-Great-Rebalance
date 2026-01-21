@@ -1,0 +1,519 @@
+﻿
+on_claimant_faction_war_win_common = {
+	$DEFENDER$ = {
+		if = {
+			limit = {
+				is_tributary = yes
+				exists = suzerain
+				$CLAIMANT$ = {
+					is_tributary = no
+					OR = {
+						is_ruler = no
+						is_vassal_or_below_of = $DEFENDER$
+					}
+				}
+			}
+			suzerain = { save_scope_as = handover_suzerain }
+		}
+	}
+	$CLAIMANT$ = {
+		save_scope_as = the_claimant
+	}
+	
+	# If the claimant is the prisoner of the defender, free the claimant (it doesn't make much sense to leave the new king in the old king's dungeon)
+	scope:the_claimant = {
+		if = {
+			limit = {
+				is_imprisoned_by = $DEFENDER$
+			}
+			release_from_prison = yes
+		}
+	}
+
+	# Add mutual opinion bonuses between claimant and faction members, as well as a hook on the claimant if possible.
+	$ATTACKER$.joined_faction = {
+		every_faction_member = {
+			custom = FACTION_CLAIMANT_EVERY_FACTION_MEMBER
+			limit = {
+				NOT = { this = $ATTACKER$.joined_faction.special_character }
+			}
+			hidden_effect = {
+				add_opinion = {
+					modifier = claimant_faction_member_opinion
+					target = $ATTACKER$.joined_faction.special_character
+				}
+				reverse_add_opinion = {
+					modifier = claimant_faction_claimant_opinion
+					target = $ATTACKER$.joined_faction.special_character
+				}
+			}
+			if = {
+				limit = {
+					can_add_hook = {
+						type = favor_hook
+						target = $ATTACKER$.joined_faction.special_character
+					}
+					#ADDED
+					save_temporary_scope_as = faction_member_scope
+					NAND = {
+						exists = scope:war
+						scope:war = {
+							war_contribution = {
+								target = scope:faction_member_scope
+								value < 100		#Basic "did anything in the war" check
+							}	
+						}
+					}
+				}
+				add_hook = {
+					type = favor_hook
+					target = $ATTACKER$.joined_faction.special_character
+				}
+			}
+			# Struggle boost
+			if = {
+				limit = {
+					culture = $ATTACKER$.joined_faction.special_character.culture
+					any_character_struggle = {
+						involvement = involved
+						has_struggle_phase_parameter = struggle_prestige_install_same_culture_claimant
+					}
+				}
+				add_prestige = major_prestige_gain
+			}
+			
+			# Save the number of faction members for use further down
+			add_to_list = num_faction_members
+			#ADDED - some breathing room, at least from those vassals
+			hidden_effect = {
+				add_character_flag = {
+					flag = joining_faction_block
+					years = 3
+				}
+			}
+		}
+	}
+
+	# Give the claimant their new title.
+	create_title_and_vassal_change = {
+		type = faction_demand
+		save_scope_as = change
+		add_claim_on_loss = yes
+	}
+
+	# Ceremonial Liege
+	if = {
+		limit = {
+			exists = top_liege.primary_title.var:administrative_ui_special_title
+			scope:faction_targeted_title = $DEFENDER$.top_liege.primary_title.var:administrative_ui_special_title
+		}
+		$DEFENDER$ = {
+			every_held_title = {
+				limit = {
+					is_noble_family_title = no
+					is_landless_type_title = no
+					tier >= scope:faction_targeted_title.tier
+				}
+				add_to_list = faction_titles
+			}
+		}
+	}
+
+	every_in_list = {
+		list = $TARGET_TITLES$
+		add_to_list = faction_titles
+		holder = {
+			save_scope_as = target_holder
+		}
+	}
+	scope:target_holder ?= {
+		if = {
+			limit = {
+				top_liege = this
+				government_allows = administrative
+				primary_title = { is_in_list = faction_titles }
+			}
+			every_held_title = {
+				title_tier > barony
+				limit = {
+					is_noble_family_title = no
+				}
+				add_to_list = faction_titles
+			}
+		}
+	}
+	ordered_in_list = {
+		list = $TARGET_TITLES$
+		position = 0
+		order_by = tier
+		save_scope_as = target_title
+	}
+	$ATTACKER$.joined_faction = {
+		every_faction_county_member = {
+			limit = {
+				NOT = { is_in_list = faction_titles }
+			}
+			add_to_list = faction_titles
+		}
+	}
+
+	setup_claim_cb = {
+		titles = faction_titles
+		attacker = $ATTACKER$
+		defender = $DEFENDER$
+		claimant = scope:the_claimant
+		change = scope:change
+		civil_war = yes
+	}
+	
+	#ADDED - apparently the above can sometimes leave scope:target_title unset...
+	if = {
+		limit = { NOT = { exists = scope:target_title } }
+		scope:the_claimant.primary_title ?= { save_scope_as = target_title }
+	}
+
+	# Ensure that the liege structure is preserved
+	if = {
+		limit = {
+			scope:target_title.holder = { top_liege != this }
+			scope:the_claimant.primary_title.tier < scope:target_title.tier
+		}
+		scope:the_claimant = {
+			change_liege = {
+				liege = scope:target_title.holder.liege
+				change = scope:change
+			}
+		}
+	}
+
+	# Preserve Grandeur
+	if = {
+		limit = {
+			scope:target_title.holder = {
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+			}
+			scope:the_claimant = {
+				has_royal_court = no
+			}
+		}
+		scope:the_claimant = {
+			set_variable = {
+				name = previous_holder_grandeur_value
+				value = scope:target_title.holder.court_grandeur_current
+			}
+		}
+	}
+	
+	hidden_effect = {
+		if = {
+			limit = {
+				exists = scope:target_title.holder.dynasty
+				exists = scope:the_claimant.dynasty
+				scope:target_title.holder = {
+					has_variable = conqueror
+					scope:target_title.holder.dynasty = scope:the_claimant.dynasty
+				}
+				scope:the_claimant = {
+					OR = {
+						is_ai = no
+						ai_has_cautious_personality = no
+					}
+					NOT = { has_variable = conqueror }
+				}
+			}
+			scope:the_claimant = {
+				if = {
+					limit = {
+						is_ai = no
+					}
+					trigger_event = {
+						id = conqueror.0001
+						days = 10
+					}
+				}
+				else = {
+					trigger_event = conqueror.0001
+				}
+			}
+		}
+	}
+
+	resolve_title_and_vassal_change = scope:change
+	
+	# We give you decent Legitimacy so you don't get immediately deposed - people _really_ want you in the throne
+	# Can you even get Legitimacy?
+	if = {
+		limit = {
+			scope:the_claimant = {
+				is_valid_for_legitimacy_change = yes
+			}
+		}
+		# Per tier
+		if = {
+			limit = {
+				scope:target_title.tier = tier_empire
+			}
+			scope:the_claimant = {
+				add_legitimacy = {
+					value = 1000
+					multiply = nomadic_legitimacy_claimant_multiplier
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				scope:target_title.tier = tier_kingdom
+			}
+			scope:the_claimant = {
+				add_legitimacy = {
+					value = 750
+					multiply = nomadic_legitimacy_claimant_multiplier
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				scope:target_title.tier = tier_duchy
+			}
+			scope:the_claimant = {
+				add_legitimacy = {
+					value = 500
+					multiply = nomadic_legitimacy_claimant_multiplier
+				}
+			}
+		}
+		else = {
+			scope:the_claimant = {
+				add_legitimacy = {
+					value = 300
+					multiply = nomadic_legitimacy_claimant_multiplier
+				}
+			}
+		}
+		# Per number of faction members
+		if = {
+			limit = {
+				list_size:num_faction_members > 0
+				scope:the_claimant = {
+					is_valid_for_legitimacy_change = yes
+				}
+			}
+			scope:the_claimant = {
+				add_legitimacy = {
+					value = list_size:num_faction_members
+					multiply = 50
+				}
+			}
+		}
+		
+	}
+
+	# Add Appropriate Grandeur
+	scope:the_claimant = {
+		if = {
+			limit = {
+				exists = var:previous_holder_grandeur_value
+				has_royal_court = yes
+				has_dlc_feature = royal_court
+			}
+			hidden_effect = {
+				change_current_court_grandeur = -100 # Reset to 0
+				change_current_court_grandeur = var:previous_holder_grandeur_value
+				remove_variable = previous_holder_grandeur_value
+			}
+			change_current_court_grandeur = massive_court_grandeur_gain # Gain a bonus to Grandeur for winning a claim faction
+		}
+	}
+
+	# Byzantine flavor
+	if = {
+		limit = {
+			scope:target_title = title:e_byzantium
+			has_ep3_dlc_trigger = yes
+		}
+		scope:the_claimant = { 
+			trigger_event = {
+				id = ep3_emperor_yearly.2030
+				days = 15
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			exists = scope:handover_suzerain
+		}
+		start_tributary_interaction_effect = {
+			TRIBUTARY = scope:the_claimant
+			SUZERAIN = scope:handover_suzerain
+		}
+	}
+
+	# TODO Add prestige effects based on $ATTACKER_PRESTIGE$ and $DEFENDER_PRESTIGE$
+}
+
+pay_short_term_gold_reparations_effect = {
+	if = {
+		limit = { has_government = landless_adventurer_government }
+		#pay_short_term_gold = {
+		#	gold = {
+		#		value = medium_gold_value
+		#		multiply = $GOLD_VALUE$
+		#		if = {
+		#			limit= {
+		#				scope:defender.culture = { has_cultural_parameter = more_gold_for_successful_defensive_wars }
+		#			}
+		#			multiply = 2
+		#		}
+		#	}
+		#	target = scope:defender
+		#}
+		#comment out everything from up above
+		save_temporary_scope_value_as = {
+			name = total_gold_to_pay
+			value = {
+				add = medium_gold_value
+				multiply = $GOLD_VALUE$
+				if = {
+					limit= {
+						scope:defender.culture = { has_cultural_parameter = more_gold_for_successful_defensive_wars }
+					}
+					multiply = 2
+				}
+			}
+		}
+	}
+	else = {
+		#pay_short_term_gold = {
+		#	gold = {
+		#		value = $GOLD_VALUE$
+		#		if = {
+		#			limit= {
+		#				scope:defender.culture = { has_cultural_parameter = more_gold_for_successful_defensive_wars }
+		#			}
+		#			multiply = 2
+		#		}
+		#	}
+		#	target = scope:defender
+		#	yearly_income = yes # STANDARD
+		#}
+		#comment out everything from up above
+		save_temporary_scope_value_as = {
+			name = total_gold_to_pay
+			value = {
+				add = yearly_character_income
+				multiply = $GOLD_VALUE$
+				if = {
+					limit= {
+						scope:defender.culture = { has_cultural_parameter = more_gold_for_successful_defensive_wars }
+					}
+					multiply = 2
+				}
+			}
+		}
+	}
+	#ADDED - this is where the fun begins.
+	#"scope:war.war_contribution(scope:laamp_temp)"
+	#owed_contract_assistance_war = scope:target
+	if = {
+		limit = {
+			exists = scope:total_gold_to_pay
+		}
+		root.war ?= {
+			#limit = {
+			#	primary_attacker = scope:attacker
+			#	primary_defender = scope:defender
+			#}
+			save_scope_as = war_scope 
+			every_war_defender = {
+				limit = {
+					NOR = {
+						this = scope:defender		#not primary one for sure
+						scope:war_scope = {
+							war_contribution = {	#did smth in the war
+								target = prev
+								value < 100								
+							}
+						}
+						AND = {						#isnt payed to participate
+							has_variable = owed_contract_assistance_war
+							var:owed_contract_assistance_war = scope:war_scope
+						}
+					}
+				}
+				add_to_list = participated_defenders
+			}
+		}
+		if = {
+			limit = {
+				list_size:participated_defenders > 0
+			}
+			save_temporary_scope_value_as = {
+				name = total_defender_contribution
+				value = 0
+			}
+			every_in_list = {
+				list = participated_defenders
+				save_temporary_scope_as = some_defender_scope
+				save_temporary_scope_value_as = {
+					name = total_defender_contribution
+					value = {
+						value = scope:total_defender_contribution
+						add = "scope:war_scope.war_contribution(scope:some_defender_scope)"
+					}
+				}
+			}
+			save_temporary_scope_value_as = {
+				name = gold_to_pay_to_primary
+				value = {
+					value = scope:total_gold_to_pay
+					multiply = {
+						value = "scope:war_scope.war_contribution(scope:defender)"
+						divide = {
+							value = scope:total_defender_contribution
+							add = "scope:war_scope.war_contribution(scope:defender)"
+							min = 1
+						}
+						min = 0.5
+					}
+				}
+			}
+			# First the primary defender gets payed at least 50% of the total
+			custom_tooltip = reparations_will_be_split
+			pay_short_term_gold = {
+				target = scope:defender
+				gold = scope:gold_to_pay_to_primary
+			}
+			#add_prestige = "root.war.war_contribution(scope:defender)"
+			every_in_list = {
+				list = participated_defenders
+				save_temporary_scope_as = some_defender_scope
+				scope:attacker = {
+					pay_short_term_gold = {
+						target = prev
+						gold = {
+							value = scope:total_gold_to_pay
+							subtract = scope:gold_to_pay_to_primary
+							multiply = {
+								value = "scope:war_scope.war_contribution(scope:some_defender_scope)"
+								divide = {
+									value = scope:total_defender_contribution
+									min = 1
+								}
+							}
+						}
+					}
+					#add_prestige = "scope:war_scope.war_contribution(scope:some_defender_scope)"
+				}
+			}	
+		}
+		else = {
+			custom_tooltip = reparations_may_be_split
+			pay_short_term_gold = {
+				gold = scope:total_gold_to_pay
+				target = scope:defender
+			}
+		}
+	}
+}

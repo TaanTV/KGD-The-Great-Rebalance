@@ -1,0 +1,460 @@
+﻿
+diarch_loyalty_score_type_regency_value = {
+	### PLEASE NOTE ####
+	# It's deliberate design that we don't double up on lots of values between loyalty and succession score (e.g., familial bonuses).
+	# If the two values become too synced, then you'll either always be fine or else always be screwed. Neither of these are fun or interesting.
+	# The intention is that societal ties govern your succession score whilst loyalty is more about personal relations and outlook (which is why we pepper in some traits and cultural traditions to break the score up a bit).
+
+	if = {
+		# For performance reasons, you'll sometimes check this when you don't have a liege, so we need to check beforehand for error purposes.
+		limit = { exists = liege }
+		# Add raw opinion.
+		add = {
+			desc = diarch_loyalty_score.regency.opinion_of_you
+			#value = "opinion(liege)"
+			#ADDED
+			value = {
+				value = "opinion(liege)"
+				multiply = 0.75
+			}
+		}
+		# High-Tier Relationships.
+		add = diarch_loyalty_score_standard_values_high_tier_relationships_value
+		# Traits.
+		add = diarch_loyalty_score_standard_values_general_traits_value
+		# Court Positions.
+		add = diarch_loyalty_score_standard_values_general_court_positions_value
+		# Cultural Traditions.
+		add = diarch_loyalty_score_standard_values_general_culture_value
+		# Sympathies.
+		## General factors.
+		add = diarch_loyalty_score_standard_values_general_sympathies_value
+		## Dread factors in in temporary regencies.
+		if = {
+			limit = {
+				liege = {
+					dread >= 1
+					has_diarchy_active_parameter = diarchy_type_is_temporary_regency
+				}
+				has_dread_level_towards = {
+	  				target = liege
+	  				level >= 1
+	  			}
+			}
+			add = {
+				desc = diarch_loyalty_score.regency.temporary_regency.dread
+				value = {
+					value = liege.dread
+					#ADDED - lower that slightly
+					multiply = 0.75
+					# Weight up if they're a basic natural coward.
+					if = {
+						limit = {
+							has_dread_level_towards = {
+				  				target = liege
+				  				level >= 2
+				  			}
+						}
+						multiply = 2
+					}
+				}
+			}
+		}
+		# Obedience matters if you have obedience
+		if = {
+			limit = {
+				liege = { government_allows = obedience }
+			}
+			add = {
+				desc = game_concept_obedience
+				value = obedience_value
+			}
+		}
+		# Overrides.
+		## Loyalty overrides.
+		add = diarch_loyalty_score_standard_values_overrides_loyalty_value
+		# Voyager Perk
+		add = diarch_loyalty_score_value_power_at_home_perk_value
+		#ADDED - time as regent
+		if = {
+			limit = { 
+				is_diarch_of_target = liege
+				liege = { has_diarchy_active_parameter = diarchy_type_is_temporary_regency }
+			}
+			add = {
+				desc = diarch_loyalty_score.regency.years_as_diarch
+				value = {
+					value = years_as_diarch
+					multiply = -25
+				}
+			}
+		}
+		else_if = {
+			limit = { 
+				is_diarch_of_target = liege
+			}
+			add = {
+				desc = diarch_loyalty_score.regency.years_as_diarch	#dont forget to actually add the loc bruh.
+				value = {
+					value = years_as_diarch
+					multiply = -3
+				}
+			}
+		}
+	}
+}
+
+syphon_treasury_gold_gain_low = {
+	value = 0
+	#add = scope:recipient.minor_gold_value
+	#ADDED
+	add = scope:recipient.miniscule_gold_value
+}
+syphon_treasury_gold_gain_medium = {
+	value = 0
+	#add = scope:recipient.medium_gold_value
+	#ADDED
+	add = scope:recipient.minor_gold_value
+}
+syphon_treasury_gold_gain_high = {
+	value = 0
+	#add = scope:recipient.major_gold_value
+	#ADDED
+	add = scope:recipient.medium_gold_value
+}
+syphon_treasury_gold_gain_very_high = {
+	value = 0
+	#add = scope:recipient.monumental_gold_value
+	#ADDED
+	add = scope:recipient.major_gold_value
+}
+
+swing_scales_discounts_multiplier_value = {
+	# Landless characters pay a fraction.
+	if = {
+		#limit = { is_playable_character = no }
+		limit = { is_ruler = no }
+		value = 0.5		#prev 0.75
+	}
+	# Otherwise we give the AI mate's rates to encourage them to use the system.
+	else_if = {
+		limit = { is_ai = yes }
+		value = 0.75	#prev 0.5
+	}
+	# Otherwise no discounts.
+	else = { value = 1 }
+	
+	#ADDED - actually more discounts down below
+	if = {
+		limit = { 
+			#Quadruple check that everyone exists just in case
+			exists = scope:actor
+			exists = scope:recipient
+			#Not sure if this junk is necessary, but i have a feeling that it is.
+			OR = {
+				AND = { 
+					scope:actor = { is_diarch_of_target = scope:recipient }
+					scope:recipient = { has_diarchy_type = temporary_regency }
+				}
+				AND = { 
+					scope:recipient = { is_diarch_of_target = scope:actor }
+					scope:actor = { has_diarchy_type = temporary_regency }
+				}
+			}
+		}
+		multiply = 0.5
+	}
+}
+
+swing_scales_influence_cost_value = {
+	value = 0
+	# Gate by liege tier.
+	## Count.
+	if = {
+		limit = { liege.highest_held_title_tier <= tier_county }
+		add = minor_influence_value
+	}
+	## Duke.
+	else_if = {
+		limit = { liege.highest_held_title_tier <= tier_duchy }
+		add = medium_influence_value
+	}
+	## King or Emperor
+	else = { add = major_influence_value }
+
+	# Adjust how much this swing costs due to Legitimacy
+	## Should only affect the regent, not the ruler
+	if = {
+		limit = {
+			scope:recipient = { is_liege_or_above_of = scope:actor }
+		}
+		# 1
+		if = {
+			limit = { liege.legitimacy_level = 1 }
+			add = miniscule_influence_value
+		}
+		# 2
+		else_if = {
+			limit = { liege.legitimacy_level = 2 }
+			add = minor_influence_value
+		}
+		# 3
+		else_if = {
+			limit = { liege.legitimacy_level = 3 }
+			add = medium_influence_value
+		}
+		# 4
+		else_if = {
+			limit = { liege.legitimacy_level = 4 }
+			add = major_influence_value
+		}
+		# 5
+		else_if = {
+			limit = { liege.legitimacy_level = 5 }
+			add = massive_influence_value
+		}
+		else = {
+			# Deliberately empty
+			# Adjustable in the future if necessary
+		}
+	}
+	
+	# Adjust cost if you have the family attribute for it
+	#multiply = swing_scales_cost_multipler_value
+}
+
+swing_scales_prestige_cost_value = {
+	value = 0
+	# Gate by liege tier.
+	## Count.
+	if = {
+		limit = { liege.highest_held_title_tier <= tier_county }
+		add = minor_prestige_value
+	}
+	## Duke.
+	else_if = {
+		limit = { liege.highest_held_title_tier <= tier_duchy }
+		add = medium_prestige_value
+	}
+	## King or Emperor
+	else = { add = major_prestige_value }
+
+	# Adjust how much this swing costs due to Legitimacy
+	## Should only affect the regent, not the ruler
+	if = {
+		limit = {
+			scope:recipient = { is_liege_or_above_of = scope:actor }
+		}
+		# 1
+		if = {
+			limit = { liege.legitimacy_level = 1 }
+			add = miniscule_prestige_value
+		}
+		# 2
+		else_if = {
+			limit = { liege.legitimacy_level = 2 }
+			add = minor_prestige_value
+		}
+		# 3
+		else_if = {
+			limit = { liege.legitimacy_level = 3 }
+			add = medium_prestige_value
+		}
+		# 4
+		else_if = {
+			limit = { liege.legitimacy_level = 4 }
+			add = major_prestige_value
+		}
+		# 5
+		else_if = {
+			limit = { liege.legitimacy_level = 5 }
+			add = massive_prestige_value
+		}
+		else = {
+			# Deliberately empty
+			# Adjustable in the future if necessary
+		}
+	}
+	
+	# Adjust cost if you have the family attribute for it
+	#multiply = swing_scales_cost_multipler_value
+}
+
+swing_scales_piety_cost_value = {
+	# Various ways to be charged piety.
+	## Pure route.
+	if = {
+		limit = {
+			OR = {
+				always = scope:swing_piety
+				# And if we're in the important_action...
+				NOT = { exists = scope:swing_piety }
+			}
+		}
+		value = 0
+		# Gate by liege tier.
+		## Count.
+		if = {
+			limit = { liege.highest_held_title_tier <= tier_county }
+			add = minor_piety_value
+		}
+		## Duke.
+		else_if = {
+			limit = { liege.highest_held_title_tier <= tier_duchy }
+			add = medium_piety_value
+		}
+		## King or Emperor
+		else = { add = major_piety_value }
+	}
+	## Hybrid HoF route.
+	else_if = {
+		limit = { always = scope:swing_hof }
+		value = 0
+		# Gate by liege tier.
+		## Count.
+		if = {
+			limit = { liege.highest_held_title_tier <= tier_county }
+			add = minor_piety_value
+		}
+		## Duke.
+		else_if = {
+			limit = { liege.highest_held_title_tier <= tier_duchy }
+			add = medium_piety_value
+		}
+		## King or Emperor
+		else = { add = major_piety_value }
+	}
+
+	# Adjust how much this swing costs due to Legitimacy
+	## Should only affect the regent, not the ruler
+	if = {
+		limit = {
+			scope:recipient = { is_liege_or_above_of = scope:actor }
+		}
+		# 1
+		if = {
+			limit = { liege.legitimacy_level = 1 }
+			add = miniscule_piety_value
+		}
+		# 2
+		else_if = {
+			limit = { liege.legitimacy_level = 2 }
+			add = minor_piety_value
+		}
+		# 3
+		else_if = {
+			limit = { liege.legitimacy_level = 3 }
+			add = medium_piety_value
+		}
+		# 4
+		else_if = {
+			limit = { liege.legitimacy_level = 4 }
+			add = major_piety_value
+		}
+		# 5
+		else_if = {
+			limit = { liege.legitimacy_level = 5 }
+			add = massive_piety_value
+		}
+		else = {
+			# Deliberately empty
+			# Adjustable in the future if necessary
+		}
+	}
+	
+	# Adjust cost if you have the family attribute for it
+	#multiply = swing_scales_cost_multipler_value
+}
+
+swing_scales_cash_cost_value = {
+	## Pure route.
+	if = {
+		limit = {
+			OR = {
+				always = scope:swing_gold
+				# And if we're in the important action...
+				NOT = { exists = scope:swing_gold }
+			}
+		}
+		value = 0
+		# Gate by liege tier.
+		## Count.
+		if = {
+			limit = { liege.highest_held_title_tier <= tier_county }
+			add = liege.minor_gold_value				#prev medium_gold_value
+		}
+		## Duke.
+		else_if = {
+			limit = { liege.highest_held_title_tier <= tier_duchy }
+			add = liege.medium_gold_value				#prev major_gold_value
+		}
+		## King or Emperor
+		else = { add = liege.major_gold_value }			#prev massive_gold_value
+	}
+	## Hybrid HoF route.
+	else_if = {
+		limit = { always = scope:swing_hof }
+		value = 0
+		# Gate by liege tier.
+		## Count.
+		if = {
+			limit = { liege.highest_held_title_tier <= tier_county }
+			add = liege.tiny_gold_value					#prev minor_gold_value
+		}
+		## Duke.
+		else_if = {
+			limit = { liege.highest_held_title_tier <= tier_duchy }
+			add = liege.minor_gold_value				#prev medium_gold_value
+		}
+		## King or Emperor
+		else = { add = liege.medium_gold_value }		#prev major_gold_value
+	}
+
+	# Adjust how much this swing costs due to Legitimacy
+	## Should only affect the regent, not the ruler
+	if = {
+		limit = {
+			scope:recipient = { is_liege_or_above_of = scope:actor }
+		}
+		# 1
+		if = {
+			limit = { liege.legitimacy_level = 1 }
+			#add = tiny_gold_value
+		}
+		# 2
+		else_if = {
+			limit = { liege.legitimacy_level = 2 }
+			#add = minor_gold_value
+			#ADDED
+			add = scope:recipient.tiny_gold_value
+		}
+		# 3
+		else_if = {
+			limit = { liege.legitimacy_level = 3 }
+			#add = medium_gold_value
+			#ADDED
+			add = scope:recipient.minor_gold_value
+		}
+		# 4
+		else_if = {
+			limit = { liege.legitimacy_level = 4 }
+			#add = major_gold_value
+			#ADDED
+			add = scope:recipient.medium_gold_value
+		}
+		# 5
+		else_if = {
+			limit = { liege.legitimacy_level = 5 }
+			#add = massive_gold_value
+			#ADDED
+			add = scope:recipient.major_gold_value
+		}
+		else = {
+			# Deliberately empty
+			# Adjustable in the future if necessary
+		}
+	}
+	
+	# Adjust cost if you have the family attribute for it
+	#multiply = swing_scales_cost_multipler_value
+}

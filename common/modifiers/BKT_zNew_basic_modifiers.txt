@@ -1,0 +1,64 @@
+﻿### Somewhat stolen from MND ###
+rolehard_difficulty_player = {
+	tyranny_gain_mult = 0.50
+	stress_loss_mult = -0.25
+	stress_gain_mult = 0.25
+}
+
+rolehard_difficulty_ai = {
+	vassal_opinion = 20
+	legitimacy_gain_mult = 0.2
+	
+	#ai_war_chance = 0.1
+	#ai_war_cooldown = -0.1
+}
+
+roleplay_difficulty_player = {
+	tyranny_gain_mult = 0.25
+	stress_loss_mult = -0.1
+	stress_gain_mult = 0.25
+}
+
+roleplay_difficulty_ai = {
+	vassal_opinion = 20
+	legitimacy_gain_mult = 0.2
+	
+	#ai_war_chance = 0.1
+	#ai_war_cooldown = -0.1
+}
+
+bkt_difficulty_higher_player = {
+	general_opinion = -15
+	build_speed = 0.5			#prev 0.75
+	enemy_hostile_scheme_phase_duration_add = -20
+	court_grandeur_baseline_add = -16
+	dread_baseline_add = -10
+	dread_decay_mult = 0.5
+	inbreeding_chance = 0.5
+	monthly_influence_mult = -0.25
+	advantage = -3
+}
+
+bkt_difficulty_higher_ai = {
+	vassal_opinion = 20
+	men_at_arms_recruitment_cost = -0.8 
+	title_creation_cost_mult = -0.65
+	short_reign_duration_mult = -0.5
+	stress_gain_mult = -0.25
+	maa_damage_mult = 0.15
+	maa_toughness_mult = 0.15
+	knight_limit = 2
+	knight_effectiveness_mult = 0.25
+	monthly_county_control_growth_add = 0.5
+	tyranny_loss_mult = 1
+	levy_reinforcement_rate = 0.5
+	nomadic_horde_damage_mult = -0.15
+	nomadic_horde_toughness_mult = -0.15
+}
+
+dummy_mp_rules_description_modifier = {
+}
+
+bkt_accolades_disabled = {
+	active_accolades = -99
+}

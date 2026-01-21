@@ -1,0 +1,69 @@
+﻿landless_adventurer_government = {
+	government_rules = {
+		court_generate_spouses = no
+		council = no
+		create_cadet_branches = yes
+		rulers_should_have_dynasty = yes
+		landless_playable = yes
+		conditional_maa_refill = yes
+		#regiments_prestige_as_gold = yes
+		use_title_tier_modifiers = no
+		mercenary = yes
+		allow_out_of_realm_inheritance = yes
+		use_as_base_on_landed = yes
+		use_maa_maintenance = no
+	}
+
+	domicile_type = camp
+	court_generate_commanders = no
+
+	can_get_government = {
+		any_held_title = {
+			title_tier = duchy
+			is_landless_type_title = yes
+		}
+	}
+
+	valid_holdings = { tribal_holding church_holding castle_holding city_holding temple_citadel_holding }
+
+	character_modifier = {
+		active_accolades = -100
+		knight_limit = 3		#prev 2 - compatibility with adventurer nerfs
+		men_at_arms_cap = -2	#prev -3
+		men_at_arms_limit = -2
+		character_travel_speed = 20
+		siege_weapon_siege_value_mult = -0.5
+		mercenary_hire_cost_mult = 1
+		short_reign_duration_mult = -5
+		long_reign_bonus_mult = -1
+		domicile_travel_speed = -0.75
+		monthly_wanderer_lifestyle_xp_gain_mult = 0.15
+		
+		#ADDED
+		# Tribal has -0.5
+		#men_at_arms_maintenance = -0.6
+		monthly_piety_gain_mult = -0.5		#KAN: -0.66
+		character_travel_safety = -5
+	}
+
+	ai = {
+		use_goals = no
+		use_scripted_guis = no
+		perform_religious_reformation = no
+		use_legends = no
+	}
+
+	# Use flags instead of has_government for moddability if possible (i.e., wherever not visible to the player).
+	flags = {
+		cannot_be_vassal_or_liege
+		government_is_landless_adventurer
+		has_unique_government_perks
+	}
+
+	mechanic_type = landless_adventurer
+	is_mechanic_type_default = yes
+
+	color = hsv{ 0.00 0.00 0.66 }
+	realm_mask_offset = { 0.0 0.0 }
+	realm_mask_scale = { 1 1 }
+}

@@ -1,0 +1,156 @@
+﻿#ai_compassion
+#ai_boldness 
+#ai_honor 
+#ai_greed 
+#ai_rationality 
+#ai_zeal 
+#ai_energy 
+#ai_vengefulness 
+
+# Originally Triggered from on_actions
+# but many triggers require story_owner_scope and scope:story
+# this = character
+
+###ai_goal_manager_opportunity_pulse_effect = {
+###	random_list = {
+###		5 = {
+###			modifier = {
+###				add = 40
+###				has_trait = lazy
+###			}
+###		}
+###		45 = { 	# Act outs or smth. Lower weight coz War! has conditions to meet.
+###			trigger = {
+###				#is_adult = yes
+###				always = no
+###				is_available = yes
+###			}
+###			random = {
+###				chance = 45
+###				ai_goal_manager_opportunity_pulse_personality_effect = yes
+###			}
+###		}
+###		100 = {	# War!
+###			trigger = {
+###				is_adult = yes
+###				is_available = yes
+###				is_at_war = no
+###				gold > major_gold_value
+###				NOT = {
+###					any_targeting_faction = {
+###						discontent_per_month > 0
+###					}
+###				}
+###				NOT = { has_trait = compassionate }
+###				current_military_strength >= eighty_percent_of_max_military_strength
+###			}
+###			modifier = {
+###				add = { value = ai_boldness min = -95 max = 75 }
+###			}
+###			modifier = {
+###				add = 100
+###				has_trait = ambitious
+###			}
+###			modifier = {
+###				add = -75
+###				has_trait = content
+###			}
+###			ai_goal_manager_opportunity_pulse_war_effect = yes
+###		}
+###	}
+###}
+###
+###ai_goal_manager_opportunity_pulse_war_effect = {
+###	save_scope_as = story_owner_scope
+###	random = {
+###		chance = 33
+###		modifier = {
+###			government_allows = administrative
+###			add = -18
+###		}
+###		set_variable = {
+###			name = will_attack_tribals
+###			days = 1
+###		}
+###	}
+###	if = {
+###		limit = {
+###			has_personality_benevolent_trigger = yes
+###		}
+###		ai_start_best_war = {
+###			cb = {
+###				claim_cb
+###				de_jure_cb
+###			}
+###			is_valid = {
+###				save_temporary_scope_as = story_owner_scope
+###				#scope:has_hostage = no
+###				scope:target_character = {
+###					story_owner_scope_can_attack_this = yes
+###					OR = {
+###						scope:score >= 3000
+###						AND = {
+###							NOT = { any_ally = { current_military_strength >= scope:story_owner_scope.a_third_of_current_military_strength } } 
+###							scope:story_owner_scope.a_third_of_current_military_strength >= current_military_strength
+###						}
+###					}
+###				}
+###				OR = {
+###					government_has_flag = government_is_tribal
+###					has_variable = will_attack_tribals
+###					scope:target_character = { NOT = { government_has_flag = government_is_tribal } }
+###				}
+###			}
+###			on_success = {
+###				debug_log = "War declared through ai opportunity pulse!"
+###				debug_log_scopes = yes
+###				debug_log_date = yes
+###			}
+###		}
+###	}
+###	else = {
+###		ai_start_best_war = {
+###			cb = {
+###				claim_cb
+###				religious_war
+###				imperial_reconquest_cb
+###				invasion_war
+###				clan_invasion_war
+###				tribal_subjugation_cb
+###				de_jure_cb
+###			}
+###			is_valid = {
+###				save_temporary_scope_as = story_owner_scope
+###				#scope:has_hostage = no
+###				scope:target_character = {
+###					story_owner_scope_can_attack_this = yes
+###					OR = {
+###						scope:score >= 3000
+###						AND = {
+###							NOT = { any_ally = { current_military_strength >= scope:story_owner_scope.a_third_of_current_military_strength } } 
+###							scope:story_owner_scope.a_third_of_current_military_strength >= current_military_strength
+###						}
+###					}
+###				}
+###				OR = {
+###					government_has_flag = government_is_tribal
+###					has_variable = will_attack_tribals
+###					scope:target_character = { NOT = { government_has_flag = government_is_tribal } }
+###				}
+###			}
+###			on_success = {
+###				debug_log = "War declared through ai opportunity pulse!"
+###				debug_log_scopes = yes
+###				debug_log_date = yes
+###			}
+###		}
+###	}
+###}
+###
+#### Zealous should try to revoke religious rights (even for tyranny) if present, ask to convert if someone compassionate, imprison and revoke if not
+####
+###ai_goal_manager_opportunity_pulse_personality_effect = {
+###	random_list = {
+###		10 = { }
+###	}
+###}

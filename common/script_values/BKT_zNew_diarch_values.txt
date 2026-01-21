@@ -1,0 +1,132 @@
+﻿
+bkt_swing_scales_cash_cost_value = {
+	if = {
+		limit = {
+			OR = {
+				always = scope:swing_gold
+				always = scope:swing_hof
+			}
+		}
+		# Diarch version.
+		if = {
+			limit = {
+				scope:actor = { is_diarch_of_target = scope:recipient }
+			}
+			# Costs should always be applied on the diarch.
+			add = scope:actor.swing_scales_cash_cost_value
+		}
+		# Liege version.
+		else = {
+			# Costs should always be applied on the diarch.
+			add = scope:recipient.swing_scales_cash_cost_value
+		}
+		# Cost scaling mults.
+		multiply = scope:actor.swing_scales_discounts_multiplier_value
+		# LEGITIMACY OF RULER AFFECTS COSTS FOR REGENTS
+		if = {
+			limit = { scope:actor = { is_valid_for_legitimacy_change = yes } }
+			multiply = legitimacy_regent_swing_scale_multipler_value
+		}
+		
+		# Adjust cost if you have the family attribute for it
+		multiply = scope:actor.swing_scales_cost_multipler_value
+	}
+}
+
+bkt_swing_scales_influence_cost_value = {
+	if = {
+		limit = { always = scope:swing_influence }
+		#value = scope:actor.swing_scales_influence_cost_value
+		#ADDED - ported from the other interaction
+		# Diarch version.
+		if = {
+			limit = {
+				scope:actor = { is_diarch_of_target = scope:recipient }
+			}
+			# Costs should always be applied on the diarch.
+			add = scope:actor.swing_scales_influence_cost_value
+		}
+		# Liege version.
+		else = {
+			# Costs should always be applied on the diarch.
+			add = scope:recipient.swing_scales_influence_cost_value
+		}
+		# Cost scaling mults.
+		multiply = scope:actor.swing_scales_discounts_multiplier_value
+		# LEGITIMACY OF RULER AFFECTS COSTS FOR REGENTS
+		if = {
+			limit = { scope:actor = { is_valid_for_legitimacy_change = yes } }
+			multiply = legitimacy_regent_swing_scale_multipler_value
+		}
+		
+		# Adjust cost if you have the family attribute for it
+		multiply = scope:actor.swing_scales_cost_multipler_value
+	}
+}
+	
+bkt_swing_scales_prestige_cost_value = {
+	if = {
+		limit = { always = scope:swing_prestige }
+		#value = scope:actor.swing_scales_prestige_cost_value
+		#ADDED - ported from the other interaction
+		# Diarch version.
+		if = {
+			limit = {
+				scope:actor = { is_diarch_of_target = scope:recipient }
+			}
+			# Costs should always be applied on the diarch.
+			add = scope:actor.swing_scales_prestige_cost_value
+		}
+		# Liege version.
+		else = {
+			# Costs should always be applied on the diarch.
+			add = scope:recipient.swing_scales_prestige_cost_value
+		}
+		# Cost scaling mults.
+		multiply = scope:actor.swing_scales_discounts_multiplier_value
+		# LEGITIMACY OF RULER AFFECTS COSTS FOR REGENTS
+		if = {
+			limit = { scope:actor = { is_valid_for_legitimacy_change = yes } }
+			multiply = legitimacy_regent_swing_scale_multipler_value
+		}
+		
+		# Adjust cost if you have the family attribute for it
+		multiply = scope:actor.swing_scales_cost_multipler_value
+	}
+}
+
+bkt_swing_scales_piety_cost_value = {
+	if = {
+		limit = {
+			OR = {
+				always = scope:swing_piety
+				always = scope:swing_hof
+			}
+		}
+		#value = scope:actor.swing_scales_piety_cost_value
+		#ADDED - ported from the other interaction
+		# Diarch version.
+		if = {
+			limit = {
+				scope:actor = { is_diarch_of_target = scope:recipient }
+			}
+			# Costs should always be applied on the diarch.
+			add = scope:actor.swing_scales_piety_cost_value
+		}
+		# Liege version.
+		else = {
+			# Costs should always be applied on the diarch.
+			add = scope:recipient.swing_scales_piety_cost_value
+		}
+		# Cost scaling mults.
+		multiply = scope:actor.swing_scales_discounts_multiplier_value
+		# LEGITIMACY OF RULER AFFECTS COSTS FOR REGENTS
+		if = {
+			limit = { scope:actor = { is_valid_for_legitimacy_change = yes } }
+			multiply = legitimacy_regent_swing_scale_multipler_value
+		}
+		
+		# Adjust cost if you have the family attribute for it
+		multiply = scope:actor.swing_scales_cost_multipler_value
+	}
+}

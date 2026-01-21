@@ -1,0 +1,189 @@
+﻿# Called from story
+# scopes: story_owner, story
+# this = story
+
+is_valid_for_ai_goals_system = {
+	highest_held_title_tier >= tier_duchy
+	is_landed = yes
+}
+
+ai_main_goal_allies_check = {
+	story_owner = {
+		any_ally = { count < 2 always = yes }
+		any_courtier = {
+			count >= 2
+			is_close_family_of = PREV
+			is_married = no
+			is_betrothed = no
+		}
+	}
+}
+
+ai_main_goal_children_check = {
+	story_owner = { 
+		is_adult = yes
+		any_child = { count < 4 NOT = { has_trait = bastard } } 
+		NAND = {
+			is_female = yes
+			age > 40
+		}
+	}
+}
+ai_main_goal_liege_opinion_check = {
+	story_owner = { 
+		exists = liege
+		NOR = {
+			has_relation_rival = liege
+			has_relation_nemesis = liege
+		}
+		reverse_opinion = { 
+			target = liege 
+			value <= 25
+		}
+	}
+}
+
+ai_main_goal_vassal_opinion_check = {
+	story_owner = { 
+		tyranny < low_tyranny
+		average_vassal_opinion <= 30
+		any_vassal = {
+			NOR = {
+				has_relation_rival = PREV
+				has_relation_nemesis = PREV
+			}
+		}
+	}
+}
+
+ai_main_goal_dread_check = {
+	story_owner = { 
+		dread < high_dread
+		is_adult = yes
+		save_temporary_scope_as = story_owner_scope
+		any_vassal = {
+			NOT = { has_trait = brave }
+			has_dread_level_towards = {
+				target = scope:story_owner_scope
+				level = 0
+			}
+		}
+	}
+}
+
+ai_main_goal_rivals_check = {
+	story_owner = { 
+		OR = {
+			num_of_relation_rival > 0
+			num_of_relation_nemesis > 0
+		}
+	}
+}
+
+ai_main_goal_landed_dynasty_check = {
+	story_owner = {
+	
+	}
+}
+
+ai_main_goal_construct_buildings_check = {
+	story_owner = {
+		NOT = { government_has_flag = government_is_tribal }
+		any_held_title = {
+			tier = tier_barony
+			title_province = {
+				free_building_slots > 0
+				has_ongoing_construction = no
+			}
+		}
+	}
+}
+
+ai_main_goal_construct_holdings_check = {
+	story_owner = {
+		NOT = { government_has_flag = government_is_tribal }
+		any_held_title = {
+			tier = tier_county
+			any_county_province = {
+				has_holding = no
+				has_ongoing_construction = no
+				barony = { barony_cannot_construct_holding = no }
+			}
+		}
+	}
+}
+
+ai_main_goal_conquer_own_de_jure_check = {
+	story_owner = {
+		save_temporary_scope_as = story_owner_scope
+		completely_controls = primary_title
+	}
+}
+
+ai_main_goal_conquer_own_culture_check = {
+	story_owner = {
+		save_temporary_scope_as = story_owner_scope
+		culture = {
+			any_culture_county = {
+				count = all
+				holder = { any_liege_or_above = { this = scope:story_owner_scope } }
+			}
+		}
+	}
+}
+
+ai_main_goal_conquer_same_liege_check = {
+	story_owner = {
+		save_temporary_scope_as = story_owner_scope
+		is_independent_ruler = no
+		liege = {
+			NOt = {
+				any_vassal = {
+					story_owner_scope_can_attack_this = yes
+				}
+			}
+		}
+	}
+}
+
+story_owner_scope_can_attack_this = {
+	NOR = {
+		this = scope:story_owner_scope 
+		any_liege_or_above = { this = scope:story_owner_scope } 
+		is_tributary_of_suzerain_or_above = scope:story_owner_scope
+		scope:story_owner_scope = { is_tributary_of_suzerain_or_above = PREV }
+		scope:story_owner_scope.liege ?= this
+		scope:story_owner_scope.liege.liege ?= this
+		is_allied_to = scope:story_owner_scope
+		scope:story_owner_scope = { has_truce = PREV }
+		has_hook = scope:story_owner_scope 
+		reverse_opinion = {
+			target = scope:story_owner_scope 
+			value >= 50
+		}
+	}
+	#max_military_strength <= { value = scope:story_owner_scope.max_military_strength multiply = 1.5 }
+}
+	
+this_is_valid_target_for_story_owner_scope_war_first_try = {
+	story_owner_scope_can_attack_this = yes
+	current_military_power_this_plus_allies_value < scope:story_owner_scope.current_military_power_this_plus_allies_value
+	#OR = {
+	#	gold < scope:story_owner_scope.gold
+	#	current_military_strength <= scope:story_owner_scope.eighty_percent_of_current_military_strength
+	#}
+	scope:score >= 5000
+}
+	
+this_is_valid_target_for_story_owner_scope_war_second_try = {
+	story_owner_scope_can_attack_this = yes
+	current_military_power_this_plus_allies_value < scope:story_owner_scope.current_military_power_this_plus_allies_value
+	#OR = {
+	#	gold < { value = scope:story_owner_scope.gold multiply = 1.5 }
+	#	current_military_strength <= scope:story_owner_scope.eighty_percent_of_current_military_strength
+	#	scope:story_owner_scope = { has_trait = brave }
+	#	scope:story_owner_scope = { has_trait = eccentric }
+	#	scope:story_owner_scope = { has_trait = intellect_bad }
+	#}
+	scope:score >= 1000
+}

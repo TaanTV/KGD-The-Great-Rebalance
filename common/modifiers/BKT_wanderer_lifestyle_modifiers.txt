@@ -1,0 +1,86 @@
+﻿local_arbitration_modifier_1 = {
+	icon = stewardship_positive
+	travel_danger = -10
+	county_opinion_add = 10
+	levy_reinforcement_rate = 0.05	#prev 0.15
+	levy_size = 0.05				#prev 0.15
+}
+
+local_arbitration_modifier_2 = {
+	icon = stewardship_positive	
+	tax_mult = 0.25
+	travel_danger = -10
+	county_opinion_add = 10
+}
+
+local_arbitration_modifier_3 = {
+	icon = stewardship_positive
+	#development_growth = 0.05
+	development_growth_factor = 0.15
+	travel_danger = -10
+	county_opinion_add = 10
+}
+
+inspection_reward_average_tax_modifier = {
+	icon = economy_positive
+	tax_mult = 0.1
+	monthly_income = 0.25	#prev 1
+}
+
+inspection_reward_focused_tax_modifier = {
+	icon = economy_positive
+	tax_mult = 0.15
+	monthly_income = 0.5	#prev 2
+}
+
+inspection_reward_average_levy_modifier = {
+	icon = martial_positive
+	levy_size = 0.1	#prev 0.15
+}
+
+inspection_reward_focused_levy_modifier = {
+	icon = martial_positive
+	levy_size = 0.2	#prev 0.3
+}
+
+inspection_empty_lands_border_modifier = {
+	icon = county_modifier_development_positive
+	holding_build_gold_cost = -0.15	#prev -0.3
+	holding_build_speed = -0.15		#prev -0.3
+}
+
+inspection_fighting_guilds_innkeepers_guild_modifier = {
+	icon = county_modifier_development_positive
+	development_growth_factor = 0.15
+	county_opinion_add = 10
+	tax_mult = 0.15
+	building_slot_add = -1
+	supply_limit_mult = 0.2
+}
+
+inspection_fighting_guilds_artists_guild_modifier = {
+	icon = county_modifier_development_positive
+	development_growth_factor = 0.15
+	county_opinion_add = 25
+	building_slot_add = -1
+	travel_danger = -10
+}
+
+inspection_fire_spreading_modifier = {
+	icon = county_modifier_development_positive
+	build_gold_cost = -0.15		#prev -0.5
+	build_prestige_cost = -0.15	#prev -0.5
+	build_speed = -0.15			#prev -0.5
+}
+
+internal_affairs_local_corruption_modifier = {
+	icon = county_modifier_control_mixed
+	tax_mult = 0.01		#prev 0.06
+	monthly_county_control_decline_add = -0.02
+
+	scale = {
+		value = internal_affairs_local_corruption_value
+		desc = internal_affairs_local_corruption_desc
+		display_mode = scaled
+	}
+}

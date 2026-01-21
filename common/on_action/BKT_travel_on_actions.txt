@@ -1,0 +1,156 @@
+﻿# Starting a travel plan (starting to travel to the first destination)
+on_travel_plan_start = {
+	on_actions = {
+		BKT_long_travel_diarchy_boost_setup
+	}
+}
+
+BKT_long_travel_diarchy_boost_setup = {
+	trigger = {
+		travel_would_cause_regency_trigger = { REALM_HOLDER = root }
+		is_adult = yes
+	}
+	effect = {
+		#debug_log = "Long travel setup"
+		#debug_log_scopes = yes
+		current_travel_plan = { save_scope_as = travel_plan_scope }
+		#Moved to effect to save the travel plan as a scope, otherwise it may mistrigger sometimes
+		trigger_event = {
+			on_action = BKT_long_travel_diarchy_boost
+			#years = 1
+			days = 367		#slightly desynced for reasons.
+		}
+		trigger_event = {
+			on_action = BKT_very_long_travel_diarchy_boost
+			years = 3
+		}
+	}
+}
+
+BKT_long_travel_diarchy_boost = {
+	trigger = {
+		exists = scope:travel_plan_scope
+		has_active_diarchy = yes
+		OR = {
+			#has_diarchy_type = regency
+			has_diarchy_type = temporary_regency
+		}
+	}
+	effect = {
+		#debug_log = "Long travel yearly event"
+		#debug_log_scopes = yes
+		if = {
+			limit = { NOT = { has_variable = BKT_long_travel_diarchy_boost_doublecount_preventor } }
+			if = {
+				limit = { has_diarchy_type = temporary_regency }
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect
+					title = swing_scales_long_travel_liege.t
+					right_icon = diarch
+					custom_tooltip = swing_scales_long_travel_liege.desc
+					update_diarchy_swing_with_perspective_effect = {
+						SWING = major_sop_swing_diarch_gain				#prev medium_sop_swing_diarch_gain
+						LIEGE = this
+					}
+				}
+				diarch ?= {
+					send_interface_message = {
+						type = msg_mandate_results_neutral_effect
+						title = swing_scales_long_travel_diarch.t
+						right_icon = prev
+						custom_tooltip = swing_scales_long_travel_diarch.desc
+						show_as_tooltip = {
+							update_diarchy_swing_with_perspective_effect = {
+								SWING = major_sop_swing_diarch_gain		#prev medium_sop_swing_diarch_gain
+								LIEGE = this
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { diarch = { is_ai = yes } }
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect
+					title = swing_scales_long_travel_liege.t
+					right_icon = diarch
+					custom_tooltip = swing_scales_long_travel_liege.desc
+					update_diarchy_swing_with_perspective_effect = {
+						SWING = minor_sop_swing_diarch_gain
+						LIEGE = this
+					}
+				}
+			}
+			else = {
+				remove_variable = BKT_long_travel_diarchy_boost_doublecount_preventor
+			}
+		}
+	}
+	on_actions = {
+		delay = { years = 1 }
+		BKT_long_travel_diarchy_boost
+	}
+}
+
+BKT_very_long_travel_diarchy_boost = {
+	trigger = {
+		exists = scope:travel_plan_scope
+		has_active_diarchy = yes
+		OR = {
+			#has_diarchy_type = regency
+			has_diarchy_type = temporary_regency
+		}
+	}
+	effect = {
+		#debug_log = "Long travel 3 yearly event"
+		#debug_log_scopes = yes
+		set_variable = {
+			name = BKT_long_travel_diarchy_boost_doublecount_preventor
+			days = 30
+		}
+		if = {
+			limit = { has_diarchy_type = temporary_regency }
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect
+				title = swing_scales_long_travel_liege.t
+				right_icon = diarch
+				custom_tooltip = swing_scales_very_long_travel_liege.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = monumental_sop_swing_diarch_gain			#prev major_sop_swing_diarch_gain
+					LIEGE = this
+				}
+			}
+			diarch ?= {
+				send_interface_message = {
+					type = msg_mandate_results_neutral_effect
+					title = swing_scales_long_travel_diarch.t
+					right_icon = prev
+					custom_tooltip = swing_scales_very_long_travel_diarch.desc
+					show_as_tooltip = {
+						update_diarchy_swing_with_perspective_effect = {
+							SWING = monumental_sop_swing_diarch_gain	#prev major_sop_swing_diarch_gain
+							LIEGE = this
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { diarch = { is_ai = yes } }
+			send_interface_message = {
+				type = msg_mandate_results_neutral_effect
+				title = swing_scales_long_travel_liege.t
+				right_icon = diarch
+				custom_tooltip = swing_scales_very_long_travel_liege.desc
+				update_diarchy_swing_with_perspective_effect = {
+					SWING = medium_sop_swing_diarch_gain
+					LIEGE = this
+				}
+			}
+		}
+	}
+	on_actions = {
+		delay = { years = 3 }
+		BKT_very_long_travel_diarchy_boost
+	}
+}

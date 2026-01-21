@@ -1,0 +1,71 @@
+﻿declared_war = {
+	opinion = -50	#prev -25
+	years = 30		#prev 12
+	decaying = yes
+	imprisonment_reason = yes
+	revoke_title_reason = yes
+	#ADDED
+	stacking = yes
+}
+
+declared_war_in_admin = {
+	opinion = -50	#prev -25
+	years = 25		#prev 12
+	decaying = yes
+	imprisonment_reason = yes
+	revoke_title_reason = yes
+}
+
+declared_war_on_son_daughter = {
+	opinion = -30		#prev -15
+	years = 20			#prev 10
+	decaying = yes
+	#ADDED
+	imprisonment_reason = yes
+}
+
+vassal_lost_faction_revolt_war = {
+	opinion = -60		#prev -30
+	years = 30			#prev 15
+	decaying = yes
+	revoke_title_reason = yes
+	imprisonment_reason = yes
+	banish_reason = yes
+	execute_reason = yes
+}
+
+vassal_wp_faction_revolt_war = {
+	opinion = -60		#prev -30
+	years = 30			#prev 15
+	decaying = yes
+	revoke_title_reason = yes
+	imprisonment_reason = yes
+}
+
+peasant_revolt_opinion = {
+	opinion = -60		#prev -30
+	years = 30
+	decaying = yes
+	revoke_title_reason = yes
+	imprisonment_reason = yes
+	banish_reason = yes
+	execute_reason = yes
+}
+
+switched_sides_in_war = {
+	opinion = -50
+	decaying = yes
+	years = 20			#prev 10
+}
+
+left_war_early = {
+	opinion = -60		#prev -40
+	decaying = yes
+	years = 20			#prev 10
+}
+
+switched_to_my_side = {
+	opinion = 60	#prev 40
+	decaying = yes
+	years = 15		#prev 10	
+}

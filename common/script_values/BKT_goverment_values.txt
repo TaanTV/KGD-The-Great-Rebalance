@@ -1,0 +1,51 @@
+﻿###################
+# GOVERNMENT VALUES  #
+###################
+
+clan_government_levies_default = 0.035		#prev 0.04
+#clan_government_levies_player = 0.25
+
+clan_government_tax_default = 0.03			#BKT prev 0.035		#prev 0.02
+#clan_government_tax_player = 0.25
+
+#Feudal government values
+exempt_feudal_tax = 0.025		#prev 0
+low_feudal_tax = 0.1			#prev 0.025
+normal_feudal_tax = 0.18		#prev 0.1		#MOD prev 0.20	#MOD prev prev 0.25
+high_feudal_tax = 0.25			#prev 0.15		#MOD prev 0.30	#MOD prev prev 0.35
+extortionate_feudal_tax = 0.35	#prev 0.25		#MOD prev 0.40	#MOD prev prev 0.45
+
+exempt_feudal_levy = 0.05		#prev 0
+low_feudal_levy = 0.20			#prev 0.1
+normal_feudal_levy = 0.30		#prev 0.25
+high_feudal_levy = 0.40			#prev 0.35
+extortionate_feudal_levy = 0.5
+
+#max_contract_changes = 4
+
+march_contract_taxes = -0.20	#prev -0.5
+march_contract_taxes_tooltip = {
+	value = march_contract_taxes
+	multiply = 100
+	multiply = -1
+}
+
+# Vanilla values.
+##Nomadic government values
+exempt_herd_tax = 0.025			#prev 0
+low_herd_tax = 0.1				#prev 0.05
+normal_herd_tax = 0.18			#prev 0.1		#MOD prev 0.20
+high_herd_tax = 0.25			#prev 0.25		#MOD prev 0.30
+extortionate_herd_tax = 0.35	#prev 0.4
+#
+exempt_nomad_tax = 0.025		#prev 0
+low_nomad_tax = 0.1				#prev 0.05
+normal_nomad_tax = 0.18			#prev 0.1		#MOD prev 0.20
+high_nomad_tax = 0.25			#prev 0.15		#MOD prev 0.30
+extortionate_nomad_tax = 0.35	#prev 0.2
+#
+## Default Tributary values
+normal_tributary_tax = 0.1			#prev 0.25
+high_tributary_tax = 0.25			#prev 0.50
+#normal_prestige_transfer = 0.1
+#high_prestige_transfer = 0.25

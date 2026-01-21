@@ -1,0 +1,9 @@
+﻿l_english:
+ #liberty_faction_war:0 "Liberty Faction"
+ liberty_war_victory_defender_desc:0 "Your [crown_authority|E] is reduced to the lowest one, and you will get a strong negative [modifier|E]."
+ liberty_war_victory_desc:0 "The [crown_authority|E] of the [defender.GetPrimaryTitle.GetName] is reduced to the lowest one,, and [defender.GetShortUIName] will get a negative [modifier|E]."
+ #liberty_war_victory_end_desc:2 "The [liberty_faction|E] is disbanded, its members cannot join factions for [SCOPE.ScriptValue('liberty_war_victory_cooldown')|0] years."
+ liberty_war_victory_defender_desc_admin: "Your [imperial_bureaucracy|E] is reduced to the lowest one, and you will get a strong negative [modifier|E].
+ liberty_war_victory_desc_admin: "The [imperial_bureaucracy|E] of the [defender.GetPrimaryTitle.GetName] is reduced to the lowest one, and [defender.GetShortUIName] will get a strong negative [modifier|E]."
+ liberty_war_victory_defender_desc_tribal: "Your [tribal_authority|E] is reduced to the lowest one, and you will get a strong negative [modifier|E]."
+ liberty_war_victory_desc_tribal: "The [tribal_authority|E] of the [defender.GetPrimaryTitle.GetName] is reduced to the lowest one, and [defender.GetShortUIName] will get a strong negative [modifier|E]."

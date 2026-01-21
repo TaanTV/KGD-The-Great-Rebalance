@@ -1,0 +1,6 @@
+﻿###############
+# DYNASTY
+###############
+
+# Dynasty Glory Marriage Acceptance Perk
+glory_legacy_1_marriage_acceptance = 20	#prev 30

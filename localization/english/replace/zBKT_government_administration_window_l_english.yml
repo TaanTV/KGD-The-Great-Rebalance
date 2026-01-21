@@ -1,0 +1,2 @@
+﻿l_english:
+ ADMIN_WINDOW_THEME_GOVERNOR_EFFICIENCY_VALID_TT: "#T [governor_efficiency|e]: $ADMIN_WINDOW_THEME_GOVERNOR_EFFICIENCY_VALUE$#!\n#weak (Min: #N -33%#! - Max: #P +33%#!)#!\n\nBase: #N -90#!\n[Character.MakeScope().GetScriptValueDesc( 'governor_efficiency' )]"

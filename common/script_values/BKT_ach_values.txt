@@ -1,0 +1,11 @@
+﻿oath_conquest_value_1 = {
+	value = sub_realm_size
+	add = {
+		value = sub_realm_size
+		multiply = 0.25	#prev 0.3
+		min = 10		#prev 5
+		floor = yes
+		#ADDED - no more than double
+		max = sub_realm_size
+	}
+}

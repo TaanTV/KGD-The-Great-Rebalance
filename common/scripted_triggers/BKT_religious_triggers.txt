@@ -1,0 +1,159 @@
+﻿# Balance.
+
+refusing_conversion_is_crime_trigger = {
+	faith = {
+		trigger_if = { # Only apply imprisonment reason if actor's faith is not the state faith
+			limit = {
+				$CHARACTER$ = {
+					top_liege = { government_allows = state_faith }
+					faith = $CHARACTER$.top_liege.primary_title.state_faith
+				}
+			}
+			always = no
+		}
+		#ADDED - this check
+		NOT = { has_doctrine_parameter = pluralism_pluralistic_demand_conversion_never_criminal }
+		OR = {
+			religion_tag = christianity_religion
+			religion_tag = islam_religion
+			religion_tag = judaism_religion
+			religion_tag = zoroastrianism_religion
+			#ADDED - you either have big authority or faith is fundamentalist
+			PREV = { has_realm_law_flag = refusing_conversion_is_crime_law_flag }
+			has_doctrine_parameter = pluralism_fundamentalist_demand_conversion_always_criminal
+		}
+		NAND = {		#prev NOT
+			faith_hostility_level = {
+				target = $CHARACTER$.faith
+				value <= faith_astray_level
+			}
+			#ADDED
+			NOT = { has_doctrine_parameter = pluralism_fundamentalist_demand_conversion_always_criminal }
+		}
+	}
+}
+
+
+valid_demand_conversion_conditions_trigger = {
+	scope:recipient = {
+		NOR = {
+			has_strong_hook = scope:actor
+			has_trait = devoted
+			has_trait = order_member
+			is_imprisoned_by = scope:actor
+			is_at_war_with = scope:actor
+		}
+	}
+	scope:actor = {
+		trigger_if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+				scope:recipient = { is_courtier_of = scope:actor }
+			}
+			custom_tooltip = {
+				text = valid_demand_conversion_conditions_trigger.tt.domicile_requires_shrine
+				domicile = { has_domicile_parameter = camp_enable_conversion }
+			}
+		}
+		#ADDED - trigger_if, rewritten stuff to be more logical
+		trigger_if = {
+			limit = { NOT = { government_has_flag = government_is_landless_adventurer } }
+			OR = {
+				NOT = { has_trait = nomadic_philosophy }
+				has_trait = zealous
+			}
+		}
+		#NAND = {
+		#	has_trait = nomadic_philosophy
+		#	has_trait = zealous
+		#}
+	}
+
+	custom_description = {
+		text = "is_head_of_religion"
+		subject = scope:recipient
+		scope:recipient.faith.religious_head != scope:recipient
+	}
+
+	custom_description = {
+		text = "is_protected_via_contract"
+		subject = scope:recipient
+		# Vassal Contract forbids meddling by liege
+		NAND = {
+			exists = scope:recipient.liege
+			scope:recipient.liege = scope:actor
+			scope:recipient = {
+				is_ruler = yes
+				vassal_contract_has_flag = religiously_protected
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			scope:recipient = {
+				AND = {
+					has_variable = cannot_be_converted_by_value
+					var:cannot_be_converted_by_value = scope:actor	
+				}
+			}
+		}
+		custom_tooltip = {
+			text = promised_to_not_convert_character
+			scope:recipient = {
+				NOR = {
+					has_variable = cannot_be_converted_by_value
+					var:cannot_be_converted_by_value = scope:actor
+				}
+			}
+		}
+	}
+
+	custom_tooltip = {
+		text = cannot_take_overt_hostile_actions_against_diarch.tt
+		NOT = { scope:recipient ?= scope:actor.diarch }
+	}
+}
+
+
+### Head of Faith
+can_create_temporal_head_of_faith_title_trigger = {
+	num_realm_holy_sites_faithful_holders = {
+		COUNT = holy_sites_to_create_temporal_head_of_faith
+		CHARACTER = ROOT
+	}
+	root = { piety_level >= high_piety_level }
+	trigger_if = {
+		limit = {
+			root = { top_liege != this }
+		}
+		custom_description = {
+			text = cannot_create_hof_title_at_or_above_liege_tier
+			root.liege.primary_title.tier > tier_duchy
+		}
+	}
+	#ADDED
+    trigger_if = {
+        limit = { has_doctrine = special_doctrine_not_allowed_to_hof }
+        NOT = { has_doctrine = special_doctrine_not_allowed_to_hof }
+    }
+	#ADDED
+	is_independent_ruler = yes
+}
+
+can_create_spiritual_head_of_faith_title_trigger = {
+    num_realm_holy_sites_faithful_holders = {
+        COUNT = holy_sites_to_create_spiritual_head_of_faith
+        CHARACTER = ROOT
+    }
+    root = { piety_level >= medium_piety_level }
+    trigger_if = {
+        limit = { has_doctrine = special_doctrine_not_allowed_to_hof }
+        NOT = { has_doctrine = special_doctrine_not_allowed_to_hof }
+    }
+    NAND = {
+        exists = religious_head
+        has_doctrine_parameter = maintains_head_of_faith_on_creation
+    }
+	#ADDED
+	is_independent_ruler = yes
+}

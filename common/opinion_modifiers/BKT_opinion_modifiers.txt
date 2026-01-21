@@ -1,0 +1,206 @@
+﻿opinion_of_predecessor = {
+	years = 10			#prev 5
+	decaying = yes
+}
+
+#RECEIVED TITLE
+received_title_barony = {
+	opinion = 20
+	years = 50
+	stacking = yes
+	#ADDED
+	decaying = yes
+}
+
+received_title_county = {
+	opinion = 40
+	years = 50
+	stacking = yes
+	#ADDED
+	decaying = yes
+}
+
+received_title_duchy = {
+	opinion = 60
+	years = 50
+	stacking = yes
+	#ADDED
+	decaying = yes
+}
+
+received_title_kingdom = {
+	opinion = 80
+	years = 50
+	stacking = yes
+	#ADDED
+	decaying = yes
+}
+
+received_title_empire = {
+	opinion = 100
+	years = 50
+	stacking = yes
+	#ADDED
+	decaying = yes
+}
+
+# Raid
+raided_me_opinion = {
+	opinion = -25		#prev -15
+	years = 10
+	decaying = yes
+}
+
+courtly_title_creation_opinion = {
+	opinion = 20		#prev 15
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+courtly_lowborn_grant_opinion = {
+	opinion = -25		#prev -10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+courtly_disinherit_opinion = {
+	opinion = -35		#prev -20
+	years = 25			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+courtly_court_position_opinion = {
+	opinion = 20		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+glory_hound_approves_war_victory_opinion = {
+	opinion = 25		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+glory_hound_disapproves_war_white_peace_opinion = {
+	opinion = -15		#prev -10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+glory_hound_disapproves_war_defeat_opinion = {
+	opinion = -35		#prev -20
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+antagonistic_house_approves_war_victory_opinion = {
+	opinion = 25		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+antagonistic_house_approves_war_victory_defensive_opinion = {
+	opinion = 30		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+antagonistic_house_disapproves_war_white_peace_opinion = {
+	opinion = -20		#prev -10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+antagonistic_house_disapproves_war_defeat_opinion = {
+	opinion = -35		#prev -20
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+parochial_approves_holding_construction_opinion = {
+	opinion = 25		#prev 20
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+parochial_approves_holding_upgrade_opinion = {
+	opinion = 25		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+parochial_disapproves_strong_war_enemy_opinion = {
+	opinion = -30		#prev -10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_approves_temple_construction_opinion = {
+	opinion = 30
+	years = 20		#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_approves_temple_upgrade_opinion = {
+	opinion = 20	#prev 15
+	years = 20		#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_disapproves_of_asking_hof_for_gold_opinion = {
+	opinion = -20	#prev -10
+	years = 20		#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_approves_of_learning_language_opinion = {
+	opinion = 10
+	years = 20		#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_approves_of_religious_display_opinion = {
+	opinion = 25		#prev 10
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+zealot_disapproves_of_cynicism_opinion = {
+	opinion = -25		#prev -10 
+	years = 20			#prev 10 
+	decaying = yes 
+	stacking = yes
+}
+
+minority_disapproves_of_conversion_opinion = {
+	opinion = -30		#prev -20
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}
+
+barons_and_minor_landholders_disapproves_baron_revocations_opinion = {
+	opinion = -35		#prev -20
+	years = 20			#prev 10
+	decaying = yes
+	stacking = yes
+}

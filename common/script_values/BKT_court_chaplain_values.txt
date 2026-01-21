@@ -1,0 +1,30 @@
+﻿#####################
+# Fabricate Claim
+#####################
+
+# Base value
+court_chaplain_fabricate_claim_base = {
+	add = 4		#prev 3
+}
+
+court_chaplain_fabricate_claim_monthly_increase_base = {
+	add = learning
+	divide = 8		#prev 5
+}
+
+court_chaplain_fabricate_claim_base_total = {
+	add = court_chaplain_fabricate_claim_base
+	add = court_chaplain_fabricate_claim_monthly_increase_base
+}
+
+
+#court_chaplain_fabricate_claim_county_base = 3
+#court_chaplain_fabricate_claim_county_min_cost = {
+#	value = { 40 60 }
+#}
+
+court_chaplain_fabricate_claim_duchy_base = 8		#prev 7
+court_chaplain_fabricate_claim_duchy_min_cost = {
+	#value = { 80 100 }
+	value = { 90 120 }
+}

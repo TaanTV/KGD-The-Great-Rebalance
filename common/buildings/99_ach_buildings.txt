@@ -1,0 +1,448 @@
+﻿oath_warriors_building_01 = {
+    construction_time = standard_construction_time
+    
+	can_construct_potential = {
+        scope:holder = {
+            has_variable = provide_for_the_warriors_oath
+        }
+	}  
+
+	cost = {
+    	gold = normal_building_tier_1_cost	#prev cheap_building_tier_1_cost
+    	prestige = 125
+    }
+	
+	#character_modifier = {
+	#	knight_limit = 1
+    #    knight_effectiveness_mult = 0.1
+	#}
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_1	#prev 0.1
+        stationed_maa_toughness_mult = low_maa_toughness_tier_1	#prev 0.05
+	}
+	
+	next_building = oath_warriors_building_02
+
+	type_icon = "oath_warriors_building.dds"
+	
+	ai_value = {
+		base = 1000
+        modifier = {
+            factor = 0
+            scope:holder = {
+                any_directly_owned_province = {
+                    count >= 3
+                    has_building_or_higher = oath_warriors_building_01
+                }
+            }
+        }
+	}
+}
+
+oath_warriors_building_02 = {
+
+    cost = {
+    	gold = normal_building_tier_3_cost	#prev cheap_building_tier_2_cost
+    	prestige = 250
+    }
+
+    construction_time = standard_construction_time
+	
+    character_modifier = {
+		#knight_limit = 1
+        knight_effectiveness_mult = 0.05	#prev 0.1
+        #men_at_arms_maintenance = -0.01
+	}
+
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_3		#prev 0.15
+        stationed_maa_toughness_mult = normal_maa_toughness_tier_2	#prev 0.07
+	}
+
+    next_building = oath_warriors_building_03
+	type_icon = "oath_warriors_building.dds"
+	
+	ai_value = {
+		base = 1000
+	}
+}
+
+oath_warriors_building_03 = {
+
+	cost = {
+    	gold = normal_building_tier_5_cost	#prev cheap_building_tier_3_cost
+    	prestige = 375
+    }
+
+    construction_time = standard_construction_time
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 03 }
+		scope:holder.culture = {
+			has_innovation = innovation_castle_baileys
+		}
+	}
+	
+	character_modifier = {
+		#knight_limit = 1
+        knight_effectiveness_mult = 0.1
+        #men_at_arms_maintenance = -0.03
+	}
+
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_5		#prev 0.2
+        stationed_maa_toughness_mult = normal_maa_toughness_tier_4	#prev 0.1
+        #stationed_maa_siege_value_add = 0.1
+		#ADDED
+        stationed_maa_siege_value_mult = normal_maa_siege_value_tier_3
+	}
+
+	type_icon = "oath_warriors_building.dds"
+    next_building = oath_warriors_building_04
+	
+	ai_value = {
+		base = 100
+	}
+}
+
+oath_warriors_building_04 = {
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 04 }
+		scope:holder.culture = {
+			has_innovation = innovation_royal_armory
+		}
+	}
+
+    can_construct_showing_failures_only = {
+        custom_tooltip = {
+            text = oath_warriors_building_04_tooltip
+            has_province_modifier = oath_provide_for_the_warriors_province
+        }
+    }
+
+	cost = {
+    	gold = normal_building_tier_7_cost	#prev cheap_building_tier_4_cost
+    	prestige = 500
+    }
+    construction_time = standard_construction_time
+	
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_7		#prev 0.3
+        stationed_maa_toughness_mult = normal_maa_toughness_tier_6	#prev 0.2
+        #stationed_maa_siege_value_add = 0.2
+		#ADDED
+        stationed_maa_siege_value_mult = normal_maa_siege_value_tier_5
+	}
+
+    character_modifier = {
+        #men_at_arms_maintenance = -0.05
+        #knight_limit = 1
+        knight_effectiveness_mult = 0.15
+    }
+
+	type_icon = "oath_warriors_building.dds"
+	
+	ai_value = {
+		base = 100
+	}
+}
+
+oath_faithful_building_01 = {
+
+    can_construct_potential = {
+        scope:holder = {
+            has_variable = provide_for_the_faithful_oath
+        }
+    }
+
+    is_enabled = {
+        faith = scope:holder.faith
+    }
+
+    can_construct_showing_failures_only = {
+        faith = scope:holder.faith
+    }   
+
+    cost = {
+    	gold = normal_building_tier_1_cost	#prev cheap_building_tier_1_cost
+    	piety = 150		#prev 100
+    }
+    construction_time = standard_construction_time
+    
+    character_modifier = {
+        monthly_piety_gain_mult = 0.025
+    }
+
+    province_modifier ={
+        monthly_income = poor_building_tax_tier_2	#prev poor_building_tax_tier_1
+		#ADDED
+        epidemic_resistance = 3
+    }
+    
+    next_building = oath_faithful_building_02
+
+    type_icon = "oath_faithful_building.dds"
+    
+    ai_value = {
+		base = 1000
+        modifier = {
+            factor = 0
+            scope:holder = {
+                any_directly_owned_province = {
+                    count >= 3
+                    has_building_or_higher = oath_faithful_building_01
+                }
+            }  
+        }
+	}
+}
+
+oath_faithful_building_02 = {
+
+    is_enabled = {
+        faith = scope:holder.faith
+    }
+
+    can_construct_showing_failures_only = {
+        faith = scope:holder.faith
+    }
+
+    cost = {
+    	gold = normal_building_tier_3_cost	#prev cheap_building_tier_2_cost
+    	piety = 250		#prev 200
+    }
+    construction_time = standard_construction_time
+    
+    character_modifier = {
+        monthly_piety_gain_mult = 0.05
+    }
+
+    province_modifier ={
+        monthly_income = poor_building_tax_tier_4	#prev poor_building_tax_tier_2
+        epidemic_resistance = 6						#prev 4
+    }
+
+    next_building = oath_faithful_building_03
+
+    type_icon = "oath_faithful_building.dds"
+    
+    ai_value = {
+        base = 100
+    }
+}
+
+oath_faithful_building_03 = {
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 03 }
+		scope:holder.culture = {
+			has_innovation = innovation_guilds
+		}
+	}
+
+    is_enabled = {
+        faith = scope:holder.faith
+    }
+
+    next_building = oath_faithful_building_04
+
+    can_construct_showing_failures_only = {
+        faith = scope:holder.faith
+    }
+
+    cost = {
+    	gold = normal_building_tier_5_cost	#prev cheap_building_tier_3_cost
+    	piety = 350		#prev 300
+    }
+    construction_time = standard_construction_time
+    
+    character_modifier = {
+        monthly_piety_gain_mult = 0.075
+    }
+
+    province_modifier = {
+        monthly_income = poor_building_tax_tier_6	#prev poor_building_tax_tier_3
+        epidemic_resistance = 12					#prev 8
+    }
+
+    type_icon = "oath_faithful_building.dds"
+    
+    ai_value = {
+        base = 100
+    }
+}
+
+oath_faithful_building_04 = {
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 04 }
+		scope:holder.culture = {
+			has_innovation = innovation_cranes
+		}
+	}
+
+    is_enabled = {
+        faith = scope:holder.faith
+    }
+
+    can_construct_showing_failures_only = {
+        faith = scope:holder.faith
+        custom_tooltip = {
+            text = oath_faithful_building_04_tooltip
+            has_province_modifier = oath_provide_for_the_faithful_province
+        }
+    }
+
+    cost = {
+    	gold = normal_building_tier_7_cost	#prev cheap_building_tier_4_cost
+    	piety = 500		#prev 400
+    }
+    construction_time = standard_construction_time
+    
+    character_modifier = {
+        monthly_piety_gain_mult = 0.1
+        monthly_piety = 0.1
+        clergy_opinion = 3		#prev 4
+    }
+
+    province_modifier = {
+        monthly_income = poor_building_tax_tier_8	#prev poor_building_tax_tier_4
+        epidemic_resistance = 18					#prev 12
+    }
+
+    type_icon = "oath_faithful_building.dds"
+    
+    ai_value = {
+        base = 100
+    }
+}
+
+oath_poor_building_01 = {
+
+    can_construct_potential = {
+        scope:holder = {
+            has_variable = provide_for_the_poor_oath
+        }
+    }
+
+    cost = {
+    	gold = normal_building_tier_1_cost	#prev cheap_building_tier_1_cost
+    	prestige = 75	#prev 125
+		#ADDED
+		piety = 75
+    }
+    construction_time = standard_construction_time
+
+    county_modifier = {
+        tax_mult = -0.025			#prev -0.05
+        development_growth = 0.1	#prev 0.05
+        county_opinion_add = 10
+    }
+    
+    next_building = oath_poor_building_02
+
+    type_icon = "oath_poor_building.dds"
+    
+    ai_value = {
+        base = 1000
+    }
+}
+
+oath_poor_building_02 = {
+
+    cost = {
+    	gold = normal_building_tier_3_cost	#prev cheap_building_tier_2_cost
+    	prestige = 150	#prev 250
+		#ADDED
+		piety = 150
+    }
+    construction_time = standard_construction_time
+    
+    county_modifier = {
+        tax_mult = -0.05					#prev -0.1
+        development_growth_factor = 0.2		#prev 0.05
+        development_growth = 0.01			#prev 0.1
+        county_opinion_add = 15
+    }
+
+    next_building = oath_poor_building_03
+
+    type_icon = "oath_poor_building.dds"
+    
+    ai_value = {
+        base = 100		#prev 0
+    }
+}
+
+oath_poor_building_03 = {
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 03 }
+		scope:holder.culture = {
+			has_innovation = innovation_guilds
+		}
+	}
+	
+	
+
+    cost = {
+    	gold = normal_building_tier_5_cost	#prev cheap_building_tier_3_cost
+    	prestige = 250	#prev 375
+		#ADDED
+		piety = 250
+    }
+    construction_time = standard_construction_time
+    
+    county_modifier = {
+        tax_mult = -0.1						#prev -0.2
+        development_growth_factor = 0.35	#prev 0.15
+        development_growth = 0.02			#prev 0.2
+        county_opinion_add = 20
+    }
+
+    next_building = oath_poor_building_04
+
+    type_icon = "oath_poor_building.dds"
+    
+    ai_value = {
+        base = 100		#prev 0
+    }
+}
+
+oath_poor_building_04 = {
+	#ADDED
+	can_construct = {
+		building_requirement_castle_city_church = { LEVEL = 04 }
+		scope:holder.culture = {
+			has_innovation = innovation_cranes
+		}
+	}
+
+    can_construct_showing_failures_only = {
+        custom_tooltip = {
+            text = oath_poor_building_04_tooltip
+            has_province_modifier = oath_provide_for_the_poor_province
+        }    
+    }
+    cost = {
+    	gold = normal_building_tier_7_cost	#prev cheap_building_tier_4_cost
+    	prestige = 350	#prev 500
+		#ADDED
+		piety = 350
+    }
+    construction_time = standard_construction_time
+    
+    county_modifier = {
+        tax_mult = -0.15					#prev -0.3
+        development_growth_factor = 0.5		#prev 0.2
+        development_growth = 0.03			#prev 0.3
+        county_opinion_add = 30
+    }
+
+    type_icon = "oath_poor_building.dds"
+    
+    ai_value = {
+        base = 100		#prev 0
+    }
+}

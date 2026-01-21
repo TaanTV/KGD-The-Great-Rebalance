@@ -1,0 +1,47 @@
+﻿random_yearly_playable_pulse = {
+	on_actions = {
+		BKT_ai_goal_manager_opportunity_pulse
+		delay = { days = 1 }
+		BKT_ai_goal_manager_assignment
+	}
+}
+
+BKT_ai_goal_manager_opportunity_pulse = {
+	trigger = {
+		#has_variable = ai_goal_manager
+		is_valid_for_ai_goals_system = yes
+		is_ai = yes
+		NOT = { has_variable = conqueror }
+	}
+	effect = {
+		ai_goal_manager_opportunity_pulse_effect = yes
+	}
+}
+
+BKT_ai_goal_manager_assignment = {
+	trigger = {
+		#ADDED - at this point this is a husk of it's forrmer self, the only thing it's doing is worsening performance... probably.
+		always = no
+		is_valid_for_ai_goals_system = yes
+		NOT = { has_variable = ai_goal_manager }
+	}
+	effect = {
+		if = {
+			limit = {
+				any_owned_story = { story_type = story_ai_goal_manager }
+			}
+			save_temporary_scope_as = bad_check_ruler
+			debug_log = "A ruler didnt have a variable for ai_goal_manager"
+			debug_log_scopes = yes
+			debug_log_date = yes
+			random_owned_story = {
+				limit = { story_type = story_ai_goal_manager }
+				save_temporary_scope_as = ai_goal_manager_story_scope
+			}
+			set_variable = { name = ai_goal_manager value = scope:ai_goal_manager_story_scope }
+		}
+		else = {
+			create_story = story_ai_goal_manager
+		}
+	}
+}

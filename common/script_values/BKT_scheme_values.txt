@@ -1,0 +1,86 @@
+﻿###################
+# SCHEME VALUES	#
+###################
+
+sway_opinion_increase_per_success = 20	#prev 25
+sway_max_value = 75						#prev 100
+
+### Base Maximum Success
+#### Max success before agents.
+t1_base_max_success_value = 30		#prev 20
+t2_base_max_success_value = 40		#prev 30
+t3_base_max_success_value = 50		#prev 40
+
+##################################################
+# Secrecy Values
+
+# Cap secrecy for the scheme_owner to a sensible maximum value so that you can't single-handedly cover up for every gossip in the world.
+secrecy_skill_contribution_max_value = 45		#prev 40
+
+secrecy_base_value = {
+	add = {
+		value = 30		#prev 20
+		desc = BASE
+	}
+	# Reduce by the target's scheme discovery chance, if appropriate.
+	if = {
+		limit = {
+			# Scheme has to exist already.
+			exists = this
+			#ADDED - prevent startup errors
+			exists = scope:owner
+			# We gotta be facing a character.
+			is_scheme_target_type = character
+			# Do they have a spymaster...
+			scheme_target_character.cp:councillor_spymaster ?= {
+				# ... who is performing the appropriate task...
+				is_performing_council_task = task_disrupt_schemes
+				NOR = {
+					# ... who _isn't_ the scheme owner...
+					this = scope:owner
+					# ... or an agent in the scheme.
+					save_temporary_scope_as = char_temp
+					root = {
+						any_scheme_agent_character = { this = scope:char_temp }
+					}
+				}
+			}
+		}
+		add = {
+			value = scope:target.cp:councillor_spymaster.spymaster_disrupt_schemes_total_modifier
+			multiply = -1
+			desc = secrecy.scheme_owner.spymaster.disrupt_schemes
+		}
+	}
+	#ADDED
+	if = {
+		limit = {
+			exists = this
+			is_type_basic = no
+			scope:owner ?= { is_ai = no }	#dunno about that 
+		}
+		add = secrecy_agent_count_reduction_value
+	}
+}
+secrecy_agent_count_reduction_value = {
+	add = {
+		value = {
+			every_scheme_agent_slot = {
+				limit = {
+					is_filled = yes
+					NOT = { agent_slot_has_contribution_type = secrecy }
+				}
+				add = -3			#prev -10
+			}
+		}
+		desc = secrecy.num_agents
+	}
+}
+
+# What're the upper and lower constraints for how much contribution an agent can give?
+## Because we don't want any agent to insta-boost you too high.
+agent_scheme_contributor_max = 45	#prev 50
+
+# Agent contribution setup values.
+# How much can any one of an agent's skills contribute to their score?
+agent_max_skill_value = 20			#prev 25

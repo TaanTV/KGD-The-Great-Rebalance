@@ -1,0 +1,114 @@
+﻿# Referenced from code, in code value will be clamped between NRoyalCourt::COURT_GRANDEUR_MIN and NRoyalCourt::COURT_GRANDEUR_MAX
+# root = character calculating for
+court_grandeur_minimum_expected_value = {
+	value = sub_realm_size
+	divide = 8		#prev 4
+	#ADDED - avg_dev part
+	add = {
+		value = average_sub_realm_development
+		divide = 2
+	}
+	if = { # Elective Empires have slightly lower expectations (i.e. the HRE)
+		limit = {
+			any_held_title = {
+				tier = tier_empire
+				has_title_law_flag = elective_succession_law
+			}
+		}
+		divide = 2
+	}
+	if = { # Add a baseline depending on rank
+		limit = {
+			#highest_held_title_tier = tier_empire
+			#ADDED - replaced
+			highest_held_title_tier >= tier_empire
+		}
+		add = 35	#prev 20
+	}
+	else = {
+		add = 15	#prev 10
+	}
+	if = {
+		limit = {
+			government_has_flag = government_is_tribal
+		}
+		multiply = 0
+		add = court_grandeur_current
+	}
+	max = 95
+}
+
+
+ep1_court_grandeur_marriage_acceptance_value = {
+	scope:actor = {
+		add = court_grandeur_current_level
+		subtract = court_grandeur_minimum_expected_level
+		multiply = 2.5		#prev 5
+		floor = yes
+		if = {
+			limit = {
+				scope:recipient.faith = {
+					faith_hostility_level = {
+						target = scope:actor.faith
+						value = faith_astray_level
+					}
+				}
+			}
+			divide = 2
+		}
+		else_if = {
+			limit = {
+				scope:recipient.faith = {
+					faith_hostility_level = {
+						target = scope:actor.faith
+						value = faith_hostile_level
+					}
+				}
+			}
+			divide = 3
+		}
+		else_if = {
+			limit = {
+				scope:recipient.faith = {
+					faith_hostility_level = {
+						target = scope:actor.faith
+						value = faith_evil_level
+					}
+				}
+			}
+			divide = 4
+		}
+	}
+}
+
+# The unmodified, average cost of sponsoring an Inspiration.
+basic_fund_inspiration_cost = {
+	value = 125		#prev 100
+}
+
+court_grandeur_level_difference_modifier_multiplier = {
+	value = 1
+	if = { # Small realms receives larger bonuses for being above their expected level
+		limit = {
+			court_grandeur_current_level >= court_grandeur_minimum_expected_level
+		}
+		#value = 100 # Realm size baseline
+		#divide = {
+		#	value = sub_realm_size
+		#	min = 1 		
+		#} 
+		#min = 1
+		#max = 4
+	}
+	else = { # Big realms receives larger penalties for being below their expected level
+		value = sub_realm_size
+		multiply = 0.02		#prev 0.025
+		min = 1
+		max = 4
+		#ADDED
+		if = {
+			limit = { government_has_flag = government_has_higher_grandeur_penalty_and_court_costs }
+			multiply = 1.5
+		}
+	}
+}

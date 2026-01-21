@@ -1,0 +1,11 @@
+﻿vassal_modify_vassal_contract_cannot_increase_obligation_level_hook_diarch = {
+	first_not = vassal_modify_vassal_contract_cannot_increase_obligation_level_hook_diarch
+}
+
+vassal_modify_vassal_contract_obligation_change_limit_1 = {
+	first_not = vassal_modify_vassal_contract_obligation_change_limit_1
+}
+
+vassal_modify_vassal_contract_obligation_change_limit_2 = {
+	first_not = vassal_modify_vassal_contract_obligation_change_limit_2
+}

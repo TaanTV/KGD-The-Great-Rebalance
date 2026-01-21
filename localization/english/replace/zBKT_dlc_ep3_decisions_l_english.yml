@@ -1,0 +1,13 @@
+﻿l_english: 
+ # Restore Backwater Counties Decision
+ #restore_backwater_counties_decision: "Restore [ROOT.Char.GetPrimaryTitle.GetNameNoTierNoTooltip]"
+ #restore_backwater_counties_decision_desc: "Throughout the passing centuries, [ROOT.Char.GetPrimaryTitle.GetNameNoTier] fell into ignominy and presents a shameful shadow of its once prominent past.\n\nBut, we have worked tirelessly to develop our ancestral lands to their former standing. The glory of [ROOT.Char.GetPrimaryTitle.GetNameNoTierNoTooltip] shall be restored!"
+ restore_backwater_counties_decision_tooltip: "Remove the [GetModifier('backwater_county_modifier').GetNameWithTooltip] [county_modifier|E] from all [counties|E] with #V [ROOT.ScriptValue('backwater_development_value')|V0]#! or more [development|E]"
+ #restore_backwater_counties_decision_confirm: "Confirm"
+ greek_backwater_modifier_removal_tt: "Every [county|E] with [GetModifier('backwater_county_modifier').GetNameWithTooltip] and greater than #HIGH [root_scope.MakeScope.ScriptValue('backwater_development_value')|V0]#! [development|E] will lose the [county_modifier|E]"
+ #no_backwater_counties_meet_criteria_tt: "@alert_icon! #alert_trial No counties currently meet this criteria!#!"
+
+ #greek_backwater_modifier_region: "Greece"
+ backwater_county_eligible_modifier_removal_tt: "The [development|E] of at least one sub-realm [county|E] with the [GetModifier('backwater_county_modifier').GetName] [county_modifier|E] is #V [root_scope.MakeScope.ScriptValue('backwater_development_value')|V0]#! or higher"
+ #restored_greek_theme_modifier: "Restored Theme"
+ #restored_greek_theme_modifier_desc: "This character has restored a Theme to surpass the golden days of old.\n[governor_efficiency|E]: @governor_efficiency!#P +10%#!"

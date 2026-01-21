@@ -1,0 +1,113 @@
+﻿# ADVENTURE LEGACIES
+
+fp1_adventure_legacy_1 = { # Wanderlust
+	legacy = fp1_adventure_legacy_track
+
+	can_be_picked = { eligible_for_fp1_dynasty_legacies_trigger = yes }
+
+	character_modifier = {
+		diplomatic_range_mult = 0.2	#prev 0.3
+		#opinion_of_different_culture = 10
+		#different_culture_opinion = 10
+		ai_boldness = medium_positive_ai_value
+		ai_energy = medium_positive_ai_value
+	}
+
+	effect = {
+		# Receives extra troops when undertaking Varangian Adventures.
+		custom_description_no_bullet = { text = fp1_adventure_legacy_1_effect }
+	}
+
+	ai_chance = {
+		value = 11
+		if = {
+			limit = {
+				culture = { has_cultural_pillar = heritage_north_germanic }
+			}
+			multiply = 10
+		}
+		if = {
+			limit = {
+				can_start_new_legacy_track_trigger = no
+			}
+			multiply = 0
+		}
+	}
+}
+
+fp1_adventure_legacy_3 = { # Strange Gods
+	legacy = fp1_adventure_legacy_track
+
+	character_modifier = {
+		faith_conversion_piety_cost_mult = -0.25	#prev -0.5
+		different_faith_county_opinion_mult = -0.5
+		different_faith_opinion = 15
+	}
+
+	effect = {
+		# More likely to accept Demand Conversion requests of all stripes.
+		custom_description_no_bullet = { text = fp1_adventure_legacy_3_effect }
+	}
+}
+
+fp1_adventure_legacy_4 = { # Veteran Explorers
+	legacy = fp1_adventure_legacy_track
+
+	character_modifier = {
+		movement_speed = 0.05		#prev 0.1
+		enemy_hostile_scheme_success_chance_add = -15
+		supply_duration = 1
+	}
+}
+
+# PILLAGE LEGACIES
+
+fp1_pillage_legacy_1 = { # Sea-Wolves
+	legacy = fp1_pillage_legacy_track
+
+	can_be_picked = { eligible_for_fp1_dynasty_legacies_trigger = yes }
+
+	character_modifier = {
+		naval_movement_speed_mult = 0.2
+		prowess = 1
+		ai_boldness = medium_positive_ai_value
+		ai_greed = medium_positive_ai_value
+	}
+
+	effect = {
+		custom_description_no_bullet = { text = fp1_pillage_legacy_1_effect }
+	}
+
+	ai_chance = {
+		value = 11
+		if = {
+			limit = {
+				culture = { has_cultural_pillar = heritage_north_germanic }
+				#ADDED
+				OR = {
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+				}
+			}
+			multiply = 10
+		}
+		if = {
+			limit = {
+				can_start_new_legacy_track_trigger = no
+			}
+			multiply = 0
+		}
+	}
+}
+
+fp1_pillage_legacy_2 = { # Always Space in the Hold
+	legacy = fp1_pillage_legacy_track
+
+	character_modifier = {
+		max_loot_mult = 0.5
+		#defender_advantage = 5
+		heavy_infantry_max_size_add = 1		#prev 2
+		#ADDED
+		attacker_advantage = 3
+	}
+}

@@ -1,0 +1,58 @@
+﻿coastal_land_province_modifier = {
+	supply_limit_mult = 0.25
+	#ADDED
+	epidemic_resistance = 5
+}
+
+coastal_land_county_capital_province_modifier = {
+	#development_growth_factor = 0.2 #Added to counter Plagues hitting coastal provinces more
+	# Added epidemic_resistance above to metigate it instead
+}
+
+#
+independent_realm_capital_province_modifier = {
+	levy_size = 0.1		#prev 0.2
+}
+
+# Duke or greater
+high_tier_vassal_capital_province_modifier = {
+	levy_size = 0.05	#prev 0.1
+}
+
+# Not applied for barons
+capital_province_modifier = {
+	monthly_income = 0.75		#prev 1
+	stationed_maa_damage_mult = normal_maa_damage_tier_1
+	stationed_maa_toughness_mult = normal_maa_toughness_tier_1
+	#ADDED
+	monthly_county_control_growth_add = 0.1
+	county_opinion_add = 10
+}
+
+capital_duchy_province_modifier = {
+	levy_size = 0.1
+	stationed_maa_damage_mult = 0.05			#prev low_maa_damage_tier_1
+	stationed_maa_toughness_mult = 0.05			#prev low_maa_toughness_tier_1
+	#ADDED
+	monthly_county_control_growth_add = 0.03	#0.1
+}
+# Referenced in code; blocks raiding when present on a province
+recently_looted_modifier = {
+	icon = martial_negative
+	build_speed = 0.35					#prev 0.5
+	development_growth_factor = -0.1
+	tax_mult = -0.35					#prev -0.5
+	county_fertility_growth_mult = -0.2
+	#ADDED
+	levy_size = -0.15
+}
+
+# Referenced in code; blocks raiding & bartering when present on a province
+recently_bartered_modifier = {
+	icon = goods_positive
+	build_speed = -0.05			#prev -0.1
+	#development_growth = 0.3
+	tax_mult = 0.1
+	#ADDED
+	development_growth_factor = 0.1
+}

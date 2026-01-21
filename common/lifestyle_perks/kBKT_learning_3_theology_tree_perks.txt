@@ -1,0 +1,216 @@
+﻿faithful_perk = {
+	lifestyle = learning_lifestyle
+	tree = theology
+	position = { 1 0 }
+	icon = node_learning
+	
+	auto_selection_weight = {
+		value = 11
+		if = {
+			limit = {
+				has_education_learning_trigger = yes
+			}
+			add = 1989
+		}
+		if = {
+			limit = {
+				has_focus = learning_theology_focus
+			}
+			multiply = 5
+		}
+		if = {
+			limit = {
+				can_start_new_lifestyle_tree_trigger = no
+			}
+			multiply = 0
+		}
+	}
+	
+	doctrine_character_modifier = {
+		doctrine = doctrine_theocracy_lay_clergy
+		zealot_opinion = 10
+	}
+	doctrine_character_modifier = {
+		doctrine = doctrine_theocracy_temporal
+		clergy_opinion = 10
+		#ADDED - 10 opinion with religious head is a bit much
+		religious_head_opinion = -5	
+	}
+
+	government_character_modifier = {
+		flag = government_has_merit
+		monthly_merit = 0.5
+	}
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}	
+			custom_tooltip = {
+				text = adventurer_faithful_perk_effect
+			}
+		}
+	}
+}
+
+prophet_perk = {
+	lifestyle = learning_lifestyle
+	tree = theology
+	position = { 0 3 }
+	icon = node_learning
+	
+	parent = religious_icon_perk
+	
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = prophet_perk_adventurer_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_has_merit }
+				desc = grand_preceptor_court_position #Grand Preceptor
+			}
+			desc = prophet_perk_name
+		}
+	}
+	
+	government_character_modifier = {
+		flag = government_has_merit
+		invert_check = yes
+		monthly_piety_gain_per_knight_mult = 0.02
+		faith_creation_piety_cost_mult = -0.25		#prev -0.5
+	}
+
+	government_character_modifier = {
+		flag = government_has_merit
+		monthly_merit_mult = 0.2
+		stress_loss_per_piety_level = 0.1
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				government_allows = state_faith
+			}
+			custom_description_no_bullet = {
+				text = cheaper_change_state_faith_cost_effect
+			}
+		}
+
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}	
+			custom_tooltip = {
+				text = adventurer_prophet_perk_effect
+			}	
+			custom_tooltip = {
+				text = adventurer_prophet_perk_2_effect
+			}
+		}
+	}
+}
+
+
+church_and_state_perk = {
+	lifestyle = learning_lifestyle
+	tree = theology
+	position = { 2 2 }
+	icon = node_learning
+	
+	parent = clerical_justifications_perk
+	
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = church_and_state_perk_adventurer_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_uses_domicile_but_not_adventurer }
+				desc = personal_piety
+			}
+			desc = church_and_state_perk_name
+		}
+	}
+	
+	doctrine_character_modifier = {
+		doctrine = doctrine_theocracy_lay_clergy
+		monthly_piety_from_buildings_mult = 0.75	#prev 1
+	}
+	doctrine_character_modifier = {
+		doctrine = doctrine_theocracy_temporal
+		realm_priest_opinion = 25		#prev 50
+		#ADDED
+		theocracy_government_tax_contribution_add = 0.05
+	}
+
+	government_character_modifier = {
+		flag = government_is_nomadic
+		zealot_opinion = 25			#prev 50
+		same_faith_opinion = 5		#prev 15
+	}
+	government_character_modifier = {
+		flag = government_uses_domicile_but_not_adventurer
+		domicile_monthly_piety_mult = 0.05
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}	
+			custom_tooltip = {
+				text = adventurer_church_and_state_perk_2_effect
+			}
+			custom_tooltip = {
+				text = adventurer_church_and_state_perk_effect
+			}
+		}
+	}
+}
+
+defender_of_the_faith_perk = {
+	lifestyle = learning_lifestyle
+	tree = theology
+	position = { 1 4 }
+	icon = node_learning
+	
+	parent = radiant_perk
+	parent = prophet_perk
+	
+	doctrine_character_modifier = {
+		doctrine = doctrine_pluralism_fundamentalist
+		tolerance_advantage_mod = 5	#prev 10
+		prowess_per_piety_level = 2
+		clergy_opinion = 10			#prev 20
+	}
+	doctrine_character_modifier = {
+		doctrine = doctrine_pluralism_righteous
+		zealot_opinion = 10			#prev 20
+		tyranny_gain_mult = -0.25
+		zealot_tax_contribution_mult = 0.05		#prev 0.35
+		zealot_levy_contribution_mult = 0.05		#prev 0.35
+	}
+	doctrine_character_modifier = {
+		doctrine = doctrine_pluralism_pluralistic
+		diplomacy_per_piety_level = 1
+		monthly_piety_gain_mult = 0.2
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}	
+			custom_tooltip = {
+				text = adventurer_defender_of_the_faith_perk_effect
+			}
+			custom_tooltip = {
+				text = adventurer_defender_of_the_faith_perk_2_effect
+			}
+		}
+	}
+}
+

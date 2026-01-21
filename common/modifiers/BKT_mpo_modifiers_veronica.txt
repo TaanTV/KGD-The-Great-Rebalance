@@ -1,0 +1,5 @@
+﻿astrologer_desired_area_modifier = {
+	icon = county_fertility_positive
+	#county_fertility_growth_mult = 0.2
+	county_fertility_growth_add = 1
+}

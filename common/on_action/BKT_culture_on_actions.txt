@@ -1,0 +1,78 @@
+﻿# Happens when the culture reaches a new era
+# Root is the culture
+# BKT: This could be useful to track overall lag behind 
+#on_culture_era_changed = {
+#	
+#}
+
+# Happens when a culture is created through hybridization or divergence
+# Root = The new culture
+# scope:founder = The founder of the new culture
+on_culture_created = {
+	on_actions = {
+		BKT_on_culture_created
+	}
+}
+
+BKT_on_culture_created = {
+	effect = {
+		if = {
+			limit = { 
+				scope:founder ?= { government_allows = uses_county_fertility } 
+				NOT = { has_cultural_pillar = head_determination_herd }
+			}
+			set_culture_pillar = head_determination_herd
+		}
+		else_if = {
+			limit = { 
+				NOT = { has_cultural_pillar = head_determination_domain }
+			}
+			set_culture_pillar = head_determination_domain
+		}
+	}
+}
+
+# Happens when a county is granted to an auto-generated local culture noble
+# Root = The culture
+# scope:actor = The granter
+# scope:landed_title = The landed title
+on_county_auto_granted_to_local_culture = {
+	on_actions = {
+		BKT_on_county_auto_granted_to_local_culture
+	}
+}
+
+BKT_on_county_auto_granted_to_local_culture = {
+	effect = {
+		save_temporary_scope_value_as = {
+			name = opinion_to_add_value
+			value = {
+				value = 10	#50 - 10 because we multiply by 5 in the end
+				multiply = {
+					value = 100
+					subtract = "cultural_acceptance(scope:actor.culture)"
+					divide = 100
+				}
+				if = {
+					limit = { 
+						OR = {		#Sadly i have to check for specific traditions here
+							has_cultural_tradition = tradition_xenophilic
+							has_cultural_tradition = tradition_fp2_malleable_subjects
+						}
+					}
+					value = 0
+				}
+				ceiling = yes
+				multiply = 5 	#cute numbers
+				add = 10			#make sure it's a bit better than own culture
+			}
+		}
+		scope:landed_title.holder = {
+			add_opinion = {
+				target = scope:actor
+				modifier = became_vassal
+				opinion = scope:opinion_to_add_value
+			}
+		}
+	}
+}

@@ -1,0 +1,4 @@
+﻿l_russian:
+ culture_parameter_romance_scheme_bonuses: "Успешное завершение [Concept( 'scheme', 'происков' )|E] «[GetScheme('courting').GetTypeName]» против [Concept( 'rulers', 'правителей' )|E] близким к вам по [Concept( 'rank', 'рангу' )|E] и их [Concept( 'close_family', 'близких родственников' )|E] дает [dynasty_prestige_i][Concept( 'dynasty_prestige', 'признание' )|E]"
+ #culture_parameter_romance_scheme_penalty: "Неудачные [Concept( 'scheme', 'происки' )|E] «[GetScheme('courting').GetTypeName]» увеличивают [Concept( 'stress', 'стресс' )|E]"
+ 

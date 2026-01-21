@@ -1,0 +1,102 @@
+﻿### Shamelessly stolen from the amazing MND mod. ###
+#difficulty = {
+#	
+#	categories = {
+#		difficulty ai
+#	}
+#	
+#	default = roleplay_difficulty
+#
+#	very_easy_difficulty = {
+#		apply_modifier = player:very_easy_difficulty
+#	}
+#	
+#	easy_difficulty = {
+#		apply_modifier = player:easy_difficulty
+#	}
+#	
+#	normal_difficulty = {
+#
+#	}
+#
+#	roleplay_difficulty = {
+#		apply_modifier = player:roleplay_difficulty_player
+#		apply_modifier = ai:roleplay_difficulty_ai
+#	}
+#	
+#	rolehard_difficulty = {
+#		apply_modifier = player:rolehard_difficulty_player
+#		apply_modifier = ai:rolehard_difficulty_ai
+#	}
+#}
+
+conquerors_bonuses = {
+	
+	categories = {
+		difficulty ai
+	}
+	
+	default = default_conquerors_bonuses
+
+	default_conquerors_bonuses = {
+
+	}
+	
+	no_conquerors_bonuses = {
+	
+	}
+	
+	extreme_conquerors_bonuses = {
+	
+	}
+	
+	reduced_random_conquerors_bonuses = {
+	
+	}
+	
+	random_conquerors_bonuses = {
+	
+	}
+	
+	more_random_conquerors_bonuses = {
+	
+	}
+}
+
+conquerors_inheritance = {
+	
+	categories = {
+		difficulty ai
+	}
+	
+	default = no_conquerors_inheritance	#prev primary_conquerors_inheritance
+
+	default_conquerors_inheritance = {
+
+	}
+	
+	primary_conquerors_inheritance = {
+	
+	}
+	
+	no_conquerors_inheritance = {
+	
+	}
+}
+
+
+
+random_harm_target = {
+		
+	categories = {
+		difficulty health
+	}
+		
+	default = harm_target_all	#prev harm_target_ai_only
+	
+	harm_target_all = {}
+		
+	harm_target_player_only = {}
+		
+	harm_target_ai_only = {}
+}

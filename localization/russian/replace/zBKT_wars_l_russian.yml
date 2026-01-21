@@ -1,0 +1,9 @@
+﻿l_russian:
+ #liberty_faction_war: "Фракция свободы"
+ liberty_war_victory_defender_desc: "Ваш [crown_authority|El] снижен до самого низкого уровня, и вы получаете сильный негативный [modifier|E]."
+ liberty_war_victory_desc: "[crown_authority|E] персонажа [defender.GetPrimaryTitle.GetName] снижен до самого низкого уровня, и [defender.GetShortUIName] [Select_CString(defender.IsLocalPlayer, 'получаете', 'получает' )] сильный негативный [modifier|E]."
+ #liberty_war_victory_end_desc: "[liberty_faction|E] распущена, и ее участники не могут вступать во фракции на протяжении [SCOPE.ScriptValue('liberty_war_victory_cooldown')|0] лет."
+ liberty_war_victory_defender_desc_admin: "Ваша [Concept('imperial_bureaucracy', 'имперская бюрократия')|E] снижена до самого низкого уровня, и вы получаете сильный негативный [modifier|E]."
+ liberty_war_victory_desc_admin: "[Concept('imperial_bureaucracy', 'Имперская бюрократия')|E] персонажа [defender.GetPrimaryTitle.GetName] снижена до самого низкого уровня, и [defender.GetShortUIName] [Select_CString(defender.IsLocalPlayer, 'получаете', 'получает' )] сильный негативный [modifier|E]."
+ liberty_war_victory_defender_desc_tribal: "Ваш [Concept('tribal_authority', 'авторитет вождя')|E] снижен до самого низкого уровня, и вы получаете сильный негативный [modifier|E]."
+ liberty_war_victory_desc_tribal: "[Concept('tribal_authority', 'Авторитет вождя')|E] персонажа [defender.GetPrimaryTitle.GetName] снижен до самого низкого уровня, и [defender.GetShortUIName] [Select_CString(defender.IsLocalPlayer, 'получаете', 'получает' )] сильный негативный [modifier|E]."

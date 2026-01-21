@@ -1,0 +1,361 @@
+﻿#PRESTIGE
+# Multiplied all by 2 because PUNISHMENT.
+# Commented out because AI seems to struggle :<
+#miniscule_prestige_loss = {
+#	value = 0
+#	subtract = miniscule_prestige_value
+#	multiply = 2
+#}
+#minor_prestige_loss = {
+#	value = 0
+#	subtract = minor_prestige_value
+#	multiply = 2
+#}
+#medium_prestige_loss = {
+#	value = 0
+#	subtract = medium_prestige_value
+#	multiply = 2
+#}
+#major_prestige_loss = {
+#	value = 0
+#	subtract = major_prestige_value
+#	multiply = 2
+#}
+#massive_prestige_loss = {
+#	value = 0
+#	subtract = massive_prestige_value
+#	multiply = 2
+#}
+#monumental_prestige_loss = {
+#	value = 0
+#	subtract = monumental_prestige_value
+#	multiply = 2
+#}
+
+
+knight_prestige_gain_on_wound = {
+	value = minor_prestige_gain
+	if = {
+		limit = {
+			exists = scope:enemy_knight.primary_title
+			scope:enemy_knight.primary_title.tier > 0
+		}
+		#multiply = scope:enemy_knight.primary_title.tier
+		#ADDED - barons are people too
+		multiply = {
+			value = scope:enemy_knight.primary_title.tier
+			add = 1
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:enemy_knight
+			scope:enemy_knight = {
+				is_lowborn = yes
+			}
+		}
+		#divide = 2
+		#ADDED - lowborns can get a bit more prestige
+		if = {
+			limit = { is_lowborn  = yes }
+			divide = 1.5
+		}
+		else = { divide = 2 }
+	}
+}
+
+knight_prestige_gain_on_kill = {
+	value = medium_prestige_gain
+	if = {
+		limit = {
+			exists = scope:enemy_knight.primary_title
+			scope:enemy_knight.primary_title.tier > 0
+		}
+		#multiply = scope:enemy_knight.primary_title.tier
+		#ADDED - barons are people too
+		multiply = {
+			value = scope:enemy_knight.primary_title.tier
+			add = 1
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:enemy_knight
+			scope:enemy_knight = {
+				is_lowborn = yes
+			}
+		}
+		#divide = 2
+		#ADDED - lowborns can get a bit more prestige
+		if = {
+			limit = { is_lowborn  = yes }
+			divide = 1.5
+		}
+		else = { divide = 2 }
+	}
+}
+
+knight_prestige_gain_on_wound_inverse = {
+	value = minor_prestige_gain
+	if = {
+		limit = {
+			exists = root.primary_title
+			root.primary_title.tier > 0
+		}
+		#multiply = root.primary_title.tier
+		#ADDED - barons are people too
+		multiply = {
+			multiply = root.primary_title.tier
+			add = 1
+		}
+	}
+	if = {
+		limit = {
+			root = {
+				is_lowborn = yes
+			}
+		}
+		#divide = 2
+		#ADDED - lowborns can get a bit more prestige
+		if = {
+			limit = { scope:enemy_knight ?= { is_lowborn  = yes } }
+			divide = 1.5
+		}
+		else = { divide = 2 }
+	}
+}
+
+knight_prestige_gain_on_kill_inverse = {
+	value = medium_prestige_gain
+	if = {
+		limit = {
+			exists = root.primary_title
+			root.primary_title.tier > 0
+		}
+		#multiply = root.primary_title.tier
+		#ADDED - barons are people too
+		multiply = {
+			multiply = root.primary_title.tier
+			add = 1
+		}
+	}
+	if = {
+		limit = {
+			root = {
+				is_lowborn = yes
+			}
+		}
+		#divide = 2
+		#ADDED - lowborns can get a bit more prestige
+		if = {
+			limit = { scope:enemy_knight ?= { is_lowborn  = yes } }
+			divide = 1.5
+		}
+		else = { divide = 2 }
+	}
+}
+
+##PIETY
+## Multiplied all by 2 because PUNISHMENT.
+#miniscule_piety_loss = {
+#	value = 0
+#	subtract = miniscule_piety_value
+#	multiply = 2
+#}
+#minor_piety_loss = {
+#	value = 0
+#	subtract = minor_piety_value
+#	multiply = 2
+#}
+#medium_piety_loss = {
+#	value = 0
+#	subtract = medium_piety_value
+#	multiply = 2
+#}
+#major_piety_loss = {
+#	value = 0
+#	subtract = major_piety_value
+#	multiply = 2
+#}
+#massive_piety_loss = {
+#	value = 0
+#	subtract = massive_piety_value
+#	multiply = 2
+#}
+
+
+#FAME
+# Multiplied all by 2 because PUNISHMENT.
+miniscule_fame_loss = {
+	value = 0
+	subtract = miniscule_fame_value
+	multiply = 2
+}
+minor_fame_loss = {
+	value = 0
+	subtract = minor_fame_value
+	multiply = 2
+}
+medium_fame_loss = {
+	value = 0
+	subtract = medium_fame_value
+	multiply = 2
+}
+major_fame_loss = {
+	value = 0
+	subtract = major_fame_value
+	multiply = 2
+}
+massive_fame_loss = {
+	value = 0
+	subtract = massive_fame_value
+	multiply = 2
+}
+
+
+#DEVOTION
+# Multiplied all by 2 because PUNISHMENT.
+miniscule_devotion_loss = {
+	value = 0
+	subtract = miniscule_devotion_value
+	multiply = 2
+}
+minor_devotion_loss = {
+	value = 0
+	subtract = minor_devotion_value
+	multiply = 2
+}
+medium_devotion_loss = {
+	value = 0
+	subtract = medium_devotion_value
+	multiply = 2
+}
+major_devotion_loss = {
+	value = 0
+	subtract = major_devotion_value
+	multiply = 2
+}
+massive_devotion_loss = {
+	value = 0
+	subtract = massive_devotion_value
+	multiply = 2
+}
+
+#DE JURE DRIFT
+medium_de_jure_drift_progress_gain = 60		#prev 15
+medium_de_jure_drift_progress_loss = -60	#prev -15
+#Send Gift
+send_gift_opinion = {
+	value = 15	#prev 5
+	add = {
+		if = {
+			limit = {
+				scope:actor.diplomacy > 0
+			}
+			add = {
+				value = scope:actor.diplomacy
+				multiply = 2	#prev 3
+			}
+		}
+		if = {
+			limit = {
+				scope:recipient.ai_greed > 0
+			}
+			add = {
+				value = scope:recipient.ai_greed
+				divide = 4		#prev 3
+			}
+		}
+		if = {
+			limit = {
+				scope:recipient.liege = scope:actor
+			}
+			divide = 1.5
+		}
+		if = {
+			limit = {
+				scope:recipient = scope:actor.faith.religious_head
+			}
+			divide = 3
+		}
+		if = {
+			limit = {
+				scope:actor.culture ?= {
+					has_innovation = fp3_innovation_fritware
+				}
+			}
+			multiply = 1.2
+		}
+		max = 85	#prev 100
+	}
+	if = {
+		limit = {
+			scope:actor.culture = { has_cultural_parameter = more_gift_opinion }
+		}
+		multiply = 1.2
+	}
+	if = {
+		limit = {
+			scope:actor = {
+				any_sub_realm_barony = {
+					county.holder = scope:actor
+					title_province = { 
+						has_building_or_higher = dragon_kiln_01
+					}
+				}
+			}
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			scope:actor = { has_perk = thoughtful_perk }
+		}
+		multiply = 1.5		#prev 2
+	}
+}
+
+#FOR DIVORCE
+divorce_cost = {
+	value = 750		#prev 100
+	if = {
+		limit = {
+			exists = scope:actor
+			NOT = { exists = scope:secondary_actor }	#Dynast interactions can go f themselves.
+			OR = {
+				scope:recipient ?= {
+					is_spouse_of = scope:actor
+					NOT = { exists = scope:secondary_recipient }
+					OR = {
+						reverse_has_opinion_modifier = {
+							modifier = unfaithful_spouse_exposed_opinion
+							target = scope:actor
+						}
+						reverse_has_opinion_modifier = {
+							modifier = unfaithful_spouse_discovered_opinion
+							target = scope:actor
+						}
+					}
+				}
+				scope:secondary_recipient ?= {
+					is_spouse_of = scope:actor
+					OR = {
+						reverse_has_opinion_modifier = {
+							modifier = unfaithful_spouse_exposed_opinion
+							target = scope:actor
+						}
+						reverse_has_opinion_modifier = {
+							modifier = unfaithful_spouse_discovered_opinion
+							target = scope:actor
+						}
+					}
+				}
+			}
+		}
+		add = -700
+	}
+}
+
+
+
+death_chance_starts_health = 2.75	#prev 3
