@@ -16,13 +16,13 @@
 	freeze_scheme_when_traveling = yes
 	freeze_scheme_when_traveling_target = no
 
-    speed_per_skill_point = t2_spsp_owner_value			#prev t3_spsp_owner_value
+    speed_per_skill_point = t2_spsp_owner_value				#prev t3_spsp_owner_value
 	speed_per_target_skill_point = t3_spsp_target_value
-	base_progress_goal = t3_base_phase_length_value		#prev 50
+	base_progress_goal = t3_base_phase_length_value			#prev 50 (now 70)
 	maximum_secrecy = 95
-	base_maximum_success = t1_base_max_success_value	#prev t2_base_max_success_value
+	base_maximum_success = t1_base_max_success_value		#prev t2_base_max_success_value
 	phases_per_agent_charge = 1
-	success_chance_growth_per_skill_point = t3_scgpsp_value
+	success_chance_growth_per_skill_point = t2_scgpsp_value	#prev t3_scgpsp_value
 
     # Core Triggers
 	allow = {
@@ -177,7 +177,7 @@
 		modifier = {
 			add = 15	#prev 10 
 			desc = SCHEME_STEAL_HERD_AMOUNT
-			scope:owner = { has_character_flag = steal_herd_low }
+			#scope:owner = { has_character_flag = steal_herd_low }
 			#ADDED - how about you actually work
 			has_variable = steal_herd_low
 		}

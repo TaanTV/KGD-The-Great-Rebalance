@@ -91,6 +91,12 @@
  revolter_offensive_desc: "This side will focus exclusively on the wargoal and nothing else."
  revolter_offensive_2: "$revolter_offensive$"
  revolter_offensive_2_desc: "$revolter_offensive_desc$"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_1: "$yearly_herd_decay_modifier$#p -3%#!"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_2: "$yearly_herd_decay_modifier$#p -5%#!"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_3: "$yearly_herd_decay_modifier$#p -7%#!"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_4: "$yearly_herd_decay_modifier$#p -9%#!"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_5: "$yearly_herd_decay_modifier$#p -12%#!"
+ domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_6: "$yearly_herd_decay_modifier$#p -15%#!"
  
  
  secondary_recipient_is_lowborn: "Because [secondary_recipient.GetShortUIName] is [lowborn|E]:" 

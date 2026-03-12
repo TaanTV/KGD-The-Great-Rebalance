@@ -1,4 +1,25 @@
-﻿###########
+﻿#Special Buildings:
+#When adding Special Buildings also always add an entry in the following custom loc:
+#GetSpecialBuildingNameFromProvince
+#GetSpecialBuildingTouristDescriptor
+
+
+#Special Building Flags:
+
+#Effects, adding the flag is enough to have it working but you also need to add a tooltip using effect_desc
+#special_university = unlocks effects for tournaments and book inspiration, as well other mechanical effects of universities
+#holy_building = unlocks funeral bonuses
+
+#Point of Interest flags (no further implementation needed after adding the flag)
+#travel_point_of_interest_religious = this location will be a religious point of interest
+#travel_point_of_interest_economic = this location will be an economic point of interest
+#travel_point_of_interest_martial = this location will be a martial point of interest
+#travel_point_of_interest_wonder = this location will be a wonder point of interest
+#travel_point_of_interest_natural_feature = this location will be a natural feature point of interest
+#travel_point_of_interest_diplomatic = this location will be a diplomatic point of interest
+#travel_point_of_interest_learning = this location will be a learning point of interest
+
+###########
 ## Generic Holy Site Buildings
 ###########
 
@@ -95,6 +116,7 @@ holy_site_mosque_01 = {
 	construction_time = very_slow_construction_time
 
 	type_icon = "icon_structure_cathedral_muslim.dds"
+
 	effect_desc = {
 		triggered_desc = {
 			trigger = { has_dlc_feature = legends_of_the_dead }
@@ -175,6 +197,7 @@ holy_site_fire_temple_01 = {
 		type = entity
 		name = "building_special_cathedral_zoroastrian_01_a_entity"
 	}
+
 	effect_desc = {
 		triggered_desc = {
 			trigger = { has_dlc_feature = legends_of_the_dead }
@@ -3667,7 +3690,7 @@ hall_of_heroes_01 = {
 
 	type_icon = "icon_building_hall_of_heroes.dds"
 	
-	levy = normal_building_levy_tier_1				#prev 150	#Just use normal values, wth?
+	levy = 150
 	max_garrison = 50		#prev 75
 	cost_gold = 0
 	construction_time = 0
@@ -3676,6 +3699,12 @@ hall_of_heroes_01 = {
 		monthly_piety_gain_per_knight_add = 0.02		#prev 0.1
 		prowess = 1
 		knight_effectiveness_mult = 0.05
+	}
+	#ADDED
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_2
+		stationed_maa_toughness_mult = normal_maa_toughness_tier_1
+		stationed_maa_pursuit_add = 1
 	}
 
 	is_enabled = {
@@ -3702,15 +3731,21 @@ hall_of_heroes_02 = {
 	}
 	type_icon = "icon_building_hall_of_heroes.dds"
 	
-	levy = normal_building_levy_tier_3		#prev 265
+	levy = 265
 	max_garrison = 70		#prev 110
-	cost_gold = 225
+	cost_gold = 250			#prev 225
 	construction_time = 500
 
 	character_modifier = {
 		monthly_piety_gain_per_knight_add = 0.02		#prev 0.1
 		prowess = 1
 		knight_effectiveness_mult = 0.1
+	}
+	#ADDED
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_3
+		stationed_maa_toughness_mult = normal_maa_toughness_tier_2
+		stationed_maa_pursuit_add = 3
 	}
 
 	is_enabled = {
@@ -3738,15 +3773,21 @@ hall_of_heroes_03 = {
 	}
 	type_icon = "icon_building_hall_of_heroes.dds"
 	
-	levy = normal_building_levy_tier_5		#prev 375
+	levy = 375
 	max_garrison = 95	#prev 150
-	cost_gold = 300
+	cost_gold = 350		#prev 300
 	construction_time = 500
 
 	character_modifier = {
 		monthly_piety_gain_per_knight_add = 0.03		#prev 0.1
 		prowess = 2
 		knight_effectiveness_mult = 0.15
+	}
+	#ADDED
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_4
+		stationed_maa_toughness_mult = normal_maa_toughness_tier_3
+		stationed_maa_pursuit_add = 5
 	}
 
 	is_enabled = {
@@ -3774,15 +3815,21 @@ hall_of_heroes_04 = {
 	}
 	type_icon = "icon_building_hall_of_heroes.dds"
 	
-	levy = normal_building_levy_tier_7		#prev 500
+	levy = 500
 	max_garrison = 130	#prev 225
-	cost_gold = 375
+	cost_gold = 500		#prev 375
 	construction_time = 500
 
 	character_modifier = {
 		monthly_piety_gain_per_knight_add = 0.03		#prev 0.1
 		prowess = 2
 		knight_effectiveness_mult = 0.2
+	}
+	#ADDED
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_5
+		stationed_maa_toughness_mult = normal_maa_toughness_tier_4
+		stationed_maa_pursuit_add = 7
 	}
 
 	is_enabled = {
@@ -3810,15 +3857,21 @@ hall_of_heroes_05 = {
 	}
 	type_icon = "icon_building_hall_of_heroes.dds"
 	
-	levy = good_building_levy_tier_7		#prev 700
+	levy = 700
 	max_garrison = 175	#prev 260
-	cost_gold = 450
+	cost_gold = 750		#prev 450
 	construction_time = 500
 
 	character_modifier = {
 		monthly_piety_gain_per_knight_add = 0.04		#prev 0.1
 		prowess = 3
 		knight_effectiveness_mult = 0.25
+	}
+	#ADDED
+	province_modifier = {
+		stationed_maa_damage_mult = normal_maa_damage_tier_6
+		stationed_maa_toughness_mult = normal_maa_toughness_tier_5
+		stationed_maa_pursuit_add = 10
 	}
 
 	is_enabled = {
@@ -8819,7 +8872,7 @@ herat_bazaar_02 = {
 	}
 	county_modifier = {
 		development_growth = 0.03			#prev 0.25
-		development_growth_factor = 0.15
+		development_growth_factor = 0.2
 		tax_mult = 0.2
 	}
 	character_modifier = {
@@ -8916,7 +8969,7 @@ dvin_shuka_02 = {
 	}
 	county_modifier = {
 		development_growth = 0.03			#prev 0.25
-		development_growth_factor = 0.15
+		development_growth_factor = 0.2
 		tax_mult = 0.2
 	}
 	character_modifier = {
@@ -9016,7 +9069,7 @@ lhasa_market_02 = {
 	}
 	county_modifier = {
 		development_growth = 0.03			#prev 0.25
-		development_growth_factor = 0.15
+		development_growth_factor = 0.2
 		tax_mult = 0.2
 	}
 	character_modifier = {
@@ -9116,7 +9169,7 @@ khiva_bazaar_02 = {
 	}
 	county_modifier = {
 		development_growth = 0.03			#prev 0.25
-		development_growth_factor = 0.15
+		development_growth_factor = 0.2
 		tax_mult = 0.2
 	}
 	character_modifier = {
@@ -9311,7 +9364,7 @@ lahur_bazaar_02 = {
 	}
 	county_modifier = {
 		development_growth = 0.03			#prev 0.25
-		development_growth_factor = 0.15
+		development_growth_factor = 0.2
 		tax_mult = 0.2
 	}
 	character_modifier = {
@@ -10451,9 +10504,9 @@ hanging_temple_01 = {
 	character_modifier = {
 		piety_level_impact_mult = 0.1
 		monthly_piety_gain_per_legitimacy_level_mult = 0.05
-		taoism_religion_opinion = 5			#prev 15
-		buddhism_religion_opinion = 5		#prev 15
-		confucianism_religion_opinion = 5	#prev 15
+		taoism_religion_opinion = 5
+		buddhism_religion_opinion = 5
+		confucianism_religion_opinion = 5
 	}
 
 	province_modifier = {
@@ -10771,7 +10824,7 @@ gongsanseong_fortress_01 = {
 		}
 	}
 	
-	type = special 
+	type = special
 
 	flag = travel_point_of_interest_martial
 }
@@ -11316,7 +11369,3 @@ mozu_tombs = {
 
 	flag = travel_point_of_interest_wonder
 }
-
-
-
-

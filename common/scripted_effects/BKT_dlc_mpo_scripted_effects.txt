@@ -1,0 +1,130 @@
+﻿
+#Called from game start on action
+#inside domicile scope
+#ADDED - swapped some numbers around
+add_random_yurt_external_building_effect = {
+	random_list = {
+		1 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = herd_welfare_yurt_01 }
+			}
+			add_domicile_building = herd_welfare_yurt_01
+		}
+		10 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = character_warfare_yurt_01 }
+			}
+			add_domicile_building = character_warfare_yurt_01
+		}
+		10000 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = mass_warfare_yurt_01 }
+			}
+			add_domicile_building = mass_warfare_yurt_01
+		}
+		100 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = court_yurt_01 }
+			}
+			add_domicile_building = court_yurt_01
+		}
+		1 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = family_yurt_01 }
+			}
+			add_domicile_building = family_yurt_01
+		}
+		1 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = mystical_yurt_01 }
+			}
+			add_domicile_building = mystical_yurt_01
+		}
+	}
+}
+
+#Called from game start on action
+#Limited to lvl 3 to offer more variety and prevent startup errors
+#inside domicile scope
+upgrade_random_yurt_external_building_effect = {
+	random_list = {
+		1 = {
+			trigger = {
+				has_domicile_building_or_higher = herd_welfare_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = herd_welfare_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				herd_welfare_yurt_01 = { add_domicile_building = herd_welfare_yurt_02 }
+				herd_welfare_yurt_02 = { add_domicile_building = herd_welfare_yurt_03 }
+			}
+		}
+		10 = {
+			trigger = {
+				has_domicile_building_or_higher = character_warfare_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = character_warfare_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				character_warfare_yurt_01 = { add_domicile_building = character_warfare_yurt_02 }
+				character_warfare_yurt_02 = { add_domicile_building = character_warfare_yurt_03 }
+			}
+		}
+		1000 = {
+			trigger = {
+				has_domicile_building_or_higher = mass_warfare_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = mass_warfare_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				mass_warfare_yurt_01 = { add_domicile_building = mass_warfare_yurt_02 }
+				mass_warfare_yurt_02 = { add_domicile_building = mass_warfare_yurt_03 }
+			}
+		}
+		100 = {
+			trigger = {
+				has_domicile_building_or_higher = court_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = court_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				court_yurt_01 = { add_domicile_building = court_yurt_02 }
+				court_yurt_02 = { add_domicile_building = court_yurt_03 }
+			}
+		}
+		1 = {
+			trigger = {
+				has_domicile_building_or_higher = family_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = family_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				family_yurt_01 = { add_domicile_building = family_yurt_02 }
+				family_yurt_02 = { add_domicile_building = family_yurt_03 }
+			}
+		}
+		1 = {
+			trigger = {
+				has_domicile_building_or_higher = mystical_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = mystical_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				mystical_yurt_01 = { add_domicile_building = mystical_yurt_02 }
+				mystical_yurt_02 = { add_domicile_building = mystical_yurt_03 }
+			}
+		}
+	}
+}

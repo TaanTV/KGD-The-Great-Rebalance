@@ -433,12 +433,42 @@ temple_01 = {
 			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
 		}
 
-		asset = { #Also fallback for pagans in the steppe
+		### Kamuyism
+		asset = { 
+			type = entity
+			name = "building_emishi_temple_01_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "kamuyism_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				tibetan_building_gfx southeast_asian_building_gfx iranian_building_gfx african_building_gfx
+				japanese_building_gfx chinese_building_gfx east_slavic_building_gfx caucasian_building_gfx
+				western_building_gfx mediterranean_building_gfx iberian_building_gfx indian_building_gfx byzantine_building_gfx
+				arabic_group_building_gfx berber_group_building_gfx mena_building_gfx norse_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Emishi temple is also used as a fallback for Emishi building gfx cultures for pagan_gfx
+			type = entity
+			name = "building_emishi_temple_01_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "pagan_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism 
+				emishi_building_gfx amuric_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Tengri is also fallback for pagans in the steppe
 			type = entity
 			name = "mpo_mongol_temple_01_entity"
 			illustration = @illustration_tengri
-			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
-			graphical_faiths = { "tengrism_gfx" "pagan_gfx" } #+1
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } } 
+			graphical_faiths = { "tengrism_gfx" "pagan_gfx"} #+1
 			graphical_cultures = { steppe_building_gfx } #+2
 			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
 		}
@@ -462,7 +492,11 @@ temple_01 = {
 			requires_dlc_flag = all_under_heaven
 			illustration = @illustration_shinto 
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/japanese_temple" soundparameter = { "Tier" = 0 } }
-			graphical_faiths = { shinto_gfx } #+1
+			graphical_faiths = {
+				shinto_gfx
+				#DLC Fallback
+				kamuyism_gfx
+			} #+1
 			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its Shinto
 				tibetan_building_gfx southeast_asian_building_gfx iranian_building_gfx african_building_gfx steppe_building_gfx
 				chinese_building_gfx east_slavic_building_gfx caucasian_building_gfx
@@ -503,6 +537,8 @@ temple_01 = {
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
 			graphical_faiths = {
 				pagan_gfx
+				#DLC Fallback:
+				kamuyism_gfx
 			} #+1
 			graphical_cultures = {
 				western_building_gfx byzantine_building_gfx
@@ -981,7 +1017,7 @@ temple_01 = {
 			}
 		}
 	}
-	
+
 	ai_value = {
 		base = 5	#prev 100
 		#ADDED - same as cities
@@ -1428,14 +1464,44 @@ temple_02 = {
 			}
 			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
 		}
+		### Kamuyism
 		asset = { 
+			type = entity
+			name = "building_emishi_temple_01_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "kamuyism_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				tibetan_building_gfx southeast_asian_building_gfx iranian_building_gfx african_building_gfx
+				japanese_building_gfx chinese_building_gfx east_slavic_building_gfx caucasian_building_gfx
+				western_building_gfx mediterranean_building_gfx iberian_building_gfx indian_building_gfx byzantine_building_gfx
+				arabic_group_building_gfx berber_group_building_gfx mena_building_gfx norse_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Emishi temple is also used as a fallback for Emishi building gfx cultures for pagan_gfx
+			type = entity
+			name = "building_emishi_temple_01_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "pagan_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				emishi_building_gfx amuric_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Tengri is also fallback for pagans in the steppe
 			type = entity
 			name = "mpo_mongol_temple_01_entity"
 			illustration = @illustration_tengri
-			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
-			graphical_faiths = { "tengrism_gfx" "pagan_gfx" } #+1
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } } 
+			graphical_faiths = { "tengrism_gfx" "pagan_gfx"} #+1
 			graphical_cultures = { steppe_building_gfx } #+2
-			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
 		}
 
 		### Shinto ###
@@ -1737,6 +1803,8 @@ temple_02 = {
 		parameter = government_is_mandala
 		monthly_piety = 0.02
 	}
+
+	flag = temple
 	
 	#ADDED
 	county_modifier = {
@@ -2255,14 +2323,44 @@ temple_03 = {
 			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
 		}
 
+		### Kamuyism
 		asset = { 
+			type = entity
+			name = "building_emishi_temple_02_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "kamuyism_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				tibetan_building_gfx southeast_asian_building_gfx iranian_building_gfx african_building_gfx
+				japanese_building_gfx chinese_building_gfx east_slavic_building_gfx caucasian_building_gfx
+				western_building_gfx mediterranean_building_gfx iberian_building_gfx indian_building_gfx byzantine_building_gfx
+				arabic_group_building_gfx berber_group_building_gfx mena_building_gfx norse_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Emishi temple is also used as a fallback for Emishi building gfx cultures for pagan_gfx
+			type = entity
+			name = "building_emishi_temple_02_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "pagan_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				emishi_building_gfx amuric_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Tengri is also fallback for pagans in the steppe
 			type = entity
 			name = "mpo_mongol_temple_01_entity"
 			illustration = @illustration_tengri
-			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
-			graphical_faiths = { "tengrism_gfx" "pagan_gfx" } #+1
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } } 
+			graphical_faiths = { "tengrism_gfx" "pagan_gfx"} #+1
 			graphical_cultures = { steppe_building_gfx } #+2
-			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
 		}
 
 		### Shinto ###
@@ -3072,14 +3170,44 @@ temple_04 = {
 			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
 		}
 
+		### Kamuyism
 		asset = { 
+			type = entity
+			name = "building_emishi_temple_02_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "kamuyism_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				tibetan_building_gfx southeast_asian_building_gfx iranian_building_gfx african_building_gfx
+				japanese_building_gfx chinese_building_gfx east_slavic_building_gfx caucasian_building_gfx
+				western_building_gfx mediterranean_building_gfx iberian_building_gfx indian_building_gfx byzantine_building_gfx
+				arabic_group_building_gfx berber_group_building_gfx mena_building_gfx norse_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Emishi temple is also used as a fallback for Emishi building gfx cultures for pagan_gfx
+			type = entity
+			name = "building_emishi_temple_02_entity"
+			illustration = @illustration_shinto
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
+			requires_dlc_flag = north_pacific_attire
+			graphical_faiths = { "pagan_gfx" } #+1
+			graphical_cultures = { #Note this is all the graphical cultures that have unique temples for any faith - unless its kamuyism
+				emishi_building_gfx amuric_building_gfx
+			}
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
+		}
+
+		asset = { #Tengri is also fallback for pagans in the steppe
 			type = entity
 			name = "mpo_mongol_temple_01_entity"
 			illustration = @illustration_tengri
-			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } }
-			graphical_faiths = { "tengrism_gfx" "pagan_gfx" } #+1
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/Temples/pagan_temple" soundparameter = { "Tier" = 0 } } 
+			graphical_faiths = { "tengrism_gfx" "pagan_gfx"} #+1
 			graphical_cultures = { steppe_building_gfx } #+2
-			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia } #+4
+			graphical_regions = { graphical_western graphical_mena graphical_india graphical_mediterranean graphical_steppe graphical_east_asia graphical_siberia } #+4
 		}
 
 		### Shinto ###
@@ -4602,7 +4730,7 @@ breweries_01 = {
 	}
 
 	cost_gold = normal_building_tier_1_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4654,7 +4782,7 @@ breweries_02 = {
 	}
 
 	cost_gold = normal_building_tier_2_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4704,7 +4832,7 @@ breweries_03 = {
 	}
 
 	cost_gold = normal_building_tier_3_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4745,7 +4873,7 @@ breweries_04 = {
 	}
 
 	cost_gold = normal_building_tier_4_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4786,7 +4914,7 @@ breweries_05 = {
 	}
 
 	cost_gold = normal_building_tier_5_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4827,7 +4955,7 @@ breweries_06 = {
 	}
 
 	cost_gold = normal_building_tier_6_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4835,7 +4963,7 @@ breweries_06 = {
 		#monthly_county_control_growth_add = 0.30
 		#development_growth_factor = 0.12
 	}
-	
+
 	province_modifier = {
 		monthly_income = poor_building_tax_tier_6
 		#ADDED
@@ -4868,7 +4996,7 @@ breweries_07 = {
 	}
 
 	cost_gold = normal_building_tier_7_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {
@@ -4909,7 +5037,7 @@ breweries_08 = {
 	}
 
 	cost_gold = normal_building_tier_8_cost
-	
+
 	effect_desc = brewery_effect_desc
 
 	county_modifier = {

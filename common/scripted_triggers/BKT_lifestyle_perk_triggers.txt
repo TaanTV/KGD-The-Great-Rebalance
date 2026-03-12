@@ -7,6 +7,6 @@
 		# Scope:actor *definitely* cannot challenge someone they're at war with.
 		NOT = { is_at_war_with = scope:recipient }
 		#ADDED - no.
-		NOT = { scope:recipient { has_strong_hook = scope:actor } }
+		NOT = { scope:recipient = { has_strong_hook = scope:actor } }
 	}
 }

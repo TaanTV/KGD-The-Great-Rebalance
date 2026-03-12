@@ -5950,7 +5950,7 @@ disfigured = {
 	culture_modifier = {
 		parameter = wounds_and_scars_give_bonuses
 		monthly_prestige_gain_mult = 0.15
-		same_culture_opinion = 10
+		same_culture_opinion = 5	#prev 10
 		#ADDED
 		dread_baseline_add = 10
 	}
@@ -5960,7 +5960,7 @@ disfigured = {
 		monthly_influence = -0.75	#prev -1
 	}
 	
-	ruler_designer_cost = 0			#prev -10
+	ruler_designer_cost = 5			#prev -10
 
 	desc = {
 		first_valid = {

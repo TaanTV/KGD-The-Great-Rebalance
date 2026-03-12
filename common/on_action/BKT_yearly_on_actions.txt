@@ -18,6 +18,7 @@ BKT_serious_empire_wars_maintenance = {
 				NOR = {
 					has_variable = year_of_last_serious_defensive_war 
 					holder = {
+						save_temporary_scope_as = temp_ruler_scope
 						any_character_situation = {
 							situation_type = dynastic_cycle 
 							any_participant_group = {
@@ -39,6 +40,7 @@ BKT_serious_empire_wars_maintenance = {
 				NOR = {
 					has_variable = year_of_last_serious_defensive_war
 					holder = {
+						save_temporary_scope_as = temp_ruler_scope
 						any_character_situation = {
 							situation_type = dynastic_cycle 
 							any_participant_group = {
@@ -257,6 +259,7 @@ BKT_herd_decay = {
 			domicile.herd < 1000		#that's kind of mean
 			has_trait = greatest_of_khans 
 			has_character_modifier = the_great_khan_modifier
+			has_character_modifier = ai_extreme_conqueror_modifier
 		}
 	}
 	effect = {
@@ -287,6 +290,16 @@ BKT_herd_decay = {
 								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_5 = { add = -0.08  }
 								nomad_yurt_tenth_of_a_percent_herd_decay_reduction_lvl_6 = { add = -0.1	  }
 							}
+							#Now this one absolutely does NOT have legacy naming
+							switch = {
+								trigger = has_domicile_parameter
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_1 = { add = -0.03	}
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_2 = { add = -0.05	}
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_3 = { add = -0.07	}
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_4 = { add = -0.09	}
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_5 = { add = -0.12	}
+								nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_6 = { add = -0.15	}
+							}
 						}
 					}
 					multiply = -0.01
@@ -299,6 +312,11 @@ BKT_herd_decay = {
 						else_if = {
 							limit = { has_game_rule = very_hard_difficulty }
 							multiply = 0.5
+						}
+						
+						if = {	#let them cook
+							limit = { has_variable = conqueror }
+							multiply = 0.75
 						}
 					}
 				}

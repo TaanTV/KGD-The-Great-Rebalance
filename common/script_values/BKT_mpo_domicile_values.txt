@@ -7,6 +7,10 @@
 ###############################
 #AI VALUES
 
+#ADDED - the next one
+nomadic_capital_omega_invaluable_building = {
+	value = 5000
+}
 #nomadic_capital_literally_invaluable_building = {
 #	value = 1000
 #}
@@ -18,22 +22,23 @@
 #nomadic_capital_very_important_building = {
 #	value = 15
 #}
+#Switched all short_term_gold for just gold just because
 
 nomadic_capital_main_building_1 = {
 	value = 8
 }
 
 nomadic_capital_main_building_2 = {
-	value = 6	#prev 7
+	value = 9	#prev 7
 	if = {
 		limit = {
 			owner = {
-				short_term_gold >= yurt_main_building_gold_cost_tier_2
+				gold >= yurt_main_building_gold_cost_tier_2
 				prestige >= yurt_main_building_prestige_cost_tier_2
 			}
 			herd >= yurt_main_building_herd_cost_tier_2
 		}
-		add = 8	#prev 4
+		add = 1000	#prev 4
 	}
 	if = {
 		limit = {
@@ -44,19 +49,24 @@ nomadic_capital_main_building_2 = {
 		}
 		add = 2	#prev 5
 	}
+	#ADDED
+	if = {
+		limit = { free_external_domicile_building_slots > 4 }
+		multiply = 0.01
+	}
 }
-
+ 
 nomadic_capital_main_building_3 = {
 	value = 5	#prev 6
 	if = {
 		limit = {
 			owner = {
-				short_term_gold >= yurt_main_building_gold_cost_tier_3
+				gold >= yurt_main_building_gold_cost_tier_3
 				prestige >= yurt_main_building_prestige_cost_tier_3
 			}
 			herd >= yurt_main_building_herd_cost_tier_3
 		}
-		add = 8	#prev 4
+		add = 1000	#prev 4
 	}
 	if = {
 		limit = {
@@ -66,6 +76,11 @@ nomadic_capital_main_building_3 = {
 			}
 		}
 		add = 2	#prev 5
+	}
+	#ADDED
+	if = {
+		limit = { free_external_domicile_building_slots > 3 }
+		multiply = 0.01
 	}
 }
 
@@ -74,12 +89,12 @@ nomadic_capital_main_building_4 = {
 	if = {
 		limit = {
 			owner = {
-				short_term_gold >= yurt_main_building_gold_cost_tier_4
+				gold >= yurt_main_building_gold_cost_tier_4
 				prestige >= yurt_main_building_prestige_cost_tier_4
 			}
 			herd >= yurt_main_building_herd_cost_tier_4
 		}
-		add = 8	#prev 4
+		add = 1000	#prev 4
 	}
 	if = {
 		limit = {
@@ -89,6 +104,11 @@ nomadic_capital_main_building_4 = {
 			}
 		}
 		add = 2	#prev 5
+	}
+	#ADDED
+	if = {
+		limit = { free_external_domicile_building_slots > 2 }
+		multiply = 0.01
 	}
 }
 
@@ -97,12 +117,12 @@ nomadic_capital_main_building_5 = {
 	if = {
 		limit = {
 			owner = {
-				short_term_gold >= yurt_main_building_gold_cost_tier_5
+				gold >= yurt_main_building_gold_cost_tier_5
 				prestige >= yurt_main_building_prestige_cost_tier_5
 			}
 			herd >= yurt_main_building_herd_cost_tier_5
 		}
-		add = 8	#prev 4
+		add = 1000	#prev 4
 	}
 	if = {
 		limit = {
@@ -112,6 +132,11 @@ nomadic_capital_main_building_5 = {
 			}
 		}
 		add = 2	#prev 5
+	}
+	#ADDED
+	if = {
+		limit = { free_external_domicile_building_slots > 1 }
+		multiply = 0.01
 	}
 }
 
@@ -120,12 +145,12 @@ nomadic_capital_main_building_6 = {
 	if = {
 		limit = {
 			owner = {
-				short_term_gold >= yurt_main_building_gold_cost_tier_6
+				gold >= yurt_main_building_gold_cost_tier_6
 				prestige >= yurt_main_building_prestige_cost_tier_6
 			}
 			herd >= yurt_main_building_herd_cost_tier_6
 		}
-		add = 8	#prev 4
+		add = 1000	#prev 4
 	}
 	if = {
 		limit = {
@@ -135,6 +160,11 @@ nomadic_capital_main_building_6 = {
 			}
 		}
 		add = 2	#prev 5
+	}
+	#ADDED
+	if = {
+		limit = { free_external_domicile_building_slots > 0 }
+		multiply = 0.01
 	}
 }
 

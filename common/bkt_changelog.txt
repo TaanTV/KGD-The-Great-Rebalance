@@ -44,7 +44,7 @@ Soon:
 #TODO: make some events (or just actions with notifications - preferable) so that barons with low opinion shit on you and barons with high one mabe help you a bit
 
 #TODO: revisit new buildings or at least their AI weights (didnt touch them yet)
-#TODO: add some chance to become rivals (grudge?) on raid, effect: progress_towards_rival_effect, reason: rival_raided_me, file: army_on_actions_BKT.txt
+#TODO: add some chance to become rivals (grudge?) on raid, effect: progress_towards_rival_effect, reason: rival_raided_me, file: BKT_army_on_actions.txt
 
 Very soon:
 #TODO: idk succession?
@@ -54,8 +54,27 @@ Very soon:
 
 
 ####	0.11.11	####
-- 
+- Increased Disfigured ruler designer cost
+- Yurt buildings changes:
+- - Buffed fetility decline bonus of Fishing yurt to actually be a bonus (was malus)
+- - Buffed herd gain bonus of Zud Shelter internal yurt but made initial bonus smaller
+- - Buffed county fertility related bonuses of most yurts
+- - Nerfed couty fertility bonus per held nomadic holding a bit to compensate 
+- - Nerfed both Weapon Storage buildings a bit
+- - Nerfed scheme success chances from Court Yurt
+- - Added yearly herd decay reduction bonus to Forbearing yurt internal yurt
+- - Reduced Barter Stalls yurt gold cost a bit
+- - Made AI a lot smarter at deciding which yurts to build
 
+####	0.11.10.1####
+Updated to 1.18.4
+- Buffed Temples of Angkor by adding some weaker versions of second level modifiers 
+- Reduced success chance growth per owner intrigue of Steal Herd scheme
+- Hall of Heroes special building changes:
+- - Reverted levies back to vanilla values
+- - Added some minor stationing bonuses, including a flat pursuit bonus
+- - Increased gold costs of building levels a bit
+- Fixed Steal Herd low herd option not impacting success chance
 
 ####	0.11.10	####
 - Doubled base regiment count but decreased their size a bit for Counts 
