@@ -36,38 +36,3 @@ defensive_negotiations_perk = {
 		}
 	}
 }
-
-embassies_perk = {
-	lifestyle = diplomacy_lifestyle
-	tree = foreign_affairs
-	position = { 4 2.5 }
-	icon = node_diplomacy
-	
-	parent = defensive_negotiations_perk
-	
-	effect = {
-		custom_description_no_bullet = {
-			text = embassies_perk_effect
-		}
-		hidden_effect = {
-			update_embassies_effect = yes
-		}
-		if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-			}	
-			custom_tooltip = {
-				text = adventurer_embassies_perk_effect
-			}
-		}
-	}
-	
-	character_modifier = {
-		learn_language_scheme_phase_duration_add = monumental_scheme_phase_duration_bonus_value
-	}
-	
-	government_character_modifier = {
-		flag = government_is_administrative
-		owned_political_scheme_success_chance_add = 20
-	}
-}

@@ -135,7 +135,7 @@ crown_authority = {
 				limit = { 
 					has_realm_law = crown_authority_0 
 					#ADDED
-					#ADDED
+					#vassal_count <= { value = vassal_limit add = -5 }
 					save_temporary_scope_value_as = {
 						name = avg_vassal_opinion
 						value = average_vassal_opinion
@@ -246,7 +246,7 @@ crown_authority = {
 				limit = { 
 					has_realm_law = crown_authority_1 
 					#ADDED
-					#ADDED
+					vassal_count <= { value = vassal_limit add = -10 }
 					save_temporary_scope_value_as = {
 						name = avg_vassal_opinion
 						value = average_vassal_opinion
@@ -285,8 +285,8 @@ crown_authority = {
 			#ADDED
 			vassal_limit = -5
 			domain_limit = 1
-			vassal_tax_contribution_add = 0.075
-			vassal_levy_contribution_add = 0.075
+			vassal_tax_contribution_add = 0.025
+			vassal_levy_contribution_add = 0.025
 		}
 		flag = vassal_all_wars_banned
 		flag = can_designate_heirs
@@ -358,6 +358,7 @@ crown_authority = {
 				limit = { 
 					has_realm_law = crown_authority_2
 					#ADDED
+					vassal_count <= { value = vassal_limit add = -5 }
 					save_temporary_scope_value_as = {
 						name = avg_vassal_opinion
 						value = average_vassal_opinion
@@ -491,6 +492,33 @@ tribal_authority = {
 							ai_greed_plus_ai_boldness > 150
 							scope:avg_vassal_opinion > -30
 						}
+						liege ?= { 
+							OR = {
+								government_has_flag = government_is_japan_feudal
+								government_has_flag = government_is_feudal
+								government_has_flag = government_is_clan
+							}
+							prev.faith ?= { NOT = { has_doctrine_parameter = unreformed } }
+						}
+						culture ?= {	#time to feudalise!
+							calc_true_if = {
+								amount >= 9
+								has_innovation = innovation_motte
+								has_innovation = innovation_catapult
+								has_innovation = innovation_barracks
+								has_innovation = innovation_mustering_grounds
+								has_innovation = innovation_bannus
+								has_innovation = innovation_quilted_armor
+								has_innovation = innovation_gavelkind
+								has_innovation = innovation_crop_rotation
+								has_innovation = innovation_city_planning
+								has_innovation = innovation_casus_belli
+								has_innovation = innovation_plenary_assemblies
+								has_innovation = innovation_ledger
+								has_innovation = innovation_development_01
+								has_innovation = innovation_currency_01
+							}
+						}
 					}
 				}
 				value = 1
@@ -592,6 +620,25 @@ tribal_authority = {
 							ai_greed_plus_ai_boldness > 150
 							scope:avg_vassal_opinion > -25
 						}
+						culture ?= {	#time to feudalise!
+							calc_true_if = {
+								amount >= 9
+								has_innovation = innovation_motte
+								has_innovation = innovation_catapult
+								has_innovation = innovation_barracks
+								has_innovation = innovation_mustering_grounds
+								has_innovation = innovation_bannus
+								has_innovation = innovation_quilted_armor
+								has_innovation = innovation_gavelkind
+								has_innovation = innovation_crop_rotation
+								has_innovation = innovation_city_planning
+								has_innovation = innovation_casus_belli
+								has_innovation = innovation_plenary_assemblies
+								has_innovation = innovation_ledger
+								has_innovation = innovation_development_01
+								has_innovation = innovation_currency_01
+							}
+						}
 					}
 				}
 				value = 1
@@ -680,6 +727,25 @@ tribal_authority = {
 						AND = {
 							ai_greed_plus_ai_boldness > 150
 							scope:avg_vassal_opinion > -15
+						}
+						culture ?= {	#time to feudalise!
+							calc_true_if = {
+								amount >= 9
+								has_innovation = innovation_motte
+								has_innovation = innovation_catapult
+								has_innovation = innovation_barracks
+								has_innovation = innovation_mustering_grounds
+								has_innovation = innovation_bannus
+								has_innovation = innovation_quilted_armor
+								has_innovation = innovation_gavelkind
+								has_innovation = innovation_crop_rotation
+								has_innovation = innovation_city_planning
+								has_innovation = innovation_casus_belli
+								has_innovation = innovation_plenary_assemblies
+								has_innovation = innovation_ledger
+								has_innovation = innovation_development_01
+								has_innovation = innovation_currency_01
+							}
 						}
 					}
 				}
@@ -820,10 +886,18 @@ imperial_bureaucracy = {
 			}
 			#ADDED
 			influence = { 
-				add = {
-					value = massive_influence_value
-					desc = "BASE_VALUE"
-					format = "BASE_VALUE_FORMAT"
+				if = {
+					limit = {
+						NOR = {
+							has_realm_law = imperial_bureaucracy_2
+							has_realm_law = imperial_bureaucracy_3
+						}
+					}
+					add = {
+						value = massive_influence_value
+						desc = "BASE_VALUE"
+						format = "BASE_VALUE_FORMAT"
+					}
 				}
 			}
 		}
@@ -943,11 +1017,16 @@ imperial_bureaucracy = {
 				}
 			}
 			#ADDED
-			influence = { 
-				add = {
-					value = massive_influence_value
-					desc = "BASE_VALUE"
-					format = "BASE_VALUE_FORMAT"
+			influence = {
+				if = {
+					limit = {
+						NOT = { has_realm_law = imperial_bureaucracy_3 }
+					}
+					add = {
+						value = massive_influence_value
+						desc = "BASE_VALUE"
+						format = "BASE_VALUE_FORMAT"
+					}
 				}
 			}
 		}
@@ -1063,10 +1142,15 @@ imperial_bureaucracy = {
 			}
 			#ADDED
 			influence = { 
-				add = {
-					value = massive_influence_value
-					desc = "BASE_VALUE"
-					format = "BASE_VALUE_FORMAT"
+				if = {
+					limit = {
+						NOT = { has_realm_law = imperial_bureaucracy_3 }
+					}
+					add = {
+						value = massive_influence_value
+						desc = "BASE_VALUE"
+						format = "BASE_VALUE_FORMAT"
+					}
 				}
 			}
 		}

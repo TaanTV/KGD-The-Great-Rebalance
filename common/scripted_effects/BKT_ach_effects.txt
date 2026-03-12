@@ -1,0 +1,517 @@
+﻿#Increases or reduces attendee opinion based on coronation magnificence
+#Used in ceremony phase
+coronation_ceremony_opinion_effect = {
+	scope:activity = {
+		if = {
+			limit = {
+				scope:activity.var:activity_special_type_progression >= 75
+			}
+			every_attending_character = {
+				custom = custom.every_attending_character
+				limit = {
+					NOT = {
+						this = scope:host
+					}
+				}
+				add_opinion = {
+					target = scope:host
+					opinion = 15	#prev 10
+					modifier = impressed_opinion
+				}
+			}
+			scope:host = {
+				custom_tooltip = coronation_ceremony_opinion_effect_tt
+			}
+		}
+		else_if = {
+			limit = {
+				scope:activity.var:activity_special_type_progression >= 50
+			}
+			every_attending_character = {
+				custom = custom.every_attending_character
+				limit = {
+					NOT = {
+						this = scope:host
+					}
+				}
+				add_opinion = {
+					target = scope:host
+					opinion = 5
+					modifier = impressed_opinion
+				}
+			}
+			scope:host = {
+				custom_tooltip = coronation_ceremony_opinion_effect_tt
+			}
+		}
+		#ADDED - another one
+		else_if = {
+			limit = {
+				scope:activity.var:activity_special_type_progression > 25
+			}
+			every_attending_character = {
+				custom = custom.every_attending_character
+				limit = {
+					NOT = {
+						this = scope:host
+					}
+				}
+				add_opinion = {
+					target = scope:host
+					opinion = -10
+					modifier = contempt_opinion
+				}
+			}
+			scope:host = {
+				custom_tooltip = coronation_ceremony_opinion_effect_tt
+			}
+		}
+		else_if = {
+			limit = {
+				scope:activity.var:activity_special_type_progression < 25
+			}
+			every_attending_character = {
+				custom = custom.every_attending_character
+				limit = {
+					NOT = {
+						this = scope:host
+					}
+				}
+				add_opinion = {
+					target = scope:host
+					opinion = -25	#prev -10
+					modifier = contempt_opinion
+				}
+			}
+			scope:host = {
+				custom_tooltip = coronation_ceremony_opinion_effect_tt
+			}
+		}
+	}
+}
+
+coronation_disburse_rewards_effect = {
+	if = { #Highest Magnificence Rewards
+		limit = {
+			scope:activity = { var:activity_special_type_progression >= 100 }
+		}
+
+		#Oath Legitimacy and Prestige upgrade notificiation
+		custom_tooltip = coronation_oath_upgrade_100
+
+		custom_tooltip = coronation_reward_100
+		save_scope_value_as = {
+			name = coronation_reward_mult
+			value = 2.5
+		}
+
+		ach_coronation_ceremony_intent_modifiers_giveaway_effect = yes
+		save_scope_value_as = {
+			name = coronation_vassal_opinion_gain
+			value = 20
+		}
+	}
+	else_if = { #High Magnificence Rewards
+		limit = {
+			scope:activity = { var:activity_special_type_progression >= 75 }
+		}
+
+		#Intent rewards
+
+		ach_coronation_ceremony_intent_modifiers_giveaway_effect = yes
+
+		#Oath Legitimacy and Prestige upgrade notificiation
+		custom_tooltip = coronation_oath_upgrade_75
+
+		custom_tooltip = coronation_reward_75
+		save_scope_value_as = {
+			name = coronation_reward_mult
+			value = 1.75
+		}
+
+		save_scope_value_as = {
+			name = coronation_vassal_opinion_gain
+			value = 15
+		}
+	}
+	else_if = { #Medium Magnificence Rewards
+		limit = {
+			scope:activity = { var:activity_special_type_progression >= 50 }
+		}
+
+		#Oath Legitimacy and Prestige upgrade notificiation
+		custom_tooltip = coronation_oath_upgrade_50
+
+		custom_tooltip = coronation_reward_50
+		save_scope_value_as = {
+			name = coronation_reward_mult
+			value = 1.5
+		}
+
+		save_scope_value_as = {
+			name = coronation_vassal_opinion_gain
+			value = 10
+		}
+	}
+	else_if = { #Low Magnificence Rewards
+		limit = {
+			scope:activity = { var:activity_special_type_progression >= 25 }
+		}
+
+		#Oath Legitimacy and Prestige upgrade notificiation
+		custom_tooltip = coronation_oath_upgrade_25
+
+		save_scope_value_as = {
+			name = coronation_vassal_opinion_gain
+			value = 5
+		}
+
+		save_scope_value_as = {
+			name = coronation_reward_mult
+			value = 1.25
+		}
+	}
+	else = {
+		save_scope_value_as = {
+			name = coronation_reward_mult
+			value = 1
+		}
+	}
+
+	if = {
+		limit = { exists = scope:coronation_vassal_opinion_gain root = root.involved_activity.activity_host }
+		switch = {
+			trigger = has_activity_intent
+			coronation_exalt_crown = {
+				involved_activity = {
+					every_attending_character = {
+						limit = {
+							is_vassal_of = root
+							has_vassal_stance = parochial
+						}
+						custom = exalt_crown_opinion
+						add_opinion = {
+							target = root
+							modifier = impressed_opinion
+							opinion = scope:coronation_vassal_opinion_gain
+						}
+					}
+				}
+			}
+			coronation_embrace_supporters = {
+				involved_activity = {
+					every_attending_character = {
+						limit = {
+							is_vassal_of = root
+							OR = {
+								has_vassal_stance = glory_hound
+								has_vassal_stance = zealot
+							}
+						}
+						custom = embrace_supporters_opinion
+						add_opinion = {
+							target = root
+							modifier = impressed_opinion
+							opinion = scope:coronation_vassal_opinion_gain
+						}
+					}
+				}
+			}
+			coronation_weaken_detractors = {
+				involved_activity = {
+					every_attending_character = {
+						limit = {
+							is_vassal_of = root
+							has_vassal_stance = belligerent
+							NOT = { is_in_guest_subset = { name = detractor } }
+						}
+						custom = weaken_detractors_opinion
+						add_opinion = {
+							target = root
+							modifier = impressed_opinion
+							opinion = scope:coronation_vassal_opinion_gain
+						}
+					}
+				}
+			}
+			coronation_impress_attendees = {
+				involved_activity = {
+					every_attending_character = {
+						limit = {
+							is_vassal_of = root
+							OR = {
+								has_vassal_stance = courtly
+								has_vassal_stance = minority
+							}
+						}
+						custom = impress_attendees_opinion
+						add_opinion = {
+							target = root
+							modifier = impressed_opinion
+							opinion = scope:coronation_vassal_opinion_gain
+						}
+					}
+				}
+			}	
+		}
+	}
+
+	
+	save_scope_value_as = {
+		name = tribal_prestige_mult
+		value = 1
+	}
+	switch = {
+		trigger = government_has_flag
+		government_is_administrative = {
+			change_influence = {
+				value = medium_influence_value
+				multiply = scope:coronation_reward_mult
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_celestial = {
+			change_influence = {
+				value = medium_influence_value
+				multiply = scope:coronation_reward_mult
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_meritocratic = {
+			change_influence = {
+				value = medium_influence_value
+				multiply = scope:coronation_reward_mult
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_steppe_admin = {
+			change_influence = {
+				value = medium_influence_value
+				multiply = scope:coronation_reward_mult
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_japan_administrative = {
+			change_influence = {
+				value = medium_influence_value
+				multiply = scope:coronation_reward_mult
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_nomadic = {
+			save_scope_value_as = {
+				name = coronation_herd_value
+				value = {
+					value = scope:host.domicile.medium_herd_value
+					multiply = scope:coronation_reward_mult
+				}
+			}
+			hidden_effect = {
+				domicile ?= {
+					change_herd = {
+						value = scope:coronation_herd_value
+					}
+				}
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+			custom_tooltip = coronation_nomadic_herd_reward
+		}
+		government_is_clan = {
+			scope:activity = {
+				ordered_attending_character = {
+					order_by = coronation_supporter_sort_value
+					limit = {
+						house ?= scope:host.house
+						is_ai = yes
+						NOT = { this = scope:host } #Unop: Prevent self char unity change
+					}
+					switch = {
+						trigger = scope:coronation_reward_mult
+						1 = {
+							save_scope_value_as = {
+								name = clan_unity_gain
+								value = miniscule_unity_loss
+							}
+						}
+						1.25 = {
+							save_scope_value_as = {
+								name = clan_unity_gain
+								value = miniscule_unity_gain
+							}
+						}
+						1.5 = {
+							save_scope_value_as = {
+								name = clan_unity_gain
+								value = minor_unity_gain
+							}
+						}
+						1.75 = {
+							save_scope_value_as = {
+								name = clan_unity_gain
+								value = medium_unity_gain
+							}
+						}
+						2.5 = {
+							save_scope_value_as = {
+								name = clan_unity_gain
+								value = major_unity_gain
+							}
+						}
+					}
+					save_scope_as = unity_character
+					add_clan_unity_interaction_effect = {
+						CHARACTER = scope:unity_character
+						TARGET = scope:host
+						VALUE = scope:clan_unity_gain
+						DESC = clan_unity_coronation_reward.desc
+						REVERSE_NON_HOUSE_TARGET = no
+					}
+				}
+			}
+			save_scope_value_as = {
+				name = coronation_reward_mult
+				value = {
+					value = scope:coronation_reward_mult
+					multiply = 0.8
+				}
+			}
+		}
+		government_is_tribal = {
+			save_scope_value_as = {
+				name = tribal_prestige_mult
+				value = {
+					value = scope:coronation_reward_mult
+					subtract = 1
+					multiply = 0.4
+					add = 1
+					min = 1
+				}	
+			}
+		}
+	}
+
+	# Prestige and Legitimacy Rewards for host after coronation ceremony
+
+	add_prestige = {
+		value = 100
+		multiply = {
+			value = number_of_vassal_supporters
+			#ADDED - some deminishing returns so big realms are not geting 13021030210 prestige 
+			max = 5		#first 5 are fully counted
+			add = {		#the next 10 are half-counted
+				value = number_of_vassal_supporters
+				add = -5
+				min = 0
+				max = 10
+				multiply = 0.5
+			}
+			add = {		#the next 20 are quarter-counted
+				value = number_of_vassal_supporters
+				add = -15
+				min = 0
+				max = 20
+				multiply = 0.25
+			}
+			add = {		#the rest are tenth-counted
+				value = number_of_vassal_supporters
+				add = -35
+				min = 0
+				multiply = 0.1
+			}
+			min = 1
+		}
+		multiply = scope:coronation_reward_mult
+		multiply = scope:tribal_prestige_mult
+		min = 100
+		max = {
+			value = 4000
+			multiply = scope:tribal_prestige_mult
+		}
+	}
+
+	add_legitimacy = {
+		value = 25
+		multiply = {
+			value = number_of_vassal_supporters
+			#ADDED - some deminishing returns so big realms are not geting 13021030210 prestige 
+			max = 5		#first 5 are fully counted
+			add = {		#the next 10 are half-counted
+				value = number_of_vassal_supporters
+				add = -5
+				min = 0
+				max = 10
+				multiply = 0.5
+			}
+			add = {		#the next 20 are quarter-counted
+				value = number_of_vassal_supporters
+				add = -15
+				min = 0
+				max = 20
+				multiply = 0.25
+			}
+			add = {		#the rest are tenth-counted
+				value = number_of_vassal_supporters
+				add = -35
+				min = 0
+				multiply = 0.1
+			}
+			min = 1
+		}
+		multiply = scope:coronation_reward_mult
+		min = 25
+		max = 1000
+	}
+	
+	# Renown if you have the Exalt the Crown Intent
+	if = {
+		limit = { 
+			has_activity_intent = coronation_exalt_crown 
+			#ADDED - no cheese.
+			has_dynasty = yes	#just in case
+			OR = {
+				top_liege = this
+				any_liege_or_above = {
+					count = 0
+					dynasty ?= prev.dynasty
+				}
+			}
+		}
+		dynasty = { add_dynasty_prestige = minor_dynasty_prestige_gain }
+	}
+}

@@ -1,11 +1,149 @@
 ﻿standard_activity_base_cost = {
 	value = 25		#prev 30
+
+	if = { #Unop: There are inconsistency in calls with this, sometimes logs throw errors stating root is an activity where it should be a character, also sometimes called from interaction where root does not exists
+		limit = { # Root is a character
+			exists = root.primary_title
+		}
+		multiply = {
+			value = root.primary_title.tier
+			subtract = 1
+			min = 1
+			#ADDED
+			#multiply = 0.75		# Scale less aggresively with tier
+		}
+		if = {
+			limit = {
+				root = {
+					government_has_flag = government_is_tribal
+				}
+			}
+			multiply = 0.5
+		}
+		if = {
+			limit = {
+				root.primary_title.tier > tier_duchy
+			}
+			#add = 50
+			#ADDED - Wtf? not like that.
+			add = { value = root.primary_title.tier add = -3 multiply = 20 }
+		}
+		if = {
+			limit = {
+				is_ai = yes
+				has_game_rule = hard_difficulty
+			}
+			multiply = 0.5
+		}
+		else_if = {
+			limit = {
+				is_ai = yes
+				has_game_rule = very_hard_difficulty
+			}
+			multiply = 0.25
+		}
+	}
+	else_if = { # Root is an activity
+		limit = {
+			exists = root.activity_host
+		}
+		multiply = {
+			value = root.activity_host.primary_title.tier
+			subtract = 1
+			min = 1
+			#ADDED
+			#multiply = 0.75		# Scale less aggresively with tier
+		}
+		if = {
+			limit = {
+				root.activity_host = {
+					government_has_flag = government_is_tribal
+				}
+			}
+			multiply = 0.5
+		}
+		if = {
+			limit = {
+				root.activity_host.primary_title.tier > tier_duchy
+			}
+			#add = 50
+			#ADDED - Wtf? not like that.
+			add = { value = root.activity_host.primary_title.tier add = -3 multiply = 20 }
+		}
+		if = {
+			limit = {
+				root.activity_host = { is_ai = yes }
+				has_game_rule = hard_difficulty
+			}
+			multiply = 0.5
+		}
+		else_if = {
+			limit = {
+				root.activity_host = { is_ai = yes }
+				has_game_rule = very_hard_difficulty
+			}
+			multiply = 0.25
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:actor
+		}
+		multiply = {
+			value = scope:actor.primary_title.tier
+			subtract = 1
+			min = 1
+			#ADDED
+			#multiply = 0.75		# Scale less aggresively with tier
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					government_has_flag = government_is_tribal
+				}
+			}
+			multiply = 0.5
+		}
+		if = {
+			limit = {
+				scope:actor.primary_title.tier > tier_duchy
+			}
+			#add = 50
+			#ADDED - Wtf? not like that.
+			add = { value = scope:actor.primary_title.tier add = -3 multiply = 20 }
+		}
+		if = {
+			limit = {
+				scope:actor = { is_ai = yes }
+				has_game_rule = hard_difficulty
+			}
+			multiply = 0.5
+		}
+		else_if = {
+			limit = {
+				scope:actor = { is_ai = yes }
+				has_game_rule = very_hard_difficulty
+			}
+			multiply = 0.25
+		}
+	}
+	
+	#ADDED
+	min = 10
+}
+
+law_legacy_cost_reduction_mult = 0.15	#prev 0.3
+
+#ADDED - just to keep track of it easier
+pre_unop_standard_activity_base_cost = {
+	value = 25		#prev 30
+
 	multiply = {
 		value = primary_title.tier #Unop ck3-tiger
 		subtract = 1
 		min = 1
 		#ADDED
-		multiply = 0.75		# Scale less aggresively with tier
+		#multiply = 0.75		# Scale less aggresively with tier
 	}
 	if = {
 		limit = {
@@ -17,8 +155,9 @@
 		limit = {
 			primary_title.tier > tier_duchy #Unop ck3-tiger
 		}
-		add = 35		#prev 50
-		# Wtf? 
+		#add = 50
+		#ADDED - Wtf? not like that.
+		add = { value = primary_title.tier add = -3 multiply = 20 }
 	}
 	if = {
 		limit = {
@@ -34,6 +173,9 @@
 		}
 		multiply = 0.25
 	}
+	
+	#ADDED
+	min = 10
 }
 
 ######################
@@ -72,6 +214,58 @@ activity_cost_scale_by_era = {
 			else = {
 				add = 0.75
 			}
+		}
+	}
+	else_if = { #Unop: To handle cases where 'root' is an activity
+		limit = { exists = activity_host }
+		if = {
+			limit = { exists = activity_host.culture }
+			activity_host.culture = {
+				if = {
+					limit = { has_cultural_era_or_later = culture_era_late_medieval }
+					add = 2.25		#prev 3
+				}
+				else_if = {
+					limit = { has_cultural_era_or_later = culture_era_high_medieval }
+					add = 1.5
+				}
+				else_if = {
+					limit = { has_cultural_era_or_later = culture_era_early_medieval }
+					add = 1
+				}
+				else = {
+					add = 0.75
+				}
+			}
+		}
+	}
+}
+
+
+activity_cost_scale_by_tier = {
+	value = 0
+	if = {
+		limit = {
+			exists = primary_title
+		}
+		add = {
+			value = primary_title.tier
+			subtract = 1
+			min = 1
+			#ADDED
+			#multiply = 0.75		# Scale less aggresively with tier
+		}
+	}
+	else_if = { #Unop: To handle cases where 'root' is an activity
+		limit = { 
+			exists = activity_host
+		}
+		add = {
+			value = activity_host.primary_title.tier
+			subtract = 1
+			min = 1
+			#ADDED
+			#multiply = 0.75		# Scale less aggresively with tier
 		}
 	}
 }

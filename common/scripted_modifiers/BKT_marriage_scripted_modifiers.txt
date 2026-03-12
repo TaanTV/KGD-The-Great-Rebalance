@@ -36,15 +36,12 @@
 			if = {
 				limit = {
 					scope:secondary_recipient = {
-						is_ai = yes
-						scope:recipient = { is_ai = yes }
-						
 						trigger_if = {
 							limit = { 
-								exists = dynasty 
-								exists = scope:secondary_actor.dynasty
+								exists = house 
+								exists = scope:secondary_actor.house
 							}
-							NOT = { dynasty = scope:secondary_actor.dynasty }
+							NOT = { house = scope:secondary_actor.house }
 						}
 						scope:secondary_actor = { sex_opposite_of = scope:secondary_recipient }
 						#Incorrect lineality
@@ -74,12 +71,16 @@
 				}
 				add = -60
 			}
+			if = {
+				limit = {
+					exists = scope:secondary_actor.dynasty
+					scope:secondary_recipient.dynasty ?= scope:secondary_actor.dynasty
+				}
+				multiply = 0.5
+			}
 		}
+		scope:actor = { is_ai = no }
 		has_game_rule = bkt_difficulty_higher
-		OR = {
-			scope:actor = { is_ai = no }
-			scope:recipient = { is_ai = no }
-		}
 		desc = BKT_DIFFICULTY_HIGHER_PLAYER_MODIFIER
 	}
 	#########
@@ -259,12 +260,12 @@
 			#ADDED
 			if = {
 				limit = {
-					scope:actor.max_military_strength >= scope:recipient.max_military_strength 
-					scope:actor.current_military_strength >= scope:actor.eighty_percent_of_max_military_strength
 					scope:recipient = {
 						has_variable = ai_goal_manager
 						var:ai_goal_manager.var:ai_main_goal = flag:allies
 					}
+					scope:actor.max_military_strength >= scope:recipient.max_military_strength 
+					scope:actor.current_military_strength >= scope:actor.eighty_percent_of_max_military_strength
 				}
 				add = 60
 			}
@@ -289,6 +290,16 @@
 					}
 				}
 				subtract = 30
+			}
+			#ADDED
+			if = {
+				limit = {
+					scope:recipient = {
+						liege = scope:actor
+						"opinion(liege)" < 0
+					}
+				}
+				multiply = 0.25
 			}
 			if = {
 				limit = {
@@ -342,13 +353,9 @@
 				scope:actor = { has_government = landless_adventurer_government }
 			}
 			OR = {
-				#ADDED - AND block and strength check inside it
-				AND = {
-					ai_diplomacy_stance = {
-						target = scope:actor
-						stance = neutral
-					}
-					scope:actor.max_military_strength >= scope:recipient.eighty_percent_of_max_military_strength 
+				ai_diplomacy_stance = {
+					target = scope:actor
+					stance = neutral
 				}
 				ai_diplomacy_stance = {
 					target = scope:actor
@@ -360,6 +367,8 @@
 				target = scope:actor
 				target_candidate = scope:secondary_actor
 			}
+			#ADDED - strength check 
+			scope:actor.max_military_strength >= scope:recipient.eighty_percent_of_max_military_strength 
 		}
 		OR = {
 			scope:actor = {
@@ -405,6 +414,16 @@
 					scope:actor.current_military_strength >= scope:actor.eighty_percent_of_max_military_strength
 				}
 				add = 80
+			}
+			#ADDED
+			if = {
+				limit = {
+					scope:recipient = {
+						liege = scope:actor
+						"opinion(liege)" < 0
+					}
+				}
+				multiply = 0.25
 			}
 			if = {
 				limit = {
@@ -1295,7 +1314,7 @@
 			if = {
 				limit = {	# Old ppl can drop their expectations a bit
 					scope:secondary_recipient.age > 32
-					scope:secondary_recipient = { any_child = { count < 2 } }
+					scope:secondary_recipient = { any_child = { count < 2 is_alive = yes } }
 				}
 				multiply = 0.5
 			}
@@ -1358,9 +1377,18 @@
 			exists = scope:recipient.dynasty
 			dynasty = scope:recipient.dynasty
 			NAND = {
-				dynasty = scope:actor.dynasty
-				dynasty = scope:secondary_actor.dynasty
+				#dynasty = scope:actor.dynasty
+				#dynasty = scope:secondary_actor.dynasty
+				#ADDED - now we check this instead
+				house = scope:recipient.house
+				house = scope:actor.house
+				house = scope:secondary_actor.house
 				scope:secondary_actor = { NOT = { has_trait = bastard } }
+			}
+			#ADDED - dont care for marriages within dynasty in that case
+			NAND = {
+				scope:secondary_actor.dynasty ?= dynasty
+				house != scope:recipient.house
 			}
 
 			scope:recipient = { is_ruler = yes }
@@ -1400,17 +1428,63 @@
 				}
 				has_realm_law = equal_law
 				AND = {
-					scope:secondary_recipient = { is_female = yes }
+					#scope:secondary_recipient = { is_female = yes }
 					OR = {
 						has_realm_law = female_only_law
 						has_realm_law = female_preference_law
 					}
+					#ADDED - now an OR with a bit more conditions
+					scope:secondary_recipient = {
+						OR = {
+							is_female = yes
+							AND = {
+								#is_male = yes		#implied
+								OR = {
+									father ?= scope:recipient
+									mother ?= scope:recipient
+								}
+								NOT = { prev = { has_realm_law = female_only_law } }
+								is_eunuch_trigger = no
+								NOR = { has_trait = bastard has_trait = disinherited}
+								any_sibling = {
+									count = 0
+									is_male = yes
+									age > prev.age
+									is_eunuch_trigger = no
+									NOR = { has_trait = bastard has_trait = disinherited }
+								}
+							}
+						}
+					}
 				}
 				AND = {
-					scope:secondary_recipient = { is_male = yes }
+					#scope:secondary_recipient = { is_male = yes }
 					OR = {
 						has_realm_law = male_only_law
 						has_realm_law = male_preference_law
+					}
+					#ADDED - now an OR with a bit more conditions
+					scope:secondary_recipient = {
+						OR = {
+							is_male = yes
+							AND = {
+								#is_female = yes		#implied
+								OR = {
+									father ?= scope:recipient
+									mother ?= scope:recipient
+								}
+								NOT = { prev = { has_realm_law = male_only_law } }
+								is_eunuch_trigger = no
+								NOR = { has_trait = bastard has_trait = disinherited }
+								any_sibling = {
+									count = 0
+									is_female = yes
+									age > prev.age
+									is_eunuch_trigger = no
+									NOR = { has_trait = bastard has_trait = disinherited}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -1551,7 +1625,7 @@
 						}
 					}
 				}
-				subtract = 75	#prev 30 #A bit more than a weak hook
+				subtract = 80	#prev 30 #A bit more than a weak hook
 				#ADDED - if-else_if
 				if = {
 					limit = {
@@ -1560,7 +1634,7 @@
 						}
 						has_game_rule = hard_difficulty
 					}
-					add = -25
+					add = -20
 				}
 				else_if = {
 					limit = {
@@ -1569,14 +1643,14 @@
 						}
 						has_game_rule = very_hard_difficulty
 					}
-					add = -75
+					add = -70
 				}
 			}
 			else_if = {
 				limit = {
 					scope:recipient = { has_realm_law = equal_law }
 				}
-				subtract = 45	#prev 10 #If The realm law is equal, and the secondary_recipient is NOT ruler or their 1st/2nd/3rd heir, slash the penalty in half
+				subtract = 40	#prev 10 #If The realm law is equal, and the secondary_recipient is NOT ruler or their 1st/2nd/3rd heir, slash the penalty in half
 				#ADDED - if-else_if
 				if = {
 					limit = {
@@ -1585,7 +1659,7 @@
 						}
 						has_game_rule = hard_difficulty
 					}
-					add = -15
+					add = -10
 				}
 				else_if = {
 					limit = {
@@ -1594,7 +1668,7 @@
 						}
 						has_game_rule = very_hard_difficulty
 					}
-					add = -30
+					add = -40
 				}
 			}
 			else = {
@@ -1607,7 +1681,7 @@
 						}
 						has_game_rule = hard_difficulty
 					}
-					add = -15
+					add = -20
 				}
 				else_if = {
 					limit = {
@@ -1618,6 +1692,18 @@
 					}
 					add = -40
 				}
+			}
+			#ADDED - lower penalty within the same dynasty
+			if = {
+				limit = {
+					NOT = { scope:recipient = { government_allows = administrative } }
+					scope:secondary_recipient = { 
+						dynasty = scope:actor.dynasty
+						dynasty = scope:secondary_actor.dynasty
+						scope:secondary_actor = { NOT = { has_trait = bastard } }
+					}
+				}
+				multiply = 0.5
 			}
 		}
 		desc = MATRILINEAL_PATRILINEAL_REASON
@@ -1917,6 +2003,7 @@
 	
 	compare_modifier = { # Recipient is VERY reluctant to betrothe old women to boys
 		trigger = {
+			always = no 	#turn this off for now
 			scope:secondary_actor = {
 				#age > 20
 				age > { value = scope:secondary_recipient.age add = 7 }
@@ -1980,7 +2067,7 @@
 			}
 			OR = {
 				is_female = no
-				age < 45
+				age < 43	#prev 45
 			}
 			any_child = { }
 		}
@@ -2046,7 +2133,31 @@
 	}
 
 	modifier = { # A Recipient is VERY unlikely to agree to a marriage where the Secondary_recipient is a fertile woman and the Secondary_actor is an underage boy who won't become an adult before the woman is infertile
-		add = -250		#prev -200
+		#add = -200
+		#ADDED
+		add = {
+			add = 16	#prev scope:secondary_recipient.age	#-250
+			subtract = scope:secondary_actor.age
+			if = {
+				limit = { marriage_fertile_age_reverse_value >= 35 }
+				multiply = 2
+			}
+			max = {
+				value = marriage_fertile_age_reverse_value
+				subtract = 26	#keep it in sync with one in the trigger 
+				multiply = 2
+			}
+			multiply = -10
+			if = {
+				limit = { 
+					scope:secondary_recipient = {
+						this = scope:recipient
+						is_ruler = no
+					}
+				}
+				multiply = 0.5
+			}
+		}
 		
 		scope:secondary_recipient = {
 			is_female = yes
@@ -2070,18 +2181,44 @@
 					exists = scope:recipient.player_heir
 					this = scope:recipient.player_heir
 				}
+				#ADDED - AI should avoid doing this in general
+				scope:actor = { is_ai = yes }
 			}
 		}
 		scope:secondary_actor = {
 			is_adult = no
 		}
-		marriage_fertile_age_reverse_value >= 41	#prev 43
+		marriage_fertile_age_reverse_value >= 26	#prev 43
 		
 		desc = MARRY_LOW_FERTILITY_REASON
 	}
 
 	modifier = { # A Recipient is VERY unlikely to agree to a marriage where the Secondary_actor is a woman and the Secondary_recipient is an underage boy who won't become an adult before the woman is infertile
-		add = -250		#prev -200
+		#add = -200
+		#ADDED
+		add = {
+			add = 16	#prev scope:secondary_actor.age	#-250
+			subtract = scope:secondary_recipient.age
+			if = {
+				limit = { marriage_fertile_age_value >= 35 }
+				multiply = 2
+			}
+			max = {
+				value = marriage_fertile_age_value
+				subtract = 26	#keep it in sync with one in the trigger 
+				multiply = 2
+			}
+			multiply = -15
+			if = {
+				limit = { 
+					scope:secondary_recipient = {
+						this = scope:recipient
+						is_ruler = no
+					}
+				}
+				multiply = 0.5
+			}
+		}
 		
 		scope:secondary_actor = {
 			is_female = yes
@@ -2107,9 +2244,11 @@
 					exists = scope:recipient.player_heir
 					this = scope:recipient.player_heir
 				}
+				#ADDED - AI should avoid doing this in general
+				scope:actor = { is_ai = yes }
 			}
 		}
-		marriage_fertile_age_value >= 41		#prev 43
+		marriage_fertile_age_value >= 26		#prev 43
 		
 		desc = MARRY_LOW_FERTILITY_REASON
 	}
@@ -2899,9 +3038,14 @@
 	#  NOMAD/TRIBUTARY   #
 	######################
 	modifier = {
-		add = 50
+		add = 30	#prev 50
 		scope:recipient = {
 			is_tributary_of_suzerain_or_above = scope:actor
+			#ADDED - maybe they shouldn't hate the liege too?
+			opinion = {
+				target = scope:actor
+				value > -20
+			}
 		}
 		desc = AI_TRIBUTARY_REASON
 	}
@@ -3036,6 +3180,8 @@
 	modifier = {
 		add = ep2_activities_legacy_2_grand_weddings_acceptance_boost_value
 		scope:actor.dynasty ?= { has_dynasty_perk = ep2_activities_legacy_2  }
+		#ADDED - maybe actually check for grand wedding promise?
+		scope:grand_wedding_promise = yes
 		desc = GRAND_WEDDING_DYNASTY_LEGACY_BONUS
 	}
 
@@ -3113,6 +3259,11 @@
 					has_legitimacy_flag = massively_reduced_marriage_acceptance
 				}
 			}
+			#ADDED - doesnt apply to random nobodies i dont think they care that much
+			OR = {
+				this = scope:secondary_actor 
+				is_close_or_extended_family_of = scope:secondary_actor
+			}
 		}
 		add = {
 			value = 0
@@ -3153,6 +3304,11 @@
 					has_legitimacy_flag = very_increased_marriage_acceptance
 					has_legitimacy_flag = extra_increased_marriage_acceptance
 				}
+			}
+			#ADDED - doesnt apply to random nobodies i dont think they care that much
+			OR = {
+				this = scope:secondary_actor 
+				is_close_or_extended_family_of = scope:secondary_actor
 			}
 		}
 		add = {

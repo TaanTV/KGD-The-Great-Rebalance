@@ -1,3 +1,4 @@
 ﻿l_russian:
  let_me_be_raided: "Дали [Concept( 'raid', 'разграбить' )|E] мои земли"
  let_me_be_occupied: "Дали [Concept( 'occupied', 'оккупировать' )|E] мои земли"
+ same_stance_in_council: "Советники с похожими [Concept( 'vassal_stance', 'Взглядами' )|E]"

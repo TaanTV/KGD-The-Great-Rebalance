@@ -1,0 +1,3 @@
+﻿nomadic_wash_your_hands_perk_effect = {
+	global = nomadic_wash_your_hands_perk_effect
+}

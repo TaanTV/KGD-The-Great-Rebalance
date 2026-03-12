@@ -1,3 +1,5 @@
 ﻿l_english:
  tradition_bkt_error_suppress_name: "placeholder"
  tradition_bkt_error_suppress_desc: "placeholder"
+ war_dec_law_fix_decision_t: "Fix War Declaration Laws"
+ war_dec_law_fix_decision_desc: "Click if your save is old and doesnt have War Declaration Law set up"

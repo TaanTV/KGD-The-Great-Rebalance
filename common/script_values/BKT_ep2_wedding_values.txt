@@ -1,0 +1,1 @@
+﻿#impress_intent_vassalization_acceptance_value = { # values synced with offer_vassalization_interaction

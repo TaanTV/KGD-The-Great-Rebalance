@@ -1,4 +1,0 @@
-﻿chancellor_foreign_affairs_prestige_gain_base = {
-	add = diplomacy
-	divide = 40		#prev 20
-}

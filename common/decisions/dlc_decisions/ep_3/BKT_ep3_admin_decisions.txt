@@ -99,12 +99,14 @@ convert_to_administrative_decision = {
 					limit = {
 						culture = { has_cultural_parameter = can_adopt_administrative_government_as_kingdom_tier }
 					}
-					custom_tooltip = {
-						text = king_tier_tt
-						primary_title.tier >= tier_kingdom
+					#ADDED - now in an AND bloc and added sub_realm_size check
+					AND = {
+						custom_tooltip = {
+							text = king_tier_tt
+							primary_title.tier >= tier_kingdom
+						}
+						sub_realm_size >= 36
 					}
-					#ADDED
-					sub_realm_size >= 36
 				}
 				trigger_else = {
 					AND = { # To force the correct tooltip in loc
@@ -157,6 +159,8 @@ convert_to_administrative_decision = {
 				faith = { has_doctrine = tenet_legalism }
 				dynasty = { has_dynasty_perk = erudition_legacy_5 }
 				dynasty = { has_dynasty_perk = law_legacy_5 }
+				#ADDED
+				culture = { has_cultural_tradition = tradition_ep3_cultivated_sophistication }
 			}
 		}
 		#ADDED - actually do this for players too.
@@ -170,6 +174,7 @@ convert_to_administrative_decision = {
 				culture = { has_cultural_pillar = ethos_courtly }
 				#culture = { has_cultural_pillar = ethos_egalitarian }
 				culture = { has_cultural_tradition = tradition_legalistic }
+				culture = { has_cultural_tradition = tradition_ep3_cultivated_sophistication }
 				has_realm_law = crown_authority_3
 				capital_county = { development_level > medium_development_level }
 				faith = { has_doctrine = tenet_legalism }
@@ -695,34 +700,17 @@ convert_to_feudalism_from_administrative_decision = {
 					has_realm_law = japanese_bureaucracy_0 
 				}
 			}
+			#ADDED - rewritten the whole "on the border" thing
 			custom_tooltip = {
-				text = governorship_is_on_the_border_or_borders_feudal_clan_vassal_tt	#prev governorship_is_on_the_border_tt
+				text = governorship_is_on_the_border_or_borders_non_admin_vassal_or_is_island_tt
 				#ADDED - an OR, might save on performance to check contract first as it is only valid if the below stuff is valid anyways
 				OR = {
 					vassal_contract_has_flag = admin_theme_frontier
-					any_sub_realm_county = {
-						any_neighboring_county = {
-							#holder.top_liege != root.top_liege
-							#ADDED - be on the border or border someone who's already feudal
-							holder ?= {
-								OR = {
-									top_liege != root.top_liege
-									AND = {
-										highest_held_title_tier = root.highest_held_title_tier
-										OR = { 
-											government_has_flag = government_is_feudal
-											government_has_flag = government_is_clan
-										}
-									}
-									any_liege_or_above = {
-										highest_held_title_tier = root.highest_held_title_tier
-										OR = { 
-											government_has_flag = government_is_feudal
-											government_has_flag = government_is_clan
-										}
-									}
-								}
-							}
+					NOT = { any_neighboring_realm_same_rank_owner = { } }
+					any_neighboring_realm_same_rank_owner = {
+						OR = {
+							top_liege != root.top_liege
+							NOT = { government_allows = administrative }
 						}
 					}
 				}
@@ -736,6 +724,9 @@ convert_to_feudalism_from_administrative_decision = {
 				custom_tooltip = {
 					text = you_have_governorship_rights_tt
 					primary_title.var:petition_house_rights ?= house
+				}
+				AND = {
+					top_liege ?= { has_character_modifier = fully_autonomous_vassals_admin_modifier }
 				}
 				AND = {
 					top_liege ?= { 
@@ -817,7 +808,12 @@ convert_to_feudalism_from_administrative_decision = {
 			value = 0
 			if = {
 				limit = {
-					has_treasury = no
+					#has_treasury = no
+					#ADDED - now a more complex trigger
+					OR = {
+						has_treasury = no	#either you have no treasury
+						gold > treasury 	#or you have more gold than treasury
+					}
 				}
 				add = 500		#prev 1000 #Them pens be expensive
 				#Realm size
@@ -895,7 +891,12 @@ convert_to_feudalism_from_administrative_decision = {
 			value = 0
 			if = {
 				limit = {
-					has_treasury = yes
+					#has_treasury = yes
+					#ADDED - now a more complex trigger
+					NOR = {
+						has_treasury = no	#either you have no treasury
+						gold > treasury 	#or you have more gold than treasury
+					}
 				}
 				add = 500		#prev 1000 #Them pens be expensive
 				#Realm size
@@ -970,7 +971,7 @@ convert_to_feudalism_from_administrative_decision = {
 			}
 		}
 		#ADDED
-		influence = 350
+		influence = 150
 	}
 
 	effect = {
@@ -997,17 +998,23 @@ convert_to_feudalism_from_administrative_decision = {
 		government_allows = administrative
 		liege = top_liege
 		has_realm_law_in_group = imperial_bureaucracy	#dont check other ones for now
-		gold > 600
+		OR = {
+			gold > 500
+			treasury > 500
+		}
 		influence > 350
 		prestige > 350
-		prestige_level >= 3
+		prestige_level >= 2
 		OR = {
 			AND = {
 				top_liege != this
-				top_liege ?= { 
-					is_in_civil_war = yes 
-					debt_level >= 1
-					has_realm_law = imperial_bureaucracy_0 
+				OR = {
+					top_liege ?= { has_character_modifier = fully_autonomous_vassals_admin_modifier }
+					top_liege ?= { 
+						is_in_civil_war = yes 
+						debt_level >= 1
+						has_realm_law = imperial_bureaucracy_0 
+					}
 				}
 			}
 			AND = {
@@ -1030,15 +1037,31 @@ convert_to_feudalism_from_administrative_decision = {
 		}
 		modifier = {
 			add = 25
+			top_liege != this
+			NOT = { top_liege = { is_rightful_liege_of = prev } }
+		}
+		modifier = {
+			add = 10
+			top_liege != this
+			top_liege ?= { has_character_modifier = fully_autonomous_vassals_admin_modifier }
+		}
+		modifier = {
+			add = 35
 			has_trait = ambitious
 		}
 		modifier = {
-			add = -25
+			add = 15
+			has_trait = greedy
+		}
+		modifier = {
+			add = -35
 			has_trait = stubborn
 		}
 		modifier = {
 			culture = {
-				has_cultural_tradition = tradition_legalistic
+				OR = {
+					has_cultural_tradition = tradition_legalistic
+				}
 			}
 			add = -50
 		}
@@ -1049,7 +1072,7 @@ convert_to_feudalism_from_administrative_decision = {
 					has_cultural_tradition = tradition_loyal_soldiers 
 				}
 			}
-			add = -20
+			add = -30
 		}
 		modifier = {
 			culture = {
@@ -1091,7 +1114,7 @@ convert_to_feudalism_from_administrative_decision = {
 				}
 			}
 			any_vassal = {
-				count >= 3
+				count >= 5
 				is_landed = yes
 				government_has_flag = government_is_administrative
 			}

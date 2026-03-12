@@ -1,0 +1,19 @@
+﻿ep3_administrative_legacy_4 = { # The Eternal City
+	legacy = ep3_administrative_legacy_track
+
+	can_be_picked = {
+		has_ep3_dlc_trigger = yes
+		government_allows = administrative
+	}
+
+	effect = {
+		custom_description_no_bullet = { text = ep3_administrative_legacy_4_effect_cabinet_of_curiosities }
+	}
+
+	character_modifier = {
+		county_opinion_add = 10		#prev 15
+		#development_growth = 0.1
+		#ADDED
+		development_growth_factor = 0.1
+	}
+}

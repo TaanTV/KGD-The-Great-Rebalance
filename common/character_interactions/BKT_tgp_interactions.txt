@@ -78,7 +78,11 @@ request_great_project_contribution_interaction = {
 
 		modifier = {
 			#ADDED - just disable that for mandalas for now, it seems unfinished
-			NOT = { scope:actor = { government_has_flag = government_is_mandala } }
+			OR = { 
+				NOT = { scope:actor = { government_has_flag = government_is_mandala } }
+				scope:great_project_contribution.great_project = { great_project_type = great_project_earthquake }
+				scope:great_project_contribution.great_project = { great_project_type = great_project_flood }
+			}
 			add = "ai_will_do_contribution(scope:great_project_contribution)"
 			desc = base_contribution_desire
 		}

@@ -331,6 +331,7 @@ pesilat_warriors = {
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score 
 		#ADDED
+		add = -30
 		add = counter_synergy_ai_weight_skirmishers
 	}
 	icon = pesilat_warrior
@@ -471,10 +472,11 @@ black_armor_cavalry = {
 	high_maintenance_cost = { gold = tiefutu_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_bankrupting
 	
-	stack = 50
+	stack = 40
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score
-		add = counter_synergy_ai_weight_heavy_infantry
+		#ADDED
+		add = counter_synergy_ai_weight_heavy_cavalry
 	}
 
 	icon = black_armor_cavalry

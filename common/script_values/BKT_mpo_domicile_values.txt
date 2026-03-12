@@ -1,0 +1,203 @@
+﻿###################
+# NOMAD YURT VALUES #
+###################
+
+# Beware, this file is full of MATH!
+
+###############################
+#AI VALUES
+
+#nomadic_capital_literally_invaluable_building = {
+#	value = 1000
+#}
+#
+#nomadic_capital_extremely_important_building = {
+#	value = 100
+#}
+#
+#nomadic_capital_very_important_building = {
+#	value = 15
+#}
+
+nomadic_capital_main_building_1 = {
+	value = 8
+}
+
+nomadic_capital_main_building_2 = {
+	value = 6	#prev 7
+	if = {
+		limit = {
+			owner = {
+				short_term_gold >= yurt_main_building_gold_cost_tier_2
+				prestige >= yurt_main_building_prestige_cost_tier_2
+			}
+			herd >= yurt_main_building_herd_cost_tier_2
+		}
+		add = 8	#prev 4
+	}
+	if = {
+		limit = {
+			herd >= {
+				value = max_herd
+				multiply = 0.9
+			}
+		}
+		add = 2	#prev 5
+	}
+}
+
+nomadic_capital_main_building_3 = {
+	value = 5	#prev 6
+	if = {
+		limit = {
+			owner = {
+				short_term_gold >= yurt_main_building_gold_cost_tier_3
+				prestige >= yurt_main_building_prestige_cost_tier_3
+			}
+			herd >= yurt_main_building_herd_cost_tier_3
+		}
+		add = 8	#prev 4
+	}
+	if = {
+		limit = {
+			herd >= {
+				value = max_herd
+				multiply = 0.9
+			}
+		}
+		add = 2	#prev 5
+	}
+}
+
+nomadic_capital_main_building_4 = {
+	value = 4	#prev 5
+	if = {
+		limit = {
+			owner = {
+				short_term_gold >= yurt_main_building_gold_cost_tier_4
+				prestige >= yurt_main_building_prestige_cost_tier_4
+			}
+			herd >= yurt_main_building_herd_cost_tier_4
+		}
+		add = 8	#prev 4
+	}
+	if = {
+		limit = {
+			herd >= {
+				value = max_herd
+				multiply = 0.9
+			}
+		}
+		add = 2	#prev 5
+	}
+}
+
+nomadic_capital_main_building_5 = {
+	value = 3	#prev 4
+	if = {
+		limit = {
+			owner = {
+				short_term_gold >= yurt_main_building_gold_cost_tier_5
+				prestige >= yurt_main_building_prestige_cost_tier_5
+			}
+			herd >= yurt_main_building_herd_cost_tier_5
+		}
+		add = 8	#prev 4
+	}
+	if = {
+		limit = {
+			herd >= {
+				value = max_herd
+				multiply = 0.9
+			}
+		}
+		add = 2	#prev 5
+	}
+}
+
+nomadic_capital_main_building_6 = {
+	value = 2	#prev 3
+	if = {
+		limit = {
+			owner = {
+				short_term_gold >= yurt_main_building_gold_cost_tier_6
+				prestige >= yurt_main_building_prestige_cost_tier_6
+			}
+			herd >= yurt_main_building_herd_cost_tier_6
+		}
+		add = 8	#prev 4
+	}
+	if = {
+		limit = {
+			herd >= {
+				value = max_herd
+				multiply = 0.9
+			}
+		}
+		add = 2	#prev 5
+	}
+}
+
+#nomadic_capital_interior_building_1 = {
+#	value = 9
+#}
+#
+#nomadic_capital_interior_building_2 = {
+#	value = 8
+#}
+#
+#nomadic_capital_interior_building_3 = {
+#	value = 7
+#}
+#
+#nomadic_capital_interior_building_4 = {
+#	value = 6
+#}
+#
+#nomadic_capital_interior_building_5 = {
+#	value = 5
+#}
+#
+#nomadic_capital_interior_building_6 = {
+#	value = 4
+#}
+#
+#nomadic_capital_interior_building_7 = {
+#	value = 3
+#}
+#
+#nomadic_capital_interior_building_8 = {
+#	value = 2
+#}
+#
+#nomadic_capital_exterior_building_1 = {
+#	value = 11
+#}
+#
+#nomadic_capital_exterior_building_2 = {
+#	value = 7
+#}
+#
+#nomadic_capital_exterior_building_3 = {
+#	value = 6
+#}
+#
+#nomadic_capital_exterior_building_4 = {
+#	value = 5
+#}
+#
+#nomadic_capital_exterior_building_5 = {
+#	value = 4
+#}
+#
+#nomadic_capital_exterior_building_6 = {
+#	value = 3
+#}
+#
+#nomadic_capital_exterior_building_7 = {
+#	value = 2
+#}
+#
+#nomadic_capital_exterior_building_8 = {
+#	value = 4
+#}

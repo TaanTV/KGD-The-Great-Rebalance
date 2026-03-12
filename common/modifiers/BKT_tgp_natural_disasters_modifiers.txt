@@ -1,0 +1,14 @@
+﻿tgp_natural_disaster_resettlement_domain_burden = {
+	icon = stewardship_negative
+	#domain_limit = -1
+	stacking = yes
+	#ADDED
+	tax_mult = -0.25
+	levy_size = -0.25
+	development_growth_factor = -0.25
+}
+
+tgp_natural_disaster_resettlement_taxation_loss = {
+	icon = economy_negative
+	tax_mult = -0.25	#prev -0.5
+}

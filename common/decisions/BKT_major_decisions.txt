@@ -357,9 +357,9 @@ expand_duchy_decision = {
 			OR = {
 				trigger_if = {
 					limit = { government_has_flag = government_is_mandala }
-					piety_level >= 3
+					piety_level >= 4	#prev 3
 				}
-				trigger_else = { prestige_level >= 3 }
+				trigger_else = { prestige_level >= 4 }	#prev 3
 				trigger_if = {
 					limit = {
 						has_legitimacy = yes
@@ -378,7 +378,7 @@ expand_duchy_decision = {
 			}
 		}
 		trigger_else = {
-			prestige_level >= 3
+			prestige_level >= 4		#prev 3
 		}
 		custom_tooltip = {
 			text = expand_duchy_less_than_4
@@ -424,9 +424,22 @@ expand_duchy_decision = {
 				}
 				value = 250
 			}
+			#ADDED
+			else_if = {
+				limit = { government_has_flag = government_is_mandala }
+				value = 0
+			}
 			else = {
 				value = 1000
 			}
+		}
+		#ADDED
+		piety = {
+			if = {
+				limit = { government_has_flag = government_is_mandala }
+				add = 1500
+			}
+			else = { value = 0 }
 		}
 	}
 

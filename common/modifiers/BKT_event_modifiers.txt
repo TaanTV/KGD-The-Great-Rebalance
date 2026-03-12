@@ -1,0 +1,24 @@
+﻿almohad_leader_modifier = {
+	icon = learning_positive
+	martial = 3		#prev 1
+	learning = 3	#prev 1
+	enemy_hostile_scheme_phase_duration_add = major_scheme_phase_duration_malus_value	#prev medium_scheme_phase_duration_malus_value
+	enemy_hostile_scheme_success_chance_add = -25	#prev -15
+	#ADDED
+	health = 1
+	army_damage_mult = 0.33
+	monthly_county_control_growth_add = 0.5
+	levy_reinforcement_rate_same_faith = 0.5
+	same_faith_opinion = 20
+	men_at_arms_maintenance = -0.5
+	stress_gain_mult = -0.5
+}
+
+rebuilding_marrakesh_modifier = {
+	icon = county_modifier_development_positive
+	development_growth_factor = 0.5	#prev 0.25
+	build_gold_cost = -0.15
+	build_piety_cost = -0.5
+	#ADDED
+	development_growth = 0.25
+}

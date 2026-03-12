@@ -4,9 +4,15 @@ court_grandeur_minimum_expected_value = {
 	value = sub_realm_size
 	divide = 8		#prev 4
 	#ADDED - avg_dev part
-	add = {
-		value = average_sub_realm_development
-		divide = 2
+	if = {
+		limit = { NOT = { government_allows = affected_by_development } }
+		multiply = 3
+	}
+	else = {
+		add = {
+			value = average_sub_realm_development
+			divide = 2
+		}
 	}
 	if = { # Elective Empires have slightly lower expectations (i.e. the HRE)
 		limit = {
@@ -34,6 +40,8 @@ court_grandeur_minimum_expected_value = {
 		}
 		multiply = 0
 		add = court_grandeur_current
+		#ADDED
+		min = 10
 	}
 	max = 95
 }
@@ -83,7 +91,16 @@ ep1_court_grandeur_marriage_acceptance_value = {
 
 # The unmodified, average cost of sponsoring an Inspiration.
 basic_fund_inspiration_cost = {
-	value = 125		#prev 100
+	value = 120		#prev 100
+	if = {
+		limit = {
+			scope:inspiration_owner.confederation ?= { has_cohesion_level_parameter = any_member_commission_and_inspiration_reduced }
+		}
+		multiply = {
+			value = 0.9
+			desc = CB_COHESION_PARAMETER_DISCOUNT
+		}
+	}
 }
 
 court_grandeur_level_difference_modifier_multiplier = {
@@ -109,6 +126,37 @@ court_grandeur_level_difference_modifier_multiplier = {
 		if = {
 			limit = { government_has_flag = government_has_higher_grandeur_penalty_and_court_costs }
 			multiply = 1.5
+		}
+	}
+}
+
+
+# This is balanced against a typical base score of 50
+# And a typical skill score of 12 (aptitude of 3)
+# We want to sit at roughly 10% of income spent
+# So 10% income spent needs to give -62 score
+# So the cost of them all we multiply by 600, for 10% = -60
+# While the cost of the position itself with 100. 5 positions of 2% each will then each get -2
+#ADDED - note: i dont understand wtf is going on here, im just gonna lower subtracts a bit so AI maybe hires more court positions
+court_position_liege_score_base_value = {
+	value = 0
+	scope:liege = {
+		subtract = {
+			# Less likely to hire for the really expensive positions
+			# But this is a pretty minor impact
+			value = 75		#prev 100
+			multiply = scope:percent_of_monthly_gold_income
+		}
+		subtract = {
+			# Value decreases as cost of all positions increase
+			value = 400		#prev 600
+			if = {
+				limit = {
+					ai_should_focus_on_building_in_their_capital = yes
+				}
+				add = 100	#prev 400
+			}
+			multiply = scope:percent_of_monthly_gold_income_all_positions
 		}
 	}
 }

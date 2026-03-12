@@ -1,0 +1,78 @@
+﻿#On actions about titles
+
+# All on-actions in this file provide scope:transfer_type unless otherwise noted
+# scope:transfer_type has the following permutations:
+# flag:conquest
+# flag:conquest_holy_war
+# flag:conquest_claim
+# flag:conquest_populist
+# flag:inheritance
+# flag:abdication
+# flag:destroyed
+# flag:created
+# flag:usurped
+# flag:granted
+# flag:revoked
+# flag:election
+# flag:independency
+# flag:returned
+# flag:leased_out
+# flag:lease_revoked
+# flag:faction_demand
+# flag:swear_fealty
+# flag:stepped_down
+
+# A title is destroyed
+# root = the holder before destruction
+# scope:landed_title = the title that is being destroyed
+# Does *not* provide scope:transfer_type
+on_title_destroyed = {
+	on_actions = {
+		BKT_on_empire_destroyed
+	}
+}
+
+BKT_on_empire_destroyed = {
+	trigger = {
+		scope:landed_title.tier >= tier_empire
+	}
+	effect = {
+		scope:landed_title = { 
+			remove_variable = year_of_last_serious_defensive_war 
+			#remove_variable = number_of_successions		#No idea how to track that one properly...
+		}
+	}
+}
+
+# A title is transferred to a new character
+# root = the new holder
+# scope:title = the title that changes hands
+# scope:previous_holder = previous holder. Might be dead
+#Sadly there is no separate on_title_created
+on_title_gain = {
+	on_actions = {
+		BKT_on_empire_created
+	}
+}
+
+BKT_on_empire_created = {
+	trigger = {
+		scope:transfer_type ?= flag:created
+		scope:title.tier >= tier_empire
+		#Those have their own thingies
+		save_temporary_scope_as = temp_ruler_scope
+		NOT = {
+			any_character_situation = { 
+				situation_type = dynastic_cycle 
+				any_participant_group = {
+					NOT = { participant_group_type = other_rulers }
+					participant_group_has_character = scope:temp_ruler_scope
+				}
+			} 
+		}
+	}
+	effect = {
+		scope:title = { save_scope_as = landed_title }
+		get_or_set_year_of_last_serious_defensive_war = yes
+	}
+}

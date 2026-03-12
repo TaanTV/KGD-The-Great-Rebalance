@@ -48,7 +48,7 @@ innovation_machicolations = {
 	
 	#ADDED
 	ai_weight_for_fascination = {
-		value = 2000	#good
+		value = 4000	#good
 		if = {
 			limit = { NOT = { has_cultural_era_or_later = culture_era_late_medieval } }
 			multiply = 0.001
@@ -122,8 +122,8 @@ innovation_royal_armory = {
 	#ADDED
 	maa_upgrade = {
 		type = peasant_militia
-		damage = 2
-		toughness = 2
+		damage = 4
+		toughness = 4
 	}
 	
 	#ADDED
@@ -135,7 +135,7 @@ innovation_royal_armory = {
 		}
 		else_if = {
 			limit = { has_innovation = innovation_machicolations }
-			add = 1700
+			add = 2700
 		}
 	}
 
@@ -276,7 +276,7 @@ innovation_cranes = {
 		}
 		else_if = {
 			limit = { has_innovation = innovation_machicolations }
-			add = 1700
+			add = 2700
 		}
 	}
 

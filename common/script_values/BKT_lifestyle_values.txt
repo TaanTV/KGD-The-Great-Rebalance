@@ -98,7 +98,7 @@ bellum_justum_discount_percentage = 80		#prev 50	#set to 80 if you figure out ho
 #accomplished_forger_percentage = 75
 
 # Thicker Than Water Perk
-#thicker_than_water_bonus = 25
+thicker_than_water_bonus = 20	#prev 25
 
 # Flatterer Perk
 #flatterer_bonus = 30
@@ -121,7 +121,7 @@ tax_man_perk_percentage = 35		#prev 25
 
 #planned_cultivation_percentage = 20
 
-#duty_focus_value = -20
+duty_focus_value = -15	#prev -20
 
 
 ###############
@@ -132,7 +132,7 @@ tax_man_perk_percentage = 35		#prev 25
 #clerical_justifications_percentage = 20
 
 # Learn on the Job
-#learn_on_the_job_percentage = 20
+learn_on_the_job_percentage = 15	#prev 20
 
 # Zealous Proselytizer
 #zealous_proselytizer_percentage = 25

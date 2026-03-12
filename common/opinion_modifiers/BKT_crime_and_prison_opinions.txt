@@ -217,3 +217,18 @@ castrated_me = {
 	years = 50
 	imprisonment_reason = yes
 }
+
+
+###ABDUCTION###
+abducted_me_opinion = {
+	opinion = -80	#prev -30
+	years = 25		#prev 20
+	decaying = yes
+}
+
+attempted_abduction_opinion = {
+	opinion = -40	#prev -20
+	years = 15		#prev 10
+	decaying = yes
+	imprisonment_reason = yes
+}

@@ -10,8 +10,6 @@ has_any_main_economic_building = {
 		has_building_or_higher = orchards_01
 		has_building_or_higher = plantations_01
 		has_building_or_higher = paddy_fields_01
-		has_building_or_higher = paddy_fields_01
-		has_building_or_higher = paddy_fields_01
 		AND = {
 			terrain = steppe
 			has_building_or_higher = pastures_01
@@ -29,6 +27,8 @@ has_any_basic_military_building = {
 		has_building_or_higher = military_camps_01
 		has_building_or_higher = stables_01
 		has_building_or_higher = barracks_01
+		has_building_or_higher = oath_warriors_building_01
+		has_building_or_higher = powder_magazine_01		#maybe not?
 	}
 }
 

@@ -54,7 +54,7 @@ innovation_battlements = {
 	
 	#ADDED
 	ai_weight_for_fascination = {
-		value = 2000	#good
+		value = 4000	#good
 		if = {
 			limit = { NOT = { has_cultural_era_or_later = culture_era_early_medieval } }
 			multiply = 0.001
@@ -159,8 +159,8 @@ innovation_burhs = { # Stone Forts in-game
 	#ADDED
 	maa_upgrade = {
 		type = peasant_militia
-		damage = 1
-		toughness = 2
+		damage = 2
+		toughness = 4
 	}
 	
 	#ADDED
@@ -173,7 +173,7 @@ innovation_burhs = { # Stone Forts in-game
 		else = {
 			if = {
 				limit = { has_innovation = innovation_battlements }
-				add = 1700
+				add = 2700
 			}
 			if = {
 				limit = { has_cultural_era_or_later = culture_era_high_medieval }
@@ -324,7 +324,7 @@ innovation_manorialism = {
 		else = {
 			if = {
 				limit = { has_innovation = innovation_battlements }
-				add = 1700
+				add = 2700
 			}
 			if = {
 				limit = { has_cultural_era_or_later = culture_era_high_medieval }

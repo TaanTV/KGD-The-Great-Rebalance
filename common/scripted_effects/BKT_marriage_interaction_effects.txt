@@ -23,8 +23,55 @@
 	}
 	
 	#ADDED - penalties for marrying lowborn.... yes, more of them.
-	bkt_marriage_interaction_appendage = yes
+	if = {
+		limit = {
+			OR = {
+				NOT = { exists = scope:secondary_actor }
+				NOT = { exists = scope:secondary_recipient }
+				scope:secondary_actor.age < 16
+				scope:secondary_recipient.age < 16
+			}
+		}
+		#This is here to stop it from double-counting
+		show_as_tooltip = { bkt_marriage_interaction_appendage = yes }
+	}
+	else = {
+		bkt_marriage_interaction_appendage = yes
+	}
 	
+	#ADDED - compensate landless chars somewhat
+	if = {
+		limit = {
+			OR = {
+				NOT = { exists = scope:secondary_actor }
+				NOT = { exists = scope:secondary_recipient }
+				scope:secondary_actor.age < 16
+				scope:secondary_recipient.age < 16
+			}
+		}
+		#Yes, this is a structure indeed.
+	}
+	else_if = {
+		limit = {
+			scope:actor = {
+				is_ruler = yes
+				this = scope:secondary_actor
+				government_has_flag = government_is_landless_adventurer
+			}
+		}
+		scope:actor = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
+	}
+	else_if = {
+		limit = {
+			scope:recipient = {
+				is_ruler = yes
+				this = scope:secondary_recipient
+				government_has_flag = government_is_landless_adventurer
+			}
+		}
+		scope:recipient = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
+	}
+			
 	#Penalties for marrying a lowborn
 	scope:actor = {
 		if = {
@@ -155,66 +202,11 @@
 		#		add_legitimacy = medium_legitimacy_gain
 		#	}
 		#}
-		
-		#ADDED - legitimacy for dynasty prestige differences
-		if = {
-			limit = {
-				is_valid_for_legitimacy_change = yes
-				OR = {
-					AND = {
-						this = scope:secondary_actor # We check that you're marrying them yourself 
-						scope:secondary_recipient = { is_lowborn = no }
-						dynasty.dynasty_prestige_level < scope:secondary_recipient.dynasty.dynasty_prestige_level
-						NAND = {		#only once per character.
-							has_variable_list = got_legitimacy_for_marrying_those
-							is_target_in_variable_list = {
-								name = got_legitimacy_for_marrying_those
-								target = scope:secondary_recipient
-							}
-						}
-					}
-					AND = {
-						this = scope:secondary_recipient # We check that you're marrying them yourself
-						scope:secondary_actor = { is_lowborn = no }
-						dynasty.dynasty_prestige_level < scope:secondary_actor.dynasty.dynasty_prestige_level
-						NAND = {		#only once per character.
-							has_variable_list = got_legitimacy_for_marrying_those
-							is_target_in_variable_list = {
-								name = got_legitimacy_for_marrying_those
-								target = scope:secondary_actor
-							}
-						}
-					}
-				}
-			}
-			if = {
-				limit = { this = scope:secondary_actor }
-				scope:secondary_recipient = { save_scope_as = spouse_scope }
-			}
-			else_if = {
-				limit = { this = scope:secondary_recipient }
-				scope:secondary_actor = { save_scope_as = spouse_scope }
-			}
-			add_legitimacy = {
-				value = scope:spouse_scope.dynasty.dynasty_prestige_level
-				subtract = dynasty.dynasty_prestige_level
-				multiply = 10
-				if = {
-					limit = {
-						OR = {
-							NOT = { exists = primary_spouse }
-							primary_spouse ?= scope:spouse_scope
-						}
-					}
-					multiply = 2
-				}
-			}	
-			add_to_variable_list = {
-				name = got_legitimacy_for_marrying_those
-				target = scope:spouse_scope
-			}
-		}
 	}
+		
+	#ADDED - would be nice if this was prettier but euhhhhhhhhhhhhhhhh idc
+	check_and_add_legitimacy_for_renown_differences = { SCOPE_TO = recipient SCOPE_FROM = actor }
+	check_and_add_legitimacy_for_renown_differences = { SCOPE_TO = actor SCOPE_FROM = recipient }
 	
 	#No longer Herder
 	if = {
@@ -293,7 +285,7 @@
 	hidden_effect = {
 		scope:actor = {
 			if = {
-				limit = { NOT = { this = scope:recipient } }
+				limit = { this != scope:recipient }
 				trigger_event = marriage_interaction.0010
 			}
 			else = { #In my own court
@@ -389,7 +381,7 @@
 			if = {
 				limit = {
 					any_vassal = {
-						has_vassal_stance = courtly
+						vassal_stance = courtly
 					}
 				}
 				if = {
@@ -397,9 +389,7 @@
 						has_been_promised_grand_wedding = yes
 					}
 					every_vassal = {
-						limit = {
-							has_vassal_stance = courtly
-						}
+						vassal_stance = courtly
 						add_opinion = {
 							target = scope:secondary_actor
 							modifier = prestigious_wedding_opinion
@@ -412,7 +402,7 @@
 			if = {
 				limit = {
 					any_vassal = {
-						has_vassal_stance = courtly
+						vassal_stance = courtly
 					}
 				}
 				if = {
@@ -420,9 +410,7 @@
 						has_been_promised_grand_wedding = yes
 					}
 					every_vassal = {
-						limit = {
-							has_vassal_stance = courtly
-						}
+						vassal_stance = courtly
 						add_opinion = {
 							target = scope:secondary_recipient
 							modifier = prestigious_wedding_opinion

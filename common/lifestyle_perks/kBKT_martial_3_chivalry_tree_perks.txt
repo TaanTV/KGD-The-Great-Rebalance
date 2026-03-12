@@ -9,13 +9,13 @@ courtship_perk = {
 	
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
-		courting_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value	#From KAN
-		elope_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value		#From KAN
+		courting_scheme_phase_duration_add = medium_scheme_phase_duration_bonus_value	#prev monumental_scheme_phase_duration_bonus_value
+		elope_scheme_phase_duration_add = medium_scheme_phase_duration_bonus_value		#prev monumental_scheme_phase_duration_bonus_value
 	}
 
 	character_modifier = {
-		courting_scheme_phase_duration_add = massive_scheme_phase_duration_bonus_value	#perv medium_scheme_phase_duration_bonus_value
-		elope_scheme_phase_duration_add = massive_scheme_phase_duration_bonus_value		#prev medium_scheme_phase_duration_bonus_value
+		courting_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value	#perv medium_scheme_phase_duration_bonus_value
+		elope_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value		#prev medium_scheme_phase_duration_bonus_value
 	}
 	effect = {
 		custom_description_no_bullet = {

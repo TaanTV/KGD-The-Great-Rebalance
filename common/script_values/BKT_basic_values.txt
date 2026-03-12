@@ -315,6 +315,97 @@ send_gift_opinion = {
 	}
 }
 
+gift_artifact_opinion = {
+	value = 0
+	scope:target = {
+		# Per level of Rarity
+		if = {
+			limit = { rarity = common }
+			add = 5		#prev 10
+		}
+		else_if = {
+			limit = { rarity = masterwork }
+			add = 10	#prev 25
+		}
+		else_if = {
+			limit = { rarity = famed }
+			add = 20	#prev 50
+		}
+		else = { add = 40 }	#prev 100
+		if = { # AI Greed
+			limit = { scope:recipient.ai_greed > 0 }
+			multiply = { # Up to *2
+				value = 1
+				add = {
+					value = scope:recipient.ai_greed
+					divide = 200		#prev 100
+				}
+			}
+		}
+		if = {
+			limit = { artifact_durability <= define:NInventory|ARTIFACT_LOW_DURABILITY }
+			divide = 3 # 1/3 for damaged artifacts
+		}
+		if = {
+			limit = { artifact_durability <= define:NInventory|ARTIFACT_VERY_LOW_DURABILITY }
+			divide = 3 # 1/3 for very damaged artifacts
+		}
+		if = {
+			limit = { can_be_claimed_by = scope:recipient }
+			multiply = 1.5 # 3/2 for claimed artifacts
+		}
+		if = {
+			limit = { scope:recipient.liege = scope:actor }
+			divide = 1.33 # 3/4 for vassals
+		}
+		floor = yes
+		if = {
+			limit = { scope:recipient = scope:actor.faith.religious_head }
+			divide = 2 # 1/2 for religious heads
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_variable = banner_house
+						NOT = { var:banner_house = scope:recipient.house }
+					}
+					AND = {
+						has_variable = banner_dynasty
+						NOT = { var:banner_dynasty = scope:recipient.dynasty }
+					}
+				}
+			}
+			subtract = 100 # 1/10 for useless banners
+			min = 0
+		}
+		else_if = {
+			limit = {
+				scope:recipient = {
+					NOR = {
+						can_equip_artifact = scope:target
+						can_benefit_from_artifact = scope:target
+					}
+				}
+			}
+			divide = 10 # 1/10 for useless artifacts
+		}
+		else_if = {
+			limit = {
+				scope:recipient = {
+					OR = {
+						NOT = { can_equip_artifact = scope:target }
+						NOT = { can_benefit_from_artifact = scope:target }
+					}
+				}
+			}
+			divide = 5 # 1/5 for unfit artifacts
+		}
+		else = { min = 5 }
+	}
+	max = 100	#prev 150
+}
+
 #FOR DIVORCE
 divorce_cost = {
 	value = 750		#prev 100
@@ -352,10 +443,21 @@ divorce_cost = {
 				}
 			}
 		}
-		add = -700
+		add = -600
+	}
+	if = {
+		limit = { scope:actor.faith ?= { has_doctrine_parameter = divorce_allowed_cheaper_divorce } }
+		multiply = 2
+		divide = 3
 	}
 }
 
 
 
 death_chance_starts_health = 2.75	#prev 3
+
+#This is from 00_invasion_values.txt but im not going to create the file for this one line
+almohad_appearance_base_chance = 5	#prev 1
+
+#This is from 00_bastardy_values.txt but i doubt its gonna change any time soon and idc for the rest of it soooo
+bastard_legitimization_prestige_cost = 350	#prev 150

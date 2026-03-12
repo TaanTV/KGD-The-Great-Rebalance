@@ -1,22 +1,16 @@
 ﻿#Scripted Modifiers used for buildings
 
 ai_general_building_modifier = {
-	#modifier = {
-	#	add = -2
-	#	NOT = {
-	#		scope:holder.capital_province = this
-	#	}
-	#}
 	#ADDED - instead lets try to encourage capital
 	modifier = {
-		add = 1
+		add = 4
 		scope:holder.capital_province = this
 	}
 	modifier = { # No time, must conquer!
 		add = -1000
 		scope:holder = {
-			ai_has_conqueror_personality = yes
 			gold <= conqueror_safe_spending_gold
+			has_variable = conqueror
 		}
 	}
 }
@@ -28,7 +22,10 @@ ai_tier_1_economical_building_preference_modifier = {
 	modifier = { # Economy boom AI's like economy buildings
 		add = 5
 		scope:holder = {
-			ai_has_economical_boom_personality = yes
+			OR = {
+				ai_has_economical_boom_personality = yes
+				has_character_flag = ai_desire_economy_buildings
+			}
 		}
 	}
 	modifier = {
@@ -47,40 +44,8 @@ ai_tier_1_economical_building_preference_modifier = {
 	}
 }
 
-## Cultural Modifiers
-#culture_likely_to_fortify_modifier = {
-#	modifier = {
-#		factor = 5
-#		scope:holder.culture = { has_cultural_parameter = ai_more_likely_to_fortify }
-#	}
-#	modifier = {
-#		add = -10
-#		free_building_slots <= 2
-#		scope:holder == scope:county.holder
-#		NOR = {
-#			has_building_or_higher = regimental_grounds_01
-#			has_building_or_higher = military_camps_01
-#			has_building_or_higher = stables_01
-#			has_building_or_higher = barracks_01
-#		}
-#	}
-#	modifier = {
-#		add = -2000
-#		free_building_slots <= 1
-#		scope:holder == scope:county.holder
-#		NOR = {
-#			has_building_or_higher = regimental_grounds_01
-#			has_building_or_higher = military_camps_01
-#			has_building_or_higher = stables_01
-#			has_building_or_higher = barracks_01
-#		}
-#	}
-#}
-
-
-
-
-
+## Cultural Modifiers - this one is not needed anymore.
+#culture_likely_to_fortify_modifier
 
 ai_skirmisher_modifier = {
 	modifier = {
@@ -91,16 +56,12 @@ ai_skirmisher_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_baltic
+					has_cultural_pillar = heritage_ugro_permian
+					has_cultural_pillar = heritage_balto_finnic
 					culture_has_skirmisher_maa = yes
-				}
-				culture = {
-					OR = {
-						has_cultural_pillar = heritage_baltic
-						has_cultural_pillar = heritage_ugro_permian
-						has_cultural_pillar = heritage_balto_finnic
-					}
 				}
 			}
 		}
@@ -148,20 +109,16 @@ ai_archer_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_west_germanic
+					has_cultural_pillar = heritage_brythonic
+					has_cultural_pillar = heritage_east_african
+					has_cultural_pillar = heritage_indo_aryan
+					has_cultural_pillar = heritage_dravidian
+					has_cultural_pillar = heritage_burman
+					has_cultural_pillar = heritage_chinese
 					culture_has_archer_maa = yes
-				}
-				culture = {
-					OR = {
-						has_cultural_pillar = heritage_west_germanic
-						has_cultural_pillar = heritage_brythonic
-						has_cultural_pillar = heritage_east_african
-						has_cultural_pillar = heritage_indo_aryan
-						has_cultural_pillar = heritage_dravidian
-						has_cultural_pillar = heritage_burman
-						has_cultural_pillar = heritage_chinese
-					}
 				}
 			}
 		}
@@ -203,17 +160,13 @@ ai_heavy_infantry_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_central_germanic
+					has_cultural_pillar = heritage_north_germanic
+					has_cultural_pillar = heritage_west_germanic
+					has_cultural_pillar = heritage_east_slavic
 					culture_has_heavy_infantry_maa = yes
-				}
-				culture = {
-					OR = {
-						has_cultural_pillar = heritage_central_germanic
-						has_cultural_pillar = heritage_north_germanic
-						has_cultural_pillar = heritage_west_germanic
-						has_cultural_pillar = heritage_east_slavic
-					}
 				}
 			}
 		}
@@ -230,18 +183,18 @@ ai_heavy_infantry_modifier = {
 	#}
 	modifier = { # If the holder doesn't care for the MaA type
 		add = dislikes_maa_value
+		#ADDED - neva.
+		always = no
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			#OR = {
-			#	number_maa_regiments_of_base_type = {
-			#		type = heavy_infantry
-			#		value <= 0
-			#	}
-			#	culture = { has_cultural_pillar = heritage_central_germanic }
-			#	culture = { has_cultural_pillar = heritage_latin }
-			#}
-			#ADDED
-			always = no
+			OR = {
+				number_maa_regiments_of_base_type = {
+					type = heavy_infantry
+					value <= 0
+				}
+				culture = { has_cultural_pillar = heritage_central_germanic }
+				culture = { has_cultural_pillar = heritage_latin }
+			}
 		}
 	}
 }
@@ -255,12 +208,12 @@ ai_pikemen_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_central_germanic
+					has_cultural_pillar = heritage_latin
 					culture_has_pikemen_maa = yes
 				}
-				culture = { has_cultural_pillar = heritage_central_germanic }
-				culture = { has_cultural_pillar = heritage_latin }
 			}
 		}
 	}
@@ -276,6 +229,8 @@ ai_pikemen_modifier = {
 	#}
 	modifier = { # If the holder doesn't care for the MaA type
 		add = dislikes_maa_value
+		#ADDED - neva.
+		always = no
 		scope:holder = {
 			highest_held_title_tier >= tier_county
 			#OR = {
@@ -284,8 +239,6 @@ ai_pikemen_modifier = {
 			#		value <= 0
 			#	}
 			#}
-			#ADDED
-			always = no
 		}
 	}
 }
@@ -299,21 +252,17 @@ ai_light_cavalry_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_arabic
+					has_cultural_pillar = heritage_iranian
+					has_cultural_pillar = heritage_berber
+					has_cultural_pillar = heritage_iberian
+					has_cultural_pillar = heritage_indo_aryan
 					culture_has_light_cavalry_maa = yes
-				}
-				culture = {
-					OR = {
-						has_cultural_pillar = heritage_arabic
-						has_cultural_pillar = heritage_iranian
-						has_cultural_pillar = heritage_berber
-						has_cultural_pillar = heritage_iberian
-						has_cultural_pillar = heritage_indo_aryan
-						#ADDED
-						has_cultural_pillar = heritage_turkic
-						has_cultural_pillar = heritage_mongolic
-					}
+					#ADDED - the next 2
+					has_cultural_pillar = heritage_turkic
+					has_cultural_pillar = heritage_mongolic
 				}
 			}
 		}
@@ -345,11 +294,15 @@ ai_light_cavalry_modifier = {
 				#	type = light_cavalry
 				#	value <= 0
 				#}
-				culture = { has_cultural_pillar = heritage_central_germanic }
-				culture = { has_cultural_pillar = heritage_tibetan }
-				culture = { has_cultural_pillar = heritage_baltic }
-				culture = { has_cultural_pillar = heritage_burman }
-				culture = { has_cultural_pillar = heritage_somalian }
+				culture = {
+					OR = {
+						has_cultural_pillar = heritage_central_germanic
+						has_cultural_pillar = heritage_tibetan
+						has_cultural_pillar = heritage_baltic
+						has_cultural_pillar = heritage_burman
+						has_cultural_pillar = heritage_somalian
+					}
+				}
 			}
 			#ADDED
 			NOT = { culture = {	culture_has_light_cavalry_maa = yes } }
@@ -366,19 +319,17 @@ ai_heavy_cavalry_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = {
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_central_germanic
+					has_cultural_pillar = heritage_frankish
+					has_cultural_pillar = heritage_indo_aryan
 					culture_has_heavy_cavalry_maa = yes
+					#ADDED
+					has_cultural_pillar = heritage_iranian
+					has_cultural_pillar = heritage_turkic
+					has_cultural_pillar = heritage_mongolic
 				}
-				culture = { has_cultural_pillar = heritage_central_germanic }
-				culture = { has_cultural_pillar = heritage_frankish }
-				culture = { has_cultural_pillar = heritage_indo_aryan }
-				#ADDED
-				culture = { has_cultural_pillar = heritage_iranian }
-				
-				# Steppe cultures
-				culture = { has_cultural_pillar = heritage_turkic }
-				culture = { has_cultural_pillar = heritage_mongolic }
 			}
 		}
 	}
@@ -525,10 +476,12 @@ ai_elephants_modifier = {
 		add = likes_maa_value
 		scope:holder = {
 			highest_held_title_tier >= tier_county
-			OR = {
-				culture = { has_cultural_pillar = heritage_dravidian }
-				culture = { has_cultural_pillar = heritage_indo_aryan }
-				culture = { has_cultural_pillar = heritage_burman }
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_dravidian
+					has_cultural_pillar = heritage_indo_aryan
+					has_cultural_pillar = heritage_burman
+				}
 			}
 		}
 	}
@@ -609,7 +562,7 @@ ai_stacking_bonus_stables_modifier = {
 			OR = {
 				max_number_maa_soldiers_of_base_type = {
 					type = heavy_cavalry
-					value >= 30		#prev 50
+					value >= 40		#prev 50
 				}
 				max_number_maa_soldiers_of_base_type = {
 					type = light_cavalry
@@ -753,7 +706,7 @@ ai_stacking_bonus_elephant_pens_modifier = {
 		scope:holder = {
 			max_number_maa_soldiers_of_base_type = {
 				type = elephant_cavalry
-				value >= 30			#prev 50
+				value >= 20			#prev 50
 			}
 		}
 	}

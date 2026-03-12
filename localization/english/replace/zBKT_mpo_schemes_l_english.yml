@@ -1,0 +1,3 @@
+﻿l_english:
+ steal_herd_interaction.tt.low: "You attempt to smuggle a few horses from [recipient.GetShortUINamePossessive] camp\n\n[scheme|E] Success Chance: #p +15%#!"
+ steal_herd_interaction.tt.high: "You attempt to steal a great deal of [recipient.GetShortUINamePossessive] [herd|E]\n\n[scheme|E] Success Chance: #n -15%#!"

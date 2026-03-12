@@ -8,6 +8,7 @@ on_birth_child = {
 	on_actions = {
 		delay = { days = 1 }
 		bkt_on_birth_child_nomadic_philosophy
+		bkt_on_birth_child_seclusion
 	}
 }
 
@@ -31,6 +32,34 @@ bkt_on_birth_child_nomadic_philosophy = {
 				}
 			}
 			remove_trait = nomadic_philosophy
+		}
+	}
+}
+
+bkt_on_birth_child_seclusion = {
+	trigger = {
+		OR = {
+			scope:mother ?= { has_character_modifier = isolating_modifier }
+			scope:father ?= { has_character_modifier = isolating_modifier }
+		}
+	}
+	effect = {
+		liege ?= {
+			if = {
+				limit = { has_variable_list = isolating_relatives }
+				add_to_variable_list = {
+					name = isolating_relatives
+					target = prev
+				}
+			}
+		}
+		add_character_flag = {
+			flag = blocked_from_leaving
+			years = 5
+		}
+		add_character_modifier = {
+			modifier = isolating_modifier
+			years = 5
 		}
 	}
 }

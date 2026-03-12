@@ -1,4 +1,313 @@
-﻿tradition_maritime_way_of_life = {
+﻿tradition_tgp_bushido = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = asian
+		4 = samurai.dds
+	}
+
+	is_shown = {
+		culture_head = {
+			top_liege = { has_character_flag = shogun_flag }
+			has_government = japan_feudal_government
+		}
+	}
+	can_pick = {
+		culture_head = {
+			top_liege = { has_character_flag = shogun_flag }
+			has_government = japan_feudal_government
+		}
+		# Mutually exclusive with Imperial Peace and other Horse Archer MaA
+		NOR = {
+			culture_tradition:tradition_horse_lords = { is_in_list = traits }
+			culture_tradition:tradition_devoted_horsemanship = { is_in_list = traits }
+			culture_tradition:tradition_tgp_imperial_peace = { is_in_list = traits }
+			culture_tradition:tradition_tgp_imperial_peace = { is_in_list = traits }
+		}
+	}
+
+	parameters = {
+		unlock_mounted_samurai_units = yes
+		unlock_infantry_samurai_units = yes
+		must_pledge_loyalty_to_liege = yes
+		honorable_trait_bonuses = yes
+		prowess_from_martial_education = yes
+		stalwart_leader_non_admin_duels = yes
+		non_admin_close_family_non_martial_gender_knights_in_defensive_wars = yes
+	}
+
+	character_modifier = {
+		character_opinion_from_high_prowess_add = 1		#prev 2
+		character_opinion_from_low_prowess_add = -1.5	#prev -1
+	}
+
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_double_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = 1000 # AI should always try to pick this when they can
+	}
+}
+
+tradition_tgp_rice_cultivators = {
+	category = realm
+
+	layers = {
+		0 = steward
+		1 = asian
+		4 = svamp.dds
+	}
+	
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+		NOT = {
+			culture_tradition:tradition_intensive_farming = { is_in_list = traits }
+		}
+	}
+	
+	can_pick = {
+		custom_tooltip = {
+			text = culture_in_terraced_hills_terrain_desc
+			any_culture_county = {
+				any_county_province = {
+					terrain = terraced_hills
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		rice_cultivators_next_level_paddy_fields = yes
+		rice_cultivators_can_construct_paddy_fields_in_hills_and_jungle = yes
+	}
+
+	county_modifier = {
+		terraced_hills_development_growth_factor = 0.3
+		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
+		terraced_hills_levy_size = 0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					culture_pillar:ethos_bellicose = { is_in_list = traits }
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = culture_not_bellicose
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							count >= 3
+							any_county_province = {
+								terrain = terraced_hills
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_in_terraced_hills_terrain_count_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							culture = scope:character.culture
+							any_county_province = {
+								terrain = terraced_hills
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				scope:character = {
+					government_has_flag = government_is_tribal
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+tradition_tgp_inward_perfection = {
+	category = regional
+
+	layers = {
+		0 = diplo
+		1 = asian
+		4 = instrument.dds
+	}
+
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+		has_east_asian_heritage_pillar_trigger = yes
+	}
+	
+	can_pick = {
+		# Mutually exclusive with other Isolationist
+		NOR = {
+			culture_tradition:tradition_isolationist = { is_in_list = traits }
+			culture_tradition:tradition_cultural_primacy = { is_in_list = traits }
+		}
+	}
+
+	parameters = {
+		reduced_marriage_acceptance_outside_culture = yes
+		reduced_marriage_acceptance_distant_realms = yes
+		ai_doesnt_marry_outside_culture = yes
+		harder_to_hybridize = yes
+		may_challenge_to_board_games = yes
+		#ADDED
+		ai_less_likely_to_have_foreign_court_language = yes
+	}
+
+	culture_modifier = {
+		culture_innovation_progress_chance_from_spread_add = -20
+	}
+
+	character_modifier = {
+		character_innovation_progress_chance_from_fascination_add = 10
+		monthly_lifestyle_xp_gain_mult = 0.05
+		diplomatic_range_mult = -0.25
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_spiritual_communal_or_stoic_desc
+				}
+			}
+		}
+	}
+	
+	ai_will_do = {
+		value = 50
+	}
+}
+
+tradition_cultural_primacy = {
+	category = regional
+
+	layers = {
+		0 = diplo
+		1 = asian
+		4 = instrument.dds
+	}
+
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+		scope:character = {
+			OR = {
+				culture = { has_cultural_pillar = heritage_chinese }
+				has_title = title:h_china #Always available to new emperors
+			}
+		}
+	}
+	
+	can_pick = {
+		# Mutually exclusive with other Isolationist
+		NOR = {
+			culture_tradition:tradition_isolationist = { is_in_list = traits }
+			culture_tradition:tradition_tgp_inward_perfection = { is_in_list = traits }
+		}
+	}
+
+	parameters = {
+		innovation_from_learning_traits = yes
+		courtiers_less_likely_to_leave_same_culture_court = yes
+
+		reduced_marriage_acceptance_outside_culture = yes
+		reduced_marriage_acceptance_distant_realms = yes
+		ai_doesnt_marry_outside_culture = yes
+		harder_to_hybridize = yes
+		may_challenge_to_board_games = yes
+		#ADDED
+		ai_less_likely_to_have_foreign_court_language = yes
+	}
+
+	character_modifier = {
+		monthly_piety_gain_per_legitimacy_level_add = 0.15
+		court_grandeur_baseline_add = 5
+
+		monthly_lifestyle_xp_gain_mult = 0.05
+		opinion_of_different_culture = -15
+		different_culture_opinion = -15
+	}
+
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_spiritual_communal_or_stoic_desc
+				}
+			}
+		}
+	}
+	
+	ai_will_do = {
+		value = 50
+	}
+}
+
+tradition_maritime_way_of_life = {
 	category = regional
 
 	layers = {
@@ -140,3 +449,482 @@
 	}
 }
 
+tradition_tgp_hydraulic_builders = {
+	category = regional
+
+	layers = {
+		0 = steward
+		1 = asian
+		4 = wat.dds
+	}
+	
+	can_pick = {
+		scope:character = { government_has_flag = government_is_mandala }
+	}
+	
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+		scope:character = { government_has_flag = government_is_mandala }
+		OR = {
+			has_cultural_pillar = heritage_mon_khmer
+			scope:character = {
+				any_sub_realm_county = {
+					culture = {	has_cultural_pillar = heritage_mon_khmer }
+				}
+			}
+		}
+	}
+
+	parameters = {
+		sacred_pool_additional_bonuses = yes
+		may_build_sacred_pools_ahead_of_time = yes
+		unlocks_waterworks_buildings = yes
+		waterworks_additional_bonuses = yes
+	}
+	county_modifier = {
+		wetlands_development_growth_factor = 0.4		#prev 0.25
+		wetlands_construction_gold_cost = -0.1
+		terraced_hills_development_growth_factor = 0.1
+		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_courtly_or_spiritual_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_tgp_hydraulic_builders }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							count >= 2
+							culture = scope:character.culture
+							any_county_province = {
+								has_holding_type = temple_citadel_holding
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+tradition_nudists = {
+	category = societal
+
+	layers = {
+		0 = diplo
+		1 = asian
+		4 = speech.dds		#prev jungle.dds
+	}
+	
+	parameters = {
+		naked_culture_active = yes
+		lustful_trait_less_common = yes
+	}
+	county_modifier = {
+		jungle_development_growth_factor = 0.05	#prev 0.2
+		#jungle_supply_limit_mult = 1
+		#jungle_provisions_use_mult = -0.75
+		jungle_barter_goods_mult = 0.05			#prev 0.15
+	}
+
+	character_modifier = {
+		stress_gain_mult = -0.1
+		#jungle_advantage = 5
+		#jungle_travel_danger = jungle_medium_danger_reduction
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				#ADDED
+				multiply = 1.5
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						any_in_list = { list = traits this = flag:ethos_courtly }
+						any_in_list = { list = traits this = flag:ethos_communal }
+						any_in_list = { list = traits this = flag:ethos_spiritual }
+					}
+					#ADDED - fix that
+					NOR = {
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_courtly_communal_or_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					trigger_if = {
+						limit = {
+							scope:character = {
+								is_ai = no
+							}
+						}
+						NOT = {
+							any_ruler = {
+								count >= 3
+								culture = prev
+								primary_title.tier >= tier_county
+								OR = {
+									has_completed_inspiration = yes
+									any_courtier_or_guest = {
+										OR = {
+											has_completed_inspiration = yes
+											exists = inspiration
+										}
+									}
+								}
+							}
+						}
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = has_courtier_or_guest_with_inspiration_desc
+				}
+			}
+
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+
+	ai_will_do = {
+		value = 0
+	}
+}
+
+
+tradition_tgp_mountain_island = {
+	category = regional
+
+	layers = {
+		0 = steward
+		1 = asian
+		4 = mountain.dds
+	}
+	
+	is_shown = {
+		NOR = { #This is replaced by Himalayan Settlers, Mountaineer Ruralism and Mountain Herding. 
+			has_cultural_tradition = tradition_himalayan_settlers
+			has_cultural_tradition = tradition_mountaineer_ruralism
+			has_cultural_tradition = tradition_mountain_homes
+			has_cultural_pillar = heritage_arabic
+			has_cultural_pillar = heritage_berber
+			has_cultural_pillar = heritage_tibetan
+			has_cultural_pillar = heritage_qiangic
+			has_cultural_pillar = heritage_west_slavic
+			any_culture_county = {
+				title_province = {
+					geographical_region = world_himalaya
+				}
+			}
+		}
+		any_culture_county = {
+			title_province = {
+				geographical_region = world_asia_japan
+			}
+		}
+	}
+	can_pick = {
+		custom_description = {
+			text = culture_in_mountains_desc
+			any_culture_county = {
+				any_county_province = {
+					OR = {
+						terrain = mountains
+						terrain = desert_mountains
+					}
+				}
+			}
+		}
+		# Mutually exclusive with other Mountaineers
+		NOT = {
+			culture_tradition:tradition_mountaineers = { is_in_list = traits }
+		}
+	}
+
+	parameters = {
+		prestige_gain_on_building_complete_in_mountains_forest = yes
+	}
+	character_modifier = {
+		coastal_sea_travel_danger = medium_sea_danger_reduction
+		mountains_travel_danger = mountains_medium_danger_reduction
+		hills_travel_danger = hills_medium_danger_reduction
+		forest_travel_danger = forest_medium_danger_reduction
+	}
+	county_modifier = {
+		hills_development_growth_factor = 0.25				#prev 0.05
+		mountains_development_growth_factor = 0.4			#prev 0.2
+	}
+	province_modifier = {
+		mountains_construction_gold_cost = -0.1
+		mountains_holding_construction_gold_cost = -0.1
+		forest_construction_gold_cost = -0.1
+		forest_holding_construction_gold_cost = -0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					culture_pillar:ethos_bellicose = { is_in_list = traits }
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = culture_not_bellicose
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							percent >= 0.3
+							any_county_province = {
+								OR = {
+									terrain = mountains
+									terrain = desert_mountains
+								}
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = mountain_percentage_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_tgp_mountain_island }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 100
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							percent >= 0.2
+							culture = scope:character.culture
+							any_county_province = { terrain = mountains }
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		else_if = {
+			limit = {
+				any_culture_county = {
+					percent >= 0.6
+					any_county_province = { terrain = mountains }
+				}
+			}
+			multiply = 8
+		}
+	}
+}
+tradition_intensive_farming = {
+	category = regional
+
+	layers = {
+		0 = steward
+		1 = asian
+		4 = svamp.dds
+	}
+
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+		OR = {
+			has_cultural_pillar = heritage_chinese
+			any_parent_culture_or_above = {
+				has_cultural_pillar = heritage_chinese
+			}
+		}
+		NOR = {
+			culture_tradition:tradition_agrarian = { is_in_list = traits }
+			culture_tradition:tradition_tgp_rice_cultivators = { is_in_list = traits }
+		}
+	}
+	
+	can_pick = {
+		custom_tooltip = {
+			text = culture_in_farmlands_or_floodplains_terrain_desc
+			any_culture_county = {
+				county_has_province_with_terrain = {
+					terrain = farmlands
+					terrain = floodplains
+				}
+			}
+		}
+		custom_tooltip = {
+			text = cultrad_not_nomadic_government_type
+			scope:character = {
+				NOT = {
+					government_has_flag = government_is_nomadic
+				}
+			}
+		}
+	}
+	
+	parameters = {
+		content_trait_more_common = yes
+		martial_education_worse_outcomes = yes
+		hard_working_traits_more_valued = yes
+		rice_cultivators_next_level_paddy_fields = yes
+	}
+	character_modifier = {
+		men_at_arms_recruitment_cost = 0.25
+		levy_maintenance = 0.10				#prev 0.025
+	}
+	county_modifier = {
+		farmlands_development_growth_factor = 0.3
+		farmlands_tax_mult = 0.1			#prev 0.05
+		farmlands_levy_size = 0.1
+		terraced_hills_development_growth_factor = 0.3
+		terraced_hills_tax_mult = 0.05
+		terraced_hills_levy_size = 0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					culture_pillar:ethos_bellicose = { is_in_list = traits }
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = culture_not_bellicose
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_culture_county = {
+							count >= 5
+							county_has_province_with_terrain = {
+								terrain = farmlands
+								terrain = floodplains
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = culture_in_farmlands_or_floodplains_terrain_count_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_agrarian }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							count >= 2
+							culture = scope:character.culture
+							county_has_province_with_terrain = {
+								terrain = farmlands
+								terrain = floodplains
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				scope:character = {
+					government_has_flag = government_is_tribal
+				}
+			}
+			multiply = 0
+		}
+	}
+}

@@ -76,7 +76,7 @@ demand_admin_acceptance_modifier = {
 			government_allows = administrative
 		}
 		desc = is_already_administrative
-		add = 25
+		add = 35	#prev 25
 	}
 
 

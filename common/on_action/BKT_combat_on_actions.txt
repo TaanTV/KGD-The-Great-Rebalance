@@ -1,0 +1,66 @@
+﻿# Root = Winning combat side
+# scope:wipe - Was this a wipe?
+on_combat_end_winner = {
+	on_actions = {
+		BKT_commander_value_tracker
+	}
+}
+
+BKT_commander_value_tracker = {
+	trigger = {
+		always = no		#maybe one day...
+	}
+	effect = {
+		if = {
+			limit = {
+				exists = side_commander 									#the obvious
+				NOT = { side_commander.liege ?= side_commander }			#you arent commanding yourself
+				side_commander.liege.highest_held_title_tier >= tier_duchy	#not much point tracking it for counts
+				combat = { warscore_value >= 10 }							#it's a combat of at least some kind of value 
+				enemy_side.side_max_army_size >= { value = side_max_army_size multiply = 0.5 }	#not a total blowout
+			}
+			side_commander = { save_temporary_scope_as = commander }
+			side_commander.liege ?= {
+				#This is kind of jank but whatchagonna do
+				if = {
+					limit = {
+						is_target_in_variable_list = { name = valuable_commanders_tier_3 target = scope:commander }
+					}
+					#nothing.
+				}
+				if = {
+					limit = {
+						is_target_in_variable_list = { name = valuable_commanders_tier_2 target = scope:commander }
+					}
+					add_to_variable_list = {
+						name = valuable_commanders_tier_3
+						target = scope:commander
+					}
+					remove_list_variable = {
+						name = valuable_commanders_tier_2
+						target = scope:commander
+					}
+				}
+				else_if = {
+					limit = {
+						is_target_in_variable_list = { name = valuable_commanders_tier_1 target = scope:commander }
+					}
+					add_to_variable_list = {
+						name = valuable_commanders_tier_2
+						target = scope:commander
+					}
+					remove_list_variable = {
+						name = valuable_commanders_tier_1
+						target = scope:commander
+					}
+				}
+				else = {
+					add_to_variable_list = {
+						name = valuable_commanders_tier_1
+						target = scope:commander
+					}
+				}
+			}
+		}
+	}
+}

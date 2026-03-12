@@ -1,265 +1,4 @@
 ﻿
-# Steal Herd
-steal_herd_interaction = {
-	icon = icon_scheme_steal_herd
-	interface_priority = 90
-	common_interaction = yes
-	category = interaction_category_hostile
-
-	send_name = START_SCHEME
-
-	scheme = steal_herd
-	ignores_pending_interaction_block = yes
-	
-	#ADDED
-	cooldown = { years = 3 }
-
-	is_shown = {
-		scope:recipient != scope:actor
-		scope:actor = {
-			is_landed = yes
-			is_adult = yes
-			is_imprisoned = no
-			government_has_flag = government_is_nomadic
-			in_diplomatic_range = scope:recipient
-			trigger_if = {
-				limit = {
-					is_ai = yes
-				}
-				NOR = {
-					is_tributary_of_suzerain_or_above = scope:recipient
-					is_vassal_or_below_of = scope:recipient
-					scope:recipient = {
-						is_ai = no
-						any_targeting_scheme = {
-							scheme_type = steal_herd
-						}
-					}
-				}
-			}
-		}
-		scope:recipient = {
-			is_landed = yes
-			is_adult = yes
-			government_has_flag = government_is_nomadic
-			highest_held_title_tier >= tier_county
-		}
-	}
-
-	is_valid_showing_failures_only = {
-		scope:actor = {
-			can_start_scheme = {
-				type = steal_herd
-				target_character = scope:recipient
-			}
-		}
-		scope:recipient = { NOT = { has_strong_hook = scope:actor } }
-		trigger_if = {
-			limit = { scope:actor = { has_variable = no_scheming_allowed_var } }
-			custom_tooltip = {
-				text = no_scheming_allowed_var_tt
-				scope:actor.var:no_scheming_allowed_var != scope:recipient
-			}
-		}
-	}
-
-	desc = {
-		triggered_desc = {
-			trigger = {
-				scope:actor = {
-					can_start_scheme = {
-						type = steal_herd
-						target_character = scope:recipient
-					}
-				}
-			}
-			desc = scheme_interaction_tt_steal_herd_approved
-		}
-	}
-
-	on_accept = {
-		scope:actor = {
-			stress_impact = {
-				compassionate = minor_stress_impact_gain
-				honest = minor_stress_impact_gain
-				craven = minor_stress_impact_gain
-				content = minor_stress_impact_gain
-			}
-			send_interface_toast = {
-				type = event_toast_effect_neutral
-				title = steal_herd_interaction_notification
-
-				left_icon = scope:actor
-				right_icon = scope:recipient
-
-				begin_scheme_basic_effect = {
-					SCHEME_TYPE = steal_herd
-					TARGET_TYPE = target_character
-					TARGET_SCOPE = scope:recipient
-				}
-
-				if = {
-					limit = {
-						domicile ?= { herd >= ninety_percent_herd_value }
-					}
-					custom_tooltip = steal_herd_interaction_tt.warning
-				}
-				scope:new_scheme ?= {
-					if = {
-						limit = {
-							scope:steal_herd_low ?= yes
-						}
-						set_variable = steal_herd_low
-					}
-					else_if = {
-						limit = {
-							scope:steal_herd_normal ?= yes
-						}
-						set_variable = steal_herd_normal
-					}
-					else_if = {
-						limit = {
-							scope:steal_herd_high ?= yes
-						}
-						set_variable = steal_herd_high
-					}
-				}
-			}
-		}
-	}
-
-	ai_potential = {
-		prestige >= medium_prestige_value # In case they fail
-		trigger_if = {
-			limit = {
-				NOT = {
-					domicile ?= {
-						has_domicile_building_or_higher = steal_herd_yurt_01
-					}
-				}
-			}
-			ai_honor <= 50
-		}
-		NOR = {
-			scheme_generic_ai_blocker_trigger = yes
-			primary_title = {
-				is_mercenary_company = yes
-			}
-		}
-		prestige >= major_prestige_value 	#prev medium_prestige_value # In case they fail
-	}
-
-	auto_accept = yes
-	
-	ai_will_do = {
-		base = -30
-
-		modifier = {
-			add = 20
-			domicile ?= { herd <= twenty_percent_herd_value }
-		}
-
-		modifier = {
-			add = 20
-			domicile ?= { herd <= sixty_percent_herd_value }
-		}
-		
-		modifier = {
-			add = {
-				value = intrigue
-				multiply = 3
-			}
-		}
-		
-		modifier = {
-			add = {
-				value = ai_greed
-				multiply = -1
-			}
-		}
-		modifier = {
-			add = {
-				value = ai_honor
-				multiply = -0.25
-			}
-		}
-		modifier = {
-			scope:actor = {
-				has_trait = schemer
-			}
-			add = 60
-		}
-		modifier = {
-			scope:actor = {
-				has_relation_rival = scope:recipient
-			}
-			add = 60
-		}
-		modifier = {
-			scope:actor = {
-				has_relation_nemesis = scope:recipient
-			}
-			add = 150
-		}
-		modifier = {
-			scope:actor = {
-				opinion = {
-					target = scope:recipient
-					value >= low_positive_opinion
-				}
-				ai_greed <= high_positive_ai_value
-			}
-			factor = 0
-		}
-		modifier = {
-			scope:recipient = {
-				OR = {
-					has_relation_friend = scope:actor
-					has_relation_lover = scope:actor
-					is_obedient_to = scope:actor
-				}
-			}
-			factor = 0
-		}
-		start_hostile_scheme_ai_base_modifiers = yes # At the end so Cowed can block it completely
-	}
-
-	ai_targets = {
-		ai_recipients = scripted_relations
-		ai_recipients = neighboring_rulers
-		ai_recipients = peer_vassals
-	}
-
-	# Options
-	options_heading = schemes.t.herd_amount
-	send_options_exclusive = yes
-	## Steal a little herd
-	send_option = {
-		flag = steal_herd_low
-		current_description = steal_herd_interaction.tt.low
-	}
-	## Steal a moderate amount of herd
-	send_option = {
-		flag = steal_herd_normal
-		current_description = steal_herd_interaction.tt.normal
-	}
-	## Steal a lot of herd
-	send_option = {
-		flag = steal_herd_high
-		current_description = steal_herd_interaction.tt.high
-	}
-
-	ai_frequency_by_tier = {
-		barony = 0
-		county = 72
-		duchy = 36
-		kingdom = 36
-		empire = 36
-		hegemony = 36
-	}
-}
-
-
 ### Demand Obedience
 mpo_demand_obedience_interaction = {
 	category = interaction_category_vassal
@@ -551,6 +290,11 @@ mpo_demand_obedience_interaction = {
 					}
 				}
 			}
+			#Unop Use the hook on the recipient
+			if = {
+				limit = { scope:hook = yes }
+				use_hook = scope:recipient
+			}
 		}
 	}
 }
@@ -634,6 +378,11 @@ mpo_vassal_to_tributary_interaction = {
 			}
 		}
 		scope:actor = {
+			#Unop Use the hook on the recipient
+			if = {
+				limit = { scope:hook = yes }
+				use_hook = scope:recipient
+			}
 			trigger_event = mpo_interactions_events.0010
 		}
 	}
@@ -792,6 +541,13 @@ mpo_negotiate_obedience_interaction = {
 				}
 				multiply = 0.5
 			}
+			#ADDED
+			if = {
+				limit = { 
+					scope:hook ?= yes
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -869,6 +625,24 @@ mpo_negotiate_obedience_interaction = {
 	}
 
 	send_options_exclusive = no
+	
+	#ADDED
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+	
+	#ADDED
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook = yes
+			scope:actor = { has_strong_hook = scope:recipient }
+		}
+		
+	}
 
 	ai_accept = {
 		base = -60		#prev -50

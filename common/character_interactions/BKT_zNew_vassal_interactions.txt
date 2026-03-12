@@ -21,6 +21,7 @@ request_council_powerful_vassal_interaction = {
 	ai_max_reply_days = 9
 	can_send_despite_rejection = yes
 	popup_on_receive = yes
+	pause_on_receive = yes
 	send_name = "SEND_REQUEST_COUNCIL"
 
 	greeting = positive
@@ -38,11 +39,11 @@ request_council_powerful_vassal_interaction = {
 		adult = yes
 	}
 	ai_frequency_by_tier = {
-		barony = 60
+		barony = 120
 		county = 36
 		duchy = 24
 		kingdom = 12
-		empire = 36
+		empire = 12
 		hegemony = 0
 	}
 
@@ -70,12 +71,13 @@ request_council_powerful_vassal_interaction = {
 			liege ?= scope:recipient
 			is_powerful_vassal = yes
 		}
-		#No tribes, i think
+		#No tribes, i think.... Actually, allow tribes, but only vs feudals.
 		scope:actor = { 
 			OR = {
 				government_has_flag = government_is_feudal
 				government_has_flag = government_is_republic
 				government_has_flag = government_is_clan
+				government_has_flag = government_is_tribal
 			}
 		}
 		scope:recipient = { 
@@ -94,7 +96,7 @@ request_council_powerful_vassal_interaction = {
 
 	is_valid_showing_failures_only = {
 		scope:actor = {
-			is_adult = yes
+			is_available_adult = yes
 			NOT = {
 				is_at_war_with = scope:recipient
 			}
@@ -179,6 +181,20 @@ request_council_powerful_vassal_interaction = {
 					left_icon = scope:actor
 					custom_tooltip = request_council.recipient.tt.duration
 				}
+				set_variable = {
+					name = request_council_powerful_vassal_interaction_cooldown
+					years = 1
+				}
+			}
+			if = {
+				limit = { is_ai = no NOT = { has_trait = arbitrary } }
+				stress_impact = {
+					greedy = miniscule_stress_impact_gain
+					arrogant = miniscule_stress_impact_gain
+				}
+			}
+			else = {
+				#custom_tooltip = request_council_powerful_vassal_interaction.stress_impact.arbitrary
 			}
 		}
 	}
@@ -188,13 +204,22 @@ request_council_powerful_vassal_interaction = {
 			progress_towards_rival_effect = {
 				REASON = rival_grave_insult
 				CHARACTER = scope:recipient
-				OPINION = -35
+				OPINION = -30
 			}
-			#add_opinion = {
-			#	target = scope:recipient
-			#	modifier = disappointed_opinion
-			#	opinion = -35
-			#}
+			if = {
+				limit = { is_powerful_vassal_of = scope:recipient }
+				scope:recipient = {
+					every_powerful_vassal = {
+						custom = custom.every_powerful_vassal
+						limit = { this != scope:actor }
+						add_opinion = {
+							target = scope:recipient
+							modifier = disappointed_opinion
+							opinion = -15
+						}
+					}
+				}
+			}
 			#And notify the vassal.
 			hidden_effect = {
 				send_interface_toast = {
@@ -267,18 +292,24 @@ request_council_powerful_vassal_interaction = {
 				limit = { has_legitimacy = yes }
 				add_legitimacy = miniscule_legitimacy_loss
 			}
-			if = { # If the liege is a player, put on a longer global cooldown to reduce potential spam
-				limit = { is_ai = no }
-				add_character_flag = {
-					flag = refused_council_request
-					years = 10
+			add_character_flag = {
+				flag = refused_council_request
+				years = 5
+			}
+			set_variable = {
+				name = request_council_powerful_vassal_interaction_cooldown
+				years = 1
+			}
+			if = {
+				limit = { is_ai = no NOT = { has_trait = arbitrary } }
+				stress_impact = {
+					generous = miniscule_stress_impact_gain
+					just = minor_stress_impact_gain
+					humble = miniscule_stress_impact_gain
 				}
 			}
-			else = { # But also dont nuke AI's legitimacy...
-				add_character_flag = {
-					flag = refused_council_request
-					years = 5
-				}
+			else = {
+				#custom_tooltip = request_council_powerful_vassal_interaction.stress_impact.arbitrary
 			}
 		}
 	}
@@ -292,11 +323,15 @@ request_council_powerful_vassal_interaction = {
 						can_be_chancellor_trigger = { COURT_OWNER = scope:recipient }
 					}
 					modifier = {
-						factor = diplomacy
+						add = diplomacy
 					}
 					modifier = {
 						trigger = { highest_skill = diplomacy }
-						factor = 15
+						factor = 10
+					}
+					modifier = {
+						trigger = { diplomacy < 8 }
+						factor = 0.5
 					}
 					scope:recipient.council_task:councillor_chancellor = {
 						save_scope_as = target
@@ -308,11 +343,15 @@ request_council_powerful_vassal_interaction = {
 						can_be_steward_trigger = { COURT_OWNER = scope:recipient }
 					}
 					modifier = {
-						factor = stewardship
+						add = stewardship
 					}
 					modifier = {
 						trigger = { highest_skill = stewardship }
-						factor = 15
+						factor = 10
+					}
+					modifier = {
+						trigger = { stewardship < 8 }
+						factor = 0.5
 					}
 					scope:recipient.council_task:councillor_steward = {
 						save_scope_as = target
@@ -324,11 +363,15 @@ request_council_powerful_vassal_interaction = {
 						can_be_marshal_trigger = { COURT_OWNER = scope:recipient }
 					}
 					modifier = {
-						factor = martial
+						add = martial
 					}
 					modifier = {
 						trigger = { highest_skill = martial }
-						factor = 15
+						factor = 10
+					}
+					modifier = {
+						trigger = { martial < 8 }
+						factor = 0.5
 					}
 					scope:recipient.council_task:councillor_marshal = {
 						save_scope_as = target
@@ -340,11 +383,11 @@ request_council_powerful_vassal_interaction = {
 						can_be_spymaster_trigger = { COURT_OWNER = scope:recipient }
 					}
 					modifier = {
-						factor = intrigue
+						add = intrigue
 					}
 					modifier = {
 						trigger = { highest_skill = intrigue }
-						factor = 15
+						factor = 10
 					}
 					scope:recipient.council_task:councillor_spymaster = {
 						save_scope_as = target
@@ -356,11 +399,15 @@ request_council_powerful_vassal_interaction = {
 						can_be_court_chaplain_trigger = { COURT_OWNER = scope:recipient }
 					}
 					modifier = {
-						factor = learning
+						add = learning
 					}
 					modifier = {
 						trigger = { highest_skill = learning }
-						factor = 15
+						factor = 10
+					}
+					modifier = {
+						trigger = { learning < 8 }
+						factor = 0.5
 					}
 					scope:recipient.council_task:councillor_court_chaplain = {
 						save_scope_as = target
@@ -397,6 +444,14 @@ request_council_powerful_vassal_interaction = {
 		modifier = {
 			factor = 2
 			ai_boldness >= very_high_positive_ai_value
+		}
+		modifier = {
+			factor = 1.5
+			liege.highest_held_title_tier = tier_kingdom
+		}
+		modifier = {
+			factor = 2
+			liege.highest_held_title_tier >= tier_empire
 		}
 
 		# Don't do it towards a good relation, unless very greedy
@@ -604,6 +659,467 @@ request_council_powerful_vassal_interaction = {
 			}
 			desc = AI_POWERFUL_VASSAL
 			add = 50
+		}
+	}
+}
+
+vassal_syphon_treasury_interaction = {		#diarch_syphon_treasury_interaction
+	category = interaction_category_vassal
+	icon = icon_gold
+	common_interaction = yes
+
+	desc = diarch_syphon_treasury_interaction_desc
+
+
+	interface_priority = 121
+
+	is_shown = {
+		# Not right away plz
+		years_from_game_start > 3
+		# The obvious.
+		scope:actor != scope:recipient
+		# You are a councillor
+		scope:actor = { 
+			exists = liege
+			is_councillor = yes 
+		}
+		# Make sure scope:recipient is suitable.
+		scope:recipient = {
+			this = scope:actor.liege
+			OR = {		#for starters
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+			}
+			#Basic sanity check
+			any_held_county = {
+				percent >= 0.8
+				OR = {
+					county_control > 10
+					AND = {
+						immune_to_county_corruption_trigger = no
+						county_corruption_modifier_count < 3	#lets not be too harsh here
+					}
+				}
+			}
+		}
+		NOT = { scope:actor = { is_diarch_of_target = scope:recipient } }
+	}
+	
+	is_valid_showing_failures_only = {
+		# Make sure scope:recipient is the liege.
+		custom_tooltip = {
+			text = custom_description.tt.must_target_liege
+			scope:recipient = scope:actor.liege
+		}
+		scope:actor = { is_available_adult = yes }
+		
+		# Must have selected an amount to embezzle.
+		#trigger_if = {
+		#	# AI won't exploit and need this exception, as they don't actually open the windows, so they'll be blocked from taking the interaction otherwise.
+		#	limit = {
+		#		scope:actor = { is_ai = no }
+		#	}
+		#		custom_tooltip = {
+		#		text = diarch_interactions.tt.must_embezzle_something
+		#		OR = {
+		#			scope:diarch_syphon_treasury_sum_small = yes
+		#			scope:diarch_syphon_treasury_sum_medium = yes
+		#			scope:diarch_syphon_treasury_sum_large = yes
+		#			scope:diarch_syphon_treasury_sum_huge = yes
+		#		}
+		#	}
+		#}
+		# Cannot be at war with your liege.
+		NOT = {
+			scope:actor = { is_at_war_with = scope:actor.liege }
+		}
+		custom_tooltip = {
+			text = vassal_syphon_treasury_interaction_cooldown_tt
+			NOR = { 
+				scope:actor = { has_variable = vassal_syphon_treasury_interaction_cooldown }
+			}
+		}
+	}
+
+	can_send = {
+	}
+
+	cooldown = { years = 5 }
+	#cooldown_against_recipient = { years = 10 }
+
+	# Attempt Methods
+	#send_options_exclusive = yes
+	## Steal a small sum.
+	### Bonus to scope:actor.
+	#send_option = {
+	#	flag = diarch_syphon_treasury_sum_small
+	#	# We're doing gross overrides here so that we don't need to relocalise some perfectly good stuff.
+	#	localization = diarch_syphon_treasury_sum_small_name
+	#	current_description = diarch_syphon_treasury_sum_small
+	#	starts_enabled = { always = yes }
+	#}
+
+	on_send = {
+		# Did a landless diarch send this?
+	}
+
+	on_accept = {
+		# Time for a skill duel!
+		scope:actor = {
+			duel = {
+				skills = { stewardship intrigue } 
+				target = scope:recipient
+				# Victory! Gold for scope:actor, maluses for the liege.
+				50 = {
+					compare_modifier = {
+						value = scope:duel_value
+						multiplier = 2
+						min = -49
+					}
+					# The bigger the liege the easier it is to do
+					modifier = {
+						add = {
+							value = scope:recipient.highest_held_title_tier
+							add = -3
+							multiply = 5
+						}
+						always = yes
+					}
+					# Bonus for spouses (yes they intentionally stack)
+					modifier = {
+						add = 30
+						scope:recipient = {
+							is_married = yes
+							primary_spouse = scope:actor
+						}
+					}
+					modifier = {
+						add = 20
+						scope:recipient = {
+							is_married = yes
+							any_spouse = { this = scope:actor }
+						}
+					}
+					modifier = {
+						add = 15
+						scope:recipient = {
+							is_imprisoned = yes
+						}
+					}
+					modifier = {
+						add = 5
+						scope:recipient = {
+							is_travelling = yes
+						}
+					}
+					# You always have some kind of a chance.
+					min = 10
+					desc = diarch_syphon_treasury_interaction.tt.success
+					# Inform scope:actor what type of embezzlement they'll be pursuing.
+					## Very high stewardship characters syphon development growth from a few counties.
+					custom_tooltip = vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties 
+					
+					save_temporary_scope_value_as = {
+						name = gold_to_get
+						value = {
+							add = scope:actor.minor_gold_value
+							multiply = 0.5
+							add = {
+								value = scope:recipient.minor_gold_value
+								multiply = 0.5
+							}
+							multiply = 0.2
+							floor = yes
+							multiply = 5
+						}
+					}
+					
+					# Now we sort the actual effects.
+					## A nice toast to tell us about our new gold.
+					send_interface_toast = {
+						type = event_toast_effect_good
+						title = diarch_syphon_treasury_interaction.tt.success
+						left_icon = scope:recipient
+						# Transfer gold.
+						## Small amount.
+						give_or_update_embezzler_secret_effect = {
+							TARGET = scope:recipient
+							STAKE = scope:gold_to_get	#prev syphon_treasury_gold_gain_low
+						}
+						add_gold = scope:gold_to_get	#syphon_treasury_gold_gain_low
+					}
+					## Plus the maluses for the liege.
+					scope:recipient = {
+						trigger_event = {
+							days = { 1 9 }
+							on_action = on_success_vassal_syphon_treasury_interaction
+						}
+						set_variable = {
+							name = vassal_syphon_treasury_interaction_cooldown
+							years = 1
+						}
+					}
+				}
+				# Defeat! No gold, just prestige loss & a crime opinion.
+				50 = {
+					compare_modifier = {
+						value = scope:duel_value
+						multiplier = -3
+						min = -49
+					}
+					# No way you're stealing from paranoics
+					modifier = {
+						add = -15
+						scope:recipient = { has_trait = paranoid }
+					}
+					# Or greedy bastards
+					modifier = {
+						add = -10
+						scope:recipient = { has_trait = greedy }
+					}
+					# You can always fail.
+					min = 20
+					desc = diarch_syphon_treasury_interaction.tt.failure.actor
+					send_interface_toast = {
+						type = event_toast_effect_bad
+						title = diarch_syphon_treasury_interaction.tt.failure.actor
+						left_icon = scope:recipient
+						show_as_tooltip = {
+							scope:actor = {
+								add_prestige = medium_prestige_loss
+								reverse_add_opinion = {
+									target = scope:recipient
+									modifier = embezzled_opinion
+								}
+							}
+						}
+					}
+					hidden_effect = {
+						scope:recipient = {
+							send_interface_toast = {
+								type = event_toast_effect_neutral
+								title = diarch_syphon_treasury_interaction.tt.failure.recipient
+								left_icon = scope:actor
+								scope:actor = {
+									add_prestige = medium_prestige_loss
+									reverse_add_opinion = {
+										target = scope:recipient
+										modifier = embezzled_opinion
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { is_ai = no }
+				stress_impact = {
+					generous = major_stress_impact_gain
+					honest = major_stress_impact_gain
+					just = medium_stress_impact_gain
+					compassionate = medium_stress_impact_gain
+				}
+			}
+		}
+
+		# Debug logging.
+		if = {
+			limit = {
+				always = no
+			}
+			debug_log = "AI used vassal_syphon_treasury_interaction!"
+			save_temporary_scope_value_as = {
+				name = liege_stats
+				value = { add = scope:recipient.stewardship add = scope:recipient.intrigue }
+			}
+			save_temporary_scope_value_as = {
+				name = vassal_stats
+				value = { add = scope:actor.stewardship add = scope:actor.intrigue }
+			}
+			save_temporary_scope_value_as = {
+				name = vassal_opinion_of_liege
+				value = "scope:actor.opinion(scope:recipient)"
+			}
+			debug_log_scopes = yes
+		}
+	}
+
+	auto_accept = yes
+
+	# AI
+	ai_targets = { ai_recipients = liege }
+	ai_frequency = 36
+
+	ai_potential = {
+		is_councillor = yes
+		#Should there be more? Idk...
+		ai_greed > 0
+		"opinion(liege)" < { value = ai_greed subtract = ai_honor multiply = 0.5 min = -95 max = 60 }
+		dread_modified_ai_boldness = { #Too scared to do anything.
+			dreaded_character = liege
+			value > -50
+		}
+		# Honest and generous characters never embezzle.
+		NOR = {
+			has_trait = honest
+			has_trait = generous
+		}
+	}
+
+	ai_will_do = {
+		# Embezzlement is serious, so you need actual reasons for it.
+		base = 0
+
+		# Additions.
+		## Weight for opinion.
+		opinion_modifier = {
+			opinion_target = scope:recipient
+			multiplier = -1.25
+		}
+		## Weight for personality.
+		ai_value_modifier = {
+			ai_boldness = 0.25
+			ai_greed = 1
+			ai_honor = -0.5
+		}
+		## Debt is a great motivator for theft.
+		### Is slightly in debt.
+		modifier = {
+			add = 10
+			debt_level = 1
+		}
+		### Is one year in debt.
+		modifier = {
+			add = 25
+			debt_level = 2
+		}
+		### Is two years in debt.
+		modifier = {
+			add = 40
+			debt_level = 3
+		}
+		### Is three years in debt.
+		modifier = {
+			add = 60
+			debt_level = 4
+		}
+		### Is four years in debt.
+		modifier = {
+			add = 100
+			debt_level = 5
+		}
+		### Is over five years in debt.
+		modifier = {
+			add = 200
+			debt_level >= 6
+		}
+		## Certain traits can affect likelihood directly.
+		### It's intentional that these don't sync up value-wise with their opposite traits.
+		### Honest/generous excluded because they're hard locked out of the interaction for the AI.
+		### +++ Greedy.
+		modifier = {
+			add = diarch_ai_desire_plus_3_value
+			has_trait = greedy
+		}
+		### ++ Deceitful.
+		modifier = {
+			add = diarch_ai_desire_plus_2_value
+			has_trait = deceitful
+		}
+		### + Arbitrary.
+		modifier = {
+			add = diarch_ai_desire_plus_1_value
+			has_trait = arbitrary
+		}
+		### -- Just.
+		modifier = {
+			add = diarch_ai_desire_minus_2_value
+			has_trait = just
+		}
+		### -- Just.
+		modifier = {
+			add = diarch_ai_desire_minus_2_value
+			has_trait = just
+		}
+		# Factors.
+		## Skill considerations.
+		modifier = {
+			factor = {
+				value = scope:actor.stewardship
+				add = scope:actor.intrigue
+				subtract = scope:recipient.stewardship
+				subtract = scope:recipient.intrigue
+				if = {
+					limit = { is_spouse_of = scope:recipient }
+					add = 15
+				}
+				if = {
+					limit = { 
+						scope:recipient = { is_imprisoned = yes }
+					}
+					add = 10
+				}
+				min = -25
+				max = 50
+				multiply = 0.04		#roughly -1 to 2
+				add = 1				#roughly 0 to 3
+				min = 0.05
+			}
+		}
+		## +++ Do pick on people we hate.
+		modifier = {
+			factor = 2
+			should_prioritise_hostile_action_against_due_to_personal_relations_trigger = {
+				ACTOR = scope:actor
+				RECIPIENT = scope:recipient
+			}
+		}
+		## x0 Don't pick on our friends or allies.
+		modifier = {
+			factor = 0
+			should_avoid_hostile_action_against_due_to_personal_relations_trigger = {
+				ACTOR = scope:actor
+				RECIPIENT = scope:recipient
+			}
+		}
+		## - Not very bold non-rulers should probably think twice.
+		modifier = {
+			factor = 0.75
+			scope:actor = {
+				is_ruler = no
+				ai_boldness < 50
+			}
+		}
+		## - Spooky scary
+		modifier = {
+			factor = 0.66
+			scope:actor = {
+				has_dread_level_towards = {
+					target = scope:recipient
+					level = 1
+				}
+			}
+		}
+		## --- Spooky scary 2
+		modifier = {
+			factor = 0.25
+			scope:actor = {
+				has_dread_level_towards = {
+					target = scope:recipient
+					level = 2
+				}
+			}
+		}
+		## ++ They're just a child
+		modifier = {
+			factor = 1.5
+			scope:recipient.age < 8
+		}
+		## - let AI live somewhat.
+		modifier = {
+			factor = 0.5
+			scope:recipient = { is_ai = yes }
 		}
 	}
 }

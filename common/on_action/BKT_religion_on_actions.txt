@@ -26,11 +26,12 @@ BKT_on_faith_created_courtiers = {
 	effect = {
 		save_temporary_scope_as = root_scope
 		every_courtier = {
+			limit = { faith != scope:root_scope.faith }
 			run_interaction = {
 				interaction = ask_for_conversion_interaction
 				actor = scope:root_scope 
 				recipient = this
-				send_threshold = maybe
+				send_threshold = accept
 			}
 		}
 	}

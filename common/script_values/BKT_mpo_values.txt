@@ -68,6 +68,15 @@ obedience_threshold = {
 obedience_value = {
 	value = {
 		value = 0
+		#ADDED - those two
+		if = {
+			limit = { is_courtier_of = obedience_target }
+			add = 5
+			if = {
+				limit = { is_lowborn = yes }
+				add = 5
+			}
+		}
 		desc = BASE
 	}
 	if = {
@@ -196,14 +205,14 @@ obedience_value = {
 						}
 						switch = {
 							trigger = has_domicile_parameter
-							nomad_yurt_kurultai_more_loyal_lvl_1 = {
-								add = { value = 6 desc = kurultai_yurt_01 }
+							nomad_yurt_kurultai_more_loyal_lvl_1 = {	#ADDED - fixed descs below 
+								add = { value = 5 desc = kurultai_yurt_01_domicile_building }	#prev 6
 							}
 							nomad_yurt_kurultai_more_loyal_lvl_2 = {
-								add = { value = 12 desc = kurultai_yurt_01 }
+								add = { value = 10 desc = kurultai_yurt_01_domicile_building }	#prev 12
 							}
 							nomad_yurt_kurultai_more_loyal_lvl_3 = {
-								add = { value = 18 desc = kurultai_yurt_01 }
+								add = { value = 15 desc = kurultai_yurt_01_domicile_building }	#prev 18
 							}
 						}
 					}
@@ -339,6 +348,8 @@ obedience_value = {
 				limit = {
 					is_courtier_of = obedience_target
 					has_any_court_position = no
+					#ADDED - is being a councillor not enough?
+					NOT = { is_councillor_of = obedience_target }
 				}
 				add = { value = -15 desc = obedience_value_no_court_position }
 			}
@@ -433,6 +444,8 @@ obedience_value = {
 				}
 				add = { 
 					value = obedience_target.dread 
+					#ADDED - not so fast
+					subtract = this.dread
 					multiply = 0.5
 					desc = obedience_value_high_dread 
 				}

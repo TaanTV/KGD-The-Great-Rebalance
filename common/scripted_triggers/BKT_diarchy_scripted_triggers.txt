@@ -19,6 +19,27 @@ character_hates_scope_due_to_strife_guts_trigger = {
 	}
 }
 
+# And *this* needs to be added to guest activity intents to keep diarchs from showing up to the same parties as their liege.
+bannable_serving_diarch_trigger = {
+	liege ?= {
+		NOR = {
+			is_landless_adventurer = yes 
+			has_diarchy_type = grand_secretariat
+		}
+	}
+	OR = {
+		# Diarchs with official responsibilities can't come out to play.
+		is_diarch = yes
+		is_designated_diarch = yes
+		# Assumed diarchs don't get to either if they're the AI, as the player might be planning around them & the AI may have designated to avoid people after if it'd known they were going to welch.
+		## Assumed-diarch players can make an intelligent choice on whether they want to go to events or not.
+		#ADDED - commented this AND out to maybe allow player heirs and spouses to visit activities. Yes, it may break some things, idc.
+		#AND = {
+		#	is_ai = yes
+		#	is_diarchy_successor = yes
+		#}
+	}
+}
 
 regency_for_personal_reasons_trigger = {
 	custom_tooltip = {

@@ -287,9 +287,9 @@ conrois_recruitment_cost = @[heavy_cavalry_recruitment_cost * 0.85]
 conrois_low_maint_cost = @[heavy_cavalry_low_maint_cost * 0.85]
 conrois_high_maint_cost = @[heavy_cavalry_high_maint_cost * 0.85]
 
-akritai_recruitment_cost = @[skirmisher_recruitment_cost * 0.9]
-akritai_low_maint_cost = @[skirmisher_low_maint_cost * 0.9]
-akritai_high_maint_cost = @[skirmisher_high_maint_cost * 0.9]
+akritai_recruitment_cost = @[skirmisher_recruitment_cost * 1.15]	#prev 0.9
+akritai_low_maint_cost = @[skirmisher_low_maint_cost * 1.15]		#prev 0.9
+akritai_high_maint_cost = @[skirmisher_high_maint_cost * 1.15]		#prev 0.9
 
 skoutatoi_recruitment_cost = @[pikemen_recruitment_cost * 1.1]
 skoutatoi_low_maint_cost = @[pikemen_low_maint_cost * 1.1]
@@ -522,6 +522,10 @@ counter_synergy_ai_weight_skirmishers = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000
@@ -609,6 +613,10 @@ counter_synergy_ai_weight_archers = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000
@@ -694,6 +702,10 @@ counter_synergy_ai_weight_pikemen = {
 				}
 				number_maa_regiments_of_base_type = {
 					type = elephant_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
 					value >= 1
 				}
 			}
@@ -789,6 +801,108 @@ counter_synergy_ai_weight_heavy_infantry = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
+		add = -10000
+	}
+}
+
+counter_synergy_ai_weight_gunpowder = {
+	value = 200 # Since these are hard-limited elsewhere, prefer them highly
+	if = {
+		limit = {
+			culture = { has_cultural_era_or_later = culture_era_late_medieval }
+			number_maa_regiments_of_base_type = {
+				type = pikemen
+				value >= 3
+			}
+			NOT = {
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
+		add = 60
+	}
+	if = {
+		limit = {
+			culture = { has_cultural_pillar = heritage_chinese }
+		}
+		add = 10	# more gun
+	}
+	#ADDED 
+	if = {
+		limit = {
+			is_landed = yes
+			any_held_title = {
+				tier = tier_barony
+				OR = {
+					#title_province = { 
+					#	building_slots > 0 
+					#	NOR = {
+					#		has_building_or_higher = stables_01
+					#		has_building_or_higher = military_camps_01
+					#	}
+					#}
+					title_province = { 
+						has_building_or_higher = powder_magazine_01
+						has_stationed_regiment = no
+					}
+				}
+			}
+		}
+		add = 8000
+	}
+	#ADDED
+	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)
+		limit = {
+			calc_true_if = {
+				amount >= 2
+				number_maa_regiments_of_base_type = {
+					type = skirmishers
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = archers
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = pikemen
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = heavy_infantry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = light_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = heavy_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = archer_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = camel_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = elephant_cavalry
+					value >= 1
+				}
+				#number_maa_regiments_of_base_type = {
+				#	type = gunpowder
+				#	value >= 1
+				#}
 			}
 		}
 		add = -10000
@@ -876,6 +990,10 @@ counter_synergy_ai_weight_light_cavalry = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000
@@ -890,7 +1008,15 @@ counter_synergy_ai_weight_heavy_cavalry = {
 			is_landed = yes
 			highest_held_title_tier <= tier_county
 		}
-		add = -120	# Maybe consider hiring anything else?
+		add = -150	# Maybe consider hiring anything else?
+	}
+	#ADDED 
+	else_if = {
+		limit = { 
+			is_landed = yes
+			highest_held_title_tier = tier_duchy
+		}
+		add = -45	# Maybe consider hiring anything else?
 	}
 	#ADDED 
 	if = {
@@ -956,6 +1082,10 @@ counter_synergy_ai_weight_heavy_cavalry = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000
@@ -1016,6 +1146,10 @@ counter_synergy_ai_weight_archer_cavalry = {
 				}
 				number_maa_regiments_of_base_type = {
 					type = elephant_cavalry
+					value >= 1
+				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
 					value >= 1
 				}
 			}
@@ -1087,6 +1221,10 @@ counter_synergy_ai_weight_camel_cavalry = {
 					type = elephant_cavalry
 					value >= 1
 				}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000
@@ -1145,6 +1283,10 @@ counter_synergy_ai_weight_elephant_cavalry = {
 				#	type = elephant_cavalry
 				#	value >= 1
 				#}
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
 			}
 		}
 		add = -10000

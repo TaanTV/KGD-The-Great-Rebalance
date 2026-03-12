@@ -1,0 +1,9 @@
+﻿#########################################
+######## ESPIONAGE SCHEME TASK ##########
+#########################################
+
+spymaster_espionage_modifier_base_scale = {
+	add = intrigue
+	multiply = -0.5		#prev -1
+	max = -1
+}

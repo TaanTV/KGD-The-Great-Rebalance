@@ -276,7 +276,13 @@ fired_from_council_position_prestige_loss_effect = {
 		liege_or_court_owner = {
 			if = {
 				limit = { is_ai = no }
-				add_prestige = major_prestige_loss
+				if = {
+					limit = { highest_held_title_tier <= tier_duchy }
+					add_prestige = { value = medium_prestige_loss multiply = 1.5 }
+				}
+				else = {
+					add_prestige = major_prestige_loss
+				}
 			}
 			else = {		#lets try actually punishing AI a bit for this
 				add_prestige = minor_prestige_loss
@@ -294,7 +300,13 @@ fired_from_council_position_prestige_piety_loss_effect = {
 		liege_or_court_owner = {
 			if = {
 				limit = { is_ai = no }
-				add_prestige = major_prestige_loss
+				if = {
+					limit = { highest_held_title_tier <= tier_duchy }
+					add_prestige = { value = medium_prestige_loss multiply = 1.5 }
+				}
+				else = {
+					add_prestige = major_prestige_loss
+				}
 				add_piety = medium_piety_loss
 			}
 			else = {		#lets try actually punishing AI a bit for this
@@ -310,13 +322,196 @@ on_get_position_councillor_firing_cooldown_effect = {
 		limit = { 
 			exists = root.liege_or_court_owner
 			years_from_game_start >= 1 
-		}
-		liege_or_court_owner = {
-			set_variable = {
-				name = block_fire_councillor
-				value = prev
-				years = 5
+			NAND = { 
+				has_variable = block_fire_councillor
+				var:block_fire_councillor = liege_or_court_owner
 			}
+		}
+		set_variable = {
+			name = block_fire_councillor
+			value = liege_or_court_owner
+			years = 5
+		}
+	}
+}
+
+#REQUIRES: THIS being the councillor and scope:temp_liege_scope being saved
+recalc_vassal_stance_council_bonuses = {
+	#Actually, exclude counts from this.
+	if = {
+		limit = { 
+			highest_held_title_tier >= tier_duchy 
+			any_vassal = { exists = this }		#sometimes you just dont have vassals somehow.
+		}
+		save_temporary_scope_as = temp_liege_scope
+		clear_vassal_stance_council_bonuses = yes
+		every_councillor = {
+			limit = { is_ruler = yes }
+			switch = {
+				trigger = has_vassal_stance
+				courtly = { destribute_vassal_stance_council_bonuses = { STANCE = courtly } }
+				glory_hound = { destribute_vassal_stance_council_bonuses = { STANCE = glory_hound } }
+				parochial = { destribute_vassal_stance_council_bonuses = { STANCE = parochial } }
+				zealot = { destribute_vassal_stance_council_bonuses = { STANCE = zealot } }
+				minority = { destribute_vassal_stance_council_bonuses = { STANCE = minority } }
+				barons_and_minor_landholders = { destribute_vassal_stance_council_bonuses = { STANCE = barons_and_minor_landholders } }
+				belligerent = { destribute_vassal_stance_council_bonuses = { STANCE = belligerent } }
+			}
+		}
+	}
+}
+
+clear_vassal_stance_council_bonuses = {
+	every_vassal = {
+		remove_opinion = {
+			modifier = same_stance_in_council
+			target = prev
+		}
+	}
+}
+
+destribute_vassal_stance_council_bonuses = { 
+	scope:temp_liege_scope = {
+		every_vassal = {
+			limit = {
+				has_vassal_stance = $STANCE$
+				is_councillor = no
+			}
+			add_opinion = {
+				modifier = same_stance_in_council
+				target = scope:temp_liege_scope
+			}
+		}
+	}	
+}
+
+#character scope, requires scope:landed_title
+get_or_set_year_of_last_serious_defensive_war = {
+	random_held_title = {
+		limit = {
+			tier >= tier_empire
+			NOT = { this = scope:landed_title }
+			has_variable = year_of_last_serious_defensive_war
+		}
+		save_scope_as = title_to_copy_variable_from
+	}
+	if = {
+		limit = {
+			exists = scope:title_to_copy_variable_from
+		}
+		scope:landed_title = {
+			set_variable = {
+				name = year_of_last_serious_defensive_war
+				value = scope:title_to_copy_variable_from.var:year_of_last_serious_defensive_war
+			}
+		}
+	}
+	else = {
+		scope:landed_title = {
+			set_variable = {
+				name = year_of_last_serious_defensive_war
+				value = current_year
+			}
+		}
+	}
+}
+
+#throw_opinions_on_same_stance_vassals_of_liege = { LIEGE = scope:recipient OPINION = insult_opinion VALUE = -15 }
+throw_opinions_on_same_stance_vassals_of_liege = {
+	save_scope_as = original_vassal
+	$LIEGE$ = { save_scope_as = root_scope }
+	switch = {
+		trigger = has_vassal_stance
+		courtly = { 
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = courtly this != scope:original_vassal }
+					custom = every_courtly_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		glory_hound = {
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = glory_hound this != scope:original_vassal }
+					custom = every_glory_hound_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		parochial = { 
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = parochial this != scope:original_vassal }
+					custom = every_parochial_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		zealot = { 
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = zealot this != scope:original_vassal }
+					custom = every_zealot_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		minority = {
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = minority this != scope:original_vassal }
+					custom = every_minority_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		barons_and_minor_landholders = {
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = barons_and_minor_landholders this != scope:original_vassal }
+					custom = every_baron_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
+		}
+		belligerent = {
+			$LIEGE$ = { 
+				every_vassal = {
+					limit = { has_vassal_stance = belligerent this != scope:original_vassal }
+					custom = every_belligerent_vassal
+					add_opinion = {
+						target = $LIEGE$
+						modifier = $OPINION$
+						opinion = $VALUE$
+					}
+				}
+			} 
 		}
 	}
 }

@@ -1,0 +1,17 @@
+﻿#tradition scope
+is_a_terrain_specific_tradition = {
+	OR = {
+		this = culture_tradition:tradition_hill_dwellers
+		this = culture_tradition:tradition_amharic_highlanders
+		this = culture_tradition:tradition_forest_folk
+		this = culture_tradition:tradition_forest_wardens
+		this = culture_tradition:tradition_mountain_homes
+		this = culture_tradition:tradition_himalayan_settlers
+		this = culture_tradition:tradition_mountaineer_ruralism
+		this = culture_tradition:tradition_jungle_dwellers
+		this = culture_tradition:tradition_hidden_cities
+		this = culture_tradition:tradition_wetlanders
+		this = culture_tradition:tradition_agrarian
+		this = culture_tradition:tradition_intensive_farming
+	}
+}

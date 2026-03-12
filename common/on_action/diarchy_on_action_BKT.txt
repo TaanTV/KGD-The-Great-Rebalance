@@ -225,3 +225,223 @@ on_diarch_change = {
 		}
 	}
 }
+
+# Called when liege manually designates a diarch
+# Diarchy shouldn't exist
+# root - liege whos designated diarch changed
+# scope:former_designated_diarch - character who was previously designated diarch
+# former designated diarch might be empty scope
+on_diarch_designation = {
+	effect = {
+		# Designated_diarch is very happy!
+		reverse_add_opinion = {
+			target = root.designated_diarch
+			modifier = designated_me_regent_opinion
+		}
+		# Has designating a diarch pissed anyone off?
+		## We check to see if they're first in line first, since no one really objects to you picking the best available choice.
+		if = {
+			limit = {
+				any_diarchy_succession_character = { diarchy_regent_succession_score_value > root.designated_diarch.diarchy_regent_succession_score_value }
+			}
+			# Try to annoy people higher up the order.
+			every_diarchy_succession_character = {
+				limit = { diarchy_regent_succession_score_value > root.designated_diarch.diarchy_regent_succession_score_value }
+				# Calc how upset we should be.
+				## We set a variable because we need to account for this in over-dramatic courtly vassals later.
+				set_variable = {
+					name = degree_of_upset
+					value = {
+						# Get the base score
+						## We start in reverse so that we can grok min-maxs easier, and will invert it later.
+						value = diarchy_regent_succession_score_value
+						# Now, subtract their score to see how badly we were screwed.
+						subtract = root.designated_diarch.diarchy_regent_succession_score_value
+						#ADDED - get it to be a bit lower
+						multiply = 0.75
+						floor = yes
+						# Sweet, next up, add some extra to act as a decent maximum without smoothing the scores out too much.
+						add = 5		#prev 10
+						# Make sure no one is ever _too_ pissed.
+						max = 30	#prev 40
+						# And, finally, invert.
+						multiply = -1
+					}
+				}
+				# Right, now that we've got our upset score, let's plug that in.
+				add_opinion = {
+					target = root
+					modifier = passed_me_over_for_regent_opinion
+					opinion = var:degree_of_upset
+				}
+			}
+			# Courtlies because the new designatee is...
+			## ... a lowborn non-family member.
+			if = {
+				limit = {
+					root.designated_diarch = {
+						is_lowborn = yes
+						NOT = {
+							any_close_or_extended_family_member = { this = root }
+						}
+					}
+				}
+				every_vassal = {
+					vassal_stance = courtly
+					limit = {
+						this != root.designated_diarch
+					}
+					# Account for over-dramatic courtly vassals who are in line for succession.
+					## ... as otherwise they may hate you more than if you'd murdered their child.
+					save_scope_value_as = {
+						name = degree_of_upset
+						value = {
+							value = courtly_offence_scandalise_value
+							if = {
+								limit = { has_variable = degree_of_upset }
+								# Subtract so that we get a double negative.
+								subtract = var:degree_of_upset
+							}
+						}
+					}
+					if = {
+						limit = { scope:degree_of_upset <= -1 }
+						add_opinion = {
+							target = root
+							modifier = designated_bad_regent_opinion
+							opinion = scope:degree_of_upset
+						}
+					}
+				}
+			}
+			## ... a lowborn family member.
+			else_if = {
+				limit = {
+					root.designated_diarch = { is_lowborn = yes }
+				}
+				every_vassal = {
+					vassal_stance = courtly
+					limit = {
+						this != root.designated_diarch
+					}
+					# Account for over-dramatic courtly vassals who are in line for succession.
+					## ... as otherwise they may hate you more than if you'd murdered their child.
+					save_scope_value_as = {
+						name = degree_of_upset
+						value = {
+							value = courtly_offence_greatly_offend_value
+							if = {
+								limit = { has_variable = degree_of_upset }
+								# Subtract so that we get a double negative.
+								subtract = var:degree_of_upset
+							}
+						}
+					}
+					if = {
+						limit = { scope:degree_of_upset <= -1 }
+						add_opinion = {
+							target = root
+							modifier = designated_bad_regent_opinion
+							opinion = scope:degree_of_upset
+						}
+					}
+				}
+			}
+			## ... someone with a weak succession score.
+			else_if = {
+				limit = { root.designated_diarch.diarchy_regent_succession_score_value <= courtly_offence_at_succession_threshold_low }
+				every_vassal = {
+					vassal_stance = courtly
+					limit = {
+						this != root.designated_diarch
+					}
+					# Account for over-dramatic courtly vassals who are in line for succession.
+					## ... as otherwise they may hate you more than if you'd murdered their child.
+					save_scope_value_as = {
+						name = degree_of_upset
+						value = {
+							value = courtly_offence_offend_value
+							if = {
+								limit = { has_variable = degree_of_upset }
+								# Subtract so that we get a double negative.
+								subtract = var:degree_of_upset
+							}
+						}
+					}
+					if = {
+						limit = { scope:degree_of_upset <= -1 }
+						add_opinion = {
+							target = root
+							modifier = designated_bad_regent_opinion
+							opinion = scope:degree_of_upset
+						}
+					}
+				}
+			}
+			## ... someone with a medium succession score.
+			else_if = {
+				limit = { root.designated_diarch.diarchy_regent_succession_score_value <= courtly_offence_at_succession_threshold_medium }
+				every_vassal = {
+					vassal_stance = courtly
+					limit = {
+						this != root.designated_diarch
+					}
+					# Account for over-dramatic courtly vassals who are in line for succession.
+					## ... as otherwise they may hate you more than if you'd murdered their child.
+					save_scope_value_as = {
+						name = degree_of_upset
+						value = {
+							value = courtly_offence_somewhat_offend_value
+							if = {
+								limit = { has_variable = degree_of_upset }
+								# Subtract so that we get a double negative.
+								subtract = var:degree_of_upset
+							}
+						}
+					}
+					if = {
+						limit = { scope:degree_of_upset <= -1 }
+						add_opinion = {
+							target = root
+							modifier = designated_bad_regent_opinion
+							opinion = scope:degree_of_upset
+						}
+					}
+				}
+			}
+			## ... someone with a just-barely adequate succession score.
+			else_if = {
+				limit = { root.designated_diarch.diarchy_regent_succession_score_value <= courtly_offence_at_succession_threshold_high }
+				every_vassal = {
+					vassal_stance = courtly
+					limit = {
+						this != root.designated_diarch
+					}
+					# Account for over-dramatic courtly vassals who are in line for succession.
+					## ... as otherwise they may hate you more than if you'd murdered their child.
+					save_scope_value_as = {
+						name = degree_of_upset
+						value = {
+							value = courtly_offence_lightly_offend_value
+							if = {
+								limit = { has_variable = degree_of_upset }
+								# Subtract so that we get a double negative.
+								subtract = var:degree_of_upset
+							}
+						}
+					}
+					if = {
+						limit = { scope:degree_of_upset <= -1 }
+						add_opinion = {
+							target = root
+							modifier = designated_bad_regent_opinion
+							opinion = scope:degree_of_upset
+						}
+					}
+				}
+			}
+			# Finally, clean up all those variables.
+			every_diarchy_succession_character = { remove_variable = degree_of_upset }
+		}
+	}
+}

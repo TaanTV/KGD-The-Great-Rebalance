@@ -3,7 +3,7 @@ restore_backwater_counties_decision = {
 	picture = {
 		reference = "gfx/interface/illustrations/decisions/ep3_decision_estate.dds"
 	}
-	decision_group_type = major
+	#decision_group_type = major #Unop: Duplicate as "roman" just below
 	ai_check_interval_by_tier = {
 		barony = 0
 		county = 0
@@ -171,6 +171,607 @@ restore_backwater_counties_decision = {
 				}
 				# Trigger the event for the emperor to see if all the counties have been cleared
 				trigger_event = ep3_decisions_event.3001
+			}
+		}
+	}
+}
+
+
+### Restore the Byzantine Empire ###
+recreate_byzantine_empire_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_cerimonial_decision.dds"
+	}
+	decision_group_type = major
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 6
+		empire = 6
+		hegemony = 0
+	}
+
+	desc = recreate_byzantine_empire_decision_desc
+	selection_tooltip = recreate_byzantine_empire_decision_tooltip
+	decision_group_type = roman
+
+	is_shown = {
+		has_dlc_feature = roads_to_power
+		NOR = {
+			exists = title:e_byzantium.holder
+			exists = title:h_roman_empire.holder
+			exists = title:h_eastern_roman_empire.holder
+		}
+		title:e_byzantium = { is_titular = no }
+		#ADDED - not for latins.
+		NAND = {
+			has_title = title:e_latin_empire 
+			faith.religious_head_title ?= faith:catholic.religious_head_title
+		}
+		OR = {
+			culture = {
+				OR = {
+					this = culture:greek
+					any_parent_culture_or_above = { this = culture:greek }
+				}
+			}
+			AND = {
+				OR = {
+					ep3_orthodox_faith_trigger = yes
+					faith = faith:hellenic_pagan
+				}
+				primary_title = {
+					tier <= tier_empire
+					empire = title:e_latin_empire
+				}
+			}
+			AND = {
+				OR = {
+					ep3_orthodox_faith_trigger = yes
+					faith = faith:hellenic_pagan
+				}
+				primary_title = {
+					tier <= tier_empire
+					empire = title:e_byzantium
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			NOT = {
+				exists = title:e_byzantium.holder
+			}
+			text = no_byz_emp_exists_tt
+		}
+		top_liege = this
+		OR = {
+			custom_tooltip = {
+				culture = {
+					this = culture:greek
+				}
+				text = is_greek_tt
+			}
+			custom_tooltip = {
+				culture = {
+					any_parent_culture_or_above = { this = culture:greek }
+				}
+				text = is_greek_descendent_tt
+			}
+			ep3_orthodox_faith_trigger = yes
+			faith = faith:hellenic_pagan
+		}
+		highest_held_title_tier >= tier_kingdom
+		
+		realm_size >= 12
+		custom_tooltip = {
+			title:c_byzantion.holder = {
+				exists = this
+				OR = {
+					this = root
+					AND = {
+						is_ai = yes
+						top_liege = root
+					}
+				}
+			}
+			text = pandidakterion_tt
+		}
+		primary_title = {
+			tier <= tier_empire
+			OR = {
+				empire = title:e_latin_empire
+				empire = title:e_byzantium
+			}
+		}
+		trigger_if = {
+			limit = {
+				is_ai = no
+				has_legitimacy = yes
+			}
+			legitimacy_level >= 3
+		}
+		#A liiiiiittle easier for AI
+		trigger_if = {
+			limit = {
+				is_ai = yes
+				has_legitimacy = yes
+			}
+			legitimacy_level >= 1
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		trigger_if = {
+			limit = {
+				is_ai = no
+			}
+			NOT = { exists = involved_activity }
+			is_available = yes
+		}
+		trigger_else = {
+			is_alive = yes
+			is_imprisoned = no
+			is_incapable = no
+		}
+	}
+
+	cost = {
+		prestige = {
+			value = {
+				add = 1000
+				if = {
+					limit = {
+						any_held_title = {
+							this = title:e_latin_empire
+						}
+					}
+					add = 1000
+				}
+				if = {
+					limit = {
+						culture = {
+							NOR = {
+								this = culture:greek
+								any_parent_culture_or_above = { this = culture:greek }
+							}
+						}
+					}
+					add = 500
+				}
+				#AI need to take this decision and aren't good at saving up for it
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					multiply = 0.5
+				}
+			}
+		}
+		piety = {
+			value = {
+				add = massive_piety_value
+				if = {
+					limit = {
+						any_held_title = {
+							this = title:e_latin_empire
+						}
+					}
+					add = 500
+				}
+				if = {
+					limit = {
+						ep3_orthodox_faith_trigger = no
+					}
+					add = 500
+				}
+				if = {
+					limit = {
+						faith = faith:catholic
+					}
+					add = 500
+				}
+				#AI need to take this decision and aren't good at saving up for it
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					multiply = 0.5
+				}
+			}
+		}
+	}
+
+	effect = {
+		show_as_tooltip = {
+			recreate_ere_decision_effect = yes
+		}
+		trigger_event = ep3_decisions_event.4030
+	}
+
+	ai_potential = {
+		NOT = { exists = title:e_byzantium.holder }
+		any_held_title = {
+			title_tier = kingdom
+			OR = {
+				empire = title:e_latin_empire
+				empire = title:e_byzantium
+			}
+		}
+		OR = {
+			culture = {
+				OR = {
+					this = culture:greek
+					any_parent_culture_or_above = { this = culture:greek }
+				}
+			}
+			ep3_orthodox_faith_trigger = yes
+			primary_title = {
+				tier <= tier_empire
+				empire = title:e_latin_empire
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 100
+		modifier = {
+			primary_title = {
+				tier <= tier_empire
+				empire = title:e_latin_empire
+			}
+			add = -60
+		}
+		modifier = {
+			NAND = {
+				culture = {
+					OR = {
+						this = culture:greek
+						any_parent_culture_or_above = { this = culture:greek }
+					}
+				}
+				OR = {
+					ep3_orthodox_faith_trigger = yes
+					faith = faith:hellenic_pagan
+				}
+			}
+			add = -30
+		}
+	}
+}
+
+
+#A Byzantine switches it back
+### Expunge Latin Dominion ###
+expunge_latin_dominion_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_hold_triumph.dds"
+	}
+	decision_group_type = major
+
+	desc = expunge_latin_dominion_decision_desc
+	selection_tooltip = expunge_latin_dominion_decision_tooltip
+	decision_group_type = roman
+
+	cooldown = { days = 60 }
+	
+	is_shown = {
+		has_dlc_feature = roads_to_power
+		#Latin land needs to exist
+		title:e_latin_empire = {
+			any_in_de_jure_hierarchy = {
+				tier <= tier_kingdom
+			}
+		}
+		#ADDED - not for latins.
+		NAND = { has_title = title:e_latin_empire }
+		#Must be a Greek or Greekoid
+		OR = {
+			culture = culture:greek
+			culture = culture:roman
+			culture = {
+				any_parent_culture_or_above = {
+					this = culture:greek
+				}
+			}
+			ep3_orthodox_faith_trigger = yes
+			faith = faith:hellenic_pagan
+			AND = {
+				exists = title:e_byzantium.holder
+				this = title:e_byzantium.holder
+			}
+			AND = {
+				exists = title:h_roman_empire.holder
+				this = title:h_roman_empire.holder
+			}
+			AND = {
+				exists = title:h_eastern_roman_empire.holder
+				this = title:h_eastern_roman_empire.holder
+			}
+		}
+		OR = {
+			capital_province = {
+				OR = {
+					geographical_region = world_asia_minor
+					geographical_region = world_europe_south
+					geographical_region = world_middle_east
+					geographical_region = world_europe_east
+					geographical_region = world_steppe_west
+				}
+			}
+			AND = {
+				exists = title:e_byzantium.holder
+				this = title:e_byzantium.holder
+			}
+			AND = {
+				exists = title:h_roman_empire.holder
+				this = title:h_roman_empire.holder
+			}
+			AND = {
+				exists = title:h_eastern_roman_empire.holder
+				this = title:h_eastern_roman_empire.holder
+			}
+		}
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = {
+				top_liege != this
+			}
+			custom_tooltip = {
+				text = liege_isnt_latin_emp_tt
+				NOT = {
+					top_liege = {
+						primary_title = title:e_latin_empire
+					}
+				}
+			}
+		}
+		trigger_else = {
+			OR = {
+				highest_held_title_tier <= tier_kingdom
+				custom_tooltip = {
+					exists = title:e_byzantium.holder
+					this = title:e_byzantium.holder
+					text = holds_byz_emp_tt
+				}
+				custom_tooltip = {
+					exists = title:h_roman_empire.holder
+					this = title:h_roman_empire.holder
+					text = holds_roman_emp_tt
+				}
+				custom_tooltip = {
+					exists = title:h_eastern_roman_empire.holder
+					this = title:h_eastern_roman_empire.holder
+					text = holds_roman_emp_tt
+				}
+			}
+		}
+		#Must be a Greek or Greekoid
+		OR = {
+			culture = culture:greek
+			culture = culture:roman
+			custom_tooltip = {
+				culture = {
+					any_parent_culture_or_above = { this = culture:greek }
+				}
+				text = is_greek_descendent_tt
+			}
+			ep3_orthodox_faith_trigger = yes
+			faith = faith:hellenic_pagan
+			custom_tooltip = {
+				exists = title:e_byzantium.holder
+				this = title:e_byzantium.holder
+				text = holds_byz_emp_tt
+			}
+			custom_tooltip = {
+				exists = title:h_roman_empire.holder
+				this = title:h_roman_empire.holder
+				text = holds_roman_emp_tt
+			}
+			custom_tooltip = {
+				exists = title:h_eastern_roman_empire.holder
+				this = title:h_eastern_roman_empire.holder
+				text = holds_roman_emp_tt
+			}
+		}
+		OR = {
+			#Controls entire kingdom
+			custom_tooltip = {
+				text = control_latin_kingdom_tt
+				title:e_latin_empire = {
+					any_in_de_jure_hierarchy = {
+						tier = tier_kingdom
+						NOT = { this = title:e_latin_empire }
+						any_de_jure_county = {
+							percent >= 1
+							holder.top_liege = {
+								this = root
+							}
+						}
+					}
+				}
+			}
+			#Controls half and has de jure title
+			custom_tooltip = {
+				text = has_latin_kingdom_title_tt
+				title:e_latin_empire = {
+					any_in_de_jure_hierarchy = {
+						tier = tier_kingdom
+						NOT = { this = title:e_latin_empire }
+						holder ?= {
+							OR = {
+								this = root
+								top_liege = root
+							}
+						}
+						OR = {
+							any_de_jure_county = {
+								this = root.capital_county
+							}
+							any_de_jure_county = {
+								percent >= 0.5
+								holder.top_liege = {
+									this = root
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				has_legitimacy = yes
+				is_ai = no
+			}
+			legitimacy_level >= 2
+		}
+		#A liiiiiittle easier for AI
+		trigger_if = {
+			limit = {
+				has_legitimacy = yes
+				is_ai = yes
+			}
+			legitimacy_level >= 1
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		trigger_if = {
+			limit = {
+				is_ai = no
+			}
+			NOT = { exists = involved_activity }
+			is_available = yes
+		}
+		trigger_else = {
+			is_alive = yes
+			is_imprisoned = no
+			is_incapable = no
+		}
+		is_at_war = no
+	}
+
+	cost = {
+		prestige = {
+			value = {
+				add = major_prestige_value
+				#AI should definitely take this
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					multiply = 0.5
+				}
+			}
+		}
+		piety = {
+			value = {
+				add = major_piety_value
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					multiply = 0.5
+				}
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = remove_latin_kingdom_de_jure_tt
+		custom_tooltip = legitimize_byz_control_tt
+		custom_tooltip = legitimize_byz_claim_tt
+		show_as_tooltip = {
+			expunge_latin_dominion_effect = yes
+		}
+		trigger_event = ep3_frankokratia_events.0090
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 36
+		kingdom = 9
+		empire = 9
+		hegemony = 9
+	}
+	
+	ai_potential = {
+		is_available = yes
+		OR = {
+			highest_held_title_tier >= tier_kingdom
+			realm_size >= 10
+		}
+		#Must be a Greek or Greekoid
+		OR = {
+			culture = culture:greek
+			culture = culture:roman
+			culture = {
+				any_parent_culture_or_above = {
+					this = culture:greek
+				}
+			}
+			ep3_orthodox_faith_trigger = yes
+			faith = faith:hellenic_pagan
+			primary_title = title:e_byzantium
+		}
+		OR = {
+			#Controls entire kingdom
+			title:e_latin_empire = {
+				any_in_de_jure_hierarchy = {
+					tier = tier_kingdom
+					NOT = { this = title:e_latin_empire }
+					any_de_jure_county = {
+						percent >= 1
+						holder.top_liege = {
+							this = root
+						}
+					}
+				}
+			}
+			#Controls half and has de jure title
+			title:e_latin_empire = {
+				any_in_de_jure_hierarchy = {
+					tier = tier_kingdom
+					NOT = { this = title:e_latin_empire }
+					holder ?= {
+						OR = {
+							this = root
+							top_liege = root
+						}
+					}
+					OR = {
+						any_de_jure_county = {
+							this = root.capital_county
+						}
+						any_de_jure_county = {
+							percent >= 0.5
+							holder.top_liege = {
+								this = root
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 75
+		modifier = {
+			add = 25
+			primary_title = title:e_byzantium
+		}
+		modifier = {
+			add = -50
+			any_held_title = {
+				this = title:e_latin_empire
 			}
 		}
 	}

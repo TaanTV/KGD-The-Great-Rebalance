@@ -662,7 +662,7 @@ governor_efficiency = {
 		if = { # The Forbidden City special building bonus
 			limit = {
 				top_liege ?= {
-					capital_province = {
+					capital_province ?= {
 						has_building_or_higher = forbidden_city_01
 					}
 				}
@@ -784,5 +784,61 @@ governor_efficiency_presented = {
 	}
 }
 
+
+latin_emp_army_levies_value = {
+	value = 750		#prev 100
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_early_medieval
+			}
+		}
+		add = 500	#prev 100
+	}
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_high_medieval
+			}
+		}
+		add = 500	#prev 200
+	}
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_late_medieval
+			}
+		}
+		add = 750	#prev 200
+	}
+}
+
+latin_emp_army_maa_value = {
+	value = 3		#prev 1
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_early_medieval
+			}
+		}
+		add = 3		#prev 1
+	}
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_high_medieval
+			}
+		}
+		add = 3		#prev 1
+	}
+	if = {
+		limit = {
+			culture = {
+				has_cultural_era_or_later = culture_era_late_medieval
+			}
+		}
+		add = 3		#prev 1
+	}
+}
 appointment_non_preferred_gender_penalty_value = 0.5	#prev 0.8
 appointment_opposite_gender_penalty_value = 0.8			#prev 1

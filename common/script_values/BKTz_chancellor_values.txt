@@ -1,0 +1,4 @@
+﻿chancellor_foreign_affairs_prestige_gain_base = {
+	add = diplomacy
+	divide = 25		#BKT prev 40 	#prev 20
+}

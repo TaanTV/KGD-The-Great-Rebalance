@@ -239,8 +239,9 @@ ep3_interactions_events.0005 = {
 	immediate = {
 		random = {
 			chance = 0
+			japan_demand_admin_acceptance_modifier = yes
 			demand_admin_acceptance_modifier = yes
-			save_temporary_scope_as = will_accept
+			save_scope_as = will_accept
 		}
 		if = {
 			limit = {
@@ -249,7 +250,8 @@ ep3_interactions_events.0005 = {
 			random = {		#extra 75%
 				chance = 75
 				demand_admin_acceptance_modifier = yes
-				save_temporary_scope_as = will_bargain
+				japan_demand_admin_acceptance_modifier = yes
+				save_scope_as = will_bargain
 			}
 		}
 	}
@@ -282,7 +284,7 @@ ep3_interactions_events.0005 = {
 				add = 50
 			}
 			modifier = { # We increase the value to compensate for the potentially high AI values in the other options
-				factor = 2
+				factor = 1	#prev 2
 				always = yes
 			}
 		}
@@ -335,9 +337,15 @@ ep3_interactions_events.0005 = {
 				has_trait = ambitious
 				add = 50
 			}
-			#ADDED
+			#ADDED - next 2
 			modifier = {
 				has_variable = unbecame_admin
+				factor = 0
+			}
+			modifier = {
+				NOR = {
+					exists = scope:will_bargain
+				}
 				factor = 0
 			}
 		}
@@ -391,9 +399,15 @@ ep3_interactions_events.0005 = {
 				ai_greed < high_negative_ai_value
 				add = -50
 			}
-			#ADDED
+			#ADDED - next 2
 			modifier = {
 				has_variable = unbecame_admin
+				factor = 0
+			}
+			modifier = {
+				NOR = {
+					exists = scope:will_bargain
+				}
 				factor = 0
 			}
 		}
@@ -416,7 +430,7 @@ ep3_interactions_events.0005 = {
 				add_opinion = {
 					modifier = angry_opinion
 					target = scope:recipient
-					opinion = -15
+					opinion = -25	#prev -15
 				}
 			}
 		}
@@ -814,6 +828,7 @@ ep3_interactions_events.0031 = { # By Jason Cantalini
 					has_graphical_mena_culture_group_trigger = yes
 					has_graphical_african_culture_group_trigger = yes
 					has_building_gfx = indian_building_gfx
+					has_building_gfx = tibetan_building_gfx
 				}
 			}
 			NOT = { government_has_flag = government_is_tribal }
@@ -829,6 +844,7 @@ ep3_interactions_events.0031 = { # By Jason Cantalini
 						has_graphical_mena_culture_group_trigger = yes
 						has_graphical_african_culture_group_trigger = yes
 						has_building_gfx = indian_building_gfx
+						has_building_gfx = tibetan_building_gfx
 					}
 				}
 				government_has_flag = government_is_tribal
@@ -2548,6 +2564,11 @@ ep3_interactions_events.0121 = {
 			limit = {
 				is_alive = yes
 			}
+
+			#Unop Clear saved scopes to prevent errors
+			clear_saved_scope = laamp_temp
+			clear_saved_scope = war_contribution_value
+
 			save_temporary_scope_as = laamp_temp
 			save_scope_value_as = {
 				name = war_contribution_value
@@ -4383,7 +4404,6 @@ ep3_interactions_events.0610 = {
 		}
 		show_as_tooltip = { get_title = primary_title }
 	}
-
 
 	#I'm a new kinda landless now
 	option = {

@@ -45,6 +45,7 @@ recently_looted_modifier = {
 	county_fertility_growth_mult = -0.2
 	#ADDED
 	levy_size = -0.15
+	supply_limit_mult = -0.25
 }
 
 # Referenced in code; blocks raiding & bartering when present on a province

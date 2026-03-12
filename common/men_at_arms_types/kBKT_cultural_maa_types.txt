@@ -179,7 +179,7 @@ goedendag = {
 gendarme = {
 	type = heavy_cavalry
 	
-	damage = 125
+	damage = 120	#prev 125
 	toughness = 40
 	pursuit = 20
 	screen = 10
@@ -187,10 +187,10 @@ gendarme = {
 	terrain_bonus = {
 		plains = { damage = 30 }
 		drylands = { damage = 30 }
-		hills = { damage = -10 }
+		hills = { damage = -15 }				#prev -10
 		jungle = { damage = -25 }
-		mountains = { damage = -50 }
-		desert_mountains = { damage = -50 }
+		mountains = { damage = -65 }			#prev -50
+		desert_mountains = { damage = -65 }		#prev -50
 		wetlands = { damage = -75 }
 	}
 
@@ -428,9 +428,9 @@ cataphract = {
 	terrain_bonus = {
 		plains = { damage = 30 toughness = 5 }
 		drylands = { damage = 30 }
-		hills = { damage = -10 }
-		mountains = { damage = -50 }
-		desert_mountains = { damage = -50 }
+		hills = { damage = -15 }				#prev -10
+		mountains = { damage = -65 }			#prev -50
+		desert_mountains = { damage = -65 }		#prev -50
 		wetlands = { damage = -80 toughness = -15 pursuit = -10 }
 	}
 

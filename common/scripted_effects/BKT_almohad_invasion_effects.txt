@@ -1,0 +1,153 @@
+﻿spawn_first_almohad_troops_effect = {
+	#Basicaly rewrote this all because seems like they get only 1 army of 1000 levies????
+	save_temporary_scope_as = root_scope
+	spawn_almohad_troops_effect = { TROOPS_NAME = first_almohad_event_troops }
+	#ADDED - also become conqueror coz why not really
+	trigger_event = conqueror.0001
+}
+
+spawn_second_almohad_troops_effect = {
+	if = {
+		limit = {
+			is_at_war = yes
+		}
+		#Yes, twice.
+		save_temporary_scope_as = root_scope
+		spawn_almohad_troops_effect = { TROOPS_NAME = second_almohad_event_troops }
+		spawn_almohad_troops_effect = { TROOPS_NAME = second_almohad_event_troops }
+		#ADDED - also become conqueror coz why not really
+		trigger_event = conqueror.0001
+	}
+}
+
+spawn_almohad_troops_effect = {
+	if = {
+		limit = {
+			is_at_war = yes
+		}
+		ordered_war_enemy = {
+			order_by = max_military_strength
+			position = 0
+			save_scope_value_as = {
+				name = base_troop_count
+				value = {
+					value = max_military_strength
+					multiply = 2
+					min = 4000
+				}
+			}
+		}
+	}
+	else = { 
+		save_scope_value_as = {
+			name = base_troop_count
+			value = 4000
+		}
+	}
+		
+	spawn_army = {
+		uses_supply = no
+		inheritable = yes
+		name = $TROOPS_NAME$
+		levies = {
+			value = scope:base_troop_count
+			divide = 2000
+			ceiling = yes	#to round to nearest 500
+			multiply = 500
+		}
+		men_at_arms = {
+			type = mulaththamun
+			stacks = {
+				value = scope:base_troop_count
+				divide = 1000
+				ceiling = yes
+			}
+		}
+		men_at_arms = {
+			type = sahel_horsemen
+			stacks = {
+				value = scope:base_troop_count
+				divide = 1000
+				ceiling = yes
+				add = -1
+			}
+		}
+		men_at_arms = {
+			type = abudrar
+			stacks = {
+				value = scope:base_troop_count
+				divide = 1000
+				ceiling = yes
+			}
+		}
+		location = scope:root_scope.capital_province
+	}
+		
+	#Yes those are tribes with trebuchets, so what?
+	spawn_army = {
+		uses_supply = no
+		inheritable = yes
+		name = $TROOPS_NAME$
+		levies = {
+			value = scope:base_troop_count
+			divide = 1500
+			ceiling = yes	#to round to nearest 500
+			multiply = 500
+		}
+		men_at_arms = {
+			type = abudrar
+			stacks = {
+				value = scope:base_troop_count
+				divide = 500
+				ceiling = yes
+			}
+		}
+		men_at_arms = {
+			type = trebuchet
+			stacks = {
+				value = scope:base_troop_count
+				divide = 2000
+				ceiling = yes
+			}
+		}
+		location = scope:root_scope.capital_province
+	}
+	
+	#make it double as well
+	spawn_army = {
+		uses_supply = no
+		inheritable = yes
+		name = $TROOPS_NAME$
+		levies = {
+			value = scope:base_troop_count
+			divide = 1500
+			ceiling = yes	#to round to nearest 500
+			multiply = 500
+		}
+		men_at_arms = {
+			type = abudrar
+			stacks = {
+				value = scope:base_troop_count
+				divide = 1000
+				ceiling = yes
+			}
+		}
+		men_at_arms = {
+			type = mulaththamun
+			stacks = {
+				value = scope:base_troop_count
+				divide = 1000
+				ceiling = yes
+			}
+		}
+		men_at_arms = {
+			type = trebuchet
+			stacks = {
+				value = scope:base_troop_count
+				divide = 2000
+				ceiling = yes
+			}
+		}
+		location = scope:root_scope.capital_province
+	}
+}

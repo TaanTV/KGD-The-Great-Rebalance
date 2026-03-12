@@ -1,0 +1,234 @@
+﻿vizier_default_task_diplomacy_scale = {
+	add = diplomacy
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 5
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_default_task_martial_scale = {
+	add = martial
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 5
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_default_task_intrigue_scale = {
+	add = intrigue
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 5
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_default_task_learning_scale = {
+	add = learning
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_default_task_stewardship_scale = {
+	add = stewardship
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 5
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_task_court_politics_scale = {
+	add = diplomacy
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 2.5	#prev 2
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_task_chivalry_scale = {
+	add = martial
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 2.5	#prev 2
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_task_court_intrigue_scale = {
+	add = intrigue
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 2.5	#prev 2
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_task_manage_domain_scale = {
+	add = stewardship
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 2.5	#prev 2
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+vizier_task_patronage_scale = {
+	add = learning
+	#ADDED - save the value
+	save_temporary_value_as = original_skill
+	scope:councillor_liege = {
+		#ADDED - CHANGED moved all that into a proper unified script value
+		add = vizier_task_skill_from_bonuses_value
+		divide = 2.5	#prev 2
+		if = {
+			limit = {
+				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again
+			}
+			ceiling = yes
+		}
+		else = {
+			floor = yes
+		}
+	}
+	min = 1
+}
+
+#ADDED - new value yay.
+vizier_task_skill_from_bonuses_value = {
+	if = {
+		limit = {
+			has_perk = loyalty_and_respect_perk
+		}
+		add = {
+			value = scope:original_skill
+			multiply = 1.25
+			subtract = scope:original_skill
+		}
+		save_temporary_value_as = has_been_modified # for performance reasons, to avoid checking trigger again
+	}
+	if = {
+		limit = {
+			dynasty ?= { has_dynasty_perk = fp3_khvarenah_legacy_3 }
+		}
+		add = {
+			value = scope:original_skill
+			multiply = 1.25
+			subtract = scope:original_skill
+		}
+		save_temporary_value_as = has_been_modified # for performance reasons, to avoid checking trigger again
+	}
+}

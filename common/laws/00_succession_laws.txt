@@ -67,6 +67,8 @@
 			create_primary_tier_titles = yes
 		}
 		flag = partition_succession_law
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			glory_hound_opinion = 10
 			parochial_opinion = 5
@@ -147,6 +149,8 @@
 			title_division = partition
 		}
 		flag = partition_succession_law
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			glory_hound_opinion = 10
 			parochial_opinion = 5
@@ -162,6 +166,13 @@
 			if = {
 				limit = { has_realm_law = confederate_partition_succession_law }
 				value = 1
+			}
+			#ADDED
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
 			}
 		}
 
@@ -209,10 +220,14 @@
 			primary_heir_minimum_share = 0.5
 		}
 		flag = partition_succession_law
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			glory_hound_opinion = 5
 			belligerent_opinion = -10
 			player_heir_opinion = 15
+			#ADDED
+			eligible_child_except_player_heir_opinion = -10
 		}
 		pass_cost = {
 			prestige = change_succession_law_prestige_cost
@@ -227,6 +242,13 @@
 					}
 				}
 				value = 2
+			}
+			#ADDED
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
 			}
 		}
 
@@ -258,7 +280,11 @@
 		can_title_have = {
 			# Ceremonial Regent
 			NOT = { exists = var:administrative_ui_special_title.holder }
+			#ADDED
+			can_title_have_law_general_trigger = yes
 		}
+		#ADDED
+		should_show_for_title = { always = no }
 		can_have = {
 			NOT = { government_has_flag = government_is_nomadic }
 			can_have_single_heir_succession_law_trigger = yes
@@ -281,7 +307,13 @@
 			}
 		}
 		should_start_with = {
-			historical_succession_access_single_heir_succession_law_trigger = yes
+			OR = { # Unop: Now, if you have unlocked the primogeniture innovation you will start with this law
+				historical_succession_access_single_heir_succession_law_trigger = yes
+				AND = {
+					culture = { has_innovation = innovation_heraldry }
+					years_from_game_start > 0			#not right-right away though
+				}
+			}
 		}
 		succession = {
 			order_of_succession = inheritance
@@ -290,11 +322,13 @@
 			title_division = single_heir
 		}
 		flag = advanced_succession_law
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			glory_hound_opinion = -10
 			parochial_opinion = -5
 			player_heir_opinion = 20
-			eligible_child_except_player_heir_opinion = -5
+			eligible_child_except_player_heir_opinion = -20		#prev -5
 		}
 		pass_cost = {
 			prestige = change_succession_law_prestige_cost
@@ -317,6 +351,13 @@
 
 		ai_will_do = {
 			value = 3
+			#ADDED
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
+			}
 		}
 
 		potential = {
@@ -357,6 +398,8 @@
 		}
 		flag = advanced_succession_law
 		flag = can_designate_heirs
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			belligerent_opinion = 10
 			glory_hound_opinion = 5
@@ -371,6 +414,13 @@
 
 		ai_will_do = {
 			value = 3
+			#ADDED
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
+			}
 		}
 
 		potential = {
@@ -419,11 +469,13 @@
 		}
 
 		flag = advanced_succession_law
+		#ADDED
+		flag = bkt_normal_succession_law
 		modifier = {
 			glory_hound_opinion = -10
 			parochial_opinion = -5
 			player_heir_opinion = 20
-			eligible_child_except_player_heir_opinion = -5
+			eligible_child_except_player_heir_opinion = -20		#prev -5
 		}
 		pass_cost = {
 			prestige = change_succession_law_prestige_cost
@@ -497,7 +549,7 @@
 		flag = advanced_succession_law
 		modifier = {
 			glory_hound_opinion = -5
-			eligible_child_except_player_heir_opinion = -15
+			eligible_child_except_player_heir_opinion = -20		#prev -15
 			dynasty_house_opinion = 5
 		}
 		pass_cost = {
@@ -532,6 +584,13 @@
 					}
 				}
 				value = 2
+			}
+			#ADDED
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
 			}
 		}
 
@@ -697,6 +756,8 @@
 			limit_to_courtiers = yes
 		}
 		flag = can_designate_heirs
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		potential = {
 			government_has_flag = government_is_landless_adventurer
@@ -829,6 +890,8 @@
 
 		flag = same_house_vassals_gain_claim_on_primary_title
 		flag = house_unity_stage_antagonistic
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		modifier = {
 			dynasty_house_opinion = -10
@@ -885,6 +948,8 @@
 
 		flag = same_house_vassals_gain_claim_on_primary_title
 		flag = house_unity_stage_competitive
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		modifier = {
 			glory_hound_opinion = 10
@@ -942,6 +1007,8 @@
 		}
 
 		flag = house_unity_stage_impassive
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		succession = {
 			order_of_succession = inheritance
@@ -994,6 +1061,8 @@
 		}
 
 		flag = house_unity_stage_friendly
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		succession = {
 			order_of_succession = inheritance
@@ -1047,6 +1116,8 @@
 		}
 
 		flag = house_unity_stage_harmonious
+		#ADDED
+		flag = bkt_normal_succession_law
 
 		succession = {
 			order_of_succession = inheritance
@@ -1241,6 +1312,8 @@
 		}
 		can_title_have = {
 			exists = var:administrative_ui_special_title
+			#ADDED
+			can_title_have_law_general_trigger = yes
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -1422,6 +1495,8 @@
 			title_division = single_heir
 		}
 		flag = can_designate_heirs
+		#ADDED
+		flag = bkt_normal_succession_law
 		
 		potential = {
 			realm_law_is_mandala = yes
@@ -1588,6 +1663,8 @@
 		}
 		can_title_have = {
 			exists = var:administrative_ui_special_title
+			#ADDED
+			can_title_have_law_general_trigger = yes
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -1629,11 +1706,6 @@ succession_gender_laws = {
 	male_only_law = {
 		can_title_have = {
 			can_title_have_law_general_trigger = yes
-			#ADDED - stop AI from spamming this on all the titles for some reason
-			trigger_if = {
-				limit = { holder ?= { is_ai = yes } }
-				has_title_law = male_only_law
-			}
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -1779,18 +1851,36 @@ succession_gender_laws = {
 				}
 				multiply = 0
 			}
+			if = {
+				limit = {
+					NAND = {
+						is_male = yes
+						OR = {
+							AND ={
+								has_trait = zealous
+								faith = { has_dominant_ruling_gender = prev }
+							}
+							has_trait = arrogant
+						}
+						NOT = { has_trait = stubborn }
+						ai_boldness > 75
+					}
+					culture = { has_cultural_parameter = female_preference_inheritance }
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
+			}
 		}
-						
 	}
 
 	male_preference_law = {
 		can_title_have = {
 			can_title_have_law_general_trigger = yes
-			#ADDED - stop AI from spamming this on all the titles for some reason
-			trigger_if = {
-				limit = { holder ?= { is_ai = yes } }
-				has_title_law = male_preference_law
-			}
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -1937,13 +2027,6 @@ succession_gender_laws = {
 			}
 			if = {
 				limit = {
-					is_male = yes
-					government_has_flag = government_is_clan
-				}
-				multiply = 0
-			}
-			if = {
-				limit = {
 					faith = {
 						has_doctrine = doctrine_pluralism_fundamentalist
 						NOT = {
@@ -1953,17 +2036,43 @@ succession_gender_laws = {
 				}
 				multiply = 0
 			}
+			if = {
+				limit = {
+					NAND = {
+						is_male = yes
+						OR = {
+							AND ={
+								has_trait = zealous
+								faith = { has_dominant_ruling_gender = prev }
+							}
+							has_trait = arrogant
+						}
+						NOT = { has_trait = stubborn }
+						ai_boldness > 50
+					}
+					culture = { has_cultural_parameter = female_preference_inheritance }
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					is_male = yes
+					government_has_flag = government_is_clan
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
+			}
 		}
 	}
 
 	equal_law = {
 		can_title_have = {
 			can_title_have_law_general_trigger = yes
-			#ADDED - stop AI from spamming this on all the titles for some reason
-			trigger_if = {
-				limit = { holder ?= { is_ai = yes } }
-				has_title_law = equal_law
-			}
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -2072,17 +2181,18 @@ succession_gender_laws = {
 				}
 				multiply = 0
 			}
+			if = {
+				limit = {
+					exists = scope:title
+				}
+				multiply = 0
+			}
 		}
 	}
 
 	female_preference_law = {
 		can_title_have = {
 			can_title_have_law_general_trigger = yes
-			#ADDED - stop AI from spamming this on all the titles for some reason
-			trigger_if = {
-				limit = { holder ?= { is_ai = yes } }
-				has_title_law = female_preference_law
-			}
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -2190,8 +2300,32 @@ succession_gender_laws = {
 			}
 			if = {
 				limit = {
+					NAND = {
+						is_female = yes
+						OR = {
+							AND ={
+								has_trait = zealous
+								faith = { has_dominant_ruling_gender = prev }
+							}
+							has_trait = arrogant
+						}
+						NOT = { has_trait = stubborn }
+						ai_boldness > 50
+					}
+					culture = { has_cultural_parameter = male_preference_inheritance }
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
 					is_female = yes
 					government_has_flag = government_is_clan
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					exists = scope:title
 				}
 				multiply = 0
 			}
@@ -2201,11 +2335,6 @@ succession_gender_laws = {
 	female_only_law = {
 		can_title_have = {
 			can_title_have_law_general_trigger = yes
-			#ADDED - stop AI from spamming this on all the titles for some reason
-			trigger_if = {
-				limit = { holder ?= { is_ai = yes } }
-				has_title_law = female_only_law
-			}
 		}
 		should_show_for_title = { # Never show this in the UI, just apply it through script
 			always = no
@@ -2334,6 +2463,30 @@ succession_gender_laws = {
 							has_doctrine = doctrine_gender_female_dominated
 						}
 					}
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					NAND = {
+						is_female = yes
+						OR = {
+							AND ={
+								has_trait = zealous
+								faith = { has_dominant_ruling_gender = prev }
+							}
+							has_trait = arrogant
+						}
+						NOT = { has_trait = stubborn }
+						ai_boldness > 75
+					}
+					culture = { has_cultural_parameter = male_preference_inheritance }
+				}
+				multiply = 0
+			}
+			if = {
+				limit = {
+					exists = scope:title
 				}
 				multiply = 0
 			}

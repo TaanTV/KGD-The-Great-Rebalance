@@ -104,7 +104,9 @@ special_contract = {
 			levies_factor = scutage_contract_levies		#prev -0.75
 
 			subject_modifier = {
-				men_at_arms_maintenance = -0.2
+				men_at_arms_maintenance = -0.33			#prev -0.2
+				#ADDED
+				development_growth_factor = 0.25
 			}
 
 			flag = has_scutage_contract
@@ -133,6 +135,18 @@ special_contract = {
 						}
 					}
 					add = 10
+				}
+				#ADDED - dont spam them plz
+				if = {
+					limit = {
+						scope:liege = {
+							any_vassal = {
+								percent >= 0.33
+								vassal_contract_has_flag = has_scutage_contract
+							}
+						}
+					}
+					multiply = 0
 				}
 			}
 			ai_subject_desire = -2
@@ -476,6 +490,7 @@ coinage_rights = {
 			}
 			
 			#ADDED
+			tax_factor = -0.05
 			subject_opinion = 10
 
 			ai_liege_desire = 0
@@ -552,6 +567,10 @@ war_declaration_rights = {
 			subject_modifier = {
 				monthly_war_income_mult = 0.05
 			}
+			
+			#ADDED
+			#ADDED
+			levies_factor = -0.05
 
 			flag = vassal_contract_war_override
 
@@ -605,6 +624,10 @@ title_revocation_rights = {
 			}
 		}
 	}
+	#ADDED
+	can_be_changed = {
+		NOT = { scope:subject = { is_imprisoned_by = scope:liege } }
+	}
 	obligation_levels = {
 		title_revocation_rights_default = {
 			default = yes
@@ -631,7 +654,7 @@ title_revocation_rights = {
 
 			subject_opinion = 15	#prev 5
 
-			#ADDED
+			#ADDED - factors
 			tax_factor = -0.1
 			levies_factor = -0.1
 

@@ -11,36 +11,36 @@ cf_abundant_grazing_growth_mult_value = 0.5		#prev 0.25
 ## SEVERE DROUGHT (BAD)
 
 cf_severe_drought_decline_add_value = -1		#prev -0.5
-cf_severe_drought_decline_mult_value = 0.3		#prev 0.2
-cf_severe_drought_growth_mult_value = -0.4		#prev -0.2
+cf_severe_drought_decline_mult_value = 0.25		#prev 0.2
+cf_severe_drought_growth_mult_value = -0.35		#prev -0.2
 
 ## WHITE ZUD (BAD-BAD)
 
-cf_white_zud_decline_add_value = -4				#prev -2
-cf_white_zud_decline_mult_value = 0.6			#prev 0.4
-cf_white_zud_growth_mult_value = -1				#prev -0.4
+cf_white_zud_decline_add_value = -2.5			#prev -2
+cf_white_zud_decline_mult_value = 0.5			#prev 0.4
+cf_white_zud_growth_mult_value = -0.8			#prev -0.4
 
 ## COLD ZUD ( BAD )
 
-cf_cold_zud_decline_add_value = -3				#prev -2
-cf_cold_zud_decline_mult_value = 0.45			#prev 0.3
-cf_cold_zud_growth_mult_value = -0.8			#prev -0.4
+cf_cold_zud_decline_add_value = -2.25			#prev -2
+cf_cold_zud_decline_mult_value = 0.4			#prev 0.3
+cf_cold_zud_growth_mult_value = -0.65			#prev -0.4
 
 ## EVERLASTING SUMMER ( GOOD-GOOD )
 
 cf_warm_nights_growth_add_value = 2.0
-cf_warm_nights_growth_mult_value = 1.35			#prev 0.75
+cf_warm_nights_growth_mult_value = 1.25			#prev 0.75
 
 ## BLESSING OF THE BLUE SKY ( BLISS )
 
 cf_sky_blessing_growth_add_value = 8
-cf_sky_blessing_growth_mult_value = 5			#prev 3
+cf_sky_blessing_growth_mult_value = 4			#prev 3
 
 # HAVSARSAN ( EVERYBODY WILL PERISH )
 
 cf_havsarsan_decline_add_value = -4				#prev 4
-cf_havsarsan_decline_mult_value = 0.8			#prev 1
-cf_havsarsan_growth_mult_value = -1.5			#prev -3
+cf_havsarsan_decline_mult_value = 0.75			#prev 1
+cf_havsarsan_growth_mult_value = -1.25			#prev -3
 
 
 # TERRAIN (only growth add)
@@ -50,13 +50,13 @@ steppe_county_fertility_value = 0.7				#prev 0.35
 farmlands_county_fertility_value = 0.5			#prev 0.35
 oasis_county_fertility_value = 0.6				#prev 0.35
 plains_county_fertility_value = 0.55			#prev 0.25
-desert_county_fertility_value = 0.4				#prev 0.25
+desert_county_fertility_value = 0.35			#prev 0.25
 drylands_county_fertility_value = 0.5			#prev 0.25
-hills_county_fertility_value = 0.4				#prev 0.2
-floodplains_county_fertility_value = 0.4		#prev 0.2
-wetlands_county_fertility_value = 0.35			#prev 0.2
-mountains_county_fertility_value = 0.25			#prev 0.15
-desert_mountains_county_fertility_value = 0.2	#prev 0.15
-forest_county_fertility_value = 0.3				#prev 0.15
-taiga_county_fertility_value = 0.3				#prev 0.15
-jungle_county_fertility_value = 0.25			#prev 0.05
+hills_county_fertility_value = 0.35				#prev 0.2
+floodplains_county_fertility_value = 0.45		#prev 0.2
+wetlands_county_fertility_value = 0.3			#prev 0.2
+mountains_county_fertility_value = 0.2			#prev 0.15
+desert_mountains_county_fertility_value = 0.15	#prev 0.15
+forest_county_fertility_value = 0.25			#prev 0.15
+taiga_county_fertility_value = 0.25				#prev 0.15
+jungle_county_fertility_value = 0.2				#prev 0.05

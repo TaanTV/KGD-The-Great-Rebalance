@@ -50,7 +50,7 @@ innovation_hoardings = {
 	
 	#ADDED
 	ai_weight_for_fascination = {
-		value = 2000	#good
+		value = 4000	#good
 		if = {
 			limit = { NOT = { has_cultural_era_or_later = culture_era_high_medieval } }
 			multiply = 0.001
@@ -117,8 +117,8 @@ innovation_castle_baileys = {
 	#ADDED
 	maa_upgrade = {
 		type = peasant_militia
-		damage = 2
-		toughness = 2
+		damage = 4
+		toughness = 4
 	}
 	
 	#ADDED
@@ -131,7 +131,7 @@ innovation_castle_baileys = {
 		else = {
 			if = {
 				limit = { has_innovation = innovation_hoardings }
-				add = 1700
+				add = 2700
 			}
 			if = {
 				limit = { has_cultural_era_or_later = culture_era_late_medieval }
@@ -403,7 +403,7 @@ innovation_guilds = {
 		else = {
 			if = {
 				limit = { has_innovation = innovation_hoardings }
-				add = 1700
+				add = 2700
 			}
 			if = {
 				limit = { has_cultural_era_or_later = culture_era_late_medieval }

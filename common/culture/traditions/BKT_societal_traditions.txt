@@ -294,9 +294,9 @@ tradition_hard_working = {
 		#next_level_w_mills = yes		#Heh. Nope.
 	}
 	character_modifier = {
-		build_speed = -0.15
-		stress_gain_mult = 0.15
-		build_gold_cost = 0.15
+		build_speed = 0.25				#prev -0.15
+		stress_gain_mult = 0.1			#prev 0.15
+		#build_gold_cost = 0.15
 	}
 	
 	cost = {
@@ -374,7 +374,7 @@ tradition_hard_working = {
 	}
 	
 	ai_will_do = {
-		value = 200		#prev 400
+		value = 150		#prev 400
 		if = {
 			limit = {
 				NOR = {
@@ -388,6 +388,8 @@ tradition_hard_working = {
 			limit = {
 				scope:character ?= {
 					ai_has_economical_boom_personality = yes
+					#ADDED
+					NOT = { has_variable = temporary_forced_builder_ai }
 				}
 			}
 			multiply = 4

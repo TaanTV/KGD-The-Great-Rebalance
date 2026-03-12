@@ -1,0 +1,157 @@
+﻿
+check_and_add_legitimacy_for_renown_differences = {
+	scope:secondary_$SCOPE_TO$ = {
+		if = {
+			limit = {
+				is_valid_for_legitimacy_change = yes
+				is_lowborn = no
+				#this = scope:secondary_$SCOPE_TO$ # We check that you're marrying them yourself 
+				scope:secondary_$SCOPE_FROM$ = { is_lowborn = no }
+				dynasty.dynasty_prestige_level < scope:secondary_$SCOPE_FROM$.dynasty.dynasty_prestige_level
+				NAND = {		#only once per character.
+					has_variable_list = got_legitimacy_for_marrying_those
+					is_target_in_variable_list = {
+						name = got_legitimacy_for_marrying_those
+						target = scope:secondary_$SCOPE_FROM$
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = scope:secondary_actor }
+						NOT = { exists = scope:secondary_recipient }
+						scope:secondary_actor.age < 16
+						scope:secondary_recipient.age < 16
+					}
+				}
+				#This is here to stop it from double-counting
+				show_as_tooltip = {
+					add_legitimacy = {
+						value = scope:secondary_$SCOPE_FROM$.dynasty.dynasty_prestige_level
+						subtract = dynasty.dynasty_prestige_level
+						multiply = 10
+						if = {
+							limit = {
+								OR = {
+									NOT = { exists = primary_spouse }
+									primary_spouse ?= scope:secondary_$SCOPE_FROM$
+								}
+							}
+							multiply = 3
+						}
+					}
+				}
+			}
+			else = {
+				add_legitimacy = {
+					value = scope:secondary_$SCOPE_FROM$.dynasty.dynasty_prestige_level
+					subtract = dynasty.dynasty_prestige_level
+					multiply = 10
+					if = {
+						limit = {
+							OR = {
+								NOT = { exists = primary_spouse }
+								primary_spouse ?= scope:secondary_$SCOPE_FROM$
+							}
+						}
+						multiply = 3
+					}
+				}	
+				add_to_variable_list = {
+					name = got_legitimacy_for_marrying_those
+					target = scope:secondary_$SCOPE_FROM$
+				}
+			}
+		}
+	}
+	
+	### THIS IS HOW IT WAS DONE BEFORE ###
+	#ADDED - legitimacy for dynasty prestige differences
+	#if = {
+	#	limit = {
+	#		is_valid_for_legitimacy_change = yes
+	#		OR = {
+	#			AND = {
+	#				this = scope:secondary_actor # We check that you're marrying them yourself 
+	#				scope:secondary_recipient = { is_lowborn = no }
+	#				dynasty.dynasty_prestige_level < scope:secondary_recipient.dynasty.dynasty_prestige_level
+	#				NAND = {		#only once per character.
+	#					has_variable_list = got_legitimacy_for_marrying_those
+	#					is_target_in_variable_list = {
+	#						name = got_legitimacy_for_marrying_those
+	#						target = scope:secondary_recipient
+	#					}
+	#				}
+	#			}
+	#			AND = {
+	#				this = scope:secondary_recipient # We check that you're marrying them yourself
+	#				scope:secondary_actor = { is_lowborn = no }
+	#				dynasty.dynasty_prestige_level < scope:secondary_actor.dynasty.dynasty_prestige_level
+	#				NAND = {		#only once per character.
+	#					has_variable_list = got_legitimacy_for_marrying_those
+	#					is_target_in_variable_list = {
+	#						name = got_legitimacy_for_marrying_those
+	#						target = scope:secondary_actor
+	#					}
+	#				}
+	#			}
+	#		}
+	#	}
+	#	if = {
+	#		limit = { this = scope:secondary_actor }
+	#		scope:secondary_recipient = { save_scope_as = spouse_scope }
+	#	}
+	#	else_if = {
+	#		limit = { this = scope:secondary_recipient }
+	#		scope:secondary_actor = { save_scope_as = spouse_scope }
+	#	}
+	#	if = {
+	#		limit = {
+	#			OR = {
+	#				NOT = { exists = scope:secondary_actor }
+	#				NOT = { exists = scope:secondary_recipient }
+	#				scope:secondary_actor.age < 16
+	#				scope:secondary_recipient.age < 16
+	#			}
+	#		}
+	#		#This is here to stop it from double-counting
+	#		show_as_tooltip = {
+	#			add_legitimacy = {
+	#				value = scope:spouse_scope.dynasty.dynasty_prestige_level
+	#				subtract = dynasty.dynasty_prestige_level
+	#				multiply = 10
+	#				if = {
+	#					limit = {
+	#						OR = {
+	#							NOT = { exists = primary_spouse }
+	#							primary_spouse ?= scope:spouse_scope
+	#						}
+	#					}
+	#					multiply = 3
+	#				}
+	#			}
+	#		}
+	#	}
+	#	else = {
+	#		add_legitimacy = {
+	#			value = scope:spouse_scope.dynasty.dynasty_prestige_level
+	#			subtract = dynasty.dynasty_prestige_level
+	#			multiply = 10
+	#			if = {
+	#				limit = {
+	#					OR = {
+	#						NOT = { exists = primary_spouse }
+	#						primary_spouse ?= scope:spouse_scope
+	#					}
+	#				}
+	#				multiply = 3
+	#			}
+	#		}	
+	#		add_to_variable_list = {
+	#			name = got_legitimacy_for_marrying_those
+	#			target = scope:spouse_scope
+	#		}
+	#	}
+	#}
+}

@@ -1,0 +1,218 @@
+﻿##############################################################################
+###### UNITY
+##############################################################################
+
+
+evaluate_action_decreasing_house_unity = {
+	modifier = {
+		desc = DECREASE_UNITY_DESC
+		scope:actor = {
+			government_has_flag = government_is_clan
+			exists = scope:recipient.house
+			house ?= scope:recipient.house
+		}
+		#ADDED - why is this not here?
+		ai_wants_high_unity = no
+		add = {
+			value = $VALUE$ # The value is set by the content calling the unity effect; we want it to be alligned with the other modifiers
+			# Then different parameters apply a factor on the value
+
+			### Personality
+			# Warmonger and Ambitious AI wants a low unity to expand while peaceful and economy focused wants Harmonious
+			#ADDED - this part is rewritten
+			if = {
+				limit = { ai_wants_low_unity = no }
+				multiply = 1
+			}
+			else = {
+				multiply = 0.5
+			}
+
+			### House Head related
+			# Do I want to  take the title?
+			if = {
+				limit = {
+					# if you are aboe impassive, you really want to lower unity
+					house ?= {
+						OR = {
+							has_house_unity_stage = harmonious
+							has_house_unity_stage = friendly
+							has_house_unity_stage = impassive
+
+						}
+					}
+					# only valid for some personnality, and not the heir of the current house head
+					AND = {
+						OR = {
+							has_trait = ambitious
+							has_trait = deceitful
+							has_trait = greedy
+						}
+						NOT = { is_heir_of = house.house_head }
+					}
+
+				}
+				multiply = 1.2
+			}
+
+			### Struggle
+			if = {
+				limit = { has_trait = fp3_struggle_detractor }
+				multiply = 1.5
+			}
+			else_if = {
+				limit = { has_trait = fp3_struggle_supporter }
+				multiply = 0.5
+			}
+
+			### Current Unity state
+			# lower the overall weight if unity is already low: you don't care of lowering unity if you are at 0
+			if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = harmonious
+					}
+				}
+				multiply = 1.2
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = friendly
+					}
+				}
+				multiply = 1.1
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = competitive
+					}
+				}
+				multiply = 0.9
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = antagonistic
+					}
+				}
+				multiply = {
+					value = 0.8
+					if = {
+						limit = {
+							house ?= { house_unity_value <= critical_house_unity }
+						}
+						multiply = 0.5
+					}
+				}
+			}
+		}
+	}
+}
+
+evaluate_action_increasing_house_unity = {
+	modifier = {
+		desc = INCREASE_UNITY_DESC
+		scope:actor = {
+			government_has_flag = government_is_clan
+			exists = scope:recipient.house
+			house ?= scope:recipient.house
+		}
+		#ADDED - why is this not here?
+		ai_wants_low_unity = no
+		add = {
+			value = $VALUE$ # The value is set by the content calling the unity effect; we want it to be alligned with the other modifiers
+			# Then different parameters apply a factor on the value
+
+			### Personality
+			# Warmonger and Ambitious AI wants a low unity to expand while peaceful and economy focused wants Harmonious
+			#ADDED - this part is rewritten
+			if = {
+				limit = { ai_wants_high_unity = no }	#prev yes
+				multiply = 1
+			}
+			else = {
+				multiply = 0.5
+			}
+
+			### House Head related
+			# Do I want to  be rescued if outside of the realm
+			if = {
+				limit = {
+					# if you are under impassive, you really want to increase unity
+					house ?= {
+						OR = {
+							has_house_unity_stage = antagonistic
+							has_house_unity_stage = competitive
+							has_house_unity_stage = impassive
+
+						}
+					}
+					# only valid for people outside of their liege realm
+					NOR ={
+						house.house_head = top_liege
+						house.house_head = liege
+					}
+
+				}
+				multiply = 1.2
+			}
+
+			### Struggle
+			if = {
+				limit = { has_trait = fp3_struggle_supporter }
+				multiply = 1.5
+			}
+			else_if = {
+				limit = { has_trait = fp3_struggle_detractor }
+				multiply = 0.5
+			}
+
+			### Current Unity state
+			# lower the overall weight if unity is already high: you don't care of increasing unity if you are at 100
+			if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = antagonistic
+					}
+				}
+				multiply = 1.2
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = competitive
+					}
+				}
+				multiply = 1.1
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = friendly
+					}
+				}
+				multiply = 0.9
+			}
+			else_if = {
+				limit = {
+					house ?= {
+						has_house_unity_stage = harmonious
+					}
+				}
+				multiply = {
+					value = {
+						add = 0.8
+						if = {
+							limit = {
+								house ?= { house_unity_value >= very_high_house_unity }
+							}
+							multiply = 0.5
+						}
+					}
+				}
+			}
+		}
+	}
+}

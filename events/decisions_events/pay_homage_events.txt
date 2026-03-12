@@ -67,19 +67,29 @@ scripted_trigger pay_homage_valid_trigger = { # Homage is still valid
 
 scripted_effect pay_homage_0001_refuse_homage_effect = {
 	scope:homage_liege = { 
-		add_prestige = minor_prestige_loss
-		add_tyranny = petition_liege_refusal_tyranny_value
+		#add_prestige = minor_prestige_loss
+		#add_tyranny = petition_liege_refusal_tyranny_value
+		#ADDED
+		if = {
+			limit = { NOT = { scope:homage_vassal.var:homage_type = flag:homage_submission } }
+			add_tyranny = petition_liege_refusal_tyranny_value
+		}
+		add_dread = 10
 	}
 	scope:homage_vassal = {
+		#ADDED - stress_impact
+		stress_impact = {
+			base = minor_stress_impact_gain
+		}
 		add_opinion = {
 			modifier = refusal_opinion
 			target = scope:homage_liege
-			opinion = -35		#prev -20
+			opinion = -50		#prev -20
 		}
 		progress_towards_rival_effect = {
 			CHARACTER = scope:homage_liege
 			REASON = rival_refuse_homage
-			OPINION = default_rival_opinion
+			OPINION = 0		#prev default_rival_opinion
 		}
 	}
 }
@@ -218,7 +228,7 @@ pay_homage.0001 = {
 			}
 			#ADDED - dont be a dick
 			modifier = {
-				factor = 0.33
+				factor = 0.5
 				NOT = { scope:homage_vassal.var:homage_type = flag:homage_submission }
 			}
 			modifier = {
@@ -290,13 +300,53 @@ scripted_effect pay_homage_liege_reward_effect = {
 		}
 		else = {
 			change_current_court_grandeur = minor_court_grandeur_gain
-			add_prestige = medium_prestige_gain
-			dynasty = { add_dynasty_prestige = miniscule_dynasty_prestige_gain }		#prev minor_dynasty_prestige_gain
-			#ADDED
+			#add_prestige = medium_prestige_gain
+			#dynasty = { add_dynasty_prestige = minor_dynasty_prestige_gain }
+			#ADDED - actually have a variable amount so there's any point to brushing them off
+			if = {
+				limit = {
+					OR = {
+						exists = scope:homage_faux_pas_mocked
+						NOR = {
+							exists = scope:homage_faux_pas_language
+							exists = scope:homage_faux_pas_clumsy
+							exists = scope:homage_faux_pas_infatuation
+							exists = scope:homage_faux_pas_delivery
+						}
+					}
+				}
+				add_prestige = medium_prestige_gain
+			}
+			else = {
+				add_prestige = miniscule_prestige_gain
+			}
+			if = {
+				limit = {
+					dynasty != scope:homage_vassal.dynasty
+				}
+				dynasty = { add_dynasty_prestige = miniscule_dynasty_prestige_gain }
+			}
 			if = { 
 				limit = { has_legitimacy = yes }
-				add_legitimacy = minor_legitimacy_gain
+				if = {
+					limit = {
+						OR = {
+							exists = scope:homage_faux_pas_mocked
+							NOR = {
+								exists = scope:homage_faux_pas_language
+								exists = scope:homage_faux_pas_clumsy
+								exists = scope:homage_faux_pas_infatuation
+								exists = scope:homage_faux_pas_delivery
+							}
+						}
+					}
+					add_legitimacy = minor_legitimacy_gain
+				}
+				else = {
+					add_prestige = miniscule_legitimacy_gain
+				}
 			}
+			#ADDED - END
 			if = {
 				limit = { scope:homage_vassal.var:homage_type = flag:homage_gold }
 				add_treasury_or_gold = scope:homage_vassal.medium_treasury_or_gold_value

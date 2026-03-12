@@ -1,4 +1,186 @@
-﻿# For buildings
+﻿# Referenced by code. Amount of prestige gained by the winning side per 1000 men who died in battle (hard casualties)
+# Root is the winner main participant
+# scope:enemy_battle_owner is the main enemy participant
+# scope:combat is the combat itself
+battle_winner_prestige_gain = {
+	value = 75
+
+	if = { # Bonus for tribals
+		limit = {
+			government_has_flag = government_is_tribal
+		}
+		add = 75
+	}
+
+	if = { # Leading the troops yourself adds a bit
+		limit = {
+			OR = {
+				scope:combat = {
+					combat_attacker = {
+						side_commander ?= {
+							this = root
+						}
+					}
+				}
+				scope:combat = {
+					combat_defender = {
+						side_commander ?= {
+							this = root
+						}
+					}
+				}
+			}
+		}
+		add = 50	#prev 40
+	}
+
+	if = { # Bonus for legacy
+		limit = {
+			dynasty ?= {
+				has_dynasty_perk = fp1_pillage_legacy_1
+			}
+		}
+		multiply = 2
+	}
+
+	if = { # Cultural tradition
+		limit = {
+			culture = {
+				has_cultural_parameter = less_prestige_from_battles
+			}
+		}
+		multiply = 0.1
+	}
+
+	# Fighting Peasants Rebellion
+	if = {
+		limit = {
+			scope:enemy_battle_owner = { has_variable = rebel_leader_peasants }
+		}
+		multiply = 0.25 # to test
+	}
+
+	if = { # Reduced for LAAMPs
+		limit = {
+			has_government = landless_adventurer_government
+		}
+		multiply = 0.75
+	}
+
+	if = { # Master of Spoils Camp Officer
+		limit = {
+			employs_court_position = master_of_spoils_camp_officer
+		}
+		add = {
+			value = court_position:master_of_spoils_camp_officer.aptitude:master_of_spoils_camp_officer
+			add = 1
+			multiply = 10
+		}
+	}
+
+	if = { # BP3 - Kings of the Wilds Perk
+		limit = {
+			has_perk = personal_touch_perk
+			landless_inspector_king_of_the_wilds = yes
+		}
+		multiply = 1.5
+	}
+	
+	
+	#ADDED - if you're not at war, halve it
+	if = {
+		limit = {
+			NOT = { is_at_war_with = scope:enemy_battle_owner }
+		}
+		multiply = 0.5
+	}
+}
+
+# Referenced by code. Amount of piety gained by the winning side per 1000 men who died in battle (hard casualties)
+# Root is the winner main participant
+# scope:enemy_battle_owner is the main enemy participant
+# scope:combat is the combat itself
+battle_winner_piety_gain = {
+	value = 0
+	if = {
+		limit = {
+			faith = {
+				faith_hostility_level = {
+					target = scope:enemy_battle_owner.faith
+					value >= religious_cb_enabled_hostility_level
+				}
+			}
+		}
+		value = 35
+
+		if = { # Bonus for tribals
+			limit = {
+				government_has_flag = government_is_tribal
+			}
+			add = 50
+		}
+
+		if = { # Leading the troops yourself adds a bit
+			limit = {
+				OR = {
+					scope:combat = {
+						combat_attacker = {
+							side_commander ?= {
+								this = root
+							}
+						}
+					}
+					scope:combat = {
+						combat_defender = {
+							side_commander ?= {
+								this = root
+							}
+						}
+					}
+				}
+			}
+			add = 20
+		}
+
+		if = { # Master of Spoils Camp Officer
+			limit = {
+				employs_court_position = master_of_spoils_camp_officer
+			}
+			add = {
+				value = court_position:master_of_spoils_camp_officer.aptitude:master_of_spoils_camp_officer
+				add = 1
+				multiply = 10
+			}
+		}
+	}
+
+	# Fighting Peasants Rebellion
+	if = {
+		limit = {
+			scope:enemy_battle_owner = { has_variable = rebel_leader_peasants }
+		}
+		multiply = 0.25 # to test
+	}
+
+	if = { # Reduced for LAAMPs
+		limit = {
+			has_government = landless_adventurer_government
+		}
+		multiply = 0.75
+	}
+	
+	
+	#ADDED - if you're not at war, halve it
+	if = {
+		limit = {
+			NOT = { is_at_war_with = scope:enemy_battle_owner }
+		}
+		multiply = 0.5
+	}
+}
+
+
+# For buildings
 
 #dislikes_maa_value = -9
 #compensate_conflict_maa_bonus = 9

@@ -58,7 +58,7 @@ bkt_difficulty = {
 bkt_accolades = {
 	
 	categories = {
-		balance difficulty ai
+		difficulty ai
 	}
 	
 	default = bkt_accolades_enabled
@@ -73,6 +73,19 @@ bkt_accolades = {
 		apply_modifier = player:bkt_accolades_disabled
 		apply_modifier = ai:bkt_accolades_disabled
 	}
+}
+
+bkt_own_war_declaration_law_toggle = {
+	
+	categories = {
+		difficulty
+	}
+	
+	default = bkt_own_war_declaration_law_toggle_enabled
+	#dlc = "The Northern Lords"
+	bkt_own_war_declaration_law_toggle_enabled = { flag = GG_can_change_rule }
+	bkt_own_war_declaration_law_toggle_player_only = { flag = GG_can_change_rule }
+	bkt_own_war_declaration_law_toggle_disabled = { flag = GG_can_change_rule }
 }
 
 bkt_additional_content = {
@@ -91,7 +104,7 @@ bkt_additional_content = {
 bkt_mp_special_rules = {
 	
 	categories = {
-		tweaks
+		multiplayer tweaks
 	}
 	
 	default = bkt_mp_special_rules_disabled

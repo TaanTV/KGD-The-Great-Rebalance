@@ -51,8 +51,70 @@
 	}
 	
 	character_modifier = {
-		sway_scheme_phase_duration_add = massive_scheme_phase_duration_bonus_value
+		sway_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value	#prev medium_scheme_phase_duration_bonus_value
 		# Wtf do u mean "medium", sway has 1 phase! Pdx PLEASE.
+	}
+}
+
+
+inspiring_rule_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = majesty
+	
+	position = { 0 1 }
+	icon = node_diplomacy
+	
+	parent = benevolent_intent_perk
+	
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = inspiring_rule_perk_adventurer_name
+			}
+			desc = inspiring_rule_perk_name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_tooltip = {
+				text = adventurer_inspiring_rule_perk_effect
+			}
+		}
+	}
+	
+	government_character_modifier = {
+		flag = has_unique_government_perks
+		invert_check = yes
+		monthly_prestige_gain_per_happy_powerful_vassal_mult = 0.04
+		councillor_opinion = 5		#prev 10
+	}
+	
+	government_character_modifier = {
+		flag = government_is_nomadic
+		blood_brother_renown_mult = 0.02 # Counts as one more living member
+	}
+
+	government_character_modifier = {
+		flag = government_is_japan_feudal
+		monthly_prestige_gain_per_court_position_mult = 0.01
+		councillor_opinion = 5		#prev 
+	}
+
+	government_character_modifier = {
+		flag = government_is_japan_administrative
+		monthly_prestige_gain_per_court_position_mult = 0.01
+		councillor_opinion = 5		#prev 
+	}
+
+	government_character_modifier = {
+		flag = government_is_mandala
+		monthly_piety_gain_per_court_position_mult = 0.01
+		councillor_opinion = 5		#prev 
 	}
 }
 

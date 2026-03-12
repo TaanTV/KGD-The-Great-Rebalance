@@ -33,9 +33,12 @@ activity_feast = {
 					NOR = {
 						has_government = japan_administrative_government
 						has_government = japan_feudal_government
+						#ADDED
+						top_liege = this
+						stress > 75
 					}
 				}
-				ai_sociability >= 80		#prev 100
+				ai_sociability >= 75		#prev 100
 			}
 		}
 		#Every other activity must be blocked until an uncrowned AI crowns themselves
@@ -647,6 +650,38 @@ activity_feast = {
             	desc = "Diarchy"
             }
 		}
+		#ADDED - i heard you need prestige
+        if = {
+        	limit = { 
+				#350 per rank above baron, 1400 for empires 1750 for hegemons 
+				prestige < { value = highest_held_title_tier add = -1 multiply = 350 }
+			}
+        	add = {
+            	value = 30
+            	desc = "Prestige"
+            }
+        }
+		#ADDED - i heard you need prestige 2
+        if = {
+        	limit = { 
+				exists = confederation
+				OR = {
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+				}
+				save_temporary_scope_as = root_scope
+				confederation = {
+					any_confederation_member = {
+						count = all
+						max_military_strength < scope:root_scope.max_military_strength
+					}
+				}
+			}
+        	add = {
+            	value = 755
+            	desc = "Prestige potential confederation leader"
+            }
+        }
 		if = {
 			limit = {
 				government_has_flag = government_is_nomadic
@@ -843,6 +878,17 @@ activity_feast = {
 				has_character_flag = feast_ai_override
 			}
 			add = 10000
+		}
+		#ADDED
+		if = {
+			limit = {
+				government_has_flag = government_is_mandala
+				house ?= { 
+					prev = house_head
+					has_house_head_parameter = aspect_of_serenity_ways_to_die #basically just serenity check
+				}
+			}
+			add = 200
 		}
 	}
 
@@ -1842,7 +1888,12 @@ activity_feast = {
 	}
 	background = {	# EP3
 		trigger = {
-			activity_location.culture = { has_building_gfx = byzantine_building_gfx }
+			activity_location.culture = {
+				OR = {
+					has_building_gfx = byzantine_building_gfx
+					has_building_gfx = caucasian_building_gfx
+				}
+			}
 		}
 		texture = "gfx/interface/illustrations/event_scenes/ep3_feast_byzantine.dds"
 		environment = "environment_ep3_byzantine_feast"
@@ -4209,7 +4260,7 @@ activity_feast = {
 	# PHASES
 	###################
 
-	max_guest_arrival_delay_time = { months = 8 }
+	max_guest_arrival_delay_time = { months = 3 }	#prev 8
 
 	phases = {
 		# Meal.

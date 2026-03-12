@@ -1,0 +1,65 @@
+﻿
+#Holy Order province calculations
+holy_order_barony_value_calculation = {
+	value = 0
+	add = scope:request_target.medium_gold_value		#prev major_gold_value
+	add = {
+		value = scope:request_target.medium_gold_value
+		multiply = {
+			value = county.development_level
+			multiply = 0.04		#prev 0.1
+		}
+	}
+	if = {
+		limit = {
+			title_province = {
+				has_holding_type = castle_holding
+			}
+		}
+		multiply = 1.2
+	}
+	if = {
+		limit = {
+			title_province = {
+				OR = {
+					has_building = castle_02
+					has_building = city_02
+				}
+			}
+		}
+		multiply = 1.2
+	}
+	if = {
+		limit = {
+			title_province = {
+				OR = {
+					has_building = castle_03
+					has_building = city_03
+				}
+			}
+		}
+		multiply = 1.4
+	}
+	if = {
+		limit = {
+			title_province = {
+				OR = {
+					has_building = castle_04
+					has_building = city_04
+				}
+			}
+		}
+		multiply = 1.6
+	}
+
+	#max = massive_gold_max_value
+	
+	#ADDED
+	multiply = 0.75
+	min = 300
+	max = scope:request_target.massive_gold_max_value
+	if = {
+		limit = { county.holder ?= { NOT = { this = scope:request_target } } }
+		multiply = 0.33
+	}
+}

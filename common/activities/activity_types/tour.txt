@@ -228,6 +228,8 @@
 			limit = {
 				any_vassal = {
 					count >= 15		#prev 5
+					#ADDED
+					highest_held_title_tier > tier_barony
 				}
 			}
 			desc = "I have many vassals"

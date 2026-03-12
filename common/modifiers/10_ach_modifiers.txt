@@ -513,10 +513,10 @@ coronation_swore_persecution_modifier = {
 
 coronation_denying_clergy_modifier = {
 	icon = economy_positive
-	domain_tax_mult = 0.1
-	theocracy_government_tax_contribution_mult = 0.2
-	zealot_opinion = -15	#prev -10
-	clergy_opinion = -35	#prev -25
+	domain_tax_mult = 0.05	#prev 0.1
+	#theocracy_government_tax_contribution_mult = 0.2
+	zealot_opinion = -5		#prev -10
+	clergy_opinion = -15	#prev -25
 	#ADDED
 	theocracy_government_tax_contribution_add = 0.05
 }

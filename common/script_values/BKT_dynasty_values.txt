@@ -4,3 +4,11 @@
 
 # Dynasty Glory Marriage Acceptance Perk
 glory_legacy_1_marriage_acceptance = 20	#prev 30
+
+# Dynasty Kin Personal Scheme Success Chance on Dynasty Perk
+kin_legacy_4_success_chance = 15	#prev 30
+
+# Dynasty House Scheme Success Chance on Cultural Paramater
+cultural_house_personal_scheme_success_chance = 15	#prev 30
+
+ep2_activities_legacy_2_grand_weddings_discount_value = 0.33	#prev 0.5

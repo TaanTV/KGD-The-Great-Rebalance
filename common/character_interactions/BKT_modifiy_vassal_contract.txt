@@ -60,14 +60,6 @@
 				custom_description = {
 					text = "liege_modify_vassal_contract_cannot_exceed_tyranny_cap"
 					object = scope:actor
-					NOT = {
-						vassal_obligation_increase_tyranny_gain_multiplier > 1
-					}
-				}
-
-				custom_description = {
-					text = "liege_modify_vassal_contract_cannot_exceed_tyranny_cap"
-					object = scope:actor
 					#ADDED - OR bloc and actor_recipient_both_players_special_treatment_trigger
 					OR = {
 						NOT = {
@@ -760,14 +752,25 @@ ai_only_liege_modify_vassal_contract_interaction = {
 						}
 						OR = {
 							current_military_strength > eighty_percent_of_max_military_strength
-							ai_rationality < -25
+							ai_rationality < -33
 						}
 					}
 					scope:recipient = {
-						government_has_flag = government_is_feudal
 						OR = {
-							vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
-							vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+							AND = {
+								government_has_flag = government_is_feudal
+								OR = {
+									vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+								}
+							}
+							AND = {
+								government_has_flag = government_is_mandala
+								OR = {
+									vassal_contract_obligation_level:mandala_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:mandala_government_levies < feudal_levies_normal_level
+								}
+							}
 							AND = {
 								highest_held_title_tier >= tier_duchy
 								scope:actor.ai_greed >= 75
@@ -854,10 +857,19 @@ ai_only_liege_modify_vassal_contract_interaction = {
 				NOT = { has_usable_hook = scope:recipient }
 			}
 			scope:recipient = {
-				government_has_flag = government_is_feudal
-				NOR = {
-					vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
-					vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+				OR = {
+					government_has_flag = government_is_clan
+					government_has_flag = government_is_nomadic
+					AND = {
+						government_has_flag = government_is_feudal
+						vassal_contract_obligation_level:feudal_government_taxes >= feudal_tax_normal_level
+						vassal_contract_obligation_level:feudal_government_levies >= feudal_levies_normal_level
+					}
+					AND = {
+						government_has_flag = government_is_mandala
+						vassal_contract_obligation_level:mandala_government_taxes >= feudal_tax_normal_level
+						vassal_contract_obligation_level:mandala_government_levies >= feudal_levies_normal_level
+					}
 				}
 			}
 		}

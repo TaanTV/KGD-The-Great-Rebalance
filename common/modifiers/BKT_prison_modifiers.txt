@@ -4,6 +4,8 @@
 	dread_loss_mult = 1
 	monthly_lifestyle_xp_gain_mult = -0.75
 	icon = prison_negative
+	#ADDED
+	monthly_legitimacy_add = -0.5
 }
 
 dungeon = {
@@ -14,4 +16,6 @@ dungeon = {
 	dread_loss_mult = 3				#prev 1
 	monthly_lifestyle_xp_gain_mult = -1.5
 	icon = prison_negative
+	#ADDED
+	monthly_legitimacy_add = -1
 }

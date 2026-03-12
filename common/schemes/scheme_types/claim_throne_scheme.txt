@@ -10,7 +10,7 @@
 	target_type = character
 	is_secret = yes
 	maximum_breaches = 5
-	cooldown = { years = 2 }
+	cooldown = { years = 5 }	#prev 2
 	
 	# Parameters
 	speed_per_skill_point = t2_spsp_owner_value

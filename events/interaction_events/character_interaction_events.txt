@@ -368,8 +368,17 @@ char_interaction.0080 = {
 				trigger = {
 					this = scope:guardian
 					scope:recipient = scope:ward_liege
+					NOT = { scope:recipient = scope:secondary_recipient }
 				}
 				desc = char_interaction.0080.desc_self
+			}
+			triggered_desc = {
+				trigger = {
+					this = scope:guardian
+					scope:recipient = scope:ward_liege
+					scope:recipient = scope:secondary_recipient
+				}
+				desc = char_interaction.0080.desc_ward_self
 			}
 			desc = char_interaction.0080.desc
 		} 
@@ -843,7 +852,11 @@ char_interaction.0160 = {
 		}
 	}
 
-	option = {
+	option = { #Unop: Reverse the order of name & added the trigger since in base game (as of 1.13.2) the "lowest" name will be taken if untriggered even if there is one before that validate the trigger
+		name = {
+			trigger = { always = yes }
+			text = char_interaction.0160.a
+		}
 		name = {
 			trigger = {
 				scope:recipient = {
@@ -857,9 +870,10 @@ char_interaction.0160 = {
 			}
 			text = char_interaction.0160.a.courtier
 		}
-		name = {
-			text = char_interaction.0160.a
-		}
+		#Unop Reverse the order
+		#name = {
+		#	text = char_interaction.0160.a
+		#}
 	}
 }
 
@@ -1252,9 +1266,10 @@ char_interaction.0230 = {
 				}
 				every_in_list = {
 					list = ward_children
+					save_temporary_scope_as = ward_child #Unop ck3-tiger
 					remove_guardian_effect = {
 						GUARDIAN = scope:recipient
-						WARD = this
+						WARD = scope:ward_child #Unop ck3-tiger
 						RETURN_WARD = yes
 						HIDE_OPINION = no
 					}
@@ -1312,7 +1327,7 @@ char_interaction.0231 = {
 				limit = {
 					scope:actor = { is_rightful_liege_of = scope:recipient }
 				}
-				scope:actor = { add_legitimacy = miniscule_legitimacy_loss }
+				scope:actor = { add_legitimacy_effect = { LEGITIMACY = miniscule_legitimacy_loss } } #Unop Use correct effect
 			}
 		}
 		show_as_tooltip = {
@@ -2459,13 +2474,19 @@ char_interaction.0350 = {
 				ONLY_EMPTY = no
 			}
 		}
+
 		if = {
-			limit = { exists = scope:eunuch.var:target_court_position }
-			court_position_generator_assignment_effect = {
-				VAR = target
-				EMPLOYER = scope:eunuch_taker
-				CANDIDATE = scope:eunuch
+			limit = { #Unop Add debug log
+				scope:eunuch = { NOT = { has_variable = target_court_position } }
 			}
+			debug_log = "Unop:char_interaction.0350"
+			debug_log_scopes = yes
+		}
+
+		court_position_generator_assignment_effect = {
+			VAR = target
+			EMPLOYER = scope:eunuch_taker
+			CANDIDATE = scope:eunuch
 		}
 	}
 

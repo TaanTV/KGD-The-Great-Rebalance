@@ -1,0 +1,34 @@
+﻿#warfare_ongoing.3010
+#warfare_wrathful_strategy_modifier = {
+#	icon = martial_positive
+#	attacker_advantage = 5
+#	enemy_hard_casualty_modifier = 0.1
+#}
+
+warfare_greedy_strategy_modifier = {
+	icon = martial_positive
+	hostile_county_attrition = -0.25
+	supply_duration = 0.20
+	siege_phase_time = -0.1
+	#advantage = -5
+}
+
+#warfare_patient_strategy_modifier = {
+#	icon = martial_positive
+#	defender_advantage = 5
+#	controlled_province_advantage = 2
+#}
+
+warfare_craven_strategy_modifier = {
+	icon = martial_positive
+	retreat_losses = -0.25
+	movement_speed = 0.1
+	#attacker_advantage = -5
+	hard_casualty_modifier = -0.1
+}
+
+#warfare_flexible_strategy_modifier = {
+#	icon = martial_positive
+#	enemy_terrain_advantage = -0.25
+#	movement_speed = 0.1
+#}

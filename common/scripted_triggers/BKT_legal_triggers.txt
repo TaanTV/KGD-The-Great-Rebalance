@@ -1,9 +1,14 @@
 ﻿
 can_change_succession_laws_realm_flag_trigger = {
+	#ADDED - being uncrowned is bad
+	trigger_if = {
+		limit = { NOT = { culture ?= { has_innovation = innovation_primogeniture } } }
+		NOT = { has_realm_law = uncrowned }
+	}
 	#ADDED - primo allows to skip realm law requirements.
 	trigger_if = {
 		limit = { culture ?= { has_innovation = innovation_primogeniture } }
-		culture = { has_innovation = innovation_primogeniture }
+		always = yes
 	}
 	trigger_else_if = {		#prev trigger_if
 		limit = { realm_law_use_tribal_authority = yes }

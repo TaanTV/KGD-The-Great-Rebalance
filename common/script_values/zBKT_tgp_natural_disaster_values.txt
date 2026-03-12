@@ -1,0 +1,105 @@
+﻿
+# Scale cost by number of affected counties
+# Realms pay a premium based on how many counties are involved in the disaster
+natural_disaster_contributions_cost_value = {
+	add = {
+		add = scope:great_project.great_project_owner.minor_gold_value
+		min = 100
+		multiply = 0.66		#prev 0.5
+		#ADDED
+		floor = yes
+		multiply = {
+			add = 1
+			add = { # first value added as a mult for each county beyond the first
+				add = 0.5
+				multiply = {
+					add = natural_disaster_realm_counties_in_situation_value
+					subtract = 1
+				}
+			}
+		}
+		desc = great_project_contribution_cost_num_affected_realm_counties
+	}
+}
+
+natural_disaster_contributions_cost_treasury_value = {
+	add = {
+		add = scope:great_project.great_project_owner.minor_gold_value
+		min = 100
+		multiply = 0.66		#prev 0.5
+		#ADDED
+		floor = yes
+		multiply = {
+			add = 1
+			add = { # first value added as a mult for each county beyond the first
+				add = 0.5
+				multiply = {
+					add = natural_disaster_realm_counties_in_situation_value
+					subtract = 1
+				}
+			}
+		}
+		multiply = 2
+		if = {
+			limit = { highest_held_title_tier >= tier_empire }
+			multiply = 2
+		}
+		desc = great_project_contribution_cost_num_affected_realm_counties
+	}
+}
+
+natural_disaster_legitimacy_loss_value = {
+	value = -150	#prev -50
+	if = {
+		limit = { title:h_china.holder ?= this }
+		#multiply = 2 # Disasters hit the Legitimacy of the Chinese Emperor harder
+		if = {
+			limit = {
+				situation:dynastic_cycle ?= {
+					OR = {
+						situation_current_phase = situation_dynastic_cycle_phase_instability
+						situation_current_phase = situation_dynastic_cycle_phase_instability_conquest
+					}
+				}
+			}
+			multiply = 2 # Especially during unstable phases of the Dynastic Cycle
+		}
+	}
+	#ADDED
+	if = {
+		limit = { government_allows = administrative }
+		multiply = 2
+	}
+}
+
+natural_disaster_great_project_mandatory_investment_legitimacy_gain_value = {
+	value = 50	#prev 25
+	if = {
+		limit = { 
+			title:h_china.holder ?= this 
+			situation:dynastic_cycle ?= {
+				OR = {
+					situation_current_phase = situation_dynastic_cycle_phase_instability
+					situation_current_phase = situation_dynastic_cycle_phase_instability_conquest
+				}
+			}
+		}
+		multiply = 2 # The Emperor resolving disasters during Instability is proof of the Mandate of Heaven
+	}
+}
+
+natural_disaster_great_project_optional_investment_legitimacy_gain_value = {
+	value = 100	#prev 50
+	if = {
+		limit = { 
+			title:h_china.holder ?= this 
+			situation:dynastic_cycle ?= {
+				OR = {
+					situation_current_phase = situation_dynastic_cycle_phase_instability
+					situation_current_phase = situation_dynastic_cycle_phase_instability_conquest
+				}
+			}
+		}
+		multiply = 2 # The Emperor resolving disasters during Instability is proof of the Mandate of Heaven
+	}
+}

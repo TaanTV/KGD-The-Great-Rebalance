@@ -7,3 +7,172 @@
 		}
 	}
 }
+
+realm_law_use_own_war_declaration_law_trigger = {
+	NOR = {
+		government_has_flag = government_is_landless_adventurer
+		government_has_flag = government_is_herder
+		government_has_flag = government_is_holy_order
+		government_has_flag = government_is_mercenary
+		AND = {
+			government_has_flag = government_is_celestial
+			top_liege = this
+		}
+		#Covered separatly
+		#government_allows = administrative
+		#government_allows = deny_powerful_vassal
+	}
+	OR = {
+		has_game_rule = bkt_own_war_declaration_law_toggle_enabled
+		AND = {
+			is_ai = no
+			has_game_rule = bkt_own_war_declaration_law_toggle_player_only
+		}
+	}
+}
+
+can_declare_war_according_to_laws_trigger = {
+	trigger_if = {
+		limit = { 		#I cheat here for AI counts coz they dont get the opportunity pulse to sway councillors
+			is_ai = yes
+			highest_held_title_tier <= tier_county
+		}
+		always = yes
+	}
+	trigger_if = {
+		limit = { 		#Conquerors are cheaty bastards so they can just cheat through the thing.
+			has_variable = conqueror
+		}
+		always = yes
+	}
+	trigger_else_if = {
+		limit = {
+			has_realm_law_flag = war_declaration_powerful_vassal_approval
+		}
+		custom_tooltip = {
+			text = no_powerful_vassal_with_negative_opinion_war
+			NAND = {
+				any_vassal = {
+					count > 1
+					is_powerful_vassal = yes
+					age >= 16
+					opposes_succession_law_change_trigger = yes
+				}
+			}
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			has_realm_law_flag = war_declaration_council_approval
+		}
+		custom_tooltip = {
+			text = no_real_councillor_with_negative_opinion_war
+			NAND = {
+				any_councillor = {
+					count > 1
+					NOR = {
+						prev.cp:councillor_spouse ?= this
+						prev.cp:councillor_vizier ?= this
+					}
+					opposes_succession_law_change_trigger = yes
+				}
+			}
+		}
+	}
+	trigger_else_if = {
+		limit = {
+			has_realm_law_flag = war_declaration_no_approval
+		}
+		always = yes
+	}
+	trigger_else = {	#just in case
+		always = yes
+	}
+}
+
+# Block until at least second authority
+can_pass_own_war_declaration_law_1 = {
+	#always = yes
+	trigger_if = {
+		limit = { government_has_flag = government_is_tribal }
+		custom_description = {
+			text = "has_law_allowing_title_revocation_tribal"
+			has_realm_law_flag = title_revocation_allowed
+		}
+	}
+	trigger_else_if = {
+		limit = { government_is_japanese_trigger = yes }
+		custom_description = {
+			text = "has_law_allowing_title_revocation_soryo"
+			has_realm_law_flag = title_revocation_allowed
+		}
+	}
+	trigger_else_if = {
+		limit = { government_allows = administrative }
+	}
+	trigger_else = {
+		custom_description = {
+			text = "has_law_allowing_title_revocation_crown"
+			has_realm_law_flag = title_revocation_allowed
+		}
+	}
+}
+
+# Block until at least second authority
+can_pass_own_war_declaration_law_2 = {
+	# Non-tribals only
+	trigger_if = { # We split the tooltip into two, to make sure we don't show admin unless you actually have it
+		limit = {
+			has_ep3_dlc_trigger = yes
+		}
+		custom_tooltip = {
+			text = must_be_feudal_clan_or_admin
+			OR = {
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+				government_allows = administrative
+				government_has_flag = government_is_japan_feudal
+				tgp_has_ceremonial_liege_title_trigger = yes
+				government_has_flag = government_is_mandala	#isnt included in the tooltip but who cares really
+			}
+		}
+	}
+	trigger_else = {
+		custom_description = {
+			text = succession_laws_must_have_organised_government_tooltip
+			OR = {
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+				government_allows = merit
+				government_has_flag = government_is_japan_feudal
+				tgp_has_ceremonial_liege_title_trigger = yes
+				government_has_flag = government_is_mandala	#isnt included in the tooltip but who cares really
+			}
+		}
+	}
+	trigger_if = { # We split the tooltip into two, to make sure we don't show admin unless you actually have it
+		limit = {
+			government_has_flag = government_is_mandala
+			exists = culture
+		}
+		culture = { has_innovation = innovation_divine_right }	#it just makes sense, right???
+	}
+	trigger_else_if = {
+		limit = {
+			OR = {
+				government_has_flag = government_is_feudal
+				government_has_flag = government_is_clan
+				government_allows = administrative
+				government_has_flag = government_is_japan_feudal
+				tgp_has_ceremonial_liege_title_trigger = yes
+			}
+		}
+		custom_tooltip = {
+			text = need_to_have_max_authority
+			has_realm_law_flag = max_authority_level
+		}
+	}
+	trigger_else = {
+		always = yes
+	}
+}

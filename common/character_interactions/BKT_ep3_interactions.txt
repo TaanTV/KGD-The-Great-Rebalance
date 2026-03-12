@@ -15,6 +15,15 @@ support_candidacy_interaction = {
 			CANDIDATE = scope:secondary_recipient
 			TOP_LIEGE = scope:recipient
 		}
+		tgp_ceremonial_candidacy_restriction_trigger = yes #Unop: Prevent selecting invalid title
+		#ADDED - maybe plz?
+		scope:target ?= {
+			is_title_created = yes
+			NOT = { has_variable = ceremonial_title }
+			holder ?= {
+				is_alive = yes
+			}
+		}
 	}
 
 	has_valid_target_showing_failures_only = {
@@ -54,6 +63,8 @@ support_candidacy_interaction = {
 
 	is_valid_showing_failures_only = {
 		scope:secondary_recipient ?= {
+			#ADDED - you log too many errors.
+			is_lowborn = no
 			# This is broken out from any_valid_title_to_grant_trigger because of performance reasons
 			# When realms get really large, the AI needs a fixed pool of characters to promote
 			# Otherwise performance tanks significantly in the form of 'stutters'or smaller freezes
@@ -67,7 +78,6 @@ support_candidacy_interaction = {
 					scope:actor.primary_heir ?= this
 					scope:actor.house.house_head ?= this
 					is_close_or_extended_family_of = scope:actor
-					#ADDED
 					has_relation_friend = scope:actor
 					has_relation_best_friend = scope:actor
 				}
@@ -551,9 +561,11 @@ support_candidacy_interaction = {
 
 		# Promote only one house member for each title
 		modifier = {
-			#ADDED
+			#ADDED - just in case
 			exists = scope:target
 			scope:target = {
+				#ADDED
+				NOT = { has_variable = ceremonial_title }
 				holder = {
 					has_realm_law_flag = appointment_type_succession
 				}
@@ -583,23 +595,22 @@ support_candidacy_interaction = {
 
 		# Don't promote a candidate if your house is first in line
 		modifier = {
-			#ADDED
+			#ADDED - two exists.
 			exists = scope:target
+			exists = scope:actor.house
 			scope:target = {
-				any_title_heir = {
-					exists = house
-					exists = scope:actor.house
-					house = scope:actor.house
-					scope:target = {
-						place_in_line_of_succession = {
-							target = prev
-							value = 1
-						}
-					}
-				}
+				#any_title_heir = {
+				#	exists = house
+				#	exists = scope:actor.house
+				#	scope:target = {
+				#		place_in_line_of_succession = {
+				#			target = prev
+				#			value = 1
+				#		}
+				#	}
+				#}
 				#ADDED
-				#exists = scope:actor.house
-				#current_heir.house ?= scope:actor.house
+				current_heir.house ?= scope:actor.house
 			}
 			factor = 0
 		}
@@ -609,17 +620,17 @@ support_candidacy_interaction = {
 			#ADDED
 			exists = scope:target
 			scope:target = {
-				any_title_heir = {
-					this = scope:secondary_recipient
-					scope:target = {
-						place_in_line_of_succession = {
-							target = prev
-							value = 1
-						}
-					}
-				}
+				#any_title_heir = {
+				#	this = scope:secondary_recipient
+				#	scope:target = {
+				#		place_in_line_of_succession = {
+				#			target = prev
+				#			value = 1
+				#		}
+				#	}
+				#}
 				#ADDED
-				#current_heir ?= scope:secondary_recipient
+				current_heir ?= scope:secondary_recipient
 			}
 			factor = 0
 		}
@@ -649,9 +660,12 @@ support_candidacy_interaction = {
 
 		# Don't outcompete someone you like
 		modifier = {
-			#ADDED
+			#ADDED - the next 2
 			exists = scope:target
+			exists = scope:target.current_heir
 			scope:target = {
+				#ADDED
+				NOT = { has_variable = ceremonial_title }
 				any_title_heir = {
 					scope:target = {
 						place_in_line_of_succession = {
@@ -758,10 +772,10 @@ harm_candidacy_interaction = {
 			TITLE = scope:target
 			CANDIDATE = scope:secondary_recipient
 		}
+		tgp_ceremonial_candidacy_restriction_trigger = yes #Unop: Prevent selecting invalid title
 	}
 
 	has_valid_target_showing_failures_only = {
-		#ADDED
 		scope:target ?= {
 			tier >= tier_duchy
 			holder ?= {

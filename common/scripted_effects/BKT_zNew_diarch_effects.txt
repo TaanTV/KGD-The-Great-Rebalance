@@ -52,7 +52,8 @@ bkt_diarch_changed_own_contract_effect = {
 			}
 		}
 		# Everyone else loses much more.
-		else = {
+		else_if = {
+			limit = { diarch ?= scope:actor }
 			add_to_variable_list = {
 				name = diarch_contract_rights_used_list
 				target = scope:actor
@@ -62,6 +63,12 @@ bkt_diarch_changed_own_contract_effect = {
 				modifier = abused_position_of_trust_opinion
 				opinion = -40
 			}
+		}
+		else = { #how did we get here in the first place?
+			#Log to both coz i dont mind both being spammed
+ 			error_log = "bkt_diarch_changed_own_contract_effect called but scope:actor isnt a diarch"
+ 			debug_log = "bkt_diarch_changed_own_contract_effect called but scope:actor isnt a diarch"
+			debug_log_scopes = yes
 		}
 	}
 }

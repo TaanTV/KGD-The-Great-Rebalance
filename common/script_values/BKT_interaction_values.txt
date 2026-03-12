@@ -1,55 +1,5 @@
 ﻿#WARNING - herd ones have A LOT of issues, like herd cost of a courtier being the same as for the liege ransoming them, 
-# but idc + vanilla skill issue
-ransom_herd_value_recipient = {
-	value = 0
-	if = {
-		limit = {
-			exists = scope:recipient.domicile
-		}
-		add = scope:recipient.domicile.medium_herd_value
-		#ADDED - i assume recipient pays to actor... i think
-		multiply = {
-			value = 1
-			add = {
-				value = scope:actor.diplomacy
-				add = 2		#offsets the values a bit so 1 vs 2 diplo isnt an x2 difference
-				divide = { value = scope:recipient.diplomacy add = 2 }
-				max = 1.5		#range 0 to 1.5
-				add = -1	 	#range -1 to 0.5
-				multiply = 2	#range -2 to 1
-				multiply = 0.2	#range -0.4 to 0.2 
-								#final range 0.6 to 1.2
-			}
-		}
-		floor = yes
-	}
-}
-
-ransom_herd_value_actor = {
-	value = 0
-	if = {
-		limit = {
-			exists = scope:actor.domicile
-		}
-		add = scope:actor.domicile.medium_herd_value
-		#ADDED - i assume actor pays to recipient... i think
-		#now we kinda assume the scopes are set because they ARE set.
-		multiply = {
-			value = 1
-			add = {
-				value = scope:recipient.diplomacy
-				add = 2		#offsets the values a bit so 1 vs 2 diplo isnt an x2 difference
-				divide = { value = scope:actor.diplomacy add = 2 }
-				max = 1.5		#range 0 to 1.5
-				add = -1	 	#range -1 to 0.5
-				multiply = 2	#range -2 to 1
-				multiply = 0.2	#range -0.4 to 0.2 
-								#final range 0.6 to 1.2
-			}
-		}
-		floor = yes
-	}
-}
+#ANTI-WARNING - solved those surprisingly easy
 
 ransom_cost_value = {
 	value = ransom_cost
@@ -172,7 +122,7 @@ ransom_cost_value = {
 				max = 1.5		#range 0 to 1.5
 				add = -1	 	#range -1 to 0.5
 				multiply = 2	#range -2 to 1
-				multiply = 0.2	#range -0.2 to 0.2 
+				multiply = 0.2	#range -0.4 to 0.2 
 								#final range 0.6 to 1.2
 			}
 		}
@@ -416,26 +366,6 @@ offer_vassalage_acceptance_value = {
 
 #ADDED
 ransom_herd_value = {
-	value = 0
-	if = {
-		limit = {
-			exists = domicile
-		}
-		add = domicile.medium_herd_value
-		#now we kinda assume the scopes are set because they ARE set.
-		multiply = {
-			value = 1
-			add = {
-				value = scope:imprisoner.diplomacy
-				add = 2		#offsets the values a bit so 1 vs 2 diplo isnt an x2 difference
-				divide = { value = scope:payer.diplomacy add = 2 }
-				max = 1.5		#range 0 to 1.5
-				add = -1	 	#range -1 to 0.5
-				multiply = 2	#range -2 to 1
-				multiply = 0.2	#range -0.4 to 0.2 
-								#final range 0.6 to 1.2
-			}
-		}
-		floor = yes
-	}
+	value = ransom_cost_value	#this one is already scaled with diplo
+	multiply = 5	#prev 10
 }

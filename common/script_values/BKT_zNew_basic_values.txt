@@ -172,3 +172,232 @@ artifact_durability_percentage = {
 		min = 1
 	}
 }
+
+revoke_title_succession_law_prestige_cost = {
+	value = change_title_succession_law_prestige_cost
+	#multiply = 2
+}
+
+own_war_declaration_law_prestige_cost = {
+	if = {
+		limit = {
+			OR = {
+				has_realm_law_in_group = crown_authority 
+				government_allows = administrative
+			}
+		}
+		add = increase_crown_authority_prestige_cost
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_realm_law_in_group = tribal_authority 
+				has_realm_law_in_group = nomadic_authority 
+			}
+		}
+		add = increase_tribal_authority_prestige_cost
+	}
+	else = {
+		add = 1000
+	}
+}
+
+#Dynamic gold stuff
+
+#tiny_gold_max_value_static = 50
+tiny_gold_max_less_scaled_value = {
+	value = tiny_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}
+
+#minor_gold_max_value_static = 150
+minor_gold_max_less_scaled_value = {
+	value = minor_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}
+
+#medium_gold_max_value_static = 300
+medium_gold_max_less_scaled_value = {
+	value = medium_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}
+
+#major_gold_max_value_static = 500
+major_gold_max_less_scaled_value = {
+	value = major_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}
+
+#massive_gold_max_value_static = 750
+massive_gold_max_less_scaled_value = {
+	value = massive_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}
+
+#monumental_gold_max_value_static = 1500
+monumental_gold_max_less_scaled_value = {
+	value = monumental_gold_max_value_static
+	if = {
+		limit = {
+			exists = culture
+		}
+		culture = {
+			if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply = 2
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = 1.5
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+				multiply = 1
+			}
+			else = {
+				multiply = 0.75
+			}
+		}
+	}
+}

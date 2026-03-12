@@ -1,6 +1,37 @@
-﻿opinion_of_predecessor = {
+﻿imprisoned_family_member = {
+	opinion = -25	#prev -15
+	years = 20
+	decaying = yes
+}
+
+imprisoned_family_member_dungeon = {
+	opinion = -50	#prev -30
+	years = 20
+	decaying = yes
+}
+
+family_moved_to_dungeon_opinion = {
+	opinion = -25	#prev -15
+	years = 20
+	decaying = yes
+}
+
+opinion_of_predecessor = {
 	years = 10			#prev 5
 	decaying = yes
+}
+
+#CHILDHOOD
+childhood_crush = {
+	opinion = 15	#prev 10
+}
+
+childhood_bully = {
+	opinion = -25	#prev -10
+}
+
+childhood_victim = {
+	opinion = -5
 }
 
 #RECEIVED TITLE
@@ -46,9 +77,12 @@ received_title_empire = {
 
 # Raid
 raided_me_opinion = {
-	opinion = -25		#prev -15
-	years = 10
+	opinion = -15
+	#years = 10
 	decaying = yes
+	#ADDED
+	stacking = yes
+	monthly_change = 0.2
 }
 
 courtly_title_creation_opinion = {

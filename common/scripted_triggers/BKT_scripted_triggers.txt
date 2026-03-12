@@ -1,0 +1,73 @@
+﻿can_be_granted_titles_by = { #This is set up with trigger-ifs to allow for nice tooltip printouts in grant title interaction
+	save_temporary_scope_as = title_grantee
+	#Gender check
+	trigger_if = {
+		limit = {
+			is_ruler = no #Rulers can always get additional titles
+			is_theocratic_lessee = no #Theocratic lessees use other gender checks
+			NOT = { $RULER$ = { government_allows = administrative } }
+			NOT = {
+				$RULER$.faith = {
+					has_dominant_ruling_gender = scope:title_grantee
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				$RULER$ = { government_allows = state_faith }
+			}
+			$RULER$.primary_title.state_faith = {
+				has_dominant_ruling_gender = scope:title_grantee
+			}
+		}
+		trigger_else = {
+			$RULER$.faith = {
+				has_dominant_ruling_gender = scope:title_grantee
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			is_ruler = no #Rulers can always get additional titles
+			is_theocratic_lessee = no #Theocratic lessees use other gender checks
+			$RULER$ = {
+				government_allows = administrative
+				NOT = { has_realm_law = equal_law }
+			}
+		}
+		trigger_if = {
+			limit = {
+				$RULER$ = { has_realm_law = male_only_law }
+			}
+			scope:title_grantee = { is_female = no }
+		}
+		trigger_if = {
+			limit = {
+				$RULER$ = { has_realm_law = female_only_law }
+			}
+			scope:title_grantee = { is_female = yes }
+		}
+		#trigger_else = { always = yes }
+	}
+	trigger_else_if = {
+		limit = {
+			is_theocratic_lessee = yes
+		}
+		liege = $RULER$
+		#If this is ever visible anywhere, we need to write a custom desc "Theocratic lessees cannot only be given titles by their ruler"
+	}
+	#ADDED - trigger_else_if
+	trigger_else_if = {
+		limit = {
+			$RULER$.faith.religious_head = scope:title_grantee
+			NOR = { 
+				target_is_liege_or_above = $RULER$ 	#granting to a vassal if a fine game.
+				liege = $RULER$.liege				#within the same realm is fine game.
+			} 
+		}
+		$RULER$ = { is_independent_ruler = yes }
+	}
+	trigger_else = {
+		always = yes
+	}
+}

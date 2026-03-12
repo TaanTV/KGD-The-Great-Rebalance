@@ -1,0 +1,12 @@
+﻿rival_single_combat_shown_and_not_invalid_trigger = {
+	scope:actor = {
+		# Scope:actor must be able to fight personally.
+		can_start_single_combat_trigger = yes
+		# Scope:actor cannot challenge someone they have a ceasefire against.
+		NOT = { has_truce = scope:recipient }
+		# Scope:actor *definitely* cannot challenge someone they're at war with.
+		NOT = { is_at_war_with = scope:recipient }
+		#ADDED - no.
+		NOT = { scope:recipient { has_strong_hook = scope:actor } }
+	}
+}

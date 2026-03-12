@@ -572,6 +572,14 @@
 			}
 			multiply = 0
 		}
+		
+		#ADDED - stop doing kind of dumb stuff.
+		if = {
+			limit = {
+				scope:attacker = { has_variable = conqueror }
+			}
+			multiply = 0.5
+		}
 	}
 
 	ai_score = {

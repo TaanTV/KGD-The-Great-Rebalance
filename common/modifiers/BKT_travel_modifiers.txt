@@ -1,0 +1,15 @@
+﻿
+travel_bull_fighter_modifier = {
+	icon = bear_positive
+	prowess = 1				#prev 2
+	#general_opinion = 10
+	#ADDED
+	monthly_prestige = 0.25
+	glory_hound_opinion = 5
+	belligerent_opinion = 5 
+}
+
+travel_stealing_food_modifier = {
+	icon = county_modifier_opinion_negative
+	county_opinion_add = -10	#prev -25
+}

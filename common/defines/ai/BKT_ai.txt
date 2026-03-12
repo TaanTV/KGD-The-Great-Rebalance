@@ -38,7 +38,7 @@
     # The AI will not betroth nor seek betrothals with characters 
     # under this age.
     #
-    BETROTHAL_MIN_AGE = 10		#prev 12
+    BETROTHAL_MIN_AGE = 11		#prev 12
 	
 	### Brief: MEN_AT_ARMS_STATIONED_MODIFIER_SCORE_MULTIPLIER ( Array of int32 )
 	# Number of spouse candidates before the search is aborted, per
@@ -134,7 +134,7 @@
 	# AI won't declare a war on someone stronger than this if they are 
 	# already at war
 	#
-	CB_TARGET_AT_WAR_POWER_RATIO_MAX = 1.2		#prev 1.5
+	CB_TARGET_AT_WAR_POWER_RATIO_MAX = 1.35		#prev 1.5
 
 	### Brief: CB_TARGET_AT_WAR_POWER_RATIO_PER_WAR ( Fixed Point )
 	# Added per war the target character is in above the first one, but
@@ -181,6 +181,23 @@
 	# ai_amenity_spending modifies the min and max
 	COURT_AMENITY_MIN_TARGET_EXPENDITURE_PERCENTAGE_OF_INCOME = 0.1		#prev 0.05	# Court amenity min target expenditure value in % of income
 	COURT_AMENITY_MAX_TARGET_EXPENDITURE_PERCENTAGE_OF_INCOME = 0.35	#prev 0.20	# Court amenity max target expenditure value in % of income
+
+	### Brief: GATHERING_DAYS_FOR_GREAT_HOLY_WAR ( int32 )
+    # Number of days the AI spend trying to gather as many units
+    # as possible in the designated gathering province before
+	# moving towards the staging province
+	#
+    GATHERING_DAYS_FOR_GREAT_HOLY_WAR = 200		#prev 300
+
+	### Brief: MAX_STAGING_DAYS_FOR_GREAT_HOLY_WAR ( int32 )
+    # The maximum number of days that the AI spend waiting for
+    # its units to arrive inthe designated staging province before
+	# moving towards the intended target
+	#
+	# Should enough units arrive before this date, the AI will
+	# stop staging
+	#
+    MAX_STAGING_DAYS_FOR_GREAT_HOLY_WAR = 200	#prev 300
 }
 
 

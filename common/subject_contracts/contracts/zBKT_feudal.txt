@@ -122,7 +122,7 @@
 			subject_opinion = -30		#prev -25
 
 			ai_liege_desire = {
-				value = 6
+				value = 7	#prev 6
 				if = {
 					limit = {
 						scope:liege = {
@@ -139,7 +139,7 @@
 				}
 			}
 			ai_subject_desire = 1
-			score = -3
+			score = -4	#prev -3
 			flag = obligation_high_taxes
 		}
 	}
@@ -156,7 +156,20 @@ feudal_government_levies = {
 			subject_opinion = 20			#prev 10
 
 			ai_liege_desire = 1
-			ai_subject_desire = 5
+			ai_subject_desire = {
+				value = 4.5	#prev 5
+				#ADDED
+				if = {
+					limit = { 
+						scope:subject = { 
+							government_has_flag = government_is_feudal
+							ai_has_warlike_personality = yes
+							vassal_contract_obligation_level:feudal_government_levies > feudal_levies_exempt_level
+						}
+					}
+					add = 1
+				}
+			}
 			score = 2
 		}
 		feudal_levies_low = {
@@ -168,18 +181,43 @@ feudal_government_levies = {
 
 			ai_liege_desire = {
 				value = 2
+				#ADDED - militarists want this
+				if = {
+					limit = {
+						scope:liege = {
+							ai_has_warlike_personality = yes
+						}
+						scope:subject = {
+							government_has_flag = government_is_feudal
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_exempt_level
+						}
+					}
+					add = 8
+				}
 				#ADDED - make sure getting them out of "low" obligations is the priority
 				if = {
 					limit = {
 						scope:subject = {
 							government_has_flag = government_is_feudal
-							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_low_level
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_exempt_level
 						}
 					}
 					add = 15
 				}
 			}
-			ai_subject_desire = 4
+			ai_subject_desire = {
+				value = 3.5	#prev 4
+				if = {
+					limit = { 
+						scope:subject = { 
+							government_has_flag = government_is_feudal
+							ai_has_warlike_personality = yes
+							vassal_contract_obligation_level:feudal_government_levies > feudal_levies_low_level
+						}
+					}
+					add = 1
+				}
+			}
 			score = 1
 		}
 		feudal_levies_normal = {
@@ -191,18 +229,43 @@ feudal_government_levies = {
 
 			ai_liege_desire = {
 				value = 3
+				#ADDED - militarists want this
+				if = {
+					limit = {
+						scope:liege = {
+							ai_has_warlike_personality = yes
+						}
+						scope:subject = {
+							government_has_flag = government_is_feudal
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_low_level
+						}
+					}
+					add = 7
+				}
 				#ADDED - make sure getting them out of "low" obligations is the priority 
 				if = {
 					limit = {
 						scope:subject = {
 							government_has_flag = government_is_feudal
-							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_normal_level
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_low_level
 						}
 					}
 					add = 15
 				}
 			}
-			ai_subject_desire = 3
+			ai_subject_desire = {
+				value = 2.5	#prev 3
+				if = {
+					limit = { 
+						scope:subject = { 
+							government_has_flag = government_is_feudal
+							ai_has_warlike_personality = yes
+							vassal_contract_obligation_level:feudal_government_levies > feudal_levies_normal_level
+						}
+					}
+					add = 1
+				}
+			}
 			score = 0
 		}
 		feudal_levies_high = {
@@ -212,8 +275,36 @@ feudal_government_levies = {
 			levies = high_feudal_levy
 			subject_opinion = -15
 
-			ai_liege_desire = 4
-			ai_subject_desire = 2
+			ai_liege_desire = {
+				value = 5	#prev 4
+				#ADDED - militarists want this
+				if = {
+					limit = {
+						scope:liege = {
+							ai_has_warlike_personality = yes
+						}
+						scope:subject = {
+							government_has_flag = government_is_feudal
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_normal_level
+						}
+					}
+					add = 6
+				}
+			}
+			ai_subject_desire = {
+				value = 1.5	#prev 2
+				#ADDED
+				if = {
+					limit = { 
+						scope:subject = { 
+							government_has_flag = government_is_feudal
+							ai_has_warlike_personality = yes
+							vassal_contract_obligation_level:feudal_government_levies > feudal_levies_high_level
+						}
+					}
+					add = 1
+				}
+			}
 			score = -2	#prev -1
 			flag = obligation_high_levies
 		}
@@ -224,48 +315,25 @@ feudal_government_levies = {
 			levies = extortionate_feudal_levy
 			subject_opinion = -30	#prev -25
 
-			ai_liege_desire = 5
-			ai_subject_desire = 1
-			score = -3	#prev -2
+			ai_liege_desire = {
+				value = 7	#prev 5
+				#ADDED - militarists want this
+				if = {
+					limit = {
+						scope:liege = {
+							ai_has_warlike_personality = yes
+						}
+						scope:subject = {
+							government_has_flag = government_is_feudal
+							vassal_contract_obligation_level:feudal_government_levies <= feudal_levies_high_level
+						}
+					}
+					add = 5
+				}
+			}
+			ai_subject_desire = 0.5	#prev 1
+			score = -4	#prev -2
 			flag = obligation_high_levies
-		}
-	}
-}
-
-feudal_government_prestige = {
-	display_mode = tree
-	icon = prestige_icon
-	obligation_levels = {
-		prestige_transfer_none = {
-			position = { 0 0 }
-
-			prestige = 0
-
-			ai_liege_desire = 1
-			ai_subject_desire = 5
-			score = 2
-		}
-		prestige_transfer_normal = {
-			parent = prestige_transfer_none
-			position = { 1 0 }
-
-			prestige = 0.1
-			subject_opinion = -10
-
-			ai_liege_desire = 5
-			ai_subject_desire = 3
-			score = 1
-		}
-		prestige_transfer_high = {
-			parent = prestige_transfer_normal
-			position = { 2 0 }
-
-			prestige = 0.25
-			subject_opinion = -25
-
-			ai_liege_desire = 7
-			ai_subject_desire = 1
-			score = 1
 		}
 	}
 }

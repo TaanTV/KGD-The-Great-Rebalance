@@ -1,0 +1,11 @@
+﻿imprisoned_me = {
+	opinion = -50	#prev -30
+	years = 20		#prev 10
+	decaying = yes
+}
+
+imprisoned_me_dungeon = {
+	opinion = -75	#prev -40
+	years = 30		#prev 20
+	decaying = yes
+}

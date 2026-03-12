@@ -44,7 +44,7 @@ positions_of_power_perk = {
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		invert_check = yes
-		councillor_opinion = 15
+		councillor_opinion = 10	#prev 15
 	}
 
 	effect = {

@@ -1,0 +1,7 @@
+﻿divine_guidance_modifier = {
+	icon = stress_positive
+	#learning = 1
+	martial = 1
+	stress_gain_mult = -0.05	#prev -0.25
+	stress_loss_mult = 0.1		#prev 0.25
+}

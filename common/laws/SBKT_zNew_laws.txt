@@ -1,0 +1,223 @@
+﻿#####################
+# WAR DEC LAWS
+#####################
+@own_war_declaration_law_cooldown_value = 10
+
+# ADMINISTRATIVE GOVERNMENT
+own_war_declaration_law = {
+	default = own_war_declaration_law_0
+	cumulative = no
+	flag = imperial_policy
+
+	own_war_declaration_law_0 = {
+		modifier = {
+			powerful_vassal_opinion = 10
+		}
+		flag = war_declaration_powerful_vassal_approval
+		
+		can_have = {
+			#realm_law_use_own_war_declaration_law_trigger = yes
+			custom_tooltip = {
+				text = must_be_feudal_clan_or_admin_or_any_tribal_game
+				NOT = { government_allows = deny_powerful_vassal }
+			}
+		}
+
+		can_keep = {
+			realm_law_use_own_war_declaration_law_trigger = yes
+		}
+
+		can_pass = {
+			custom_description = {
+				subject = root
+				text = "has_own_war_declaration_law_cooldown"
+				NAND = {
+					has_variable = own_war_declaration_law_cooldown
+				}
+			}
+			custom_description = {
+				text = "no_powerful_vassal_with_negative_opinion"
+				NOT = {
+					any_vassal = {
+						is_powerful_vassal = yes
+						opposes_succession_law_change_trigger = yes
+					}
+				}
+			}
+		}
+		
+		should_start_with = { 
+			NOR = {
+				government_allows = administrative
+				government_allows = deny_powerful_vassal
+				government_allows = uses_county_fertility
+			}
+		}
+
+		on_pass = {
+			## Set cooldown
+			set_variable = {
+				name = own_war_declaration_law_cooldown
+				years = @own_war_declaration_law_cooldown_value
+			}
+		}
+
+		ai_will_do = {
+			value = 0
+		}
+	}
+
+	own_war_declaration_law_1 = {
+		modifier = {
+			powerful_vassal_opinion = -5
+			councillor_opinion = 10
+		}
+		flag = war_declaration_council_approval
+		
+		can_have = {
+			#realm_law_use_own_war_declaration_law_trigger = yes
+		}
+
+		can_keep = {
+			realm_law_use_own_war_declaration_law_trigger = yes
+			government_allows = council
+		}
+
+		can_pass = {
+			can_pass_own_war_declaration_law_1 = yes
+			custom_description = {
+				subject = root
+				text = "has_own_war_declaration_law_cooldown"
+				NAND = {
+					has_variable = own_war_declaration_law_cooldown
+				}
+			}
+			custom_description = {
+				text = "no_powerful_vassal_with_negative_opinion"
+				NOT = {
+					any_vassal = {
+						is_powerful_vassal = yes
+						opposes_succession_law_change_trigger = yes
+					}
+				}
+			}
+		}
+		
+		should_start_with = { 
+			OR = {
+				government_allows = administrative
+				government_allows = deny_powerful_vassal
+				government_allows = uses_county_fertility
+			}
+		}
+
+		on_pass = {
+			## Set cooldown
+			set_variable = {
+				name = own_war_declaration_law_cooldown
+				years = @own_war_declaration_law_cooldown_value
+			}
+		}
+
+		pass_cost = {
+			prestige = {
+				if = {
+					limit = { 
+						has_realm_law = own_war_declaration_law_0 
+					}
+					add = own_war_declaration_law_prestige_cost
+				}
+			}
+			influence = {
+				if = {
+					limit = { 
+						has_realm_law = own_war_declaration_law_0
+						government_allows = administrative 
+					}
+					add = {
+						value = massive_influence_value
+						desc = "BASE_VALUE"
+						format = "BASE_VALUE_FORMAT"
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			value = 0	#has no point for AI since it keeps powerful vassals on the council anyway
+		}
+	}
+
+	own_war_declaration_law_2 = {
+		modifier = {
+			powerful_vassal_opinion = -20
+			councillor_opinion = -10
+		}
+		flag = war_declaration_no_approval
+		
+		can_have = {
+			#realm_law_use_own_war_declaration_law_trigger = yes
+		}
+
+		can_keep = {
+			realm_law_use_own_war_declaration_law_trigger = yes
+		}
+
+		can_pass = {
+			can_pass_own_war_declaration_law_2 = yes
+			custom_description = {
+				subject = root
+				text = "has_own_war_declaration_law_cooldown"
+				NAND = {
+					has_variable = own_war_declaration_law_cooldown
+				}
+			}
+			custom_description = {
+				text = "no_powerful_vassal_with_negative_opinion"
+				NOT = {
+					any_vassal = {
+						is_powerful_vassal = yes
+						opposes_succession_law_change_trigger = yes
+					}
+				}
+			}
+		}
+
+		on_pass = {
+			## Set cooldown
+			set_variable = {
+				name = own_war_declaration_law_cooldown
+				years = @own_war_declaration_law_cooldown_value
+			}
+		}
+
+		pass_cost = {
+			prestige = {
+				if = {
+					limit = { 
+						#has_realm_law = own_war_declaration_law_0 
+						always = yes
+					}
+					add = own_war_declaration_law_prestige_cost
+				}
+			}
+			influence = {
+				if = {
+					limit = { 
+						#has_realm_law = own_war_declaration_law_0
+						government_allows = administrative 
+					}
+					add = {
+						value = massive_influence_value
+						desc = "BASE_VALUE"
+						format = "BASE_VALUE_FORMAT"
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			value = 1
+		}
+	}
+}

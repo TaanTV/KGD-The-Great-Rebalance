@@ -32,6 +32,13 @@ county_increased_opinion_modifier = {
 	tax_mult = -0.1
 	levy_size = -0.15
 	garrison_size = -0.2
+	supply_limit_mult = -0.2
+}
+
+cared_for_war_widow = {
+	icon = county_modifier_development_positive
+	county_opinion_add = 10		#prev 5
+	development_growth = 0.03	#prev 0.2
 }
 
 mpo_siberian_permafrost_modifier = {

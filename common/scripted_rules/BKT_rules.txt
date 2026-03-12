@@ -1,0 +1,341 @@
+﻿# Will AI for this character try to arrange matrilineal marriages?
+# Note that the AI can still arrange patrilineal marriages based on the SPOUSE_SCORE_LINEALITY_MISMATCH_SCORE AI define
+# root: the arranging AI character
+# scope:secondary_actor: the character to be married
+ai_wants_matrilineal_marriage = {
+	scope:secondary_actor = {
+		is_female = yes
+	}
+	trigger_if = { # AI's always want to matrilineally marry their Dynasty members
+		limit = {
+			has_game_rule = matrilineal_marriages_always
+		}
+		scope:secondary_actor.dynasty = root.dynasty
+	}
+	trigger_else_if = { # AI's want matrilineal marriages if female dominated or equal, but not otherwise
+		limit = {
+			has_game_rule = matrilineal_marriages_female_and_equal
+		}
+		OR = { # Either Matrilineal Marriages are the norm
+			has_realm_law = female_only_law
+			has_realm_law = female_preference_law
+			faith = {
+				has_doctrine_parameter = female_dominated_law
+			}
+			AND = {
+				exists = dynasty
+				scope:secondary_actor.dynasty = root.dynasty
+				root = {
+					has_realm_law = equal_law
+				}
+				OR = {
+					scope:secondary_actor = root # Either I am a woman
+					OR = {
+						root.primary_title = { # Or it's my first three heirs
+							place_in_line_of_succession = {
+								target = scope:secondary_actor
+								value <= 3
+							}
+						}
+						scope:secondary_actor = {
+							any_parent = { # Or my first heir's oldest child
+								root.primary_title = {
+									place_in_line_of_succession = {
+										target = scope:secondary_actor
+										value <= 1
+									}
+								}
+							}
+							NOT = {
+								any_sibling = {
+									age > scope:secondary_actor.age
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	trigger_else_if = { # Only Female Dominated realms want matrilineal marriages
+		limit = {
+			has_game_rule = matrilineal_marriages_never
+		}
+		OR = { # Matrilineal Marriages are the norm
+			has_realm_law = female_only_law
+			has_realm_law = female_preference_law
+			faith = {
+				has_doctrine_parameter = female_dominated_law
+			}
+		}
+	}
+	trigger_else_if = { # Default, but no player exception
+		limit = {
+			has_game_rule = matrilineal_marriages_no_player_exception
+		}
+		OR = { # Either Matrilineal Marriages are the norm
+			has_realm_law = female_only_law
+			has_realm_law = female_preference_law
+			faith = {
+				has_doctrine_parameter = female_dominated_law
+			}
+			AND = { # Or there's a good reason to pursue them, such as being of a Reputable dynasty or ruling a Duchy
+				exists = dynasty
+				scope:secondary_actor.dynasty = root.dynasty
+				OR = {
+					scope:secondary_actor = root # Either I am a woman
+					root.primary_title = { # It's my primary heir
+						place_in_line_of_succession = {
+							target = scope:secondary_actor
+							value <= 1
+						}
+					}
+					AND = { # Or I'm under Equal, and it's my first three heirs
+						has_realm_law = equal_law
+						OR = {
+							root.primary_title = {
+								place_in_line_of_succession = {
+									target = scope:secondary_actor
+									value <= 3
+								}
+							}
+							scope:secondary_actor = {
+								any_parent = { # Or my first heir's oldest child
+									root.primary_title = {
+										place_in_line_of_succession = {
+											target = scope:secondary_actor
+											value <= 1
+										}
+									}
+								}
+								NOT = {
+									any_sibling = {
+										age > scope:secondary_actor.age
+									}
+								}
+							}
+						}
+					}
+					#ADDED - or it's your oldest daughter 
+					scope:secondary_actor = {
+						OR = {
+							father ?= root
+							mother ?= root
+						}
+						NOR = { has_trait = bastard has_trait = disinherited }
+						any_sibling = {
+							count = 0
+							is_female = yes
+							age > prev.age
+							is_eunuch_trigger = no
+							NOR = { has_trait = bastard has_trait = disinherited}
+						}
+					}
+				}
+				root = {
+					OR = {
+						highest_held_title_tier >= tier_duchy
+						dynasty = { dynasty_prestige_level >= 4 }
+						has_realm_law = equal_law
+					}
+				}
+			}
+		}
+	}
+	trigger_else = { # Default rules
+		OR = { # Either Matrilineal Marriages are the norm
+			has_realm_law = female_only_law
+			has_realm_law = female_preference_law
+			faith = {
+				has_doctrine_parameter = female_dominated_law
+			}
+			AND = { # Or there's a good reason to pursue them, such as being of a Reputable dynasty or ruling a Duchy
+				exists = dynasty
+				scope:secondary_actor.dynasty = root.dynasty
+				OR = {
+					scope:secondary_actor = root # Either I am a woman
+					root.primary_title = { # It's my primary heir
+						place_in_line_of_succession = {
+							target = scope:secondary_actor
+							value <= 1
+						}
+					}
+					AND = { # Or I'm under Equal, and it's my first three heirs
+						has_realm_law = equal_law
+						OR = {
+							root.primary_title = {
+								place_in_line_of_succession = {
+									target = scope:secondary_actor
+									value <= 3
+								}
+							}
+							scope:secondary_actor = {
+								any_parent = { # Or my first heir's oldest child
+									root.primary_title = {
+										place_in_line_of_succession = {
+											target = scope:secondary_actor
+											value <= 1
+										}
+									}
+								}
+								NOT = {
+									any_sibling = {
+										age > scope:secondary_actor.age
+									}
+								}
+							}
+						}
+					}
+					#ADDED - or it's your oldest daughter 
+					scope:secondary_actor = {
+						OR = {
+							father ?= root
+							mother ?= root
+						}
+						NOR = { has_trait = bastard has_trait = disinherited }
+						any_sibling = {
+							count = 0
+							is_female = yes
+							age > prev.age
+							is_eunuch_trigger = no
+							NOR = { has_trait = bastard has_trait = disinherited}
+						}
+					}
+				}
+				root = {
+					OR = {
+						highest_held_title_tier >= tier_duchy
+						dynasty = { dynasty_prestige_level >= 4 }
+						has_realm_law = equal_law
+						any_player = { # Very close to a player
+							dynasty ?= scope:secondary_actor.dynasty
+							is_close_family_of = scope:secondary_actor
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Does the AI want to have a grand wedding instead of an instant marriage
+# root: the arranging AI character
+# scope:actor: the arranging AI character
+# scope:secondary_actor: character being married that AI can control
+# scope:recipient: the character who can accept the marriage proposal
+# scope:secondary_recipient: the character to be married
+ai_wants_grand_wedding_promise = {
+	#ADDED - it should probably always exist but anyways.
+	exists = scope:actor.dynasty
+	OR = {
+		# Propose grand wedding to the player, the players primary heir, and their oldest child (both sexes)
+		scope:recipient = {
+			is_ai = no
+			scope:secondary_recipient = {
+				OR = {
+					this = scope:recipient
+					is_primary_heir_of = scope:recipient
+					AND = {
+						is_child_of = scope:recipient
+						NOT = {
+							any_sibling = {
+								sex_same_as = scope:secondary_recipient
+								age > scope:secondary_recipient.age
+							}
+						}
+					}
+				}
+			}
+		}
+		# An unmarried ruler wants it for their primary wedding
+		scope:actor = {
+			this = scope:secondary_actor
+			is_married = no
+			is_ruler = yes
+			#ADDED - dont spam
+			highest_held_title_tier > tier_county
+		}
+		# A ruler wants it for their primary heir's primary wedding
+		AND = {
+			scope:actor.primary_title = {
+				place_in_line_of_succession = {
+					target = scope:secondary_actor
+					value <= 1
+				}
+			}
+			scope:secondary_actor = {
+				is_married = no
+			}
+			#ADDED - dont spam
+			scope:actor.highest_held_title_tier > tier_duchy
+		}
+		# Very prestigious rulers just want to show off
+		AND = {
+			scope:actor = {
+				#highest_held_title_tier >= tier_kingdom
+				has_personality_extroverted_trigger = yes
+				ai_greed <= -50
+			}
+			OR = {
+				scope:actor.dynasty = { dynasty_prestige_level >= 6 }	#prev 4
+				scope:actor = { prestige_level >= 4 }
+			}
+		}
+		# Swimming in money and not greedy
+		AND = {
+			scope:actor.ai_greed <= 50					#prev 0
+			scope:actor.gold >= { value = monumental_gold_value	multiply = 2 min = 1000 } #prev 7000
+		}
+	}
+	# Let's try to prevent the AI from going bankrupt
+	scope:actor = { gold >= ai_wedding_promise_gold_actor }
+	scope:actor = {
+		OR = {
+			# You're getting at least an alliance out of it
+			yields_alliance = {
+				candidate = scope:secondary_actor
+				target = scope:recipient
+				target_candidate = scope:secondary_recipient
+			}
+			# Or it's an ally you want to strengthen the bonds with
+			is_allied_to = scope:recipient
+			# Or you just have the perfect personality for it!
+			AND = {
+				has_personality_extroverted_trigger = yes
+				ai_greed <= -50
+				ai_rationality <= -25
+				exists = scope:secondary_actor.dynasty
+			}
+		}
+		is_at_war = no
+	}
+	# Only do Grand Weddings for rulers of your tier or above
+	exists = scope:recipient.primary_title
+	OR = {
+		scope:recipient.primary_title.tier >= primary_title.tier
+		scope:recipient.primary_title.tier >= tier_kingdom
+	}
+}
+
+# check if the AI ruler in scope should evaluate creating the target title. Available scope:
+#	root: the ruler that could create the title
+# 	scope:title the title to create
+ai_should_create_title = {
+	# emperors should not create kingdoms / empires
+	nand = {
+		root.primary_title.tier = tier_empire
+		scope:title.tier >= tier_kingdom
+		scope:title.tier <= tier_empire
+		#ADDED - actually create kingdoms if you're low on vassal limit
+		or = {
+			scope:title.tier > tier_kingdom
+			vassal_count <= { value = vassal_limit add = -5 }
+		}
+	}
+	
+	# hegemons should not create empires / hegemonies
+	nand = {
+		root.primary_title.tier = tier_hegemony
+		scope:title.tier >= tier_empire
+	}
+}

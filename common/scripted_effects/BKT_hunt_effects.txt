@@ -193,6 +193,153 @@ hunt_animal_melee_kill_effect = {
 	}
 }
 
+hunt_create_trophy_effect = {
+	# Scopes for artifact loc
+	if = {
+		limit = {
+			NOT = { exists = scope:animal_slayer }
+		}
+		if = {
+			limit = { exists = scope:credit_taker }
+			scope:credit_taker = { save_scope_as = animal_slayer }
+		}
+		else = {
+			scope:host = { save_scope_as = animal_slayer }
+		}
+	}
+	# Create trophy artifact
+	hidden_effect = {
+		random_list = {
+			100 = { # Create Skull
+				trigger = {
+					has_royal_court = yes
+					exists = scope:activity.var:animal_type
+					can_animal_produce_skull_trigger = { VARIABLE = scope:activity.var:animal_type }
+					scope:activity = {
+						NOR = {
+							AND = {
+								hunt_activity_deer_game_trigger = { VAR = var:animal_type }
+								exists = scope:activity.var:female_quarry
+							}
+							exists = var:skull_damaged
+							has_activity_option = { category = special_type option = hunt_type_falconry }
+						}
+					}
+				}
+				modifier = { # Already have one of the same
+					factor = 0.5
+					any_character_artifact = {
+						artifact_type = animal_skull
+						exists = var:animal_type
+						var:animal_type = scope:activity.var:animal_type
+					}
+				}
+				create_artifact_wall_skull_effect = {
+					OWNER = root
+					HUNTER = scope:animal_slayer
+					LEGENDARY = no
+					ANIMAL = scope:activity.var:animal_type
+				}
+			}
+			100 = { # Create Hide
+				trigger = {
+					has_royal_court = yes
+					exists = scope:activity.var:animal_type
+					scope:activity = {
+						NOR = {
+							exists = scope:activity.var:pelt_damaged
+							has_activity_option = { category = special_type option = hunt_type_falconry }
+						}
+					}
+				}
+				modifier = { # Already have one
+					factor = 0.5
+					trigger_if = {
+						limit = {
+							hunt_hide_big_trigger = { VARIABLE = scope:activity.var:animal_type }
+						}
+						any_character_artifact = {
+							artifact_type = animal_hide_big
+							exists = var:animal_type
+							var:animal_type = scope:activity.var:animal_type
+						}
+					}
+					trigger_else = {
+						any_character_artifact = {
+							artifact_type = animal_hide
+							exists = var:animal_type
+							var:animal_type = scope:activity.var:animal_type
+						}
+					}
+				}
+				create_artifact_animal_hide_effect = {
+					OWNER = root
+					HUNTER = scope:animal_slayer
+					LEGENDARY = no
+					ANIMAL = scope:activity.var:animal_type
+				}
+			}
+			5 = { # Create Trinket
+				trigger = {
+					scope:activity = { # Must be hare if Falconry
+						trigger_if = {
+							limit = {
+								has_activity_option = { category = special_type option = hunt_type_falconry }
+							}
+							var:animal_type = flag:hare
+						}
+						NAND = {
+							hunt_activity_deer_game_trigger = { VAR = var:animal_type }
+							exists = scope:activity.var:female_quarry
+						}
+						NOT = {
+							has_activity_option = { category = special_type option = hunt_type_falconry }
+						}
+					}
+				}
+				#ADDED - so it has any chance to drop if you have court
+				modifier = {
+					add = 95
+					always = yes
+				}
+				create_artifact_animal_trinket_effect = {
+					OWNER = root
+					HUNTER = scope:animal_slayer
+					LEGENDARY = no
+					ANIMAL = scope:activity.var:animal_type
+				}
+			}
+			5 = { # Create Feather
+				trigger = {
+					scope:activity = {
+						has_activity_option = { category = special_type option = hunt_type_falconry }
+					}
+					NOT = { scope:activity.var:animal_type = flag:hare }
+				}
+				#ADDED - so it has any chance to drop if you have court
+				modifier = {
+					add = 70
+					always = yes
+				}
+				create_artifact_bird_feather_effect = {
+					OWNER = root
+					HUNTER = root
+					ANIMAL = scope:activity.var:animal_type
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:newly_created_artifact }
+			scope:activity = {
+				add_to_variable_list = {
+					name = artifact_rewards
+					target = scope:newly_created_artifact
+				}
+			}
+		}
+	}
+}
+
 # Unified effect for adding sightings to counties
 hunt_create_sighting_effect = {
 	if = {

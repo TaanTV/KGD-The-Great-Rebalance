@@ -2,11 +2,49 @@
 # GOVERNMENT VALUES  #
 ###################
 
-clan_government_levies_default = 0.035		#prev 0.04
+clan_government_levies_default = 0.045		#prev 0.04
 #clan_government_levies_player = 0.25
 
-clan_government_tax_default = 0.03			#BKT prev 0.035		#prev 0.02
+clan_government_tax_default = 0.03			#prev 0.02
 #clan_government_tax_player = 0.25
+
+#the above ones get up to x15-ed by tax collector aptitude i think. WTF.
+
+clan_government_tax_collector_aptitude_multiplier = {
+	value =	{
+		scope:tax_collector = {
+			if = { # Value saved once at start to maximize performance
+				limit = {
+					save_temporary_scope_value_as = {
+						name = aptitude_value
+						value = "tax_collector_aptitude(clan_tax_slot)"
+					}
+				}
+			}
+		}
+		if = { # Reordered to maximize performance based on commonality of aptitude
+			limit = { scope:aptitude_value = 1 }	#prev 2
+			add = 4		#prev 3
+		}
+		else_if = {
+			limit = { scope:aptitude_value = 2 }	#prev 3
+			add = 6
+		}
+		#else_if = {
+		#	limit = { scope:aptitude_value = 0 }	#prev 1
+		#	add = 2		#prev 1
+		#}
+		else_if = {
+			limit = { scope:aptitude_value = 3 }	#prev 4
+			add = 8		#prev 10
+		}
+		else_if = {
+			limit = { scope:aptitude_value = 4 }	#prev 5
+			add = 10	#prev 15
+		}
+		else = { add = 2 }
+	}
+}
 
 #Feudal government values
 exempt_feudal_tax = 0.025		#prev 0

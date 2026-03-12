@@ -1,8 +1,8 @@
 ﻿random_yearly_playable_pulse = {
 	on_actions = {
 		BKT_ai_goal_manager_opportunity_pulse
-		delay = { days = 1 }
-		BKT_ai_goal_manager_assignment
+		#delay = { days = 1 }
+		#BKT_ai_goal_manager_assignment
 	}
 }
 

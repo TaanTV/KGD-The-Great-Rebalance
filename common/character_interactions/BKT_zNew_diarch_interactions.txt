@@ -15,14 +15,16 @@ foster_legitimacy_diarch_interaction = {
 		ai_recipients = liege
 	}
  
-	ai_frequency_by_tier = {
-		barony = 18
-		county = 18
-		duchy = 18
-		kingdom = 18
-		empire = 18
-		hegemony = 0
-	}
+	#ai_frequency_by_tier = {
+	#	barony = 18
+	#	county = 18
+	#	duchy = 18
+	#	kingdom = 18
+	#	empire = 18
+	#	hegemony = 0
+	#}
+	#The above doesnt work with landless
+	ai_frequency = 18
 	
 	is_shown = {
 		NOT = {
@@ -31,8 +33,6 @@ foster_legitimacy_diarch_interaction = {
 		scope:actor = {
 			liege = scope:recipient
 			is_diarch_of_target = scope:recipient
-			is_adult = yes
-			is_imprisoned = no
 		}
 		scope:recipient = {
 			has_legitimacy = yes
@@ -457,14 +457,16 @@ damage_legitimacy_diarch_interaction = {
 		ai_recipients = liege
 	}
 
-	ai_frequency_by_tier = {
-		barony = 18
-		county = 18
-		duchy = 18
-		kingdom = 18
-		empire = 18
-		hegemony = 0
-	}
+	#ai_frequency_by_tier = {
+	#	barony = 18
+	#	county = 18
+	#	duchy = 18
+	#	kingdom = 18
+	#	empire = 18
+	#	hegemony = 0
+	#}
+	#The above doesnt work with landless
+	ai_frequency = 18
 	
 	is_shown = {
 		NOT = {
@@ -473,8 +475,6 @@ damage_legitimacy_diarch_interaction = {
 		scope:actor = {
 			liege = scope:recipient
 			is_diarch_of_target = scope:recipient
-			is_adult = yes
-			is_imprisoned = no
 		}
 		scope:recipient = {
 			has_legitimacy = yes

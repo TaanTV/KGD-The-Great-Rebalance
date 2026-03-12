@@ -1,0 +1,4 @@
+﻿l_russian:
+ steal_herd_interaction.tt.low: "Вы пытаетесь увести пару лошадей из лагеря персонажа [recipient.GetShortUIName]\n\nШанс на успех [Concept('scheme', 'происков')|E]: #p +15%#!"
+ steal_herd_interaction.tt.high: "Вы пытаетесь угнать огромную часть [Concept('herd', 'стада')|E] персонажа [recipient.GetShortUIName]\n\nШанс на успех [Concept('scheme', 'происков')|E]: #n -15%#!"
+ 

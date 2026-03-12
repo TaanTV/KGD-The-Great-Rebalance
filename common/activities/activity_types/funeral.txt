@@ -472,6 +472,17 @@ activity_funeral = {
             	desc = "Diarchy"
             }
         }
+		#ADDED - i heard you need piety
+        if = {
+        	limit = { 
+				#300 per rank above baron, 1200 for empires 1500 for hegemons 
+				prestige < { value = highest_held_title_tier add = -1 multiply = 300 }
+			}
+        	add = {
+            	value = 35
+            	desc = "piety"
+            }
+        }
 		# Legitimacy
 		if = {
 			limit = {
@@ -641,7 +652,7 @@ activity_funeral = {
 		gold = {
 			add = {
 				value = 0
-				desc = funeral_activity_cost_desc
+				#desc = funeral_activity_cost_desc
 				add = {
 					value = funeral_activity_cost
 					desc = funeral_activity_cost_desc
@@ -745,15 +756,15 @@ activity_funeral = {
 			}
 			add = { # Ceremony 
 				value = 0 # Bad Option Cost
-				add = 10 # Normal Option Cost
-				add = 35 # Good Option Cost
+				add = 15	#prev 10 # Normal Option Cost
+				add = 50	#prev 35 # Good Option Cost
 				# Scale the sum of the options by era and tier
 				add = {
-					value = 45
+					value = 65	#prev 45
 					multiply = activity_cost_scale_by_tier
 				}
 				add = {
-					value = 45
+					value = 65	#prev 45
 					multiply = activity_cost_scale_by_era
 				}
 				# Divide by 3 (num of levels for this option) so we get the average option cost
@@ -1337,17 +1348,17 @@ activity_funeral = {
 							value = 0
 							desc = funeral_ceremony_normal
 							add = {
-								value = 10
+								value = 15		#prev 10
 								desc = funeral_ceremony_normal
 							}
 							add = {
-								value = 10
+								value = 15		#prev 10
 								multiply = activity_cost_scale_by_tier
-								subtract = 10
+								subtract = 15	#prev 10
 								desc = activity_cost_scale_by_tier_desc
 							}
 							add = {
-								value = 10
+								value = 15		#prev 10
 								multiply = activity_cost_scale_by_era
 								subtract = 10
 								desc = activity_cost_scale_by_era_desc
@@ -1359,16 +1370,16 @@ activity_funeral = {
 									}
 								}
 								subtract = {
-									value = 10
+									value = 15				#prev 10
 									add = {
-										value = 10
+										value = 15			#prev 10
 										multiply = activity_cost_scale_by_tier
-										subtract = 10
+										subtract = 15		#prev 10
 									}
 									add = {
-										value = 10
+										value = 15			#prev 10
 										multiply = activity_cost_scale_by_era
-										subtract = 10
+										subtract = 15		#prev 10
 									}
 									multiply = law_legacy_cost_reduction_mult
 									desc = law_legacy_1_name
@@ -1408,19 +1419,19 @@ activity_funeral = {
 							value = 0
 							desc = funeral_ceremony_good
 							add = {
-								value = 35
+								value = 50		#prev 35
 								desc = funeral_ceremony_good
 							}
 							add = {
-								value = 35
+								value = 50		#prev 35
 								multiply = activity_cost_scale_by_tier
-								subtract = 35
+								subtract = 50	#prev 35
 								desc = activity_cost_scale_by_tier_desc
 							}
 							add = {
-								value = 35
+								value = 50		#prev 35
 								multiply = activity_cost_scale_by_era
-								subtract = 35
+								subtract = 50	#prev 35
 								desc = activity_cost_scale_by_era_desc
 							}
 							if = {
@@ -1430,16 +1441,16 @@ activity_funeral = {
 									}
 								}
 								subtract = {
-									value = 35
+									value = 50			#prev 35
 									add = {
-										value = 35
+										value = 50		#prev 35
 										multiply = activity_cost_scale_by_tier
-										subtract = 35
+										subtract = 50	#prev 35
 									}
 									add = {
-										value = 35
+										value = 50		#prev 35
 										multiply = activity_cost_scale_by_era
-										subtract = 35
+										subtract = 50	#prev 35
 									}
 									multiply = law_legacy_cost_reduction_mult
 									desc = law_legacy_1_name
@@ -1473,7 +1484,7 @@ activity_funeral = {
 	# PHASES
 	###################
 
-	max_guest_arrival_delay_time = { months = 8 }
+	max_guest_arrival_delay_time = { months = 4 }	#prev 8
 
 	phases = {
 		# Mingling and socialising

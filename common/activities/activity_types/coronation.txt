@@ -170,7 +170,12 @@
 			add = {
 				if = {
 					limit = {
-						has_treasury = no
+						#has_treasury = no
+						#ADDED - to fix some things.
+						OR = {
+							has_treasury = no
+							gold > treasury
+						}
 					}
 					add = {
 						value = base_coronation_cost
@@ -307,7 +312,12 @@
 			add = {
 				if = {
 					limit = {
-						has_treasury = yes
+						#has_treasury = yes
+						#ADDED - to fix some things.
+						NOR = {
+							has_treasury = no
+							gold > treasury
+						}
 					}
 					add = {
 						value = base_coronation_cost
@@ -760,7 +770,12 @@
 			add = {
 				if = {
 					limit = {
-						has_treasury = no
+						#has_treasury = no
+						#ADDED - to fix some things.
+						OR = {
+							has_treasury = no
+							gold > treasury
+						}
 					}
 					add = {
 						value = base_coronation_cost
@@ -897,7 +912,12 @@
 			add = {
 				if = {
 					limit = {
-						has_treasury = yes
+						#has_treasury = yes
+						#ADDED - to fix some things.
+						NOR = {
+							has_treasury = no
+							gold > treasury
+						}
 					}
 					add = {
 						value = base_coronation_cost
@@ -1379,6 +1399,13 @@
 						}
 						multiply = 0.2		#prev 0.1
 					}
+					#ADDED
+					if = {
+						limit = {
+							has_trait = conqueror
+						}
+						multiply = 0
+					}
 				}
 			}
 			coronation_medium_ceremony = {
@@ -1393,7 +1420,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = no
+									#has_treasury = no
+									#ADDED - to fix some things.
+									OR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_medium_ceremony_value
 								add = {
@@ -1511,7 +1543,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = yes
+									#has_treasury = yes
+									#ADDED - to fix some things.
+									NOR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_medium_ceremony_treasury_value
 								add = {
@@ -1690,7 +1727,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = no
+									#has_treasury = no
+									#ADDED - to fix some things.
+									OR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_large_ceremony_value
 								add = {
@@ -1789,7 +1831,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = yes
+									#has_treasury = yes
+									#ADDED - to fix some things.
+									NOR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_large_ceremony_treasury_value
 								add = {
@@ -1995,6 +2042,13 @@
 						}
 						multiply = 0.2		#prev 0.1
 					}
+					#ADDED
+					if = {
+						limit = {
+							has_trait = conqueror
+						}
+						multiply = 0
+					}
 				}
 			}
 			ceremony_feast_type_regular = {
@@ -2009,7 +2063,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = no
+									#has_treasury = no
+									#ADDED - to fix some things.
+									OR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_medium_feast_value
 								add = {
@@ -2127,7 +2186,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = yes
+									#has_treasury = yes
+									#ADDED - to fix some things.
+									NOR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_medium_feast_treasury_value
 								add = {
@@ -2313,7 +2377,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = no
+									#has_treasury = no
+									#ADDED - to fix some things.
+									OR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_large_feast_value
 								add = {
@@ -2411,7 +2480,12 @@
 						value = {
 							if = {
 								limit = {
-									has_treasury = yes
+									#has_treasury = yes
+									#ADDED - to fix some things.
+									NOR = {
+										has_treasury = no
+										gold > treasury
+									}
 								}
 								value = coronation_large_feast_treasury_value
 								add = {
@@ -2628,7 +2702,7 @@
 			limit = {
 				has_game_rule = coronation_laws_off
 			}
-			divide = 20
+			divide = 100	#prev 20
 		}
 		#ADDED - unless they're making a crown/regalia and dont have one!
 		if = {
@@ -2698,7 +2772,7 @@
 					county.holder ?= scope:host
 				}
 			}
-			multiply = 0.1
+			multiply = 0.01		#prev 0.1
 		}
 		#Head of Faith holy site
 		if = {
@@ -3994,6 +4068,8 @@
 				limit = {
 					exists = scope:activity.var:activity_special_type_progression
 					scope:activity.var:activity_special_type_progression >= 50
+					#ADDED - quick and dirty fix for this thing
+					this = scope:host 
 				}
 				if = {
 					limit = {
@@ -4032,7 +4108,7 @@
 				else = {
 					set_variable = {
 						name = coronation_tradition_location
-						value = 1
+						value = 3		#prev 1
 					}
 				}
 			}
@@ -4375,6 +4451,7 @@
 							has_building_gfx = western_building_gfx 
 							has_building_gfx = mediterranean_building_gfx 
 							has_building_gfx = byzantine_building_gfx 
+							has_building_gfx = caucasian_building_gfx
 							has_building_gfx = norse_building_gfx 
 							has_building_gfx = iberian_building_gfx 
 						}
@@ -4617,11 +4694,11 @@
 				activity_location = { NOT = { has_holding_type = church_holding } }
 				scope:host = {
 					OR = {
-						location = province:b_constantinople
+						location = title:b_constantinople.title_province #Unop: keep tiger quiet
 						AND = {
 							primary_title = title:e_byzantium
 							title:c_byzantion = {
-								any_de_jure_top_liege = { this = root } 
+								any_de_jure_top_liege = { this = scope:host } #Unop: root is an activity here, so use host scope
 							}
 						}
 					}
@@ -5034,7 +5111,12 @@
 		trigger = {
 			scope:activity ?= { 
 				has_current_phase = coronation_phase_feast 
-				activity_location.culture = { has_building_gfx = byzantine_building_gfx }
+				activity_location.culture = {
+					OR = {
+						has_building_gfx = byzantine_building_gfx
+						has_building_gfx = caucasian_building_gfx
+					}
+				}
 			}
 		}
 		texture = "gfx/interface/illustrations/event_scenes/ep3_feast_byzantine.dds"

@@ -17,3 +17,9 @@
  foster_legitimacy_diarch_interaction.failure.liege.t: "[actor.GetDiarchTitle] не смог укреплить #V вашу#! [Concept('legitimacy', 'легитимность')|E]"
  damage_legitimacy_diarch_interaction.success.liege.t: "[actor.GetDiarchTitle] подрывает #V вашу#! [Concept('legitimacy', 'легитимность')|E]"
  damage_legitimacy_diarch_interaction.failure.liege.t: "[actor.GetDiarchTitle] не смог подорвать #V вашу#! [Concept('legitimacy', 'легитимность')|E]"
+ 
+ vassal_syphon_treasury_interaction: "Злоупотребить Полномочиями Советника"
+ vassal_syphon_treasury_interaction_cooldown_tt: "[actor.GetShortUIName] [Select_CString(actor.IsFemale, 'была', 'был' )] жертвой злоупотреблений недавно, действие недоступно до [GetCurrentDateWithDiff( GetVarTimeRemaining( actor.MakeScope, 'vassal_syphon_treasury_interaction_cooldown') )]"
+ vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties: "Вы увеличите [Concept('county_corruption', 'коррупцию')|E] или присвоите [Concept('control', 'контроль')|E] в некоторых [Concept('counties', 'графствах')|E] вашего [Concept('liege', 'сюзерена')|E]"
+ 
+ cant_attack_lower_tier_foreign_vassals: "Невозможно атаковать чужого [Concept('vassal', 'вассала')|E] чей [rank|E] ниже вашего"

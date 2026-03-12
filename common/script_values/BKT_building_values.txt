@@ -21,9 +21,9 @@
 @good_tax_base = 0.25		#0.5
 @excellent_tax_base = 0.35	#0.7
 
-@copper_mine_tax_base = 1.25	#2
-@silver_mine_tax_base = 2		#3
-@special_mine_tax_base = 3		#5
+@copper_mine_tax_base = 1		#2
+@silver_mine_tax_base = 1.5		#3
+@special_mine_tax_base = 2		#5
 
 # We have four 'tax classes', each one has a better scale than the others.
 @poor_tax_scale_addition_per_tier = 0.075		#0.15
@@ -1800,19 +1800,19 @@ building_garrison_reinforcement_factor_tier_8 = @[garrison_reinforcement_factor_
 ### NEW STUFF ###
 
 castle_building_tax_tier_1 = @[poor_tax_tier_2 * 3]
-castle_building_tax_tier_2 = @[poor_tax_tier_4 * 2.5 + 0.025]		#I hate this.
-castle_building_tax_tier_3 = @[poor_tax_tier_6 * 2.5]
-castle_building_tax_tier_4 = @[poor_tax_tier_8 * 2.5 + 0.025]		#And this.
+castle_building_tax_tier_2 = @[poor_tax_tier_4 * 2.5 - 0.025]		#I hate this.	prev [poor_tax_tier_4 * 2.5 + 0.025]
+castle_building_tax_tier_3 = @[poor_tax_tier_6 * 2.5 - 0.100]
+castle_building_tax_tier_4 = @[poor_tax_tier_8 * 2.5 - 0.125]		#And this.
 
-temple_building_tax_tier_1 = @[poor_tax_tier_3 * 3 + 0.025]			#And all
-temple_building_tax_tier_2 = @[poor_tax_tier_5 * 3 - 0.025]			#Of those
-temple_building_tax_tier_3 = @[poor_tax_tier_7 * 3 - 0.025]			#A lot.
-temple_building_tax_tier_4 = @[good_tax_tier_6 * 2.25]
+temple_building_tax_tier_1 = @[poor_tax_tier_3 * 3 - 0.025]			#And all
+temple_building_tax_tier_2 = @[poor_tax_tier_5 * 3 - 0.125]			#Of those
+temple_building_tax_tier_3 = @[poor_tax_tier_7 * 3 - 0.175]			#A lot.
+temple_building_tax_tier_4 = @[good_tax_tier_6 * 2.25 - 0.25]
 
 city_building_tax_tier_1 = @[good_tax_tier_2 * 3]
-city_building_tax_tier_2 = @[good_tax_tier_4 * 2.5]
-city_building_tax_tier_3 = @[good_tax_tier_6 * 2.5 - 0.1]			#This is fine
-city_building_tax_tier_4 = @[good_tax_tier_8 * 2.5 - 0.2]			#This too
+city_building_tax_tier_2 = @[good_tax_tier_4 * 2.5  -0.10]
+city_building_tax_tier_3 = @[good_tax_tier_6 * 2.5 - 0.35]			#This is fine
+city_building_tax_tier_4 = @[good_tax_tier_8 * 2.5 - 0.50]			#This too
 
 # Unused because that makes tribes more interesting
 tribe_building_tax_tier_1 = @[poor_tax_tier_1 + 0.025 ]

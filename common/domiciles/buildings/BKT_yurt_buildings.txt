@@ -93,9 +93,10 @@ yurt_main_01 = {
 	character_modifier = {
 		domicile_external_slots_capacity_add = 2
 		domicile_monthly_prestige_add = 0.5		#prev 1
-		domicile_monthly_gold_add = 0.25
-		additional_fort_level = 1
+		domicile_monthly_gold_add = 0.5			#prev 0.25
+		#additional_fort_level = 1
 		#ADDED
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5
 	}
 
@@ -134,6 +135,8 @@ yurt_main_02 = {
 		herd_capacity_mult = 0.05
 		domicile_monthly_gold_add = 0.25
 		#ADDED
+		additional_fort_level = 1
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5	#total 10
 	}
 
@@ -183,10 +186,11 @@ yurt_main_03 = {
 		domicile_monthly_gold_add = 0.25
 		domicile_monthly_prestige_add = 0.25		#prev 0.5
 		herd_capacity_mult = 0.05
-		additional_fort_level = 1
+		#additional_fort_level = 1
 		vassal_limit_max = 2
 		herd_capacity_add = 1000
 		#ADDED
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5	#total 15
 	}
 
@@ -243,6 +247,7 @@ yurt_main_04 = {
 		vassal_limit_max = 2
 		herd_capacity_add = 2000
 		#ADDED
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 10	#total 25
 	}
 
@@ -296,10 +301,11 @@ yurt_main_05 = {
 		domicile_monthly_gold_add = 0.5
 		domicile_monthly_prestige_add = 0.25		#prev 0.5
 		herd_capacity_mult = 0.05
-		additional_fort_level = 2
+		additional_fort_level = 1	#prev 2
 		vassal_limit_max = 5
 		herd_capacity_add = 2000
 		#ADDED
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 10	#total 35
 	}
 
@@ -349,12 +355,13 @@ yurt_main_06 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.50
-		additional_fort_level = 2
+		additional_fort_level = 1	#prev 2
 		domicile_monthly_prestige_add = 0.25		#prev 0.5
 		herd_capacity_mult = 0.05
 		vassal_limit_max = 5
 		herd_capacity_add = 5000
 		#ADDED
+		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 15	#total 50
 	}
 
@@ -3637,7 +3644,7 @@ herd_wealth_yurt_01 = {
 
 	character_modifier = {
 		herd_capacity_add = 200
-		monthly_income_from_herd_mult = 0.02		#prev 0.01
+		monthly_income_from_herd_mult = 0.03		#prev 0.01
 	}
 
 	ai_value = {
@@ -3667,7 +3674,7 @@ herd_wealth_yurt_02 = {
 
 	character_modifier = {
 		herd_capacity_add = 200
-		monthly_income_from_herd_mult = 0.02		#prev 0.01
+		monthly_income_from_herd_mult = 0.03		#prev 0.01
 	}
 
 	ai_value = {
@@ -3697,7 +3704,7 @@ herd_wealth_yurt_03 = {
 
 	character_modifier = {
 		herd_capacity_add = 400
-		monthly_income_from_herd_mult = 0.02		#prev 0.01
+		monthly_income_from_herd_mult = 0.03		#prev 0.01
 	}
 
 	ai_value = {
@@ -3728,7 +3735,7 @@ herd_wealth_yurt_04 = {
 
 	character_modifier = {
 		herd_capacity_add = 600
-		monthly_income_from_herd_mult = 0.02		#prev 0.01
+		monthly_income_from_herd_mult = 0.03		#prev 0.01
 	}
 
 	ai_value = {
@@ -3759,7 +3766,7 @@ herd_wealth_yurt_05 = {
 
 	character_modifier = {
 		herd_capacity_add = 1000
-		monthly_income_from_herd_mult = 0.02		#prev 0.01
+		monthly_income_from_herd_mult = 0.04		#prev 0.01
 	}
 
 	ai_value = {
@@ -3790,7 +3797,7 @@ herd_wealth_yurt_06 = {
 
 	character_modifier = {
 		herd_capacity_add = 1000
-		#monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.04		#prev 0.01
 	}
 
 	ai_value = {
@@ -3826,7 +3833,7 @@ herder_yurt_01 = {
 
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_literally_invaluable_building
 	}
 
 	asset = {
@@ -7610,6 +7617,8 @@ kurultai_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_1
+		#ADDED - this one is probably REALLY good for AI
+		add = 2
 	}
 
 	asset = {
@@ -9706,7 +9715,7 @@ marriage_yurt_02 = {
 	}
 
 	character_modifier = {
-		domicile_monthly_prestige_add = 0.01		#prev 0.1
+		domicile_monthly_prestige_add = 0.02		#prev 0.1
 	}
 
 	ai_value = {
@@ -9740,7 +9749,7 @@ marriage_yurt_03 = {
 	}
 
 	character_modifier = {
-		domicile_monthly_prestige_add = 0.01		#prev 0.1
+		#domicile_monthly_prestige_add = 0.1
 	}
 
 	ai_value = {
@@ -9908,7 +9917,7 @@ better_children_yurt_02 = {
 	}
 
 	character_modifier = {
-		domicile_monthly_prestige_add = 0.01		#prev 0.1
+		domicile_monthly_prestige_add = 0.02		#prev 0.1
 	}
 
 	ai_value = {
@@ -9942,7 +9951,7 @@ better_children_yurt_03 = {
 	}
 
 	character_modifier = {
-		domicile_monthly_prestige_add = 0.01		#prev 0.1
+		#domicile_monthly_prestige_add = 0.1
 	}
 
 	ai_value = {
@@ -12224,7 +12233,7 @@ trade_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_1
+		value = 11	#prev nomadic_capital_exterior_building_1
 	}
 
 	asset = {
@@ -12511,6 +12520,17 @@ paiza_yurt_01 = {
 		herd = yurt_internal_building_herd_cost_tier_1
 		prestige = yurt_internal_building_prestige_cost_tier_1
 		gold = yurt_internal_building_gold_cost_tier_1
+	}
+	
+	#ADDED - whats the point before that?
+	can_construct = {
+		custom_tooltip = {
+			text = yurt_main_nomadic_authority_4_5
+			OR = {
+				has_realm_law = nomadic_authority_4
+				has_realm_law = nomadic_authority_5
+			}	
+		}	
 	}
 
 	parameters = {
@@ -13391,7 +13411,7 @@ herd_trade_yurt_02 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13461,7 +13481,7 @@ herd_trade_yurt_04 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13496,7 +13516,7 @@ herd_trade_yurt_05 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13531,7 +13551,7 @@ herd_trade_yurt_06 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13597,7 +13617,7 @@ char_trade_yurt_02 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13667,7 +13687,7 @@ char_trade_yurt_04 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13702,7 +13722,7 @@ char_trade_yurt_05 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -13737,7 +13757,7 @@ char_trade_yurt_06 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.02	#prev 0.01
 	}
 
 	ai_value = {

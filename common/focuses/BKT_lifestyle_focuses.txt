@@ -454,7 +454,7 @@ intrigue_intimidation_focus = {
 	
 	modifier = {
 		intrigue = 2
-		dread_baseline_add = 30
+		dread_baseline_add = 20		#prev 30
 		dread_loss_mult = -0.25
 	}
 
@@ -582,6 +582,8 @@ stewardship_domain_focus = {
 	
 	modifier = {
 		stewardship = 3
+		#ADDED
+		monthly_county_control_growth_add = 0.15
 	}
 
 	auto_selection_weight = {

@@ -291,7 +291,11 @@ mpo_nerge.0120 = { # Impressive Outcome
 			limit = {
 				root = scope:host
 			}
+			#ADDED - not all the time plz
+			random = {
+				chance = 35
 			nerge_commander_trait_effect = yes
+			}
 		}
 	}
 }
@@ -315,9 +319,15 @@ mpo_nerge.0125 = { # Great Outcome
 		name = mpo_nerge.0125.a
 		if = {
 			limit = {
-				is_ai = no
+				#is_ai = no
+				#ADDED
+				root = scope:host
 			}
+			#ADDED - not all the time plz
+			random = {
+				chance = 75
 			nerge_commander_trait_effect = yes
+			}
 		}
 		else = {
 			random = {
@@ -347,7 +357,9 @@ mpo_nerge.0130 = { # Fantastic Outcome
 		name = mpo_nerge.0130.a
 		if = {
 			limit = {
-				is_ai = no
+				#is_ai = no
+				#ADDED
+				root = scope:host
 			}
 			nerge_commander_trait_effect = yes
 		}
@@ -3178,6 +3190,8 @@ mpo_nerge.1050 = {
 					right_icon = scope:hunter
 					add_prowess_skill = 1
 					scope:hunter = { add_prowess_skill = 1 }
+					#ADDED
+					nerge_progression_medium_effect = yes
 				}
 			}
 			35 = {
@@ -3248,7 +3262,13 @@ mpo_nerge.1050 = {
 					type = event_toast_effect_good
 					title = mpo_nerge.1050.b.tt.success
 					left_icon = root
+					#ADDED - now inside random
+					random = {
+						chance = 50
 					add_prowess_skill = 1
+					}
+					#ADDED
+					nerge_progression_medium_effect = yes
 				}
 			}
 			50 = {
@@ -3263,7 +3283,7 @@ mpo_nerge.1050 = {
 					type = event_toast_effect_bad
 					title = mpo_nerge.1050.b.tt.failure
 					left_icon = root
-					add_prestige = miniscule_prestige_loss
+					add_prestige = minor_prestige_loss		#prev miniscule_prestige_loss
 					add_stress = medium_stress_gain
 				}
 			}
@@ -3317,8 +3337,65 @@ mpo_nerge.1050 = {
 						title = mpo_nerge.1050.c.tt.success
 						left_icon = scope:hunter
 						right_icon = scope:hunter_2
+						#ADDED - now inside random
+						random = {
+							chance = 50
 						scope:hunter = { add_prowess_skill = 1 }
 						scope:hunter_2 = { add_prowess_skill = 1 }
+						}
+						#ADDED
+						prev = { nerge_progression_small_effect = yes }
+					}
+					#ADDED - idk how this works but maybe show it too
+					hidden_effect = {
+						prev = {
+							send_interface_toast = {
+								type = event_toast_effect_bad
+								title = mpo_nerge.1050.c.tt.failure
+								left_icon = scope:hunter
+								right_icon = scope:hunter_2
+								show_as_tooltip = {
+									send_interface_toast = {
+										type = event_toast_effect_good
+										title = mpo_nerge.1050.c.tt.success
+										left_icon = scope:hunter
+										right_icon = scope:hunter_2
+										#ADDED - now inside random
+										random = {
+											chance = 50
+										scope:hunter = { add_prowess_skill = 1 }
+										scope:hunter_2 = { add_prowess_skill = 1 }
+										}
+										#ADDED
+										prev = { nerge_progression_small_effect = yes }
+									}
+								}
+							}
+						}
+						scope:hunter_2 = {
+							send_interface_toast = {
+								type = event_toast_effect_bad
+								title = mpo_nerge.1050.c.tt.failure
+								left_icon = scope:hunter
+								right_icon = scope:hunter_2
+								show_as_tooltip = {
+									send_interface_toast = {
+										type = event_toast_effect_good
+										title = mpo_nerge.1050.c.tt.success
+										left_icon = scope:hunter
+										right_icon = scope:hunter_2
+										#ADDED - now inside random
+										random = {
+											chance = 50
+										scope:hunter = { add_prowess_skill = 1 }
+										scope:hunter_2 = { add_prowess_skill = 1 }
+										}
+										#ADDED
+										prev = { nerge_progression_small_effect = yes }
+									}
+								}
+							}
+						}
 					}
 				}
 				50 = {
@@ -3335,6 +3412,8 @@ mpo_nerge.1050 = {
 						left_icon = scope:hunter
 						right_icon = scope:hunter_2
 						scope:hunter = {
+							#ADDED - prestige penalty here
+							add_prestige = miniscule_prestige_loss
 							add_stress = medium_stress_gain
 							add_opinion = {
 								target = root
@@ -3343,11 +3422,72 @@ mpo_nerge.1050 = {
 							}
 						}
 						scope:hunter_2 = {
+							#ADDED - prestige penalty here too
+							add_prestige = miniscule_prestige_loss
 							add_stress = medium_stress_gain
 							add_opinion = {
 								target = root
 								modifier = annoyed_opinion
 								opinion = -15
+							}
+						}
+					}
+					#ADDED - how about showing the results
+					hidden_effect = {
+						prev = {
+							send_interface_toast = {
+								type = event_toast_effect_bad
+								title = mpo_nerge.1050.c.tt.failure
+								left_icon = scope:hunter
+								right_icon = scope:hunter_2
+								show_as_tooltip = {
+									scope:hunter = {
+										add_prestige = miniscule_prestige_loss
+										add_stress = medium_stress_gain
+										add_opinion = {
+											target = root
+											modifier = annoyed_opinion
+											opinion = -15
+										}
+									}
+									scope:hunter_2 = {
+										add_prestige = miniscule_prestige_loss
+										add_stress = medium_stress_gain
+										add_opinion = {
+											target = root
+											modifier = annoyed_opinion
+											opinion = -15
+										}
+									}
+								}
+							}
+						}
+						scope:hunter_2 = {
+							send_interface_toast = {
+								type = event_toast_effect_bad
+								title = mpo_nerge.1050.c.tt.failure
+								left_icon = scope:hunter
+								right_icon = scope:hunter_2
+								show_as_tooltip = {
+									scope:hunter = {
+										add_prestige = miniscule_prestige_loss
+										add_stress = medium_stress_gain
+										add_opinion = {
+											target = root
+											modifier = annoyed_opinion
+											opinion = -15
+										}
+									}
+									scope:hunter_2 = {
+										add_prestige = miniscule_prestige_loss
+										add_stress = medium_stress_gain
+										add_opinion = {
+											target = root
+											modifier = annoyed_opinion
+											opinion = -15
+										}
+									}
+								}
 							}
 						}
 					}
@@ -3372,18 +3512,23 @@ mpo_nerge.1050 = {
 				}
 			}
 			modifier = {
-				factor = 0
+				factor = 0.2	#prev 0
 				OR = {
 					has_trait = diligent
 					has_trait = brave
 				}
+			}
+			#ADDED
+			modifier = {
+				factor = 2
+				scope:hunter.prowess > high_skill_rating
 			}
 		}
 	}
 	
 	option = { # Don't bother
 		name = mpo_nerge.1050.d
-		nerge_progression_small_effect = yes
+		nerge_progression_tiny_effect = yes	#prev nerge_progression_small_effect
 		stress_impact = {
 			diligent = medium_stress_impact_loss
 			brave = major_stress_impact_gain
@@ -3391,7 +3536,7 @@ mpo_nerge.1050 = {
 		ai_chance = {
 			base = 100
 			modifier = {
-				factor = 2
+				factor = 3		#prev 2
 				has_trait = diligent
 			}
 			modifier = {
@@ -3404,6 +3549,10 @@ mpo_nerge.1050 = {
 				involved_activity.activity_host = this
 				exists = involved_activity.var:activity_special_type_progression
 				involved_activity.var:activity_special_type_progression < 25
+				NOR = {
+					prowess > very_high_skill_rating
+					scope:hunter.prowess > very_high_skill_rating
+				}
 				factor = 20
 			}
 		}
@@ -3517,7 +3666,11 @@ mpo_nerge.1060 = {
 					title = mpo_nerge.1060.b.tt.success
 					left_icon = root
 					add_prestige = minor_prestige_gain
+					#ADDED - now random
+					random = {
+						chance = 50
 					add_prowess_skill = 1
+					}
 				}
 			}
 			50 = {

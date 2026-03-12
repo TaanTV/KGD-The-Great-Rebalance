@@ -28,6 +28,8 @@ form_portugal_decision = {
 	}
 
 	is_valid = {
+		#ADDED - can do it if 
+		sub_realm_size < 28
 		culture = { has_cultural_pillar = heritage_iberian }
 
 		trigger_if = {
@@ -144,7 +146,6 @@ form_portugal_decision = {
 		top_liege = this
 		#ADDED - no idea if that helps with perfomance at all but why not
 		culture = { has_cultural_pillar = heritage_iberian }
-		sub_realm_size < 30
 	}
 
 	ai_will_do = {

@@ -1,4 +1,76 @@
-﻿end_court_scheme_effect = {
+﻿# If appropriate, murder anyone travelling with scope:target.
+murder_entourage_list_effect = {
+	# Pick three random entourage members to kill
+	scope:target = {
+		current_travel_plan = {
+			#ADDED - now in random (note - no proper tabulation for easier compare time)
+			random = {
+				chance = 60
+			random_entourage_character = {
+				limit = {
+					this != scope:target
+				}
+				scope:owner = {
+					add_to_variable_list = {
+						name = entourage_members_to_kill
+						target = prev
+					}
+				}
+			}
+			}
+			#ADDED - now in random (note - no proper tabulation for easier compare time)
+			random = {
+				chance = 30
+			random_entourage_character = {
+				limit = {
+					NOR = {
+						this = scope:target
+						this = scope:owner
+						scope:owner = {
+							is_target_in_variable_list = {
+								name = entourage_members_to_kill
+								target = prev
+							}
+						}
+					}
+				}
+				scope:owner = {
+					add_to_variable_list = {
+						name = entourage_members_to_kill
+						target = prev
+					}
+				}
+			}
+			}
+			#ADDED - now in random (note - no proper tabulation for easier compare time)
+			random = {
+				chance = 15
+			random_entourage_character = {
+				limit = {
+					NOR = {
+						this = scope:target
+						this = scope:owner
+						scope:owner = {
+							is_target_in_variable_list = {
+								name = entourage_members_to_kill
+								target = prev
+							}
+						}
+					}
+				}
+				scope:owner = {
+					add_to_variable_list = {
+						name = entourage_members_to_kill
+						target = prev
+					}
+				}
+			}
+			}
+		}
+	}
+}
+
+end_court_scheme_effect = {
 	save_temporary_scope_value_as = {
 		name = court_outcome
 		value = flag:$OUTCOME$

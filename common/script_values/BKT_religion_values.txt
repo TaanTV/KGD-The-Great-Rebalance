@@ -1,1 +1,8 @@
 ﻿heretical_defector_fervor_gain = 10	#prev 15 # How much fervor Old Faith gains when a ruler splits off to a New Heresy
+
+great_holy_war_pledge_amount = {
+	value = root.yearly_character_income
+	#ADDED - lower that a bit
+	multiply = 0.75
+	min = 10
+}

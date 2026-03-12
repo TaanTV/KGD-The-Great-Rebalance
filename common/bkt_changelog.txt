@@ -1,45 +1,603 @@
 Old name: Balance Killer 228 (thus BKT)
 
+#led_by_owner_extra_advantage_add
 # "trait_compatibility(scope:actor)"
+#Requires you to save root_scope in the immediate of your event
+#every_glory_hound_vassal:0 "Every $glory_hound_vassal$ ([THIS.ScriptValue('number_of_glory_hound_vassals')|V0])"
+#every_courtly_vassal:0 "Every $courtly_vassal$ ([THIS.ScriptValue('number_of_courtly_vassals')|V0])"
+#every_parochial_vassal:0 "Every $parochial_vassal$ ([THIS.ScriptValue('number_of_parochial_vassals')|V0])"
+#every_parochial_vassal_no_count:0 "Every $parochial_vassal$"
+#every_baron_vassal: "Every $barons_and_minor_landholders_vassal$ ([THIS.ScriptValue('number_of_barons_and_minor_landholders_vassals')|V0])"
+#every_zealot_vassal:0 "Every $zealot_vassal$ ([THIS.ScriptValue('number_of_zealot_vassals')|V0])"
+#every_minority_vassal: "Every $minority_vassal$ ([THIS.ScriptValue('number_of_minority_vassals')|V0])"
+#every_belligerent_vassal: "Every $belligerent_vassal$ ([THIS.ScriptValue('number_of_belligerent_vassals')|V0])"
+
+
+Potentially:
+#TODO: offer_vassalization_interaction ai_accept needs to be synced with smth (i think that can be ignored)
+#TODO: add pragmatic sanction decision! Loc from eu4:
+		#pragmatic_sanction_decision_title:0 "Pragmatic Sanction"
+		#pragmatic_sanction_decision_desc:0 "Our heir is a woman but the Imperial crown can only pass to a man. It would be intolerable if our dynasty should lose their hold on the crown they worked so hard to acquire due to a mere technicality. Let us use all our influence to ensure our female heir will be considered as our successor when the time comes to elect a new Emperor of the Holy Roman Empire."
 
 Not soon:
 #TODO: add opinion bonus with coup conspirators in diarch_coup_attempt_standard_suite_effect in diarchy_events
 #TODO: gib byzantium primogeniture, add -20ish admin vassal opinion for primo, maybe somehow add a faction for acclaimation? 
 #TODO: check for capital being besieged in is_avaliable or smth idk (that is A LOT OF TRIGGERS) or maybe in guest invite rules or smth?...
 #TODO: Made Peasant Leader give bonuses to Peasant Militia MAAs instead of levies (has no loc, if they add it - do it!)
-#TODO: change some doctrines (not tenets) in on_faith_created if the reformer is AI 
 #TODO: make entrenched regencies heridetary somehow 
+#TODO: add opinion malus with attacker to every (independent?..) neighbour of defender when war is declared
+#TODO: maybe make piety give popular opinion and increased popular opinion from different faith (to compensate)?
+	   then governments would have to have some negative popular opinion by default?
 
 Soon:
-#TODO: limit duchy-tier holy wars to at least dukes and kingdom-tier holy wars to at least kings
+#TODO: change some doctrines (not tenets) in on_faith_created if the reformer is AI 
 #TODO: copy paste 10_ach_oath_decisions.txt and equalise the playing field (and nerf the peace oath)
-#TODO: to a thingy with confederation unification like with NATO titles in KCU (on destroyed de-jure reverts back, eats de-jure on formation like custom kingdoms)
-#TODO: add 500 prestige to landless when they marry (they lose 500 due to technically being duke tier)
-#TODO: lower vassal taxed A BIT? like 5% for feudal and idk none for everyone else
-#TODO: add some stress loss maybe once every 5 years or so to courtiers with money (and take their money away :P)
-#TODO: add opinion malus with attacker to every (independent?..) neighbour of defender when war is declared
-#TODO: make send gift gold value scale with both your income and income of recipient too (maybe 50/50 for your and recipient's?) 
+#TODO: do a thingy with confederation unification like with NATO titles in KCU (on destroyed de-jure reverts back, eats de-jure on formation like custom kingdoms)
 #TODO: add marriage acceptance maluses to beauty_bad (and reverse for beaty_good) traits and maybe lovers_pox and hunchback and idk some other ones? 
-#TODO: add vassal type (zealot parochial etc) opinion IF vassal of that type is on the council (cant just overwrite council positions coz they have a limit on modifiers)
-		#TODO: side note - apply modifiers via on actions, but that's too many modifiers?..
+#TODO: add a set of laws for realm size, debuffing larger empires?
+#TODO: maybe roll some chances depending on things that on succession in NOT partitions vassals who support a different heir rebel immidiatelly?
+#TODO: make executions cost way more piety?..
+#TODO: make reforming into feudal only reform YOU and maybe some vassals who accept or smth idk 
+#TODO: add some stress loss maybe once every 5 years or so to courtiers with money (and take their money away :P)
+#TODO: make AIs NOT ransom their cheating wifes 
+#TODO: make older (or younger for ultimo?) son/daughter become rival and gtfo if they dont inherit and are not too much of a pussy
+#TODO: make some events (or just actions with notifications - preferable) so that barons with low opinion shit on you and barons with high one mabe help you a bit
 
-#TODO: add smth like a "pay off" button to ask for pardon and make AI use it too.
-#TODO: maybe decrease the control increase from council task for emperors and kings and increase it for counts?
-#TODO: maybe decrease develop stuff council task effectiveness for counts and maybe even dukes and increase for emperors?
-#TODO: port gold gain from battle casualities reduction from KAN vs peasants
+#TODO: revisit new buildings or at least their AI weights (didnt touch them yet)
+#TODO: add some chance to become rivals (grudge?) on raid, effect: progress_towards_rival_effect, reason: rival_raided_me, file: army_on_actions_BKT.txt
 
-#TODO: revisit new buildings (didnt touch them yet)
-#TODO: offer_vassalization_interaction ai_accept needs to be synced with smth, check it later
+Very soon:
+#TODO: idk succession?
+#TODO: maybe make chars lose opinion of you if you marry them to a lowborn/shit renown spouse? and possibly try to kill her? or get -210312030210% fertility penalty???
+#TODO: maybe make an event when installing someone on the throne (so, higher rank than you?) via claim cb to ally them
 
-#led_by_owner_extra_advantage_add
+
+
+####	0.11.11	####
+- 
+
+
+####	0.11.10	####
+- Doubled base regiment count but decreased their size a bit for Counts 
+- Made hybrid cultures created by tribal/nomadic/wanua rulers always start in tribal era
+- Increased amount of innovations needed to start progressing into next era by 1
+- Decreased herd ransom value
+- Decreased additional activity cost scale for kings+ but made it scale up with rank 
+- Decreased baseline dread bonus of Sadistic trait
+- Decreased gold penalty in Profligate/Improvident options in most stress threshold events 
+- Halved Spymaster's Support Schemes task hostile scheme duration reduction
+- Removed passive development growth bonus from Bureaucracy legacy 4th perk 
+- Made Nudists tradition a bit more expensive and removed most jungle bonuses off it
+- Increased piety/prestige level required to take Expand Duchy decision
+- Swapped prestige cost for piety cost for Mandala in Expand Duchy decision
+- Steal herd scheme changes:
+- - Removed global 3 years cooldown 
+- - Increased cooldown vs same character to 10 years
+- - Increased low/high herd option impact on success chance a bit (and fixed it not working)
+- - Reduced base max success chance
+- - Halved owner intrigue and prowess skills impact on success chance
+- - Made the scheme slower at base, reduced owner intrigue impact on phase duration
+- Reverted the reversion of a nerf to base income from herd
+- Restricted building Paiza Office internal yurt building for lower-dominance rulers
+- Increased income from herd in Golden Fleeces, Herd Barter and Allure of the Steppe buildings 
+- Made all main yurt levels give 0.25 more monthly gold instead
+- Made nomadic characters start with Council approval War declaration law
+- Made hunt party size options also influence nerge success progress gain a bit
+- Made nerge success progress gain scale down (instead of up) with dominance
+- Made more tweaks to some nerge or hunts nomad-specific events 
+- Reduced Cutting Cornerstones nomadic domicile cost bonus a bit
+- Reduced obedience from Plush Kurultai Seats a bit
+- Made AI build Plush Kurultai Seats internal yurt building earlier/more often
+- Made AI build Barter Stalls yurt building earlier/more often
+- Made AI leave confederations if their realm with tributaries is of a decent size
+- Made AI host more hunts and feasts if they're the strongest power in their confederation
+- Made AI emperors create kingdom titles if they're low on vassal limit
+- Made AI counts and dukes even less likely to hire heavy cavalry
+- Tweaked AI weighting for main yurt upgrades so that AI maybe builds more stuff first
+- Fixed localisation for obedience from Plush Kurultai Seats (not for building itself though)
+- Fixed Protective Amulet artifact being omega-buffed instead of nerfed
+- Fixed being able to challenge to single combat characters that have a strong hook on you
+- Fixed Nudists tradition cost penalty for not having right ethos always applying
+- Fixed some abduction opinions not being low enough
+
+####	0.11.9.1####
+- Switched some of the main yurt fort level bonuses to capital fort level ones
+- Tweaked From Above hunt event to make a bit more sense
+- Nerfed Protective Amulet artifact
+- Removed herd drop on zud/white zud season start
+- Reduced chances of inheriting genetic traits a bit
+- Fixed being able to ransom for more herd than you/they have
+
+####	0.11.9	####
+- Added Frugal Armorers MAA size bonus to War Camps (tribal) line of buildings
+- Increased low Nomad herd contract options opinion bonuses
+- Increased "Imprisoned me" opinion penalties
+- Halved base warscore per occupied barony (idk what it does though)
+- Reworked herd for ransoms to scale with actual ransom cost
+- Reduced legitimacy bonus to required counties for creating kingdom titles
+- Reverted nerf to base income from herd
+- Restricted suzerain from joining inter-tributary wars
+- Removed advantage penalties from Improved Pillaging and Improved Avoidance modifiers
+- Lowered minimum Almohad invasion troop count but also made them get conqueror trait
+- Lowered piety gain from battles vs hostile (yellow) armies
+- War Declaration law related changes:
+- - Increased amount of disgruntled powerful vassals/councillors required to block wars to 2
+- - Increased opinion penalty with powerful vassals/councillors when declaring war
+- Made random characters a bit younger overall
+- Made raids decrease house relations only half the time (less so if there's no existing relation)
+- Made Negotiate Obedience cost no prestige when using a hook
+- Made Negotiate Obedience auto-accept when using a strong hook
+- Made "No court position" obedience penalty not apply to councillors
+- Made "Higher dread than her/him" scale down with their dread
+- Made courtiers, especially lowborn ones, have a bit more base obedience
+- Made successful nerges no longer guaranteed to give commander trait
+- Made minor adjustments to some nerge events to make certain options more impactful/viable
+- Made offering to become a low tribute tributary start characters off with suzerain guarantee
+- Made some traditions make characters very unlikely to adopt foreign language as a court one
+- Made refusing Declare me Regent from a courtly vassal have less opinion penalties
+- Made AI spam Declare me Regent less, especially courtly vassals
+- Made AI keep more court positions around (again)
+- Made AI culture convert a bit more and tweaked the logic around it
+- Made AI less likely to accept ransom offers from third parties it is rivals with
+- Made AI less insane with wanting to increase/decrease house unity
+- Made AI tributaries less likely to accept marriages from their suzerain
+- Made AI pick less terrain-specific traditions if its culture already has some 
+- Made AI with Frugal Armorers tradition prefer building War Camps a bit
+- Made AI nomads desire changing herd obligations in their favor a lot more
+- Made AI lieges of all government types occasionally change contracts through tyranny
+- Reworked AI marriage acceptance penalty for betrothals with adult women to be more granular 
+- Added a speclial AI war stance for landless revolters so that they behave
+- Enabled murder scheme for titleless charaters (i think)
+- Fixed some more cultures having herd-based culture head determination even if not nomadic
+- Fixed oversights in AI liege weighting for feudal levies options 
+- Fixed some VERY ANNOYING error log spam
+- Updated localisation files
+
+####	0.11.8.1####
+- Increased amount of troops Latin emperor gets by a lot
+- Removed tyranny from rejecting homage of vassals that dont bring anything
+- Fixed piety war cost discounts not applying to claim piety cost from Communion
+
+####	0.11.8	####
+- Added legitimacy decay for being imprisoned
+- Lowered stats from all but Assist Ruler Vizier tasks a bit
+- Increased cooldown on Claim Throne scheme
+- Increased base income from Temple Citadel 
+- Removed the random 200 supply limit bonus from Camel Farms
+- Reduced income scaling of castle, temple and city holdings
+- Reduced forced vote from hook duration to 20 years
+- Reduced base spouse opinion a bit
+- Increased legitimize bastard cost 
+- Divorce doctrine changes:
+- - Added +10% skills from spouse tasks bonus to Divorce Disallowed
+- - Added 10 spouse opinion bonus to Divorce Must Be Approved
+- - Added cheaper divorce bonus to Divorce Always Allowed
+- Clerical Succession doctrine changes:
+- - Added realm priest opinion malus for Temporal options
+- - Added head of faith opinion malus for Revocable options 
+- Clerical Marriage doctrine changes:
+- - Added a small diplomacy and opinion of liege bonus to clergy to Clerical Marriage Allowed 
+- - Added a small intrigue and learning bonus to clergy to Clerical Marriage Disallowed
+- Added reduced county opinion penalty for different faith to unreformed faiths 
+- Added a small vassal tax contribution reduction to Coinage Rights 
+- Added a small vasssal levy contribution reduction to War Declaration Rights 
+- Made it impossible to remove Protected Title Revocation off imprisoned vassals
+- Made newborn children get Secluded modifier if any of the parents have it 
+- Made AI not call conquerors into their wars, they wouldnt accept anyway
+- Made AI a bit more likely to upgrade Temple Citadels
+- Fixed skills from vizier tasks modifiers being multiplicative with each other insead of additive
+
+####	0.11.7	####
+- Increased herd of all nomads at game start, especially higher tier ones
+- Added vassal herd contribution bonus to diplomacy skill
+- Added same vassal stance opinion loss on title revocation 
+- Tweaked plague spread chance (yes, again)
+- Replaced general with glory hound and belligirent vassal opinion in Bull Fighter modifier
+- Decreased development growth bonus of Cared for War Widow modifier
+- Decreased flat tax and levies vassal contribution bonus of Absolute Crown Authority
+- Decreased offer vassalage acceptance distance penalty for small islands
+- Decreased Great Holy War gold and prestige war chests a bit
+- Removed double-gaining renown from homages of vassals of same dynasty
+- Removed prestige loss from turning vassal homage away
+- Made turning vassal homage away give them stress and add dread to liege
+- Made not mocking homage of fumbling vassal give less prestige and legitimacy
+- Made Cultivated Sophistication count for requirements of Adopt a Centralized Bureaucracy 
+- Halved scheme success chance bonus of Kin legacy 4th perk
+- Halved scheme success chance bonus from Strong Kinship and Tribal Unity traditions
+- Reduced waiting for guests time of Meet Peers activity
+- Added minor swing change in favor of liege to the end of Meet Peers activity
+- Added monthly piety per dread mult bonus to Divine Retribution perk
+- Added knight effectiveness per tyranny bonus to Malice Implicit perk
+- Reduced skill from councillor skill bonus of Learn on the Job perk  bit
+- Reduced close family opinion bonus of Heart of the Family perk a bit
+- Reduced councillor opinion bonus of Inspiring Rule perk a bit
+- Reduced reduction of faction join reasons of Duty focus a bit
+- Reduced levy but increased tax bonus to cities from Parochial tradition
+- Reduced pilgrimage cost from distance in late medieval era
+- Reduced opinion and Paragon trait impact on Request Excommunication interaction 
+- Made strong hook on head of faith block Request Excommunication interaction against you
+- Made AI use Request Excommunication interaction more often
+- Made AI tributaries/powerful vassals less likely to accept Demand Conversion interaction
+- Made AI tribals push tribal authority higher if they have enough innovations to feudalise
+- Made AI feudals NOT push crown authority higher if that would put them over vassal limit
+- Made AI join less factions vs Great khans
+- Made hard/very hard difficulties reduce herd decay for AI
+- Fixed being able to use Request Excommunication interaction vs your diarch
+- Fixed being able to add Primogeniture as a title law
+- Fixed not being able to break up with lover when they DONT have a strong hook on you
+- Fixed "Encircled by your realm" vassalage reason incorrectly applying to islands
+- Fixed being able to grant titles to independent HOF while being a vassal
+
+####	0.11.6.2####
+- Lowered plague spread chance to coastal baronies a bit (again)
+- Buffed Seljuk invasion troop count a bit
+- Buffed Almohad invasion troops and character modifier by a lot
+- Increased chance for Almohad invasion to spawn
+- Befriend scheme changes (meganerf):
+- - Added success chance malus per existing friend of either side
+- - Reduced max success chance a bit
+- - Reduced tier difference impact
+- - Reduced impact of diplomacy lifestyle traits
+- - Increased trait compatibility impact
+- - Increased low and decreased high opinion impact
+- - Increased diplomacy skill impact on scheme duration a bit
+- - Doubled phase duration duration
+- Reduced Bound by Blood perk scheme success chance bonus a bit
+- Made AI keep more court positions around
+- Fixed clan levy obligations being 1/10th of intended value
+- Updated localisation files
+
+####	0.11.6.1####
+- Added some prestige to castles for tribals
+- Added some base and more factors to stress gain for breaking up with a lover
+- Added a lot of base and more factors to stress gain for breaking up with a soulmate
+- Increased revoke title acceptance from being a baron a bit
+- Made player-barons always be able to refuse title revocation
+- Fixed Genoa having Curtail Walls built in 1066 and 1178 start dates
+- Fixed AI unintentionally not revoking titles off imprisoned vassals sometimes
+- Fixed some inconsistensies with marriage acceptance malus from additional difficulty
+- Fixed some error log spam
+- Updated localisation files
+
+####	0.11.6	####
+- Removed imprisonment reason from refusing random tax demands from grand tour
+- Increased amount of buildings in higher development areas in 1066 start
+- Lowered plague spread chance to coastal baronies 
+- Lowered roleplay/rolehard bonus to vassal opinion for AIs a bit
+- Lowered stats from all but Assist Ruler spouse tasks a bit
+- Lowered prestige gain from battles vs hostile (yellow) armies
+- Allowed starting Elevate Governorship scheme vs same house lieges
+- Allowed barons to refuse title revocation from players
+- Removed barons with lots of gold fleeing when rejecting imprisonment
+- Added watchful modifier to courtiers/barons with gold after refusing imprisonment
+- Added a fertility bonus to conqueror trait and scourge of gods modifier
+- Added opinion loss for crowning at between 25 and 50 coronation magnificence
+- Increased opinion impacts from coronation magnificence for crowning
+- Made being uncrowned block characters from changing succession laws
+- Made claimant faction war imprison former liege and his heir on factions win
+- Made more de-jure vassals join independence factions
+- Made extortionate tax and levy contributions cost 2 "points" (consistency)
+- Made AI feudal vassals prefer to lower their tax obligations first
+- Made AI warlike feudal vassals prefer to lower their levy obligations first
+- Made AI use Elevate Governorship scheme way more often
+- Made AI barons more likely to accept title revocation/imprisonment
+- Made AI barons less likely to accept title revocation/imprisonment if they have a lot of gold
+- Made AI host more funerals if they're low on piety
+- Made AI use Divine Charity court position task if they're low on piety
+- Made AI counts host feasts and hunts a bit more often, especially if independent
+- Made AI checks for "outside of de-jure" independence faction reasons make more sense
+- Made England and France more likely to have independence factions forming against them*
+- Fixed changes to salary change opinion modifiers not applying
+- Fixed childhood traits influence penalty not applying to influence from domicile
+- Fixed skills from spouse tasks modifiers being multiplicative with each other insead of additive
+- Fixed base court amenities cost increase for hegemonies being the same as for kingdoms
+- Fixed war declaration rights not working in administative realms
+- Fixed 1066 not actually getting additional buildings 
+
+* - AIs of english/frankish heritage in vanilla have -200 reasons to join independence factions vs kingdom of england/france respectively
+
+####	0.11.5.5####
+- Made AI of warlike personality weight levy vassal contributions higher
+- Fixed AI sometimes "changing" feudal vassal contracts by making no changes
+- Fixed "Not a Real Duke" sometimes applying even if dynasty head is landless
+- Fixed some error log spam
+
+####	0.11.5.4####
+- Fixed Foreign Affairs chancellor task not giving any prestige most of the time
+
+####	0.11.5.3####
+- Added some more buildings to more developed areas in 1066
+- Fixed not being able to declare wars vs independent rulers of lower rank
+
+####	0.11.5.2####
+- Nerfed mines tax income again
+- Ported a fix or two from Unofficial Patch
+
+####	0.11.5.1####
+- Removed/reduced vassal tax and/or levies contribution modifiers from most tax jurisdictions
+- Made clan vassal obligations less swingy with tax collector attitude 
+- - Apparently the whole thing was bugged so in practice i just increased minimums lol
+
+####	0.11.5	####
+- Restricted declaring war on foreign vassals if their rank is below that of the attacker
+- Enabled wrong linearity marriage acceptance penalty for different houses of same dynasty
+- - Halved it for same-dynasty marriages, unless recipient has any administative government
+- Decreased grand wedding discount from second Activities legacy perk
+- Halved feast and hunt discount from first Law legacy perk
+- Reduced same faith opinion penalty per sinful trait to -5
+- Reworked Industrious tradition to increase build time instead of build costs
+- Tweaked opinion modifiers from changes of budget/salary to accomodate the next change
+- Increased duration of opinion modifiers related to budget/salary changes by A LOT
+- Increased penalties for withdrawing funds from treasury
+- Increased legitimacy loss from disasters for all administative governments
+- Increased minimum scheme phase duration 
+- Increased court amenities cost a bit
+- Increased expected court grandeur for nomadic government
+- Added a minimum to tribal expected court grandeur 
+- Holy Orders related changes:
+- - Nerfed Order Knights MAA 
+- - Reduced amount of MAAs per holding 
+- - Increased base MAA amount
+- - Added all MAA stats buff to Holy Order government type to compensate lack of stationing*
+- - Made leasing baronies off counties your vassals hold grant a lot less gold
+- - Made leasing baronies off give a lot less gold than before in general
+- Added a short control buff after migration
+- Added minor buffs to levy stats and reduced stress gain a bit for Counts
+- Added some stress impacts for recipient to Ask for Council Position interaction
+- Made AI a bit less likely to pick Industrious tradition (again)
+- Fixed paying Northmen army off having an unintended cashback (i hope)
+- Fixed accidental reversion of most legitimacy related changes around disasters
+
+* - can only be seen in battle, but it is there, trust me bro
+
+####	0.11.4	####
+- Added same vassal stance opinion loss on Declare me Regent refusal
+- Added small barons and minor landholders opinion bonus to count rank
+- Doubled buffs to Peasant Militias from innovations
+- Deceased Gendarmes damage by 5
+- Increased Cataphracts and Gendarmes terrain penalties a bit
+- Increased Akritai maintenance cost a bit
+- Increased funeral activity options cost a bit
+- Increased activity cost scaling from rank back to vanilla values
+- Increased natural disaster recovery costs a bit
+- Removed domain limit penalty from Resettlement Domain Burden, added other maluses instead 
+- Reduced scheme duration bonuses from lifestyle perks
+- Reduced title law revocation cost 
+- Reduced prestige and influence from Spice Plantation line of buildings
+- Made lower renown levels take a bit less renown to get
+- Made higher renown levels take more renown to get
+- Made coronations take gold if character has more gold than treasury
+- Made characters always gain legitimacy when marrying higher renown dynasties
+- Made corruption gain from councillors embezzling a bit less obvious
+- Made YET ANOTHER pass on artifact modifiers, reducing some of them
+- Made AI more likely to leave confederations overall
+- Made AI more likely to pick essential innovations
+- Made AI deal with natural disaster better (i hope?)
+- Made AI less likely to agree to finance disaster recovery if they're not affected
+- Made AI weight their skills a bit harder for send options of Ask for Council Position 
+- Made AI build spice plantations only after at least one economic and military building
+- Tweaked AI murder logic a bit
+- Fixed some inconsistensies with legitimacy for marriage with higher renown dynasties
+- Fixed activity costs being a a bit weird sometimes
+- Fixed funeral cost description being extra uninformative
+- Disabled Restore the Byzantine Empire decision for latin emperors with catholic HOF
+- Disabled Expunge Latin Dominion decision for latin emperors
+
+####	0.11.3.2####
+- Increased legitimacy decay of Mandate legitimacy
+- Doubled development growth bonus from Theodosian Walls
+- Nerfed Divine Guidance modifier
+- - Added some of the bonuses from it to Mystic trait itself
+- Added county control bonus to Domain focus
+- Reduced natural dread of Intimidation focus
+- Reduced bonuses/increased penalties to fertility from some traits
+- Reduced county fertility from some (worse) terrain types
+- Reduced steppe season impact on county fertility a bit
+- Fixed some error log spam
+
+####	0.11.3.1####
+- Increased average fertility a bit
+- Increased mercenary cost for admin governments (again)
+- Increased "imprisoned family member" and similar opinion penalties
+- Increased legitimacy impact on claimant faction join reasons
+- Ported claimant faction changes over to ceremonial claimaint faction too
+- Made AI host a bit more feasts and hunts if its low on prestige
+- Fixed castles and cities being upgradable if county culture can do it while your cant
+- Fixed Keshigs being unlocked a bit too early
+
+####	0.11.3	####
+- Communion Tenet: Pressing claims vs non-excommunicated same faith rulers costs piety 
+
+- Made Mandala succession skill duels harder and ensured they're actually skill duels
+- Added county opinion bonus to Divine Charity (High Almoner-esque court positions) task
+- Added opinion loss with powerful vassals when denying request of council position from one
+- Added a minor eligble child except player heir opinion debuff to High Partition
+- Increased eligble child except player heir opinion debuff of House Seniority a bit
+- Increased eligble child except player heir opinion debuff of Primo/Ultimogeniture
+- Increased legitimacy gain from contributions to flood/earthquake situation 
+- Increased costs of contributions flood/earthquake situation a bit
+- Increased initial legitimacy loss from flood/earthquake situation 
+- Increased monthly legitimacy loss from flood/earthquake situation by a lot
+- Removed stress from refusing lovers call to arms 
+- Reduced stress from refusing friends/soulmates call to arms to non-lethal amounts
+- Reduced opinion from gifting artifacts by a lot
+- Reduced opinion penalties for designating diarchs a bit
+- Reduced prestige and legitimacy gain scaling from supporter vassals at coronations end 
+- Reduced prestige and legitimacy gained at coronations end for bigger countries 
+- Removed renown gain at the end from exalt the crown intent for same-dynasty vassals
+- Removed ability to stop crusades via stop vassal war or demand surrender in vassal war
+- Tweaked AI join reasons for claimant factions (again):
+- - Increased malus for another claimant faction already existing a bit
+- - Increased reasons from faiths gender doctrine a bit
+- - Increased reasons for being friends/lover of claimant a bit
+- - Increased reasons for being unpreferred heir
+- - Increased reasons for being unpreferred heir if liege has non-partition succession law
+- - Made preferred/unpreferred heir reasons actually expire at some point (30 years)
+- - Decreased threshold at which claimaint is considered to be too old
+- Restored script that occasionally forced AI into builder personality archetype
+- Made AI nomads settle more often when they're outside of nomadic situations
+- Made AI of lower tiers spam less grand marriages
+- Made AI use Ask for Council Position interaction a bit more often vs kings and emperors
+- Fixed legitimacy for marrying more renowned dynasty being applied twice sometimes
+- Fixed true landless diarchs not influencing liege's legitimacy
+
+####	0.11.2.2####
+- Decreased Born in the Purple trait impact on acclaimation score a bit
+- Reduced culture traditions influence over childhoods traits a bit more
+- Fixed new asian childhood events not recieving same changes as other ones
+- Fixed some oversights with childhood traits events (thanks to Unofficial Patch)
+- Fixed some inconsistensies in ai acceptance of Demand Administrative Governance interaction
+- Fixed AI always refusing Demand Administrative Governance interaction
+
+####	0.11.2.1####
+Updated to 1.18.3
+- Made all duchy buildings unlock in tribal era
+- Increased income from Theodosian walls a bit
+- Increased passive development growth from some special buildings a bit
+- Reduced passive development growth from special buildings i've previously missed
+- Reduced guardian and heavily reduced court tutor traits influence over childhood traits 
+- Reduced culture traditions influence over childhoods traits by a lot (especially for AI)
+- Made AI personality matter a bit more for accepting/declining liberty faction demands
+- Updated localisation files
+
+####	0.11.2	####
+- Allowed conquerors to declare war regardless of war declaration laws and opinions
+- Added development growth bonus to Learning skill
+- Added a control boosting modifier and some event troops to successful populist revolt leaders*
+- Increased MAA maintaince discount and added a development growth bonus to Scutage contact 
+- Increased prestige from Chancellors Foreign Affairs task slightly
+- Reduced councillor opinion bonus of Positions of Power perk 
+- Made kingdom-tier title creation/usurpation require 65% of de-jure held at base
+- Made AI actually try to marry their oldest daughters matrilinealry
+- Made AI not make additional scutages pasts certain threshold
+- Fixed illegally revoking baronies not actually decreasing control 
+- Updated localisation files
+
+* - excluding landless-led populist revolts
+
+####	0.11.1.3####
+- Made admin Adopt Feudal/Clan ways decision take gold if you have more gold than treasury
+- Increased legitimacy gain on marriage with characters from better dynasty slightly 
+- Reduced AI marriage with alliance acceptance from lieges that they dislike
+- Fixed and improved some AI checks for vassals taking admin Adopt Feudal/Clan
+- Fixed some error log spam
+
+####	0.11.1.2####
+- Changed Weak Central Authority modifier to actually be negative
+
+####	0.11.1.1####
+- Fixed base councillor firing cooldown not working
+
+####	0.11.1	####
+- Added a War Declaration Law, which may block characters from declaring war if their powerful vassals or councillors dont like them
+- - War Declaration Law can be turned off via an added gamerule
+- - Added a debug-ish decision to add said laws to everyone when continuing older saves 
+
+- Made islands always count as bordering other realm for Adopt Feudal/Clan ways for admin vassals
+- Made losing to liberty faction as admin add a different negative modifier 
+- - Said modifier also makes it easier for admin vassals to adopt Feudal/Clan ways
+- Made conquerors lose conqueror status when they lose a war against other conqueror
+- Added supply malus to Recently Looted, Devastated by Occupation/Raids and Locals Pacified
+- Increased legitimacy decay at max legitimacy for kings and higher
+- Increased prestige penalty for losing liberty faction war as the liege
+- Reduced base guest waiting time of feasts, hunts and funerals (again)
+- Reduced popular opinion penalty of Pilfered Provisions modifier
+- Reduced vassalisation acceptance for offering Religious Exception by a lot
+- - Made it cancel out different faith penalty instead
+- Restricted claims on hegemonies by the same rules as ones for empires in Buy Claim interaction
+- Restricted targeting ceremonial titles in Buy Claim interaction
+- Made AI conquerors NOT surrender to Northmen Army or other conquerors without actually losing the war
+- Made AI even less likely to accept vassalisation if it is Ambitious
+- Made AI independence faction creation restrictions a bit easier to pass
+- Made AI join independence factions more if its non-admin in admin realm
+- Made AI spend less time gathering for great holy wars
+- Made AI with serenity aspect host more feasts
+- Fixed AI logic around gunpowder units (finally)
+- Fixed AI not having liberty faction join reasons from low opinion
+- Fixed losing to liberty faction not lovering celestial/meritocratic/japanese authority
+- Fixed losing to liberty faction not setting cooldown for celestial/meritocratic/japanese authority
+- Fixed lowering admin authority costing influence
+- Fixed Shape the Realm oath modifier adding fortification buildings to cities and temples
+- - Made it add lvl2 guilds/monasteries instead
+
+####	0.11.0	####
+- Added a slight increasee to opinion of all vassals with same vassal stance as any of the liege's councillors
+- Added an interaction to syphon gold off liege for councillors
+
+- Changed max development bonus to +75% to both tax and levies
+- Halved base guest waiting time of feasts, hunts (and reduced it a bit for funerals)
+- Increased chance of hunts giving personal artifacts if you have a court
+- Increased treasury costs of maintenance for MAAs a bit (again)
+- Increased prestige/piety but decreased gold costs of options in discharge entrenched regent
+- Increased childhood crush/bully opinion values
+- Reduced opinion bonuses for being family (parent/sibling/spouse)
+- Reduced opinion bonuses/maluses of blood brother/friend/lover/grudge/rival relations
+- Reduced frequency of conquerors cheaty events
+- Changed around a bunch of acclaimation score values for to be more dynamic
+- - Increased Born in the Purple trait score impact
+- - Increased diarchy, spouse's family and guardian of the emperor score impacts
+- - Capped powerful family rating and capital popular opinion score impacts
+- Made "You recently waged war" AI vassalisation acceptance modifier more strict
+- Made AI care a bit about eldest non-dominant gender child in marriages
+- Made AI ask for pardon even when it doesnt have a hook on their liege
+- Made AI acceptance for asking pardon a bit more dynamic
+- Fixed "Guardian of the Emperor" acclaimation score bonus applying to wards of the emperor
+- Fixed all admin governments having very cheap mercenaries (very crude fix)
+- Updated localisation files
+
+####	0.10.12.2####
+- Increased admin portion of income to treasury
+- Fixed some more invite to court interaction AI acceptance issues
+- Fixed Pemba trade ports giving too much passive development
+- Fixed some very annoying error log spam
+
+####	0.10.12.1####
+- Fixed characters getting 500 prestige for every marriage they arrange
+
+####	0.10.12	####
+- Changed Yashima, Rice cultivators and Hydraulic Builders traditions for consistency
+- Increased levy maintaince penalty of Intensive Farming tradition
+- Reduced "raided me" opinion penalty back to vanilla value but made it stack
+- Buffed/Nerfed Exploiting Clergy modifier (gives and punishes you less)
+- Nerfed both opinion for prowess modifiers of Bushidō tradition
+- Restricted admin CBs to be avaliable only to top liege and relevant themes
+- Fixed (compensated) landless adventurers losing 500 prestige on marriage
+- Fixed some invite to court interaction AI acceptance issues
+- Fixed some minor loc issues
+
+####	0.10.11.1####
+- Fixed coronation tradition province modifier applying incorrectly
 
 ####	0.10.11	####
-- 
+- Decreased cost of firing council members for dukes and counts
+- Made mods prestige/piety decay a bit less punishing (again)
+- Made legitimacy only affect marriage acceptance of ruler's extended family
+- Made murder schemes not guaranteed to kill 3 entourage members if target is traveling
+- Added some minor owned hostile scheme bonuses to titleless characters
+- Increased treasury costs of maintenance for MAAs a bit
+- Increased knights toughness per prowess slightly
+- Doubled base pursuit casualities
+- Reduced base combat casualities
+- Reduced pursuit to damage convertion slightly
+- Reduced monthly legitimacy from seneschal and seneschal-related court positions
+- Made AI a bit less likely to hire Pesilat Warriors
+- Fixed first Activities legacy perk applying +15 AI acceptance for all marriages
+
+####	0.10.10.4####
+- Made mods prestige/piety decay a bit less punishing
+- Increased legitimacy gain debuffs of disputed heritage and all bastard traits
+- Made AI conquerors spam tributaries less 
+- Fixed some random errors
+
+####	0.10.10.3####		#oops should've been .2
+- Reduced building cost penalty of Hard Working tradition
+- Doubled costs of revoking title succession law
+- Fixed a couple of Black Armor Cavalry issues
 
 ####	0.10.10.1####
 Updated to 1.18.2
 - Reverted yurt buildings costs changes 
-- Fixed Growing strong event not showing chance to get weak trait for parents
+- Fixed parent's version of Growing Strong event not showing chance to get weak trait
 - Fixed AI picking Coinage innovation way ahead of time
 - Ported some fixes from Unofficial Patch
 
@@ -691,7 +1249,7 @@ Updated to 1.17
 - Restricted theocrats from getting conqueror trait 
 - Capped feast influence gain 
 - Nerfed Finest horses internal building (Main yurt)
-- Replaced health bonus with desease resistance in Medicine focus
+- Replaced health bonus with disease resistance in Medicine focus
 - Increased stress cost of +stress options of mental breaks
 - Doubled stress gained by resetting perks
 - Made attacker pay gold to defender on losing tributary war (consistency)
@@ -1332,7 +1890,7 @@ Updated to 1.15.0.1
 ####	0.9.23	####
 - Added magical 0.15 gold per month income to barons
 - Reduced clan taxes a bit since paradox buffed all tax types
-- Replaced health malus with desease resistance (health) malus fom flagellant trait 
+- Replaced health malus with disease resistance (health) malus fom flagellant trait 
 - Swapped places of dread related modifiers from Serve the Crown and Hard Rule
 - Half-reverted previous nerfs to Above Expected Court Grandeur modifiers
 - Reduced Above Expected Court Grandeur modifier scaling for small realms to x2 max
@@ -1473,7 +2031,7 @@ Updated to 1.15 (haven't checked everything yet, might work weirdly on some case
 - Increased House Guard cost and maintaince
 - - It's no longer free when not raised (it's very cheap though)
 - Made Northmen army pay some gold to defender on defeat
-- Fixed one of the desease recovery modifiers being too large
+- Fixed one of the disease recovery modifiers being too large
 - Fixed not being able to updrage Murex Farms if not administrative
 - Some tweaks to warfare AI
 
@@ -1579,7 +2137,7 @@ Updated to 1.15 (haven't checked everything yet, might work weirdly on some case
 - - Slightly reduced maintaince for tribal rulers
 - - This makes MAAs a bit cheaper while at war, but more expensive at peacetime
 - Made Crown Authority even more impactful
-- Nerfed desease recovery modifiers
+- Nerfed disease recovery modifiers
 - Nerfed mummy and mummy-jar artifacts
 - Rewrote some of mod's AI logic
 
@@ -1656,7 +2214,9 @@ Updated for 1.14.3
 - Minor alliance acceptance tweaks
 - Fixed liege changing obligations logic 
 
-### PRE-HISTORIC UPDATES ###
+##################################
+###### PRE-HISTORIC UPDATES ######
+##################################
 (i have no idea what versions those were)
 
 ####	19 feb 2####

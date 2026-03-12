@@ -1,0 +1,86 @@
+﻿#Break up with your Lover
+break_up_with_lover_interaction = {
+	category = interaction_category_hostile
+	use_diplomatic_range = no
+	icon = lover
+
+	desc = break_up_with_lover_interaction_desc
+
+	is_shown = {
+		scope:actor = {
+			has_relation_lover = scope:recipient
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		#ADDED - abusive relationships yaaay
+		NOT = { scope:recipient = { has_strong_hook = scope:actor } }
+	}
+
+	on_accept = {
+		#ADDED - save le scope
+		if = {
+			limit = { scope:actor = { has_relation_soulmate = scope:recipient } } 
+			save_scope_value_as = {
+				name = are_soulmates
+				value = 1
+			}
+		}
+		scope:actor = {
+			send_interface_message = {
+				type = event_sway_neutral
+				title = break_up_with_lover_interaction_notification
+				right_icon = scope:recipient
+				lover_breakup_effect = {
+					BREAKER = scope:actor
+					LOVER = scope:recipient
+				}
+				#ADDED - reworked stress gain here
+				if = {
+					limit = { exists = scope:are_soulmates }
+					stress_impact = {
+						base = monumental_stress_gain	#or maybe this one? -> massive_stress_impact_gain
+						compassionate = major_stress_impact_gain
+						trusting = medium_stress_impact_gain
+						just = medium_stress_impact_gain
+						loyal = major_stress_impact_gain
+						gallant = medium_stress_impact_gain
+						callous = medium_stress_impact_loss
+						sadistic = major_stress_impact_loss
+						fickle = minor_stress_impact_loss
+						deceitful = medium_stress_impact_loss
+						disloyal = major_stress_impact_loss
+					}
+					
+				}
+				else = {
+					stress_impact = {
+						base = medium_stress_impact_gain
+						lustful = major_stress_impact_gain			#prev minor_stress_impact_gain
+						compassionate = medium_stress_impact_gain
+						#ADDED
+						loyal = medium_stress_impact_gain
+						callous = minor_stress_impact_loss
+						sadistic = medium_stress_impact_loss
+						fickle = miniscule_stress_impact_loss
+						chaste = minor_stress_impact_loss
+						deceitful = minor_stress_impact_loss
+						seducer = minor_stress_impact_loss
+						disloyal = miniscule_stress_impact_loss
+					}
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:actor
+			TARGET = scope:recipient
+			VALUE = miniscule_unity_loss
+			DESC = clan_unity_dramatic_breakup.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+	
+	auto_accept = yes
+}

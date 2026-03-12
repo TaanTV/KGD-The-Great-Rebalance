@@ -513,8 +513,49 @@
 						modifier = attempted_arrest_opinion
 					}
 				}
+				#ADDED - and this else_if too
+				else_if = {
+					limit = {
+						highest_held_title_tier = tier_barony
+						gold > medium_gold_max_less_scaled_value
+					}
+					scope:actor = {
+						add_prestige = medium_prestige_loss
+					}
+					add_opinion = {
+						target = scope:actor
+						modifier = attempted_arrest_opinion
+					}
+					add_character_modifier = {
+						modifier = watchful_modifier
+						years = 5
+					}
+					hidden_effect = {
+						remove_short_term_gold = {
+							value = gold
+							multiply = 0.2
+						}
+					}
+				}
 				#If target is a baron or unlanded, have them escape.
 				else = {
+					#ADDED - lose some gold if that was the reason why u refused
+					if = {
+						limit = {
+							is_courtier_of = scope:actor
+							gold > tiny_gold_max_less_scaled_value
+						}
+						add_character_modifier = {
+							modifier = watchful_modifier
+							years = 5
+						}
+						hidden_effect = {
+							remove_short_term_gold = {
+								value = gold
+								multiply = 0.2
+							}
+						}
+					}
 					if = { #To block them from being instantly rehired
 						limit = {
 							is_councillor_of = scope:actor
@@ -919,6 +960,14 @@
 				}
 			}
 		}
+		#ADDED - im a baron (sad face)
+		modifier = {
+			desc = offer_vassalization_interaction_aibehavior_hightier_tt
+			trigger = {
+				scope:recipient = { highest_held_title_tier = tier_barony }
+			}
+			add = 25
+		}
 		modifier = {
 			add = intimidated_halved_reason_value
 			scope:recipient = {
@@ -1081,33 +1130,50 @@
 		#ADDED
 		modifier = {
 			add = {
-				value = -75
+				value = -50
 				if = {
 					limit = { scope:recipient = { is_theocratic_lessee = yes } }
 					value = -20
 				}
 			}
 			scope:recipient = {
-				is_courtier_of = scope:actor
 				is_adult = yes
-				gold > 100
-				gold <= 500
+				OR = {
+					AND = {
+						is_courtier_of = scope:actor
+						gold > tiny_gold_max_less_scaled_value
+						gold <= minor_gold_max_value_static
+					}
+					AND = {
+						highest_held_title_tier = tier_barony
+						gold > medium_gold_max_less_scaled_value
+						gold <= massive_gold_max_less_scaled_value
+					}
+				}
 			}
 			desc = I_HAVE_GOLD
 		}
 		#ADDED
 		modifier = {
 			add = {
-				value = -250
+				value = -150
 				if = {
 					limit = { scope:recipient = { is_theocratic_lessee = yes } }
-					value = -35
+					value = -60
 				}
 			}
 			scope:recipient = {
-				is_courtier_of = scope:actor
 				is_adult = yes
-				gold > 500
+				OR = {
+					AND = {
+						is_courtier_of = scope:actor
+						gold > minor_gold_max_value_static
+					}
+					AND = {
+						highest_held_title_tier = tier_barony
+						gold > massive_gold_max_less_scaled_value
+					}
+				}
 			}
 			desc = I_HAVE_A_LOT_OF_GOLD
 		}
@@ -1898,7 +1964,7 @@ ransom_interaction = {
 		}
 		is_valid = {
 			# Recipient has enough Herd
-			scope:recipient = { domicile.herd >= domicile.medium_herd_value }
+			scope:recipient = { domicile.herd >= scope:secondary_recipient.ransom_herd_value }	#prev domicile.medium_herd_value
 		}
 		flag = herd_send_option
 		localization = RANSOM_HERD_OPTION
@@ -1908,7 +1974,7 @@ ransom_interaction = {
 		EXTORTIONATE_RANSOM_COST = scope:secondary_recipient.increased_ransom_cost_value
 		RANSOM_COST = scope:secondary_recipient.ransom_cost_value
 		CURRENT_GOLD = scope:recipient.gold
-		RANSOM_HERD_COST = ransom_herd_value_recipient
+		RANSOM_HERD_COST = scope:secondary_recipient.ransom_herd_value
 	}
 
 	ai_accept = {
@@ -1922,6 +1988,8 @@ ransom_interaction = {
 			OR = {
 				scope:gold = yes
 				scope:extortionate_gold = yes
+				#ADDED
+				scope:herd_send_option = yes
 			}
 			scope:recipient != scope:secondary_recipient
 			desc = AI_VALUE_MODIFIER_GREED
@@ -1934,6 +2002,8 @@ ransom_interaction = {
 			OR = {
 				scope:gold = yes
 				scope:extortionate_gold = yes
+				#ADDED
+				scope:herd_send_option = yes
 			}
 			scope:recipient != scope:secondary_recipient
 			scope:recipient.ai_greed <= medium_negative_ai_value
@@ -2007,6 +2077,8 @@ ransom_interaction = {
 			add = -200
 			scope:recipient = {
 				has_relation_rival = scope:secondary_recipient
+				#ADDED - fix double-dipping
+				NOT = { has_relation_nemesis = scope:secondary_recipient }
 			}
 			desc = "RIVAL_TO_ME_REASON"
 		}
@@ -2123,6 +2195,16 @@ ransom_interaction = {
 			has_relation_nemesis = scope:secondary_recipient
 		}
 
+		#ADDED - the next 2
+		modifier = {
+			add = -70
+			has_relation_rival = scope:recipient
+		}
+		modifier = {
+			add = -300
+			has_relation_nemesis = scope:recipient
+		}
+
 		modifier = {
 			add = 100
 			scope:favor = yes
@@ -2207,6 +2289,18 @@ ransom_interaction = {
 			scope:actor = { 
 				has_revoke_title_reason = scope:secondary_recipient 
 				has_realm_law_flag = title_revocation_allowed
+			}
+		}
+		
+		#ADDED - keep the ones you won claimant wars against
+		modifier = {
+			factor = 0
+			scope:actor = { 
+				has_variable_list = claimant_won_against_those
+				any_in_list = {
+					variable = claimant_won_against_those
+					this = scope:secondary_recipient
+				}
 			}
 		}
 	}
@@ -2781,7 +2875,7 @@ pay_ransom_interaction = {
 		}
 		is_valid = {
 			# Actor has enough Herd
-			scope:actor = { domicile.herd >= domicile.medium_herd_value }
+			scope:actor = { domicile.herd >= scope:secondary_recipient.ransom_herd_value }	#prev domicile.medium_herd_value
 		}
 		flag = herd_send_option
 		localization = PAY_FOR_BETTER_AI_ACCEPTANCE
@@ -2809,7 +2903,7 @@ pay_ransom_interaction = {
 		EXTORTIONATE_RANSOM_COST = scope:secondary_recipient.increased_ransom_cost_value
 		RANSOM_COST = scope:secondary_recipient.ransom_cost_value
 		CURRENT_GOLD = scope:actor.gold
-		RANSOM_HERD_COST = ransom_herd_value_actor
+		RANSOM_HERD_COST = scope:secondary_recipient.ransom_herd_value
 	}
 
 	ai_accept = {
@@ -2868,6 +2962,8 @@ pay_ransom_interaction = {
 			add = -100		#prev -55
 			scope:recipient = {
 				has_relation_rival = scope:secondary_recipient
+				#ADDED - fix double-dipping
+				NOT = { has_relation_nemesis = scope:secondary_recipient }
 			}
 			desc = "RIVAL_TO_ME_REASON"
 		}
@@ -2877,6 +2973,21 @@ pay_ransom_interaction = {
 				has_relation_nemesis = scope:secondary_recipient
 			}
 			desc = "NEMESIS_TO_ME_REASON"
+		}
+		#ADDED
+		modifier = {
+			add = -70
+			scope:recipient = {
+				has_relation_rival = scope:actor
+				NOT = { has_relation_nemesis = scope:actor }
+			}
+			desc = "ACTOR_RIVAL_TO_ME_REASON"
+		}
+		#ADDED
+		modifier = {
+			add = -300
+			scope:recipient = { has_relation_nemesis = scope:actor }
+			desc = "ACTOR_NEMESIS_TO_ME_REASON"
 		}
 		modifier = { # At war
 			add = -300
@@ -2990,6 +3101,33 @@ pay_ransom_interaction = {
 				time_in_prison = { years < 5 }
 			}
 			desc = HAS_TITLE_REVOKE_REASON_VS_SECONDARY_RECIPIENT
+		}
+		
+		#ADDED - keep the ones you won claimant wars against
+		modifier = {
+			add = {
+				value = -50
+				if = {
+					limit = {
+						scope:recipient = {
+							NOR = {
+								has_trait = compassionate
+								has_trait = forgiving
+								has_trait = generous
+							}
+						}
+					}
+					add = -50
+				}
+			}
+			scope:recipient = { 
+				has_variable_list = claimant_won_against_those
+				any_in_list = {
+					variable = claimant_won_against_those
+					this = scope:secondary_recipient
+				}
+			}
+			desc = I_AM_THE_REAL_TIER_SECONDARY_RECIPIENT
 		}
 	}
 
@@ -3671,7 +3809,7 @@ ransom_me_interaction = {
 		}
 		is_valid = {
 			# Actor has enough Herd
-			scope:actor = { domicile.herd >= domicile.medium_herd_value }
+			scope:actor = { domicile.herd >= scope:actor.ransom_herd_value }	#prev domicile.medium_herd_value
 		}
 		flag = herd_send_option
 		localization = PAY_FOR_BETTER_AI_ACCEPTANCE
@@ -3698,7 +3836,7 @@ ransom_me_interaction = {
 		EXTORTIONATE_RANSOM_COST = scope:actor.increased_ransom_cost_value
 		RANSOM_COST = scope:actor.ransom_cost_value
 		CURRENT_GOLD = scope:actor.gold
-		RANSOM_HERD_COST = ransom_herd_value_actor
+		RANSOM_HERD_COST = scope:actor.ransom_herd_value
 	}
 
 	ai_accept = {
@@ -3777,6 +3915,8 @@ ransom_me_interaction = {
 			add = -100			#prev -55
 			scope:recipient = {
 				has_relation_rival = scope:actor
+				#ADDED - fix double-dipping
+				NOT = { has_relation_nemesis = scope:actor }
 			}
 			desc = "ACTOR_RIVAL_TO_ME_REASON"
 		}
@@ -3882,6 +4022,33 @@ ransom_me_interaction = {
 				time_in_prison = { years < 5 }
 			}
 			desc = HAS_TITLE_REVOKE_REASON_VS_ACTOR
+		}
+		
+		#ADDED - keep the ones you won claimant wars against
+		modifier = {
+			add = {
+				value = -50
+				if = {
+					limit = {
+						scope:recipient = {
+							NOR = {
+								has_trait = compassionate
+								has_trait = forgiving
+								has_trait = generous
+							}
+						}
+					}
+					add = -50
+				}
+			}
+			scope:recipient = {
+				has_variable_list = claimant_won_against_those
+				any_in_list = {
+					variable = claimant_won_against_those
+					this = scope:actor
+				}
+			}
+			desc = I_AM_THE_REAL_TIER_ACTOR
 		}
 	}
 

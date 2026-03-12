@@ -557,6 +557,11 @@
 				}
 			}
 		}
+		
+		#ADDED - maybe this should scale but idk
+		scope:recipient = {
+			throw_opinions_on_same_stance_vassals_of_liege = { LIEGE = scope:actor OPINION = insult_opinion VALUE = -15 }
+		}
 	}
 
 	on_decline = {
@@ -675,6 +680,20 @@
 				title_revocation_stress_effect = { VASSAL = scope:recipient }
 			}
 		}
+		#ADDED - this else
+		else_if = {
+			limit = {
+				scope:landed_title.tier = tier_barony
+				scope:actor ?= { 
+					title_revocation_is_tyrannical_trigger = { VASSAL = scope:recipient }
+					NOT = { government_has_flag = government_is_nomadic }
+					is_ai = no	#dont nuke AIs plz
+				}
+			}
+			scope:actor = {
+				add_tyranny = 10
+			}
+		}
 		if = {
 			limit = {
 				scope:recipient = { government_has_flag = government_is_herder }
@@ -690,16 +709,40 @@
 		#ADDED - this else_if
 		else_if = {
 			limit = {
-				scope:recipient = { is_ruler = yes }
-				scope:actor = { has_legitimacy_flag = vassals_refuse_revoke_with_no_war }
+				#scope:recipient = { is_ruler = yes }
+				OR = {
+					scope:landed_title.tier = tier_barony
+					scope:actor = { has_legitimacy_flag = vassals_refuse_revoke_with_no_war }
+				}
 			}
 			scope:actor = { 
-				add_prestige = medium_prestige_loss
+				if = {
+					limit = { has_legitimacy_flag = vassals_refuse_revoke_with_no_war }
+					add_prestige = medium_prestige_loss
+				}
+				else = { add_prestige = minor_prestige_loss }
 			}
 			scope:recipient = {
 				add_opinion = {
 					target = scope:actor
 					modifier = revoked_title
+				}
+				#ADDED - lose some gold if that was the reason why u refused
+				if = {
+					limit = { 
+						scope:landed_title.tier = tier_barony
+						gold > medium_gold_max_less_scaled_value
+					}
+					add_character_modifier = {
+						modifier = watchful_modifier
+						years = 5
+					}
+					hidden_effect = {
+						remove_short_term_gold = {
+							value = gold
+							multiply = 0.2
+						}
+					}
 				}
 			}
 		}
@@ -765,6 +808,11 @@
 			}
 			scope:actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
 		}
+		
+		#ADDED - maybe this should scale but idk
+		scope:recipient = {
+			throw_opinions_on_same_stance_vassals_of_liege = { LIEGE = scope:actor OPINION = insult_opinion VALUE = -15 }
+		}
 	}
 
 	auto_accept = {
@@ -774,6 +822,9 @@
 				custom_description = {
 					text = "baron_revocation"
 					highest_held_title_tier = tier_barony
+					#ADDED
+					scope:actor = { is_ai = yes }
+					scope:recipient = { is_ai = yes }
 				}
 				custom_description = {
 					text = "prisoner_revocation"
@@ -950,6 +1001,14 @@
 			}
 			add = -20
 		}
+		#ADDED - im a baron (sad face)
+		modifier = {
+			desc = offer_vassalization_interaction_aibehavior_hightier_tt
+			trigger = {
+				scope:recipient = { highest_held_title_tier = tier_barony }
+			}
+			add = 35
+		}
 		modifier = { #Title is part of vassal's primary title de-jure. Not relevant for Admin.
 			add = -25
 			NOT = { scope:recipient = { government_allows = administrative } }
@@ -1022,6 +1081,32 @@
 				culture = { has_cultural_parameter = vassals_more_likely_to_refuse_demands }
 			}
 			desc = VASSALS_REFUSAL_indomitable_azatani
+		}
+		
+		#ADDED
+		modifier = {
+			add = {
+				value = -50
+			}
+			scope:recipient = {
+				is_adult = yes
+				highest_held_title_tier = tier_barony
+				gold > medium_gold_max_less_scaled_value
+				gold <= massive_gold_max_less_scaled_value
+			}
+			desc = I_HAVE_GOLD
+		}
+		#ADDED
+		modifier = {
+			add = {
+				value = -150
+			}
+			scope:recipient = {
+				is_adult = yes
+				highest_held_title_tier = tier_barony
+				gold > massive_gold_max_less_scaled_value
+			}
+			desc = I_HAVE_A_LOT_OF_GOLD
 		}
 	}
 
@@ -1371,6 +1456,8 @@
 					scope:landed_title.title_province = { has_holding_type = city_holding }
 				}
 			}
+			#ADDED
+			scope:recipient = { is_ai = yes }
 			add = 1100
 		}
 		# Revoke from vassals of the wrong faith if you can do it without tyranny
@@ -1436,6 +1523,8 @@
 				}
 				scope:recipient = {
 					highest_held_title_tier = tier_barony
+					#ADDED
+					is_ai = yes
 				}
 			}
 			scope:actor = {
@@ -1602,14 +1691,23 @@
 		#Don't be an idiot
 		modifier = {
 			scope:actor = { years_as_ruler < 10 }
-			scope:recipient.highest_held_title_tier > tier_barony
+			scope:recipient = {
+				OR = {
+					highest_held_title_tier > tier_barony
+					is_ai = no
+				}
+				is_imprisoned = no
+			}
 			factor = 0
 		}
 		#ADDED
 		#Don't be an idiot if you are indeed not an idiot
 		modifier = {
 			scope:actor.ai_rationality > -25
-			scope:recipient.highest_held_title_tier > tier_barony
+			scope:recipient = {
+				highest_held_title_tier > tier_barony
+				is_imprisoned = no
+			}
 			factor = { 
 				value = scope:actor.military_power 
 				divide = { value = scope:actor.military_power multiply = 2 min = 1 } 

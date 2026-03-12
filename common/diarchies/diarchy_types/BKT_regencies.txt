@@ -156,6 +156,7 @@ regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -171,6 +172,7 @@ regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -187,6 +189,7 @@ regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -199,6 +202,7 @@ regency = {
 		if = {
 			limit = {
 				#SILENCE ERROR LOG.
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -348,6 +352,7 @@ nomad_regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -363,6 +368,7 @@ nomad_regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -379,6 +385,7 @@ nomad_regency = {
 		if = {
 			limit = {
 				#ADDED - silence the error log?
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes
@@ -391,6 +398,7 @@ nomad_regency = {
 		if = {
 			limit = {
 				#SILENCE ERROR LOG.
+				is_alive = yes
 				NOR = {
 					is_pool_character = yes
 					is_pool_guest = yes

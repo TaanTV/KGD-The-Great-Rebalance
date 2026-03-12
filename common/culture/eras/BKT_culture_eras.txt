@@ -4,73 +4,7 @@ culture_era_tribal = {
 
 	#ADDED
 	character_modifier = {
-		vassal_limit = -10
+		vassal_limit = -5
 		short_reign_duration_mult = 0.33
-	}
-}
-
-
-culture_era_early_medieval = {	
-	year = 900
-	invalid_for_government = tribal_government
-	invalid_for_government = nomad_government
-	invalid_for_government = herder_government
-	invalid_for_government = wanua_government
-	
-	culture_modifier = {
-		culture_tradition_max_add = 1
-	}
-
-	#ADDED
-	character_modifier = {
-		vassal_limit = 5
-	}
-
-	custom = more_expensive_court_positions
-	custom = increased_activity_cost
-	
-	##################################################
-	# MAA Upgrades
-
-	# Cultural 
-	## Longbowmen
-	maa_upgrade = {
-		men_at_arms = longbowmen
-		damage = 10
-		toughness = 2
-	}
-
-	## Gakgung Archers
-	maa_upgrade = {
-		men_at_arms = gakgung_archers
-		damage = 5
-		toughness = 2
-	}
-
-	# Accolade
-	## Accolade Archers
-	maa_upgrade = {
-		men_at_arms = accolade_maa_archers
-		damage = 6
-	}
-	## Accolade Skirmishers
-	maa_upgrade = {
-		men_at_arms = accolade_maa_skirmishers
-		damage = 6
-	}
-	## Accolade Pikes
-	maa_upgrade = {
-		men_at_arms = accolade_maa_pikes
-		damage = 6
-	}
-	## Accolade Outriders
-	maa_upgrade = {
-		men_at_arms = accolade_maa_outriders
-		pursuit = 6
-	}
-	## Accolade Cameliers
-	maa_upgrade = {
-		men_at_arms = accolade_maa_cameliers
-		pursuit = 6
 	}
 }

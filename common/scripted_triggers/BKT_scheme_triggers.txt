@@ -18,6 +18,44 @@ build_murder_targets_trigger = {
 					trigger_else = {
 						ai_honor <= low_positive_ai_value
 					}
+					#ADDED - make some sense though.
+					"opinion(prev)" < 5
+					can_start_scheme = {
+						target_character = prev
+						type = murder
+					}
+				}
+			}
+			add_to_temporary_list = murder_targets
+		}
+	}
+	#ADDED - potential rivals are too
+	any_relation = { 
+		type = potential_rival
+		count = all
+		trigger_if = {
+			limit = {
+				root = {
+					ai_honor <= very_low_positive_ai_value
+					"opinion(prev)" < -25
+					can_start_scheme = {
+						target_character = prev
+						type = murder
+					}
+				}
+			}
+			add_to_temporary_list = murder_targets
+		}
+	}
+	#ADDED - and grudges! But only if you're kind of evil
+	any_relation = { 
+		type = grudge
+		count = all
+		trigger_if = {
+			limit = {
+				root = {
+					ai_honor <= medium_negative_ai_value
+					"opinion(prev)" < -35
 					can_start_scheme = {
 						target_character = prev
 						type = murder
@@ -66,7 +104,7 @@ build_murder_targets_trigger = {
 					}
 					tax_collector_aptitude = {
 						target = clan_tax_slot
-						value >= 4
+						value >= 3	#prev 4
 					}
 					add_to_temporary_list = murder_targets
 				}
@@ -120,11 +158,11 @@ build_murder_targets_trigger = {
 			#ai_rationality >= medium_positive_ai_value
 			#ADDED - half-rewritten all that stuff lol
 			is_independent_ruler = no 	#liege check is faulty because you are your own liege if independent
+			ai_compassion <= low_negative_ai_value	#just in case
 			OR = {
 				AND = {
 					ai_boldness >= medium_positive_ai_value
 					ai_vengefulness >= very_high_positive_ai_value
-					ai_compassion <= low_negative_ai_value
 					ai_honor <= 35
 				}
 				AND = {
@@ -182,6 +220,7 @@ build_murder_targets_trigger = {
 		trigger_if = {
 			limit = {
 				fertility < 0.1
+				#ADDED - OR and reverse_opinion
 				OR = {
 					is_ai = yes
 					reverse_opinion = {

@@ -9,3 +9,7 @@ vassal_modify_vassal_contract_obligation_change_limit_1 = {
 vassal_modify_vassal_contract_obligation_change_limit_2 = {
 	first_not = vassal_modify_vassal_contract_obligation_change_limit_2
 }
+
+has_own_war_declaration_law_cooldown = {
+	first_not = OWN_WAR_DECLARATION_LAW_IS_ON_COOLDOWN
+}

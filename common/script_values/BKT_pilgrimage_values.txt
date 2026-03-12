@@ -65,6 +65,60 @@ very_long_pilgrimage_piety_gain = {
 
 very_long_pilgrimage_piety_multiplier = { value = 175 }	#prev 250
 
+#This needs to be synced with cost/length multipliers in the Solo Pilgrimage phase cost in the activity_types\pilgrimage.txt file
+pilgrimage_length_cost_tier_1 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 0.2
+}
+
+#Praha -> Cologne
+pilgrimage_length_cost_tier_2 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 0.4
+}
+
+pilgrimage_length_cost_tier_3 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 0.6
+}
+
+pilgrimage_length_cost_tier_4 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 0.8
+}
+
+pilgrimage_length_cost_tier_5 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 1
+}
+
+#Klingenberg -> Jerusalem
+pilgrimage_length_cost_tier_6 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 1.2
+}
+
+#Klingenberg -> Kanchipuram
+pilgrimage_length_cost_tier_7 = { 
+	value = scope:host.medium_gold_value
+	#ADDED - please dont.
+	max = scope:host.medium_gold_max_less_scaled_value
+	multiply = 1.5
+}
+
+
 pilgrimage_low_pious_multiplier = { value = 1.15 }		#prev 1.1
 #Make sure the multiplier values sync up with the multiplier_tt values to display the Reward Tiers as percentages
 pilgrimage_low_pious_multiplier_tt = { 

@@ -1,0 +1,72 @@
+﻿
+
+unreformed_faith = {
+	group = "not_creatable"
+	is_available_on_create = {
+		# Goes away on reformation
+		always = no
+	}
+	unreformed_faith_doctrine = {
+		visible = no
+		parameters = {
+			# unreformed = yes also serves as the basis for the unreformed_syncretic tenet.
+			unreformed = yes
+			hostility_override_tenet_unreformed_syncretism = 2
+			unreformed_syncretic_recipient_opinion_active = yes
+			opinion_of_unreformed_syncretic_actor_opinion_active = 30
+			conquest_cb_enabled = yes
+			faith_can_raid = yes
+		}
+
+		character_modifier = {
+			monthly_prestige_gain_mult = 0.2
+			clan_government_vassal_opinion = -20
+			feudal_government_vassal_opinion = -20
+			republic_government_vassal_opinion = -20
+			#ADDED
+			different_faith_county_opinion_mult = -0.33
+		}
+	}
+	west_african_unreformed_faith_doctrine = {
+		visible = no
+		parameters = {
+			# unreformed = yes also serves as the basis for the unreformed_syncretic tenet.
+			unreformed = yes
+			hostility_override_tenet_unreformed_syncretism = 2
+			unreformed_syncretic_recipient_opinion_active = yes
+			opinion_of_unreformed_syncretic_actor_opinion_active = 30
+			conquest_cb_enabled = yes
+			faith_can_raid = yes
+		}
+
+		character_modifier = {
+			monthly_prestige_gain_mult = 0.1
+			#ADDED
+			different_faith_county_opinion_mult = -0.33
+		}
+	}
+}
+
+has_jizya_doctrine = {
+	group = "special"
+
+	is_available_on_create = {
+		OR = {
+			has_doctrine = special_doctrine_jizya
+			has_doctrine = special_doctrine_is_islamic_faith
+		}
+	}
+
+
+	special_doctrine_jizya = {
+		character_modifier = {
+			domain_tax_different_faith_mult = 0.2
+			levy_reinforcement_rate_same_faith = 0.15				#prev 0.25
+			levy_reinforcement_rate_different_faith = -0.15			#prev -0.25
+		}
+
+		parameters = {
+			unlock_jizya_contract = yes
+		}
+	}
+}

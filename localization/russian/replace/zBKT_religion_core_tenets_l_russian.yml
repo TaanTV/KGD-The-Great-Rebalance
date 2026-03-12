@@ -1,0 +1,2 @@
+﻿l_russian:
+ doctrine_parameter_excommunication_active: "Духовный [head_of_faith|El] может [excommunicate|El] других персонажей той же [faiths|El]\n$EFFECT_LIST_BULLET$Навязывание [Concept('claim', 'претензий')|E] против не [Concept('excommunicated', 'отлученных')|E] [Concept('rulers', 'правителей')|E] одной [faiths|El] стоит [piety|E]"

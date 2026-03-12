@@ -137,7 +137,7 @@ can_create_temporal_head_of_faith_title_trigger = {
         NOT = { has_doctrine = special_doctrine_not_allowed_to_hof }
     }
 	#ADDED
-	is_independent_ruler = yes
+	root = { is_independent_ruler = yes }
 }
 
 can_create_spiritual_head_of_faith_title_trigger = {
@@ -155,5 +155,5 @@ can_create_spiritual_head_of_faith_title_trigger = {
         has_doctrine_parameter = maintains_head_of_faith_on_creation
     }
 	#ADDED
-	is_independent_ruler = yes
+	root = { is_independent_ruler = yes }
 }

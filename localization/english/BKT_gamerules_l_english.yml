@@ -55,3 +55,11 @@
  setting_bkt_accolades_disabled_all: "#high Disabled#!"
  setting_bkt_accolades_disabled_all_desc: "[accolades|E] are disabled for #V Everyone#"
  bkt_accolades_disabled: "No accolades?"
+ 
+ rule_bkt_own_war_declaration_law_toggle: "$bkt_rule_prefix$ [GetLawGroup('own_war_declaration_law').GetName]"
+ setting_bkt_own_war_declaration_law_toggle_enabled: "#high Enabled#!"
+ setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Everyone#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors."
+ setting_bkt_own_war_declaration_law_toggle_player_only: "#high Player only#!"
+ setting_bkt_own_war_declaration_law_toggle_player_only_desc: "The #V Player#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors."
+ setting_bkt_own_war_declaration_law_toggle_disabled: "#high Disabled#!"
+ setting_bkt_own_war_declaration_law_toggle_disabled_desc: "War never changes."

@@ -15,6 +15,38 @@ diarch_shift_privileges_interaction_success_apply_other_effect = {
 	}
 }
 
+diarch_shift_privileges_interaction_apply_fail_effect = {
+	# Notify other parties.
+	hidden_effect = {
+		# Inform scope:secondary_recipient.
+		#ADDED - now a ?= because error log spam is tiring.
+		scope:secondary_recipient ?= {
+			send_interface_message = {
+				type = msg_diarch_acting_text_and_effect
+				title = diarch_using_powers.t
+				desc = diarch_shift_privileges_interaction.tt.failure.liege
+				right_icon = scope:recipient
+				left_icon = scope:actor
+				show_as_tooltip = { diarch_shift_privileges_interaction_fail_effect = yes }
+			}
+		}
+		# Inform scope:recipient.
+		scope:recipient = {
+			send_interface_toast = {
+				title = diarch_shift_privileges_interaction.tt.failure
+				left_icon = scope:actor
+				show_as_tooltip = { diarch_shift_privileges_interaction_fail_effect = yes }
+			}
+		}
+	}
+	# Finally, fire off the actual effect.
+	send_interface_toast = {
+		title = diarch_shift_privileges_interaction.tt.failure
+		left_icon = scope:recipient
+		diarch_shift_privileges_interaction_fail_effect = yes
+	}
+}
+
 diarch_swing_scales_guts_effect = {
 	# Influence.
 	switch = {

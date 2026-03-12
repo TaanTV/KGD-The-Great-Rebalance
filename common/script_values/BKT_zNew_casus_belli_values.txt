@@ -1,0 +1,158 @@
+﻿claim_cb_communion_piety_cost = {
+	if = {
+		limit = {
+			exists = scope:claimant
+			scope:attacker.faith ?= {
+				this = scope:defender.faith
+				has_doctrine_parameter = excommunication_active
+			}
+			NOT = { scope:defender = { has_trait = excommunicated } }
+		}
+		add = {
+			value = {
+				every_in_list = {
+					list = target_titles
+					limit = { tier = tier_county }
+					add = {
+						value = 150
+						if = {
+							# 50% cheaper to take Pressed claims.
+							limit = { scope:claimant = { has_strong_claim_on = prev } }
+							add = -75
+						}
+					}
+				}
+				every_in_list = {
+					list = target_titles
+					limit = { tier = tier_duchy }
+					add = {
+						value = 250
+						if = {
+							# 50% cheaper to take Pressed claims.
+							limit = { scope:claimant = { has_strong_claim_on = prev } }
+							add = -125
+						}
+					}
+				}
+				every_in_list = {
+					list = target_titles
+					limit = { tier = tier_kingdom }
+					add = {
+						value = 400
+						if = {
+							# 50% cheaper to take Pressed claims.
+							limit = { scope:claimant = { has_strong_claim_on = prev } }
+							add = -200
+						}
+					}
+				}
+				every_in_list = {
+					list = target_titles
+					limit = { tier = tier_empire }
+					add = {
+						value = 600
+						if = {
+							# 50% cheaper to take Pressed claims.
+							limit = { scope:claimant = { has_strong_claim_on = prev } }
+							add = -300
+						}
+					}
+				}
+				every_in_list = {
+					list = target_titles
+					limit = { tier = tier_hegemony }
+					add = {
+						value = 850
+						if = {
+							# 50% cheaper to take Pressed claims.
+							limit = { scope:claimant = { has_strong_claim_on = prev } }
+							add = -425
+						}
+					}
+				}
+				if = {
+					limit = { scope:attacker.highest_held_title_tier = tier_kingdom }
+					multiply = 1.5
+				}
+				else_if = {
+					limit = { scope:attacker.highest_held_title_tier >= tier_empire }
+					multiply = 2
+				}
+				desc = "CB_CLAIM_COST_TARGET_TITLES"
+			}
+			#desc = CB_SAME_FAITH_COST
+			#if = {
+			#	limit = {
+			#		exists = scope:attacker.primary_title
+			#		scope:attacker.primary_title = {
+			#			tier = tier_kingdom
+			#		}
+			#	}
+			#	multiply = {
+			#		value = 1.5
+			#		desc = CB_COST_RULES_KINGDOM
+			#	}
+			#}
+			#else_if = {
+			#	limit = {
+			#		exists = scope:attacker.primary_title
+			#		scope:attacker.primary_title = {
+			#			tier = tier_empire
+			#		}
+			#	}
+			#	multiply = {
+			#		value = 2.5
+			#		desc = CB_COST_RULES_EMPIRE
+			#	}
+			#}
+			multiply = common_cb_piety_cost_multiplier
+			# LEGITIMACY AFFECTS COST
+			multiply = {
+				value = {
+					value = 0
+					scope:attacker = {
+						if = {
+							limit = { has_legitimacy_flag = reduced_claim_cb_cost }
+							add = 0.5 
+						}
+						else_if = {
+							limit = { has_legitimacy_flag = very_reduced_claim_cb_cost }
+							add = 0.25 
+						}
+						else_if = {
+							limit = { has_legitimacy_flag = extra_reduced_claim_cb_cost }
+							add = 0.15 
+						}
+						else = {
+							add = 1
+						}
+					}
+				}
+				desc = legitimacy_high_modifier_tt
+			}
+			multiply = {
+				value = {
+					value = 0
+					scope:attacker = {
+						if = {
+							limit = { has_legitimacy_flag = massively_increased_claim_cb_cost }
+							add = 2.5
+						}
+						else_if = {
+							limit = { has_legitimacy_flag = very_increased_claim_cb_cost }
+							add = 2
+						}
+						else_if = {
+							limit = { has_legitimacy_flag = increased_claim_cb_cost }
+							add = 1.5
+						}
+						else = {
+							add = 1
+						}
+					}
+				}
+				desc = legitimacy_low_modifier_tt
+			}
+		}
+	}
+}

@@ -1,0 +1,42 @@
+﻿war_declaration_law_effect = {
+	if = {
+		limit = { 
+			has_realm_law_in_group = own_war_declaration_law 
+			NOT = { has_variable = conqueror }
+		}
+		if = {
+			limit = {
+				has_realm_law_flag = war_declaration_powerful_vassal_approval
+			}
+			custom_tooltip = war_declaration_powerful_vassal_approval.opinion_penalty
+			every_powerful_vassal = {
+				custom = custom.every_powerful_vassal
+				add_opinion = {
+					target = prev
+					modifier = frustrated_opinion
+					opinion = -10
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_realm_law_flag = war_declaration_council_approval
+			}
+			custom_tooltip = war_declaration_council_approval.opinion_penalty
+			every_councillor = {
+				custom = custom.every_councillor
+				limit = { 
+					NOR = { 
+						prev.cp:councillor_spouse ?= this
+						prev.cp:councillor_vizier ?= this
+					}
+				}
+				add_opinion = {
+					target = prev
+					modifier = frustrated_opinion
+					opinion = -15
+				}
+			}
+		}
+	}
+}

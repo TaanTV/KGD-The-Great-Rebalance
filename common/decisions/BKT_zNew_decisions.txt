@@ -225,3 +225,63 @@ support_religious_art_decision = {
 		base = 1000
 	}
 }
+
+war_dec_law_fix_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+
+	title = war_dec_law_fix_decision_t
+	desc = war_dec_law_fix_decision_desc
+	selection_tooltip = tradition_bkt_error_suppress_name
+	confirm_text = relation_placeholder
+	decision_group_type = major
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+
+	is_shown = {
+		is_ai = no
+		NOT = { has_global_variable = got_war_dec_laws_fixed }
+	}
+
+	is_valid = {
+	}
+
+	is_valid_showing_failures_only = {
+	}
+
+	effect = {
+		hidden_effect = {
+			set_global_variable = got_war_dec_laws_fixed
+			every_ruler = {
+				limit = { realm_law_use_own_war_declaration_law_trigger = yes }
+				if = {
+					limit = { 
+						OR = {
+							government_allows = administrative
+							government_allows = deny_powerful_vassal
+						}
+					}
+					add_realm_law_skip_effects = own_war_declaration_law_1
+				}
+				else = {
+					add_realm_law_skip_effects = own_war_declaration_law_0
+				}
+			}
+		}
+					
+	}
+	
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}

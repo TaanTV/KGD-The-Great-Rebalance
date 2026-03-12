@@ -23,7 +23,7 @@ open_minded_perk = {
 	
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
-		learn_language_scheme_phase_duration_add = -120
+		learn_language_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value	#prev -120
 	}
 	
 	effect = {

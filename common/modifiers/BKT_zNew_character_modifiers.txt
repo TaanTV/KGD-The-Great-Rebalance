@@ -1,5 +1,5 @@
 ﻿fully_autonomous_vassals_bkt_character_modifier = {
-	icon = economy_negative
+	icon = imperial_treasury_negative	#prev economy_negative
 	vassal_opinion = 60
 	vassal_tax_contribution_mult = -0.8
 	vassal_levy_contribution_mult = -0.8
@@ -15,7 +15,7 @@ recently_converted_character_modifier = {
 
 landless_renown_equalisier_modifier = {
 	icon = camp_mixed
-	monthly_dynasty_prestige = -0.5
+	monthly_dynasty_prestige = -0.4
 }
 
 broke_betrothal_of_war_ally = {
@@ -48,5 +48,28 @@ true_heresiarch_modifier = {
 	enemy_hostile_scheme_success_chance_max_add = -20
 	
 	ai_energy = 10
+	ai_war_chance = 0.25
 	ai_war_cooldown = -0.5
+}
+
+fully_autonomous_vassals_admin_modifier = {		#weak central authority
+	icon = letter_negative
+	monthly_income_mult = -0.1
+	vassal_tax_contribution_mult = -0.33
+	vassal_levy_contribution_mult = -0.5
+	#monthly_treasury_from_vassals_mult = -0.25	#no that one is actually kind of positive
+}
+
+successful_populist_rebel_modifier = {
+	icon = martial_positive
+	monthly_income = 5
+	monthly_county_control_growth_add = 5
+	monthly_county_control_growth_factor = 5
+	levy_reinforcement_rate = 5
+}
+
+recently_migrated_character_modifier = {
+	icon = county_modifier_control_positive
+	monthly_county_control_growth_add = 1
+	county_fertility_decline_mult = -0.25
 }

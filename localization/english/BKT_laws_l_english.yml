@@ -1,0 +1,20 @@
+﻿l_english:
+ own_war_declaration_law: "[war|E] Declaration Law"
+ own_war_declaration_law_singular: "$own_war_declaration_law$"
+ own_war_declaration_law_0: "Powerful Vassal Approval"
+ own_war_declaration_law_0_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Disgruntled Adult [powerful_vassals|E] will block war declaration the same way they block [succession_law|E] changes#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Declaring wars slightly decreases opinion of all [powerful_vassals|E]#!"
+ war_declaration_powerful_vassal_approval.opinion_penalty: "Because you require [powerful_vassal|E] approval to declare war:"
+ own_war_declaration_law_1: "Council Approval"
+ own_war_declaration_law_1_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Disgruntled [councillors|E] will block war declaration the same way [powerful_vassals|E] block [succession_law|E] changes#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Declaring wars slightly decreases opinion of all [councillors|E]#!"
+ war_declaration_council_approval.opinion_penalty: "Because you require [council|E] approval to declare war:"
+ own_war_declaration_law_2: "No Approval"
+ own_war_declaration_law_2_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 You answer to no one when it comes to declaring wars#!"
+ need_to_have_max_authority: "You do not have the maximum possible authority"
+ must_be_feudal_clan_or_admin_or_any_tribal_game: "You must have the [feudal|E], [clan|E], [administrative|E], [tribal|E], [wanua|E] or [nomadic|E] [government|E]"
+
+
+ no_powerful_vassal_with_negative_opinion_war: "You have two or more [powerful_vassals|E] who have a negative opinion of you and are blocking war declarations"
+ no_real_councillor_with_negative_opinion_war: "You have two or more [councillors|E] who have a negative opinion of you and are blocking war declarations"
+ 
+ OWN_WAR_DECLARATION_LAW_IS_ON_COOLDOWN: "You recently changed $own_war_declaration_law$.\n    @alert_icon! #alert_trial Can be changed again after [GetCurrentDateWithDiff( GetVarTimeRemaining( CHARACTER.MakeScope, 'own_war_declaration_law_cooldown') )]#!"
+ #admin_law_cooldown_desc: "A [law|E] was changed recently - [laws] can be changed again after [GetCurrentDateWithDiff( GetVarTimeRemaining( GetPlayer.MakeScope, 'admin_law_cooldown') )]"

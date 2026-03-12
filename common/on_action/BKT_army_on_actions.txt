@@ -204,29 +204,6 @@ on_raid_action_completion = {
 BKT_on_raid_action_completion = {
 	effect = {
 		scope:county = {
-			#this part is just copied from vanilla
-			if = {
-				limit = {
-					holder = {
-						NOT = { has_perk = enduring_hardships_perk }
-					}
-				}
-				#change_county_control = raid_county_control_loss_value
-				random_list = {
-					25 = {
-						change_development_progress_with_overflow = -4	#prev -2
-					}
-					25 = {
-						change_development_progress_with_overflow = -6	#prev -3
-					}
-					25 = {
-						change_development_progress_with_overflow = -9	#prev -4
-					}
-					25 = {
-						change_development_progress_with_overflow = 10	#prev -5
-					}
-				}
-			}
 			if = {
 				limit = { scope:county.holder = { is_independent_ruler = no } }
 				scope:county.holder = {

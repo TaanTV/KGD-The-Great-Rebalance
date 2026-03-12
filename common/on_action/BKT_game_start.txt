@@ -11,6 +11,7 @@
 BKT_loaded_on_action = {
 	effect = {
 		set_global_variable = KGD_the_great_rebalance_is_loaded
+		set_global_variable = got_war_dec_laws_fixed
 		if = {
 			limit = { always = no }
 			set_global_variable = KGD_schizo_balance_is_loaded
@@ -117,6 +118,12 @@ BKT_on_start_misc = {
 		title:k_romagna.holder ?= {
 			destroy_title = title:k_romagna
 		}
+		title:c_genoa.title_province ?= {
+			if = { 
+				limit = { has_building = curtain_walls_01 }
+				remove_building = curtain_walls_01
+			}
+		}
 		if = {
 			limit = {
 				game_start_date = 1178.10.1
@@ -151,27 +158,61 @@ BKT_extra_fixes = {
 			culture:baranis ?= { set_culture_pillar = head_determination_domain }
 			culture:zaghawa ?= { set_culture_pillar = head_determination_domain }
 		}
+		if = {
+			limit = { NOT = { has_game_rule = sami_nomad_region_on } } 
+			culture:samoyed ?= { set_culture_pillar = head_determination_domain }
+			culture:sami ?= { set_culture_pillar = head_determination_domain }
+			culture:karelian ?= { set_culture_pillar = head_determination_domain }
+		}
+		if = {
+			limit = { NOT = { has_game_rule = horn_of_africa_nomad_region_on } } 
+			culture:beja ?= { set_culture_pillar = head_determination_domain }
+			culture:somali ?= { set_culture_pillar = head_determination_domain }
+			culture:afar ?= { set_culture_pillar = head_determination_domain }
+		}
 		every_ruler = {
-			limit = { prestige < 0 }
-			add_prestige_no_experience = {
-				add = 150	#start with at least 150
-				multiply = { value = highest_held_title_tier add = -1 min = 1 }
-				subtract = prestige
+			if = {
+				limit = { prestige < 0 }
+				add_prestige_no_experience = {
+					add = 150	#start with at least 150
+					multiply = { value = highest_held_title_tier add = -1 min = 1 }
+					subtract = prestige
+				}
 			}
-		}		
+			#Help nomads out a bit
+			if = {
+				limit = { has_government = nomad_government }
+				domicile ?= {
+					change_herd = {
+						value = owner.highest_held_title_tier
+						add = 1
+						multiply = owner.highest_held_title_tier
+						multiply = owner.highest_held_title_tier
+						multiply = 85
+						multiply = { 0.8 1.25 }
+					}
+				}
+			}
+		}
 	}
 }
 
 BKT_1066_more_buildings = {
 	trigger = {
-		game_start_date = 1066.1.1
+		game_start_date = 1066.9.15
 	}
 	effect = {
 		every_province = {
 			limit = {
 				has_holding = yes
 			}
-			generate_building = yes
+			#generate_building = yes
+			if = {
+				limit = {
+					county.development_level >= 8
+				}
+				generate_building = yes
+			}
 			if = {
 				limit = {
 					county.development_level >= 12
@@ -180,7 +221,25 @@ BKT_1066_more_buildings = {
 			}
 			if = {
 				limit = {
+					county.development_level >= 20
+				}
+				generate_building = yes
+			}
+			if = {
+				limit = {
 					county.development_level >= 24
+				}
+				generate_building = yes
+			}
+			if = {
+				limit = {
+					county.development_level >= 30
+				}
+				generate_building = yes
+			}
+			if = {
+				limit = {
+					county.development_level >= 36
 				}
 				generate_building = yes
 			}

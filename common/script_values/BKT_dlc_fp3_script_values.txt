@@ -1,0 +1,6 @@
+﻿fp3_seljuk_stack_miniscule_value = 0.8	#prev 0.6
+fp3_seljuk_stack_minor_value = 1		#prev 0.8
+fp3_seljuk_stack_medium_value = 1.25	#prev 1
+fp3_seljuk_stack_major_value = 1.5		#prev 1.25
+fp3_seljuk_stack_massive_value = 2		#prev 1.5
+fp3_seljuk_stack_monumental_value = 3	#prev 2		#NOTE: this one is used for onagers ONLY

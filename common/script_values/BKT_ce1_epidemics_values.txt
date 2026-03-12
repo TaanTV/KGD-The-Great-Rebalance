@@ -1,0 +1,202 @@
+﻿
+spread_chance_epidemics_mult_value = {
+	value = 1
+	min = 0.001
+	#Coastal Statistics Squash
+	if = {
+		limit = {
+			OR = {
+				is_coastal = yes
+				is_riverside_province = yes
+			}
+			#NOR = {
+			#	has_building_or_higher = common_tradeport_04
+			#	num_buildings > 4
+			#}
+			#ADDED - but not if its already infected
+			NOT = {
+				county = {
+					any_county_province_epidemic = {
+						this.epidemic_type = scope:epidemic.epidemic_type
+					}
+				}
+			}
+		}
+		add = spread_decrease_mult_high		#prev spread_decrease_mult_medium
+	}
+
+	#Making sure that England gets properly rekted by the Black Plague
+	if = {
+		limit = {
+			has_global_variable = black_death
+			scope:epidemic = global_var:black_death
+			OR = {
+				is_coastal = yes
+				is_riverside_province = yes
+			}
+			has_building_or_higher = common_tradeport_06
+			num_buildings > 10
+		}
+		add = spread_increase_mult_high
+	}
+
+	#less patchy, mult
+	if = {
+		limit = {
+			county = {
+				any_county_province_epidemic = {
+					this.epidemic_type = scope:epidemic.epidemic_type
+				}
+			}
+		}
+		add = spread_increase_mult_very_high
+		#ADDED - twice.
+		add = spread_increase_mult_high
+	}
+	#ADDED - less patchy plzplzplz
+	else = {
+		add = spread_decrease_mult_low
+	}
+
+	#Development
+	add = {
+		value = county.development_level
+		multiply = 0.025
+	}
+
+	# Game rules
+	if = {
+		limit = {
+			has_game_rule = epidemic_frequency_doomsday
+		}
+		add = spread_increase_mult_very_high
+	}
+	else_if = {
+		limit = {
+			has_game_rule = epidemic_frequency_very_often
+		}
+		add = spread_increase_mult_medium
+	}
+	else_if = {
+		limit = {
+			has_game_rule = epidemic_frequency_often
+		}
+		add = spread_increase_mult_low
+	}
+	else_if = {
+		limit = {
+			has_game_rule = epidemic_frequency_very_rare
+		}
+		add = spread_decrease_mult_medium
+	}
+	else_if = {
+		limit = {
+			has_game_rule = epidemic_frequency_rare
+		}
+		add = spread_decrease_mult_low
+	}
+
+	#Intensity mult
+
+	if = {
+		limit = { 
+			scope:epidemic = {
+				outbreak_intensity = apocalyptic
+			}
+		}
+		add = spread_increase_mult_high
+	}
+	else_if = {
+		limit = { 
+			scope:epidemic = {
+				outbreak_intensity = major
+			}
+		}
+		add = spread_increase_mult_medium
+	}
+
+	#Recent Epidemics
+	if = {
+		limit = {
+			is_target_in_variable_list = {
+				name = epidemic_cooldown #Average lifespan
+				target = scope:epidemic.epidemic_type
+			}
+		}
+		if = {
+			limit = {
+				has_game_rule = epidemic_frequency_often
+			}
+			add = spread_decrease_mult_high
+		}
+		else_if = {
+			limit = {
+				has_game_rule = epidemic_frequency_very_often
+			}
+			add = spread_decrease_mult_medium
+		}
+		else_if = {
+			limit = {
+				has_game_rule = epidemic_frequency_doomsday
+			}
+			add = spread_decrease_mult_low
+		}
+		else = {
+			add = spread_decrease_mult_unlikely
+		}	
+	}
+
+	#People still remember how to social distance in general
+	if = {
+		limit = {
+			has_variable = epidemic_cooldown_general #Average social memory
+		}
+		if = {
+			limit = {
+				has_game_rule = epidemic_frequency_very_often
+			}
+			add = spread_decrease_mult_medium
+		}
+		else_if = {
+			limit = {
+				has_game_rule = epidemic_frequency_doomsday
+			}
+			add = spread_decrease_mult_low
+		}
+		else = {
+			add = spread_decrease_mult_high
+		}
+	}
+
+	#Developed places
+	if = {
+		limit = {
+			has_holding = yes
+		}
+		add = spread_increase_mult_low
+	}
+	if = {
+		limit = {
+			OR = {
+				has_holding_type = castle_holding
+				has_holding_type = church_holding
+			}
+		}
+		add = spread_increase_mult_low
+	}
+	if = {
+		limit = {
+			has_holding_type = city_holding
+		}
+		add = spread_increase_mult_medium
+	}
+	if = {
+		limit = {
+			OR = {
+				has_holding_type = herder_holding
+				has_holding_type = nomad_holding
+			}
+		}
+		add = spread_decrease_mult_unlikely
+	}
+}

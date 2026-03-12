@@ -4403,6 +4403,8 @@ diarch_swing_scales_currency_interaction = {
 		is_valid = {
 			custom_tooltip = {
 				text = swing_scales_currency_interaction.tt.scales_min_movement_power
+				#ADDED - the check below
+				scope:actor = { has_variable = movement_power_individual }
 				scope:actor.var:movement_power_individual >= medium_movement_power_value
 			}
 		}
@@ -5062,7 +5064,7 @@ liege_dismiss_entrenched_regency_interaction = {
 			## Give 'em some dynasty prestige.
 			if = {
 				limit = { scope:diarchy_ending_gift_dynasty_prestige = yes }
-				scope:actor = { add_prestige = minor_prestige_loss }
+				scope:actor = { add_prestige = major_prestige_loss }		#prev minor_prestige_loss
 				# Transfer the prestige.
 				custom_tooltip = liege_dismiss_entrenched_regency_interaction.tt.dynasty_receives_prestige
 				hidden_effect = {
@@ -5093,7 +5095,7 @@ liege_dismiss_entrenched_regency_interaction = {
 			if = {
 				limit = { scope:diarchy_ending_gift_piety = yes }
 				# Transfer the piety.
-				scope:actor = { add_piety = medium_piety_loss }
+				scope:actor = { add_piety = massive_piety_loss }	#prev medium_piety_loss
 				add_piety = major_piety_value
 				# Plus they're happy.
 				if = {
@@ -5123,7 +5125,7 @@ liege_dismiss_entrenched_regency_interaction = {
 				scope:actor = {
 					pay_short_term_gold = {
 						target = scope:recipient
-						gold = major_gold_value
+						gold = medium_gold_value	#prev major_gold_value
 					}
 				}
 				# Plus they're happy.
@@ -5721,6 +5723,11 @@ declare_me_regent_interaction = {
 				has_variable = ongoing_cid_story_cycle
 			}
 		}
+		#ADDED
+		trigger_if = {
+			limit = { scope:actor = { is_ai = yes } }
+			NOT = { scope:recipient = { has_variable = declare_me_regent_ai_cooldown } }
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -5766,6 +5773,22 @@ declare_me_regent_interaction = {
 		scope:actor = { has_usable_hook = scope:recipient }
 	}
 	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+	
+	#ADDED
+	on_send = {
+		hidden_effect = {
+			scope:recipient = {
+				set_variable = {
+					name = declare_me_regent_ai_cooldown
+					years = 1
+				}
+				set_variable = {
+					name = declare_me_regent_soft_ai_cooldown
+					years = 5
+				}
+			}
+		}
+	}
 
 	on_accept = {
 		scope:actor = {
@@ -5858,11 +5881,24 @@ declare_me_regent_interaction = {
 				left_icon = scope:recipient
 				# AI lose opinion of their opposite number.
 				if = {
-					limit = { is_ai = yes }
+					#limit = { is_ai = yes }
+					#ADDED - always.
+					limit = { always = yes }
 					add_opinion = {
 						target = scope:recipient
 						modifier = insult_opinion
 						opinion = -40
+					}
+					#ADDED
+					if = {
+						limit = { is_ruler = yes }
+						if = {
+							limit = { has_vassal_stance = courtly }
+							throw_opinions_on_same_stance_vassals_of_liege = { LIEGE = scope:recipient OPINION = insult_opinion VALUE = -5 }
+						}
+						else = {
+							throw_opinions_on_same_stance_vassals_of_liege = { LIEGE = scope:recipient OPINION = insult_opinion VALUE = -15 }
+						}
 					}
 				}
 				# Even trying produces some strife.
@@ -5954,7 +5990,7 @@ declare_me_regent_interaction = {
 			desc = declare_me_regent_interaction.tt.actor_is.close_family
 			is_close_family_of = scope:actor
 			# Make sure this isn't cancelled out by the incumbent sharing the relation.
-			diarchy_successor = {
+			diarchy_successor ?= {
 				NOT = {
 					is_close_family_of = scope:recipient
 				}
@@ -6151,7 +6187,7 @@ declare_me_regent_interaction = {
 
 	ai_will_do = {
 		# Most AI think this is audacious.
-		base = 0
+		base = -5	#prev 0
 
 		# Weight for personality.
 		## Both modifier.
@@ -6302,6 +6338,19 @@ declare_me_regent_interaction = {
 					}
 				}
 			}
+		}
+		#ADDED
+		modifier = {
+			scope:actor = {
+				is_ruler = yes
+				has_vassal_stance = courtly
+			}
+			factor = 0.75
+		}
+		#ADDED
+		modifier = {
+			scope:recipient = { has_variable = declare_me_regent_soft_ai_cooldown }
+			factor = 0.5
 		}
 	}
 }

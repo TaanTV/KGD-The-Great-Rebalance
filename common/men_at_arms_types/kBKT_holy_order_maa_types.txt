@@ -34,9 +34,9 @@ teutonic_knights = { # Actually all Christian knightly orders, not just the Teut
 	special_recruit_only = yes
 	
 	# Slightly stronger than normal Heavy Infantry MaA, to represent zeal & dedication to the cause.
-	# Note: a bunch stronger due to lack of stationing
-	damage = 46			#prev 36 
-	toughness = 32		#prev 26
+	# Re-Note: a bit stronger coz they're unique ands stuff
+	damage = 40
+	toughness = 30
 	pursuit = 0
 	screen = 0
 
@@ -47,7 +47,7 @@ teutonic_knights = { # Actually all Christian knightly orders, not just the Teut
 	
 	# ADDED to all heavy infantry
 	terrain_bonus = {
-		wetlands = { damage = -26 toughness = -16 }
+		wetlands = { damage = -20 toughness = -16 }
 	}
 		
 	counters = {

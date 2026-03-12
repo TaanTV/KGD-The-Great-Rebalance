@@ -34,7 +34,7 @@ base_court_amenities_cost = {
 		}
 	}
 	#ADDED - that divide is actually non-vanilla
-	divide = 3.5		#prev 4
+	divide = 3		#prev 4
 	#END of ADDED
 	divide = {
 		add = 4
@@ -46,6 +46,8 @@ base_court_amenities_cost = {
 	if = { # Add a baseline depending on rank
 		limit = {
 			highest_held_title_tier = tier_empire
+			#ADDED - replaced
+			highest_held_title_tier >= tier_empire
 		}
 		add = 40		#20
 	}

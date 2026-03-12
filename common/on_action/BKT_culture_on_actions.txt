@@ -29,6 +29,19 @@ BKT_on_culture_created = {
 			}
 			set_culture_pillar = head_determination_domain
 		}
+		if = {
+			limit = { 
+				scope:founder ?= { 
+					OR = {
+						has_government = tribal_government
+						has_government = nomad_government
+						has_government = wanua_government
+						has_government = herder_government	#just in case
+					}
+				}
+			}
+			leave_era = culture_era_early_medieval
+		}
 	}
 }
 

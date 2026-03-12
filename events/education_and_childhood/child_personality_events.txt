@@ -116,7 +116,7 @@ child_personality.0001 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -127,7 +127,7 @@ child_personality.0001 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -352,7 +352,7 @@ child_personality.0001 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = craven }
 			}
 			modifier = {
@@ -394,7 +394,7 @@ child_personality.0001 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = lazy }
 			}
 			modifier = {
@@ -432,7 +432,7 @@ child_personality.0001 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = arbitrary }
 			}
 			modifier = {
@@ -501,7 +501,7 @@ child_personality.0002 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -512,7 +512,7 @@ child_personality.0002 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -527,7 +527,22 @@ child_personality.0002 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = arrogant
+					has_trait = compassionate
+					has_trait = callous
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = compassionate_trait_more_common
 			}
@@ -567,8 +582,16 @@ child_personality.0002 = {
 				save_scope_as = guardian
 			}
 		}
-		else = {
+		else_if = {
+			limit = {
+				exists = court_owner.court_position:court_tutor_court_position
+			}
 			court_owner.court_position:court_tutor_court_position ?= {
+				save_scope_as = guardian
+			}
+		}
+		else = {
+			court_owner.court_position:court_guru_court_position ?= {
 				save_scope_as = guardian
 			}
 		}
@@ -586,7 +609,7 @@ child_personality.0002 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = arrogant }
 			}
 			modifier = {
@@ -616,7 +639,7 @@ child_personality.0002 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = compassionate }
 			}
 			modifier = {
@@ -627,7 +650,7 @@ child_personality.0002 = {
 				}
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = compassionate_trait_more_common
 				}
@@ -655,7 +678,7 @@ child_personality.0002 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_2_trait = {
 					TRAIT = callous
 					TRAIT_2 = sadistic
@@ -744,7 +767,7 @@ child_personality.0003 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -755,7 +778,7 @@ child_personality.0003 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -770,7 +793,22 @@ child_personality.0003 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = deceitful
+					has_trait = honest
+					has_trait = humble
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = humble_trait_more_common
 			}
@@ -780,7 +818,7 @@ child_personality.0003 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = honest_trait_more_common
 			}
@@ -819,8 +857,16 @@ child_personality.0003 = {
 				save_scope_as = guardian
 			}
 		}
-		else = {
+		else_if = {
+			limit = {
+				exists = court_owner.court_position:court_tutor_court_position
+			}
 			court_owner.court_position:court_tutor_court_position ?= {
+				save_scope_as = guardian
+			}
+		}
+		else = {
+			court_owner.court_position:court_guru_court_position ?= {
 				save_scope_as = guardian
 			}
 		}
@@ -855,7 +901,7 @@ child_personality.0003 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = deceitful }
 			}
 			modifier = {
@@ -884,7 +930,7 @@ child_personality.0003 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = honest }
 			}
 			modifier = {
@@ -892,7 +938,7 @@ child_personality.0003 = {
 				guardian_or_court_tutor_trait = { TRAIT = deceitful }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = honest_trait_more_common
 				}
@@ -919,7 +965,7 @@ child_personality.0003 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = humble }
 			}
 			modifier = {
@@ -927,7 +973,7 @@ child_personality.0003 = {
 				guardian_or_court_tutor_trait = { TRAIT = arrogant }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = humble_trait_more_common
 				}
@@ -996,7 +1042,7 @@ child_personality.0004 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -1007,7 +1053,7 @@ child_personality.0004 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -1022,7 +1068,22 @@ child_personality.0004 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = generous
+					has_trait = diligent
+					has_trait = patient
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = diligent_trait_more_common
 			}
@@ -1032,7 +1093,7 @@ child_personality.0004 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = patient_trait_more_common
 			}
@@ -1042,7 +1103,7 @@ child_personality.0004 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = generous_trait_more_common
 			}
@@ -1110,7 +1171,7 @@ child_personality.0004 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = generous }
 			}
 			modifier = {
@@ -1118,7 +1179,7 @@ child_personality.0004 = {
 				guardian_or_court_tutor_trait = { TRAIT = greedy }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = generous_trait_more_common
 				}
@@ -1145,7 +1206,7 @@ child_personality.0004 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = diligent }
 			}
 			modifier = {
@@ -1153,7 +1214,7 @@ child_personality.0004 = {
 				guardian_or_court_tutor_trait = { TRAIT = lazy }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = diligent_trait_more_common
 				}
@@ -1180,7 +1241,7 @@ child_personality.0004 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = patient }
 			}
 			modifier = {
@@ -1188,7 +1249,7 @@ child_personality.0004 = {
 				guardian_or_court_tutor_trait = { TRAIT = impatient }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = patient_trait_more_common
 				}
@@ -1329,7 +1390,7 @@ child_personality.0005 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -1340,13 +1401,28 @@ child_personality.0005 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
 				}
 			}
 			court_owner.court_position:court_tutor_court_position ?= {
+				OR = {
+					has_trait = wrathful
+					has_trait = forgiving
+					has_trait = fickle
+				}
+			}
+		}
+		modifier = {
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
 				OR = {
 					has_trait = wrathful
 					has_trait = forgiving
@@ -1613,7 +1689,7 @@ child_personality.0005 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = wrathful }
 			}
 			modifier = {
@@ -1643,7 +1719,7 @@ child_personality.0005 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = forgiving }
 			}
 			modifier = {
@@ -1691,7 +1767,7 @@ child_personality.0005 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = fickle }
 			}
 			modifier = {
@@ -1771,7 +1847,7 @@ child_personality.0006 = {
 		base = 1
 
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -1782,7 +1858,7 @@ child_personality.0006 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -1797,7 +1873,22 @@ child_personality.0006 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = vengeful
+					has_trait = chaste
+					has_trait = stubborn
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = vengeful_trait_more_common
 			}
@@ -1807,7 +1898,7 @@ child_personality.0006 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = stubborn_trait_more_common
 			}
@@ -2031,7 +2122,7 @@ child_personality.0006 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = vengeful }
 			}
 			modifier = {
@@ -2039,7 +2130,7 @@ child_personality.0006 = {
 				guardian_or_court_tutor_trait = { TRAIT = forgiving }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = vengeful_trait_more_common
 				}
@@ -2079,7 +2170,7 @@ child_personality.0006 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = chaste }
 			}
 			modifier = {
@@ -2137,7 +2228,7 @@ child_personality.0006 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = stubborn }
 			}
 			modifier = {
@@ -2145,7 +2236,7 @@ child_personality.0006 = {
 				guardian_or_court_tutor_trait = { TRAIT = fickle }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = stubborn_trait_more_common
 				}
@@ -2198,6 +2289,7 @@ child_personality.0007 = {
 				is_available = yes
 			}
 			exists = court_owner.court_position:court_tutor_court_position
+			exists = court_owner.court_position:court_guru_court_position #Unop: Guru is also the tutor
 			any_courtier_or_guest = {
 				is_adult = yes
 				is_available = yes
@@ -2232,7 +2324,7 @@ child_personality.0007 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -2243,7 +2335,7 @@ child_personality.0007 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -2258,7 +2350,22 @@ child_personality.0007 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = just
+					has_trait = cynical
+					has_trait = temperate
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = just_trait_more_common
 			}
@@ -2268,7 +2375,7 @@ child_personality.0007 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = temperate_trait_more_common
 			}
@@ -2310,7 +2417,7 @@ child_personality.0007 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = just }
 			}
 			modifier = {
@@ -2318,7 +2425,7 @@ child_personality.0007 = {
 				guardian_or_court_tutor_trait = { TRAIT = arbitrary }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = just_trait_more_common
 				}
@@ -2345,7 +2452,7 @@ child_personality.0007 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = cynical }
 			}
 			modifier = {
@@ -2390,7 +2497,7 @@ child_personality.0007 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = temperate }
 			}
 			modifier = {
@@ -2398,7 +2505,7 @@ child_personality.0007 = {
 				guardian_or_court_tutor_trait = { TRAIT = gluttonous }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = temperate_trait_more_common
 				}
@@ -2477,7 +2584,7 @@ child_personality.0008 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -2488,7 +2595,7 @@ child_personality.0008 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -2503,7 +2610,22 @@ child_personality.0008 = {
 			}
 		}
 		modifier = {
-			factor = 0.5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = greedy
+					has_trait = gregarious
+					has_trait = lustful
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75	#prev 0.5
 			culture = { has_cultural_parameter = lustful_trait_less_common }
 		}
 	}
@@ -2670,7 +2792,7 @@ child_personality.0008 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = greedy }
 			}
 			modifier = {
@@ -2699,7 +2821,7 @@ child_personality.0008 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = gregarious }
 			}
 			modifier = {
@@ -2729,7 +2851,7 @@ child_personality.0008 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = lustful }
 			}
 			modifier = {
@@ -2858,7 +2980,7 @@ child_personality.0009 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -2869,7 +2991,7 @@ child_personality.0009 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -2884,7 +3006,22 @@ child_personality.0009 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = brave
+					has_trait = calm
+					has_trait = zealous
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = zealous_trait_more_common
 			}
@@ -2894,7 +3031,7 @@ child_personality.0009 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = calm_trait_more_common
 			}
@@ -2991,7 +3128,7 @@ child_personality.0009 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = brave }
 			}
 			modifier = {
@@ -3090,7 +3227,7 @@ child_personality.0009 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = calm }
 			}
 			modifier = {
@@ -3098,7 +3235,7 @@ child_personality.0009 = {
 				guardian_or_court_tutor_trait = { TRAIT = wrathful }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = calm_trait_more_common
 				}
@@ -3144,7 +3281,7 @@ child_personality.0009 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = zealous }
 			}
 			modifier = {
@@ -3152,7 +3289,7 @@ child_personality.0009 = {
 				guardian_or_court_tutor_trait = { TRAIT = cynical }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = zealous_trait_more_common
 				}
@@ -3267,6 +3404,7 @@ child_personality.0010 = {
 				is_available = yes
 			}
 			exists = court_owner.court_position:court_tutor_court_position
+			exists = court_owner.court_position:court_guru_court_position #Unop: Guru is also the tutor
 			any_courtier_or_guest = {
 				is_adult = yes
 				is_available = yes
@@ -3302,7 +3440,7 @@ child_personality.0010 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -3313,7 +3451,7 @@ child_personality.0010 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -3328,7 +3466,22 @@ child_personality.0010 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = ambitious
+					has_trait = sadistic
+					has_trait = paranoid
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = ambitious_trait_more_common
 			}
@@ -3370,7 +3523,7 @@ child_personality.0010 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = ambitious }
 			}
 			modifier = {
@@ -3378,7 +3531,7 @@ child_personality.0010 = {
 				guardian_or_court_tutor_trait = { TRAIT = content }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = ambitious_trait_more_common
 				}
@@ -3435,7 +3588,7 @@ child_personality.0010 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = paranoid }
 			}
 			modifier = {
@@ -3478,6 +3631,7 @@ child_personality.0011 = {
 				is_available = yes
 			}
 			exists = court_owner.court_position:court_tutor_court_position
+			exists = court_owner.court_position:court_guru_court_position #Unop: Guru is also the tutor
 			any_courtier_or_guest = {
 				is_adult = yes
 				is_available = yes
@@ -3511,7 +3665,7 @@ child_personality.0011 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -3522,7 +3676,7 @@ child_personality.0011 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
@@ -3537,7 +3691,22 @@ child_personality.0011 = {
 			}
 		}
 		modifier = {
-			add = 5
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
+				OR = {
+					has_trait = content
+					has_trait = fickle
+					has_trait = trusting
+				}
+			}
+		}
+		modifier = {
+			add = 2		#prev 5
 			culture = {
 				has_cultural_parameter = content_trait_more_common
 			}
@@ -3580,7 +3749,7 @@ child_personality.0011 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = content }
 			}
 			modifier = {
@@ -3588,7 +3757,7 @@ child_personality.0011 = {
 				guardian_or_court_tutor_trait = { TRAIT = ambitious }
 			}
 			modifier = {
-				add = 100
+				add = 2		#prev 100
 				culture = {
 					has_cultural_parameter = content_trait_more_common
 				}
@@ -3615,7 +3784,7 @@ child_personality.0011 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = fickle }
 			}
 			modifier = {
@@ -3644,7 +3813,7 @@ child_personality.0011 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = trusting }
 			}
 			modifier = {
@@ -3690,6 +3859,7 @@ child_personality.0012 = {
 				is_available = yes
 			}
 			exists = court_owner.court_position:court_tutor_court_position
+			exists = court_owner.court_position:court_guru_court_position #Unop: Guru is also the tutor
 			any_courtier_or_guest = {
 				is_adult = yes
 				is_available = yes
@@ -3723,7 +3893,7 @@ child_personality.0012 = {
 	weight_multiplier = {
 		base = 1
 		modifier = {
-			add = 2
+			add = 1		#prev 2
 			any_relation = {
 				type = guardian
 				OR = {
@@ -3734,13 +3904,28 @@ child_personality.0012 = {
 			}
 		}
 		modifier = {
-			add = 2
+			add = 0.5	#prev 2
 			NOT = {
 				any_relation = {
 					type = guardian
 				}
 			}
 			court_owner.court_position:court_tutor_court_position ?= {
+				OR = {
+					has_trait = impatient
+					has_trait = shy
+					has_trait = gluttonous
+				}
+			}
+		}
+		modifier = {
+			add = 0.5	#prev 2
+			NOT = {
+				any_relation = {
+					type = guardian
+				}
+			}
+			court_owner.court_position:court_guru_court_position ?= { #Unop: Guru is also the tutor
 				OR = {
 					has_trait = impatient
 					has_trait = shy
@@ -3781,7 +3966,7 @@ child_personality.0012 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = impatient }
 			}
 			modifier = {
@@ -3810,7 +3995,7 @@ child_personality.0012 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = shy }
 			}
 			modifier = {
@@ -3839,7 +4024,7 @@ child_personality.0012 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				add = 4
+				add = 2		#prev 4
 				guardian_or_court_tutor_trait = { TRAIT = gluttonous }
 			}
 			modifier = {

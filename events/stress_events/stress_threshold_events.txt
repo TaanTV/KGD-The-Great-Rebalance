@@ -665,7 +665,7 @@ stress_threshold.1001 = {
 		add_trait = improvident
 		trait = improvident
 
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 		add_stress = medium_stress_impact_loss
 	}
 	
@@ -2160,7 +2160,7 @@ stress_threshold.1503 = {
 		name = stress_threshold.1503.a.d
 		trigger = { has_trait = profligate }
 		trait = profligate
-		 remove_short_term_gold = major_gold_value_check
+		 remove_short_term_gold = minor_gold_value	#prev major_gold_value_check
 		add_stress = minor_stress_loss
 		ai_chance = {
 			base = 50		#prev 20
@@ -3572,7 +3572,7 @@ stress_threshold.1601 = {
 		}
 		add_trait = profligate
 		trait = profligate
-		remove_short_term_gold = medium_gold_value
+		remove_short_term_gold = minor_gold_value	#prev medium_gold_value
 		add_stress = medium_stress_loss
 
 		ai_chance = {
@@ -3969,7 +3969,7 @@ stress_threshold.1601 = {
 		add_trait = improvident
 		trait = improvident
 
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 		add_stress = medium_stress_impact_loss
 
 		ai_chance = {
@@ -4220,7 +4220,7 @@ stress_threshold.1602 = {
 		}
 		add_trait = profligate
 		trait = profligate
-		remove_short_term_gold = medium_gold_value
+		remove_short_term_gold = minor_gold_value	#prev medium_gold_value
 		add_stress = medium_stress_loss
 
 		ai_chance = {
@@ -4615,7 +4615,7 @@ stress_threshold.1602 = {
 		add_trait = improvident
 		trait = improvident
 
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 		add_stress = medium_stress_impact_loss
 
 		ai_chance = {
@@ -5373,7 +5373,7 @@ stress_threshold.1701 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -6130,7 +6130,7 @@ stress_threshold.1711 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -6164,7 +6164,7 @@ stress_threshold.1711 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -7069,7 +7069,7 @@ stress_threshold.1721 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -7103,7 +7103,7 @@ stress_threshold.1721 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -8086,7 +8086,7 @@ stress_threshold.1731 = {
 
 		#Account for stress.
 		add_stress = minor_stress_impact_loss
-		remove_short_term_gold = major_gold_value
+		remove_short_term_gold = minor_gold_value	#prev major_gold_value
 
 		ai_chance = {
 			base = 25
@@ -9559,7 +9559,7 @@ stress_threshold.2301 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#You buy a veritable glut of furniture.
 		add_character_modifier = {
@@ -10385,7 +10385,7 @@ stress_threshold.2311 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#Add regret coping modifier.
 		add_character_modifier = {
@@ -11309,7 +11309,7 @@ stress_threshold.2321 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#Court reacts to your little upset.
 		if = {
@@ -11376,7 +11376,7 @@ stress_threshold.2321 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#Court reacts to your little upset.
 		if = {
@@ -12374,7 +12374,7 @@ stress_threshold.2331 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#This excess spending is unbecoming of you.
 		add_prestige = medium_prestige_loss
@@ -12411,7 +12411,7 @@ stress_threshold.2331 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		capital_province.county = {
 			add_county_modifier = {
@@ -13167,7 +13167,7 @@ stress_threshold.2341 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#Your new cloak becomes a symbol of your shirked duty.
 		add_character_modifier = {
@@ -13995,7 +13995,7 @@ stress_threshold.2351 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#You try to buy your way to feeling better.
 		add_character_modifier = {
@@ -14035,7 +14035,7 @@ stress_threshold.2351 = {
 
 		#Account for stress.
 		add_stress = medium_stress_impact_loss
-		remove_short_term_gold = massive_gold_value
+		remove_short_term_gold = medium_gold_value	#prev massive_gold_value
 		
 		#Giving everyone who needs it access to the treasury is generally bad practice for feudal societies.
 		add_stewardship_skill = -1

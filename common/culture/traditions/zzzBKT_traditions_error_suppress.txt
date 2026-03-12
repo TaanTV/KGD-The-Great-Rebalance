@@ -1,0 +1,41 @@
+﻿# This one just stores all the parameters i yoinked out
+tradition_bkt_error_suppress = {
+	category = combat
+
+	is_shown = {
+		always = no
+	}
+
+	layers = {
+		0 = martial
+		1 = indian
+		4 = battle.dds
+	}
+	
+	parameters = {
+		trade_ports_give_levies = yes
+		next_level_w_mills = yes
+		permafrost_cannot_become_feudal = yes
+		estate_building_upgrade_development_gain = yes
+		watermills_forestries_unlock = yes
+		windmills_hill_farms_unlock = yes
+		farm_estates_pastures_unlock = yes
+		warrior_lodges_lift_restrictions = yes
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 0
+	}
+}

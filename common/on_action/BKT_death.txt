@@ -77,7 +77,8 @@ BKT_on_death_give_out_MAA = {
 BKT_landless_gold_inherit = {
 	trigger = {		#Condition shamelessly stolen from the mod that does the same thing
 		#NOR = { is_landed_or_landless_administrative = yes }
-		highest_held_title_tier = 0
+		#highest_held_title_tier = 0
+		is_ruler = no
 		is_clergy = no
 		is_ai = yes
 		gold > 25

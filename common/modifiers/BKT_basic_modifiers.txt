@@ -10,6 +10,7 @@ diplomacy_modifier_with_offset = {
 	#herd_gain_mult = 0.01
 	#ADDED
 	owned_scheme_secrecy_add = 0.5
+	vassal_herd_contribution_mult = 0.01
 }
 
 intrigue_modifier_with_offset = {
@@ -55,6 +56,7 @@ learning_modifier = {
 	monthly_piety = 0.05	#prev 0.1
 	#ADDED
 	character_innovation_progress_chance_from_fascination_add = 0.25
+	development_growth_factor = 0.01 
 }
 
 prowess_modifier = {
@@ -66,14 +68,18 @@ prowess_modifier = {
 unlanded_modifier = {
 	#ADDED
 	stress_gain_mult = -0.25 #unlanded characters have less reason to be stressed
+	owned_hostile_scheme_success_chance_max_add = 10
+	owned_hostile_scheme_success_chance_growth_add = 0.2
+	owned_scheme_secrecy_add = 5 #unlanded characters have less resources to scheme
 }
 
 baron_modifier = {
 	domain_limit = 1
 	# Barons don't get to have knights
-	monthly_treasury_from_liege_mult = -0.6
+	monthly_treasury_from_liege_mult = -0.55	#prev -0.6
 	#ADDED
 	stress_gain_mult = -0.2 		# Barons can't destress much.
+	stress_loss_mult = 0.25 		# Barons can't destress much.
 	monthly_income = 0.15			# A bit of money
 	diplomatic_range_mult = -0.2	# Consistent with counts
 	knight_limit = -100				# "Barons don't get to have knights"
@@ -84,12 +90,17 @@ count_modifier = {
 	knight_limit = 1		#in 1.14 - 5
 	tax_slot_add = 1
 	ai_war_chance = -0.4	#prev -0.9
-	monthly_treasury_from_liege_mult = -0.4
+	monthly_treasury_from_liege_mult = -0.35	#prev -0.4
 	#ADDED 
-	vassal_tax_contribution_mult = 0.15
-	vassal_levy_contribution_mult = 0.15
-	vassal_herd_contribution_mult = 0.15
+	stress_gain_mult = -0.1 		# Being a count is less stressful. 
+	levy_attack = 1
+	levy_toughness = 1
+	barons_and_minor_landholders_opinion = 15
+	vassal_tax_contribution_mult = 0.2
+	vassal_levy_contribution_mult = 0.2
+	vassal_herd_contribution_mult = 0.2
 	diplomatic_range_mult = -0.2
+	men_at_arms_limit = -1
 }
 
 duke_modifier = {
@@ -99,7 +110,7 @@ duke_modifier = {
 	tax_slot_add = 1
 	mercenary_hire_cost_mult = 0.1
 	enemy_scheme_secrecy_add = -10
-	monthly_treasury_from_liege_mult = -0.3
+	monthly_treasury_from_liege_mult = -0.25	#prev -0.3
 	#ADDED 
 	vassal_tax_contribution_mult = 0.05
 	vassal_levy_contribution_mult = 0.05
@@ -392,8 +403,6 @@ very_hard_difficulty_player = {
 ai_extreme_conqueror_modifier = {
 	icon = flame_positive
 	health = 2		#prev 3
-	#ADDED
-	negate_health_penalty_add = 2
 	epidemic_resistance = 50
 	enemy_hostile_scheme_phase_duration_add = 75
 	enemy_hostile_scheme_success_chance_max_add = -60
@@ -411,4 +420,6 @@ ai_extreme_conqueror_modifier = {
 	vassal_limit_max = 500
 	#ADDED
 	vassal_limit = 100
+	negate_health_penalty_add = 2
+	fertility = 0.25
 }

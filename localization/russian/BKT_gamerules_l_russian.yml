@@ -53,3 +53,11 @@
  setting_bkt_accolades_disabled_all: "#high Выключены#!"
  setting_bkt_accolades_disabled_all_desc: "[accolades|E] не доступны #V Всем#"
  bkt_accolades_disabled: "No accolades?"
+ 
+ rule_bkt_own_war_declaration_law_toggle: "$bkt_rule_prefix$ [GetLawGroup('own_war_declaration_law').GetName]"
+ setting_bkt_own_war_declaration_law_toggle_enabled: "#high Включен#!"
+ setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Все#! получают новый набор законов, в зависимости от которых объявление войны может требовать согласия могущественных вассалов или совета."
+ setting_bkt_own_war_declaration_law_toggle_player_only: "#high Только Игрок#!"
+ setting_bkt_own_war_declaration_law_toggle_player_only_desc: "#V Игрок#! получает новый набор законов, в зависимости от которых объявление войны может требовать согласия могущественных вассалов или совета."
+ setting_bkt_own_war_declaration_law_toggle_disabled: "#high Выключен#!"
+ setting_bkt_own_war_declaration_law_toggle_disabled_desc: "Война никогда не меняется."

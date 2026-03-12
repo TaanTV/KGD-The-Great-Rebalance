@@ -45,8 +45,8 @@ ai_goal_manager_opportunity_pulse_effect = {
 				is_available = yes
 				is_at_war = no
 				gold > major_gold_value
-				prestige > 0
-				piety > 0
+				prestige > 150
+				piety > 100
 				NOT = {
 					any_targeting_faction = {
 						discontent_per_month > 0
@@ -116,12 +116,45 @@ ai_goal_manager_opportunity_pulse_effect = {
 		}
 		ai_goal_manager_opportunity_pulse_sway_effect = yes
 	}
+	if = {
+		limit = { 
+			is_at_war = no		#I assume War! triggered and they're now at war?..
+			gold > major_gold_value
+			NOR = {
+				ai_has_builder_or_pious_builder_personality = yes
+				has_variable = temporary_forced_builder_ai
+			}
+		}
+		random = {
+			chance = 3.5		#MTTH a bit over 20 years
+			modifier = {
+				gold > massive_gold_value
+				NOT = { has_variable = forced_builder_ai_soft_cooldown }
+				add = 2.5
+			}
+			modifier = {
+				has_variable = forced_builder_ai_soft_cooldown
+				add = -2.5
+			}
+			set_variable = {
+				name = temporary_forced_builder_ai
+				years = 8
+			}
+			set_variable = {
+				name = forced_builder_ai_soft_cooldown
+				years = 18
+			}
+			#debug_log = "Forced AI into builder mode"
+			#debug_log_scopes = yes
+			#debug_log_date = yes
+		}
+	}
 }
 
 ai_goal_manager_opportunity_pulse_war_effect = {
 	save_scope_as = story_owner_scope
 	random = {
-		chance = 50
+		chance = 75
 		modifier = {
 			add = {
 				value = ai_greed 
@@ -422,6 +455,10 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					highest_held_title_tier >= tier_empire
 					factor = 5
 				}
+				modifier = {
+					has_realm_law_flag = war_declaration_powerful_vassal_approval
+					factor = 5
+				}
 				trigger = {
 					NOT = { government_allows = deny_powerful_vassal }
 					any_powerful_vassal = {
@@ -512,7 +549,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 				}
 				modifier = {
 					NOT = { government_allows = deny_powerful_vassal }
-					factor = 0.2
+					factor = 0.1
 				}
 				trigger = {
 					any_tributary = {
@@ -781,6 +818,106 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 						recipient = scope:target_ally_scope
 						execute_threshold = decline
 					}
+				}
+			}
+			100 = {		#Councillors
+				modifier = {
+					highest_held_title_tier >= tier_kingdom
+					factor = 3
+				}
+				modifier = {
+					highest_held_title_tier >= tier_empire
+					factor = 5
+				}
+				modifier = {
+					has_realm_law_flag = war_declaration_council_approval
+					factor = 10
+				}
+				trigger = {
+					government_allows = council
+					any_councillor = {
+						NOR = {
+							prev.cp:councillor_spouse ?= this
+							prev.cp:councillor_vizier ?= this
+						}
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 35
+						OR = {
+							scope:temp_opinion_scope < 15
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					}
+				}
+				ordered_councillor = {
+					limit = {
+						NOR = {
+							prev.cp:councillor_spouse ?= this
+							prev.cp:councillor_vizier ?= this
+						}
+						save_temporary_opinion_value_as = {
+							name = temp_opinion_scope
+							target = scope:root_scope
+						}
+						scope:temp_opinion_scope < 35
+						OR = {
+							scope:temp_opinion_scope < 15
+							NOT = {
+								has_opinion_modifier = {
+									target = scope:root_scope
+									modifier = scheme_sway_opinion
+								}
+							}
+						}
+						NOT = {
+							has_opinion_modifier = {
+								target = scope:root_scope
+								modifier = scheme_sway_opinion
+								value > sway_max_value_minus_fifteen
+							}
+						}
+						scope:root_scope = {
+							NOR = {
+								has_relation_rival = PREV
+								has_relation_nemesis = PREV
+							}
+							can_start_scheme = {
+								type = sway
+								target_character = PREV
+							}
+						}
+					
+					}
+					order_by = { value = "opinion(liege)" multiply = -1 }
+					save_scope_as = target_scope
+				}
+				start_scheme = {
+					type = sway
+					target_character = scope:target_scope
 				}
 			}
 			100 = {		#Close family

@@ -1,0 +1,115 @@
+﻿on_success_vassal_syphon_treasury_interaction = {
+	effect = {
+		random_list = {
+			200 = {
+				trigger = {
+					any_held_county = {
+						county_control > 10
+					}
+				}
+				random_list = {
+					3 = {
+						trigger = { 
+							any_held_county = {
+								count > 2
+								county_control > 10
+							}
+						}
+						save_temporary_scope_value_as = {
+							name = number_of_counties
+							value = 3
+						}
+					}
+					2 = {
+						trigger = { 
+							any_held_county = {
+								count > 1
+								county_control > 10
+							}
+						}
+						save_temporary_scope_value_as = {
+							name = number_of_counties
+							value = 2
+						}
+					}
+					1 = {
+						save_temporary_scope_value_as = {
+							name = number_of_counties
+							value = 1
+						}
+					}
+				}
+				save_temporary_scope_value_as = {
+					name = control_loss
+					value = {
+						value = -12
+						divide = scope:number_of_counties
+					}
+				}
+				while = {
+					count = scope:number_of_counties
+					random_held_county = {
+						limit = {
+							NOT = {
+								save_temporary_scope_as = current_county
+								any_in_list = {
+									list = vassal_syphon_treasury_affected_counties
+									this = scope:current_county
+								}
+							}
+						}
+						change_county_control = scope:control_loss
+						add_to_list = vassal_syphon_treasury_affected_counties
+					}
+				}
+			}
+			100 = {
+				trigger = {
+					any_held_county = {
+						immune_to_county_corruption_trigger = no
+						county_corruption_modifier_count < 4	#lets not be too harsh here
+					}
+				}
+				random_held_county = {
+					limit = {
+						immune_to_county_corruption_trigger = no
+						county_corruption_modifier_count < 4	#lets not be too harsh here
+					}
+					#Be a bit sneaker about it
+					if = {
+						limit = { prev = { is_in_debt = yes } }
+						save_temporary_scope_as = deficit
+					}
+					else_if = {
+						limit = { county_control < 100 }
+						save_temporary_scope_as = low_control
+					}
+					add_random_county_corruption_modifier_effect = yes
+				}
+			}
+		}
+	}
+}
+
+#now really "new" but i aint creating all those folders and files just to hook it there 
+mpo_migration_finished = {
+	on_actions = {
+		bkt_migration_control_boost
+	}
+}
+
+bkt_migration_control_boost = {
+	effect = {
+		add_character_modifier = {
+			modifier = recently_migrated_character_modifier
+			years = 1
+		}
+		every_vassal_or_below = {
+			limit = { highest_held_title_tier > tier_barony }
+			add_character_modifier = {
+				modifier = recently_migrated_character_modifier
+				years = 1
+			}
+		}
+	}
+}

@@ -1,0 +1,3 @@
+﻿#japan_demand_admin_acceptance_modifier = {
+#	ai_military_threat_modifier = { SENDER = scope:actor RECEIVER = scope:recipient MULTIPLIER = -1 }
+#}

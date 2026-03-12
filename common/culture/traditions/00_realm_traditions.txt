@@ -1774,6 +1774,8 @@ tradition_isolationist = {
 		less_plague_spread_culture = yes
 		cultrad_unlocks_t3_strengthen_sentries = yes
 		cultrad_unlocks_t3_redouble_guards = yes
+		#ADDED
+		ai_less_likely_to_have_foreign_court_language = yes
 	}
 	culture_modifier = {
 		cultural_acceptance_gain_mult = -0.35
@@ -2583,6 +2585,8 @@ tradition_staunch_traditionalists = {
 		expensive_convert_to_local_culture = yes
 		harder_to_hybridize = yes
 		less_likely_to_culture_convert = yes
+		#ADDED
+		ai_less_likely_to_have_foreign_court_language = yes
 	}
 	character_modifier = {
 		controlled_province_advantage = 5
@@ -2812,6 +2816,25 @@ tradition_hill_dwellers = {
 			}
 			multiply = 8
 		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
+		}
 	}
 }
 
@@ -2948,6 +2971,25 @@ tradition_forest_folk = {
 				}
 			}
 			multiply = 8
+		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
 		}
 	}
 }
@@ -3093,6 +3135,25 @@ tradition_mountain_homes = {
 			}
 			multiply = 8
 		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
+		}
 	}
 }
 
@@ -3225,6 +3286,25 @@ tradition_dryland_dwellers = {
 			}
 			multiply = 8
 		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
+		}
 	}
 }
 
@@ -3347,6 +3427,25 @@ tradition_jungle_dwellers = {
 				}
 			}
 			multiply = 8
+		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
 		}
 	}
 }
@@ -3475,6 +3574,25 @@ tradition_wetlanders = {
 				}
 			}
 			multiply = 8
+		}
+		#ADDED - get less of those plz
+		if = {
+			limit = { 
+				any_tradition = {
+					count > 1
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = { 
+				any_tradition = {
+					count > 0
+					is_a_terrain_specific_tradition = yes
+				}
+			}
+			multiply = 0.75
 		}
 	}
 }

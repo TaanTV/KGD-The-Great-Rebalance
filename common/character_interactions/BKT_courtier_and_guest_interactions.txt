@@ -261,7 +261,7 @@ invite_to_court_interaction = {
 			modifier = {
 				#ADDED - those 2 just in case + NOT bloc
 				exists = house
-				exists = house_head
+				exists = house.house_head
 				this.house.house_head = scope:actor
 				add = 35		#prev 60
 				desc = AI_YOU_ARE_THE_HOUSE_HEAD
@@ -269,7 +269,7 @@ invite_to_court_interaction = {
 			modifier = {
 				#ADDED - those 2 just in case
 				exists = dynasty
-				exists = dynast
+				exists = dynasty.dynast
 				this.dynasty.dynast = scope:actor
 				add = 25		#prev 30
 				desc = AI_YOU_ARE_THE_DYNAST
@@ -304,7 +304,7 @@ invite_to_court_interaction = {
 				exists = liege
 				#NOT = { is_child_of = scope:actor }
 				#NOT = { is_close_family_of = scope:actor }
-				is_extended_family_of = scope:actor
+				is_extended_family_of = liege
 				add = -50
 				desc = AI_THEIR_RELATIVE
 			}
@@ -312,8 +312,8 @@ invite_to_court_interaction = {
 				exists = liege
 				#ADDED - those 2 just in case + NOT bloc
 				exists = house
-				exists = house_head
-				this.house.house_head = scope:actor
+				exists = house.house_head
+				this.house.house_head = liege
 				add = -35
 				desc = AI_THEY_ARE_THE_HOUSE_HEAD
 			}
@@ -321,8 +321,8 @@ invite_to_court_interaction = {
 				exists = liege
 				#ADDED - those 2 just in case
 				exists = dynasty
-				exists = dynast
-				this.dynasty.dynast = scope:actor
+				exists = dynasty.dynast
+				this.dynasty.dynast = liege
 				add = -25
 				desc = AI_THEY_ARE_THE_DYNAST
 			}

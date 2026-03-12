@@ -1,6 +1,4 @@
-﻿#Maybe do the opposite for rivals?..
-
-friend = {
+﻿friend = {
 	corresponding = friend
 	title_grant_target = yes
 	opposites = {
@@ -12,7 +10,7 @@ friend = {
 		potential_friend
 		potential_rival
 	}
-	opinion = 60
+	opinion = 50	#prev 60
 
 	flags = {
 		has_been_confided_in
@@ -22,6 +20,7 @@ friend = {
 	#ADDED
 	modifier = {
 		stress_gain_mult = -0.02
+		#befriend_scheme_phase_duration_add = 10
 	}
 }
 
@@ -39,7 +38,7 @@ best_friend = {
 		potential_rival
 	}
 	relation_aliases = { friend }
-	opinion = 120
+	opinion = 100	#prev 120
 
 	flags = {
 		has_been_confided_in
@@ -50,5 +49,100 @@ best_friend = {
 	modifier = {
 		stress_gain_mult = -0.05
 		stress_loss_mult = 0.1
+	}
+}
+
+grudge = {
+	opposites = {
+		bully
+		victim
+		friend
+		best_friend
+		potential_friend
+	}
+	opinion = -40	#prev -60
+}
+
+rival = {
+	opposites = {
+		grudge
+		bully
+		victim
+		friend
+		best_friend
+		potential_friend
+		potential_rival
+	}
+	corresponding = rival
+	opinion = -50	#prev -60
+
+	flags = { vizierate_relation }
+}
+
+nemesis = {
+	opposites = {
+		rival
+		grudge
+		bully
+		victim
+		friend
+		best_friend
+		potential_friend
+		potential_rival
+	}
+	relation_aliases = { rival }
+	corresponding = nemesis
+	opinion = -100	#prev -120
+
+	flags = { vizierate_relation }
+}
+
+lover = {
+	corresponding = lover
+	secret = secret_lover
+	title_grant_target = yes
+	opposites = {
+		potential_lover
+	}
+	opinion = 40	#prev 60
+	fertility = 1.25
+
+	flags = { delay_further_breakup_events secret_relationship_caused_stress }
+}
+
+soulmate = {
+	corresponding = soulmate
+	secret = secret_lover
+	title_grant_target = yes
+	relation_aliases = { lover }
+	opposites = {
+		lover
+		potential_lover
+	}
+
+	flags = { secret_relationship_caused_stress }
+
+	opinion = 100	#prev 120
+	fertility = 1.25
+}
+
+blood_brother = {
+	corresponding = blood_brother
+	title_grant_target = yes
+	opposites = {
+		rival
+		nemesis
+		grudge
+		bully
+		victim
+		friend
+		potential_friend
+		potential_rival
+	}
+	relation_aliases = { friend }
+	opinion = 60	#prev 80
+
+	flags = {
+		has_been_confided_in
 	}
 }

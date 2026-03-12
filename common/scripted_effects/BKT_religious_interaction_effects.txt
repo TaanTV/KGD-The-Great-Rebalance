@@ -1,0 +1,46 @@
+﻿
+pledge_ghw_war_chest_prestige_effect = { #To be fired within the scope of an Attacker of the correct Faith.
+	if = {
+		limit = { prev = { highest_held_title_tier = 5 } }
+		change_war_chest_prestige =  2000	#prev 3000
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 4 } }
+		change_war_chest_prestige =  1000	#prev 1500
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 3 } }
+		change_war_chest_prestige =  750	#prev 1000
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 2 } }
+		change_war_chest_prestige =  350	#prev 500
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 1 } }
+		change_war_chest_prestige =  150	#prev 250
+	}
+}
+
+unpledge_ghw_war_chest_prestige_effect = { #To be fired within the ghw scope, assuming that the prev scope is the character joining it as an attacker.
+	if = {
+		limit = { prev = { highest_held_title_tier = 5 } }
+		change_war_chest_prestige =  -2000	#prev -3000
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 4 } }
+		change_war_chest_prestige =  -1000	#prev -1500
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 3 } }
+		change_war_chest_prestige =  -750	#prev -1000
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 2 } }
+		change_war_chest_prestige =  -350	#prev -500
+	}
+	if = {
+		limit = { prev = { highest_held_title_tier = 1 } }
+		change_war_chest_prestige =  -150	#prev -250
+	}
+}

@@ -2,10 +2,58 @@
 # Root does not exist
 yearly_global_pulse = {
 	on_actions = {
-		BKT_global_development_update_pulse
+		#BKT_global_development_update_pulse
+		BKT_serious_empire_wars_maintenance
 		BKT_landless_renown_fix
 		delay = { days = 1 }
 		BKT_mercenary_castles_pulse
+	}
+}
+
+BKT_serious_empire_wars_maintenance = {
+	effect = {
+		every_empire = {
+			limit = {
+				exists = holder
+				NOR = {
+					has_variable = year_of_last_serious_defensive_war 
+					holder = {
+						any_character_situation = {
+							situation_type = dynastic_cycle 
+							any_participant_group = {
+								NOT = { participant_group_type = other_rulers }
+								participant_group_has_character = scope:temp_ruler_scope
+							}
+						}
+					}
+				}
+			}
+			save_temporary_scope_as = landed_title
+			holder = {
+				get_or_set_year_of_last_serious_defensive_war = yes
+			}
+		}
+		every_hegemony = {
+			limit = {
+				exists = holder
+				NOR = {
+					has_variable = year_of_last_serious_defensive_war
+					holder = {
+						any_character_situation = {
+							situation_type = dynastic_cycle 
+							any_participant_group = {
+								NOT = { participant_group_type = other_rulers }
+								participant_group_has_character = scope:temp_ruler_scope
+							}
+						}
+					}
+				}
+			}
+			save_temporary_scope_as = landed_title
+			holder = {
+				get_or_set_year_of_last_serious_defensive_war = yes
+			}
+		}
 	}
 }
 
@@ -18,7 +66,11 @@ BKT_landless_renown_fix = {
 			variable = laamps_tally
 			holder = {
 				if = {
-					limit = { NOT = { dynasty.dynast ?= this } }
+					limit = { 
+						NOR = { 
+							dynasty.dynast ?= { government_has_flag = government_is_landless_adventurer }
+						}
+					}
 					remove_character_modifier = landless_renown_equalisier_modifier
 					add_character_modifier = {
 						modifier = landless_renown_equalisier_modifier
@@ -54,7 +106,7 @@ BKT_mercenary_castles_pulse = {
 						factor = 2
 					}
 					modifier = {
-						gold > 1000
+						gold > { value = main_building_tier_1_cost multiply = 2 }
 						factor = 3
 					}
 					PREV = { save_scope_as = mercenary_company_scope }
@@ -67,7 +119,18 @@ BKT_mercenary_castles_pulse = {
 
 random_yearly_playable_pulse = {
 	on_actions = {
+		BKT_councillor_stance_opinions_maintenance
 		currencies_loss_pulse
+	}
+}
+
+BKT_councillor_stance_opinions_maintenance = {
+	trigger = {
+		is_landed = yes
+		has_council = yes
+	}
+	effect = {
+		recalc_vassal_stance_council_bonuses = yes
 	}
 }
 	
@@ -102,7 +165,7 @@ BKT_prestige_convertion = {
 				value = prestige		#Keep in mind this should be negative
 				divide = 50
 				#floor = yes
-				multiply = 0.75
+				multiply = 0.66
 				ceiling = yes
 				multiply = 50
 				max = 750
@@ -116,7 +179,8 @@ BKT_prestige_convertion = {
 				multiply = -1
 				multiply = {
 					value = prestige_level
-					min = 0.33
+					multiply = 0.50
+					min = 0.25
 				}
 				if = {		#Make AI a bit less dead
 					limit = { is_ai = yes }
@@ -149,7 +213,7 @@ BKT_piety_convertion = {
 				value = piety		#Keep in mind this should be negative
 				divide = 50
 				#floor = yes
-				multiply = 0.75
+				multiply = 0.66
 				ceiling = yes
 				multiply = 50
 				max = 750
@@ -163,7 +227,8 @@ BKT_piety_convertion = {
 				multiply = -1
 				multiply = {
 					value = piety_level
-					min = 0.33
+					multiply = 0.50
+					min = 0.25
 				}
 				if = {		#Make AI a bit less dead
 					limit = { is_ai = yes }
@@ -206,6 +271,10 @@ BKT_herd_decay = {
 					}
 					multiply = {
 						value = 1
+						#if = {
+						#	limit = { has_perk = wash_your_hands_perk }
+						#	add = -0.05
+						#}
 						domicile ?= {
 							#Sorry for legacy naming, it's in fact not 1/10th of a percent per level :<
 							#It was supposed to be absolute but trying to convey that in a tooltip is too hard
@@ -221,6 +290,17 @@ BKT_herd_decay = {
 						}
 					}
 					multiply = -0.01
+					if = {
+						limit = { is_ai = yes }
+						if = {
+							limit = { has_game_rule = hard_difficulty }
+							multiply = 0.75
+						}
+						else_if = {
+							limit = { has_game_rule = very_hard_difficulty }
+							multiply = 0.5
+						}
+					}
 				}
 				floor = yes
 			}
@@ -241,5 +321,224 @@ BKT_herd_decay = {
 five_year_everyone_pulse = {
 	on_actions = {
 		currencies_loss_pulse_non_playable
+	}
+}
+
+# Called from code once every five years for "playable" (count+) characters.
+# Root is the character
+five_year_playable_pulse = {
+	on_actions = {
+		BKT_ai_self_legitimization_pulse
+		BKT_ai_bastard_legitimization_pulse
+	}
+}
+
+
+BKT_ai_self_legitimization_pulse = {
+	trigger = {
+		is_ai = yes
+		has_dynasty = yes
+		faith = {
+			has_doctrine_parameter = bastards_legitimize
+		}
+		house.house_head = this
+		has_trait = bastard
+		prestige >= bastard_legitimization_prestige_cost
+	}
+	effect = {
+		save_temporary_scope_as = root_scope
+		run_interaction = {
+			interaction = legitimize_bastard_interaction
+			actor = scope:root_scope
+			recipient = scope:root_scope
+			secondary_recipient = scope:root_scope
+			execute_threshold = decline
+		}
+		debug_log = "AI legitimized self via five-year pulse"
+		debug_log_scopes = yes
+	}
+}	
+
+BKT_ai_bastard_legitimization_pulse = {
+	#is_great_grandchild_of	is_grandchild_of 
+	trigger = {
+		is_ai = yes
+		has_dynasty = yes
+		faith = {
+			has_doctrine_parameter = bastards_legitimize
+		}
+		house.house_head.faith ?= {
+			has_doctrine_parameter = bastards_legitimize
+		}
+		OR = {
+			health < 3.5
+			age > 60
+			ai_compassion >= 90
+		}
+		prestige >= bastard_legitimization_prestige_cost
+		any_child = {
+			is_alive = yes
+			dynasty ?= prev.dynasty
+			has_trait = bastard
+			faith = {
+				has_doctrine_parameter = bastards_legitimize
+			}
+		}
+		OR = {
+			AND = {
+				ai_compassion >= 90	#very compassionate and has prestige to spare
+				prestige >= { value = bastard_legitimization_prestige_cost multiply = 2 }
+			}
+			NOT = { primary_heir.dynasty ?= prev.dynasty }
+			trigger_if = {
+				limit = {		#i had to MANUALLY mark them all. Ew.
+					has_realm_law_flag = bkt_normal_succession_law
+				}
+				primary_heir ?= { NOR = { is_great_grandchild_of = prev is_grandchild_of = prev is_child_of = prev } }
+			}
+			house ?= { 			#this might get expensive?
+				any_house_member = { 
+					count < 3 
+					NOR = { 
+						has_trait = bastard 
+						this = root 
+					}
+				} 
+			}
+		}
+	}
+	effect = {
+		save_temporary_scope_as = root_scope
+		if = {
+			limit = { 
+				OR = {
+					#pretty dire situation.
+					trigger_if = {
+						limit = {
+							has_realm_law_flag = bkt_normal_succession_law
+						}
+						OR = {
+							NOT = { primary_heir.dynasty ?= prev.dynasty }
+							primary_heir ?= { NOR = { is_great_grandchild_of = prev is_grandchild_of = prev is_child_of = prev } }
+						}
+					}
+					house ?= { 			#this might get expensive?
+						any_house_member = { 
+							count < 3
+							NOR = { 
+								has_trait = bastard 
+								this = scope:root_scope
+							}
+						} 
+					}
+				} 
+			}
+			save_scope_as = yes_were_doing_it
+		}
+		else = {
+			random = {
+				chance = 10
+				save_scope_as = yes_were_doing_it
+			}
+		}
+		if = {
+			limit = { exists = scope:yes_were_doing_it }
+			random_child = {
+				limit = { 
+					is_alive = yes
+					house ?= scope:root_scope.house
+					has_trait = bastard
+					faith = {
+						has_doctrine_parameter = bastards_legitimize
+					}
+					trigger_if = {
+						limit = { scope:root_scope = { has_realm_law = male_only_law } }
+						is_male = yes
+					}
+					trigger_else_if = {
+						limit = { scope:root_scope = { has_realm_law = female_only_law } }
+						is_female = yes
+					}
+					trigger_else = {
+						always = yes
+					}
+				}
+				weight = {
+					base = 20
+					modifier = {	#Skills are weighted
+						add = average_of_all_skills
+						age >= 16
+					}
+					modifier = {
+						add = {		#Compensate for lower skill of children
+							value = average_of_all_skills
+							add = { value = age multiply = -0.25 add = 4 }
+						}
+						age < 16
+					}
+					modifier = {	#Opinion is weighted
+						factor = {
+							value = "scope:root_scope.opinion(prev)"
+							multiply = 0.01
+							add = 1
+							min = 0.05
+						}
+					}
+					modifier = {	#Weight against unfavorable marriages/betrothes
+						factor = 0.05
+						OR = {
+							is_married = yes
+							is_betrothed = yes
+						}
+						OR = {
+							AND = {
+								is_male = yes
+								OR = {
+									matrilinear_marriage = yes
+									matrilinear_betrothal = yes
+								}
+							}
+							AND = {
+								is_female = yes
+								OR = {
+									patrilinear_marriage = yes
+									patrilinear_betrothal = yes
+								}
+							}
+						}
+					}
+					modifier = {	#Weight in preffered gender (limit already limits it for other laws)
+						factor = 20
+						OR = {
+							AND = {
+								scope:root_scope = { has_realm_law = male_preference_law }
+								is_male = yes
+							}
+							AND = {
+								scope:root_scope = { has_realm_law = female_preference_law }
+								is_female = yes
+							}
+						}
+					}
+				}
+				save_scope_as = very_legit_child
+				scope:root_scope = {
+					run_interaction = {
+						interaction = legitimize_bastard_interaction
+						actor = scope:root_scope
+						recipient = scope:root_scope.house.house_head
+						secondary_recipient = scope:very_legit_child
+						send_threshold = decline
+					}
+				}
+				save_temporary_scope_value_as = {
+					name = ai_compassion
+					value = scope:root_scope.ai_compassion
+				}
+				debug_log = "AI legitimized bastard via five-year pulse"
+				debug_log_scopes = yes
+				debug_log_date = yes
+			}
+		}
 	}
 }

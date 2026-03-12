@@ -17,3 +17,9 @@
  foster_legitimacy_diarch_interaction.failure.liege.t: "[actor.GetDiarchTitle] fails to bolster #V your#! [legitimacy|E]"
  damage_legitimacy_diarch_interaction.success.liege.t: "[actor.GetDiarchTitle] damages #V your#! [legitimacy|E]"
  damage_legitimacy_diarch_interaction.failure.liege.t: "[actor.GetDiarchTitle] fails to damage #V your#! [legitimacy|E]"
+ 
+ vassal_syphon_treasury_interaction: "Abuse Council Position"
+ vassal_syphon_treasury_interaction_cooldown_tt: "[actor.GetShortUIName] was syphoned from recently, wait until [GetCurrentDateWithDiff( GetVarTimeRemaining( actor.MakeScope, 'vassal_syphon_treasury_interaction_cooldown') )]"
+ vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties: "You will syphon [control|E] or apply [county_corruption|E] to some of your [liege|E]'s [counties|E]"
+ 
+ cant_attack_lower_tier_foreign_vassals: "Can not attack foreign [vassals|E] of lower [rank|E] than yours"

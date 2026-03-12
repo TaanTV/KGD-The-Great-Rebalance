@@ -9,6 +9,8 @@ on_war_won_attacker = { # As in, won BY attacker. Only one of the two on_actions
 	# `effect` fires on THIS tick, `events` fires on the NEXT tick, and the war gets destroyed between this tick and the next.
 	on_actions = {
 		BKT_more_player_truces_attacker
+		BKT_conqueror_war_attacker_win
+		BKT_populist_win_extra
 	}
 }
 
@@ -71,10 +73,69 @@ BKT_more_player_truces_attacker = {
 	}
 }
 
+BKT_populist_win_extra = {
+	trigger = {
+		scope:war = { using_cb = populist_war }
+		scope:attacker = { NOT = { government_has_flag = government_is_landless_adventurer } }
+	}
+	effect = {
+		scope:attacker = { 
+			add_character_modifier = {
+				modifier = successful_populist_rebel_modifier
+				years = 1
+			}
+			if = {
+				limit = { exists = capital_province exists = culture }
+				save_temporary_scope_value_as = {
+					name = iterations
+					value = {
+						culture = {
+							if = {
+								limit = { has_cultural_era_or_later = culture_era_late_medieval }
+								value = 4
+							}
+							else_if = {
+								limit = { has_cultural_era_or_later = culture_era_high_medieval }
+								value = 3
+							}
+							else_if = {
+								limit = { has_cultural_era_or_later = culture_era_early_medieval }
+								value = 2
+							}
+							else = {
+								value = 1
+							}
+						}
+					}
+				}
+				while = {
+					count = scope:iterations
+					spawn_army = {
+						name = event_troop_default_name
+						levies = 500
+						men_at_arms = {
+							type = pikemen_militia 
+							stacks = 3
+						}
+						men_at_arms = {
+							type = light_footmen
+							stacks = 2
+						}
+						location = scope:attacker.capital_province
+						origin = scope:attacker.capital_province
+						inheritable = no
+					}
+				}
+			}
+		}
+	}
+}
+
 # NOTE: exists scope:attacker and scope:defender
 on_war_won_defender = {
 	on_actions = {
 		BKT_more_player_truces_defender
+		BKT_conqueror_war_defender_win
 	}
 }
 
@@ -134,6 +195,40 @@ BKT_more_player_truces_defender = {
 					}
 				}
 			}
+		}
+	}
+}
+
+BKT_conqueror_war_attacker_win = {
+	trigger = {
+		#In this order coz attackers get deleted sometimes, defenders are usually permament characters
+		scope:defender = { has_variable = conqueror }
+		scope:attacker = { has_variable = conqueror }
+	}
+	effect = {
+		scope:defender = {
+			set_variable = {
+				name = lost_wars
+				value = 10
+			}
+			trigger_event = conqueror.0002
+		}
+	}
+}
+
+BKT_conqueror_war_defender_win = {
+	trigger = {
+		#In this order coz attackers get deleted sometimes, defenders are usually permament characters
+		scope:defender = { has_variable = conqueror }
+		scope:attacker = { has_variable = conqueror }
+	}
+	effect = {
+		scope:attacker = {
+			set_variable = {
+				name = lost_wars
+				value = 10
+			}
+			trigger_event = conqueror.0002
 		}
 	}
 }

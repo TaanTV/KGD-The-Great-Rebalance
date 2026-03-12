@@ -16,9 +16,16 @@ murder_scheme_maintenance.1 = {
 		ai_honor < high_positive_ai_value # Really honorable characters do not stoop this low, ever
 		trigger_if = { # Reduce the amount of landless murders
 			limit = {
-				ai_honor > -100
-				ai_vengefulness < 100
+				ai_honor > -90			#prev -100
+				ai_vengefulness < 90	#prev 100
 				is_ruler = no
+				#ADDED - let wifes and important-ish ppl scheme.
+				has_any_court_position = no
+				is_councillor = no
+				NAND = {
+					is_married = yes
+					primary_spouse ?= { is_ruler = yes }
+				}
 			}
 			static_group_filter = {
 				group = landless_murder_block
@@ -166,9 +173,15 @@ murder_scheme_maintenance.1 = {
 								any_tax_collector_vassal = {
 									this = root
 								}
-								check_tax_collector_aptitude = {
-									CHARACTER = this
-									VALUE >= 4
+								OR = { #Unop Instead of VALUE >= 4
+									check_tax_collector_aptitude = {
+										CHARACTER = this
+										VALUE = 3	#prev 4
+									}
+									check_tax_collector_aptitude = {
+										CHARACTER = this
+										VALUE = 4	#prev 5
+									}
 								}
 							}
 						}
@@ -201,7 +214,7 @@ murder_scheme_maintenance.1 = {
 				}
 				#ADDED - kill the liege.
 				modifier = {
-					add = 50
+					add = 25
 					root = { 
 						is_ruler = yes
 						top_liege != this
@@ -210,7 +223,7 @@ murder_scheme_maintenance.1 = {
 						#actually still check for opinion just in case
 						opinion = {
 							target = liege
-							value <= 5
+							value <= 25
 						}
 					}
 				}
@@ -219,9 +232,8 @@ murder_scheme_maintenance.1 = {
 					inspiration ?= { exists = inspiration_sponsor }
 				}
 				modifier = { # Don't gang up on players
-					factor = 0
-					#ADDED - actually, gang up on players, they're nasty
-					always = no
+					#ADDED - nah.
+					factor = 1		#prev 0
 					is_ai = no
 					any_targeting_scheme = {
 						scheme_owner = { is_ai = yes }
@@ -231,7 +243,7 @@ murder_scheme_maintenance.1 = {
 				}
 				# If involved in a struggle, you're markedly more likely to try and scheme against anyone inside that struggle.
 				modifier = {
-					add = 75
+					add = 50	#prev 75
 					save_temporary_scope_as = the_murder_target
 					root = {
 						any_character_struggle = {
@@ -251,11 +263,11 @@ murder_scheme_maintenance.1 = {
 					root = {
 						opinion = {
 							target = scope:the_murder_target
-							value < 0
+							value < -25	#prev 0
 						}
 					}
 				}
-				character_hates_scope_due_to_strife_modifier = { TARGET = this }
+				#character_hates_scope_due_to_strife_modifier = { TARGET = this } #Unop: Removed because of the code just before that is the extract of this modifier
 				modifier = { # Family Feud
 					add = 50
 					save_temporary_scope_as = the_murder_target
@@ -406,6 +418,9 @@ murder_scheme_maintenance.1 = {
 					add = -1000
 					NOT = { exists = dynasty }
 					NOR = {
+						#ADDED
+						has_relation_grudge = root
+						has_relation_potential_rival = root
 						has_relation_rival = root
 						has_relation_nemesis = root
 						exposed_cheating_on_spouse_trigger = { SPOUSE = root }

@@ -1,0 +1,18 @@
+﻿l_russian:
+ own_war_declaration_law: "Закон об Объявлении [Concept('war', 'войны')|E]"
+ own_war_declaration_law_singular: "$own_war_declaration_law$"
+ own_war_declaration_law_0: "Одобрение Могущественных Вассалов"
+ own_war_declaration_law_0_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Недовольные [Concept( 'powerful_vassals', 'могущественные вассалы' )|E] (кроме [Concept( 'child', 'детей' )|E]) будут препятствовать объявлению войны так же как они препятствуют изменениям [Concept( 'succession_laws', 'законов о наследовании' )|E]#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Объявление войны немного уменьшает мнение всех [Concept( 'powerful_vassals', 'могущественных вассалов' )|E]#!"
+ war_declaration_powerful_vassal_approval.opinion_penalty: "Так как ваши законы требуют одобрение [Concept( 'powerful_vassals', 'могущественных вассалов' )|E] для объявления войны:"
+ own_war_declaration_law_1: "Одобрение Совета"
+ own_war_declaration_law_1_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Недовольные [Concept( 'councillors', 'советники' )|E] будут препятствовать объявлению войны так же как они препятствали бы изменениям [Concept( 'succession_laws', 'законов о наследовании' )|E]#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Объявление войны немного уменьшает мнение всех [Concept( 'councillors', 'советников' )|E]#!"
+ war_declaration_council_approval.opinion_penalty: "Так как ваши законы требуют одобрение [Concept( 'council', 'совета' )|E] для объявления войны:"
+ own_war_declaration_law_2: "Без Одобрения"
+ own_war_declaration_law_2_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Вы можете объявлять войну когда захотите#!"
+ need_to_have_max_authority: "Вы не обладаете максимальным авторитетом"
+ must_be_feudal_clan_or_admin_or_any_tribal_game: "Ваше [Concept('government', 'правительство')|E] должно быть [Concept('feudal', 'феодальным')|E], [Concept('clan', 'клановым')|E], [Concept('administrative', 'бюрократическим')|E], [Concept('tribal', 'племенным')|E], [Concept('wanua', 'вануа')|E] или [Concept('nomadic', 'кочевым')|E]"
+
+ no_powerful_vassal_with_negative_opinion_war: "Двое или более из ваших [Concept( 'powerful_vassal', 'могущественных вассалов' )|E] плохого мнения о вас и препятствуют объявлениям войны"
+ no_real_councillor_with_negative_opinion_war: "Двое или более из ваших [Concept( 'councillor', 'советников' )|E] плохого мнения о вас и препятствуют объявлениям войны"
+ 
+ OWN_WAR_DECLARATION_LAW_IS_ON_COOLDOWN: "Не так давно ваш $own_war_declaration_law$ уже менялся. \n    @alert_icon! #alert_trial Повторно изменить его можно будет не раньше [GetCurrentDateWithDiff( GetVarTimeRemaining( CHARACTER.MakeScope, 'crown_authority_cooldown') )]#!"

@@ -6,7 +6,7 @@ rolehard_difficulty_player = {
 }
 
 rolehard_difficulty_ai = {
-	vassal_opinion = 20
+	vassal_opinion = 15			#prev 20
 	legitimacy_gain_mult = 0.2
 	
 	#ai_war_chance = 0.1
@@ -20,7 +20,7 @@ roleplay_difficulty_player = {
 }
 
 roleplay_difficulty_ai = {
-	vassal_opinion = 20
+	vassal_opinion = 15			#prev 20
 	legitimacy_gain_mult = 0.2
 	
 	#ai_war_chance = 0.1
@@ -54,6 +54,9 @@ bkt_difficulty_higher_ai = {
 	levy_reinforcement_rate = 0.5
 	nomadic_horde_damage_mult = -0.15
 	nomadic_horde_toughness_mult = -0.15
+	
+	ai_war_chance = 0.25
+	ai_war_cooldown = -0.1
 }
 
 dummy_mp_rules_description_modifier = {

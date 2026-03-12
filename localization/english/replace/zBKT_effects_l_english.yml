@@ -2,4 +2,5 @@
  SEND_GIFT_OPINION_GAIN_DOUBLED:0 "Opinion Gain from $gift_interaction$: #P +50%#!"
  SEND_HERD_OPINION_GAIN_DOUBLED: "Opinion Gain from $mpo_gift_herd_interaction$: #P +50%#!"
  CASUS_BELLI_COST_PERK_REDUCTION:0 "[casus_belli|E] Cost: #P -[EmptyScope.ScriptValue('bellum_justum_discount_percentage_display')|0]%#!"
- EACH_FRIEND_ADDS_STRESS_REDUCTION:3 "Each [friend|E] adds: [stress_gain_i]#P -3%#! [stress|E] Gain (To the Maximum of [EmptyScope.ScriptValue('confidants_max')|0])"
+ EACH_FRIEND_ADDS_STRESS_REDUCTION:3 "Each [friend|E] gives additional: [stress_gain_i]#P -3%#! [stress|E] Gain (To the Maximum of [EmptyScope.ScriptValue('confidants_max')|0])"
+ CHEAPER_HUNTS_AND_FEASTS:1 "[GetActivityType('activity_hunt').GetName] and [GetActivityType('activity_feast').GetName] Cost: [gold_i]#P -15%#!"

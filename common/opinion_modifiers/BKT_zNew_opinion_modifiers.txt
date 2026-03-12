@@ -11,3 +11,9 @@ let_me_be_occupied = {	#Дали оккупировать мои земли
 	stacking = yes
 	min = -150
 }
+
+same_stance_in_council = {
+	opinion = 5
+	years = 2
+	#stacking = yes
+}

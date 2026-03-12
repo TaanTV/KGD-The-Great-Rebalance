@@ -855,6 +855,13 @@ stop_attacker_vassal_war_interaction = {
 
 	can_be_picked = {
 		scope:target.primary_attacker = scope:recipient
+		#ADDED
+		scope:target = {
+			NOR = {
+				using_cb = undirected_great_holy_war
+				using_cb = directed_great_holy_war
+			}
+		}
 	}
 
 	on_accept = {
@@ -1017,6 +1024,13 @@ stop_defender_vassal_war_interaction = {
 
 	can_be_picked = {
 		scope:target.primary_defender = scope:recipient
+		#ADDED
+		scope:target = {
+			NOR = {
+				using_cb = undirected_great_holy_war
+				using_cb = directed_great_holy_war
+			}
+		}
 	}
 
 	on_accept = {
@@ -1083,4 +1097,287 @@ stop_defender_vassal_war_interaction = {
 	}
 
 	auto_accept = yes
+}
+
+ask_for_pardon_interaction = {
+	category = interaction_category_vassal
+	icon = scroll_scales
+
+	filter_tags = { celestial_ministry }
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:actor != scope:recipient.liege
+				}
+				desc = ask_for_pardon_interaction_minister_desc
+			}
+			desc = ask_for_pardon_interaction_desc
+		}
+	}
+	notification_text = ASK_FOR_PARDON_NOTIFICATION
+
+	is_shown = {
+		ask_for_pardon_available_trigger = { ACTOR = scope:actor }
+		OR = {
+			scope:actor.top_liege = scope:recipient
+			scope:recipient = {
+				top_liege = scope:actor.top_liege
+				has_title = title:e_minister_of_justice
+			}
+		}
+	}
+
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			NOT = { is_at_war_with = scope:recipient }
+			NOT = { is_imprisoned_by = scope:recipient }#Then you use the regular ransom interactions
+		}
+	}
+
+	highlighted_reason = {
+		triggered_desc = {
+			trigger = {
+				scope:recipient = {
+					has_title = title:e_minister_of_justice
+				}
+			}
+			desc = HIGHLIGHTED_MINISTER_WILLING_TO_PARDON
+		}
+	}
+
+	is_highlighted = {
+		OR = {
+			#has_usable_hook = scope:recipient
+			#ADDED - fixed this
+			scope:actor = { has_usable_hook = scope:recipient }
+			AND = {
+				scope:recipient = {
+					has_title = title:e_minister_of_justice
+				}
+				scope:recipient = {
+					is_character_interaction_potentially_accepted = {
+						recipient = scope:recipient
+						interaction = ask_for_pardon_interaction
+					}
+				}
+			}
+		}
+	}
+
+	ai_accept = {
+		base = -50
+
+		#How bad is it, really?
+		modifier = {
+			scope:recipient = {
+				has_banish_reason = scope:actor
+				NOR = { #These are worse
+					has_execute_reason = scope:actor
+					has_revoke_title_reason = scope:actor
+				}
+			}
+			desc = AI_BANISHMENT_REASON_MODIFIER
+			add = -20
+		}
+		modifier = {
+			scope:recipient = {
+				has_revoke_title_reason = scope:actor
+				NOT = { #This is worse are worse
+					has_execute_reason = scope:actor
+				}
+			}
+			desc = AI_REVOKE_TITLE_REASON_MODIFIER
+			add = -30
+		}
+		modifier = {
+			scope:recipient = {
+				has_execute_reason = scope:actor
+			}
+			desc = AI_EXECUTE_REASON_MODIFIER
+			add = -40
+		}
+
+		#Willing to forgive
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 1
+			desc = AI_OPINION_REASON
+		}
+		
+		#ADDED - Weight up for personality values.
+		ai_value_modifier = {
+			who = scope:recipient
+			ai_vengefulness = -0.25
+			ai_honor = -0.1
+			ai_greed = -0.1
+			ai_compassion = 0.25
+			min = -50
+			max = 50
+		}
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook = yes
+		}
+	}
+
+	ai_min_reply_days = 1
+	ai_max_reply_days = 5
+
+	on_accept = {
+		ask_for_pardon_interaction_effect = yes
+		scope:actor = {
+			trigger_event = vassal_interaction.0030
+		}
+
+		scope:recipient = {
+			if = {
+				limit = {
+					culture = {
+						has_cultural_parameter = pardoning_gives_prestige
+					}
+				}
+				add_prestige = minor_prestige_gain
+			}
+ 			add_merit_if_relevant_effect = {
+ 				MERIT = minor_merit_value
+ 			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_gain
+			DESC = clan_unity_pardon_granted.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+
+		hidden_effect = {
+			# Struggle catalysts
+			if = {
+				limit = {
+					fp3_struggle_involves_one_supporter_and_one_detractor = {
+						FIRST = scope:actor
+						SECOND = scope:recipient
+					}
+					scope:recipient = {
+						any_character_struggle	 = {
+							involvement = involved
+							phase_has_catalyst = catalyst_grants_pardon_supporter_detractor
+							is_secondary_character_involvement_involved_trigger = {
+								CHAR = scope:actor
+							}
+						}
+					}
+				}
+				scope:recipient = {
+					every_character_struggle = {
+						involvement = involved
+						activate_struggle_catalyst = {
+							catalyst = catalyst_grants_pardon_supporter_detractor
+							character = scope:recipient
+						}
+						log_debug_variable_for_persian_struggle_effect = { VAR = concession_catalyst_grants_pardon_supporter_detractor }
+					}
+				}
+			}
+		}
+	}
+
+	on_auto_accept = {
+		scope:recipient = {
+			trigger_event = char_interaction.0240
+		}
+	}
+
+	on_decline = {
+		scope:recipient = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = ask_for_pardon_interaction_decline_toast
+				left_icon = scope:actor
+
+				custom_tooltip = ask_for_pardon_interaction_accept_decline
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:recipient
+			TARGET = scope:actor
+			VALUE = minor_unity_loss
+			DESC = clan_unity_refused_pardon.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+
+	#Use hook
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+	send_options_exclusive = no
+
+	ai_targets = {
+		ai_recipients = liege
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 24
+		duchy = 12
+		kingdom = 12
+		empire = 12
+		hegemony = 0
+	}
+
+	ai_will_do = {
+		base = -25	#prev 0
+
+		modifier = {
+			add = 100
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+
+		modifier = {
+			add = 200	#prev 100
+			scope:hook = yes
+		}
+
+		#ADDED - all of the below
+
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 1
+			min = 0
+		}
+		
+		modifier = {
+			add = {
+				value = scope:recipient.ai_compassion
+				multiply = 0.5
+			}
+		}
+	}
 }

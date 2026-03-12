@@ -1,0 +1,17 @@
+﻿tgp_dipped_into_treasury_modifier = {
+	icon = legitimacy_negative
+	stacking = yes
+	legitimacy_gain_mult = -0.2
+	#ADDED
+	monthly_legitimacy_add = -2.5
+	vassal_tax_contribution_add = -0.05
+}
+
+tgp_minister_dipped_into_treasury_modifier = {
+	icon = merit_negative
+	stacking = yes
+	monthly_prestige_gain_mult = -0.1
+	monthly_merit_mult = -0.3
+	#ADDED
+	monthly_treasury_from_salary_budget_mult = -0.2
+}

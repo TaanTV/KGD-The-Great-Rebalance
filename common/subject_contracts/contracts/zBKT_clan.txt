@@ -1,0 +1,37 @@
+﻿clan_tax_collector_obligations = {
+	obligation_levels = {
+		default = {
+			levies = {
+				value = 0
+				if = {
+					limit = { exists = scope:tax_collector }
+					add = clan_government_levies_default
+					multiply = {
+						value =	clan_government_tax_collector_aptitude_multiplier
+					}
+				}
+				#ADDED
+				else = {
+					value = 0.05
+				}
+			}
+
+			tax = {
+				value = 0
+				if = {
+					limit = { exists = scope:tax_collector }
+					add = {
+						value = clan_government_tax_default
+						multiply = {
+							value =	clan_government_tax_collector_aptitude_multiplier
+						}
+					}
+				}
+				#ADDED
+				else = {
+					value = 0.03
+				}
+			}
+		}
+	}
+}

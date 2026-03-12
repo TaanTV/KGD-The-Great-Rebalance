@@ -611,6 +611,11 @@ buy_claim_interaction = {
 	can_be_picked_title = {
 		scope:target = {
 			tier >= tier_county
+			#ADDED - "cannot_grant_ceremonial_title"? Close enough...
+			custom_tooltip = {
+				text = cannot_grant_ceremonial_title
+				NOT = { has_variable = ceremonial_title }
+			}
 		}
 	}
 	#ADDED
@@ -651,6 +656,17 @@ buy_claim_interaction = {
 		trigger_if = { # Can't buy Empire Claims if you're an Emperor
 			limit = {
 				scope:target ?= { tier = tier_empire }
+				scope:actor.highest_held_title_tier >= tier_empire
+			}
+			custom_description = {
+				text = buy_claim_no_emperor_empire
+				always = no
+			}
+		}
+		#ADDED - no.
+		trigger_if = { # Can't buy Hegemony Claims if you're an Emperor
+			limit = {
+				scope:target ?= { tier = tier_hegemony }
 				scope:actor.highest_held_title_tier >= tier_empire
 			}
 			custom_description = {

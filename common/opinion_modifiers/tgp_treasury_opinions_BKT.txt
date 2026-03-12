@@ -1,0 +1,109 @@
+﻿treasury_budget_ministry_reduction_large = {
+	opinion = -75	#prev -100
+	years = 30		#prev 5
+	decaying = yes
+}
+
+treasury_budget_ministry_reduction_medium = {
+	opinion = -35	#prev -40
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_ministry_reduction_small = {
+	opinion = -15	#prev -5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_ministry_increase_small = {
+	opinion = 10	#prev 5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_ministry_increase_medium = {
+	opinion = 25	#prev 30
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_ministry_increase_large = {
+	opinion = 50
+	years = 30		#prev 5
+	decaying = yes
+}
+
+
+treasury_budget_military_reduction_large = {
+	opinion = -80	#prev -100
+	years = 30		#prev 5
+	decaying = yes
+}
+
+treasury_budget_military_reduction_medium = {
+	opinion = -40	#prev -50
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_military_reduction_small = {
+	opinion = -15	#prev -5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_military_increase_small = {
+	opinion = 10	#prev 5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_military_increase_medium = {
+	opinion = 25	#prev 20
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_military_increase_large = {
+	opinion = 35	#prev 30
+	years = 30		#prev 5
+	decaying = yes
+}
+
+
+treasury_budget_salary_reduction_large = {
+	opinion = -80	#prev -100
+	years = 30		#prev 5
+	decaying = yes
+}
+
+treasury_budget_salary_reduction_medium = {
+	opinion = -40	#prev -50
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_salary_reduction_small = {
+	opinion = -15	#prev -5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_salary_increase_small = {
+	opinion = 10	#prev 5
+	years = 20		#prev 5
+	decaying = yes
+}
+
+treasury_budget_salary_increase_medium = {
+	opinion = 30	#prev 20
+	years = 25		#prev 5
+	decaying = yes
+}
+
+treasury_budget_salary_increase_large = {
+	opinion = 50	#prev 30
+	years = 30		#prev 5
+	decaying = yes
+}

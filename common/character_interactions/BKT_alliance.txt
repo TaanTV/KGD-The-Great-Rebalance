@@ -99,6 +99,8 @@ call_ally_interaction = {
 				}
 				scope:target = {
 					primary_defender = scope:actor
+					#ADDED - no calling into tributary wars
+					primary_attacker = { NOT = { is_tributary_of_suzerain_or_above = scope:recipient } }
 				}
 			}
 
@@ -396,12 +398,12 @@ call_ally_interaction = {
 								OR = {
 									has_relation_friend = scope:actor
 									has_relation_best_friend = scope:actor
-									has_relation_lover = scope:actor
+									#has_relation_lover = scope:actor
 									has_relation_soulmate = scope:actor
 								}
 							}
 							stress_impact = {
-								base = major_stress_gain_threshold
+								base = minor_stress_gain_threshold
 								disloyal = monumental_stress_loss
 								callous = monumental_stress_loss
 								deceitful = major_stress_loss
@@ -426,21 +428,23 @@ call_ally_interaction = {
 						else = { add_prestige_experience = massive_prestige_loss }
 					}
 					#ADDED
-					if = {
-						limit = {
-							OR = {
-								has_relation_friend = scope:actor
-								has_relation_best_friend = scope:actor
-								has_relation_lover = scope:actor
-								has_relation_soulmate = scope:actor
+					scope:recipient = {
+						if = {
+							limit = {
+								OR = {
+									has_relation_friend = scope:actor
+									has_relation_best_friend = scope:actor
+									#has_relation_lover = scope:actor
+									has_relation_soulmate = scope:actor
+								}
 							}
-						}
-						stress_impact = {
-							base = major_stress_gain_threshold
-							disloyal = monumental_stress_loss
-							callous = monumental_stress_loss
-							deceitful = major_stress_loss
-							fickle = major_stress_loss
+							stress_impact = {
+								base = monumental_stress_gain
+								disloyal = monumental_stress_loss
+								callous = monumental_stress_loss
+								deceitful = major_stress_loss
+								fickle = major_stress_loss
+							}
 						}
 					}
 				}
@@ -1299,6 +1303,14 @@ call_ally_interaction = {
 					scope:recipient = { is_ai = yes }
 					defender_war_score > -20
 				}
+			}
+			factor = 0
+		}
+		
+		#ADDED
+		modifier = { # Do not call conquerors into wars, they wont accept anyway
+			scope:recipient = {
+				has_variable = conqueror
 			}
 			factor = 0
 		}
@@ -4060,24 +4072,35 @@ join_war_interaction = {
 				limit = {
 					OR = {
 						scope:actor = {
-							is_tributary_of_suzerain_or_above = scope:recipient
+							is_tributary_of = scope:recipient #Unop Change to is_tributary_of to match the check in is_valid_showing_failures_only
 						}
 						scope:recipient = {
-							is_tributary_of = scope:actor
+							is_tributary_of_suzerain_or_above = scope:actor #Unop Change to is_tributary_of_suzerain_or_above to match the check in is_valid_showing_failures_only
 						}
 					}
 				}
 				# if this is directed at a tributary, make sure they're the primary defender
-				trigger_if = {
-					limit = {
-						scope:recipient = { is_tributary_of = scope:actor }
-					}
+				
+				#Unop Always check for primary_defender to match the check in is_valid_showing_failures_only
+				#trigger_if = {
+				#	limit = {
+				#		scope:recipient = { is_tributary_of = scope:actor }
+				#	}
 					custom_tooltip = {
 						text = join_war_interaction_recipient_tributary_not_primary_defender
 						primary_defender = scope:recipient
 					}
+				#}
+				#trigger_else = { always = yes }
+				#ADDED - no joining into tributary wars, let them fight
+				trigger_if = {
+					limit = {
+						scope:recipient = {
+							is_tributary_of_suzerain_or_above = scope:actor 
+						}
+					}
+					primary_attacker = { NOT = { is_tributary_of_suzerain_or_above = scope:actor } }
 				}
-				trigger_else = { always = yes }
 			}
 
 			#allow targets of a Grand Campaign to bypass the requirements

@@ -326,7 +326,7 @@ fp1_scandi_adventurer_conquest = {
 			else_if = {
 				limit = {
 					has_variable = fp1_has_beaten_sa_progress
-					var:fp1_has_beaten_sa_progress <= 9
+					var:fp1_has_beaten_sa_progress <= 8 #Unop: Was 9, but the nick should be unlock at the 10th not 11th
 				}
 				change_variable = {
 					name = fp1_has_beaten_sa_progress
@@ -357,14 +357,28 @@ fp1_scandi_adventurer_conquest = {
 		scope:attacker = { clean_scandinavian_adventurer_effect = yes }
 
 		# Since they lost, take away their efficacy loan.
-		# ADDED CHANGED please pay something to the defender
 		scope:attacker = { 
 			#remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value 
-			pay_short_term_gold = { 
-				target = scope:defender
-				gold = {
-					value = scandinavian_adventurer_efficacy_loan_value
-					multiply = 0.5
+			#ADDED CHANGED please pay something to the defender
+			if = {
+				limit = { root.defender_war_score > 50 }	#not sure if that would stop it giving gold for fp1_trade_events.1131.c option
+				pay_short_term_gold = { 
+					target = scope:defender
+					gold = {
+						value = scandinavian_adventurer_efficacy_loan_value
+						multiply = 0.5
+					}
+				}
+			}
+			else = {
+				show_as_tooltip = {
+					pay_short_term_gold = { 
+						target = scope:defender
+						gold = {
+							value = scandinavian_adventurer_efficacy_loan_value
+							multiply = 0.5
+						}
+					}
 				}
 			}
 			remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value

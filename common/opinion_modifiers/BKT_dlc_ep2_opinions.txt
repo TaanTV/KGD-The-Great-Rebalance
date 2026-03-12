@@ -1,0 +1,22 @@
+﻿##################################################
+# Tour Opinions
+
+tax_avoidance_opinion = {
+	#imprisonment_reason = yes
+	monthly_change = 0.05
+	decaying = yes
+	#ADDED
+	stacking = yes
+}
+
+#refused_tour_demand_opinion = {
+#	imprisonment_reason = yes
+#	opinion = -20
+#	years = 10
+#}
+#
+#turned_away_tour_opinion = {
+#	imprisonment_reason = yes
+#	opinion = -25
+#	years = 10
+#}

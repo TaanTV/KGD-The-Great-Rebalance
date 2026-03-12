@@ -1,4 +1,340 @@
 ﻿
+# Found Despotate
+start_found_despotate_interaction = {
+	icon = icon_found_despotate
+	interface_priority = 60
+	common_interaction = yes
+	category = interaction_category_friendly
+	send_name = START_SCHEME 
+	scheme = found_despotate
+	ignores_pending_interaction_block = yes
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 36
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+	ai_targets = { ai_recipients = self }
+
+	target_type = title
+	target_filter = secondary_recipient_de_jure_titles
+
+	can_be_picked_title = {
+		scope:target ?= {
+			custom_tooltip = {
+				text = found_despotate_existing_scheme_tt
+				NOT = {
+					scope:actor.top_liege = {
+						any_vassal = {
+							any_scheme = {
+								type = found_despotate
+								scheme_target_title = scope:target
+							}
+						}
+					}
+				}
+			}
+			trigger_if = {
+				limit = { tier = tier_kingdom }
+				custom_tooltip = {
+					text = found_despotate_hold_duchy_tt
+					any_direct_de_jure_vassal_title = { holder = scope:actor }
+				}
+				custom_tooltip = {
+					text = found_despotate_hold_county_tt
+					any_de_jure_county = { holder = scope:actor }
+				}
+			}
+			is_landless_type_title = no
+			NOT = { holder ?= scope:actor }
+			is_title_created = no
+			scope:recipient.top_liege = { completely_controls = scope:target }
+		}
+	}
+	
+	has_valid_target_showing_failures_only = {
+		scope:target ?= {
+			tier = tier_kingdom
+		}
+	}
+	
+	# We do this via redirects because recipient_de_jure_titles did not turn up for work today.
+	redirect = {
+		scope:actor = {
+			top_liege ?= { save_scope_as = secondary_recipient }
+			if = {
+				limit = { 
+					exists = primary_title.kingdom
+					primary_title.tier = tier_duchy
+				}
+				primary_title.kingdom = { save_scope_as = target }
+			}
+		}
+	}
+
+	cooldown = { years = 5 }
+
+	is_shown = {
+		scope:actor = {
+			is_governor = yes
+			NOT = { government_is_japanese_trigger = yes }
+		}
+		scope:recipient = scope:actor
+	}
+
+	is_valid_showing_failures_only = {
+		#If kingdom primary title kingdom has more than one duchy, needs to have two duchies
+		trigger_if = {
+			limit = {
+				scope:actor = {
+					is_ruler = yes
+					primary_title.kingdom = {
+						any_in_de_jure_hierarchy = {
+							count >= 2
+							tier = tier_duchy
+							is_landless_type_title = no
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				text = 2_or_more_governorships_tt
+				scope:actor = {
+					any_held_title = {
+						count >= 2
+						title_tier = duchy
+						is_landless_type_title = no
+					}
+				}
+				
+			}
+		}
+		scope:actor = {
+			is_adult = yes
+			is_imprisoned = no
+			highest_held_title_tier < tier_kingdom
+			custom_tooltip = {
+				text = interaction_must_be_powerful_or_dominant_family_tt
+				house ?= {
+					OR = {
+						is_powerful_family = yes
+						is_dominant_family = yes
+						#ADDED
+						this = scope:secondary_recipient.house
+					}
+				}
+			}
+			custom_tooltip = {
+				text = influence_level_3_tt
+				influence_level >= 3
+			}
+		}
+		scope:secondary_recipient.primary_title ?= {
+			any_direct_de_jure_vassal_title = {
+				tier = tier_kingdom
+				is_landless_type_title = no
+				custom_tooltip = {
+					text = found_despotate_hold_duchy_tt
+					any_direct_de_jure_vassal_title = { holder = scope:actor }
+				}
+				NOT = { holder ?= scope:actor }
+				is_title_created = no
+			}
+		}
+		custom_tooltip = {
+			text = found_despotate_existing_scheme_tt
+			NOT = {
+				scope:actor.top_liege = {
+					any_vassal = {
+						any_scheme = {
+							type = found_despotate
+							scheme_target_title = scope:actor.primary_title.kingdom
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = found_despotate_percent_controlled_tt
+			scope:actor.primary_title.kingdom = {
+				any_de_jure_county = {
+					percent >= 0.25
+					county_held_or_vassal_to_target_trigger = { TARGET = scope:actor }
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:target
+				scope:actor.liege.diarch ?= {
+					any_held_title = {
+						any_this_title_or_de_jure_above = { this = scope:target }
+					}
+				}
+			}
+			scope:actor.liege.diarch = {
+				NOT = { is_diarch_of_target = liege }
+			}
+		}
+	}
+
+	desc = start_found_despotate_interaction_desc
+
+	cost = {
+		influence = {
+			add = scope:actor.massive_influence_value
+		}
+	}
+
+	# Scheme Starter Packages
+	options_heading = schemes.t.agent_packages
+	send_options_exclusive = yes
+	## Focused on Success Chance.
+	send_option = {
+		flag = agent_focus_success
+		current_description = start_found_despotate_interaction.tt.agent_focus_success
+	}
+	## Focused on Speed.
+	send_option = {
+		flag = agent_focus_speed
+		current_description = start_found_despotate_interaction.tt.agent_focus_speed
+	}
+
+	on_accept = {
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = start_found_despotate_notification
+				left_icon = scope:recipient					
+				right_icon = scope:target
+				scope:recipient = {
+					send_interface_toast = {
+						type = event_toast_effect_bad
+						title = start_found_despotate_notification
+						left_icon = scope:actor					
+						right_icon = scope:target
+						scope:actor = {
+							# Success.
+							if = {
+								limit = { scope:agent_focus_success ?= yes }
+								begin_scheme_with_agents_effect = {
+									SCHEME_TYPE = found_despotate
+									TARGET_TYPE = target_title
+									TARGET_SCOPE = scope:target
+									# Success.
+									AGENT_1 = agent_intermediary
+									AGENT_2 = agent_proponent
+									AGENT_3 = agent_sycophant
+									# Speed.
+									AGENT_4 = agent_political_socialite
+									AGENT_5 = agent_political_socialite
+								}
+							}
+							# Speed.
+							else = {
+								begin_scheme_with_agents_effect = {
+									SCHEME_TYPE = found_despotate
+									TARGET_TYPE = target_title
+									TARGET_SCOPE = scope:target
+									# Success.
+									AGENT_1 = agent_intermediary
+									AGENT_2 = agent_proponent
+									# Speed.
+									AGENT_3 = agent_political_socialite
+									AGENT_4 = agent_political_socialite
+									AGENT_5 = agent_political_socialite
+								}
+							}
+						}
+					}
+				}
+			}
+			# Scheme progress bonus from education
+			education_5_scheme_progress_effect = { SKILL = diplomacy }
+			# Scheme bonuses from being the emperor/dominant family/powerful family
+			ep3_actor_scheme_modifier_effect = yes
+
+			custom_tooltip = found_despotate_success_tt
+
+			stress_impact = {
+				content = minor_stress_impact_gain
+				humble = minor_stress_impact_gain
+			}
+		}
+	}
+
+	ai_potential = {
+		#has_trait = ambitious
+		is_governor = yes
+		NOR = {
+			has_trait = content
+			any_scheme = { is_scheme_category = political }
+		}
+		#ADDED - check greed and boldness instead of just ambitious trait
+		OR = {
+			ai_greed > 65
+			ai_boldness > 65
+		}
+		ai_greed > 35
+		ai_boldness > 35
+	}
+	
+	auto_accept = yes
+
+	ai_will_do = {
+		base = 15
+		#ADDED - some modifiers
+		modifier = {
+			add = {
+				add = ai_greed
+				add = ai_boldness
+				multiply = 0.2
+			}
+		}
+		modifier = {
+			OR = {
+				has_relation_friend = scope:secondary_recipient
+				has_relation_lover = scope:secondary_recipient
+			}
+			factor = 0.01
+		}
+		modifier = {
+			has_dread_level_towards = {
+				target = scope:secondary_recipient
+				level = 1
+			}
+			factor = 0.5
+		}
+		modifier = {
+			has_dread_level_towards = {
+				target = scope:secondary_recipient
+				level = 2
+			}
+			factor = 0.01
+		}
+		modifier = {
+			opinion = {
+				target = scope:secondary_recipient
+				value > 50
+			}
+			factor = 0.5
+		}
+		modifier = {
+			opinion = {
+				target = scope:secondary_recipient
+				value > 80
+			}
+			factor = 0.25
+		}
+		modifier = {
+			scope:agent_focus_speed ?= yes
+			factor = 0.5
+		}
+	}
+}
+
 # Teach Governor - AKA Mentor in Governance/mentor_in_governance
 start_teach_governor_interaction = {
 	icon = icon_teach_governor

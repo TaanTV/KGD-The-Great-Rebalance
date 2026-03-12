@@ -213,7 +213,7 @@
 	
 	# Something happens - random events
 	effect_group = {
-		days = { 365 600 }
+		days = { 365 1200 }		#prev { 365 600 }
 	
 		trigger = {
 			story_owner = {
@@ -245,7 +245,7 @@
 			effect = {
 				story_owner = {
 					random = {
-						chance = 25
+						chance = 50		#prev 25
 						change_variable = {
 							name = lost_wars
 							add = -1
@@ -288,7 +288,7 @@
 	}
 
 	effect_group = { # Special bonuses for AI's who have the overpowered modifier
-		days = { 90 180 }
+		days = { 90 360 }	#prev { 90 180 }
 
 		triggered_effect = {
 			trigger = {

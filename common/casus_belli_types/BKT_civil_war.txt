@@ -78,18 +78,27 @@ liberty_faction_war = {
 		faction_war_end_defeat_legitimacy_effect = yes
 
 		scope:defender = {
-			#ADDED made it almost a hard drop to 0
+			#switch = {
+			#	trigger = has_realm_law
+			#	imperial_bureaucracy_1 = { add_realm_law = imperial_bureaucracy_0 }
+			#	imperial_bureaucracy_2 = { add_realm_law = imperial_bureaucracy_1 }
+			#	imperial_bureaucracy_3 = { add_realm_law = imperial_bureaucracy_2 }
+			#	tribal_authority_1 = { add_realm_law = tribal_authority_0 }
+			#	tribal_authority_2 = { add_realm_law = tribal_authority_1 }
+			#	tribal_authority_3 = { add_realm_law = tribal_authority_2 }
+			#	crown_authority_1 = { add_realm_law = crown_authority_0 }
+			#	crown_authority_2 = { add_realm_law = crown_authority_1 }
+			#	crown_authority_3 = { add_realm_law = crown_authority_2 }
+			#}
+			#ADDED made it almost a hard drop to 0 and rewrote it a bit
 			switch = {
-				trigger = has_realm_law
-				imperial_bureaucracy_1 = { add_realm_law = imperial_bureaucracy_0 }
-				imperial_bureaucracy_2 = { add_realm_law = imperial_bureaucracy_0 }	#prev imperial_bureaucracy_1
-				imperial_bureaucracy_3 = { add_realm_law = imperial_bureaucracy_0 }	#prev imperial_bureaucracy_1
-				tribal_authority_1 = { add_realm_law = tribal_authority_0 }	
-				tribal_authority_2 = { add_realm_law = tribal_authority_0 }			#prev tribal_authority_1
-				tribal_authority_3 = { add_realm_law = tribal_authority_0 }			#prev tribal_authority_2
-				crown_authority_1 = { add_realm_law = crown_authority_0 }	
-				crown_authority_2 = { add_realm_law = crown_authority_0 }			#prev crown_authority_1
-				crown_authority_3 = { add_realm_law = crown_authority_0 }			#prev crown_authority_2
+				trigger = has_realm_law_in_group
+				crown_authority = { add_realm_law = crown_authority_0 }
+				tribal_authority = { add_realm_law = tribal_authority_0 }
+				imperial_bureaucracy = { add_realm_law = imperial_bureaucracy_0 }
+				celestial_bureaucracy = { add_realm_law = celestial_bureaucracy_0 }
+				meritocratic_bureaucracy = { add_realm_law = meritocratic_bureaucracy_0 }
+				japanese_bureaucracy = { add_realm_law = japanese_bureaucracy_0 }
 			}
 
 			# MERITOCRATIC EMPIRE CEREMONIAL MONARCH/REGENCY CREATION
@@ -98,37 +107,46 @@ liberty_faction_war = {
 			#add_prestige = -500
 			
 			#ADDED
-			add_prestige = medium_prestige_loss
-			add_prestige_experience = medium_prestige_loss
-			add_character_modifier = {
-				modifier = fully_autonomous_vassals_bkt_character_modifier
-				years = 15
+			add_prestige = major_prestige_loss
+			add_prestige_experience = major_prestige_loss
+			if = {
+				limit = {
+					has_tgp_dlc_trigger = yes
+					# Strictly Independent Empires
+					is_independent_ruler = yes
+					highest_held_title_tier = tier_empire
+					# Validity
+					has_realm_law = single_heir_succession_law
+					tgp_realm_has_ceremonial_liege_trigger = no
+					# Strictly Meritocratic
+					government_has_flag = government_is_meritocratic
+				}
 			}
-			set_variable = {
-				name = crown_authority_cooldown
-				years = 15
+			else = {
+				if = {
+					limit = { government_allows = administrative }
+					add_character_modifier = {
+						modifier = fully_autonomous_vassals_admin_modifier
+						years = 15
+					}
+				}
+				else = {
+					add_character_modifier = {
+						modifier = fully_autonomous_vassals_bkt_character_modifier
+						years = 15
+					}
+				}
+				switch = {
+					trigger = has_realm_law_in_group
+					crown_authority = { set_variable = { name = crown_authority_cooldown years = 15 } }
+					tribal_authority = { set_variable = { name = tribal_authority_cooldown years = 15 } }
+					#yes i know those 3 are the same.
+					imperial_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 15 } }
+					celestial_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 15 } }
+					meritocratic_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 15 } }
+					japanese_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 15 } }
+				}
 			}
-
-			#every_character_war = {
-			#	limit = {
-			#		is_attacker = scope:attacker
-			#		is_defender = scope:defender
-			#	}
-			#	every_war_attacker = {
-			#		if = {
-			#			limit = {
-			#				can_add_hook = {
-			#					type = favor_hook
-			#					target = scope:defender
-			#				}
-			#			}
-			#			add_hook = {
-			#				type = favor_hook
-			#				target = scope:defender
-			#			}
-			#		}
-			#	}
-			#}
 
 			add_character_flag = {
 				flag = recent_liberty_faction_war

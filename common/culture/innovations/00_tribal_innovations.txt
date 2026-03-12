@@ -82,7 +82,7 @@ innovation_motte = { # Earthworks in-game
 	
 	#ADDED
 	ai_weight_for_fascination = {
-		value = 2000	#good
+		value = 4000	#good
 		if = {
 			limit = { has_cultural_era_or_later = culture_era_early_medieval }
 			multiply = 5
@@ -96,7 +96,7 @@ innovation_motte = { # Earthworks in-game
 					} 
 				}
 			}
-			multiply = 0.15
+			multiply = 0.075
 		}
 	}
 
@@ -153,8 +153,8 @@ innovation_barracks = {
 	#ADDED
 	maa_upgrade = {
 		type = peasant_militia
-		damage = 1
-		toughness = 2
+		damage = 2
+		toughness = 4
 	}
 	
 	#ADDED
@@ -173,7 +173,7 @@ innovation_barracks = {
 		}
 		else_if = {
 			limit = { has_innovation = innovation_motte }
-			add = 1700
+			add = 2700
 		}
 		if = {
 			limit = { has_cultural_era_or_later = culture_era_early_medieval }
@@ -351,7 +351,7 @@ innovation_crop_rotation = {
 		}
 		else_if = {
 			limit = { has_innovation = innovation_motte }
-			add = 1700
+			add = 2700
 		}
 		if = {
 			limit = { has_cultural_era_or_later = culture_era_early_medieval }
