@@ -968,7 +968,7 @@ herd_conversion_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -1144,7 +1144,7 @@ lifestyle_xp_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -4173,7 +4173,7 @@ character_warfare_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_2
+		value = nomadic_capital_exterior_building_1	#prev nomadic_capital_exterior_building_2
 	}
 
 	asset = {
@@ -4212,7 +4212,7 @@ character_warfare_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_2		#prev nomadic_capital_exterior_building_3
+		value = nomadic_capital_exterior_building_1		#prev nomadic_capital_exterior_building_3
 		
 		
 	}
@@ -7228,7 +7228,7 @@ tributary_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building
+		value = nomadic_capital_interior_building_1	#prev nomadic_capital_very_important_building
 	}
 
 	asset = {
@@ -7424,7 +7424,7 @@ vassal_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_very_important_building
 	}
 
 	asset = {
@@ -13401,7 +13401,7 @@ fertility_trade_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_1
 		
 		
 	}
@@ -13436,7 +13436,7 @@ fertility_trade_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
+		value =  nomadic_capital_interior_building_2
 		
 		
 	}
@@ -14205,7 +14205,7 @@ metalworkers_cultrad_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_very_important_building
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_very_important_building
 	}
 
 	asset = {
@@ -14446,7 +14446,7 @@ sorcerous_metallurgy_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -14705,7 +14705,7 @@ zealous_people_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -14958,7 +14958,7 @@ loyal_soldiers_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -15218,7 +15218,7 @@ forbearing_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -15535,7 +15535,7 @@ stalwart_defenders_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_very_important_building
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_very_important_building
 	}
 
 	asset = {
@@ -16001,7 +16001,7 @@ horse_breeder_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_very_important_building
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_very_important_building
 	}
 
 	asset = {
