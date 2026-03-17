@@ -3747,6 +3747,14 @@
 							desc = hunter
 						}
 					}
+					#ADDED
+					if = {
+						limit = { government_has_flag = government_is_nomadic }
+						multiply {
+							value = 0.05
+							desc = "You're a nomad or what?"
+						}
+					}
 				}
 			}
 			hunt_type_falconry = {
@@ -4040,6 +4048,14 @@
 							desc = "free"
 						}
 					}
+					#ADDED
+					if = {
+						limit = { government_has_flag = government_is_nomadic }
+						multiply {
+							value = 0.05
+							desc = "You're a nomad or what?"
+						}
+					}
 				}
 			}
 			hunt_type_nerge = {
@@ -4055,7 +4071,7 @@
 				}
 				ai_will_do = {
 					add = {
-						value = 10
+						value = 100		#prev 10
 						desc = "base"
 					}
 					if = {
@@ -4144,6 +4160,14 @@
 						add = {
 							value = 25
 							desc = hunter
+						}
+					}
+					#ADDED
+					if = {
+						limit = { government_has_flag = government_is_nomadic }
+						multiply {
+							value = 0.5
+							desc = "You're a nomad or what?"
 						}
 					}
 					# ACH Greatest Hunter Oath
@@ -4690,7 +4714,7 @@
 		#########
 		hunt_option_party_size = {
 			hunt_party_size_few = {
-				default = yes
+				#default = yes
 				is_shown = { has_dlc_feature = advanced_activities }
 
 				# Entourage option grabbing suitable bodyguards & maybe someone from court who really likes you, + randos.
@@ -4750,6 +4774,8 @@
 				}
 			}
 			hunt_party_size_normal = {
+				#ADDED - you are being annoying
+				default = yes
 				is_valid = {
 					trigger_if = {
 						limit = {
