@@ -198,6 +198,50 @@ fp1_scandi_adventurer_conquest = {
 
 		#Mandalas gain or lose piety/devotion depending on Decree
 		mandala_war_victory_effects = yes
+		
+		#ADDED
+		hidden_effect = {
+			scope:attacker = {
+				if = {
+					limit = { government_has_flag = government_is_nomadic }
+					culture = { save_temporary_scope_as = old_culture }
+					create_divergent_culture_with_side_effects_excluding_cost = yes 
+					culture ?= {
+						copy_all_traditions_from = scope:old_culture
+						random_tradition = {
+							limit = {		#not those 2 though.
+								this != culture_tradition:tradition_fp1_coastal_warriors
+								this != culture_tradition:tradition_hird
+							}
+							weight = {
+								base = 1
+								modifier = {	#prefer ones norse dont start with
+									add = 1000
+									this != culture_tradition:tradition_fp1_performative_honour
+									this != culture_tradition:tradition_poetry
+									this != culture_tradition:tradition_fp1_northern_stories
+									this != culture_tradition:tradition_runestones
+									this != culture_tradition:tradition_malleable_invaders
+								}
+								modifier = {	#just in case
+									factor = 0
+									OR = {
+										this != culture_tradition:tradition_fp1_coastal_warriors
+										this != culture_tradition:tradition_hird
+									}
+								}
+							}
+							scope:attacker.culture = { remove_culture_tradition = prev }
+						}
+						add_culture_tradition = tradition_devoted_horsemanship
+					}
+					every_sub_realm_county = {
+						limit = { culture = scope:old_culture }
+						set_county_culture = scope:attacker.culture
+					}
+				}
+			}
+		}
 	}
 
 	on_white_peace_desc = {
@@ -235,6 +279,21 @@ fp1_scandi_adventurer_conquest = {
 
 		#Clean-up adventurer things.
 		scope:attacker = { clean_scandinavian_adventurer_effect = yes }
+		#ADDED - actually clean this up
+		scope:attacker = {
+			if = {
+				limit = { is_landed = no }
+				every_held_title = {
+				limit = { NOT = { has_variable = temporary_title } }
+					save_scope_as = destroyable_title
+					scope:attacker = { destroy_title = scope:destroyable_title }
+				}
+				if = {
+					limit = { has_trait = nomadic_philosophy }
+					remove_trait = nomadic_philosophy
+				}
+			}
+		}
 
 		# Since they failed to win, take away their efficacy loan.
 		scope:attacker = { remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value }
@@ -355,13 +414,28 @@ fp1_scandi_adventurer_conquest = {
 
 		#Clean-up adventurer things.
 		scope:attacker = { clean_scandinavian_adventurer_effect = yes }
+		#ADDED - actually clean this up
+		scope:attacker = {
+			if = {
+				limit = { is_landed = no }
+				every_held_title = {
+				limit = { NOT = { has_variable = temporary_title } }
+					save_scope_as = destroyable_title
+					scope:attacker = { destroy_title = scope:destroyable_title }
+				}
+				if = {
+					limit = { has_trait = nomadic_philosophy }
+					remove_trait = nomadic_philosophy
+				}
+			}
+		}
 
 		# Since they lost, take away their efficacy loan.
 		scope:attacker = { 
 			#remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value 
 			#ADDED CHANGED please pay something to the defender
 			if = {
-				limit = { root.defender_war_score > 50 }	#not sure if that would stop it giving gold for fp1_trade_events.1131.c option
+				limit = { root.war.defender_war_score > 50 }	#not sure if that would stop it giving gold for fp1_trade_events.1131.c option
 				pay_short_term_gold = { 
 					target = scope:defender
 					gold = {

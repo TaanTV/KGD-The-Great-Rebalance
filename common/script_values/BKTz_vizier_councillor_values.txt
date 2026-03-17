@@ -68,6 +68,7 @@ vizier_default_task_learning_scale = {
 	scope:councillor_liege = {
 		#ADDED - CHANGED moved all that into a proper unified script value
 		add = vizier_task_skill_from_bonuses_value
+		divide = 5
 		if = {
 			limit = {
 				exists = scope:has_been_modified # checking if a saved value scope exists rather than rechecking triggers again

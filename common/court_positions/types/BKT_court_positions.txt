@@ -46,7 +46,9 @@ seneschal_court_position = {
 
 	court_position_asset = {
 		trigger = {
-			government_has_flag = government_is_celestial
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				government_has_flag = government_is_celestial
+			}
 		}
 		animation = reading
 		background = "gfx/interface/illustrations/event_scenes/tgp_asia_estate.dds"
@@ -54,7 +56,11 @@ seneschal_court_position = {
 	}
 
 	court_position_asset = {
-		trigger = { culture_has_east_asian_heritage_pillar_trigger = yes }
+		trigger = {
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				culture_has_east_asian_heritage_pillar_trigger = yes 
+			}
+		}
 		animation = reading
 		background = "gfx/interface/illustrations/event_scenes/tgp_asia_estate.dds"
 	}
@@ -326,10 +332,12 @@ court_gardener_court_position = {
 	skill = stewardship
 
 	court_position_asset = {
-		trigger = {
-			is_independent_ruler = yes
-			highest_held_title_tier >= tier_empire
-			government_has_flag = government_is_celestial
+		trigger = {		
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				is_independent_ruler = yes
+				highest_held_title_tier >= tier_empire
+				government_has_flag = government_is_celestial
+			}
 		}
 		animation = admiration
 		background = "gfx/interface/illustrations/event_scenes/tgp_garden_asia.dds"
@@ -338,9 +346,11 @@ court_gardener_court_position = {
 
 	court_position_asset = {
 		trigger = {
-			is_independent_ruler = no
-			highest_held_title_tier <= tier_empire
-			government_has_flag = government_is_celestial
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				is_independent_ruler = no
+				highest_held_title_tier <= tier_empire
+				government_has_flag = government_is_celestial
+			}
 		}
 		animation = admiration
 		background = "gfx/interface/illustrations/event_scenes/tgp_garden_asia.dds"
@@ -348,7 +358,11 @@ court_gardener_court_position = {
 	}
 
 	court_position_asset = {
-		trigger = { culture_has_east_asian_heritage_pillar_trigger = yes }
+		trigger = {
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				culture_has_east_asian_heritage_pillar_trigger = yes 
+			}
+		}
 		animation = admiration
 		background = "gfx/interface/illustrations/event_scenes/tgp_garden_asia.dds"
 	}
@@ -410,7 +424,7 @@ court_gardener_court_position = {
 			}
 		}
 		if = {
-			limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_1 } }
+			limit = { exists = employer.domicile } #Unop: Do not check on a specific parameter as it will vanish after the upgrade
 			add = {
 				value = 0
 				if = {
@@ -433,13 +447,24 @@ court_gardener_court_position = {
 					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_2 } }
 					add = estate_increase_gardener_aptitude_value_2
 				}
-				else = { add = estate_increase_gardener_aptitude_value_1 }
+				else_if = { #Unop Add missing check
+					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_1 } }
+					add = estate_increase_gardener_aptitude_value_1
+				}
 				desc = estate_garden_building
 			}
 		}
 		add = court_position_aptitude_traveling_friends_value
 		add = court_position_aptitude_eunuch_tradition_value
 		add = court_position_aptitude_family_business_value
+		#Unop Bonus from court.8311
+		if = {
+			limit = { var:bonus_aptitude_role ?= flag:court_gardener }
+			add = {
+				value = cp_bonus_aptitude_value
+				desc = cp_bonus_aptitude
+			}
+		}
 		# Seneschal
 		if = {
 			limit = {
@@ -656,7 +681,9 @@ royal_architect_court_position = { # EP1
 
 	court_position_asset = {
 		trigger = {
-			government_has_flag = government_is_celestial
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				government_has_flag = government_is_celestial
+			}
 		}
 		animation = survey
 		background = "gfx/interface/illustrations/event_scenes/tgp_chinese_city.dds"
@@ -672,16 +699,22 @@ royal_architect_court_position = { # EP1
 	}
 
 	court_position_asset = {
-		trigger = { culture_has_east_asian_heritage_pillar_trigger = yes }
+		trigger = {
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				culture_has_east_asian_heritage_pillar_trigger = yes 
+			}
+		}
 		animation = survey
 		background = "gfx/interface/illustrations/event_scenes/tgp_market_asia.dds"
 	}
 
 	court_position_asset = {
 		trigger = {
-			OR = {
-				culture_has_mena_heritage_pillar_trigger = yes
-				culture_has_south_asian_heritage_pillar_trigger = yes
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				OR = {
+					culture_has_mena_heritage_pillar_trigger = yes
+					culture_has_south_asian_heritage_pillar_trigger = yes
+				}
 			}
 		}
 		animation = survey
@@ -689,7 +722,11 @@ royal_architect_court_position = { # EP1
 	}
 
 	court_position_asset = {
-		trigger = { culture_has_south_european_heritage_pillar_trigger = yes }
+		trigger = {
+			root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the employee
+				culture_has_south_european_heritage_pillar_trigger = yes
+			}
+		}
 		animation = survey
 		background = "gfx/interface/illustrations/event_scenes/ep3_medi_market.dds"
 	}
@@ -788,6 +825,15 @@ royal_architect_court_position = { # EP1
 			add = {
 				value = cp_bonus_aptitude_value
 				desc = improved_stewardship_court_position_efficiency_desc
+			}
+		}
+		if = { #Unop: Added this since it was on the antiquarian instead (set only in fund_inspiration.6508 as of 1.17.1 so nothing to do in the antiquarian !)
+			limit = {
+				has_variable = fund_inspiration_6508_architect_improvement
+			}
+			add = {
+				value = 5
+				desc = court_position_architect_study_experience
 			}
 		}
 	}

@@ -76,3 +76,22 @@ BKT_on_empire_created = {
 		get_or_set_year_of_last_serious_defensive_war = yes
 	}
 }
+
+# A title change makes the character rank up in the landed tiers (eg Duke -> King)
+# root = character ranking up
+# scope:title = old primary title
+on_rank_up = { # Will not fire during history execution or for dying characters
+	on_actions = {
+		BKT_on_landed
+	}
+}
+
+BKT_on_landed = {
+	trigger = {
+		NOT = { exists = scope:title }
+		is_landed = yes
+	}
+	effect = {
+		
+	}
+}

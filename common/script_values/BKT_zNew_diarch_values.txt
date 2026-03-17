@@ -29,7 +29,10 @@ bkt_swing_scales_cash_cost_value = {
 		}
 		
 		# Adjust cost if you have the family attribute for it
-		multiply = scope:actor.swing_scales_cost_multipler_value
+		if = {
+			limit = { scope:actor = { is_lowborn = no } }
+			multiply = scope:actor.swing_scales_cost_multipler_value
+		}
 	}
 }
 
@@ -60,7 +63,10 @@ bkt_swing_scales_influence_cost_value = {
 		}
 		
 		# Adjust cost if you have the family attribute for it
-		multiply = scope:actor.swing_scales_cost_multipler_value
+		if = {
+			limit = { scope:actor = { is_lowborn = no } }
+			multiply = scope:actor.swing_scales_cost_multipler_value
+		}
 	}
 }
 	
@@ -91,7 +97,10 @@ bkt_swing_scales_prestige_cost_value = {
 		}
 		
 		# Adjust cost if you have the family attribute for it
-		multiply = scope:actor.swing_scales_cost_multipler_value
+		if = {
+			limit = { scope:actor = { is_lowborn = no } }
+			multiply = scope:actor.swing_scales_cost_multipler_value
+		}
 	}
 }
 
@@ -127,6 +136,9 @@ bkt_swing_scales_piety_cost_value = {
 		}
 		
 		# Adjust cost if you have the family attribute for it
-		multiply = scope:actor.swing_scales_cost_multipler_value
+		if = {
+			limit = { scope:actor = { is_lowborn = no } }
+			multiply = scope:actor.swing_scales_cost_multipler_value
+		}
 	}
 }

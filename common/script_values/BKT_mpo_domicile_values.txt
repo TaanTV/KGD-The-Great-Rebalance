@@ -38,7 +38,7 @@ nomadic_capital_main_building_2 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_2
 		}
-		add = 1000	#prev 4
+		add = 5000	#prev 4
 	}
 	if = {
 		limit = {
@@ -66,7 +66,7 @@ nomadic_capital_main_building_3 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_3
 		}
-		add = 1000	#prev 4
+		add = 5000	#prev 4
 	}
 	if = {
 		limit = {
@@ -94,7 +94,7 @@ nomadic_capital_main_building_4 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_4
 		}
-		add = 1000	#prev 4
+		add = 5000	#prev 4
 	}
 	if = {
 		limit = {
@@ -122,7 +122,7 @@ nomadic_capital_main_building_5 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_5
 		}
-		add = 1000	#prev 4
+		add = 5000	#prev 4
 	}
 	if = {
 		limit = {
@@ -150,7 +150,7 @@ nomadic_capital_main_building_6 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_6
 		}
-		add = 1000	#prev 4
+		add = 5000	#prev 4
 	}
 	if = {
 		limit = {

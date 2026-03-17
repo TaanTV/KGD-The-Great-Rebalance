@@ -34,6 +34,8 @@ task_fabricate_claim = {
 			triggered_desc = {
 				trigger = {
 					learning > mediocre_skill_rating
+					#ADDED
+					liege.highest_held_title_tier > tier_county
 				}
 				desc = task_fabricate_claim_duchy_claim
 			}

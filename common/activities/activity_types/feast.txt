@@ -665,12 +665,9 @@ activity_feast = {
         if = {
         	limit = { 
 				exists = confederation
-				OR = {
-					government_has_flag = government_is_tribal
-					government_has_flag = government_is_nomadic
-				}
 				save_temporary_scope_as = root_scope
 				confederation = {
+					has_leading_house = no
 					any_confederation_member = {
 						count = all
 						max_military_strength < scope:root_scope.max_military_strength
@@ -678,7 +675,7 @@ activity_feast = {
 				}
 			}
         	add = {
-            	value = 755
+            	value = 75
             	desc = "Prestige potential confederation leader"
             }
         }

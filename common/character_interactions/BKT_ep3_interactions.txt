@@ -570,6 +570,8 @@ support_candidacy_interaction = {
 					has_realm_law_flag = appointment_type_succession
 				}
 				any_title_heir = {
+					#ADDED
+					is_lowborn = no
 					exists = house
 					exists = scope:actor.house
 					house = scope:actor.house
@@ -667,6 +669,8 @@ support_candidacy_interaction = {
 				#ADDED
 				NOT = { has_variable = ceremonial_title }
 				any_title_heir = {
+					#ADDED
+					is_lowborn = no
 					scope:target = {
 						place_in_line_of_succession = {
 							target = prev

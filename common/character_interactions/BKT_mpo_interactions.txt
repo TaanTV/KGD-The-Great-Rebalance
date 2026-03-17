@@ -40,7 +40,7 @@ mpo_demand_obedience_interaction = {
 		scope:actor = { dread >= medium_dread_value }
 	}
 
-	cost = { prestige = minor_prestige_value }
+	cost = { prestige = miniscule_prestige_value }	#prev minor_prestige_value
 
 	ai_potential = {
 		government_allows = obedience
@@ -60,7 +60,7 @@ mpo_demand_obedience_interaction = {
 	send_options_exclusive = no
 
 	ai_accept = {
-		base = -60		#prev -50
+		base = -50
 		
 		#ADDED
 		modifier = { # Opinion Factor
@@ -242,6 +242,15 @@ mpo_demand_obedience_interaction = {
 		modifier = {
 			scope:recipient = { is_child_of = scope:actor }
 			add = 75
+		}
+		#ADDED
+		modifier = {
+			scope:actor.health < 3
+			add = 45
+		}
+		modifier = {
+			scope:actor.age > 45
+			add = 45
 		}
 	}
 
@@ -493,7 +502,7 @@ mpo_negotiate_obedience_interaction = {
 	
 	cost = {
 		prestige = {
-			value = medium_prestige_value
+			value = minor_prestige_value	#prev medium_prestige_value
 			if = {
 				limit = {
 					scope:actor = { 
@@ -583,7 +592,7 @@ mpo_negotiate_obedience_interaction = {
 	ai_potential = {
 		government_allows = obedience
 		primary_title.tier >= tier_duchy
-		prestige >= major_prestige_value
+		prestige >= medium_prestige_value	#prev major_prestige_value
 	}
 
 	send_option = {
@@ -645,7 +654,7 @@ mpo_negotiate_obedience_interaction = {
 	}
 
 	ai_accept = {
-		base = -60		#prev -50
+		base = -50
 		
 		#ADDED
 		modifier = { # Opinion Factor
@@ -898,7 +907,7 @@ mpo_negotiate_obedience_interaction = {
 		}
 		modifier = {
 			scope:hook ?= yes
-			add = -10			#prev -1
+			add = 25			#prev -1
 		}
 		modifier = {
 			scope:recipient = {
@@ -981,6 +990,11 @@ mpo_negotiate_obedience_interaction = {
 					}
 				}
 				scope:recipient = {
+					#ADDED 
+					if = {
+						limit = { scope:hook ?= no }
+						add_prestige = minor_prestige_value
+					}
 					add_opinion = {
 						target = scope:actor
 						modifier = obedience_opinion

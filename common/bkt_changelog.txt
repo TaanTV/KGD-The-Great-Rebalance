@@ -45,26 +45,67 @@ Soon:
 
 #TODO: revisit new buildings or at least their AI weights (didnt touch them yet)
 #TODO: add some chance to become rivals (grudge?) on raid, effect: progress_towards_rival_effect, reason: rival_raided_me, file: BKT_army_on_actions.txt
+#TODO: bump artifact quality in prelude_events.0190 down?
 
 Very soon:
 #TODO: idk succession?
 #TODO: maybe make chars lose opinion of you if you marry them to a lowborn/shit renown spouse? and possibly try to kill her? or get -210312030210% fertility penalty???
-#TODO: maybe make an event when installing someone on the throne (so, higher rank than you?) via claim cb to ally them
+#TODO: maybe make an event when installing someone on the throne (so, same rank than you?) via claim cb to ally them
+#TODO: i made BKT_on_landed, do smth with it
 
 
+
+####	0.11.12	####
+- 
+
+####	0.11.11.1####
+- Made AI nomad emperors way less likely to migrate
+- Made AI pick nomadic legacy more often 
+- Made AI maybe even better at building yurts
+- Made AI a bit less likely to recruit Elephantry MAAs
+- Fixed some Vizier tasks giving way too much learning skill
 
 ####	0.11.11	####
+- Added one additional building to more developed areas in 867 start
+- Added a temporary opinion increase of all vassals and courtiers to all rulers at game start
 - Increased Disfigured ruler designer cost
+- Increased knights damage per prowess a bit
+- Buffed seljuk invasion force a bit (again)
+- Halved costs and cooldown of estabilishing culture traditions if culture has next to none of them
+- Halved prowess per prestige level bonus of Warrior by Merit tradition
+- Reduced herd capacity and prowess bonuses of Wolves of the Deep Steppe tradition
+- Restricted Wolves of the Deep Steppe tradition to only be avaliable to relevant cultures
+- Added horde conversion penalty to Only the Strong tradition
+- Added a small nomadic horde toughness bonus to Stand and Fight tradition
+- Increased fertility bonuses and added horde conversion bonus to Saharan Nomads tradition
+- Capped max amount of herd gained from provisions conversion when getting landed 
+- Reduced prestige cost increased base acceptance a bit of Negotiate/Demand Obedience
+- Made Negotiate Obedience give some prestige to the recipient
 - Yurt buildings changes:
+- - Increased prestige bonus of the last 2 main yurt upgrades
+- - Reduced Barter Stalls yurt gold cost a bit
+- - Moved Square of the Kharash's line second movement speed bonus to unlock a bit earlier
+- - Added knight effectiveness bonuses to Alchemy Yurt internal building
+- - Added some stat/stat per piety level bonuses to Yurt of Righteous internal building
+- - Added yearly herd decay reduction bonus to Forbearing yurt internal yurt
+- - Added small flat %TERRAIN% fetility growth bonus to all terrain specific internal yurts
+- - Buffed herd gain bonus of Zud Shelter
+- - Buffed gold income bonus of Wealth of the Steppe
 - - Buffed fetility decline bonus of Fishing yurt to actually be a bonus (was malus)
-- - Buffed herd gain bonus of Zud Shelter internal yurt but made initial bonus smaller
 - - Buffed county fertility related bonuses of most yurts
 - - Nerfed couty fertility bonus per held nomadic holding a bit to compensate 
 - - Nerfed both Weapon Storage buildings a bit
 - - Nerfed scheme success chances from Court Yurt
-- - Added yearly herd decay reduction bonus to Forbearing yurt internal yurt
-- - Reduced Barter Stalls yurt gold cost a bit
+- - Capped Yurt of Premonitions skill gain chance at 10 known languagues
+- - Capped Yurt of Friendship skill gain chance at 5 friends
 - - Made AI a lot smarter at deciding which yurts to build
+- Made Northmen Army diverge culture on war won if it is nomadic
+- Made Northmen Army lose its domicile on war lost/white peaced if it is nomadic 
+- Made AI not pick Warrior by Merit together with shieldmaiden-unlocking traditions
+- Made AI improve relations with confederation members if it on thew way to unite it
+- Fixed Nudists tradition cost penalty for not having right ethos always applying (fr this time)
+- Fixed Northmen Army defender victory payoff never happening
+- Fixed some error log spam
 
 ####	0.11.10.1####
 Updated to 1.18.4

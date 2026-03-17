@@ -1242,6 +1242,18 @@ counter_synergy_ai_weight_elephant_cavalry = {
 		limit = { highest_held_title_tier < tier_empire }
 		add = -8050		# Maybe consider hiring anything else?
 	}
+	#ADDED - those get +60 in vanilla
+	if = {
+		limit = {
+			OR = {
+				culture = { has_cultural_pillar = heritage_dravidian }
+				culture = { has_cultural_pillar = heritage_indo_aryan }
+				culture = { has_cultural_pillar = heritage_burman }
+			}
+		}
+		add = -30
+	}
+			
 	#ADDED
 	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)
 		limit = {

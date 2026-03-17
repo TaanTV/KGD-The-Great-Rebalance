@@ -317,6 +317,76 @@ ai_wants_grand_wedding_promise = {
 	}
 }
 
+# Supported scopes:
+#	root ( character )
+#		nomad that considers migration
+#	scope:domain_fertility ( fixed point ) average domain fertility, between 0 and 1
+#
+ai_wants_to_migrate = {
+	trigger_if = { # If AI is in the middle of a Mongol Invasion they should _never_ migrate
+		limit = {
+			OR = {
+				any_owned_story = {
+					OR = {
+						story_type = story_mongol_invasion
+						story_type = story_greatest_of_khans
+						
+					}
+				}
+				mpo_has_gok_mongol_empire_trigger = yes
+			}
+		}
+		always = no
+	}
+	trigger_else_if = {
+		limit = {
+			capital_county = {
+				any_county_situation_sub_region = {
+					sub_region_current_phase = situation_steppe_havsarsan_zud_season
+				}
+			}
+		}
+		always = yes
+	}
+	trigger_else_if = {
+		limit = {
+			OR = {
+				has_realm_law = nomadic_authority_3
+				has_realm_law = nomadic_authority_4
+				has_realm_law = nomadic_authority_5
+			}
+			primary_title.tier < tier_kingdom
+		}
+		always = yes
+	}
+	trigger_else_if = {
+		limit = {
+			is_landed = no
+		}
+		always = yes
+	}
+	#ADDED - plz stop.
+	trigger_else_if = {
+		limit = { 
+			highest_held_title_tier >= tier_empire 
+			sub_realm_size > 8	#idk what the cutoff here should be, just assuming they're VERY dead.
+		}
+		always = no
+	}
+	trigger_else = {
+		trigger_if = {
+			limit = {
+				is_confederation_member = yes
+			}
+			scope:domain_fertility < 0.15
+		}
+		trigger_else = {
+			scope:domain_fertility < 0.3
+		}
+		NOT = { has_variable = migration_cooldown }
+	}
+}
+
 # check if the AI ruler in scope should evaluate creating the target title. Available scope:
 #	root: the ruler that could create the title
 # 	scope:title the title to create
@@ -329,7 +399,7 @@ ai_should_create_title = {
 		#ADDED - actually create kingdoms if you're low on vassal limit
 		or = {
 			scope:title.tier > tier_kingdom
-			vassal_count <= { value = vassal_limit add = -5 }
+			vassal_count <= { value = vassal_limit add = -3 }
 		}
 	}
 	

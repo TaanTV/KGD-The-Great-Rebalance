@@ -46,13 +46,15 @@ tradition_saharan_nomads = {
 		desert_mountains_supply_limit_mult = 0.5
 		#desert_fertility_growth_mult = medium_culture_county_fertility_value_mult
 		#oasis_fertility_growth_mult = high_culture_county_fertility_value_mult
+		#ADDED
+		herd_conversion = 0.01
 	}
 	province_modifier = {
 		#oasis_construction_gold_cost = -0.15
 		#desert_construction_gold_cost = -0.1
 		#ADDED 
-		desert_fertility_growth_add = 0.1
-		oasis_fertility_growth_add = 0.1
+		desert_fertility_growth_add = 0.2
+		oasis_fertility_growth_add = 0.2
 	}
 
 	cost = {

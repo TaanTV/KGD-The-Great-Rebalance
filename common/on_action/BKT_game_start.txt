@@ -144,8 +144,11 @@ BKT_on_start_misc = {
 
 on_game_start_after_lobby = {
 	on_actions = {
+		BKT_867_more_buildings
 		BKT_1066_more_buildings
 		BKT_extra_fixes
+		delay = { days = 1 }
+		BKT_initial_opinion_boost
 	}
 }
 
@@ -192,6 +195,25 @@ BKT_extra_fixes = {
 						multiply = { 0.8 1.25 }
 					}
 				}
+			}
+		}
+	}
+}
+
+BKT_867_more_buildings = {
+	trigger = {
+		game_start_date = 867.1.1
+	}
+	effect = {
+		every_province = {
+			limit = {
+				has_holding = yes
+			}
+			if = {
+				limit = {
+					county.development_level >= 8
+				}
+				generate_building = yes
 			}
 		}
 	}
@@ -275,6 +297,29 @@ BKT_on_start_female_pool = {
 					}
 				}
 			}
+		}
+	}
+}
+
+BKT_initial_opinion_boost = {
+	effect = {
+		every_ruler = {
+			every_courtier = {
+				add_opinion = {
+					target = prev
+					modifier = respect_opinion
+					opinion = 25
+				}
+			}
+			#Im pretty sure this should be more performant than iterating on every vassal
+			if = {
+				limit = { top_liege != this }
+				add_opinion = {
+					target = liege
+					modifier = respect_opinion
+					opinion = 25
+				}
+			}	
 		}
 	}
 }

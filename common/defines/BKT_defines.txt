@@ -216,7 +216,7 @@ NCombat = {
 	PURSUIT_STAT_TO_PURSUIT_DAMAGE = 0.66 	#prev 0.5	#BKT prev 0.75	# The pursuit stat is multiplied by this before being turned into actual damage
 	BASE_TOUGHNESS_TO_PURSUIT = 0.1			#prev 0.05					# This many % of the toughness of the retreater's soft casualties will turn into pursuit (during the full pursuit, not per day). Essentially, this means if neither side has screen or pursuit, 5% of the soft casualties will become hard casualties. More if the pursuer has more pursuit than the defender has screen, and vice versa
 	#MINIMUM_PURSUIT_DAMAGE = 0.02			#prev 0.01					# High screen can't bring casualties below 1% in the pursuit phase
-	KNIGHT_DAMAGE_PER_PROWESS = 30			#prev 100					# How much "Damage" stat does a knight get per prowess?
+	KNIGHT_DAMAGE_PER_PROWESS = 35			#prev 100					# How much "Damage" stat does a knight get per prowess?
 	KNIGHT_TOUGHNESS_PER_PROWESS = 6		#prev 10					# How much "Toughness" stat does a knight get per prowess?
 }
 

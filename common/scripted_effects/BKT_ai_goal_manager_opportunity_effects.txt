@@ -531,11 +531,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					
 					}
 					order_by = max_military_strength
-					save_scope_as = target_vassal_scope
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_vassal_scope
+					save_scope_as = target_scope
 				}
 			}
 			200 = {		#Tributaries
@@ -622,11 +618,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					
 					}
 					order_by = max_military_strength
-					save_scope_as = target_vassal_scope
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_vassal_scope
+					save_scope_as = target_scope
 				}
 			}
 			200 = {			#Direct vassals
@@ -710,11 +702,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 						}
 					}
 					order_by = max_military_strength
-					save_scope_as = target_vassal_scope
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_vassal_scope
+					save_scope_as = target_scope
 				}
 			}
 			400 = {			#Allies!
@@ -790,20 +778,16 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 						}
 					}
 					order_by = max_military_strength
-					save_scope_as = target_ally_scope
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_ally_scope
+					save_scope_as = target_scope
 				}
 				if = {
 					limit = {
 						gold >= major_gold_value
 						NOT = { has_trait = greedy }
-						scope:target_ally_scope.current_military_strength > current_military_strength
+						scope:target_scope.current_military_strength > current_military_strength
 						is_character_interaction_valid = {
 							interaction = gift_interaction
-							recipient = scope:target_ally_scope
+							recipient = scope:target_scope
 						}
 						NOT = {
 							reverse_has_opinion_modifier = {
@@ -815,7 +799,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					run_interaction = {
 						interaction = gift_interaction
 						actor = this
-						recipient = scope:target_ally_scope
+						recipient = scope:target_scope
 						execute_threshold = decline
 					}
 				}
@@ -831,6 +815,17 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 				}
 				modifier = {
 					has_realm_law_flag = war_declaration_council_approval
+					factor = 10
+				}
+				modifier = {
+					government_allows = obedience
+					any_councillor = {
+						NOR = {
+							prev.cp:councillor_spouse ?= this
+							prev.cp:councillor_vizier ?= this
+						}
+						is_obedient = no
+					}
 					factor = 10
 				}
 				trigger = {
@@ -915,10 +910,6 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					order_by = { value = "opinion(liege)" multiply = -1 }
 					save_scope_as = target_scope
 				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
-				}
 			}
 			100 = {		#Close family
 				trigger = {
@@ -992,10 +983,6 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					}
 					save_scope_as = target_scope
 				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
-				}
 			}
 			100 = {		#Confederates
 				trigger = {
@@ -1041,6 +1028,17 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					has_trait = ambitious
 					factor = 2
 				}
+				modifier = {
+					prestige_level >= 3
+					confederation = {
+						has_leading_house = no
+						any_confederation_member = {
+							count = 0
+							prestige_level < scope:root_scope.prestige_level
+						}
+					}
+					factor = 2
+				}
 				confederation = {
 					random_confederation_member = {
 						limit = {
@@ -1078,10 +1076,6 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 						}
 						save_scope_as = target_scope
 					}
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
 				}
 			}
 			100 = {		#Neighbouring rulers
@@ -1157,10 +1151,6 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					}
 					order_by = max_military_strength
 					save_scope_as = target_scope
-				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
 				}
 			}
 			100 = {		#Fellow vassals
@@ -1249,10 +1239,6 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 						save_scope_as = target_scope
 					}
 				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
-				}
 			}
 			50 = {		#Friends
 				trigger = {
@@ -1328,10 +1314,13 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					}
 					save_scope_as = target_scope
 				}
-				start_scheme = {
-					type = sway
-					target_character = scope:target_scope
-				}
+			}
+		}
+		if = {
+			limit = { exists = scope:target_scope }
+			start_scheme = {
+				type = sway
+				target_character = scope:target_scope
 			}
 		}
 	}

@@ -285,6 +285,14 @@ scripted_effect scandinavian_adventurer_start_war_effect = {
 	}
 	# Loan a little gold in case they're in debt/to keep them going.
 	scope:scandi_adventurer = { add_gold = scandinavian_adventurer_efficacy_loan_value }
+	
+	#ADDED - catch that case.
+	scope:scandi_adventurer = {
+		if = {
+			limit = { has_government = herder_government }
+			change_government = nomad_government
+		}
+	}
 }
 
 #	Pre-filter event, check to see if we should keep sending out adventurers.

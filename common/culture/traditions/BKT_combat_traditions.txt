@@ -143,6 +143,7 @@ tradition_only_the_strong = {
 		#ADDED
 		men_at_arms_title_limit = -2
 		men_at_arms_title_cap = -1
+		herd_conversion = -0.02
 	}
 	
 	cost = {
@@ -223,6 +224,121 @@ tradition_only_the_strong = {
 		}
 	}
 }
+
+
+tradition_warriors_by_merit = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mediterranean
+		4 = soldiers2.dds
+	}
+	
+	can_pick = {
+		
+	}
+	
+	parameters = {
+		high_prowess_ignores_knight_restrictions = yes
+		blademaster_traits_more_common = yes
+	}
+	character_modifier = {
+		prowess_per_prestige_level = 1		#prev 2
+		accolade_glory_gain_mult = 0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_egalitarian = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_egalitarian_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							any_courtier = {
+								count >= 5
+								prowess >= 10
+								is_adult = yes
+								NOT = {
+									can_be_knight_trigger = { ARMY_OWNER = prev }
+								}
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = courtiers_with_prowess_who_cant_be_knight_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_warriors_by_merit }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 150
+		if = {
+			limit = {
+				NOR = {
+					culture_pillar:ethos_egalitarian = { is_in_list = traits }
+					scope:character = {
+						NOT = {
+							can_be_combatant_based_on_gender_trigger = { ARMY_OWNER = this }
+						}
+					}
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 4
+		}
+		#ADDED
+		if = {
+			limit = {
+				OR = { 
+					culture_tradition:tradition_fp1_performative_honour = { is_in_list = traits }
+					culture_tradition:tradition_fp1_the_right_to_prove = { is_in_list = traits }
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
 
 tradition_frugal_armorsmiths = {
 	category = combat
@@ -670,6 +786,8 @@ tradition_stand_and_fight = {
 		pikemen_toughness_mult = 0.15			#prev 0.2
 		hard_casualty_modifier = 0.4
 		defender_advantage = 5				#prev 8	
+		#ADDED
+		nomadic_horde_toughness_add = 1
 	}
 
 	parameters = {
@@ -839,7 +957,7 @@ tradition_longbow_competitions = {
 	}
 	
 	ai_will_do = {
-		value = 200		#prev 800
+		value = 250		#prev 800
 		if = {
 			limit = {
 				OR = {

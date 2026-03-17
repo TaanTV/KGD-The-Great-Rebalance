@@ -313,11 +313,21 @@ BKT_herd_decay = {
 							limit = { has_game_rule = very_hard_difficulty }
 							multiply = 0.5
 						}
-						
-						if = {	#let them cook
-							limit = { has_variable = conqueror }
+					}
+					else = {
+						if = {
+							limit = { has_game_rule = easy_difficulty }
 							multiply = 0.75
 						}
+						else_if = {
+							limit = { has_game_rule = very_easy_difficulty }
+							multiply = 0.5
+						}
+					}
+						
+					if = {	#let them cook
+						limit = { has_variable = conqueror }
+						multiply = 0.75
 					}
 				}
 				floor = yes

@@ -128,3 +128,115 @@ upgrade_random_yurt_external_building_effect = {
 		}
 	}
 }
+
+# Different effect as we cannot access the Herder scope in the preview
+adopt_nomadic_ways_decision_event_effect = {
+	add_character_flag = {
+		flag = domicile_culture_and_faith_check
+		days = 1
+	}
+	set_variable = {
+		name = previous_provisions
+		value = root.domicile.provisions
+	}
+	change_government = nomad_government
+	location.county = { save_scope_as = title }
+	create_title_and_vassal_change = {
+		type = granted
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	scope:title = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+	# We give you 25% of your provisions as Herd
+	custom_tooltip = adopt_nomadic_ways_decision_herd_tt
+	domicile = {
+		change_herd = {
+			value = root.var:previous_provisions
+			multiply = 0.25
+			#ADDED - nuh uh.
+			max = 5000
+		}
+	}
+	if = {
+		limit = { NOT = { has_trait = nomadic_philosophy } }
+		add_trait = nomadic_philosophy
+	}
+}
+
+language_yurt_effect = {
+	random = {
+		chance = {
+			value = root.num_of_known_languages
+			#ADDED - not too fast boy
+			max = 10
+			multiply = $CHANCE$
+			min = 0
+		}
+		root = {		
+			send_interface_message = {
+				title = language_yurt_effect_tt
+				desc = language_yurt_effect_desc
+				left_icon = root
+				random_list = {
+					1 = { add_diplomacy_skill = 1 }
+					1 = { add_stewardship_skill = 1 }
+					1 = { add_intrigue_skill = 1 }
+					1 = { add_learning_skill = 1 }
+					1 = { add_martial_skill = 1 }
+				}
+			}
+		}
+	}
+}
+friend_yurt_effect = {
+	root = {
+		every_relation = {
+			type = friend
+			add_to_list = temp_yurt_friends
+		}
+	}
+	random = {
+		chance = {
+			value = "list_size(temp_yurt_friends)"
+			#ADDED - not too fast boy
+			max = 5
+			multiply = $CHANCE$
+			min = 0
+		}
+		root = {
+			random_relation = {
+				type = friend
+				save_scope_as = yurt_friend
+			}
+			send_interface_message = {
+				title = friend_yurt_effect_tt
+				desc = friend_yurt_effect_desc
+				left_icon = scope:yurt_friend
+				scope:yurt_friend = {
+					random_list = {
+						1 = { add_diplomacy_skill = 1 }
+						1 = { add_stewardship_skill = 1 }
+						1 = { add_intrigue_skill = 1 }
+						1 = { add_learning_skill = 1 }
+						1 = { add_martial_skill = 1 }
+					}
+				}
+				root = {
+					random_list = {
+						1 = { add_diplomacy_skill = 1 }
+						1 = { add_stewardship_skill = 1 }
+						1 = { add_intrigue_skill = 1 }
+						1 = { add_learning_skill = 1 }
+						1 = { add_martial_skill = 1 }
+					}
+				}
+			}
+		}
+	}
+}
