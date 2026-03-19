@@ -239,7 +239,7 @@ mpo_nomad_invasion_cb = {
 		
 			#ADDED
 			if = {
-				limit = { is_landed = no }
+				limit = { scope:attacker = { is_landed = no } }
 				multiply = 5
 			}
 		}

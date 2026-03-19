@@ -70,6 +70,8 @@ pillage_intent_tribal = {
 	is_shown = {
 		OR = {
 			government_has_flag = government_is_tribal
+			#ADDED - government_is_steppe_admin too
+			government_has_flag = government_is_steppe_admin
 			faith = { has_doctrine_parameter = faith_can_raid }
 		}
 		NOT = { government_has_flag = government_is_nomadic }
@@ -106,6 +108,8 @@ pillage_intent = {
 		NOR = {
 			government_has_flag = government_is_nomadic
 			government_has_flag = government_is_tribal
+			#ADDED - government_is_steppe_admin too
+			government_has_flag = government_is_steppe_admin
 			faith = { has_doctrine_parameter = faith_can_raid }
 		}
 	}
@@ -203,7 +207,11 @@ capture_intent_norse = {
 	}
 
 	is_shown = {
-		government_has_flag = government_is_tribal
+		#ADDED - now an OR and added government_is_steppe_admin check
+		OR = {
+			government_has_flag = government_is_tribal
+			government_has_flag = government_is_steppe_admin
+		}
 	}
 }
 
@@ -373,6 +381,7 @@ adventure_intent_viking = {
 		OR = {
 			government_has_flag = government_is_nomadic
 			government_has_flag = government_is_tribal
+			government_has_flag = government_is_steppe_admin
 			faith = { has_doctrine_parameter = faith_can_raid }
 		}
 	}

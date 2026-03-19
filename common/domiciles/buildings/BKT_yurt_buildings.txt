@@ -14705,7 +14705,7 @@ zealous_people_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -14745,7 +14745,7 @@ zealous_people_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
 		
 	}
 

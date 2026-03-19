@@ -1,4 +1,10 @@
 ﻿l_english:
+ request_council_powerful_vassal_interaction: "$request_council_interaction$"
+ request_council_powerful_vassal_interaction_desc: "As a [powerful_vassal|E], you are entitled to a [council_i][council|E] position"
+ request_council_powerful_vassal_interaction_desc_non_powerful: "Your [liege|E] holds very little power over their vassals, as such you can request a [council_i][council|e] position"
+ request_council.recipient.tt.duration: "[actor.GetShortUIName|U] cannot be fired for [SCOPE.ScriptValue('council_position_lite_locked_value')|0] years"
+ bkt_request_council.refused.actor.tt: "[recipient.GetShortUIName] denied your council request"
+ 
  foster_legitimacy_diarch_interaction: "Bolster Legitimacy"
  foster_legitimacy_diarch_interaction_desc: "TODO "
  damage_legitimacy_diarch_interaction: "Damage Legitimacy"

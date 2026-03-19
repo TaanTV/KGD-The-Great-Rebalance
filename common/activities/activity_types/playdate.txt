@@ -139,6 +139,11 @@
 		gold = {
 			add = {
 				value = standard_playdate_activity_cost
+				#ADDED
+				if = { 
+					limit = { government_has_flag = government_is_nomadic }
+					multiply = 0.5
+				}
 				desc = hunt_base_cost
 			}
 			# Free playdate credit from various events.
@@ -153,6 +158,11 @@
 		gold = {
 			# Base Cost
 			value = standard_playdate_activity_cost
+			#ADDED
+			if = { 
+				limit = { government_has_flag = government_is_nomadic }
+				multiply = 0.5
+			}
 			# Make it a multiple of 5 (rounded up)
 			divide = 5 
 			ceiling = yes 

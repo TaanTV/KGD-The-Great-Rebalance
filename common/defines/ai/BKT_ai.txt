@@ -38,7 +38,28 @@
     # The AI will not betroth nor seek betrothals with characters 
     # under this age.
     #
-    BETROTHAL_MIN_AGE = 11		#prev 12
+    BETROTHAL_MIN_AGE = 10		#prev 12
+
+	### Brief: MARRIAGE_FOCUS_MIN_AGE ( int32 )
+	# Under this age, the AI will less often check for betrothals
+	# or marriages.
+	#
+	MARRIAGE_FOCUS_MIN_AGE = 16	#prev 20
+
+	### Brief: MARRIAGE_MALE_DESPERATION_AGE ( int32 )
+	# Over this age, the AI will consider less enticing marriages.
+	#
+	MARRIAGE_MALE_DESPERATION_AGE = 24	#prev 25
+
+	### Brief: MARRIAGE_FEMALE_DESPERATION_AGE ( int32 )
+	# Over this age, the AI will consider less enticing marriages.
+	#
+	MARRIAGE_FEMALE_DESPERATION_AGE = 20	#prev 25
+
+	### Brief: MARRIAGE_NO_PRESTIGE_LOSS_BONUS ( int32 )
+	# If a marriage causes no prestige loss, a bit of score is added.
+	#
+	MARRIAGE_NO_PRESTIGE_LOSS_BONUS = 100	#prev 50
 	
 	### Brief: MEN_AT_ARMS_STATIONED_MODIFIER_SCORE_MULTIPLIER ( Array of int32 )
 	# Number of spouse candidates before the search is aborted, per
@@ -47,12 +68,18 @@
 	MAX_NUMBER_OF_SPOUSE_CANDIDATES = {
 		0
 		0
-		8	#prev 4
-		16	#prev 8
-		32	#prev 16
+		12	#prev 4		#bkt prev 8
+		24	#prev 8		#bkt prev 16
+		48	#prev 16	#bkt prev 32
 		64	#prev 32
 		64 # Hegemon
 	}
+
+	### Brief: SPOUSE_SCORE_LINEALITY_MISMATCH_SCORE ( int32 )
+	# This value is added to the spouse score if the marriage is not
+	# of the desired lineality (matrilineal vs. patrilineal).
+	#
+	SPOUSE_SCORE_LINEALITY_MISMATCH_SCORE = -850	#prev -700
 	
     ### Brief: BUILDING_MIN_SCORE_COMPARED_TO_BEST ( Fixed Point )
 	# Any potential building with a score lower than this ratio of the

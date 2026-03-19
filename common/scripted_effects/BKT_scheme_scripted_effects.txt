@@ -70,6 +70,79 @@ murder_entourage_list_effect = {
 	}
 }
 
+
+owner_seduce_outcome_become_lovers_option_effects = {
+	show_as_tooltip = { set_relation_lover = scope:target }
+	add_character_flag = { #to assure that this is when the relationship is set
+		flag = consummation_and_relationship
+		days = 10
+	}
+
+	reverse_add_opinion = {
+		target = scope:target
+		modifier = romance_opinion
+		opinion = 20
+	}
+
+	if = {
+		limit = {
+			faith = {
+				has_doctrine_parameter = piety_gain_from_successful_intrigue_schemes
+			}	
+		}
+		add_piety = minor_piety_gain
+	}
+
+	if = {
+		limit = {
+			has_government = landless_adventurer_government
+			has_perk = mortal_adoration_perk
+			scope:target = { is_ruler = yes }
+		}
+		add_contact = scope:target
+		add_hook_if_possible_default_length_effect = {
+			TARGET = scope:target 
+			TYPE = manipulation_hook
+		}
+	}
+	#ADDED - f the landless guys actually
+	else_if = {
+		limit = {
+			NOT = { has_government = landless_adventurer_government }
+			has_perk = mortal_adoration_perk
+		}
+		add_hook_if_possible_default_length_effect = {
+			TARGET = scope:target 
+			TYPE = manipulation_hook
+		}
+	}
+
+	if = {
+		limit = {
+			dynasty ?= {
+				has_dynasty_perk = fp1_adventure_legacy_2
+			}	
+		}
+		add_prestige = fp1_adventure_legacy_2_prestige_value
+	}
+
+	if = {
+		limit = {
+			is_close_family_of = scope:target
+		}
+		create_character_memory = {
+			type = seduced_family
+			
+			participants = {
+				family_member = scope:target
+			}
+		}
+	}
+
+	owner_seduce_outcome_success_send_discovery_event_effect = yes
+}
+
+
 end_court_scheme_effect = {
 	save_temporary_scope_value_as = {
 		name = court_outcome

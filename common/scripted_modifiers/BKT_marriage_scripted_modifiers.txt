@@ -1294,14 +1294,13 @@
 				}
 				multiply = 6
 			}
-			#ADDED
+			#ADDED - all of the below
 			else_if = {
 				limit = { # Especially not if they're not lowborn themselves
 					scope:secondary_recipient = { has_dynasty = yes }
 				}
 				multiply = 4
 			}
-			#ADDED
 			if = {
 				limit = {	# Old counts can drop their expectations a bit
 					scope:secondary_recipient.highest_held_title_tier >= tier_barony
@@ -1310,7 +1309,6 @@
 				}
 				multiply = 0.5
 			}
-			#ADDED
 			if = {
 				limit = {	# Old ppl can drop their expectations a bit
 					scope:secondary_recipient.age > 32
@@ -1318,7 +1316,12 @@
 				}
 				multiply = 0.5
 			}
-			#ADDED
+			if = {
+				limit = {	# Polygamy doesnt care much past the first one
+					exists = scope:secondary_actor.primary_spouse
+				}
+				multiply = 0.5
+			}
 			if = {
 				limit = {
 					scope:recipient.faith = { has_doctrine_parameter = piety_from_marrying_lowborn_active }
@@ -1362,6 +1365,12 @@
 			if = {
 				limit = { has_global_variable = KGD_schizo_balance_is_loaded }
 				multiply = 2
+			}
+			if = {
+				limit = {	# Polygamy doesnt care much past the first one
+					exists = scope:secondary_actor.primary_spouse
+				}
+				multiply = 0.5
 			}
 		}
 		desc = AI_DYNASTY_PRESTIGE_REASON_SECONDARY
@@ -3050,7 +3059,7 @@
 		desc = AI_TRIBUTARY_REASON
 	}
 	modifier = {
-		add = 75		#prev 100
+		add = 50		#prev 100
 		scope:recipient = {
 			is_obedient_to = scope:actor
 		}
@@ -3061,7 +3070,7 @@
 		desc = AI_OBEDIENT_REASON
 	}
 	modifier = {
-		add = -100
+		add = -80	#prev -100	#since nomads get -20 base, let it add up to 100
 		scope:actor = {
 			government_has_flag = government_is_nomadic
 		}
@@ -3097,13 +3106,13 @@
 		desc = AI_REASON_LOW_PROWESS
 	}
 	modifier = {
-		add = -40
+		add = -30	#prev -40
 		scope:actor = { has_realm_law = nomadic_authority_1 }
 		scope:recipient = { government_has_flag = government_is_nomadic }
 		desc = AI_REASON_NOMADIC_AUTHORITY_1
 	}
 	modifier = {
-		add = -20
+		add = -15	#prev -20
 		scope:actor = { has_realm_law = nomadic_authority_2 }
 		scope:recipient = { government_has_flag = government_is_nomadic }
 		desc = AI_REASON_NOMADIC_AUTHORITY_2
@@ -3122,7 +3131,7 @@
 	}
 	#Smaller prejudicial malus for tribals, vassals and obedient tributaries
 	modifier = {
-		add = -50
+		add = -30	#prev -50
 		scope:actor = {
 			government_has_flag = government_is_nomadic
 		}

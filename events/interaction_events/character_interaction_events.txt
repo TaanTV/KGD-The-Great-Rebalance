@@ -1576,10 +1576,21 @@ char_interaction.0250 = {
 				#ADDED
 				AND = {
 					scope:recipient = {
-						government_has_flag = government_is_feudal
 						OR = {
-							vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
-							vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+							AND = {
+								government_has_flag = government_is_feudal
+								OR = {
+									vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+								}
+							}
+							AND = {
+								government_has_flag = government_is_mandala
+								OR = {
+									vassal_contract_obligation_level:mandala_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:mandala_government_levies < feudal_levies_normal_level
+								}
+							}
 							AND = {
 								scope:actor.ai_greed >= 75
 								scope:actor.ai_boldness >= 0

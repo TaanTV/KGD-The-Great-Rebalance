@@ -1,0 +1,28 @@
+﻿l_russian:
+ action_war_declaration_powerful_vassal_approval_denied: "@powerful_vassal_icon! Могущественный Вассал может блокировать Объявления Войны"
+ action_war_declaration_powerful_vassal_approval_denied_combined_group_label: "@warning_icon! Могущественные Вассалы блокируют Объявления Войны"
+ action_war_declaration_powerful_vassal_approval_denied_combined_group_name: "@powerful_vassal_icon! [powerful_vassals|E] блокируют Объявления Войны"
+ action_war_declaration_powerful_vassal_approval_denied_desc: "[recipient.GetPrimaryTitle.Custom('GetTierIcon')] [recipient.GetUIName] плохого мнения о вас и будет пытаться блокировать ваши Объявления Войны.\n$action_war_declaration_powerful_vassal_approval_denied_unimportant$ $action_war_declaration_approval_denied_HELP$"
+ action_war_declaration_powerful_vassal_approval_denied_combined_group_description: "Двое или больше из ваших [Concept( 'powerful_vassal', 'могущественных вассалов' )|E] плохого мнения о вас, что значит что ваш [GetLawGroup('own_war_declaration_law').GetName] #Bold не разрешает#! вам объявлять войны. $action_war_declaration_approval_denied_HELP_plural$"
+ action_war_declaration_powerful_vassal_approval_denied_label: "@powerful_vassal_icon! Ваш Могущественный Вассал, [recipient.GetPrimaryTitle.Custom('GetTierIcon')][recipient.GetUINameNoTooltip], пытается блокировать Объявления Войны ([recipient.GetOpinionOf( GetPlayer )|+=])"
+ action_war_declaration_powerful_vassal_approval_denied_combined_label: "[recipient.GetPrimaryTitle.Custom('GetTierIcon')] [recipient.GetUINameNoTooltip] ([recipient.GetOpinionOf( GetPlayer )|+=])"
+ action_war_declaration_powerful_vassal_approval_denied_click: "$action_war_declaration_approval_denied_click$"
+ action_war_declaration_powerful_vassal_approval_denied_unimportant: "recipient.GetHerHim|U] мнение мало значит если [recipient.GetSheHe|U] противостит вам в одиночку, но если несколько [Concept( 'adult', 'взрослых' )|E] [Concept( 'powerful_vassal', 'могущественных вассалов' )|E] плохого мнения о вас то вы не сможете объявлять войны, как предеписывает ваш [GetLawGroup('own_war_declaration_law').GetName]."
+ 
+ action_war_declaration_council_approval_denied: "@council_icon! Советник пытается блокировать Объявления Войны"
+ action_war_declaration_council_approval_denied_combined_group_label: "@warning_icon! Советники блокируют Объявления Войны"
+ action_war_declaration_council_approval_denied_combined_group_name: "@council_icon! [councillors|E] блокируют Объявления Войны"
+ action_war_declaration_council_approval_denied_desc: "[recipient.GetUIName] плохого мнения о вас и будет пытаться блокировать ваши Объявления Войны.\n$action_war_declaration_council_approval_denied_unimportant$ $action_war_declaration_approval_denied_HELP$"
+ action_war_declaration_council_approval_denied_combined_group_description: "Двое или больше из ваших  [Concept( 'councillor', 'советников' )|E] плохого мнения о вас, что значит что ваш [GetLawGroup('own_war_declaration_law').GetName] #Bold не разрешает#! вам объявлять войны. $action_war_declaration_approval_denied_HELP_plural$"
+ action_war_declaration_council_approval_denied_label: "@council_icon! Ваш [recipient.GetCouncilTitle], [recipient.GetUINameNoTooltip], пытается блокировать Объявления Войны ([recipient.GetOpinionOf( GetPlayer )|+=])"
+ action_war_declaration_council_approval_denied_combined_label: "@council_icon! [recipient.GetCouncilTitle] [recipient.GetUINameNoTooltip] ([recipient.GetOpinionOf( GetPlayer )|+=])"
+ action_war_declaration_council_approval_denied_click: "$action_war_declaration_approval_denied_click$"
+ action_war_declaration_council_approval_denied_unimportant: "[recipient.GetHerHim|U] мнение мало значит если [recipient.GetSheHe|U] противостит вам в одиночку, но если несколько [Concept( 'councillor', 'советников' )|E] (исключая Супург/Наперстинков) плохого мнения о вас то вы не сможете объявлять войны, как предеписывает ваш [GetLawGroup('own_war_declaration_law').GetName]."
+ 
+ action_war_declaration_approval_denied_click: "#I Нажмите, чтобы открыть окно персонажа#!"
+ action_war_declaration_approval_denied_HELP: "\n\n#help #Условия согласия:\n$BULLET_WITH_TAB$ Положительное [opinion|El] о вас\n$BULLET_WITH_TAB$ [cowed|E] перед вами\n$BULLET_WITH_TAB$ [imprisoned|E] (у кого угодно)#!"
+ action_war_declaration_approval_denied_HELP_plural: "$action_war_declaration_approval_denied_HELP_plural$"
+
+ 
+
+#Условия согласия:\n$BULLET_WITH_TAB$ Положительное [opinion|El] о вас\n$BULLET_WITH_TAB$ [cowed|E] перед вами\n$BULLET_WITH_TAB$ [imprisoned|E] (у кого угодно)"

@@ -130,6 +130,12 @@ NChildbirth = {
 	#EXTRA_FERTILITY_FOR_FIRST_RULER_CHILD = 0.3			 		# Extra fertility if the couple are primary spouses and have no children together, and at least one of them is a ruler
 }
 
+NMarriage = {
+	SPOUSE_FINDER_RELEVANCE_PRESTIGE_GAIN_MULTIPLIER = 0.25	#prev 1		# How much the prestige gain is valued for the relevance sorting of a marriage
+	SPOUSE_FINDER_RELEVANCE_AGE_DIFFERENCE_MULTIPLIER = -5 	#prev -10	# Multiplier on age difference applied to relevance sorting of a marriage if the age difference is greater than or equal to the below
+	SPOUSE_FINDER_RELEVANCE_AGE_DIFFERENCE_CUTOFF = 8 		#prev 5		# The age difference between the two parties for the above modifier to be applied per year of difference
+}
+
 NCharacterOpinion = {
 
 	MOTHER = 35		#prev 50

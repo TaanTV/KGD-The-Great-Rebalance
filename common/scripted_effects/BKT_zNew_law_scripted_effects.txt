@@ -1,6 +1,7 @@
 ﻿war_declaration_law_effect = {
 	if = {
 		limit = { 
+			is_ai = no 	#maybe?
 			has_realm_law_in_group = own_war_declaration_law 
 			NOT = { has_variable = conqueror }
 		}

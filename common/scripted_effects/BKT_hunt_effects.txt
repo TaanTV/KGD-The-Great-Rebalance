@@ -371,6 +371,20 @@ hunt_create_sighting_effect = {
 	}
 }
 
+nerge_check_commander_trait_xp_effect = {
+	prev = {
+		if = {
+			limit = {
+				has_trait = $TRAIT$
+			}
+			add_trait_xp = {
+				trait = $TRAIT$
+				value = 20	#prev 10
+			}
+		}
+	}
+}
+
 nerge_progression_effect = {
 	save_temporary_scope_as = root_scope
 	save_scope_value_as = {

@@ -522,8 +522,8 @@ administrative_government = {
 		feudal_government_levy_contribution_mult = -0.5
 		clan_government_tax_contribution_mult = -0.5
 		clan_government_levy_contribution_mult = -0.5
-		men_at_arms_cap = -1	#prev -2
-		men_at_arms_limit = -1	#prev -2
+		men_at_arms_cap = -2
+		men_at_arms_limit = -2
 		knight_limit = -5
 		vassal_limit = 100
 		active_accolades = -1
@@ -535,7 +535,7 @@ administrative_government = {
 		monthly_treasury_from_liege_mult = -0.15
 		#ADDED
 		men_at_arms_recruitment_cost = -0.2
-		men_at_arms_title_cap = -1
+		#men_at_arms_title_cap = -1
 		mercenary_hire_cost_add = 150
 	}
 
@@ -845,7 +845,7 @@ celestial_government = {
 		feudal_government_levy_contribution_mult = -0.5
 		clan_government_tax_contribution_mult = -0.5
 		clan_government_levy_contribution_mult = -0.5
-		men_at_arms_limit = -1		#prev -2
+		men_at_arms_limit = -2
 		knight_limit = -5
 		vassal_limit = 20
 		active_accolades = -1
@@ -855,7 +855,7 @@ celestial_government = {
 		# Vassals get Treasury income that is this percentage less than their taxes to their liege
 		monthly_treasury_from_liege_mult = -0.25
 		#ADDED - same as admin
-		men_at_arms_title_cap = -1
+		#men_at_arms_title_cap = -1
 		mercenary_hire_cost_add = 150
 	}
 
@@ -1142,13 +1142,13 @@ steppe_admin_government = {
 	max_dread = 150
 
 	character_modifier = {
-		levy_size = -0.45		#prev -0.5
+		levy_size = -0.2		#prev -0.5
 		feudal_government_tax_contribution_mult = -0.5
 		feudal_government_levy_contribution_mult = -0.5
 		clan_government_tax_contribution_mult = -0.5
 		clan_government_levy_contribution_mult = -0.5
-		men_at_arms_cap = -1	#prev -2
-		men_at_arms_limit = -1	#prev -2
+		men_at_arms_cap = -2
+		men_at_arms_limit = -2
 		knight_limit = -5
 		vassal_limit = 20
 		active_accolades = -1
@@ -1159,13 +1159,16 @@ steppe_admin_government = {
 		ai_war_chance = 1						#prev 2
 		title_creation_cost_mult = -0.5
 		character_max_merit_level_add = 2
-		mercenary_hire_cost_mult = 10			#prev 2
+		mercenary_hire_cost_mult = 1.5			#prev 2
 
 		# Vassals get Treasury income that is this percentage less than their taxes to their liege
 		monthly_treasury_from_liege_mult = -0.4
-		#ADDED - same as admin
+		#ADDED - same as admin + compensation for being a shittier nomads with more levy stats
 		men_at_arms_recruitment_cost = -0.2
-		men_at_arms_title_cap = -1
+		#men_at_arms_title_cap = -1
+		mercenary_hire_cost_add = 120
+		levy_attack = 2
+		levy_toughness = 2
 	}
 
 	top_liege_character_modifier = {
@@ -1272,8 +1275,8 @@ meritocratic_government = { # e.g. Korea, Dai Viet
 		feudal_government_levy_contribution_mult = -0.5
 		clan_government_tax_contribution_mult = -0.5
 		clan_government_levy_contribution_mult = -0.5
-		men_at_arms_cap = -1	#prev -2
-		men_at_arms_limit = -1	#prev -2
+		men_at_arms_cap = -2
+		men_at_arms_limit = -2
 		knight_limit = -5
 		vassal_limit = 20
 		active_accolades = -1
@@ -1284,7 +1287,7 @@ meritocratic_government = { # e.g. Korea, Dai Viet
 		# Vassals get Treasury income that is this percentage less than their taxes to their liege
 		monthly_treasury_from_liege_mult = -0.4
 		#ADDED - same as admin
-		men_at_arms_title_cap = -1
+		#men_at_arms_title_cap = -1
 		mercenary_hire_cost_add = 150
 	}
 

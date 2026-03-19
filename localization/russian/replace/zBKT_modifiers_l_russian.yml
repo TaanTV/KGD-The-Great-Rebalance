@@ -1,6 +1,6 @@
 ﻿l_russian:
  #Skill tooltips
- diplomacy_effect_desc: "Увеличивает эффективность дипломатических [Concept( 'schemes', 'происков' )|E]\nУвеличивает [Concept( 'initial_legitimacy', 'начальную легитимность' )|E]\nВлияет на стоимости выкупов"
+ diplomacy_effect_desc: "Увеличивает эффективность дипломатических [Concept( 'schemes', 'происков' )|E]\nУвеличивает [Concept( 'initial_legitimacy', 'начальную легитимность' )|E]\nМеняет на стоимость Выкупов в вашу пользу"
  #martial_effect_desc: "Увеличивает [advantage|El] при командовании войсками в сражении."
  #intrigue_effect_desc: "Каждые [EmptyScope.ScriptValue('scheme_starting_opportunities_per_intrigue_increment_value')] очк. [Concept('intrigue', 'интриги')|E] свыше [EmptyScope.ScriptValue('scheme_starting_opportunities_per_intrigue_threshold_value')] дают +1 к изначальному количеству [Concept('scheme_opportunity_opportunities', 'очков преимущества')|E] для [Concept('intrigue', 'интриганских')] [Concept('schemes', 'происков')|E]\nУвеличивает начальный [Concept('success_chance', 'шанс успеха')|E] у [Concept('schemes', 'происков')|E]-интриг\nУскоряет [Concept('scheme_growth', 'прогресс')|E] интриганских [Concept('schemes', 'происков')|E]\nПовышает шанс успешно [Concept('imprison', 'заключить в тюрьму')|E] другого персонажа"
  #learning_effect_desc: "Снижает расход [Concept( 'prestige', 'престижа' )|E] на то, чтобы увеличить [crown_authority|El].\nПовышает вероятность того, что другие персонажи [Concept( 'demand_conversion', 'согласятся обратиться' )|E]."

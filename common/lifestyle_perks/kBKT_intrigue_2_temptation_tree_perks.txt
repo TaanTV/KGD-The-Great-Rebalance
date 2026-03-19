@@ -1,4 +1,34 @@
-﻿
+﻿mortal_adoration_perk = {
+	lifestyle = intrigue_lifestyle
+	tree = temptation
+	position = { 0 3.75 }
+	icon = node_intrigue
+	
+	parent = subtle_desire_perk
+	
+	can_be_picked = { always = yes }
+	
+	effect = {
+		custom_description_no_bullet = { text = mortal_adoration_perk_effect }
+		if = {
+			limit = { government_has_flag = government_is_landless_adventurer }	
+			custom_tooltip = { text = adventurer_mortal_adoration_perk_effect }
+		}
+		#ADDED
+		else = {
+			custom_description_no_bullet = { text = bkt_mortal_adoration_perk_effect }
+		}
+		if = {
+			limit = { government_has_flag = government_is_administrative }	
+			custom_description_no_bullet = { text = admin_mortal_adoration_perk_effect }
+		}
+		if = {
+			limit = { government_has_flag = government_is_mandala }	
+			custom_description_no_bullet = { text = add_mandala_radiance_perk_effect }
+		}
+	}
+}
+
 enticing_opportunity_perk = {
 	lifestyle = intrigue_lifestyle
 	tree = temptation

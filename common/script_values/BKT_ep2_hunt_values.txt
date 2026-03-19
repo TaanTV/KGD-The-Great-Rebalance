@@ -746,17 +746,26 @@ unimpressive_nerge_dread_value = -20	#prev -25
 
 # Regular Nerge
 regular_nerge_dread_value = 10
+regular_nerge_prestige_value = {
+	value = 150		#prev 100
+	multiply = nerge_prestige_multiplier
+}
 regular_nerge_gold_value = 10			#prev 25
+regular_nerge_guest_prestige_value = 50	#prev 25
 
 
 # Impressive Nerge
 impressive_nerge_dread_value = 15		#prev 30
+impressive_nerge_prestige_value = {
+	value = 250		#prev 200
+	multiply = nerge_prestige_multiplier
+}
 impressive_nerge_gold_value = 25		#prev 75
 
 # Great Nerge
 great_nerge_dread_value = 20			#prev 40
 great_nerge_prestige_value = {
-	value = 250
+	value = 350		#prev 250
 	multiply = nerge_prestige_multiplier
 }
 great_nerge_gold_value = 25				#prev 150
@@ -764,7 +773,7 @@ great_nerge_gold_value = 25				#prev 150
 # Fantastic Nerge
 fantastic_nerge_dread_value = 30		#prev 50
 fantastic_nerge_prestige_value = {
-	value = 350
+	value = 500		#prev 350
 	multiply = nerge_prestige_multiplier
 }
 fantastic_nerge_gold_value = 75			#prev 250

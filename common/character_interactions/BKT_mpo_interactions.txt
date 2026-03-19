@@ -17,6 +17,9 @@ mpo_demand_obedience_interaction = {
 	}
 	popup_on_receive = yes
 	pause_on_receive = yes
+	
+	#ADDED
+	cooldown = { months = 1 }
 
 	is_shown = {
 		scope:actor = {
@@ -63,19 +66,19 @@ mpo_demand_obedience_interaction = {
 		base = -50
 		
 		#ADDED
-		modifier = { # Opinion Factor
+		modifier = { # Less harsh than negotiating obedience
 			add = {
 				if = {  # Duke
 					limit = { scope:actor.highest_held_title_tier = tier_duchy }
-					add = -15
+					add = -10
 				}
 				else_if = {  # King
 					limit = { scope:actor.highest_held_title_tier = tier_kingdom }
-					add = -40
+					add = -30
 				}
 				else_if = {  # Emperor
 					limit = { scope:actor.highest_held_title_tier = tier_empire }
-					add = -65
+					add = -50
 				}
 			}
 			scope:actor.highest_held_title_tier >= tier_duchy
@@ -85,14 +88,14 @@ mpo_demand_obedience_interaction = {
 		opinion_modifier = { # Opinion Factor
 			who = scope:recipient
 			opinion_target = scope:actor
-			multiplier = 0.5
+			multiplier = 0.25	#was 0.5
 			desc = AI_OPINION_REASON
 		}
 		modifier = {
 			trigger = {
 				scope:hook ?= yes
 			}
-			add = 50	#prev 100
+			add = 75	#prev 100
 			desc = MIGRATION_HOOK_USED
 		}
 		modifier = {
@@ -146,7 +149,7 @@ mpo_demand_obedience_interaction = {
 			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
 		}
 		modifier = {
-			add = 25	#prev 50
+			add = 35	#prev 50
 			scope:actor = { legitimacy_level = 5 }
 			desc = DEMAND_OBEDIENCE_INTERACTION_LEGITIMACY_ACCEPTANCE
 		}
@@ -201,7 +204,7 @@ mpo_demand_obedience_interaction = {
 					has_sub_region_phase_parameter = the_great_steppe_easier_obedience
 					any_situation_sub_region_participant_group = {
 						participant_group_type = nomad_rulers_capital
-						participant_group_has_character = scope:recipient 	#prev actor
+						participant_group_has_character = scope:actor
 					}
 				}
 			}
@@ -223,7 +226,7 @@ mpo_demand_obedience_interaction = {
 	}
 
 	ai_will_do = {
-		base = 0
+		base = 25	#prev 0
 		modifier = {
 			scope:actor = { dread >= major_dread_value }
 			add = 25
@@ -294,7 +297,7 @@ mpo_demand_obedience_interaction = {
 						add_opinion = {
 							modifier = impressed_opinion
 							target = scope:actor
-							opinion = 15
+							opinion = 10	#prev 15
 						}
 					}
 				}
@@ -308,7 +311,788 @@ mpo_demand_obedience_interaction = {
 	}
 }
 
+mpo_make_blood_brother = {
+	category = interaction_category_diplomacy
+	icon = blood_brother
+	desc = make_blood_brother_desc
+	common_interaction = yes
+	can_send_despite_rejection = yes
+	interface_priority = 60
 
+	greeting = positive
+	notification_text = MAKE_BLOOD_BROTHER_NOTIFICATION
+	popup_on_receive = yes
+	ai_maybe = yes
+
+	cooldown = { months = 1 }
+	cooldown_against_recipient = { years = 5 }
+
+	is_shown = {
+		# Scope:actor needs to have a suitable CulTrad.
+		scope:actor = {
+			mpo_valid_for_blood_brotherhood_trigger = yes
+			NOT = { var:had_mpo_temujin_flavor_0020 ?= scope:recipient }
+		}
+		scope:recipient = {
+			mpo_valid_for_blood_brotherhood_trigger = yes
+			NOT = {
+				this = scope:actor
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		mpo_can_be_blood_brothers_trigger = { CHARACTER_1 = scope:actor CHARACTER_2 = scope:recipient }
+		# Both characters must be available
+		scope:actor = {
+			is_imprisoned = no
+			is_incapable = no
+		}
+		scope:recipient = {
+			is_imprisoned = no
+			is_incapable = no
+		}
+	}
+	#Mutual enemy that you oppose together
+	send_option = {
+		flag = common_enemy
+		is_valid = {
+			custom_description = {
+				text = blood_brother_common_enemy_trigger
+				mpo_blood_brother_common_enemy_trigger = yes
+			}
+		}
+		localization = BLOOD_BROTHER_COMMON_ENEMY
+	}
+	#Shared memories
+	send_option = {
+		flag = memories_together
+		is_valid = {
+			custom_description = {
+				text = blood_brother_memory_trigger
+				scope:actor = {
+					any_memory = {
+						has_memory_participant = scope:recipient
+						mpo_blood_brother_reason_memory_trigger = yes
+					}
+				}
+			}
+		}
+		localization = BLOOD_BROTHER_MEMORIES
+	}
+
+	#Fought together in a war
+	send_option = {
+		flag = war_allies
+		is_valid = {
+			custom_description = {
+				text = blood_brother_former_war_allies_trigger
+				scope:actor = {
+					has_variable_list = former_war_allies
+					any_in_list = {
+						variable = former_war_allies
+						this = scope:recipient
+					}
+				}
+			}
+		}
+		localization = BLOOD_BROTHER_WAR_ALLIES
+	}
+
+	# Normal
+	send_option = {
+		is_shown = {
+			always = no
+		}
+		is_valid = {
+			always = yes
+		}
+		flag = normal
+		localization = BLOOD_BROTHER_NORMAL
+		starts_enabled = { always = yes	}
+	}
+
+	cost = {
+		piety = minor_piety_value
+	}
+
+	send_options_exclusive = no
+
+	on_accept = {
+		# Notifications with most effects.
+		scope:actor = {
+			# Become blood brothers
+			#Tooltip effect because it happens later/in the blood brother on action
+			show_as_tooltip = {
+				set_relation_blood_brother = scope:recipient
+			}
+			custom_tooltip = blood_brother_alliance_actor_alliance_tt
+			custom_tooltip = blood_brother_actor_gains_hook_tt
+			if = {
+				limit = {
+					scope:recipient = {
+						mpo_blood_brother_august_trigger = { OTHER_BROTHER = scope:actor }
+					}
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							government_has_flag = government_is_nomadic
+						}
+					}
+					custom_tooltip = blood_brother_august_nomadic_modifier_tt
+				}
+				else = {
+					custom_tooltip = blood_brother_august_modifier_tt
+				}
+			}
+			if = {
+				limit = {
+					scope:recipient = {
+						mpo_blood_brother_warrior_trigger = { OTHER_BROTHER = scope:actor }
+					}
+				}
+				custom_tooltip = blood_brother_warrior_modifier_tt
+			}
+			if = {
+				limit = {
+					scope:recipient = {
+						mpo_blood_brother_clever_trigger = yes
+					}
+				}
+				if = {
+					limit = {
+						scope:actor = {
+							government_has_flag = government_is_nomadic
+						}
+					}
+					custom_tooltip = blood_brother_clever_nomadic_modifier_tt
+				}
+				else = {
+					custom_tooltip = blood_brother_clever_modifier_tt
+				}
+			}
+			if = {
+				limit = {
+					scope:recipient = {
+						mpo_blood_brother_loving_trigger = yes
+					}
+				}
+				custom_tooltip = blood_brother_loving_modifier_tt
+			}
+			if = {
+				limit = {
+					always = scope:common_enemy
+				}
+				custom_tooltip = blood_brother_foe_modifier_tt
+			}
+		}
+		scope:recipient = {
+			# Become blood brothers
+			#Tooltip effect because it happens later/in the blood brother on action
+
+			show_as_tooltip = { set_relation_blood_brother = scope:actor }
+			custom_tooltip = blood_brother_alliance_recipient_alliance_tt
+			custom_tooltip = blood_brother_recipient_gains_hook_tt
+			if = {
+				limit = {
+					scope:actor = {
+						mpo_blood_brother_august_trigger = { OTHER_BROTHER = scope:recipient }
+					}
+				}
+				if = {
+					limit = {
+						scope:recipient = {
+							government_has_flag = government_is_nomadic
+						}
+					}
+					custom_tooltip = blood_brother_august_nomadic_modifier_tt
+				}
+				else = {
+					custom_tooltip = blood_brother_august_modifier_tt
+				}
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						mpo_blood_brother_warrior_trigger = { OTHER_BROTHER = scope:recipient }
+					}
+				}
+				custom_tooltip = blood_brother_warrior_modifier_tt
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						mpo_blood_brother_clever_trigger = yes
+					}
+				}
+				if = {
+					limit = {
+						scope:recipient = {
+							government_has_flag = government_is_nomadic
+						}
+					}
+					custom_tooltip = blood_brother_clever_nomadic_modifier_tt
+				}
+				else = {
+					custom_tooltip = blood_brother_clever_modifier_tt
+				}
+			}
+			if = {
+				limit = {
+					scope:actor = {
+						mpo_blood_brother_loving_trigger = yes
+					}
+				}
+				custom_tooltip = blood_brother_loving_modifier_tt
+			}
+			if = {
+				limit = {
+					always = scope:common_enemy
+				}
+				custom_tooltip = blood_brother_foe_modifier_tt
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_gain
+			DESC = clan_unity_oath_of_true_friendship.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+		if = {
+			limit = {
+				always = scope:common_enemy
+			}
+			scope:actor = {
+				make_blood_brother_save_common_enemy_effect = yes
+			}
+		}
+		#Fire events for each char, resetting scopes to be appropriate in each
+		hidden_effect = {
+			scope:recipient = {
+				save_scope_as = blood_bro
+			}
+			scope:actor = {
+				set_relation_blood_brother = {
+					reason = sworn_blood_brother
+					target = scope:recipient
+				}
+				trigger_event = mpo_interactions_events.0006
+			}
+			clear_saved_scope = blood_bro
+			scope:actor = {
+				save_scope_as = blood_bro
+			}
+			scope:recipient = {
+				trigger_event = mpo_interactions_events.0006
+			}
+		}
+	}
+
+	on_decline = {
+		# Scope:actor gains some stress over the whole ordeal.
+		scope:actor = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = make_blood_brother_interaction.decline.actor.tt
+				left_icon = scope:recipient
+				add_stress = minor_stress_gain
+			}
+		}
+		# Scope:actor loses opinion of scope:recipient.
+		scope:recipient = {
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = make_blood_brother_interaction.decline.recipient.tt
+				left_icon = scope:actor
+				scope:actor = {
+					add_opinion = {
+						target = scope:recipient
+						modifier = hurt_opinion
+						opinion = -20
+					}
+				}
+			}
+		}
+		# And set up a little hidden drama for later...
+		hidden_effect = {
+			scope:recipient = {
+				if = {
+					limit = {
+						# We don't use the standard check for this, since they'll already be friends by definition, so the trigger would always return as false.
+						# Instead, we just check to make sure they're not *already* potential rivals; this can happen regardless, so really we're just setting them up for drama if the friendship ever falters.
+						NOT = { has_relation_potential_rival = scope:actor }
+					}
+					random = {
+						chance = 20
+						set_relation_potential_rival = scope:actor
+					}
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_loss
+			DESC = clan_unity_declined_true_friendship.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	# AI
+	## Standard Acceptance stuff
+	ai_accept = {
+		base = -75	#prev -50
+
+		mpo_blood_brother_interactions_ai_accept_modifier = yes
+
+		# Common foe send option
+		# Are you offering confederation leadership?
+		modifier = {
+			trigger = {
+				scope:common_enemy ?= yes
+			}
+			add = 60	#prev 75
+			desc = BLOOD_BROTHER_COMMON_ENEMY_VALUE
+		}
+		# Memories send option
+		modifier = {
+			trigger = {
+				scope:memories_together ?= yes
+			}
+			add = 45	#prev 50
+			desc = BLOOD_BROTHER_MEMORIES_VALUE
+		}
+		# Former war allies send option
+		modifier = {
+			trigger = {
+				scope:war_allies ?= yes
+			}
+			add = 30
+			desc = BLOOD_BROTHER_WAR_ALLIES_VALUE
+		}
+	}
+	## Performance-enhancement
+	ai_potential = {
+		is_imprisoned = no
+		is_at_war = no
+		has_blood_brother = no
+	}
+	ai_target_quick_trigger = { adult = yes }
+	ai_targets = {
+		ai_recipients = liege
+		ai_recipients = scripted_relations
+	}
+	ai_targets = {
+		ai_recipients = peer_vassals
+		max = 10
+	}
+	ai_targets = {
+		ai_recipients = neighboring_rulers_including_tributary_borders
+		max = 15
+	}
+	## Frequency
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 96
+		duchy = 48
+		kingdom = 12
+		empire = 12
+		hegemony = 12
+	}
+	ai_will_do = {
+		base = -50
+
+		#Dishonorable characters don't want to be bound like this
+		modifier = {
+			scope:recipient = {
+				ai_honor <= medium_negative_ai_value
+			}
+			add = -40
+		}
+		modifier = {
+			scope:recipient = {
+				ai_sociability <= medium_negative_ai_value
+			}
+			add = -20
+		}
+
+		#This will mostly just annoy players, unless AI is worthy and has a good reason
+		modifier = {
+			scope:recipient = {
+				is_ai = no
+			}
+			NOT = {
+				scope:actor = {
+					is_landed = yes
+					OR = {
+						has_relation_friend = scope:recipient
+						has_relation_soulmate = scope:recipient
+						is_allied_to = scope:recipient
+					}
+				}
+			}
+			add = -100
+		}
+		modifier = {
+			add = 25
+			any_ally = {
+				count < 1
+			}
+		}
+		modifier = {
+			add = 75
+			any_ally = {
+				count < 2
+			}
+			scope:recipient = { # Don't propose alliances to tiny insignificant rulers just because
+				OR = {
+					current_military_strength >= scope:actor.eighty_percent_of_current_military_strength
+					primary_title.tier >= scope:actor.primary_title.tier
+					AND = {
+						primary_title.tier >= tier_duchy
+						scope:actor.primary_title.tier < tier_empire
+					}
+				}
+			}
+		}
+
+		modifier = {
+			add = 25
+			scope:actor = {
+				mpo_blood_brother_common_enemy_trigger = yes
+			}
+		}
+		modifier = {
+			add = 25
+			scope:actor = {
+				scope:actor = {
+					any_memory = {
+						has_memory_participant = scope:recipient
+						mpo_blood_brother_reason_memory_trigger = yes
+					}
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			scope:actor = {
+				has_variable_list = former_war_allies
+				any_in_list = {
+					variable = former_war_allies
+					this = scope:recipient
+				}
+			}
+		}
+
+		mpo_blood_brother_interactions_ai_accept_modifier = yes
+
+		modifier = { # The AI shouldn't propose to their Lieges
+			factor = 0.5
+			is_liege_or_above_of = scope:recipient
+		}
+		modifier = { # The AI shouldn't propose to their Vassals unless Clan
+			factor = 0.5
+			scope:actor = {
+				NOT = { government_has_flag = government_is_clan }
+			}
+			scope:recipient = {
+				is_vassal_of = scope:actor
+			}
+		}
+		modifier = {
+			factor = 0
+			scope:recipient = {
+				has_character_modifier = broke_blood_brotherhood_modifier
+			}
+		}
+
+		# Jamukha offers Temujin via Event
+		modifier = {
+			trigger = {
+				scope:actor = { this = character:mpo_mongol_1 }
+				scope:recipient = { this = character:125501 }
+			}
+			factor = 0
+		}
+	}
+}
+
+mpo_retrieve_land_from_herder_interaction = {
+	category = interaction_category_diplomacy
+	common_interaction = yes
+	notification_text = REVOKE_TITLE_PROPOSAL
+	interface_priority = 100
+	icon = mpo_retrieve_land_from_herder_interaction
+	desc = mpo_retrieve_land_from_herder_interaction_desc
+
+	special_interaction = revoke_title_interaction
+	interface = revoke_title
+	target_type = title
+	target_filter = recipient_domain_titles
+	ai_maybe = yes
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	interface_priority = 60
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+
+	# actor character giving the titles
+	# recipient character receiving the titles
+
+	is_shown = {
+		scope:recipient = {
+			government_has_flag = government_is_herder
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_adult = yes
+			is_imprisoned = no
+			prestige >= minor_prestige_value
+			trigger_if = {
+				limit = { is_landed = yes }
+				custom_tooltip = {
+					text = mpo_retrieve_land_from_herder_interaction_neighbour_tt
+					any_sub_realm_county = {
+						any_neighboring_county = {
+							holder = {
+								this = scope:recipient
+							}
+						}
+					}
+				}
+			}
+			trigger_else = {
+				government_has_flag = government_is_landless_adventurer
+				domicile.domicile_location.county.holder ?= scope:recipient
+			}
+		}
+		scope:recipient = {
+			custom_tooltip = {
+				text = mpo_retrieve_land_from_herder_independent_tt
+				OR = {
+					AND = {
+						is_independent_ruler = yes
+						is_tributary = no
+					}
+					is_tributary_of_suzerain_or_above = scope:actor
+					is_vassal_of = scope:actor
+				}
+			}
+			custom_tooltip = {
+				text = mpo_retrieve_land_migration_tt
+				capital_county = { is_migration_target = no }
+			}
+		}
+	}
+
+	can_be_picked_title = {
+		scope:target = {
+			title_revocation_standard_can_pick_title_trigger = yes
+		}
+	}
+
+	has_valid_target = {
+		scope:target = {
+			is_landless_type_title = no
+			NOT = { is_noble_family_title = yes }
+			NOT = { is_nomad_title = yes }
+		}
+	}
+
+	#Use hook -- Has to stay so the UI doesn't break
+	send_option = {
+		is_valid = {
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	on_auto_accept = {
+		scope:recipient = {
+			trigger_event = char_interaction.0200
+		}
+	}
+
+	on_accept = {
+		scope:recipient = {
+			if = {
+				limit = {
+					is_tributary = yes
+					NOT = {
+						is_tributary_of = scope:actor
+					}
+				}
+				suzerain = {
+					add_opinion = {
+						target = scope:actor
+						modifier = upset_opinion
+						opinion = -25
+					}
+				}
+			}
+		}
+		save_scope_value_as = {
+			name = revoke_title_interaction
+			value = yes
+		}
+		scope:recipient = {
+			capital_county = {
+				change_county_control = -25
+			}
+		}
+		scope:actor = {
+			add_prestige = minor_prestige_loss
+			trigger_event = char_interaction.0199
+		}
+		
+
+		scope:actor = {
+			if = {
+				limit = { has_character_flag = flag_hostile_actions_disabled_delay }
+				remove_character_flag = flag_hostile_actions_disabled_delay
+			}
+			if = {
+				limit = { government_has_flag = government_is_landless_adventurer }
+				demand_pastureland_adventurer_interaction_effect = yes
+			}
+			else = {
+				revoke_title_interaction_effect = yes
+			}
+		}
+	}
+
+	auto_accept = {
+		scope:actor = { is_landed = yes }
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = tributaries
+		ai_recipients = top_realm_domicile_owners
+	}
+	ai_targets = {
+		ai_recipients = neighboring_rulers
+		max = 5
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 12
+		duchy = 4
+		kingdom = 4
+		empire = 4
+		hegemony = 4
+	}
+
+	ai_potential = {
+		#domain_size < domain_limit
+		primary_title.tier >= tier_county
+		#ADDED - better logic
+		OR = {
+			domain_size < domain_limit
+			AND = {
+				government_has_flag = government_is_nomadic 
+				current_domain_fertility <= bad_county_fertility_level
+			}
+			AND = {
+				NOT = { government_has_flag = government_is_nomadic }
+				vassal_count < vassal_limit
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 0
+		modifier = {
+			scope:actor = { government_has_flag = government_is_landless_adventurer }
+			add = -50
+			desc = YOU_ARE_AN_ADVENTURER_REASON
+		}
+		modifier = {
+			exists = scope:actor.suzerain
+			add = -25
+			desc = ADVENTURER_SUZERAIN_REASON
+		}
+		modifier = {
+			scope:actor = { government_has_flag = government_is_landless_adventurer }
+			add = {
+				value = scope:actor.military_power
+				divide = 100
+			}
+			desc = ADVENTURER_MILITARY_POWER_REASON
+		}
+	}
+
+	ai_will_do = {
+		base = 0
+		modifier = {
+			scope:actor = {
+				government_has_flag = government_is_nomadic
+				#current_domain_fertility <= bad_county_fertility_level
+				#ADDED - better logic
+				OR = {
+					#current_domain_fertility <= bad_county_fertility_level
+					scope:recipient.current_domain_fertility >= 90	#might as well take it already
+					scope:recipient.current_domain_fertility > { value = current_domain_fertility multiply = 2.5 }
+				}
+			}
+			add = 100
+		}
+		modifier = {
+			scope:actor = {
+				NOT = { government_has_flag = government_is_nomadic }
+				short_term_gold >= massive_gold_value
+				NOR = {
+					has_trait = humble
+					has_trait = content
+				}
+			}
+			add = 25
+		}
+		#ADDED - plz get rid of herders for the love of god
+		modifier = {
+			scope:actor = {
+				NOR = { 
+					government_has_flag = government_is_nomadic 
+					government_has_flag = government_is_landless_adventurer
+					has_trait = humble
+					has_trait = content
+				}
+			}
+			add = {
+				value = 25
+				if = {
+					limit = { domain_size < domain_limit }
+					add = 475
+				}
+			}
+		}
+		#ADDED - throttle vassals somewhat
+		modifier = {
+			scope:actor = {
+				top_liege != this
+			}
+			factor = 0.5
+		}
+	}
+}
 
 mpo_vassal_to_tributary_interaction = {
 	category = interaction_category_vassal
@@ -488,6 +1272,9 @@ mpo_negotiate_obedience_interaction = {
 	}
 	popup_on_receive = yes
 	pause_on_receive = yes
+	
+	#ADDED
+	cooldown = { months = 1 }
 
 	is_shown = {
 		scope:actor = {
@@ -505,7 +1292,7 @@ mpo_negotiate_obedience_interaction = {
 			value = minor_prestige_value	#prev medium_prestige_value
 			if = {
 				limit = {
-					scope:actor = { 
+					scope:actor = {
 						OR = {
 							has_realm_law = nomadic_authority_2
 							has_realm_law = meritocratic_bureaucracy_1
@@ -516,7 +1303,7 @@ mpo_negotiate_obedience_interaction = {
 			}
 			else_if = {
 				limit = {
-					scope:actor = { 
+					scope:actor = {
 						OR = {
 							has_realm_law = nomadic_authority_3
 							has_realm_law = meritocratic_bureaucracy_2
@@ -527,7 +1314,7 @@ mpo_negotiate_obedience_interaction = {
 			}
 			else_if = {
 				limit = {
-					scope:actor = { 
+					scope:actor = {
 						OR = {
 							has_realm_law = nomadic_authority_4
 							has_realm_law = meritocratic_bureaucracy_3
@@ -654,7 +1441,7 @@ mpo_negotiate_obedience_interaction = {
 	}
 
 	ai_accept = {
-		base = -50
+		base = -50	#prev -95
 		
 		#ADDED
 		modifier = { # Opinion Factor
@@ -874,7 +1661,7 @@ mpo_negotiate_obedience_interaction = {
 					has_sub_region_phase_parameter = the_great_steppe_easier_obedience
 					any_situation_sub_region_participant_group = {
 						participant_group_type = nomad_rulers_capital
-						participant_group_has_character = scope:recipient 	#prev actor
+						participant_group_has_character = scope:actor
 					}
 				}
 			}
@@ -899,11 +1686,11 @@ mpo_negotiate_obedience_interaction = {
 		base = 0
 		modifier = {
 			scope:herd ?= yes
-			add = -75			#prev -1
+			add = -60			#prev -1
 		}
 		modifier = {
 			scope:gold ?= yes
-			add = -75			#prev -1
+			add = -60			#prev -1
 		}
 		modifier = {
 			scope:hook ?= yes

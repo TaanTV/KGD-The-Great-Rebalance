@@ -182,7 +182,8 @@ BKT_prestige_convertion = {
 				multiply = {
 					value = prestige_level
 					multiply = 0.50
-					min = 0.25
+					min = 0
+					add = 0.25
 				}
 				if = {		#Make AI a bit less dead
 					limit = { is_ai = yes }
@@ -230,7 +231,8 @@ BKT_piety_convertion = {
 				multiply = {
 					value = piety_level
 					multiply = 0.50
-					min = 0.25
+					min = 0
+					add = 0.25
 				}
 				if = {		#Make AI a bit less dead
 					limit = { is_ai = yes }
@@ -271,6 +273,10 @@ BKT_herd_decay = {
 					fixed_range = {
 						min = 5
 						max = 6
+					}
+					if = {	#spare vassals a bit
+						limit = { top_liege != this }
+						add = -1
 					}
 					multiply = {
 						value = 1
@@ -358,6 +364,7 @@ five_year_playable_pulse = {
 	on_actions = {
 		BKT_ai_self_legitimization_pulse
 		BKT_ai_bastard_legitimization_pulse
+		BKT_herder_vassals_fix_pulse
 	}
 }
 
@@ -567,6 +574,21 @@ BKT_ai_bastard_legitimization_pulse = {
 				debug_log_scopes = yes
 				debug_log_date = yes
 			}
+		}
+	}
+}
+
+BKT_herder_vassals_fix_pulse = {
+	trigger = {
+		government_has_flag = government_is_herder
+		top_liege != this
+		NOT = { liege = { government_has_flag = government_is_herder } }	#now this would be horrific
+	}
+	effect = {
+		change_government = nomad_government
+		every_held_county = {
+			limit = { title_province = { has_holding_type = herder_holding } }
+			title_province = { set_holding_type = nomad_holding }
 		}
 	}
 }

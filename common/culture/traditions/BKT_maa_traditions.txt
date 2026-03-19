@@ -1,4 +1,197 @@
-﻿tradition_mobile_guards = {
+﻿tradition_land_of_the_bow = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = mena
+		4 = bow.dds
+	}
+	
+	is_shown = {
+		has_cultural_pillar = heritage_east_african
+	}
+	can_pick = {
+		has_cultural_pillar = heritage_east_african
+	}
+	
+	parameters = {
+		unlock_maa_archers_of_the_nile = yes
+		hunting_archery_building_bonuses = yes
+	}
+	county_modifier = {
+		floodplains_levy_size = 0.1
+	}
+	province_modifier = {
+		garrison_size = 0.25
+	}
+	character_modifier = {
+		defender_advantage = 5
+		archers_damage_mult = 0.2
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_or_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = archers
+								value >= 320	#prev 800
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_archers_desc	#prev culture_head_archers_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_land_of_the_bow }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				NOT = {
+					scope:character = {
+						any_sub_realm_county = {
+							culture = scope:character.culture
+							county_has_province_with_terrain = {
+								terrain = floodplains
+							}
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+}
+
+tradition_hussar = { #Konni Raids
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = western
+		4 = rider.dds
+	}
+
+	#This replaces Hit and Run
+	is_shown = {
+		OR = {
+			has_cultural_pillar = heritage_south_slavic
+			has_cultural_pillar = heritage_magyar
+			has_cultural_pillar = heritage_west_slavic
+		}
+	}
+	can_pick = {
+		trigger_if = {
+			limit = {
+				OR = {
+					NOT = { exists = scope:replacing }
+					NOT = { scope:replacing = culture_tradition:tradition_hit_and_run }
+				}
+			}
+			NOT = { has_cultural_tradition = tradition_hit_and_run } #To prevent stacking after hybridization
+		}
+	}
+	
+	parameters = {
+		unlock_maa_hussar = yes
+	}
+	character_modifier = {
+		skirmishers_screen_mult = 0.2
+		light_cavalry_damage_mult = 0.2
+		light_cavalry_screen_mult = 0.2
+		retreat_losses = -0.1
+		hard_casualty_modifier = -0.1
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOT = {
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_stoic_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = light_cavalry
+								value >= 200	#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_light_cavalry_desc	#prev culture_head_light_cavalry_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_hussar }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = { value = 400 }
+}
+
+tradition_mobile_guards = {
 	category = regional
 
 	layers = {
@@ -56,14 +249,14 @@
 						scope:character = {
 							number_maa_soldiers_of_base_type = {
 								type = skirmishers
-								value >= 800
+								value >= 320	#prev 800
 							}
 						}
 					}
 				}
 				add = {
 					value = tradition_unfulfilled_criteria_penalty
-					desc = culture_head_skirmishers_desc
+					desc = bkt_culture_head_skirmishers_desc	#prev culture_head_skirmishers_desc
 				}
 			}
 

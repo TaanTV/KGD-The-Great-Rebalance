@@ -178,7 +178,7 @@ embrace_english_culture_decision = {
 					any_realm_county = {
 						culture = culture:english
 					}
-					culture.culture_head = {
+					culture.culture_head ?= {
 						any_realm_county = {
 							culture = culture:english
 						}

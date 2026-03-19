@@ -172,7 +172,7 @@
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -100
 			}
 		}
 
@@ -248,7 +248,7 @@
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -100
 			}
 		}
 
@@ -356,7 +356,7 @@
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -100
 			}
 		}
 
@@ -419,7 +419,7 @@
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -100
 			}
 		}
 
@@ -590,7 +590,7 @@
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -100
 			}
 		}
 
@@ -1849,7 +1849,7 @@ succession_gender_laws = {
 						}
 					}
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
@@ -1867,13 +1867,13 @@ succession_gender_laws = {
 					}
 					culture = { has_cultural_parameter = female_preference_inheritance }
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -1000
 			}
 		}
 	}
@@ -2034,7 +2034,7 @@ succession_gender_laws = {
 						}
 					}
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
@@ -2052,20 +2052,20 @@ succession_gender_laws = {
 					}
 					culture = { has_cultural_parameter = female_preference_inheritance }
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					is_male = yes
 					government_has_flag = government_is_clan
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -1000
 			}
 		}
 	}
@@ -2179,13 +2179,13 @@ succession_gender_laws = {
 						NOT = { has_doctrine = doctrine_gender_equal }
 					}
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -1000
 			}
 		}
 	}
@@ -2296,7 +2296,7 @@ succession_gender_laws = {
 						}
 					}
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
@@ -2314,20 +2314,20 @@ succession_gender_laws = {
 					}
 					culture = { has_cultural_parameter = male_preference_inheritance }
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					is_female = yes
 					government_has_flag = government_is_clan
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -1000
 			}
 		}
 	}
@@ -2464,7 +2464,7 @@ succession_gender_laws = {
 						}
 					}
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
@@ -2482,13 +2482,13 @@ succession_gender_laws = {
 					}
 					culture = { has_cultural_parameter = male_preference_inheritance }
 				}
-				multiply = 0
+				add = -100
 			}
 			if = {
 				limit = {
 					exists = scope:title
 				}
-				multiply = 0
+				add = -1000
 			}
 		}
 	}

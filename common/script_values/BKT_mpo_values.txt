@@ -70,7 +70,10 @@ obedience_value = {
 		value = 0
 		#ADDED - those two
 		if = {
-			limit = { is_courtier_of = obedience_target }
+			limit = { 
+				exists = obedience_target
+				is_courtier_of = obedience_target 
+			}
 			add = 5
 			if = {
 				limit = { is_lowborn = yes }

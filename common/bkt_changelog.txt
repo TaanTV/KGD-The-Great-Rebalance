@@ -53,10 +53,56 @@ Very soon:
 #TODO: maybe make an event when installing someone on the throne (so, same rank than you?) via claim cb to ally them
 #TODO: i made BKT_on_landed, do smth with it
 
+#skills = { martial prowess }
+- Fixed obedience acceptance from current season not working	#NOTE: ISNT ACTUALLY FIXED!
 
+####	0.11.13	####
+- 
 
 ####	0.11.12	####
-- 
+- Made Mortal Adoration perk give weak hooks on Seduce scheme end if you choose to become lovers for non-adventurers too
+- Added a notification to current situation about powerful vassals/council blocking war declaration (when relevant)
+
+- Reverted personal and title MAA limits change from all administrative governments
+- Reverted nerf to domain tax bonus of Stewardship skill
+- Nerfed flat vassal levy contribution bonus of Haku holy site
+- Buffed Loyal to the Crown county modifier a bit
+- Buffed tax mult but reduced build cost bonus of Silk Road trading modifiers
+- Made mods prestige/piety decay a tiny bit more punishing 
+- Buffed levy stats and levy size (relative to other admin governments) of Meritocratic Khanate 
+- Allowed raiding without losing prestige to characters with Meritocratic Khanate government
+- Made nomadic change vassal contract also require vassals to use hook/borrowed powers 
+- Halved Meet Peers cost for nomads
+- Doubled commander trait xp from successful nerge (since it isnt guaranteed now)
+- Added some penalties to Horde Riders in forests, taiga and wetlands
+- Added county fertility bonus to Exalt Crown: Development modifier
+- Added county fertility modifiers to Silk Road trading modifiers
+- Added some nomad-specific bonuses to holy sites with levy related bonuses
+- Added flat vassal herd contribution bonus to nomads in Larger Levies perk
+- Added a 1 month cooldown to Demand/Negotiate obedience interactions
+- Increased prestige for successful nerge hunt slightly
+- Increased max domain limit of all dominance levels by 1
+- Increased cost of 4th and decreased cost of 2nd dominance levels
+- Increased Swear Blood Brotherhood acceptance penalty from negative opinion and border distance
+- Reduced Swear Blood Brotherhood acceptance at base, from options and tier difference
+- Reduced herd decay for vassals 
+- Reduced vassal herd contribution bonus of Honored to Serve perk
+- Reduced title tier impact on acceptance of Demand Obedience interaction
+- Reduced opinion impact on acceptance of Demand Obedience interaction
+- Reduced belligirent vassal opinion bonus and dread required from Demand Obedience interaction
+- Reduced marriage acceptance bonus from obedience
+- Reduced marriage acceptance specific to nomads (low dominance, nomads vs non-nomads) a bit
+- Made AI a bit better at marrying (i hope)
+- Made AI even less likely to murder targets its obedient to
+- Made AI nomads way less likely to host non-nerge hunts
+- Made AI demand pastureland off herders more often (especially non-nomadic landed rulers)
+- Made AI lieges of all government types occasionally change contracts through tyranny (fr this time)
+- Fixed AI liege changing vassal contract always forever blocking further vassal contract changes
+- Fixed nomadic change vassal contract interaction missing checks for use of Borrowed powers
+- Fixed nomadic change vassal contract interaction missing tyranny gain for tyrannical changes
+- Fixed Almohadi Calpihate title not getting Temporal Theocratic succession law
+- Fixed some traditions requiring way too many MAAs to unlock/fulfill criteria for
+- Updated localisation files
 
 ####	0.11.11.1####
 - Made AI nomad emperors way less likely to migrate

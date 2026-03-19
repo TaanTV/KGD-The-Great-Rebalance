@@ -259,8 +259,11 @@ large_levies_perk = {
 	
 	government_character_modifier = {
 		flag = government_is_nomadic
-		vassal_herd_contribution_mult = 0.2
+		#vassal_herd_contribution_mult = 0.2
 		monthly_income_from_herd_mult = 0.05
+		#ADDED
+		vassal_levy_contribution_add = -0.05
+		vassal_herd_contribution_add = 0.05
 	}
 	
 	effect = {
@@ -376,7 +379,7 @@ honored_to_serve_perk = {
 		invert_check = yes
 		happy_powerful_vassal_tax_contribution_mult = 0.05		#prev 0.2
 		happy_powerful_vassal_levy_contribution_mult = 0.05		#prev 0.2
-		happy_powerful_vassal_herd_contribution_mult = 0.2
+		happy_powerful_vassal_herd_contribution_mult = 0.05		#prev 0.2
 	}
 
 	government_character_modifier = {

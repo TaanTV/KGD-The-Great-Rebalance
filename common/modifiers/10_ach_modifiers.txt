@@ -534,15 +534,15 @@ coronation_crowds_beaten_modifier = {
 }
 coronation_loyal_to_the_crown_modifier = {
 	icon = martial_positive
-	county_opinion_add = 10
+	county_opinion_add = 20			#prev 10
 	levy_size = 0.25
-	development_growth_factor = 0.02
+	development_growth_factor = 0.1	#prev 0.02
 }
 coronation_still_loyal_modifier = {
 	icon = martial_negative
 	county_opinion_add = -20
 	levy_size = -0.33
-	development_growth_factor = -0.03
+	development_growth_factor = -0.15	#prev -0.03
 }
 
 # Host intent rewards
@@ -556,6 +556,8 @@ ach_intent_development_boost_modifier = {
 	icon = stewardship_positive
 	development_growth = 0.03			#prev 0.05
 	development_growth_factor = 0.1
+	#ADDED
+	county_fertility_growth_add = 0.5
 }
 ach_intent_vassal_defensive_boost_modifier = {
 	icon = martial_positive
@@ -567,6 +569,8 @@ ach_intent_vassal_development_boost_modifier = {
 	icon = stewardship_positive
 	development_growth = 0.05			#prev 0.1
 	development_growth_factor = 0.2
+	#ADDED
+	county_fertility_growth_add = 0.75
 }
 ach_intent_better_councillors_modifier = {
 	icon = diplomacy_positive

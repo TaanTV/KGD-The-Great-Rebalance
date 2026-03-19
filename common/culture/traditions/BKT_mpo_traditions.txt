@@ -6,6 +6,111 @@
 # MPO Traditions 	 #
 ######################
 
+tradition_mpo_iron_cavalry = {
+	category = regional
+
+	layers = {
+		0 = martial
+		1 = steppe
+		4 = iron_cavalry.dds
+	}
+
+	is_shown = {
+		has_mpo_dlc_trigger = yes
+		OR = {
+			has_cultural_pillar = heritage_mongolic
+			has_cultural_pillar = heritage_turkic
+			has_cultural_pillar = heritage_magyar
+			scope:character = {
+				mpo_can_recruit_nomad_maa_trigger = yes
+			}
+		}
+	}
+
+	
+	can_pick = {
+		culture_not_pacifistic_trigger = yes
+		custom_tooltip = {
+			text = bkt_culture_head_archer_cavalry_desc	#prev culture_head_archer_cavalry_desc
+			scope:character = {
+				max_number_maa_soldiers_of_base_type = {
+					type = archer_cavalry
+					value >= 240	#prev 600
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:character = { government_has_flag = government_is_nomadic }
+			}
+			scope:character.domicile ?= {
+				has_domicile_building_or_higher = paiza_metal_trade_yurt_01
+			}
+		}
+		trigger_else = {
+			scope:character = {
+				has_trait = nomadic_philosophy
+			}
+		}
+	}
+	
+	parameters = {
+		unlock_maa_cataphract_archers = yes
+		martial_traits_give_out_hcav_bonus = yes
+		metalworkers_internal_yurt_unlock = yes
+	}
+	character_modifier = {
+		heavy_cavalry_toughness_mult = 0.2
+		archer_cavalry_toughness_mult = 0.2
+		light_cavalry_toughness_mult = 0.1
+		herd_conversion = -0.01
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				multiply = 4
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_mpo_iron_cavalry }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200
+		if = {
+			limit = { # Reduce chance slightly if the culture has access to other "cavalry" types
+				OR = {
+					has_innovation = innovation_war_camels
+					has_innovation = innovation_elephantry
+				}
+			}
+			multiply = 0.4
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 4
+		}
+	}
+}
+
 tradition_mpo_wolves_of_the_deep_steppe = {
 	category = regional
 

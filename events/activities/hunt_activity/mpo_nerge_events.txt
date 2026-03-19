@@ -977,6 +977,15 @@ mpo_nerge.1010 = {
 				50 = {
 					show_chance = no
 					desc = mpo_nerge.1010.a.tt.injury
+					#ADDED - im sure they can have some agency here
+					modifier = {
+						add = {
+							add = martial
+							add = prowess
+							add = prowess
+							divide = 2
+						}
+					}
 					add_opinion = {
 						modifier = abandoned_me_opinion
 						target = root
@@ -2208,7 +2217,7 @@ mpo_nerge.1030 = {
 			}
 			#ADDED - why is this not here?
 			modifier = {
-				OR = {
+				AND = {
 					prowess > decent_skill_rating
 					martial > decent_skill_rating
 				}
@@ -2731,7 +2740,7 @@ mpo_nerge.1035 = {
 			#ADDED
 			modifier = {
 				factor = 4
-				OR = {
+				AND = {
 					learning > decent_skill_rating
 					intrigue > decent_skill_rating
 				}

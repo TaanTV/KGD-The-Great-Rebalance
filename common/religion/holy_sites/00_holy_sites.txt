@@ -386,6 +386,8 @@ damascus = {
 		name = holy_site_damascus_effect_name
 		levy_size = 0.05
 		monthly_county_control_growth_factor = 0.1
+		#ADDED
+		herd_conversion = 0.003
 	}
 }
 
@@ -1705,6 +1707,8 @@ poszony = {
 	character_modifier = {
 		name = holy_site_poszony_effect_name
 		levy_reinforcement_rate_same_faith = 0.2
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 
@@ -1760,6 +1764,8 @@ preslav = {
 	character_modifier = {
 		name = holy_site_preslav_effect_name
 		levy_size = 0.1
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 
@@ -2553,7 +2559,9 @@ haku = {
 
 	character_modifier = {
 		name = holy_site_haku_effect_name
-		vassal_levy_contribution_add = 0.15
+		vassal_levy_contribution_add = 0.05	#prev 0.15
+		#ADDED
+		vassal_herd_contribution_add = 0.03
 	}
 }
 
@@ -2996,6 +3004,8 @@ yizhou = {
 	character_modifier = {
 		name = holy_site_yizhou_effect_name
 		levy_size = 0.1
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 
@@ -3031,6 +3041,8 @@ tate = {
 	character_modifier = {
 		name = holy_site_tate_effect_name
 		levy_size = 0.1
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 
@@ -3183,6 +3195,8 @@ dongting = {
 	character_modifier = {
 		name = holy_site_dongting_effect_name
 		levy_reinforcement_rate_same_faith = 0.2
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 
@@ -3435,6 +3449,8 @@ zunyi = {
 	character_modifier = {
 		name = holy_site_zunyi_effect_name
 		levy_reinforcement_rate_same_faith = 0.2
+		#ADDED
+		herd_conversion = 0.005
 	}
 }
 

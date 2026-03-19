@@ -27,7 +27,7 @@ intrigue_modifier = {
 #	monthly_barter_goods_mult = 0.01
 #}
 stewardship_modifier_with_offset = {
-	domain_tax_mult = 0.015				#prev 0.02
+	domain_tax_mult = 0.02
 	domicile_monthly_gold_mult = 0.03	#prev 0.04
 	monthly_income_from_herd_mult = 0.02
 	#build_gold_cost = -0.02

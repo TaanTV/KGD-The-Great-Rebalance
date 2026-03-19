@@ -563,7 +563,7 @@ mpo_hunt.0010 = {
 						min = -49
 					}
 					min = 5
-					desc = mpo_hunt.1050.c.tt.success		#good enough of a loc
+					desc = mpo_nerge.1050.c.tt.success		#good enough of a loc
 					send_interface_toast = {
 						title = mpo_nerge.1050.c.tt.success
 						left_icon = scope:target

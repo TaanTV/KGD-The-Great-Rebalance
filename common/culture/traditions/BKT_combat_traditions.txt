@@ -400,7 +400,7 @@ tradition_frugal_armorsmiths = {
 				}
 				add = {
 					value = tradition_unfulfilled_criteria_penalty
-					desc = culture_head_small_soldiers_desc
+					desc = bkt_culture_head_small_soldiers_desc	#prev culture_head_small_soldiers_desc
 				}
 			}
 
@@ -762,6 +762,127 @@ tradition_stalwart_defenders = {
 	}
 }
 
+tradition_hit_and_run = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mediterranean
+		4 = soldiers4.dds
+	}
+	
+	is_shown = {
+		NOR = { #Replaced by Konni Raids (tradition_hussar)
+			has_cultural_pillar = heritage_south_slavic
+			has_cultural_pillar = heritage_magyar
+			has_cultural_pillar = heritage_west_slavic
+		}
+	}
+	can_pick = {
+		trigger_if = {
+			limit = {
+				OR = {
+					NOT = { exists = scope:replacing }
+					NOT = { scope:replacing = culture_tradition:tradition_hussar }
+				}	
+			}
+			NOT = { has_cultural_tradition = tradition_hussar } #To prevent stacking after hybridization
+		}
+	}
+
+	# Iberian: Concurso Tactics
+	character_modifier = {
+		nomadic_horde_damage_mult = 0.05
+		nomadic_horde_screen_mult = 0.05
+		skirmishers_damage_mult = 0.2
+		skirmishers_screen_mult = 0.25
+		light_cavalry_damage_mult = 0.2
+		light_cavalry_screen_mult = 0.25
+		retreat_losses = -0.1
+		hard_casualty_modifier = -0.1
+	}
+
+	parameters = {
+		hit_run_nomadic_cultrad_stationing_bonus = yes
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_egalitarian = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_egalitarian_or_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {	
+							number_maa_soldiers_of_base_type = {
+								type = skirmishers
+								value >= 200	#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = light_cavalry
+								value >= 200	#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_skirmishers_and_light_cav_desc	#prev culture_head_skirmishers_and_light_cav_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_hit_and_run }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200
+		if = {
+			limit = {
+				NOR = {
+					culture_has_skirmisher_maa = yes
+					culture_has_light_cavalry_maa = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 4
+		}
+	}
+}
+
 tradition_stand_and_fight = {
 	category = combat
 
@@ -831,7 +952,7 @@ tradition_stand_and_fight = {
 				}
 				add = {
 					value = tradition_unfulfilled_criteria_penalty
-					desc = culture_head_heavy_inf_and_pikemen_desc
+					desc = bkt_culture_head_heavy_inf_and_pikemen_desc	#prev culture_head_heavy_inf_and_pikemen_desc
 				}
 			}
 
@@ -868,6 +989,267 @@ tradition_stand_and_fight = {
 				}
 			}
 			multiply = 2
+		}
+	}
+}
+
+
+tradition_adaptive_skirmishing = {
+	category = combat
+
+	layers = {
+		0 = intrigue
+		1 = western
+		4 = soldiers4.dds
+	}
+
+	parameters = {
+		next_level_military_camps = yes
+		skirmisher_nomadic_cultrad_stationing_bonus = yes
+	}
+	
+	character_modifier = {
+		enemy_terrain_advantage = -0.25
+		archers_damage_mult = 0.15
+		archers_toughness_mult = 0.15
+		archers_maintenance_mult = -0.05
+		skirmishers_damage_mult = 0.15
+		skirmishers_toughness_mult = 0.2
+		skirmishers_maintenance_mult = -0.05	
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+						culture_pillar:ethos_stoic = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_spiritual_or_stoic_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = skirmishers
+								value >= 200	#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = archers
+								value >= 200	#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_small_soldiers_desc	#prev culture_head_small_soldiers_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_adaptive_skirmishing }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 400
+		if = {
+			limit = {
+				scope:character = {
+					OR = {
+						number_maa_soldiers_of_base_type = {
+							type = heavy_infantry
+							value >= 120	#prev 200
+						}	
+						number_maa_soldiers_of_base_type = {
+							type = pikemen
+							value >= 120	#prev 200
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				OR = {
+					culture_has_heavy_infantry_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+				}
+			}
+			multiply = 0
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					culture_has_archer_maa = yes
+					culture_has_skirmisher_maa = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 2
+		}
+	}
+}
+
+tradition_formation_fighting = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mediterranean
+		4 = soldiers3.dds
+	}
+	
+	layers = {
+		0 = martial
+	}
+
+	parameters = {
+		next_level_barracks = yes
+		formation_fighting_strategist = yes
+		formation_nomadic_cultrad_stationing_bonus = yes
+	}
+
+	character_modifier = {
+		counter_efficiency = 0.15
+		pursue_efficiency = -0.15
+		archers_damage_mult = 0.1
+		archers_toughness_mult = 0.15
+		pikemen_damage_mult = 0.15
+		pikemen_toughness_mult = 0.2
+		nomadic_horde_toughness_mult = 0.05
+		nomadic_horde_damage_mult = 0.05
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_courtly = { is_in_list = traits }
+						culture_pillar:ethos_communal = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_courtly_or_communal_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = pikemen
+								value >= 200	#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = archers
+								value >= 200	#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_archers_and_pikemen_desc	#prev culture_head_archers_and_pikemen_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_formation_fighting }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 200
+		if = {
+			limit = {
+				scope:character = {
+					OR = {
+						number_maa_soldiers_of_base_type = {
+							type = light_cavalry
+							value >= 160	#prev 300
+						}	
+						number_maa_soldiers_of_base_type = {
+							type = skirmishers
+							value >= 200	#prev 400
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+		if = {
+			limit = {
+				OR = {
+					culture_has_skirmisher_maa = yes
+					culture_has_light_cavalry_maa = yes
+				}
+			}
+			multiply = 0
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					culture_has_archer_maa = yes
+					culture_has_pikemen_maa = yes
+				}
+			}
+			multiply = 0.25
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 4
 		}
 	}
 }

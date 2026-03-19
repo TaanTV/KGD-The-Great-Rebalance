@@ -3750,7 +3750,7 @@
 					#ADDED
 					if = {
 						limit = { government_has_flag = government_is_nomadic }
-						multiply {
+						multiply = {
 							value = 0.05
 							desc = "You're a nomad or what?"
 						}
@@ -4051,7 +4051,7 @@
 					#ADDED
 					if = {
 						limit = { government_has_flag = government_is_nomadic }
-						multiply {
+						multiply = {
 							value = 0.05
 							desc = "You're a nomad or what?"
 						}
@@ -4165,7 +4165,7 @@
 					#ADDED
 					if = {
 						limit = { government_has_flag = government_is_nomadic }
-						multiply {
+						multiply = {
 							value = 0.5
 							desc = "You're a nomad or what?"
 						}

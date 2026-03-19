@@ -2,7 +2,8 @@
 	#Basicaly rewrote this all because seems like they get only 1 army of 1000 levies????
 	save_temporary_scope_as = root_scope
 	spawn_almohad_troops_effect = { TROOPS_NAME = first_almohad_event_troops }
-	#ADDED - also become conqueror coz why not really
+	#ADDED - fix HOF succession and also become conqueror coz why not really 
+	scope:root_scope.faith.religious_head_title = { add_title_law = temporal_head_of_faith_succession_law }
 	trigger_event = conqueror.0001
 }
 

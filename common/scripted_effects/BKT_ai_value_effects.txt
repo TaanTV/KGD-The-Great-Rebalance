@@ -157,7 +157,7 @@ ai_chance_to_become_conqueror_effect = {
 					limit = {
 						government_has_flag = government_is_nomadic
 					}
-					add = 2
+					add = 0.25	#prev 2	#ADDED - actually it ruins nomads since they dont build in domiciles sooo
 				}
 				if = {
 					limit = {
@@ -165,7 +165,7 @@ ai_chance_to_become_conqueror_effect = {
 						highest_held_title_tier >= tier_kingdom
 						domicile.herd >= 10000
 					}
-					add = 2
+					add = 0.5	#prev 2
 				}
 				if = {
 					limit = {
@@ -340,6 +340,13 @@ ai_chance_to_become_conqueror_effect = {
 						}
 					}
 					add = -2
+				}
+				#ADDED - less for ones with empires already plz
+				if = {
+					limit = {
+						highest_held_title_tier >= tier_empire
+					}
+					add = -1
 				}
 				if = {
 					limit = {

@@ -22,6 +22,7 @@ murder_scheme_maintenance.1 = {
 				#ADDED - let wifes and important-ish ppl scheme.
 				has_any_court_position = no
 				is_councillor = no
+				is_diarch = no
 				NAND = {
 					is_married = yes
 					primary_spouse ?= { is_ruler = yes }
@@ -29,7 +30,7 @@ murder_scheme_maintenance.1 = {
 			}
 			static_group_filter = {
 				group = landless_murder_block
-				match = 0.25
+				match = 0.15	#prev 0.25
 			}
 		}
 		NOT = {
@@ -114,7 +115,7 @@ murder_scheme_maintenance.1 = {
 					}
 				}
 				modifier = {
-					add = -100
+					add = -500	#prev -100
 					is_obedient_to = root
 				}
 				modifier = {
