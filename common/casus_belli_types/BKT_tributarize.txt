@@ -163,6 +163,14 @@
 							else = {
 								max = 1000	#prev 300
 							}
+							#ADDED
+							if = {
+								limit = { 
+									scope:attacker = { government_has_flag = government_is_nomadic }
+									scope:defender = { government_has_flag = government_is_nomadic }
+								}
+								multiply = 0.8
+							}
 							desc = CB_SIZE_OF_TARGET_REALM_COST
 						}
 					}
@@ -517,6 +525,8 @@
 						NOR = { 
 							government_has_flag = government_is_tribal
 							government_has_flag = government_is_mandala
+							#ADDED
+							government_has_flag = government_is_nomadic
 						}
 					}
 					scope:defender = {
@@ -545,6 +555,18 @@
 				scope:attacker.domain_size < scope:attacker.domain_limit
 			}
 			multiply = 0.1
+		}
+		#ADDED
+		else_if = {
+			limit = {
+				scope:attacker = { 
+					government_has_flag = government_is_nomadic 
+					exists = domicile
+					domicile.herd > 50000
+				}
+				scope:defender = { government_has_flag = government_is_nomadic }
+			}
+			multiply = 2
 		}
 
 		add = frankokratia_leader_protection_value #Set back to 0. Declaring war on the frankokratia leader can really ruin the whole thing
@@ -619,12 +641,12 @@
 					}
 				}
 
-				if = {
-					limit = {
-						NOT = { government_has_flag = government_is_mandala }
-					}
-					add = -1000
-				} 
+				#if = {
+				#	limit = {
+				#		NOT = { government_has_flag = government_is_mandala }
+				#	}
+				#	add = -1000
+				#} 
 			}
 		}
 	}

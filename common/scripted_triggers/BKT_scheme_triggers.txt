@@ -65,6 +65,42 @@ build_murder_targets_trigger = {
 			add_to_temporary_list = murder_targets
 		}
 	}
+	#ADDED - and lovers wifes! But only if you're kind of evil
+	any_relation = { 
+		type = lover
+		count = all
+		trigger_if = {
+			limit = {
+				save_temporary_scope_as = lover_scope
+				NOT = { has_trait = seducer }	#those guys are safe :P
+				primary_spouse ?= {
+					this != root
+					NOR = {
+						has_relation_potential_friend = root
+						has_relation_friend = root
+						has_relation_potential_lover = root
+						has_relation_lover = root
+					}
+					root = {
+						ai_honor <= low_negative_ai_value
+						ai_compassion <= medium_positive_ai_value
+						OR = {
+							ai_vengefulness >= medium_positive_ai_value
+							ai_boldness >= high_positive_ai_value
+							ai_greed >= very_high_positive_ai_value
+						}
+						"opinion(prev)" < 0
+						can_marry_character_trigger = { CHARACTER = scope:lover_scope }	#all the way down here coz it might be the most expensive trigger here
+						can_start_scheme = {
+							target_character = prev
+							type = murder
+						}
+					}
+				}
+			}
+			primary_spouse = { add_to_temporary_list = murder_targets }
+		}
+	}
 	trigger_if = { # Greedy people have no qualms murdering their way up the succession...
 		limit = {
 			ai_greed >= low_positive_ai_value

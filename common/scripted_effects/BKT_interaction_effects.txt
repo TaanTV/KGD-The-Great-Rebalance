@@ -687,7 +687,7 @@ start_tributary_interaction_effect = {
 					hidden_effect = {
 						tributary_contract_set_obligation_level = {
 							type = barter_goods_obligations
-							level = 3
+							level = 2	#prev 3
 						}
 						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 2 }
 						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
@@ -707,7 +707,7 @@ start_tributary_interaction_effect = {
 							level = 1
 						}
 						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
-						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }
+						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 0 }	#prev 1
 					}
 				}
 				custom_tooltip = low_wanua_tribute_barter_goods
@@ -720,7 +720,7 @@ start_tributary_interaction_effect = {
 					hidden_effect = {
 						tributary_contract_set_obligation_level = {
 							type = barter_goods_obligations
-							level = 2
+							level = 1	#prev 2
 						}
 						tributary_contract_set_obligation_level = { type = default_tributary_taxes level = 1 }
 						tributary_contract_set_obligation_level = { type = default_tributary_prestige level = 1 }

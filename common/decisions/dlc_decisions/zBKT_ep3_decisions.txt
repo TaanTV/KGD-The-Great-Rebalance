@@ -443,6 +443,93 @@ recreate_byzantine_empire_decision = {
 	}
 }
 
+### Found the Varangian Guard ###
+found_varangian_guard_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_varangian_guard.dds"
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 0
+		empire = 60
+		hegemony = 60
+	}
+
+	sort_order = 100
+
+	desc = found_varangian_guard_decision_desc
+	selection_tooltip = found_varangian_guard_decision_tooltip
+	decision_group_type = roman
+
+	is_shown = {
+		has_ep3_dlc_trigger = yes
+		culture = { has_cultural_parameter = unlock_maa_varangian_guards }
+		primary_title.tier >= tier_empire
+		NOT = {
+			# You have not already founded it for your current title
+			primary_title = { has_variable = founded_varangian_guard }
+		}
+	}
+	
+	is_valid = {
+		prestige_level >= 3
+		OR = {
+			any_realm_county = { culture = culture:norse }
+			any_courtier = {
+				count >= 5
+				culture = culture:norse
+			}
+			any_ally = { culture = culture:norse }
+			#ADDED - help AI press this a bit
+			trigger_if = {
+				limit = { is_ai = yes }
+				any_courtier_or_guest = {
+					count >= 8
+					culture = culture:norse
+				}
+			}
+			trigger_if = {
+				limit = { is_ai = yes }
+				current_year >= 988
+				title:e_byzantium ?= primary_title
+			}	
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_at_war = no
+		NOT = { exists = involved_activity }
+		is_imprisoned = no
+	}
+
+	cost = {
+		prestige = 1000
+	}
+
+	effect = {
+		primary_title = { set_variable = founded_varangian_guard }
+		send_interface_toast = {
+			title = unlocked_varangian_guard_desc_tt
+			type = event_toast_effect_neutral
+			left_icon = root
+			custom_tooltip = unlocked_varangian_guard_desc
+		}
+		create_character_memory = {
+			type = found_varangian_memory
+		}
+	}
+
+	ai_potential = {
+		has_title = title:e_byzantium
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}
+
 
 #A Byzantine switches it back
 ### Expunge Latin Dominion ###
@@ -776,3 +863,4 @@ expunge_latin_dominion_decision = {
 		}
 	}
 }
+

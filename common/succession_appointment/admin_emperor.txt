@@ -54,7 +54,7 @@
 					has_trait = born_in_the_purple
 				}
 				add = {
-					value = 150		#prev 50
+					value = 100		#prev 50
 					desc = trait_born_in_the_purple
 				}
 			}

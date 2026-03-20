@@ -760,6 +760,11 @@ counter_synergy_ai_weight_heavy_infantry = {
 		}
 		add = 8000
 	}
+	#ADDED - not with that traditon
+	if = {
+		limit = { culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban } }
+		add = -8000
+	}
 	#ADDED
 	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)
 		limit = {
@@ -1041,6 +1046,11 @@ counter_synergy_ai_weight_heavy_cavalry = {
 		}
 		add = 8000
 	}
+	#ADDED - not with that traditon
+	if = {
+		limit = { culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban } }
+		add = -8000
+	}
 	#ADDED
 	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)
 		limit = {
@@ -1253,7 +1263,11 @@ counter_synergy_ai_weight_elephant_cavalry = {
 		}
 		add = -30
 	}
-			
+	#ADDED - not with that traditon
+	if = {
+		limit = { culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban } }
+		add = -8000
+	}
 	#ADDED
 	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)
 		limit = {

@@ -202,7 +202,7 @@ tradition_only_the_strong = {
 			limit = {
 				scope:character = {
 					NOR = {
-						prowess >= 12
+						prowess >= 20	#prev 12
 						has_trait = strong
 						has_trait = physique_good
 					}
@@ -339,6 +339,128 @@ tradition_warriors_by_merit = {
 	}
 }
 
+tradition_strength_in_numbers = {
+	category = combat
+
+	layers = {
+		0 = martial
+		1 = mena
+		4 = soldiers3.dds
+	}
+
+	parameters = {
+		strength_in_numbers_maa_limit_bonus = yes
+		strength_in_numbers_heavy_maa_ban = yes
+	}
+	
+	province_modifier = {
+		levy_size = 0.25
+	}
+	character_modifier = {
+		supply_limit_mult = 0.5
+		herd_conversion = 0.04
+		#ADDED
+		heavy_infantry_maintenance_mult = 0.5
+		heavy_cavalry_maintenance_mult = 0.5
+		elephant_cavalry_maintenance_mult = 0.5
+	}
+	
+	cost = {
+		prestige = {
+			add = {
+				value = tradition_base_cost
+				desc = BASE
+				format = "BASE_VALUE_FORMAT"
+			}
+			if = {
+				limit = {
+					NOR = {
+						culture_pillar:ethos_bellicose = { is_in_list = traits }
+						culture_pillar:ethos_spiritual = { is_in_list = traits }
+					}
+				}
+				add = {
+					value = tradition_incompatible_ethos_penalty
+					desc = not_bellicose_or_spiritual_desc
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						scope:character = {
+							number_maa_soldiers_of_base_type = {
+								type = skirmishers
+								value >= 200	#prev 500
+							}	
+							number_maa_soldiers_of_base_type = {
+								type = archers
+								value >= 200	#prev 500
+							}
+						}
+					}
+				}
+				add = {
+					value = tradition_unfulfilled_criteria_penalty
+					desc = bkt_culture_head_small_soldiers_desc	#prev culture_head_small_soldiers_desc
+				}
+			}
+
+			if = {
+				limit = {
+					culture_tradition_reduction_trigger = { TRADITION = tradition_strength_in_numbers }
+				}
+				multiply = {
+					value = 0.5
+					desc = inspired_by_culture_desc
+				}
+			}
+			
+			multiply = tradition_replacement_cost_if_relevant
+		}
+	}
+	
+	ai_will_do = {
+		value = 20	#prev 5 # The AI shouldn't really pick this very often
+		if = {
+			limit = {
+				OR = {
+					culture_has_heavy_infantry_maa = yes
+					culture_has_pikemen_maa = yes
+					culture_has_heavy_cavalry_maa = yes
+				}
+			}
+			multiply = 0
+		}
+		#ADDED - the next two
+		else_if = {
+			limit = {
+				OR = {
+					culture_has_skirmisher_maa = yes
+					culture_has_archer_maa = yes
+					culture_has_light_cavalry_maa = yes
+				}
+			}
+			multiply = 5
+		}
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 2
+		}
+		if = {
+			limit = {
+				NOR = {
+					culture_pillar:ethos_bellicose = { is_in_list = traits }
+					culture_pillar:ethos_spiritual = { is_in_list = traits }
+				}
+			}
+			multiply = 0.5
+		}
+	}
+}
 
 tradition_frugal_armorsmiths = {
 	category = combat
@@ -454,6 +576,15 @@ tradition_frugal_armorsmiths = {
 				}
 			}
 			multiply = 0
+		}
+		#ADDED
+		else_if = {
+			limit = {
+				scope:character ?= {
+					ai_has_warlike_personality = yes
+				}
+			}
+			multiply = 2
 		}
 	}
 }

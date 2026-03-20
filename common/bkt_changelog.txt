@@ -57,7 +57,41 @@ Very soon:
 - Fixed obedience acceptance from current season not working	#NOTE: ISNT ACTUALLY FIXED!
 
 ####	0.11.13	####
-- 
+-
+
+####	0.11.12.1####
+- Added required counties percentage discount for creating titles you have claims to
+- Added penalty to "heavy" MAAs maintaince cost to Strength in Numbers tradition
+- Relaxed requirements for Found the Varangian Guard decision for AI 
+- Shuffled bonuses of some yurts to be less front/back loaded
+- Buffed Improved Pasturages and Velvet Kurultai Seats internal yurts a bit
+- Nerfed Portable Forge and Finest Horses internal yurts a bit
+- Nerfed Yurt of the Forbearing internal yurt by removing defender advantage bonus
+- Reduced cost tributarize CB cost for nomads vs other nomads
+- Reduced county fertility growth bonus per held nomadic/tribal holding a bit (again)
+- Reduced gold transfrer in Request as House Head interaction
+- Reduced gold/piety/prestige for robbing/refusing to take in religious exiles 
+- Reduced parochial vassal opinion bonus from upgrading holdings
+- Reduced zealot vassal opinion bonus from building temple holdings
+- Reduced courtly vassal opinion bonus from granting court positions
+- Reduced glory hound vassal opinion impact from winning/losing wars a bit
+- Reduced (antagonistic) same house vassal opinion impact from finishing wars a bit
+- Reduced Request as House Head interaction base AI acceptance from 100 to -50
+- Reduced appointment succession score boost of Born in the Purple trait 
+- Restricted using Eradicate house CB vs anyone but house-heads
+- Increased cost tenfold and removed prestige gain on victory in Eradicate House CB
+- Increased cost of hiring landless adventurers as mercenaries by a lot*
+- Made AI sometimes kill spouses of their lovers if it could potentially take their place
+- Made AI less suicidal when it comes to Become the Greatest of All Khans decision
+- Made AI more likely to leave confederations (yes, again)
+- Made AI really dislike "heavy" MAAs if its culture has Strength in Numbers tradition
+- Made AI pick Strength in Numbers tradition a bit more often
+- Made AI a tiny bit better at marrying (i hope?)
+- Made AI spam a bit less legends 
+- Fixed being leaving faction right after pressing demands not invalidating the demands
+- Fixed occasional herder-vassals 
+
+* - since its based on troop count, it was practically reduced a ton by making MAA regiments smaller, which i only now noticed 
 
 ####	0.11.12	####
 - Made Mortal Adoration perk give weak hooks on Seduce scheme end if you choose to become lovers for non-adventurers too

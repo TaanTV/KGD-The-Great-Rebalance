@@ -99,6 +99,10 @@
  domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_6: "$yearly_herd_decay_modifier$#p -15%#!"
  mpo_negotiate_obedience_interaction_extra_icon: "$hook_extra_icon$"
  bkt_mortal_adoration_perk_effect: "Успешные [Concept('schemes', 'происки')|E] «[GetScheme('seduce').GetTypeName]» даст вам [Concept('weak_hook', 'слабое влияние')|E], если вы решите стать [Concept('lovers', 'любовниками')|E]"
+ CREATE_TITLE_PERCENTAGE_BASE_DUCHY: "Базовое значение для [Concept( 'duchy', 'герцогства' )|E]"
+ CREATE_TITLE_PERCENTAGE_BASE_KINGDOM: "Базовое значение для [Concept( 'kingdom', 'королевства' )|E]"
+ CREATE_TITLE_PERCENTAGE_STRONG_CLAIM: "Скидка за [pressed_claims|E]"    #Обоснованные претензии
+ CREATE_TITLE_PERCENTAGE_WEAK_CLAIM: "Скидка за [unpressed_claims|E]"    #Слабые претензии
 
  bkt_culture_head_small_soldiers_desc: "У вас нет #V 200#! [Concept( 'skirmishers', 'застрельщиков' )|E] и #V 200#! [Concept( 'archers', 'лучников' )|E]"
  bkt_culture_head_skirmishers_and_light_cav_desc: "У вас нет #V 200#! [Concept( 'skirmishers', 'застрельщиков' )|E] и #V 200#! [Concept( 'light_cavalry', 'легких всадников' )|E]"

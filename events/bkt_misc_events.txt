@@ -7,7 +7,7 @@ namespace = bkt_misc_events
 #####
 # 0001 - Betrothal broken after you called the owner into a war
 # 0010 - Rich mercenary wants to buy some land off you
-#
+# 0020 - Your faction is at 100 demands, press them or leave it and eat a faction join cooldown (TODO)
 #
 #
 #####

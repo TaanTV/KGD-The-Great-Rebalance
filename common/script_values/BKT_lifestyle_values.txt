@@ -1,4 +1,13 @@
-﻿travel_miniscule_lifestyle_xp = {
+﻿#WHEN REALM MAINTENANCE COMES:
+#REPLACE MINISCULE WITH LIKE 10, MINOR WITH MINISCULE, ETC ETC ETC.
+#miniscule_lifestyle_xp = 25
+#minor_lifestyle_xp = 50
+#medium_lifestyle_xp = 100
+#major_lifestyle_xp = 300
+#massive_lifestyle_xp = 500		# Half of xp needed for 1 perk point
+#monumental_lifestyle_xp = 1000	# Enough for 1 perk point... but why give XP instead of just awarding a full perk?
+
+travel_miniscule_lifestyle_xp = {
 	value = miniscule_lifestyle_xp
 	#multiply = 1.5
 	if = {
@@ -79,7 +88,7 @@ travel_major_xp = {
 #peacemaker_value = 10
 
 # Bellum Justum Perk
-bellum_justum_discount_percentage = 80		#prev 50	#set to 80 if you figure out how to make it work lol.
+bellum_justum_discount_percentage = 80		#prev 50
 
 # Strict Organization Perk
 #strict_organization_percentage = 20

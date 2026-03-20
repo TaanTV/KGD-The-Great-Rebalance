@@ -308,7 +308,7 @@ BKT_initial_opinion_boost = {
 				add_opinion = {
 					target = prev
 					modifier = respect_opinion
-					opinion = 25
+					opinion = 30
 				}
 			}
 			#Im pretty sure this should be more performant than iterating on every vassal
@@ -317,7 +317,7 @@ BKT_initial_opinion_boost = {
 				add_opinion = {
 					target = liege
 					modifier = respect_opinion
-					opinion = 25
+					opinion = 30
 				}
 			}	
 		}

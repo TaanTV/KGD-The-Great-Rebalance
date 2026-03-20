@@ -107,14 +107,14 @@ courtly_disinherit_opinion = {
 }
 
 courtly_court_position_opinion = {
-	opinion = 20		#prev 10
+	opinion = 15		#prev 10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
 }
 
 glory_hound_approves_war_victory_opinion = {
-	opinion = 25		#prev 10
+	opinion = 20		#prev 10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
@@ -128,35 +128,35 @@ glory_hound_disapproves_war_white_peace_opinion = {
 }
 
 glory_hound_disapproves_war_defeat_opinion = {
-	opinion = -35		#prev -20
+	opinion = -30		#prev -20
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
 }
 
 antagonistic_house_approves_war_victory_opinion = {
-	opinion = 25		#prev 10
+	opinion = 15		#prev 10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
 }
 
 antagonistic_house_approves_war_victory_defensive_opinion = {
-	opinion = 30		#prev 10
+	opinion = 25		#prev 10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
 }
 
 antagonistic_house_disapproves_war_white_peace_opinion = {
-	opinion = -20		#prev -10
+	opinion = -15		#prev -10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
 }
 
 antagonistic_house_disapproves_war_defeat_opinion = {
-	opinion = -35		#prev -20
+	opinion = -25		#prev -20
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
@@ -170,7 +170,7 @@ parochial_approves_holding_construction_opinion = {
 }
 
 parochial_approves_holding_upgrade_opinion = {
-	opinion = 25		#prev 10
+	opinion = 20		#prev 10
 	years = 20			#prev 10
 	decaying = yes
 	stacking = yes
@@ -184,7 +184,7 @@ parochial_disapproves_strong_war_enemy_opinion = {
 }
 
 zealot_approves_temple_construction_opinion = {
-	opinion = 30
+	opinion = 25	#prev 30
 	years = 20		#prev 10
 	decaying = yes
 	stacking = yes

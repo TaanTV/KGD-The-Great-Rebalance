@@ -1,4 +1,35 @@
-﻿# Governor efficiency used in code
+﻿
+ep3_hire_laamp_mercs_cost_value = {
+	value = scope:recipient.current_military_strength
+	divide = 3	#prev 10
+	min = scope:actor.minor_gold_value
+	multiply = {
+		value = {
+			scope:actor = {
+				every_character_war = {
+					limit = {
+						is_war_leader = scope:actor
+					}
+					add = 1
+				}
+			}
+			min = 1
+		}
+	}
+	if = {
+		limit = {
+			scope:recipient.domicile = { has_domicile_parameter = camp_improved_mercenary_contract_rewards }
+		}
+		multiply = camp_improved_mercenary_contract_rewards_value
+	}
+	if = {
+		limit = {
+			scope:recipient = { has_perk = hard_rule_perk }
+		}
+		multiply = adventurer_hard_rule_contract_rewards_value
+	}
+}
+# Governor efficiency used in code
 # root - charater that is evaluated for the governorship
 # End result should be a multiplier, but we add larger values to present it better in the breakdown. E.g. we add 10, but divide it with 100 to make it 0.1.
 governor_efficiency = {

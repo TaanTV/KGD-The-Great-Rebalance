@@ -317,6 +317,17 @@ ai_wants_grand_wedding_promise = {
 	}
 }
 
+# If the ai character wants to create their own legend as well as just supporting another one
+# root = the character creating a legend
+# scope:num_legends = The number of existing legends this character could support
+ai_wants_to_create_own_legend = {
+	top_liege = this
+	highest_held_title_tier >= tier_kingdom
+	scope:num_legends <= 3	#prev 5
+	#ADDED
+	gold > monumental_gold_value
+}
+
 # Supported scopes:
 #	root ( character )
 #		nomad that considers migration

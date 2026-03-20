@@ -8,17 +8,12 @@ create_title_counties_percentage = {
 			limit = {
 				OR = {
 					tier = tier_duchy
-					tier = tier_kingdom
+					#tier = tier_kingdom
 				}
 			}
 			add = {
 				value = 0.5
-				#ADDED - this is the least intrusive way to add this
-				if = {
-					limit = { tier = tier_kingdom }
-					add = 0.15
-				}
-				desc = CREATE_TITLE_PERCENTAGE_BASE_DUCHY_KINGDOM
+				desc = CREATE_TITLE_PERCENTAGE_BASE_DUCHY	#prev CREATE_TITLE_PERCENTAGE_BASE_DUCHY_KINGDOM
 			}
 			root ?= {
 				if = {
@@ -31,11 +26,6 @@ create_title_counties_percentage = {
 						}
 						add = {
 							value = -0.15 #35%
-							#ADDED - this if, slightly less for kingdoms
-							if = {
-								limit = { prev.tier = tier_kingdom }
-								add = 0.05
-							}
 							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_REDUCED
 						}
 					}
@@ -45,11 +35,6 @@ create_title_counties_percentage = {
 						}
 						add = {
 							value = -0.20 #30%
-							#ADDED - this if, slightly less for kingdoms
-							if = {
-								limit = { prev.tier = tier_kingdom }
-								add = 0.05
-							}
 							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_VERY_REDUCED
 						}
 					}
@@ -59,11 +44,6 @@ create_title_counties_percentage = {
 						}
 						add = {
 							value = -0.25 #25%
-							#ADDED - this if, slightly less for kingdoms
-							if = {
-								limit = { prev.tier = tier_kingdom }
-								add = 0.05
-							}
 							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_EXTRA_REDUCED
 						}
 					}
@@ -85,6 +65,66 @@ create_title_counties_percentage = {
 				}
 			}
 		}
+		#ADDED - a bit different for kingdoms
+		else_if = {
+			limit = {
+				tier = tier_kingdom
+			}
+			add = {
+				value = 0.65
+				desc = CREATE_TITLE_PERCENTAGE_BASE_KINGDOM
+			}
+			root ?= {
+				if = {
+					limit = { # Do you have Legitimacy?
+						has_legitimacy = yes
+					}
+					if = {
+						limit = {
+							has_legitimacy_flag = reduced_title_creation_cost
+						}
+						add = {
+							value = -0.10 #55%
+							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_REDUCED
+						}
+					}
+					else_if = {
+						limit = {
+							has_legitimacy_flag = very_reduced_title_creation_cost
+						}
+						add = {
+							value = -0.15 #50%
+							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_VERY_REDUCED
+						}
+					}
+					else_if = {
+						limit = {
+							has_legitimacy_flag = extra_reduced_title_creation_cost
+						}
+						add = {
+							value = -0.20 #50%
+							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_EXTRA_REDUCED
+						}
+					}
+					else = {
+						#If you're level 2/1/0 or don't have Legitimacy you get no discounts
+						add = {
+							value = 0.0
+							desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_NONE
+						}
+					}
+				}
+				else = {
+					#If you're level 2/1/0 or don't have Legitimacy you get no discounts
+					add = {
+						# We add 0 with a 'desc', so we show up in the GUI and people understand legitimacy is a way to improve this
+						value = 0.0
+						desc = CREATE_TITLE_PERCENTAGE_LEGITIMACY_DISCOUNT_NONE
+					}
+				}
+			}
+		}
+			
 		else_if = { #Smaller discounts for Empires
 			limit = {
 				OR = {
@@ -146,8 +186,30 @@ create_title_counties_percentage = {
 				}
 			}
 		}
+		#ADDED - claim discount. 
+		if = {
+			limit = {
+				root = { has_strong_claim_on = scope:title }
+			}
+			add = {
+				value = -0.1
+				desc = CREATE_TITLE_PERCENTAGE_STRONG_CLAIM
+			}
+		}
+		else_if = {
+			limit = {
+				root = { has_weak_claim_on = scope:title }
+			}
+			add = {
+				value = -0.05
+				desc = CREATE_TITLE_PERCENTAGE_WEAK_CLAIM
+			}
+		
+		}
 	}
 }
+
+
 
 # Referenced in code, what % of a title's counties you need to own to usurp it
 # root = creating character

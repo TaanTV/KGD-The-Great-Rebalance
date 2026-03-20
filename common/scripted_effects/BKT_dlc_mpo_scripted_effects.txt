@@ -4,25 +4,25 @@
 #ADDED - swapped some numbers around
 add_random_yurt_external_building_effect = {
 	random_list = {
-		1 = {
+		10 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = herd_welfare_yurt_01 }
 			}
 			add_domicile_building = herd_welfare_yurt_01
 		}
-		10 = {
+		100 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = character_warfare_yurt_01 }
 			}
 			add_domicile_building = character_warfare_yurt_01
 		}
-		10000 = {
+		100000 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = mass_warfare_yurt_01 }
 			}
 			add_domicile_building = mass_warfare_yurt_01
 		}
-		100 = {
+		1000 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = court_yurt_01 }
 			}

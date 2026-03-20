@@ -226,10 +226,10 @@ mpo_demand_obedience_interaction = {
 	}
 
 	ai_will_do = {
-		base = 25	#prev 0
+		base = 10		#prev 0
 		modifier = {
 			scope:actor = { dread >= major_dread_value }
-			add = 25
+			add = 15	#prev 25
 		}
 		modifier = {
 			scope:actor = {
@@ -248,12 +248,39 @@ mpo_demand_obedience_interaction = {
 		}
 		#ADDED
 		modifier = {
-			scope:actor.health < 3
+			scope:actor.health < 3.5
+			scope:recipient = {
+				OR = {
+					is_child_of = scope:actor
+					is_councillor = yes
+				}
+			}
 			add = 45
 		}
 		modifier = {
 			scope:actor.age > 45
+			scope:recipient = {
+				OR = {
+					is_child_of = scope:actor
+					is_councillor = yes
+				}
+			}
 			add = 45
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_powerful_vassal_of = scope:actor }
+			add = 75
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_vassal_of = scope:actor }
+			add = 75
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_tributary_of = scope:actor }
+			add = 35
 		}
 	}
 
@@ -850,6 +877,10 @@ mpo_retrieve_land_from_herder_interaction = {
 		scope:recipient = {
 			government_has_flag = government_is_herder
 		}
+		#ADDED
+		scope:actor = {
+			NOT = { government_has_flag = government_is_herder }
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -977,6 +1008,14 @@ mpo_retrieve_land_from_herder_interaction = {
 				revoke_title_interaction_effect = yes
 			}
 		}
+		
+		#ADDED
+		hidden_effect = {
+			if = {
+				limit = { scope:landed_title.title_province ?= { has_holding_type = herder_holding } } 
+				scope:title.title_province = { set_holding_type = nomad_holding }
+			}
+		}
 	}
 
 	auto_accept = {
@@ -1083,7 +1122,7 @@ mpo_retrieve_land_from_herder_interaction = {
 					add = 475
 				}
 			}
-		}
+		} 
 		#ADDED - throttle vassals somewhat
 		modifier = {
 			scope:actor = {
@@ -1712,12 +1751,39 @@ mpo_negotiate_obedience_interaction = {
 			add = 100
 		}
 		modifier = {
-			scope:actor.health < 3
+			scope:actor.health < 3.5
+			scope:recipient = {
+				OR = {
+					is_child_of = scope:actor
+					is_councillor = yes
+				}
+			}
 			add = 45
 		}
 		modifier = {
 			scope:actor.age > 45
+			scope:recipient = {
+				OR = {
+					is_child_of = scope:actor
+					is_councillor = yes
+				}
+			}
 			add = 45
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_powerful_vassal_of = scope:actor }
+			add = 50
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_vassal_of = scope:actor }
+			add = 50
+		}
+		modifier = {
+			scope:actor = { has_realm_law = nomadic_authority_5 }
+			scope:recipient = { is_tributary_of = scope:actor }
+			add = 25
 		}
 	}
 	
@@ -1727,6 +1793,14 @@ mpo_negotiate_obedience_interaction = {
 		ai_recipients = councillors
 		#ADDED
 		ai_recipients = children
+	}
+
+	#ADDED
+	ai_targets = {
+		ai_recipients = vassals
+		ai_recipients = courtiers
+		ai_recipients = tributaries
+		chance = 0.25
 	}
 
 	on_accept = {

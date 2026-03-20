@@ -7,3 +7,10 @@
  #special_contract_castellan: "Castellan Contract"
  special_contract_castellan_desc: "\n#emphasis #bold [vassal|E] Privilege:#!#!\nEnables [raiding|E]\n\n#flavor While subject to a $special_contract_castellan$, the [vassal|E] will receive bonuses to their [levies] and defensive capabilities. They provide #high [EmptyScope.ScriptValue('march_contract_taxes_tooltip')|0]%#! less [tax|E], but #high [EmptyScope.ScriptValue('castellan_contract_levies_tooltip')0]%#! more [levy|E] than what their $feudal_government_taxes$ [obligation|E] dictates.#!"
  
+ antagonistic_house_approves_war_victory: "All of [attacker.GetShortUINamePossessive] [house|E] [vassals|E] gain #P 15#! [opinion|E] of [attacker.GetShortUIName] for #V 20 years#! #weak (Impressed by Offensive Victory)#!"
+ antagonistic_house_approves_war_victory_defensive: "All of [defender.GetShortUINamePossessive] [house|E] [vassals|E] gain #P 25#! [opinion|E] of [defender.GetShortUIName] for #V 320 years#! #weak (Impressed by Defensive Victory)#!"
+ antagonistic_house_disapproves_war_white_peace: "All of [attacker.GetShortUINamePossessive] [house|E] [vassals|E] lose #N 15#! [opinion|E] of [attacker.GetShortUIName] for #V 20 years#! #weak (Finds White Peace Weak)#!"
+ antagonistic_house_disapproves_war_white_peace_defender: "All of [defender.GetShortUINamePossessive] [house|E] [vassals|E] lose #N 15#! [opinion|E] of [defender.GetShortUIName] for #V 20 years#! #weak (Finds White Peace Weak)#!"
+ antagonistic_house_disapproves_war_defeat: "All of [attacker.GetShortUINamePossessive] [house|E] [vassals|E] lose #N 25#! [opinion|E] of [attacker.GetShortUIName] for #V 20 years#! #weak (Embarrassed by Defeat)#!"
+ antagonistic_house_disapproves_war_defeat_defender: "All of [defender.GetShortUINamePossessive] [house|E] [vassals|E] lose #N 25#! [opinion|E] of [defender.GetShortUIName] for #V 20 years#! #weak (Embarrassed by Defeat)#!"
+ 

@@ -133,6 +133,9 @@ faction_demand.0001 = {
 	trigger = {
 		# May have ceased to exist by the time this triggers
 		exists = scope:faction
+		#ADDED - fix this funny exploit
+		exists = scope:faction_leader
+		scope:faction = { any_faction_member = { this = scope:faction_leader } }
 	}
 
 	immediate = {
@@ -554,6 +557,9 @@ faction_demand.0101 = {
 	trigger = {
 		# May have ceased to exist by the time this triggers
 		exists = scope:faction
+		#ADDED - fix this funny exploit
+		exists = scope:faction_leader
+		scope:faction = { any_faction_member = { this = scope:faction_leader } }
 	}
 
 	immediate = {
@@ -2083,6 +2089,9 @@ faction_demand.2001 = {
 	trigger = {
 		# May have ceased to exist by the time this triggers
 		exists = scope:faction
+		#ADDED - fix this funny exploit
+		exists = scope:faction_leader
+		scope:faction = { any_faction_member = { this = scope:faction_leader } }
 	}
 
 	immediate = {
@@ -2737,6 +2746,9 @@ faction_demand.0221 = {
 	trigger = {
 		# May have ceased to exist by the time this triggers
 		exists = scope:faction
+		#ADDED - fix this funny exploit
+		exists = scope:faction_leader
+		scope:faction = { any_faction_member = { this = scope:faction_leader } }
 	}
 
 	immediate = {
@@ -3290,6 +3302,9 @@ faction_demand.1000 = {
 	trigger = {
 		# May have ceased to exist by the time this triggers
 		exists = scope:faction
+		#ADDED - fix this funny exploit
+		exists = scope:faction_leader
+		scope:faction = { any_faction_member = { this = scope:faction_leader } }
 	}
 
 	immediate = {

@@ -586,11 +586,11 @@ herd_main_yurt_01 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.04								#prev 0.02
-		character_capital_monthly_county_fertility_growth_add = 0.04	#prev 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.05
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building		#prev nomadic_capital_extremely_important_building
+		value = nomadic_capital_interior_building_2		#prev nomadic_capital_extremely_important_building
 	}
 
 	asset = {
@@ -615,7 +615,7 @@ herd_main_yurt_02 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.04								#prev 0.02
-		character_capital_monthly_county_fertility_growth_add = 0.04	#prev 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.05
 	}
 
 	ai_value = {
@@ -644,7 +644,7 @@ herd_main_yurt_03 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.04								#prev 0.06
-		character_capital_monthly_county_fertility_growth_add = 0.04	#prev 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.05
 	}
 
 	ai_value = {
@@ -674,7 +674,7 @@ herd_main_yurt_04 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.04								#prev 0.05
-		character_capital_monthly_county_fertility_growth_add = 0.04	#prev 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.05
 	}
 
 	ai_value = {
@@ -704,7 +704,7 @@ herd_main_yurt_05 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.04								#prev 0.05
-		character_capital_monthly_county_fertility_growth_add = 0.04	#prev 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.05
 	}
 
 	ai_value = {
@@ -734,7 +734,7 @@ herd_main_yurt_06 = {
 
 	character_modifier = {
 		county_fertility_growth_mult = 0.05								#prev 0.1
-		character_capital_monthly_county_fertility_growth_add = 0.05
+		character_capital_monthly_county_fertility_growth_add = 0.1		#prev 0.05
 	}
 
 	ai_value = {
@@ -800,7 +800,7 @@ kurultai_main_yurt_02 = {
 
 	character_modifier = {
 		domicile_monthly_prestige_add = 0.05
-		#domicile_monthly_prestige_mult = 0.05
+		domicile_monthly_prestige_mult = 0.05
 	}
 
 	ai_value = {
@@ -935,7 +935,7 @@ kurultai_main_yurt_06 = {
 
 	character_modifier = {
 		domicile_monthly_prestige_add = 0.1
-		domicile_monthly_prestige_mult = 0.05		#prev 0.10
+		domicile_monthly_prestige_mult = 0.10
 	}
 
 	ai_value = {
@@ -14200,8 +14200,8 @@ metalworkers_cultrad_yurt_01 = {
 	character_modifier = {
 		maa_toughness_mult = 0.05			#prev 0.1
 		maa_damage_mult = 0.05				#prev 0.1
-		nomadic_horde_toughness_add = 1
-		#hard_casualty_modifier = -0.02
+		#nomadic_horde_toughness_add = 1
+		hard_casualty_modifier = -0.01		#prev -0.02
 	}
 
 	ai_value = {
@@ -14238,7 +14238,7 @@ metalworkers_cultrad_yurt_02 = {
 	}
 
 	character_modifier = {
-		nomadic_horde_toughness_add = 1
+		#nomadic_horde_toughness_add = 1
 		archer_cavalry_toughness_add = 1
 		hard_casualty_modifier = -0.02
 	}
@@ -14279,7 +14279,7 @@ metalworkers_cultrad_yurt_03 = {
 
 	character_modifier = {
 		nomadic_horde_toughness_add = 1
-		archer_cavalry_toughness_add = 1
+		#archer_cavalry_toughness_add = 1
 		hard_casualty_modifier = -0.02
 	}
 
@@ -14318,7 +14318,7 @@ metalworkers_cultrad_yurt_04 = {
 	}
 
 	character_modifier = {
-		nomadic_horde_toughness_add = 1
+		#nomadic_horde_toughness_add = 1
 		archer_cavalry_toughness_add = 1
 		hard_casualty_modifier = -0.02
 	}
@@ -14359,6 +14359,8 @@ metalworkers_cultrad_yurt_05 = {
 
 	character_modifier = {
 		hard_casualty_modifier = -0.02
+		#ADDED
+		nomadic_horde_toughness_add = 1
 	}
 
 	ai_value = {
@@ -14398,7 +14400,7 @@ metalworkers_cultrad_yurt_06 = {
 	character_modifier = {
 		maa_toughness_mult = 0.05			#prev 0.1
 		maa_damage_mult = 0.05				#prev 0.1
-		hard_casualty_modifier = -0.02		#prev -0.05
+		hard_casualty_modifier = -0.01		#prev -0.05
 	}
 
 	ai_value = {
@@ -14446,7 +14448,7 @@ sorcerous_metallurgy_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
+		value = nomadic_capital_very_important_building		#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -14487,7 +14489,7 @@ sorcerous_metallurgy_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
+		value = nomadic_capital_very_important_building		#prev nomadic_capital_interior_building_2
 		
 	}
 
@@ -14530,7 +14532,7 @@ sorcerous_metallurgy_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_3
 		
 	}
 
@@ -15208,8 +15210,8 @@ forbearing_yurt_01 = {
 	}
 
 	character_modifier = {
-		defender_advantage = 3	#prev 2
-		stress_gain_mult = -0.05
+		#defender_advantage = 2
+		stress_gain_mult = -0.03	#prev -0.05
 	}
 	
 	#ADDED
@@ -15246,6 +15248,8 @@ forbearing_yurt_02 = {
 					count >= 5
 					has_trait = patient
 				}
+				#ADDED - AI struggles with this 
+				is_ai = yes
 			}
 		}
 	}
@@ -15257,7 +15261,7 @@ forbearing_yurt_02 = {
 	}
 
 	character_modifier = {
-		defender_advantage = 1
+		#defender_advantage = 1
 		stress_gain_mult = -0.01
 	}
 	
@@ -15301,6 +15305,8 @@ forbearing_yurt_03 = {
 					count >= 5
 					has_trait = patient
 				}
+				#ADDED - AI struggles with this 
+				is_ai = yes
 			}
 		}
 	}
@@ -15312,7 +15318,7 @@ forbearing_yurt_03 = {
 	}
 
 	character_modifier = {
-		defender_advantage = 1
+		#defender_advantage = 1
 		stress_gain_mult = -0.01	#prev -0.02
 	}
 	
@@ -15356,6 +15362,8 @@ forbearing_yurt_04 = {
 					count >= 5
 					has_trait = patient
 				}
+				#ADDED - AI struggles with this 
+				is_ai = yes
 			}
 		}
 	}
@@ -15367,7 +15375,7 @@ forbearing_yurt_04 = {
 	}
 
 	character_modifier = {
-		defender_advantage = 1
+		#defender_advantage = 1
 		stress_gain_mult = -0.01	#prev -0.02
 	}
 	
@@ -15410,6 +15418,8 @@ forbearing_yurt_05 = {
 					count >= 5
 					has_trait = patient
 				}
+				#ADDED - AI struggles with this 
+				is_ai = yes
 			}
 		}
 	}
@@ -15423,8 +15433,8 @@ forbearing_yurt_05 = {
 	character_modifier = {
 		#herd_gain_mult = 0.02
 		#ADDED
-		defender_advantage = 1
-		stress_gain_mult = -0.01
+		#defender_advantage = 2
+		stress_gain_mult = -0.02
 	}
 	
 	#ADDED
@@ -15467,6 +15477,8 @@ forbearing_yurt_06 = {
 					count >= 5
 					has_trait = patient
 				}
+				#ADDED - AI struggles with this 
+				is_ai = yes
 			}
 		}
 	}
@@ -15484,9 +15496,9 @@ forbearing_yurt_06 = {
 
 	character_modifier = {
 		#herd_gain_mult = 0.02
-		defender_advantage = 3	#prev 5
+		#defender_advantage = 5
 		#ADDED
-		stress_gain_mult = -0.01
+		stress_gain_mult = -0.02
 	}
 
 	ai_value = {
@@ -15995,8 +16007,8 @@ horse_breeder_yurt_01 = {
 
 	character_modifier = {
 		movement_speed = 0.05		#prev 0.1
-		archer_cavalry_damage_mult = 0.04	#prev 0.1
-		light_cavalry_damage_mult = 0.04	#prev 0.1
+		archer_cavalry_damage_mult = 0.03	#prev 0.1
+		light_cavalry_damage_mult = 0.03	#prev 0.1
 		nomadic_horde_damage_mult = 0.05	#prev 0.1
 	}
 
@@ -16035,8 +16047,8 @@ horse_breeder_yurt_02 = {
 
 	character_modifier = {
 		#movement_speed = 0.05
-		archer_cavalry_damage_mult = 0.04	#prev 0.05
-		light_cavalry_damage_mult = 0.04	#prev 0.05
+		archer_cavalry_damage_mult = 0.03	#prev 0.05
+		light_cavalry_damage_mult = 0.03	#prev 0.05
 		#nomadic_horde_damage_mult = 0.05
 	}
 
@@ -16076,8 +16088,8 @@ horse_breeder_yurt_03 = {
 
 	character_modifier = {
 		#movement_speed = 0.05
-		archer_cavalry_damage_mult = 0.04	#prev 0.05
-		light_cavalry_damage_mult = 0.04	#prev 0.05
+		archer_cavalry_damage_mult = 0.03	#prev 0.05
+		light_cavalry_damage_mult = 0.03	#prev 0.05
 		#nomadic_horde_damage_mult = 0.05
 	}
 
@@ -16117,8 +16129,8 @@ horse_breeder_yurt_04 = {
 
 	character_modifier = {
 		#movement_speed = 0.05
-		archer_cavalry_damage_mult = 0.04	#prev 0.05
-		light_cavalry_damage_mult = 0.04	#prev 0.05
+		archer_cavalry_damage_mult = 0.03	#prev 0.05
+		light_cavalry_damage_mult = 0.03	#prev 0.05
 		#nomadic_horde_damage_mult = 0.05
 	}
 
@@ -16158,8 +16170,8 @@ horse_breeder_yurt_05 = {
 
 	character_modifier = {
 		movement_speed = 0.05
-		archer_cavalry_damage_mult = 0.04	#prev 0.05
-		light_cavalry_damage_mult = 0.04	#prev 0.05
+		archer_cavalry_damage_mult = 0.03	#prev 0.05
+		light_cavalry_damage_mult = 0.03	#prev 0.05
 		nomadic_horde_damage_mult = 0.05
 	}
 

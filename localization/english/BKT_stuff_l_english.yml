@@ -94,6 +94,10 @@
  domicile_building_parameter_nomad_yurt_forbearing_yurt_herd_decay_reduction_lvl_6: "$yearly_herd_decay_modifier$#p -15%#!"
  mpo_negotiate_obedience_interaction_extra_icon: "$hook_extra_icon$"
  bkt_mortal_adoration_perk_effect: "Successful [GetScheme('seduce').GetTypeName] [schemes|E] will give you a [weak_hook|E] if you choose to become [lovers|E]"
+ CREATE_TITLE_PERCENTAGE_BASE_DUCHY: "Base for [duchy|E] title"
+ CREATE_TITLE_PERCENTAGE_BASE_KINGDOM: "Base for [kingdom|E] title"
+ CREATE_TITLE_PERCENTAGE_STRONG_CLAIM: "[pressed_claim|E] discount"
+ CREATE_TITLE_PERCENTAGE_WEAK_CLAIM: "[unpressed_claim|E] discount"
  
  bkt_culture_head_small_soldiers_desc: "You do not have #V 200#! [skirmishers|E] and #V 200#! [archers|E]"
  bkt_culture_head_skirmishers_and_light_cav_desc: "You do not have #V 200#! [skirmishers|E] and #V 200#! [light_cavalry|E]"

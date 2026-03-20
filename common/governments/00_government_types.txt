@@ -766,6 +766,8 @@ herder_government = {
 		active_accolades = -100
 		county_opinion_add = 100
 		monthly_income_mult = -10
+		#ADDED
+		monthly_county_control_growth_add = 0.5
 	}
 	primary_holding = herder_holding
 	valid_holdings = { herder_holding castle_holding tribal_holding }
