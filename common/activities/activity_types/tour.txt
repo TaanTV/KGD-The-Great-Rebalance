@@ -872,6 +872,41 @@
 						}
 						subtract = 500
 					}
+					#ADDED - Economy Sanity
+					if = { # Work first, play later
+						limit = {
+							exists = capital_county
+							#capital_county.title_province = { free_building_slots > 0 }
+							#ADDED - build your stuff first.
+							NOR = {
+								government_has_flag = government_is_tribal
+								government_has_flag = government_is_nomadic
+								government_has_flag = government_is_herder
+							}
+							capital_county.title_province ?= {
+								OR = {
+									free_building_slots > 0 
+									combined_building_level < excepted_combined_building_level
+								}
+							}
+						}
+						subtract = 500
+					}
+					#ADDED - i heard you need prestige 2
+					if = {
+						limit = { 
+							exists = confederation
+							save_temporary_scope_as = root_scope
+							confederation = {
+								has_leading_house = no
+								any_confederation_member = {
+									count = all
+									max_military_strength < scope:root_scope.max_military_strength
+								}
+							}
+						}
+						add = 100
+					}
 				}
 			}
 			tour_type_intimidation = {
@@ -922,6 +957,26 @@
 					if = {
 						limit = {
 							ai_should_focus_on_building_in_their_capital = yes
+						}
+						subtract = 500
+					}
+					#ADDED - Economy Sanity
+					if = { # Work first, play later
+						limit = {
+							exists = capital_county
+							#capital_county.title_province = { free_building_slots > 0 }
+							#ADDED - build your stuff first.
+							NOR = {
+								government_has_flag = government_is_tribal
+								government_has_flag = government_is_nomadic
+								government_has_flag = government_is_herder
+							}
+							capital_county.title_province ?= {
+								OR = {
+									free_building_slots > 0 
+									combined_building_level < excepted_combined_building_level
+								}
+							}
 						}
 						subtract = 500
 					}
@@ -1000,6 +1055,27 @@
 							ai_should_focus_on_building_in_their_capital = yes
 						}
 						add = 10000
+					}
+					#ADDED - Economy Sanity
+					if = { # Work first, play later
+						limit = {
+							exists = capital_county
+							#capital_county.title_province = { free_building_slots > 0 }
+							#ADDED - build your stuff first.
+							NOR = {
+								government_has_flag = government_is_tribal
+								government_has_flag = government_is_nomadic
+								government_has_flag = government_is_herder
+							}
+							capital_county.title_province ?= {
+								OR = {
+									free_building_slots > 0 
+									combined_building_level < excepted_combined_building_level
+								}
+							}
+						}
+						min = 0
+						add = 25
 					}
 				}
 			}

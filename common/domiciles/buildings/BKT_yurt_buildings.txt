@@ -1708,8 +1708,10 @@ herd_welfare_yurt_01 = {
 	}
 
 	character_modifier = {
-		county_fertility_growth_mult = 0.05
+		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 600
+		#ADDED
+		county_fertility_growth_add = 0.2
 	}
 
 	ai_value = {
@@ -1753,8 +1755,10 @@ herd_welfare_yurt_02 = {
 	}
  
 	character_modifier = {
-		county_fertility_growth_mult = 0.05
+		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 400
+		#ADDED
+		county_fertility_growth_add = 0.2
 	}
 
 	ai_value = {
@@ -1791,9 +1795,11 @@ herd_welfare_yurt_03 = {
 	}
 
 	character_modifier = {
-		county_fertility_growth_mult = 0.05
+		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 600
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
+		#ADDED
+		county_fertility_growth_add = 0.2
 	}
 
 	ai_value = {
@@ -1837,9 +1843,11 @@ herd_welfare_yurt_04 = {
 	}
 
 	character_modifier = {
-		county_fertility_growth_mult = 0.05
+		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 1000
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
+		#ADDED
+		county_fertility_growth_add = 0.2
 	}
 
 	province_modifier = {
@@ -1886,9 +1894,11 @@ herd_welfare_yurt_05 = {
 	}
 
 	character_modifier = {
-		county_fertility_growth_mult = 0.05
+		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 2000
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
+		#ADDED
+		county_fertility_growth_add = 0.2
 	}
 
 	ai_value = {
@@ -1931,9 +1941,11 @@ herd_welfare_yurt_06 = {
 	}
 
 	character_modifier = {
-		county_fertility_growth_mult = 0.1
+		#county_fertility_growth_mult = 0.1
 		herd_capacity_add = 4000
 		vassal_herd_contribution_mult = 0.02	#prev 0.03
+		#ADDED
+		county_fertility_growth_add = 0.25
 	}
 
 	province_modifier = {
@@ -12419,7 +12431,9 @@ trade_yurt_01 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.3
-		monthly_income_from_herd_mult = 0.01
+		#monthly_income_from_herd_mult = 0.01
+		#ADDED
+		domicile_monthly_gold_mult = 0.03
 	}
 
 	parameters = {
@@ -12467,7 +12481,9 @@ trade_yurt_02 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.3
-		monthly_income_from_herd_mult = 0.01
+		#monthly_income_from_herd_mult = 0.01
+		#ADDED
+		domicile_monthly_gold_mult = 0.03
 	}
 
 	parameters = {
@@ -12517,7 +12533,9 @@ trade_yurt_03 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.3
-		monthly_income_from_herd_mult = 0.02
+		#monthly_income_from_herd_mult = 0.02
+		#ADDED
+		domicile_monthly_gold_mult = 0.03
 	}
 
 	parameters = {
@@ -12567,7 +12585,9 @@ trade_yurt_04 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.3
-		monthly_income_from_herd_mult = 0.02
+		#monthly_income_from_herd_mult = 0.02
+		#ADDED
+		domicile_monthly_gold_mult = 0.03
 	}
 
 	province_modifier = {
@@ -12622,7 +12642,9 @@ trade_yurt_05 = {
 
 	character_modifier = {
 		domicile_monthly_gold_add = 0.3
-		monthly_income_from_herd_mult = 0.03
+		#monthly_income_from_herd_mult = 0.03
+		#ADDED
+		domicile_monthly_gold_mult = 0.04
 	}
  
 	parameters = {
@@ -12673,7 +12695,9 @@ trade_yurt_06 = {
  
 	character_modifier = {
 		domicile_monthly_gold_add = 0.5
-		monthly_income_from_herd_mult = 0.03
+		#monthly_income_from_herd_mult = 0.03
+		#ADDED
+		domicile_monthly_gold_mult = 0.04
 	}
 
 	province_modifier = {

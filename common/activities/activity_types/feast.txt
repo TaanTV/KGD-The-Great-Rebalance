@@ -507,7 +507,7 @@ activity_feast = {
 				NOT = { has_trait = reclusive }
 			}
 			add = {
-				value = 35		#prev 20
+				value = 50		#prev 20
 				desc = "lower_than_baseline_stress"
 			}
 		}
@@ -519,7 +519,7 @@ activity_feast = {
 				NOT = { has_trait = reclusive }
 			}
 			add = {
-				value = 50		#prev 20
+				value = 75		#prev 20
 				desc = "higher_than_baseline_stress"
 			}
 		}
@@ -531,7 +531,7 @@ activity_feast = {
 				NOT = { has_trait = reclusive }
 			}
 			add = {
-				value = 100		#prev 20
+				value = 200		#prev 20
 				desc = "high_stress"
 			}
 		}
@@ -605,36 +605,20 @@ activity_feast = {
                 exists = capital_county
                 #capital_county.title_province = { free_building_slots > 0 }
 				#ADDED - build your stuff first.
+				NOR = {
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_herder
+				}
 				capital_county.title_province ?= {
 					OR = {
 						free_building_slots > 0 
-						combined_building_level < 4
-						AND = {
-							culture = { 
-								has_innovation = innovation_battlements
-								has_innovation = innovation_manorialism  
-							}
-							combined_building_level < 12
-						}
-						AND = {
-							culture = { 
-								has_innovation = innovation_hoardings
-								has_innovation = innovation_guilds 
-							}
-							combined_building_level < 20
-						}
-						AND = {
-							culture = { 
-								has_innovation = innovation_machicolations 
-								has_innovation = innovation_cranes 
-							}
-							combined_building_level < 40
-						}
+						combined_building_level < excepted_combined_building_level
 					}
 				}
             }
             add = {
-            	value = -50		#prev -35
+            	value = -75		#prev -35
             	desc = "Work first, play later"
             }
         }
@@ -646,7 +630,7 @@ activity_feast = {
 				has_diarchy_active_parameter = regency_free_end_below_this_point	#cant leave for free
 			}
         	add = {
-            	value = 15
+            	value = 25
             	desc = "Diarchy"
             }
 		}
@@ -657,7 +641,7 @@ activity_feast = {
 				prestige < { value = highest_held_title_tier add = -1 multiply = 350 }
 			}
         	add = {
-            	value = 30
+            	value = 40
             	desc = "Prestige"
             }
         }
@@ -675,7 +659,7 @@ activity_feast = {
 				}
 			}
         	add = {
-            	value = 75
+            	value = 100
             	desc = "Prestige potential confederation leader"
             }
         }

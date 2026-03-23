@@ -123,6 +123,11 @@ raze_intent = {
 				title = raiding.0011.t
 
 				right_icon = root.army_commander
+				#ADDED
+				add_gold = {
+					value = scope:raid_loot
+					multiply = 0.35
+				}
 				add_prestige = scope:raid_loot
 				add_dread = {
 					value = scope:raid_loot
@@ -133,11 +138,13 @@ raze_intent = {
 	}
 
 	modifier = { 
-		raid_speed = -0.6
+		raid_speed = -0.5	#prev -0.6
+		#ADDED
+		movement_speed_land_raiding = -0.15
 	}
 
 	ai_will_do = {
-		value = 10
+		value = 20	#prev 10
 	}
 
 	is_shown = {

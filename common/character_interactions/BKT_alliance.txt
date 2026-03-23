@@ -410,7 +410,7 @@ call_ally_interaction = {
 								fickle = major_stress_loss
 							}
 						}
-					}	
+					}
 				}
 				else = {
 					scope:actor = {
@@ -713,7 +713,7 @@ call_ally_interaction = {
 			desc = AI_OPINION_REASON
 		}
 		
-		#ADDED - Opinion o defender if you are attacker
+		#ADDED - Opinion of defender if you are attacker
 		opinion_modifier = { 
 			trigger = {
 				scope:target.casus_belli.primary_attacker = scope:actor

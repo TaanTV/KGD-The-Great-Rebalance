@@ -1,0 +1,88 @@
+﻿# Base value
+kurultai_manage_herd_base_value = {
+	add = 0.6	#prev 0.5
+}
+
+kurultai_manage_herd_skill_value = {
+	add = diplomacy
+	divide = 5	#prev 4
+	if = {
+		limit = {
+			councillor_liege_has_erudition_legacy_5_perk = yes
+		}
+		multiply = 1.1
+	}
+	multiply = kurultai_main_yurt_bonus
+}
+
+kurultai_manage_herd_final_value = {
+	add = kurultai_manage_herd_base_value
+	add = kurultai_manage_herd_skill_value
+}
+kurultai_court_astrologer_piety_skill_value = {
+	add = learning
+	divide = 2	#prev 5
+	if = {
+		limit = {
+			councillor_liege_has_erudition_legacy_5_perk = yes
+		}
+		multiply = 1.1
+	}
+	multiply = kurultai_main_yurt_bonus
+}
+
+kurultai_court_astrologer_piety_final_value = {
+	add = kurultai_court_astrologer_piety_base_value
+	add = kurultai_court_astrologer_piety_skill_value
+	if = {
+		limit = {
+			scope:councillor_liege = { has_perk = zealous_proselytizer_perk }
+		}
+		multiply = 2 # Make sure to make this number always match zealous_proselytizer_stargazer_percentage
+	}
+	max = 50	#prev 10
+}
+
+### Increasing Fertility
+
+kurultai_increased_fertility_base_value = {
+	add = 5	#prev 1
+}
+
+kurultai_increased_fertility_skill_value = {
+	add = stewardship
+	if = {
+		limit = {
+			councillor_liege_has_erudition_legacy_5_perk = yes
+		}
+		multiply = 1.1
+	}
+	multiply = kurultai_main_yurt_bonus
+	multiply = 5	#prev 2
+}
+
+### Exploit Area
+kurultai_exploit_area_fertility_base_value = {
+	add = 7.5	#prev 1.5
+}
+
+kurultai_exploit_area_fertility_skill_value = {
+	add = stewardship
+	divide = 15	#prev 25
+	if = {
+		limit = {
+			councillor_liege_has_erudition_legacy_5_perk = yes
+		}
+		multiply = 1.1
+	}
+	multiply = kurultai_main_yurt_bonus
+	max = 5.5		#prev 1.3
+}
+
+kurultai_exploit_area_fertility_final_value = {
+	add = kurultai_exploit_area_fertility_base_value
+	subtract = kurultai_exploit_area_fertility_skill_value
+	min = 1.0	#prev 0.2
+	max = 7.5	#perv 1.5
+}
+

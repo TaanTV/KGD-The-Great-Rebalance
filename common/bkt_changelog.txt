@@ -57,7 +57,23 @@ Very soon:
 - Fixed obedience acceptance from current season not working	#NOTE: ISNT ACTUALLY FIXED!
 
 ####	0.11.13	####
--
+- Added dread decay bonus to Terrify Court court position task 
+- Added gold payoff and added army speed malus to Terrorize raid intent
+- Increased Help Stargazer council task piety bonus 
+- Increased Manage Fertility council task effectiveness by a lot
+- Increased Exploit Lands council task base county fertility decline by a lot
+- Decreased Help Herders ountcil task bonuses a bit
+- Swapped county fertility growth bonus from mult to flat in Millet Storage yurt
+- Swapped income from herd for domicile income bonus in Bartering Stalls yurt
+- Reduced county fertility growth bonus per held nomadic/tribal holding a bit (AGAIN)
+- Made AI nomads a bit better at not wasting prestige on useless court position tasks
+- Updated localisation files
+
+####	0.11.12.2####
+- Added some "cheats" (does remove gold/treasury off them) for AIs at higher difficulties to build more stuff
+
+- Made AI waste less money if its capital is low on buildings (i hope)
+- Fixed some error log spam
 
 ####	0.11.12.1####
 - Added required counties percentage discount for creating titles you have claims to

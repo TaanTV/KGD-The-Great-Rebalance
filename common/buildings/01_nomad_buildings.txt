@@ -88,7 +88,7 @@ nomadic_camp_01 = {
 	}
 	
 	character_modifier = {
-		county_fertility_growth_mult = 0.3	#prev 0.5
+		county_fertility_growth_mult = 0.2	#prev 0.5
 	}
 
 	province_terrain_modifier = {

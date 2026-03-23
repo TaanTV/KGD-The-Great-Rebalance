@@ -678,11 +678,11 @@ boyan_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 100
+		value = 200
 		#add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 150	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value
@@ -995,11 +995,11 @@ siege_engineer_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 100
+		value = 200
 		add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 150	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value
@@ -1320,15 +1320,31 @@ yurtchi_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 250	#prev 100
+		value = 500	#prev 100
 		#add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 150	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value
-        add = adjust_court_position_score_for_unity
+        add = adjust_court_position_score_for_unity 
+		#ADDED -  AI is less likely to fire, unless they have a better candidate.
+        if = {
+            limit = {
+                exists = scope:firing_court_position
+            }
+            add = 200
+            scope:employee = {
+                # Does the liege have a better candidate that they should be hiring instead?
+                if = {
+                    limit = {
+                        scope:highest_available_aptitude > scope:employee_aptitude
+                    }
+                    add = -150
+                }
+            }
+        }
 
 		if = { # To stop petitioned positions immediately being fired by the AI
 			limit = {
@@ -1725,11 +1741,11 @@ cherbi_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 250	#prev 100
+		value = 500	#prev 100
 		#add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 150	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value
@@ -2082,11 +2098,11 @@ yeke_jarquchi_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 500
+		value = 1000	#prev 500
 		#add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 250	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value
@@ -2760,11 +2776,11 @@ keeper_of_the_horses_court_position = { ### MPO
 
 	# Scripted value to determine whether an AI will hire/fire a position or not. Hires over 0, fires under -50. Look in _court_positions.info for more extensive documentation!
 	ai_position_score = { #Unop Added so that AI can hire this position
-		value = 150	#prev 100
+		value = 300	#prev 100
 		#add = court_position_debt_considerations_value
 	}
 	ai_candidate_score = {
-		value = 100
+		value = 150	#prev 100
 		add = scope:base_value
 		add = court_position_candidate_score_base_value
 		add = court_position_candidate_aptitude_value

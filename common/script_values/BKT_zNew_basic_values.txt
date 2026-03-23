@@ -401,3 +401,99 @@ monumental_gold_max_less_scaled_value = {
 		}
 	}
 }
+
+#province scope
+excepted_combined_building_level = {
+	value = 1	#dunno if holding level counts, but 1 is the absolute minimum for sure
+	county.holder.culture ?= {
+		if = {
+			limit = { 
+				has_innovation = innovation_crop_rotation
+				has_innovation = innovation_barracks
+			}
+			add = 1
+		}
+		if = {
+			limit = { 
+				has_innovation = innovation_manorialism
+				has_innovation = innovation_burhs
+			}
+			add = 2
+		}
+		else_if = {		#add some if you have just one of them
+			limit = { 
+				OR = {
+					has_innovation = innovation_manorialism
+					has_innovation = innovation_burhs
+				}
+			}
+			add = 1
+		}
+		if = {
+			limit = { 
+				has_innovation = innovation_guilds 
+				has_innovation = innovation_castle_baileys
+			}
+			add = 2
+		}
+		else_if = {		#add some if you have just one of them
+			limit = { 
+				OR = {
+					has_innovation = innovation_guilds 
+					has_innovation = innovation_castle_baileys
+				}
+			}
+			add = 1
+		}
+		if = {
+			limit = { 
+				has_innovation = innovation_cranes
+				has_innovation = innovation_castle_baileys
+			}
+			add = 2
+		}
+		else_if = {		#add some if you have just one of them
+			limit = { 
+				OR = {
+					has_innovation = innovation_cranes
+					has_innovation = innovation_castle_baileys
+				}
+			}
+			add = 1
+		}
+		
+		
+		if = {
+			limit = { 
+				has_innovation = innovation_battlements
+			}
+			max = 2
+		}
+		else_if = {
+			limit = { 
+				has_innovation = innovation_battlements
+			}
+			max = 4
+		}
+		else_if = {
+			limit = { 
+				has_innovation = innovation_hoardings
+			}
+			max = 6
+		}
+		else_if = {
+			limit = { 
+				has_innovation = innovation_machicolations
+			}
+			max = 8
+		}
+	}
+		
+	multiply = building_slots
+}
+
+excepted_combined_building_level_halved = { 
+	value = excepted_combined_building_level
+	multiply = 0.5
+	ceiling = yes
+}

@@ -1,0 +1,8 @@
+﻿#Requres scope:councillor, liege scope
+#Checks less OR EQUAL coz i dont want to bother figuring out which one this is.
+councillor_has_highest_stat_out_of_kurultai_members = {
+	cp:councillor_kurultai_1 ?= { $STAT$ <= scope:councillor.$STAT$ }
+	cp:councillor_kurultai_2 ?= { $STAT$ <= scope:councillor.$STAT$ }
+	cp:councillor_kurultai_3 ?= { $STAT$ <= scope:councillor.$STAT$ }
+	cp:councillor_kurultai_4 ?= { $STAT$ <= scope:councillor.$STAT$ }
+}	

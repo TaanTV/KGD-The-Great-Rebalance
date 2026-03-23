@@ -232,3 +232,23 @@ economical_ai_guts_trigger = {
 		}
 	}
 }
+
+ai_should_focus_on_building_in_their_capital = {
+	is_landed = yes
+	highest_held_title_tier >= tier_county
+	NOT = { has_variable = conqueror }
+	NOT = { government_has_flag = government_is_nomadic }
+	exists = capital_county
+	exists = culture
+	#ADDED - rewritten the bottom part
+	NOR = {
+		government_has_flag = government_is_tribal
+		government_has_flag = government_is_herder
+	}
+	capital_county.title_province ?= {
+		OR = {
+			free_building_slots > 0 
+			combined_building_level < excepted_combined_building_level_halved
+		}
+	}
+}

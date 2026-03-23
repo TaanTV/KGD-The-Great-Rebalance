@@ -189,7 +189,7 @@ create_title_counties_percentage = {
 		#ADDED - claim discount. 
 		if = {
 			limit = {
-				root = { has_strong_claim_on = scope:title }
+				root ?= { has_strong_claim_on = scope:title }
 			}
 			add = {
 				value = -0.1
@@ -198,7 +198,7 @@ create_title_counties_percentage = {
 		}
 		else_if = {
 			limit = {
-				root = { has_weak_claim_on = scope:title }
+				root ?= { has_weak_claim_on = scope:title }
 			}
 			add = {
 				value = -0.05

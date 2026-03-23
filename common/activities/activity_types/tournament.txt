@@ -390,36 +390,20 @@
                 exists = capital_county
                 #capital_county.title_province = { free_building_slots > 0 }
 				#ADDED - build your stuff first.
+				NOR = {
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_herder
+				}
 				capital_county.title_province ?= {
 					OR = {
 						free_building_slots > 0 
-						combined_building_level < 4
-						AND = {
-							culture = { 
-								has_innovation = innovation_battlements
-								has_innovation = innovation_manorialism  
-							}
-							combined_building_level < 12
-						}
-						AND = {
-							culture = { 
-								has_innovation = innovation_hoardings
-								has_innovation = innovation_guilds 
-							}
-							combined_building_level < 20
-						}
-						AND = {
-							culture = { 
-								has_innovation = innovation_machicolations 
-								has_innovation = innovation_cranes 
-							}
-							combined_building_level < 40
-						}
+						combined_building_level < excepted_combined_building_level
 					}
 				}
             }
             add = {
-            	value = -150		#prev -35
+            	value = -250		#prev -35
             	desc = "Work first, play later"
             }
         }

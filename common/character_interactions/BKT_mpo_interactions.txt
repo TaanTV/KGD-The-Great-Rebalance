@@ -1011,9 +1011,11 @@ mpo_retrieve_land_from_herder_interaction = {
 		
 		#ADDED
 		hidden_effect = {
-			if = {
-				limit = { scope:landed_title.title_province ?= { has_holding_type = herder_holding } } 
-				scope:title.title_province = { set_holding_type = nomad_holding }
+			scope:actor = {
+				if = {
+					limit = { scope:landed_title.title_province ?= { has_holding_type = herder_holding } } 
+					scope:landed_title.title_province ?= { set_holding_type = nomad_holding }
+				}
 			}
 		}
 	}

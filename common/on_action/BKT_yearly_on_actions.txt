@@ -365,6 +365,7 @@ five_year_playable_pulse = {
 		BKT_ai_self_legitimization_pulse
 		BKT_ai_bastard_legitimization_pulse
 		BKT_herder_vassals_fix_pulse
+		BKT_additional_difficulty_buildings_cheat
 	}
 }
 
@@ -593,6 +594,73 @@ BKT_herder_vassals_fix_pulse = {
 		domicile = {
 			set_domicile_culture = prev.capital_county.culture
 			set_domicile_faith = prev.capital_county.faith
+		}
+	}
+}
+
+BKT_additional_difficulty_buildings_cheat = {
+	trigger = {
+		OR = {
+			has_game_rule = bkt_difficulty_higher
+			has_game_rule = hard_difficulty
+			has_game_rule = very_hard_difficulty
+		}
+		is_landed = yes
+		NOR = {
+			government_has_flag = government_is_tribal
+			government_has_flag = government_is_nomadic
+			government_has_flag = government_is_herder
+			has_variable = conqueror
+		}
+		is_ai = yes
+		trigger_if = {
+			limit = { government_allows = treasury }
+			treasury >= medium_gold_max_value
+		}
+		trigger_else = {
+			gold >= medium_gold_max_value
+		}
+		any_held_county = {
+			is_landless_type_title = no
+			title_province = { combined_building_level < excepted_combined_building_level }
+		}
+	}
+	effect = {
+		random = {
+			chance = 75
+			
+			random_held_county = {
+				limit = { 
+					is_landless_type_title = no
+					title_province = { combined_building_level < excepted_combined_building_level } 
+				}
+				weight = {
+					base = 10
+					modifier = {
+						holder.capital_county ?= this
+						add = 10
+					}
+				}
+				title_province = {
+					save_temporary_scope_value_as = {
+						name = current_combined_building_level
+						value = combined_building_level
+					}
+					generate_building = yes
+					if = {	#failsafe in case nothing actually happens
+						limit = { combined_building_level > scope:current_combined_building_level }
+						county.holder = { 
+							if = {
+								limit = { government_allows = treasury }
+								remove_short_term_treasury = medium_gold_max_value
+							}
+							else = {
+								remove_short_term_gold = medium_gold_max_value 
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
