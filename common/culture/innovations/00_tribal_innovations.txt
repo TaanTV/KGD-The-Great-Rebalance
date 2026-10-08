@@ -218,7 +218,7 @@ innovation_bannus = {
 
 	character_modifier = {
 		levy_reinforcement_rate = 0.05	#prev 0.15
-		active_accolades = 1
+		accolades = 1
 		herd_conversion = 0.005
 	}
 	
@@ -285,12 +285,11 @@ innovation_currency_01 = {
 		monthly_income_from_herd_mult = 0.05
 		#ADDED
 		#domain_tax_mult = 0.05
-		domain_limit = 1
 	}
 	
 	#ADDED
 	ai_weight_for_fascination = {
-		value = 750	#almost
+		value = 100		#prev 750	#almost
 	}
 
 	flag = global_regular

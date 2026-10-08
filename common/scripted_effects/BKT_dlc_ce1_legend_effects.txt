@@ -551,7 +551,7 @@ give_legendary_building_location_standard_effect = {
 	else_if = { # Otherwise, prioritize a title you hold directly
 		limit = {
 			any_held_title = {
-				tier = tier_county
+				title_tier = county
 				title_province = { has_special_building_slot = no }
 			}
 		}

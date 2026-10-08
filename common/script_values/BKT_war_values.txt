@@ -229,3 +229,65 @@ recipient_strength_root_value = {
 		}
 	}
 }
+
+frankokratia_leader_protection_value = {
+	#Added at the end of every ai_score_mult in all CBs for now.
+
+	#Fourth Crusade flavor:
+	#We protect the Frankokratia leader to avoid breaking the story cycle.
+	if = {
+		limit = {
+			scope:defender = {
+				any_owned_story = {
+					type = frankokratia_story
+					NOT = { has_variable = franko_war_complete }
+				}
+			}
+		}
+		#multiply = 0
+		#ADDED - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
+		add = -1
+	}
+	#ADDED - since this is in every casus belli, i'll use it to nudge AI empires to war against each-other instead of idk whoever else
+	else_if = {
+		if = {
+			limit = {
+				scope:attacker.highest_held_title_tier >= tier_empire
+				scope:defender.highest_held_title_tier >= tier_empire
+			}
+			#multiply = 1.25
+			#NOTE - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
+			add = 0.25
+		}
+		#ADDED - since this is in every casus belli, i'll use it to nudge AI to venture into the steppes a bit less 
+		if = {
+			limit = {
+				scope:attacker = {
+					NOR = { 
+						government_has_flag = government_is_nomadic
+						government_has_flag = government_is_tribal
+					}
+				}			
+				scope:defender = {
+					government_has_flag = government_is_nomadic
+					any_character_situation = {
+			    		situation:the_great_steppe ?= this
+			    	}
+				}
+			}
+			#multiply = {
+			#	value = 0.8
+			#	if = {		#way less likely for vassals coz they're annoying
+			#		limit = { scope:attacker = { top_liege != this }
+			#		add = -0.3
+			#	}
+			#}	
+			#NOTE - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
+			add = -0.2
+			if = {		#way less likely for vassals coz they're annoying
+				limit = { scope:attacker = { top_liege != this } }
+				add = -0.3
+			}
+		}
+	}
+}

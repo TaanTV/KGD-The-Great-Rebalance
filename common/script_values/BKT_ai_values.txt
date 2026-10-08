@@ -289,8 +289,7 @@ ai_men_at_arms_expense_gold_max = {
 	}
 	if = {
 		limit = {
-			government_allows = administrative
-			NOT = { vassal_contract_has_flag = admin_theme_civilian }
+			vassal_contract_has_flag = province_military
 		}
 		add = {
 			desc = ai_admin_vassal
@@ -304,7 +303,7 @@ ai_men_at_arms_expense_gold_max = {
 	if = {
 		limit = {
 			OR = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 				government_has_flag = government_is_nomadic
 			}
 			debt_level <= 2
@@ -641,10 +640,7 @@ ai_men_at_arms_expense_treasury_min = {
 	if = {
 		limit = {
 			OR = {
-				vassal_contract_has_flag = celestial_province_protectorate
-				vassal_contract_has_flag = celestial_province_military
-				vassal_contract_has_flag = meritocratic_province_protectorate
-				vassal_contract_has_flag = meritocratic_province_military
+				vassal_contract_has_flag = province_military
 				vassal_contract_has_flag = celestial_grand_marshal_obligation
 			}
 		}
@@ -772,10 +768,7 @@ ai_men_at_arms_expense_treasury_ideal = {
 	if = {
 		limit = {
 			OR = {
-				vassal_contract_has_flag = celestial_province_protectorate
-				vassal_contract_has_flag = celestial_province_military
-				vassal_contract_has_flag = meritocratic_province_protectorate
-				vassal_contract_has_flag = meritocratic_province_military
+				vassal_contract_has_flag = province_military
 				vassal_contract_has_flag = celestial_grand_marshal_obligation
 			}
 		}
@@ -881,24 +874,12 @@ ai_men_at_arms_expense_treasury_max = {
 	if = {
 		limit = {
 			OR = {
-				vassal_contract_has_flag = celestial_province_protectorate
-				vassal_contract_has_flag = celestial_province_military
-				vassal_contract_has_flag = meritocratic_province_protectorate
-				vassal_contract_has_flag = meritocratic_province_military
+				vassal_contract_has_flag = province_military
+				vassal_contract_has_flag = province_balanced
 				vassal_contract_has_flag = celestial_grand_marshal_obligation
 			}
 		}
 		add = 0.3
-	}
-	if = {
-		limit = {
-			government_allows = administrative
-			NOT = { vassal_contract_has_flag = admin_theme_civilian }
-		}
-		add = {
-			desc = ai_admin_vassal
-			value = 0.3
-		}
 	}
 
 	min = 0
@@ -907,7 +888,7 @@ ai_men_at_arms_expense_treasury_max = {
 	if = {
 		limit = {
 			OR = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 				government_has_flag = government_is_nomadic
 			}
 			treasury_debt_level <= 2
@@ -1006,10 +987,7 @@ ai_men_at_arms_chance_expense_below_min = {
 	if = {
 		limit = {
 			OR = {
-				vassal_contract_has_flag = celestial_province_protectorate
-				vassal_contract_has_flag = celestial_province_military
-				vassal_contract_has_flag = meritocratic_province_protectorate
-				vassal_contract_has_flag = meritocratic_province_military
+				vassal_contract_has_flag = province_military
 				vassal_contract_has_flag = celestial_grand_marshal_obligation
 			}
 		}
@@ -1133,21 +1111,16 @@ ai_men_at_arms_chance_expense_below_ideal = {
 		limit = {
 			ai_should_focus_on_building_in_their_capital = yes
 		}
-		multiply = 0
-		add = 0.15			#prev 0.1
+		value = 0.15			#prev 0.1
 	}
 	if = {
 		limit = {
 			OR = {
-				vassal_contract_has_flag = celestial_province_protectorate
-				vassal_contract_has_flag = celestial_province_military
-				vassal_contract_has_flag = meritocratic_province_protectorate
-				vassal_contract_has_flag = meritocratic_province_military
+				vassal_contract_has_flag = province_military
 				vassal_contract_has_flag = celestial_grand_marshal_obligation
 			}
 		}
-		multiply = 0
-		add = 0.9
+		value = 0.9
 	}
 	if = {
 		limit = {
@@ -1205,6 +1178,7 @@ ai_title_creation_weight = {
 			root.primary_title.tier > tier_duchy
 			root.highest_held_title_tier > scope:title_tier_rank
 			vassal_limit_available <= 2
+			NOT = { government_has_flag = government_is_nomadic }
 		}
 		multiply = 10
 	}

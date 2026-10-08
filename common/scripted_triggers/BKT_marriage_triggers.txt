@@ -1,0 +1,32 @@
+﻿marriage_interaction_non_loyal_diarchs_refuse_secondary_marriage_trigger = {
+	trigger_if = {
+		limit = {
+			scope:$TARGET$ ?= {
+				is_diarch = yes
+				# We're only concerned about landed rulers, those who might be married out of their own court.
+				is_ruler = no
+				#ADDED - dunno if the second one will work but at least fix it bricking betrothals
+				is_betrothed = no
+				#OR = {
+				#	AND = {
+				#		is_female = yes
+				#		scope:matrilineal ?= no
+				#	}
+				#	AND = {
+				#		is_male = yes
+				#		scope:matrilineal ?= yes
+				#	}
+				#}
+			}
+		}
+		custom_tooltip = {
+			text = arrange_marriage_interaction.tt.non_loyal_regents_refuse_to_be_married_off.$TARGET$
+			scope:$TARGET$ = { diarch_loyalty >= diarch_loyalty_visibly_loyal_threshold }
+			#ADDED
+			trigger_if = {
+				limit = { exists = scope:actor scope:$TARGET$ != scope:actor }
+				scope:$TARGET$ = { is_ai = no }
+			}
+		}
+	}
+}

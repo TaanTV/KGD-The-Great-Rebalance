@@ -1,7 +1,17 @@
 ﻿nomadic_wash_your_hands_perk_effect = {
 	global = nomadic_wash_your_hands_perk_effect
+	first = nomadic_wash_your_hands_perk_effect
+	third = nomadic_wash_your_hands_perk_effect
 }
 
 bkt_mortal_adoration_perk_effect = {
 	global = bkt_mortal_adoration_perk_effect
+	first = bkt_mortal_adoration_perk_effect
+	third = bkt_mortal_adoration_perk_effect
+}
+
+bkt_at_any_cost_perk_effect = {
+	global = bkt_at_any_cost_perk_effect
+	first = bkt_at_any_cost_perk_effect
+	third = bkt_at_any_cost_perk_effect
 }

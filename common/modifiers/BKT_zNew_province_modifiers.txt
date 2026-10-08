@@ -10,3 +10,15 @@ recently_built_holding_modifier = {
 	build_speed = 3
 	tax_mult = -0.9
 }
+
+recently_looted_no_holding_modifier = {
+	icon = food_negative
+	supply_limit_mult = -0.35	#keeep this in sync with recently_looted_modifier
+	travel_danger = 5
+}
+
+hastely_constructed_defences = {
+	icon = prowess_positive
+	fort_level = 2
+	stacking = yes
+}

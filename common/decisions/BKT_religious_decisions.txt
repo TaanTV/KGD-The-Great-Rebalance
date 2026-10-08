@@ -1,0 +1,226 @@
+﻿
+### Abandon Secret Faith ###
+abandon_crypto_faith_decision = {	#Abandon your secret faith.
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 60
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/fp3/fp3_decision_secret_faith.dds"
+	}
+	decision_group_type = religious
+	desc = abandon_crypto_faith_decision.desc
+	selection_tooltip = abandon_crypto_faith_decision.tt
+
+	is_shown = {
+		any_secret = { type = secret_crypto_religionist }
+	}
+
+	is_valid = {
+		is_adult = yes
+		NOT = { has_trait = zealous }
+	}
+
+
+	cost = {
+		#It shouldn't _cost_ piety to abandon your crypto faith in favor of your actual faith
+	}
+
+	cooldown = { years = 20 }
+
+	effect = {
+		custom_tooltip = abandon_crypto_faith_decision.tt
+		random_secret = {
+			type = secret_crypto_religionist
+			remove_secret = yes
+		}
+		#Something to remember it by
+		create_character_memory = {
+			type = abandoned_crypto_faith_memory
+		}
+		scope:new_memory = {
+			set_variable = {
+				name = old_faith_to_reminisce
+				value = prev.secret_faith #The one taking the decision
+			}
+		}
+		if = {
+			limit = { exists = var:old_faith_to_reminisce }
+			#To prevent 'unused except in loc' errors :catto:
+		}
+		hidden_effect = { remove_character_secret_faith = yes }
+		
+		#ADDED
+		if = {
+			limit = { has_variable = got_secret_faith_through_mental_break_event }
+			stress_impact = {
+				base = 150
+				cynical = major_stress_impact_loss
+				fickle = miniscule_stress_impact_loss
+			}
+			remove_variable = got_secret_faith_through_mental_break_event
+		}
+		else = {
+			stress_impact = {
+				base = major_stress_impact_gain
+				cynical = major_stress_impact_loss
+				fickle = miniscule_stress_impact_loss
+			}
+		}
+	}
+
+	ai_potential = {
+		exists = secret_faith
+		any_secret = {
+			type = secret_crypto_religionist
+		}
+		liege.faith = {
+			faith_hostility_level_comparison = { root.secret_faith <= root.faith }
+		}
+	}
+
+	ai_will_do = {
+		base = 0
+		ai_value_modifier = {
+			ai_zeal = -0.5
+		}
+		#ADDED - modifiers
+		modifier = {
+			has_variable = got_secret_faith_through_mental_break_event
+			factor = 0
+		}
+		modifier = {
+			stress >= lower_than_baseline_stress
+			factor = 0
+		}
+		modifier = {
+			add = 10000
+			government_has_flag = government_is_holy_order
+		}
+	}
+}
+
+
+### Take Up the Conqueror's Mantle ### PAM - Pursuit of Power personal tenet
+pursue_conquerors_mantle_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_personal_religious.dds"
+	}
+	desc = pursue_conquerors_mantle_decision_desc
+	selection_tooltip = pursue_conquerors_mantle_decision_tooltip
+
+	decision_group_type = major
+
+	is_shown = {
+		has_personal_tenet_flag = tenet_pursuit_of_power_become_conqueror
+		NOR = {
+			has_trait = conqueror
+			any_owned_story = {
+				story_type = story_conqueror
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+		#ADDED - moved the rest of it into is_valid
+	}
+	
+	is_valid = {
+		top_liege = this
+		spiritual_fulfillment >= spiritual_fulfillment_3
+		#OR = {
+			AND = {
+				prestige_level >= max_prestige_level
+				piety_level >= max_piety_level
+			}
+		#	AND = {
+		#		highest_held_title_tier <= tier_duchy
+		#		has_trait = ambitious
+		#	}
+		#}
+		#ADDED
+		highest_held_title_tier < tier_empire
+	}
+
+	cost = {
+		piety = monumental_piety_value
+		#ADDED
+		prestige = massive_prestige_value
+	}
+
+	effect = {
+		show_as_tooltip = {
+			add_trait = conqueror
+			create_story = story_conqueror
+			if = {
+				limit = {
+					any_vassal = { vassal_stance = belligerent }
+				}
+				every_vassal = {
+					vassal_stance = belligerent
+					custom = every_belligerent_vassal
+					add_opinion = {
+						modifier = approving_opinion
+						target = root
+						opinion = 15
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_vassal = { vassal_stance = glory_hound }
+				}
+				every_vassal = {
+					vassal_stance = glory_hound
+					custom = every_glory_hound_vassal
+					add_opinion = {
+						modifier = approving_opinion
+						target = root
+						opinion = 15
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_vassal = { vassal_stance = parochial }
+				}
+				every_vassal = {
+					custom = every_parochial_vassal
+					add_opinion = {
+						modifier = disapproving_opinion
+						opinion = -20
+						target = root
+					}
+				}
+			}
+		}
+		#add_prestige = major_prestige_gain
+		#add_dread = major_dread_value
+		#dynasty = {
+		#	add_dynasty_prestige = major_dynasty_prestige_gain
+		#}
+		#trigger_event = conqueror.0001
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 60
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	ai_potential = {
+		piety >= major_piety_value
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}

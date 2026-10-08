@@ -1,5 +1,98 @@
 ﻿actor_recipient_both_players_special_treatment_trigger = {
-	scope:actor = { is_ai = no }
+	scope:puppet_or_actor = { is_ai = no }
 	scope:recipient = { is_ai = no }
 	has_game_rule = bkt_mp_special_rules_enabled
 }
+
+barons_can_start_tyranny_wars_trigger = {
+	#has_schizo_balance_loaded_trigger = yes
+	always = yes
+}
+
+baron_is_valid_to_start_tyranny_war_trigger = {
+	barons_can_start_tyranny_wars_trigger = yes
+	OR = {
+		gold >= minor_gold_value
+		#current_military_strength >= scope:actor.ten_percent_of_current_military_strength
+		#made it liege instead of scope:actor to be a less scope-dependent 
+		current_military_strength >= liege.ten_percent_of_current_military_strength	
+	}
+}
+
+underage_diarch_loyalty_restriction = {
+	trigger_if = {
+		limit = { 
+			OR = {
+				age >= 16
+				has_active_diarchy = no
+				NOT = { has_game_rule = bkt_additional_content_enabled }
+			}
+		}
+	}
+	trigger_else_if = { 
+		limit = { age < 4 has_active_diarchy = yes }
+		diarch = { save_temporary_scope_as = diarch_scope }
+		custom_tooltip = {
+			text = diarch_is_not_loyal_tt
+			diarch.diarch_loyalty >= diarch_loyalty_visibly_loyal_threshold
+		}
+	}
+	trigger_else_if = {
+		limit = { age < 16 has_active_diarchy = yes }
+		diarch = { save_temporary_scope_as = diarch_scope }
+		custom_tooltip = {
+			text = diarch_is_disloyal_tt
+			diarch.diarch_loyalty > diarch_loyalty_visibly_disloyal_threshold
+		}
+	}
+	trigger_else = { }
+}
+
+puppet_or_actor_doesnt_have_troops_in_recipient_lands = {
+	custom_tooltip = {
+		text = you_have_troops_in_their_subrealm
+		scope:actor = {
+			is_ai = no	#i doubt AI cheeses it ever
+			OR = {
+				scope:recipient.highest_held_title_tier <= tier_barony #those dont really matter for this check, its cheesable anyway
+				NOT = {
+					any_army = {
+						location.county.holder ?= {
+							target_is_same_character_or_above = scope:recipient
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+this_is_real_ally_of_target = {
+	$TARGET$ = { save_temporary_scope_as = target }
+	NOR = {
+		highest_held_title_tier <= tier_barony
+		government_has_flag = government_is_mercenary
+		trigger_if = {
+			limit = {
+				NAND = {
+					government_has_flag = can_call_vassals_into_wars
+					scope:target = { government_has_flag = can_call_vassals_into_wars }
+				}
+			}	
+			OR = {
+				target_is_liege_or_above = scope:target
+				target_is_vassal_or_below = scope:target
+			}
+		}
+	}
+}
+
+# The liege is root, and $VASSAL$ is the target
+# Sets liege_temp and rebel_temp for revoke_refusal_war_rising_strength_value
+bkt_imprison_refusal_war_would_be_massive_trigger = {
+	NOT = { government_has_flag = no_powerful_vassals }
+	save_temporary_scope_as = liege_temp
+	$VASSAL$ = { save_temporary_scope_as = rebel_temp }
+	current_military_strength < revoke_refusal_war_rising_strength_value	#this value can be freely reused it doesnt rely on it being a revoke
+}
+

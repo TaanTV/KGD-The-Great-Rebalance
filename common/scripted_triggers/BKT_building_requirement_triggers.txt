@@ -1,4 +1,17 @@
-﻿
+﻿building_horse_pastures_requirement_terrain = {
+	OR = {
+		terrain = steppe
+		geographical_region = world_steppe_east
+		culture = { has_cultural_parameter = unlock_horse_pastures_building }
+	}
+	#ADDED
+	trigger_if = {
+		limit = { has_schizo_balance_loaded_trigger = yes }
+		always = no
+	}
+}
+
+
 building_warrior_lodges_requirement_terrain = {
 	OR = {
 		AND = {
@@ -11,6 +24,11 @@ building_warrior_lodges_requirement_terrain = {
 		}
 		culture = { has_cultural_parameter = warrior_lodges_lift_restrictions }
 	}
+	#ADDED
+	trigger_if = {
+		limit = { has_schizo_balance_loaded_trigger = yes }
+		always = no
+	}
 }
 
 building_hillside_grazing_requirement_terrain = {
@@ -20,4 +38,9 @@ building_hillside_grazing_requirement_terrain = {
 		terrain = hills
 	}
 	#geographical_region = world_horse_buildings_in_hills_and_mountains
+	#ADDED
+	trigger_if = {
+		limit = { has_schizo_balance_loaded_trigger = yes }
+		always = no
+	}
 }

@@ -134,7 +134,7 @@ guile_legacy_1 = { # Ominous Reputation
 
 	character_modifier = {
 		dread_gain_mult = 0.2
-		dread_baseline_add = 15
+		dread_baseline_add = 10	#prev 15
 	}
 	
 	ai_chance = {
@@ -147,6 +147,23 @@ guile_legacy_1 = { # Ominous Reputation
 			}
 			multiply = 0
 		}
+	}
+}
+
+guile_legacy_2 = { # Long Reach
+	legacy = guile_legacy_track
+
+	effect = {
+		custom_description_no_bullet = {
+			text = guile_legacy_2_effect
+		}	
+	}
+
+	character_modifier = {
+		name = guile_legacy_2_name
+		owned_hostile_scheme_success_chance_add = 10
+		#ADDED
+		hostile_scheme_phase_duration_add = -5
 	}
 }
 
@@ -224,7 +241,7 @@ glory_legacy_2 = { # Renowned Name
 
 	character_modifier = {
 		name = glory_legacy_2_name
-		active_accolades = 1
+		accolades = 1
 		monthly_prestige_gain_mult = 0.1
 		mercenary_hire_cost_mult = -0.1
 		#knight_limit = 1

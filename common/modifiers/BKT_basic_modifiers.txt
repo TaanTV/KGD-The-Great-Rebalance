@@ -10,7 +10,7 @@ diplomacy_modifier_with_offset = {
 	#herd_gain_mult = 0.01
 	#ADDED
 	owned_scheme_secrecy_add = 0.5
-	vassal_herd_contribution_mult = 0.01
+	vassal_herd_contribution_mult = 0.02
 }
 
 intrigue_modifier_with_offset = {
@@ -82,12 +82,17 @@ baron_modifier = {
 	stress_loss_mult = 0.25 		# Barons can't destress much.
 	monthly_income = 0.15			# A bit of money
 	diplomatic_range_mult = -0.2	# Consistent with counts
-	knight_limit = -100				# "Barons don't get to have knights"
+	#knight_limit = -100			# "Barons don't get to have knights"	#UPD: actually that would be hilarious for revolts
+	accolades = -100				# Or accolades really
+	mercenary_hire_cost_mult = -0.33	#hehe
+	levy_attack = 2						#hehehe
+	levy_toughness = 2					#hehehehe	
 }
 
 count_modifier = {
-	domain_limit = 2
+	domain_limit = 3		#prev 2
 	knight_limit = 1		#in 1.14 - 5
+	accolades = -2
 	tax_slot_add = 1
 	ai_war_chance = -0.4	#prev -0.9
 	monthly_treasury_from_liege_mult = -0.35	#prev -0.4
@@ -104,7 +109,7 @@ count_modifier = {
 }
 
 duke_modifier = {
-	domain_limit = 2
+	domain_limit = 3		#prev 2
 	knight_limit = 2		#in 1.14 - 6
 	vassal_limit = 5		#prev 20
 	tax_slot_add = 1
@@ -118,10 +123,10 @@ duke_modifier = {
 }
 
 king_modifier = {
-	domain_limit = 3
+	domain_limit = 4		#prev 3
 	knight_limit = 3		#in 1.14 - 7
 	vassal_limit = 10		#prev 40
-	active_accolades = 1
+	accolades = 1
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.3
 	enemy_scheme_secrecy_add = -10			#prev -20
@@ -139,11 +144,11 @@ king_modifier = {
 }
 
 emperor_modifier = {
-	domain_limit = 4
+	domain_limit = 5		#prev 4
 	knight_limit = 4		#in 1.14 - 8
 	vassal_limit = 15		#prev 60
 	ai_amenity_target_baseline = 0.4
-	active_accolades = 2
+	accolades = 2
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.5			#prev 0.6
 	enemy_scheme_secrecy_add = -15			#prev -30
@@ -157,20 +162,26 @@ emperor_modifier = {
 	#happy_powerful_vassal_levy_contribution_mult = 0.25
 	#happy_powerful_vassal_herd_contribution_mult = 0.25
 	monthly_influence = 0.5
+	stress_loss_mult = -0.1
+	men_at_arms_limit = 2
+	capital_additional_fort_level = 1
 }
 
 hegemon_modifier = {
 	domain_limit = 5
 	knight_limit = 5		#prev 9
-	vassal_limit = 25		#prev 80
+	vassal_limit = 30		#prev 80
 	ai_amenity_target_baseline = 0.4
-	active_accolades = 3
+	accolades = 2
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.7		#prev 0.8
 	enemy_scheme_secrecy_add = -20		#prev -40
 	county_fertility_growth_mult = 0.65
 	#ADDED 
 	monthly_influence = 1
+	stress_loss_mult = -0.15
+	men_at_arms_limit = 2
+	capital_additional_fort_level = 1
 }
 
 # These modifiers are applied to the holder of a title of the respective tier (per title)
@@ -197,6 +208,7 @@ held_hegemony_modifier = {
 # Piety, prestige and stress level that do not modify anything exist for tooltiping
 piety_level_0 = {
 	hide_effects = yes # Custom description will generate the full level information
+	personal_tenet_slot_add = -1
 	#ADDED
 	different_faith_opinion = 10
 	faith_conversion_piety_cost_mult = -0.33
@@ -216,11 +228,13 @@ piety_level_3 = {
 }
 piety_level_4 = {
 	hide_effects = yes # Custom description will generate the full level information
+	personal_tenet_slot_add = 1
 	#ADDED
 	different_faith_opinion = -10
 }
 piety_level_5 = {
 	hide_effects = yes # Custom description will generate the full level information
+	personal_tenet_slot_add = 1
 	#ADDED
 	different_faith_opinion = -20
 }
@@ -229,6 +243,7 @@ piety_level_6 = { #Mandala
 	vassal_limit_max = 15
 	monthly_legitimacy_add = 0.2
 	monthly_dynasty_prestige = 0.1
+	personal_tenet_slot_add = 1
 	#ADDED
 	different_faith_opinion = -20
 }
@@ -237,6 +252,7 @@ piety_level_7 = { #Mandala
 	vassal_limit_max = 25
 	monthly_legitimacy_add = 0.3
 	monthly_dynasty_prestige = 0.15
+	personal_tenet_slot_add = 1
 	#ADDED
 	different_faith_opinion = -20
 }
@@ -245,6 +261,7 @@ piety_level_8 = { #Mandala
 	vassal_limit_max = 35
 	monthly_legitimacy_add = 0.4
 	monthly_dynasty_prestige = 0.2
+	personal_tenet_slot_add = 2
 	#ADDED
 	different_faith_opinion = -20
 }
@@ -420,6 +437,5 @@ ai_extreme_conqueror_modifier = {
 	vassal_limit_max = 500
 	#ADDED
 	vassal_limit = 100
-	negate_health_penalty_add = 2
 	fertility = 0.25
 }

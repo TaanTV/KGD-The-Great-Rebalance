@@ -105,10 +105,10 @@ request_council_powerful_vassal_interaction = {
 			}
 			NAND = {
 				has_council_position = councillor_court_chaplain
-				faith = {
+				rite = {
 					OR = {
-						has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
-						has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
 					}
 				}
 			}
@@ -675,6 +675,7 @@ vassal_syphon_treasury_interaction = {		#diarch_syphon_treasury_interaction
 
 	is_shown = {
 		# Not right away plz
+		has_game_rule = bkt_additional_content_enabled
 		years_from_game_start > 3
 		# The obvious.
 		scope:actor != scope:recipient

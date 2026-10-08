@@ -1,4 +1,42 @@
-﻿hunt_success_chance_value = {
+﻿hunt_normal_option_cost = {
+	value = 8		#prev 10
+	#multiply = activity_cost_scale_by_tier
+	#multiply = activity_cost_scale_by_era
+	#ADDED - do it PROPERLY
+	add = {
+		value = 8		#prev 10
+		multiply = activity_cost_scale_by_tier
+		subtract = 8	#prev 10
+		desc = activity_cost_scale_by_tier_desc
+	}
+	add = {
+		value = 8		#prev 10
+		multiply = activity_cost_scale_by_era
+		subtract = 8	#prev 10
+		desc = activity_cost_scale_by_era_desc
+	}
+}
+
+hunt_good_option_cost = {
+	value = 30		#prev 35
+	#multiply = activity_cost_scale_by_tier
+	#multiply = activity_cost_scale_by_era
+	#ADDED - do it PROPERLY
+	add = {
+		value = 30		#prev 35
+		multiply = activity_cost_scale_by_tier
+		subtract = 30	#prev 35
+		desc = activity_cost_scale_by_tier_desc
+	}
+	add = {
+		value = 30		#prev 35
+		multiply = activity_cost_scale_by_era
+		subtract = 30		#prev 35
+		desc = activity_cost_scale_by_era_desc
+	}
+}
+
+hunt_success_chance_value = {
 	activity_host = {
 		### HOST
 		# SKILLS
@@ -613,7 +651,7 @@ hunt_prestige_melee_value = {
 
 hunt_prestige_melee_group_value = {
 	value = hunt_prestige_melee_value
-	divide = 5	#prev 3
+	divide = 4	#prev 3
 }
 
 hunt_prestige_melee_wound_value = {
@@ -628,7 +666,7 @@ hunt_prestige_melee_wound_group_value = {
 
 hunt_prestige_bow_value = {
 	value = hunt_prestige_melee_value
-	divide = 3	#prev 2
+	divide = 4	#prev 2
 }
 
 
@@ -699,7 +737,7 @@ hunt_prestige_reward_value = {
 				var:hunt_success ?= flag:yes
 			}
 		}
-		multiply = 4	#prev 2	#Legendary hunts should be insane probably
+		multiply = 4	#prev 2
 	}
 	else_if = {
 		limit = {
@@ -768,7 +806,7 @@ great_nerge_prestige_value = {
 	value = 350		#prev 250
 	multiply = nerge_prestige_multiplier
 }
-great_nerge_gold_value = 25				#prev 150
+great_nerge_gold_value = 50				#prev 150
 
 # Fantastic Nerge
 fantastic_nerge_dread_value = 30		#prev 50
@@ -788,6 +826,7 @@ nerge_score_multiplier_value = {
 		limit = {
 			scope:activity.activity_location.county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					sub_region_current_phase = situation_steppe_sky_blessing_season
 				}
 			}
@@ -798,6 +837,7 @@ nerge_score_multiplier_value = {
 		limit = {
 			scope:activity.activity_location.county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					OR = {
 						sub_region_current_phase = situation_steppe_warm_nights_season
 						sub_region_current_phase = situation_steppe_abundant_grazing_season
@@ -811,6 +851,7 @@ nerge_score_multiplier_value = {
 		limit = {
 			scope:activity.activity_location.county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					OR = {
 						sub_region_current_phase = situation_steppe_white_zud_season
 						sub_region_current_phase = situation_steppe_cold_zud_season
@@ -824,6 +865,7 @@ nerge_score_multiplier_value = {
 		limit = {
 			scope:activity.activity_location.county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					sub_region_current_phase = situation_steppe_severe_drought_season
 				}
 			}
@@ -834,6 +876,7 @@ nerge_score_multiplier_value = {
 		limit = {
 			scope:activity.activity_location.county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					sub_region_current_phase = situation_steppe_havsarsan_zud_season
 				}
 			}

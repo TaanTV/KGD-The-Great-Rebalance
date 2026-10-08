@@ -1,0 +1,1057 @@
+﻿
+doctrine_divorce_disallowed = {
+	doctrine_group_type = doctrine_divorce
+	index = 0
+	divergence = 0
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_divorce_disallowed }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_divorce_allowed }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+
+	}
+	parameters = {
+		divorce_disallowed
+		#ADDED
+		divorce_disallowed_better_spouses
+	}
+}
+
+doctrine_divorce_approval = {
+	doctrine_group_type = doctrine_divorce
+	index = 1
+	divergence = 5
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_divorce_approval }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+
+	}
+	parameters = {
+		divorce_approval
+	}
+	#ADDED
+	character_modifier = {
+		name = divorce_must_be_approved_opinion
+		spouse_opinion = 10
+	}
+}
+
+doctrine_divorce_allowed = {
+	doctrine_group_type = doctrine_divorce
+	index = 2
+	divergence = 15
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_divorce_allowed }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_divorce_disallowed }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+	parameters = {
+		divorce_allowed
+		#ADDED
+		divorce_allowed_cheaper_divorce
+	}
+}
+
+doctrine_gender_male_dominated = {
+	doctrine_group_type = doctrine_gender
+	index = 0
+	divergence = 0
+
+	icon = "doctrine_gender_male_dominated"
+
+	is_shown = {
+		NOT = { has_game_rule = full_gender_equality }
+	}
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_gender_male_dominated }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_gender_female_dominated }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		male_dominated_law
+		female_claims_are_weak
+		women_cannot_inherit_implicit_claims
+		women_cannot_be_granted_titles
+		male_dominated_council
+		combatant_must_be_male_if_no_roco
+	}
+
+	character_modifier = {
+		name = female_ruler_male_dominant
+		opinion_of_female_rulers = -30			#prev -10
+	}
+
+	can_pick = {
+		NAND = {
+			exists = religious_head
+			religious_head.culture = { has_cultural_parameter = female_only_inheritance }
+		}
+	}
+}
+
+doctrine_gender_female_dominated = {
+	doctrine_group_type = doctrine_gender
+	index = 2
+	divergence = 40
+
+	icon = "doctrine_gender_female_dominated"
+
+	is_shown = {
+		NOT = { has_game_rule = full_gender_equality }
+	}
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_gender_female_dominated }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_gender_male_dominated }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		female_dominated_law
+		male_claims_are_weak
+		men_cannot_inherit_implicit_claims
+		men_cannot_be_granted_titles
+		female_dominated_council
+		combatant_must_be_female_if_no_roco
+	}
+
+	character_modifier = {
+		name = male_ruler_female_dominant
+		opinion_of_male_rulers = -30					#prev -10
+	}
+
+	can_pick = {
+		NAND = {
+			exists = religious_head
+			religious_head.culture = { has_cultural_parameter = male_only_inheritance }
+		}
+	}
+}
+
+doctrine_pluralism_fundamentalist = {
+	doctrine_group_type = doctrine_pluralism
+	index = 0
+	divergence = 0
+
+	icon = "doctrine_pluralism_fundamentalist"
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_pluralism_fundamentalist }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		pluralism_fundamentalist_proselytization_bonus
+		pluralism_fundamentalist_faction_join_chance
+		pluralism_fundamentalist_vulnerable_to_heresy
+		#pluralism_fundamentalist_revocation_tyranny_minimal
+		#ADDED
+		pluralism_fundamentalist_revocation_tyranny_none
+		pluralism_fundamentalist_demand_conversion_always_criminal
+		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
+	}
+
+	special_parameters = {
+		hostility_towards_us_mult = 2
+		heresy_threshold = -10		#prev -5
+	}
+	character_modifier = {
+		minority_different_faith_opinion = -30	#prev -20
+	}
+}
+doctrine_pluralism_righteous = {
+	doctrine_group_type = doctrine_pluralism
+	index = 1
+	divergence = 5
+
+	icon = "doctrine_pluralism_righteous"
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_pluralism_righteous }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	parameters = {
+		#pluralism_righteous_revocation_tyranny_reduced
+		#ADDED
+		pluralism_fundamentalist_revocation_tyranny_minimal
+	}
+
+	special_parameters = {
+		hostility_towards_us_mult = 1
+	}
+
+	character_modifier = {
+		minority_different_faith_opinion = -10
+	}
+}
+doctrine_pluralism_pluralistic = {
+	doctrine_group_type = doctrine_pluralism
+	index = 2
+	divergence = 10
+
+	icon = "doctrine_pluralism_pluralistic"
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_pluralism_fundamentalist }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_pentarchy_trigger
+			NOT = { tenet:tenet_pentarchy = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	parameters = {
+		pluralism_pluralistic_proselytization_penalty
+		pluralism_pluralistic_faction_join_chance
+		pluralism_pluralistic_resistant_to_heresy
+		pluralism_pluralistic_holy_wars_preserve_vassals
+		#ADDED
+		pluralism_righteous_revocation_tyranny_reduced
+		pluralism_pluralistic_demand_conversion_never_criminal
+		
+	}
+
+	special_parameters = {
+		hostility_towards_us_mult = 0.5
+		heresy_threshold = 10		#prev 5
+	}
+
+	#ADDED
+	character_modifier = {
+		minority_different_faith_opinion = 10
+	}
+}
+
+doctrine_theocracy_lay_clergy = {
+	doctrine_group_type = doctrine_theocracy
+	index = 1
+	divergence = 25		#prev 20
+
+	icon = "doctrine_theocracy_lay_clergy"
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_theocracy_lay_clergy }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_theocracy_temporal }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+	
+	#ADDED 
+	can_pick = {
+		custom_tooltip = {
+			text = incompatible_doctrine_spiritual_head_trigger
+			NOT = { doctrine:doctrine_spiritual_head = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	parameters = {
+		theocracy_temple_ownership
+		lay_clergy
+	}
+
+	special_parameters = {
+		allowed_holding_types = { church_holding }
+	}
+}
+
+
+doctrine_clerical_function_recruitment = {
+	doctrine_group_type = doctrine_clerical_function
+	index = 2
+	divergence = 2.5
+
+	clergy_modifier = {
+		domain_tax_same_faith_mult_even_if_baron = -0.03
+		levy_reinforcement_rate_same_faith_even_if_baron = 0.15	#prev 0.3
+		prowess = 3			#prev 4
+	}
+
+	parameters = {
+		clergy_can_fight
+	}
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_function_recruitment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+}
+
+
+doctrine_clerical_marriage_allowed = {
+	doctrine_group_type = doctrine_clerical_marriage
+	index = 0
+	divergence = 0
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_marriage_allowed }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_clerical_marriage_disallowed }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	# not defining the parameter means it is false by default
+	parameters = {
+		clergy_can_marry
+	}
+	#ADDED - idk why not
+	clergy_modifier = {
+		opinion_of_liege = 5
+		diplomacy = 1
+		
+		ai_sociability = 5
+	}
+}
+doctrine_clerical_marriage_disallowed = {
+	doctrine_group_type = doctrine_clerical_marriage
+	index = 1
+	divergence = 15
+
+	parameters = {
+		clergy_can_marry_disabled
+	}
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_marriage_disallowed }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_clerical_marriage_allowed }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	#ADDED - idk why not. NOTE: no piety or ai_zeal here coz carnal exaltation exists and it wouldnt make sense in that case. 
+	clergy_modifier = {
+		intrigue = 1
+		learning = 1
+		
+		ai_vengefulness = 5
+	}
+}
+
+doctrine_clerical_succession_temporal_appointment = { # Temporal, Free
+	doctrine_group_type = doctrine_clerical_succession
+	index = 0
+	divergence = 10
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_succession_temporal_appointment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else = {
+			if = {
+				limit = {
+					OR = { # Was Spiritual
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+			if = {
+				limit = {
+					OR = {	# Was Fixed
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+		}
+		# Round up to the nearest multiple of 25
+		divide = 25
+		ceiling = yes
+		multiply = 25
+	}
+
+	parameters = {
+		clerical_appointment_ruler
+		clerical_appointment_fixed_disabled
+		clerical_appointment_ruler_can_replace_ecc
+	}
+	
+	#ADDED - realm priests are not too happy being pawns. And neither are HOFs about their lack of involvment.
+	character_modifier = {
+		realm_priest_opinion = -10
+		religious_head_opinion = -10
+	}
+	
+	#ADDED - THOSE DISPLAY BUT DO NOT ACTULLY WORK. Now this is a bit chunky but oh well... Invert_check does not exist for some reason. 
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_spiritual_head
+	#	religious_head_opinion = -10
+	#}
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_temporal_head
+	#	religious_head_opinion = -5
+	#	monthly_piety_gain_mult = -0.05
+	#}
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_no_head
+	#	monthly_piety_gain_mult = -0.1
+	#}
+}
+doctrine_clerical_succession_spiritual_appointment = { # Spiritual, Free
+	doctrine_group_type = doctrine_clerical_succession
+	index = 1
+	divergence = 10
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_succession_spiritual_appointment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else = {
+			if = {
+				limit = {
+					OR = { # Was Temporal
+						rite_has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_temporal_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+			if = {
+				limit = {
+					OR = {	# Was Fixed
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+		}
+		# Round up to the nearest multiple of 25
+		divide = 25
+		ceiling = yes
+		multiply = 25
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_doctrine_spiritual_appointment_temporal_trigger
+			NOT = { doctrine:doctrine_temporal_head = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	parameters = {
+		clerical_appointment_head_of_faith
+		clerical_appointment_fixed_disabled
+		clerical_appointment_hof_can_replace_ecc
+	}
+	
+	#ADDED - realm priests are not too happy being pawns.
+	character_modifier = {
+		realm_priest_opinion = -10
+	}
+}
+doctrine_clerical_succession_temporal_fixed_appointment = { # Temporal, Fixed
+	doctrine_group_type = doctrine_clerical_succession
+	index = 2
+	divergence = 10
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_succession_temporal_fixed_appointment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else = {
+			if = {
+				limit = {
+					OR = { # Was Spiritual
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_fixed_appointment
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+			if = {
+				limit = {
+					OR = {	# Was free
+						rite_has_doctrine = doctrine_clerical_succession_spiritual_appointment
+						rite_has_doctrine = doctrine_clerical_succession_temporal_appointment
+					}
+				}
+				multiply = faith_changed_doctrine_cost_mult_two_step
+			}
+		}
+		# Round up to the nearest multiple of 25
+		divide = 25
+		ceiling = yes
+		multiply = 25
+	}
+
+	parameters = {
+		clerical_appointment_ruler
+		clerical_appointment_fixed
+	}
+	
+	#ADDED - HOF is not happy about their lack of involvment.
+	character_modifier = {
+		religious_head_opinion = -10
+	}
+	
+	#ADDED - THOSE DISPLAY BUT DO NOT ACTULLY WORK. Now this is a bit chunky but oh well... Invert_check does not exist for some reason
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_spiritual_head
+	#	religious_head_opinion = -10
+	#}
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_temporal_head
+	#	religious_head_opinion = -5
+	#	monthly_piety_gain_mult = -0.05
+	#}
+	#doctrine_character_modifier = { 
+	#	doctrine = doctrine_no_head
+	#	monthly_piety_gain_mult = -0.1
+	#}
+}
+
+
+
+doctrine_clerical_succession_conditional = { # Conditional (CE3) - contested appointment; both seculars and clergy may replace ecclesiastical titles, driving the Investiture Crisis
+	doctrine_group_type = doctrine_clerical_succession
+	index = 4
+	# Kept at 0 so the rites we set to this at game start do not drift into heresy on their own
+	divergence = 0
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_succession_conditional }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		# Round up to the nearest multiple of 25
+		divide = 25
+		ceiling = yes
+		multiply = 25
+	}
+
+	# Reform never picks this, so it only comes from ecumenical councils or the game start
+	can_pick = {
+		custom_tooltip = {
+			text = doctrine_clerical_succession_conditional_can_pick_tt
+			scope:actor.rite = { rite_has_doctrine = doctrine_clerical_succession_conditional }
+		}
+	}
+
+	parameters = {
+		clerical_appointment_ruler
+		clerical_appointment_fixed_disabled
+		clerical_appointment_ruler_can_replace_ecc
+		clerical_appointment_hof_can_replace_ecc
+	}
+	
+	#ADDED - Realm priests are not too happy being semi-pawns. And neither are HOFs about their rulings being overruled. 
+	character_modifier = {
+		realm_priest_opinion = -5
+		religious_head_opinion = -5
+	}
+}
+
+doctrine_funeral_sky_burial = { # Have the body fed to scavenging animals and birds
+	doctrine_group_type = doctrine_funeral
+	index = 3
+	divergence = 5
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_funeral_sky_burial }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+	parameters = {
+		sky_burials_active
+		sky_burials_charnel_grounds
+		can_build_towers_of_silence_active
+	}
+
+	character_modifier = {
+		negate_health_penalty_add = 0.1		#prev 0.25
+	}
+}
+
+
+doctrine_no_anointment = {
+	doctrine_group_type = doctrine_coronation
+	index = 0
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		#ADDED
+		if = {
+			limit = { rite_has_doctrine = doctrine_no_anointment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		if = {
+			limit = { rite_has_doctrine = doctrine_imperial_anointment }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		no_anointment = yes
+		coronation_artifact = yes
+	}
+}
+
+doctrine_anointment_permitted = {
+	doctrine_group_type = doctrine_coronation
+	index = 1
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		#ADDED
+		if = {
+			limit = { rite_has_doctrine = doctrine_anointment_permitted }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	parameters = {
+		theocratic_coronation = yes
+		coronation_artifact = yes
+	}
+
+	can_pick = {
+		custom_description = {
+			text = doctrine_requires_theocratic_head_of_faith_trigger
+			NOR = {
+				doctrine:doctrine_no_head = { is_in_list = selected_doctrines }
+				doctrine:doctrine_temporal_head = { is_in_list = selected_doctrines }
+			}
+		}
+	}
+}
+
+doctrine_imperial_anointment = {
+	doctrine_group_type = doctrine_coronation
+	index = 2
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		#ADDED
+		if = {
+			limit = { rite_has_doctrine = doctrine_imperial_anointment }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		if = {
+			limit = { rite_has_doctrine = doctrine_no_anointment }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		imperial_anointment = yes
+		coronation_artifact = yes
+	}
+
+	can_pick = {
+		custom_description = {
+			text = doctrine_requires_theocratic_head_of_faith_trigger
+			NOR = {
+				doctrine:doctrine_no_head = { is_in_list = selected_doctrines }
+				doctrine:doctrine_temporal_head = { is_in_list = selected_doctrines }
+			}
+		}
+	}
+	
+	#ADDED - HOF likes that u bow to them :P
+	character_modifier = {
+		religious_head_opinion = 5
+	}
+}
+
+doctrine_polytheist = {
+	doctrine_group_type = doctrine_theism
+	index = 1
+	divergence = 75
+	
+	icon = "doctrine_polytheist"
+
+	piety_cost = {
+		value = faith_doctrine_cost_high
+		if = {
+			limit = { rite_has_doctrine = abrahamic_hostility_doctrine }
+			multiply = faith_changed_doctrine_cost_mult_three_step
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_polytheist }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	special_parameters = {
+		hostility_levels = {
+			unrelated = hostile
+		}
+		#ADDED - coz why not really
+		heresy_threshold = 5
+	}
+}
+doctrine_monasticism_encouraged = {
+	doctrine_group_type = monasticism_group
+	index = 0
+	divergence = 0
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_latin_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_christianity_monasticism_latin_desc
+			}
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_greek_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_christianity_monasticism_greek_desc
+			}
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = {
+						pam_latin_as_liturgical_language_trigger = no
+						pam_greek_as_liturgical_language_trigger = no
+					}
+				}
+				desc = doctrine_christianity_monasticism_default_desc
+			}
+			desc = doctrine_monasticism_encouraged_desc
+		}
+	}
+
+	piety_cost = {
+		if = {
+			limit = {
+				OR = {
+					rite_religion_tag = christianity_religion
+					rite_religion_tag = dualism_religion
+					rite_religion_tag = buddhism_religion
+					rite_religion_tag = jainism_religion
+				}
+			}
+			value = faith_tenet_cost_low
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_religion_tag = zoroastrianism_religion
+					rite_has_doctrine = pagan_hostility_doctrine
+				}
+			}
+			value = faith_tenet_cost_high
+		}
+		else = {
+			value = faith_tenet_cost_mid
+		}
+
+		if = {
+			limit = { rite_has_doctrine = doctrine_monasticism_encouraged }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_has_doctrine = doctrine_monasticism_accepted
+					rite_has_doctrine = doctrine_monasticism_absent
+					rite_has_doctrine = doctrine_monasticism_forbidden
+				}
+			}
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		take_vows_active
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_hedonistic_trigger
+			NOT = { tenet:tenet_hedonistic = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	clergy_modifier = {
+		county_opinion_add_even_if_baron = 5
+	}
+
+	traits = {
+		virtues = {
+			temperate = { weight = 20 scale = 1 }
+			devoted = { weight = 30 scale = 1 }
+		}
+		sins = {
+			gluttonous = { weight = 10 scale = 1 }
+		}
+	}
+}
+
+doctrine_monasticism_accepted = {
+	doctrine_group_type = monasticism_group
+	index = 1
+	divergence = 5		#prev 1
+
+	desc = doctrine_monasticism_accepted_desc
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_monasticism_accepted }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_has_doctrine = doctrine_monasticism_absent
+					rite_has_doctrine = doctrine_monasticism_forbidden
+				}
+			}
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		take_vows_active
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_hedonistic_trigger
+			NOT = { tenet:tenet_hedonistic = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	clergy_modifier = {
+		county_opinion_add_even_if_baron = 3
+	}
+
+	traits = {
+		virtues = {
+			temperate = { weight = 10 scale = 1 }
+		}
+		sins = {
+			gluttonous = { weight = 5 scale = 1 }
+		}
+	}
+}
+
+doctrine_monasticism_absent = {
+	doctrine_group_type = monasticism_group
+	index = 2
+	divergence = 10		#prev 3
+
+	desc = doctrine_monasticism_absent_desc
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_monasticism_absent }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_has_doctrine = doctrine_monasticism_encouraged
+					rite_has_doctrine = doctrine_monasticism_accepted
+					rite_has_doctrine = doctrine_monasticism_forbidden
+				}
+			}
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_anachoresis_trigger
+			NOT = { tenet:tenet_anachoresis = { is_in_list = selected_doctrines } }
+		}
+	}
+}
+
+doctrine_monasticism_forbidden = {
+	doctrine_group_type = monasticism_group
+	index = 3
+	divergence = 15		#prev 5
+
+	desc = doctrine_monasticism_forbidden_desc
+
+	piety_cost = {
+		value = faith_doctrine_cost_mid
+		if = {
+			limit = { rite_has_doctrine = doctrine_monasticism_forbidden }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_has_doctrine = doctrine_monasticism_encouraged
+					rite_has_doctrine = doctrine_monasticism_accepted
+				}
+			}
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		devoted_trait_criminal
+		cannot_take_the_vows
+	}
+
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_anachoresis_trigger
+			NOT = { tenet:tenet_anachoresis = { is_in_list = selected_doctrines } }
+		}
+	}
+
+	traits = {
+		sins = {
+			devoted = { weight = 80 scale = 2 }
+		}
+	}
+}
+
+doctrine_sacraments_central = {
+	doctrine_group_type = sacraments_group
+	index = 0
+	#ADDED - where? Giving to this one coz i dont want to overwrite the other one
+	divergence = 20
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_latin_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_sacraments_central_latin_desc
+			}
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_greek_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_sacraments_central_greek_desc
+			}
+			desc = doctrine_sacraments_central_desc
+		}
+	}
+
+	piety_cost = {
+		if = {
+			limit = {
+				OR = {
+					rite_religion_tag = christianity_religion
+					rite_religion_tag = judaism_religion
+				}
+			}
+			value = faith_tenet_cost_low
+		}
+		else_if = {
+			limit = {
+				rite_has_doctrine = pagan_hostility_doctrine
+			}
+			value = faith_tenet_cost_high
+		}
+		else = {
+			value = faith_tenet_cost_mid
+		}
+
+		if = {
+			limit = { rite_has_doctrine = doctrine_sacraments_central }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_sacraments_absent }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	traits = {
+		virtues = {
+			honest = { weight = 20 scale = 1 }
+		}
+		sins = {
+			deceitful = { weight = 20 scale = 1 }
+		}
+	}
+
+	parameters = {
+		excommunication_active
+		pressing_claims_vs_same_faith_cost_piety	#ADDED
+		last_rites_active
+		seek_indulgences_active
+	}
+}

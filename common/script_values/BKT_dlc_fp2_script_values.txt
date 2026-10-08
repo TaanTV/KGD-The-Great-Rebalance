@@ -4,7 +4,10 @@
 		limit = { exists = scope:contract_assistance_helper }
 		add = scope:contract_assistance_helper.max_military_strength
 	}
-	divide = scope:recipient.max_military_strength
+	divide = {
+		value = scope:recipient.max_military_strength
+		min = 1
+	}
 	#ADDED - this big IF statement
 	if = {
 		limit = { 
@@ -67,7 +70,6 @@
 	}
 	if = {
 		limit = {
-			
 			scope:contract_assistance_helper.domicile ?= { has_domicile_parameter = camp_improved_mercenary_contract_rewards }
 		}
 		multiply = camp_improved_mercenary_contract_rewards_value
@@ -83,4 +85,30 @@
 	#ADDED CHANGED
 	max = { value = gold multiply = 0.75 floor = yes }
 	min = 25
+	#ADDED - this multiply, cost increases per hired party on same side in the war
+	multiply = {
+		value = 1
+		scope:target ?= {
+			if = {
+				limit = { primary_defender = scope:recipient }
+				every_war_defender = {
+					limit = { 
+						has_variable = owed_contract_assistance_war
+						var:owed_contract_assistance_war ?= scope:target
+					}
+					add = 0.2
+				}
+			}
+			else_if = {
+				limit = { primary_attacker = scope:recipient }
+				every_war_attacker = {
+					limit = { 
+						has_variable = owed_contract_assistance_war
+						var:owed_contract_assistance_war ?= scope:target
+					}
+					add = 0.2
+				}
+			}
+		}
+	}
 }

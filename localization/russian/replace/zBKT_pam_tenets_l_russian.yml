@@ -1,0 +1,2 @@
+﻿l_russian:
+ doctrine_parameter_tenet_simony_personal_gifts: "Подарки снижают [Concept('stress', 'стресс')|E], дают немного @spiritual_fulfillment_icon![Concept('spiritual_fulfillment', 'духовной реализации')|E] и сильнее улучшают [Concept('opinion', 'мнение')|E]"

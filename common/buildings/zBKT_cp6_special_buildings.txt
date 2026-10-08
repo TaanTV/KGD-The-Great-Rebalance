@@ -16,6 +16,10 @@ holy_site_st_peters_basilica_01 = {
 		name = "cp6_building_special_st_peters_basilica_mesh"
 		requires_dlc_flag = holy_buildings
 	}
+	asset = {
+		type = pdxmesh
+		name = "building_special_cathedral_generic_mesh"
+	}
 	
 	construction_time = very_slow_construction_time
 
@@ -29,9 +33,7 @@ holy_site_st_peters_basilica_01 = {
 		custom_description = {
 			text = holy_site_christian_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:christianity_religion
-				}
+				christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -51,9 +53,7 @@ holy_site_st_peters_basilica_01 = {
 		custom_description = {
 			text = holy_site_christian_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:christianity_religion
-				}
+				christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -70,9 +70,7 @@ holy_site_st_peters_basilica_01 = {
 
 	county_holder_character_modifier = {
 		monthly_piety_gain_mult = 0.2
-		same_faith_opinion = 5
-		clergy_opinion = 5			#prev 10
-		learning_per_piety_level = 1
+		holy_order_hire_cost_mult = -0.15
 	}
 	
 	county_modifier = {
@@ -105,6 +103,7 @@ holy_site_st_peters_basilica_01 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 }
 
 ##########
@@ -131,7 +130,7 @@ mont_st_michel_01 = {
 	cost_gold = 750
 	
 	is_enabled = {
-		scope:holder.faith.religion = religion:christianity_religion
+		christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 	}
 
 	character_modifier = {
@@ -172,6 +171,7 @@ mont_st_michel_01 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 }
 
 ##########
@@ -201,9 +201,7 @@ mont_st_michel_02 = {
 		custom_description = {
 			text = holy_site_christian_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:christianity_religion
-				}
+				christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -220,7 +218,7 @@ mont_st_michel_02 = {
 	}
 	
 	is_enabled = {
-		scope:holder.faith.religion = religion:christianity_religion
+		christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 	}
 
 	character_modifier = {
@@ -292,9 +290,7 @@ mont_st_michel_03 = {
 		custom_description = {
 			text = holy_site_christian_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:christianity_religion
-				}
+				christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -312,7 +308,7 @@ mont_st_michel_03 = {
 	}
 	
 	is_enabled = {
-		scope:holder.faith.religion = religion:christianity_religion
+		christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 	}
 
 	character_modifier = {
@@ -384,9 +380,7 @@ mont_st_michel_04 = {
 		custom_description = {
 			text = holy_site_christian_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:christianity_religion
-				}
+				christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -405,7 +399,7 @@ mont_st_michel_04 = {
 	}
 	
 	is_enabled = {
-		scope:holder.faith.religion = religion:christianity_religion
+		christianity_or_syncretic_with_christianity_trigger = { CHARACTER = scope:holder }
 	}
 
 	character_modifier = {
@@ -476,9 +470,7 @@ sanchi_stupa_01 = {
 	is_enabled = {
 		custom_description = {
 			text = buddhas_of_bamian_trigger
-			scope:holder = {
-				religion = { is_in_family = rf_eastern }
-			}
+			eastern_or_syncretic_with_eastern_trigger = { CHARACTER = scope:holder }
 		}
 	}
 
@@ -514,6 +506,7 @@ sanchi_stupa_01 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 }
 
 
@@ -549,9 +542,7 @@ boudhanath_01 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder = {
-					religion = { is_in_family = rf_eastern }
-				}
+				eastern_or_syncretic_with_eastern_trigger = { CHARACTER = scope:holder }
 			}
 		}
 	}
@@ -560,7 +551,7 @@ boudhanath_01 = {
 		monthly_piety_gain_mult = 0.25
 		same_faith_opinion = 3		#prev 5
 		county_opinion_add = 5
-		faith_creation_piety_cost_mult = -0.1		#prev -0.15
+		rite_creation_piety_cost_mult = -0.1		#prev -0.15
 	}
 	
 	county_modifier = {
@@ -592,6 +583,7 @@ boudhanath_01 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 }
 
 
@@ -631,7 +623,7 @@ yazd_mosque_01 = {
 					is_holy_site_of = scope:holder.faith
 				}
 			}
-			scope:holder.faith = { religion_tag = islam_religion }
+			islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 		}
 		scope:holder = {
 			culture = {
@@ -647,7 +639,7 @@ yazd_mosque_01 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 	}
@@ -689,6 +681,7 @@ yazd_mosque_01 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 }
 
 ##########
@@ -735,6 +728,7 @@ qutb_minar_01 = {
 	type = special
 
 	flag = travel_point_of_interest_wonder
+	#flag = religious_studies_location - omitted on purpose
 	
 	next_building = qutb_minar_02
 }
@@ -765,7 +759,7 @@ qutb_minar_02 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 		scope:holder = {
@@ -779,9 +773,7 @@ qutb_minar_02 = {
 		custom_description = {
 			text = holy_site_muslim_or_holy_site_trigger
 			OR = {
-				scope:holder = {
-					religion = religion:islam_religion
-				}
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 				custom_description = {
 					text = holy_site_building_trigger
 					barony = {
@@ -827,6 +819,7 @@ qutb_minar_02 = {
 	flag = holy_building
 
 	flag = travel_point_of_interest_religious
+	#flag = religious_studies_location - omitted on purpose
 }
 
 ##########
@@ -862,7 +855,7 @@ qutb_minar_03 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }	
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 		scope:holder = {
@@ -879,7 +872,7 @@ qutb_minar_03 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }	
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 	}
@@ -924,6 +917,7 @@ qutb_minar_03 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 } 
 
 ##########
@@ -952,7 +946,7 @@ qutb_minar_04 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }	
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 		scope:holder = {
@@ -969,7 +963,7 @@ qutb_minar_04 = {
 				barony = {
 					is_holy_site_of = scope:holder.faith
 				}
-				scope:holder.faith = { religion_tag = islam_religion }	
+				islam_or_syncretic_with_islam_trigger = { CHARACTER = scope:holder }
 			}
 		}
 	}
@@ -1012,4 +1006,5 @@ qutb_minar_04 = {
 
 	flag = travel_point_of_interest_religious
 	flag = holy_building
+	flag = religious_studies_location
 } 

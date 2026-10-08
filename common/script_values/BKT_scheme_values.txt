@@ -55,6 +55,7 @@ secrecy_base_value = {
 	#ADDED
 	if = {
 		limit = {
+			always = no	#disable for now
 			exists = this
 			is_type_basic = no
 			scope:owner ?= { is_ai = no }	#dunno about that 

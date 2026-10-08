@@ -1,0 +1,27 @@
+﻿
+### Vassal stance trigger list
+
+
+vassal_follows_directive_valid_trigger = {
+	$VASSAL$ = { save_temporary_scope_as = directive_vassal }
+	$LIEGE$ = { save_temporary_scope_as = directive_liege }
+	scope:directive_vassal = {
+		trigger_if = {
+			limit = {
+				scope:directive_liege = { government_has_mechanic = administrative }
+			}
+			is_vassal_of = scope:directive_liege
+		}
+		trigger_else = {
+			is_vassal_of = scope:directive_liege
+		}
+		NOT = { has_relation_rival = scope:directive_liege }
+		NOT = { is_at_war_with = scope:directive_liege }
+		NOT = { has_trait = disloyal }
+		#ADDED - gotta have at least some respect for the liege.
+		opinion = {
+			value >= -25
+			target = scope:directive_liege
+		}
+	}
+}

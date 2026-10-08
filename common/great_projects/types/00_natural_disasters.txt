@@ -1,7 +1,8 @@
 ﻿@msg_completion_effect_natural_disaster = "event:/DLC/EP4/SFX/Stingers/China/tgp_mx_sting_finishing_great_project_disaster"
 
 @disaster_relief_asian_illustration = "gfx/interface/illustrations/great_projects/asia_great_project_default.dds"
-@disaster_relief_generic = "gfx/interface/illustrations/activity_header_backgrounds/activity_survey.dds"
+@disaster_relief_generic_flood = "gfx/interface/illustrations/event_scenes/bp1_wetlands.dds"
+@disaster_relief_generic_earthquake = "gfx/interface/illustrations/activity_header_backgrounds/activity_survey.dds"
 
 @icon_asian_great_project = "gfx/interface/icons/great_projects/city_china.dds"
 @icon_generic_great_project = "gfx/interface/icons/great_projects/_default.dds"
@@ -28,7 +29,7 @@ great_project_earthquake = {
 		reference = @disaster_relief_asian_illustration
 	}
 	illustration = {
-		reference = @disaster_relief_generic
+		reference = @disaster_relief_generic_earthquake
 	}
 
 	name = {
@@ -52,7 +53,7 @@ great_project_earthquake = {
 		exists = var:situation
 	}
 
-	construction_time = 60
+	construction_time = 120		#prev 60
 	contributor_cooldown = standard_contributor_cooldown_value
 
 	on_complete = {
@@ -71,6 +72,7 @@ great_project_earthquake = {
 				}
 			}
 		}
+		tenet_benevolent_governance_disaster_neglect_effect = yes
 	}
 
 	on_start_build = {
@@ -203,14 +205,14 @@ great_project_earthquake = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -435,14 +437,14 @@ great_project_earthquake = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -734,13 +736,13 @@ great_project_earthquake = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -960,14 +962,14 @@ great_project_earthquake = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -1155,14 +1157,14 @@ great_project_earthquake = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -1173,7 +1175,7 @@ great_project_earthquake = {
 						if = {
 							limit = { 
 								faith.religious_head ?= { is_alive = yes }
-								NOT = { faith.religious_head = root }
+								faith.religious_head != root
 							}
 							faith.religious_head = {
 								add_opinion = {
@@ -1382,14 +1384,14 @@ great_project_earthquake = {
 			on_contribution_funded = {
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -1573,6 +1575,7 @@ great_project_earthquake = {
 				scope:owner = {
 					trigger_event = natural_disaster.6911
 				}
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			ai_will_do = {
@@ -1647,7 +1650,7 @@ great_project_flood = {
 		reference = @disaster_relief_asian_illustration
 	}
 	illustration = {
-		reference = @disaster_relief_generic
+		reference = @disaster_relief_generic_flood
 	}
 
 	name = {
@@ -1671,7 +1674,7 @@ great_project_flood = {
 		exists = var:situation
 	}
 
-	construction_time = 60
+	construction_time = 120		#prev 60
 	contributor_cooldown = standard_contributor_cooldown_value
 
 	on_complete = {
@@ -1697,6 +1700,7 @@ great_project_flood = {
 				YEARS = 10
 			}
 		}
+		tenet_benevolent_governance_disaster_neglect_effect = yes
 	}
 
 	on_start_build = { 
@@ -1821,14 +1825,14 @@ great_project_flood = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -1946,8 +1950,8 @@ great_project_flood = {
 			contributor_is_valid = {
 				tgp_natural_disaster_is_valid_contributor_trigger = yes
 				custom_tooltip = {
-					text = laamp_base_contract_schemes.1301.d.tt.not_enough_troops # TODO TIT-66592 replace with string with accurate value
-					current_military_strength >= 100
+					text = natural_disaster_drainage_not_enough_soldiers_tt
+					current_military_strength >= natural_disaster_drainage_min_military_strength_value
 				}
 			}
 
@@ -2038,13 +2042,13 @@ great_project_flood = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -2337,13 +2341,13 @@ great_project_flood = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = minor_spiritual_fulfillment_value TIER = mandatory }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -2564,14 +2568,14 @@ great_project_flood = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -2759,14 +2763,14 @@ great_project_flood = {
 				}
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -2777,7 +2781,7 @@ great_project_flood = {
 						if = {
 							limit = { 
 								faith.religious_head ?= { is_alive = yes }
-								NOT = { faith.religious_head = root }
+								faith.religious_head != root
 							}
 							faith.religious_head = {
 								add_opinion = {
@@ -2986,14 +2990,14 @@ great_project_flood = {
 			on_contribution_funded = {
 				great_project_notify_contribution = yes
 				great_project_contribution_catalyst_effect = yes
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			on_complete = {
 				natural_disaster_great_project_save_scopes_effect = yes
 				
 				send_interface_toast = {
-					type = event_toast_effect_good
-					title = great_project_contribution_msg_t
+					type = msg_great_project_reward
 					left_icon = root
 					right_icon = scope:great_project.great_project_location.duchy
 
@@ -3182,6 +3186,7 @@ great_project_flood = {
 				scope:owner = {
 					trigger_event = natural_disaster.6911
 				}
+				tenet_benevolent_governance_disaster_relief_effect = { AMOUNT = medium_spiritual_fulfillment_value TIER = voluntary }
 			}
 
 			ai_will_do = {

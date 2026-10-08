@@ -1,0 +1,149 @@
+﻿@unlock_scheme_opt_out_value = 1
+
+namespace = scheme_critical_moments
+
+##################################################
+# #Base System
+# 0001 - 0010	Standard Critical Moment
+#
+# #Ordinary Schemes
+# 1001 - 1010	Murder
+# 1011 - 1020	Seduce
+# 1021 - 1030	Sway
+# 1031 - 1040	Befriend
+# 1041 - 1050	Court
+# 1051 - 1060	Elope
+# 1061 - 1070	Abduct
+# 1071 - 1080	Fabricate Claim
+# 1081 - 1090	Learn Language
+# 1091 - 1100	Abduct Regent
+# 1101 - 1110	Claim Throne
+# 1111 - 1120	Steal Back Artifact
+# 1121 - 1130	Convert to Witchcraft
+# 1131 - 1140   Slander
+# 1141 - 1150   Promote
+# 1151 - 1160	Generate Claim
+# 1161 - 1170   Steal Herd
+# 1171 - 1180   Challenge Status
+# 1181 - 1190	Expand Power Base
+# 1191 - 1200	Depose Results
+# 1201 - 1210	Siphon Treasury Results
+# 1211 - 1220	Disbelieve Mandala Results
+# 1221 - 1230	Coerce Tributary Results
+#
+#
+#
+#
+#
+# #Contract Schemes (Diplo)
+# 2001 - 2010	Regale court with stories
+# 2011 - 2020	Improve ruler's reputation
+# 2021 - 2030	Hobnob with local ruler
+# 2031 - 2040	Paid Mediator
+# 2041 - 2050	Confidence trickster
+#
+# #Contract Schemes (Martial)
+# 2201 - 2210	Hunt criminals
+# 2211 - 2220	Act as hired muscle
+# 2221 - 2230	Help train local MaA
+# 2231 - 2240	Garrison service
+# 2241 - 2250	Ambush travellers
+#
+# #Contract Schemes (Stewardship)
+# 2401 - 2410	Collect taxes for a third party
+# 2411 - 2420	Perform a census
+# 2421 - 2430	Help construct a building
+# 2431 - 2440	Settle an administrative boundary dispute
+# 2441 - 2450	Collect fake taxes
+#
+# #Contract Schemes (Intrigue)
+# 2601 - 2610	Provide intelligence from your trips
+# 2611 - 2620	Murder a character's rival
+# 2621 - 2630	Abduct a character's rival
+# 2631 - 2640	Attack the property of a character's rival
+# 2641 - 2650	Heist from a ruler's treasury
+#
+# #Contract Schemes (Learning)
+# 2801 - 2810	Copy texts for a learned ruler
+# 2811 - 2820	Help settle a local theological argument
+# 2821 - 2830	Create a work of learning for a ruler
+# 2831 - 2840	Solicit Charity
+# 2841 - 2850	Sell bogus relics
+#
+# #Contract Schemes (Prowess)
+# 3001 - 3010	Hunt in the wilds
+# 3011 - 3020	Guard merchant properties
+# 3021 - 3030	Guard a local ruler at a minor event
+# 3031 - 3040	Go rustling
+# 3041 - 3050	Go poaching
+#
+##################################################
+
+
+
+
+
+#Success
+scheme_critical_moments.1172 = {
+	type = character_event
+	title = scheme_critical_moments.1172.t
+	desc = scheme_critical_moments.1172.desc
+	theme = learning
+	left_portrait = {
+		character = root
+		animation = happy_teacher
+	}
+	right_portrait = {
+		character = scope:target
+		animation = stress
+	}
+	#ADDED 
+	id_override_priority = 228
+
+	immediate = {
+		scope:target = {
+			save_scope_as = recipient # To fix loc
+			set_variable = {
+				name = challenge_status_influence_loss
+				value = {
+					value = 50
+					add = scope:scheme.scheme_success_chance
+					#ADDED
+					max = this.influence
+					min = 25
+				}
+			}
+		}
+		tgp_activate_catalyst_against_hegemon_effect = {
+			HEGEMON = scope:target.top_liege
+			CATALYST = catalyst_governor_challenged_status
+		}
+	}
+
+	option = {
+		name = scheme_critical_moments.1172.a
+		show_as_tooltip = {
+			scope:target = {
+				change_influence = {
+					value = scope:target.var:challenge_status_influence_loss
+					multiply = -1
+				}
+			}
+			custom_tooltip = status_challenged_success_tt
+			scope:owner = {
+				change_influence = {
+					value = scope:target.var:challenge_status_influence_loss
+				}
+			}
+		}
+		scope:scheme = {
+			end_scheme = yes
+		}
+	}
+
+	after = {
+		scope:target = {
+			trigger_event = scheme_critical_moments.1174
+		}
+	}
+}

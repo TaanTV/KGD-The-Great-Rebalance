@@ -5,11 +5,7 @@
 count_legitimacy = {
 	is_valid = {
 		highest_held_title_tier = tier_county
-		NOR = {
-			government_allows = administrative
-			government_has_flag = government_is_nomadic
-			government_has_flag = government_is_mandala
-		}
+		use_general_legitimacy = yes
 	}
 
 	ai_expected_level = default_ai_legitimacy_expectation
@@ -35,6 +31,7 @@ count_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 	}
 	# Gap of at least 50
 	level = {
@@ -68,6 +65,7 @@ count_legitimacy = {
 		flag = increased_alliance_acceptance
 		flag = very_reduced_claim_cb_cost
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 		flag = reduced_title_creation_cost
 	}
@@ -87,6 +85,7 @@ count_legitimacy = {
 		flag = very_increased_alliance_acceptance
 		flag = extra_reduced_claim_cb_cost
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 		flag = very_reduced_title_creation_cost
 	}
@@ -106,6 +105,7 @@ count_legitimacy = {
 		flag = extra_increased_alliance_acceptance
 		flag = extra_reduced_claim_cb_cost
 		flag = extra_reduced_factions
+		flag = massively_reduced_scheme_agent_join_chance_in_realm
 		flag = extra_swing_scales_cost
 		flag = extra_reduced_title_creation_cost
 	}
@@ -114,11 +114,7 @@ count_legitimacy = {
 duke_legitimacy = {
 	is_valid = {
 		highest_held_title_tier = tier_duchy
-		NOR = {
-			government_allows = administrative
-			government_has_flag = government_is_nomadic
-			government_has_flag = government_is_mandala
-		}
+		use_general_legitimacy = yes
 	}
 
 	ai_expected_level = default_ai_legitimacy_expectation
@@ -144,6 +140,7 @@ duke_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = very_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 		flag = very_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -165,6 +162,7 @@ duke_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 		flag = increased_swing_scales_cost
 	}
 	# Gap of at least 100
@@ -190,6 +188,7 @@ duke_legitimacy = {
 		flag = increased_vassalization_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 		flag = reduced_title_creation_cost
 	}
@@ -208,6 +207,7 @@ duke_legitimacy = {
 		flag = very_increased_vassalization_acceptance
 		flag = very_increased_tributarization_acceptance
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 		flag = very_reduced_title_creation_cost
 	}
@@ -227,6 +227,7 @@ duke_legitimacy = {
 		flag = extra_increased_vassalization_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = extra_reduced_factions
+		flag = massively_reduced_scheme_agent_join_chance_in_realm
 		flag = extra_reduced_swing_scales_cost
 		flag = extra_reduced_title_creation_cost
 	}
@@ -235,14 +236,7 @@ duke_legitimacy = {
 king_legitimacy = {
 	is_valid = {
 		highest_held_title_tier = tier_kingdom
-		OR = {
-			NOT = { government_allows = administrative }
-			top_liege = this
-		}
-		NOR = { 
-			government_has_flag = government_is_nomadic
-			government_has_flag = government_is_mandala
-		}
+		use_general_legitimacy = yes
 	}
 
 	ai_expected_level = default_ai_legitimacy_expectation
@@ -268,6 +262,7 @@ king_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = very_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 		flag = very_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -291,6 +286,7 @@ king_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 		flag = increased_swing_scales_cost
 	}
 	# Gap of at least 100
@@ -330,6 +326,7 @@ king_legitimacy = {
 		flag = increased_vassalization_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 		flag = reduced_title_creation_cost
 	}
@@ -349,6 +346,7 @@ king_legitimacy = {
 		flag = very_increased_vassalization_acceptance
 		flag = very_increased_tributarization_acceptance
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 		flag = very_reduced_title_creation_cost
 	}
@@ -357,10 +355,7 @@ king_legitimacy = {
 emperor_legitimacy = {
 	is_valid = {
 		highest_held_title_tier = tier_empire
-		NOR = { 
-			government_has_flag = government_is_nomadic
-			government_has_flag = government_is_mandala
-		}
+		use_general_legitimacy = yes
 	}
 
 	ai_expected_level = default_ai_legitimacy_expectation
@@ -386,6 +381,7 @@ emperor_legitimacy = {
 		flag = massively_reduced_tributarization_acceptance
 		flag = massively_reduced_alliance_acceptance
 		flag = massively_increased_factions
+		flag = massively_increased_scheme_agent_join_chance_in_realm
 		flag = massively_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -408,6 +404,7 @@ emperor_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = very_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 		flag = very_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -430,6 +427,7 @@ emperor_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 		flag = increased_swing_scales_cost
 	}
 	# Gap of at least 200
@@ -453,6 +451,7 @@ emperor_legitimacy = {
 			#ADDED
 			monthly_legitimacy_add = -0.75
 		}
+		flag = reduced_scheme_agent_join_chance_in_realm
 	}
 	# Gap of at least 500
 	level = {
@@ -469,6 +468,7 @@ emperor_legitimacy = {
 		flag = increased_vassalization_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_title_creation_cost
 		flag = reduced_swing_scales_cost
 	}
@@ -477,7 +477,6 @@ emperor_legitimacy = {
 hegemon_legitimacy = {
 	is_valid = {
 		highest_held_title_tier = tier_hegemony
-		NOT = { government_has_flag = government_is_mandala }
 		NAND = {
 			has_tgp_dlc_trigger = yes
 			has_title = title:h_china
@@ -511,6 +510,7 @@ hegemon_legitimacy = {
 		flag = massively_reduced_tributarization_acceptance
 		flag = massively_reduced_alliance_acceptance
 		flag = massively_increased_factions
+		flag = massively_increased_scheme_agent_join_chance_in_realm
 		flag = massively_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -533,6 +533,7 @@ hegemon_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = very_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 		flag = very_increased_swing_scales_cost
 		#ADDED
 		flag = vassals_refuse_imprisonment_with_no_war
@@ -555,6 +556,7 @@ hegemon_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 		flag = increased_swing_scales_cost
 	}
 	# Gap of at least 200
@@ -573,6 +575,7 @@ hegemon_legitimacy = {
 	# Gap of at least 350
 	level = {
 		threshold = legitimacy_level_5 # 700-2800
+		flag = reduced_scheme_agent_join_chance_in_realm
 		#ADDED
 		modifier = {
 			monthly_legitimacy_add = -1
@@ -593,6 +596,7 @@ hegemon_legitimacy = {
 		flag = increased_vassalization_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_title_creation_cost
 		flag = reduced_swing_scales_cost
 	}
@@ -637,7 +641,7 @@ mandate_legitimacy = {
 			monthly_dynasty_prestige = -0.4
 			county_opinion_add = -40
 			#ADDED
-			monthly_legitimacy_add = 0.75
+			monthly_legitimacy_add = 1.00
 		}
 		flag = massively_reduced_marriage_acceptance
 		flag = massively_increased_claim_cb_cost
@@ -645,6 +649,7 @@ mandate_legitimacy = {
 		flag = massively_reduced_tributarization_acceptance
 		flag = massively_reduced_alliance_acceptance
 		flag = massively_increased_factions
+		flag = massively_increased_scheme_agent_join_chance_in_realm
 		flag = massively_increased_swing_scales_cost
 	}
 	# Gap of at least 50
@@ -655,7 +660,7 @@ mandate_legitimacy = {
 			monthly_dynasty_prestige = -0.3
 			county_opinion_add = -30
 			#ADDED
-			monthly_legitimacy_add = 0.5
+			monthly_legitimacy_add = 0.75
 		}
 		flag = very_reduced_marriage_acceptance
 		flag = very_increased_claim_cb_cost
@@ -663,6 +668,7 @@ mandate_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = very_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 		flag = very_increased_swing_scales_cost
 	}
 	# Gap of at least 100
@@ -673,7 +679,7 @@ mandate_legitimacy = {
 			monthly_dynasty_prestige = -0.2
 			county_opinion_add = -20
 			#ADDED
-			monthly_legitimacy_add = 0.25
+			monthly_legitimacy_add = 0.5
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_alliance_acceptance
@@ -681,6 +687,7 @@ mandate_legitimacy = {
 		flag = reduced_vassalization_acceptance
 		flag = reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 		flag = increased_swing_scales_cost
 	}
 	# Gap of at least 200
@@ -689,7 +696,7 @@ mandate_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.2
 			#ADDED
-			monthly_legitimacy_add = 0.1
+			monthly_legitimacy_add = 0.25
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_vassalization_acceptance
@@ -701,7 +708,7 @@ mandate_legitimacy = {
 		threshold = legitimacy_level_5 # 700-2800
 		#ADDED
 		modifier = {
-			monthly_legitimacy_add = -0.35
+			monthly_legitimacy_add = -0.25
 		}
 	}
 	# Gap of at least 500
@@ -711,12 +718,13 @@ mandate_legitimacy = {
 			short_reign_duration_mult = -0.25
 			county_opinion_add = 10
 			#ADDED
-			monthly_legitimacy_add = -0.75
+			monthly_legitimacy_add = -0.5
 		}
 		flag = reduced_claim_cb_cost
 		flag = increased_marriage_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_title_creation_cost
 		flag = reduced_swing_scales_cost
 	}
@@ -727,12 +735,13 @@ mandate_legitimacy = {
 			county_opinion_add = 20
 			monthly_dynasty_prestige = 0.15
 			#ADDED
-			monthly_legitimacy_add = -1.5
+			monthly_legitimacy_add = -1
 		}
 		flag = very_reduced_claim_cb_cost
 		flag = very_increased_marriage_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_title_creation_cost
 		flag = reduced_swing_scales_cost
 	}
@@ -743,12 +752,13 @@ mandate_legitimacy = {
 			county_opinion_add = 25
 			monthly_dynasty_prestige = 0.25
 			#ADDED
-			monthly_legitimacy_add = -3
+			monthly_legitimacy_add = -2
 		}
 		flag = very_reduced_claim_cb_cost
 		flag = very_increased_marriage_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_title_creation_cost
 		flag = reduced_swing_scales_cost
 	}
@@ -846,6 +856,7 @@ nomadic_legitimacy = {
 		flag = increased_tributarization_acceptance
 		flag = increased_confederation_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 		flag = increased_obedience_acceptance
 	}
@@ -866,6 +877,7 @@ nomadic_legitimacy = {
 		flag = very_increased_tributarization_acceptance
 		flag = very_increased_confederation_acceptance
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 		flag = increased_obedience_acceptance
 	}
@@ -900,6 +912,7 @@ mandala_legitimacy = {
 		flag = massively_reduced_vassalization_acceptance
 		flag = slightly_reduced_tributarization_acceptance
 		flag = very_increased_factions
+		flag = very_increased_scheme_agent_join_chance_in_realm
 
 	}
 	# Gap of at least 200
@@ -917,6 +930,7 @@ mandala_legitimacy = {
 		flag = very_reduced_vassalization_acceptance
 		flag = slightly_reduced_tributarization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 	}
 	# Gap of at least 220
 	level = {
@@ -931,6 +945,7 @@ mandala_legitimacy = {
 		flag = reduced_alliance_acceptance
 		flag = reduced_vassalization_acceptance
 		flag = increased_factions
+		flag = increased_scheme_agent_join_chance_in_realm
 	}
 	# Gap of at least 220
 	level = {
@@ -957,6 +972,7 @@ mandala_legitimacy = {
 		flag = increased_alliance_acceptance
 		flag = increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 	}
 	# Gap of at least 330
@@ -975,6 +991,7 @@ mandala_legitimacy = {
 		flag = increased_alliance_acceptance
 		flag = very_increased_tributarization_acceptance
 		flag = reduced_factions
+		flag = reduced_scheme_agent_join_chance_in_realm
 		flag = reduced_swing_scales_cost
 	}
 	# Gap of at least 550
@@ -993,6 +1010,7 @@ mandala_legitimacy = {
 		flag = very_increased_alliance_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 
 
@@ -1016,6 +1034,7 @@ mandala_legitimacy = {
 		flag = increased_vassalization_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = very_reduced_factions
+		flag = very_reduced_scheme_agent_join_chance_in_realm
 		flag = very_reduced_swing_scales_cost
 
 
@@ -1039,6 +1058,7 @@ mandala_legitimacy = {
 		flag = very_increased_vassalization_acceptance
 		flag = extra_increased_tributarization_acceptance
 		flag = extra_reduced_factions
+		flag = massively_reduced_scheme_agent_join_chance_in_realm
 		flag = extra_reduced_swing_scales_cost
 
 

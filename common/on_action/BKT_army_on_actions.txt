@@ -9,76 +9,9 @@
 # scope:war is the war causing the previous controller and the occupant to be hostile
 on_county_occupied = {
 	on_actions = {
-		BKT_occupied_opinions
-		delay = { days = 1 }
+		#BKT_occupied_opinions
+		#delay = { days = 1 }
 		BKT_recently_occupied_county_modifier
-	}
-}
-
-BKT_occupied_opinions = {
-	trigger = {
-		scope:county.holder = { 
-			is_independent_ruler = no 
-		}
-	}
-	effect = {
-		scope:county.holder = {
-			ordered_liege_or_above = {
-				limit = { is_participant_in_war = scope:war }
-				order_by = { 
-					value = 6
-					subtract = highest_held_title_tier
-				}
-				save_temporary_scope_as = nasty_liege
-			}
-			if = {
-				limit = { exists = scope:nasty_liege }
-				if = {
-					limit = { 
-						NOT = { is_participant_in_war = scope:war } 
-					}
-					if = {
-						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
-						add_opinion = {
-							target = scope:nasty_liege
-							modifier = let_me_be_occupied
-							opinion = -20
-						}
-					}
-					else = {
-						add_opinion = {
-							target = scope:nasty_liege
-							modifier = let_me_be_occupied
-							opinion = -40
-						}
-					}
-				}
-				every_liege_or_above = {
-					limit = { 
-						is_independent_ruler = no 
-						any_liege_or_above = {
-							this = scope:nasty_liege
-						}
-						NOT = { is_participant_in_war = scope:war }
-					}
-					if = {
-						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
-						add_opinion = {
-							target = scope:nasty_liege
-							modifier = let_me_be_occupied
-							opinion = -10
-						}
-					}
-					else = {
-						add_opinion = {
-							target = scope:nasty_liege
-							modifier = let_me_be_occupied
-							opinion = -20
-						}
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -87,6 +20,10 @@ BKT_recently_occupied_county_modifier = {
 		NOT = { scope:county.title_province = { has_holding_type = nomad_holding } }
 	}
 	effect = {
+		save_scope_value_as = {
+			name = loot_gathered
+			value = 0
+		}
 		scope:county = {
 			if = {
 				limit = { has_county_modifier = recently_occupied_county_modifier }
@@ -112,6 +49,56 @@ BKT_recently_occupied_county_modifier = {
 					modifier = recently_occupied_county_modifier
 					years = 7		#prev 10
 				}
+			}
+			every_county_province = {
+				limit = { this != scope:barony.title_province }
+				if = {
+					limit = { has_holding = no }
+					add_province_modifier = {
+						modifier = recently_looted_no_holding_modifier
+						years = 5
+					}
+				}
+				else = {
+					if = {
+						limit = { has_province_modifier = recently_looted_no_holding_modifier }
+						remove_province_modifier = recently_looted_no_holding_modifier
+					}
+					if = {
+						limit = { 
+							NOT = { has_schizo_balance_loaded_trigger = yes } 
+							fort_level < 1
+						}
+						save_scope_value_as = {
+							name = loot_gathered
+							value = {
+								value = scope:loot_gathered
+								add = {
+									value = available_loot
+									multiply = 0.5
+								}
+							}
+						}
+						add_province_modifier = {
+							modifier = recently_looted_modifier
+							years = 5
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { scope:loot_gathered > 0 }
+			add_gold = scope:loot_gathered
+			#scope:barony.province = { save_temporary_scope_as = province_scope }
+			#this should be a toast
+			send_interface_message = {
+				type = msg_siege_effect
+				title = county_looted_title
+				#left_icon = this
+				right_icon = scope:county
+				
+				custom_tooltip = county_looted_tt
 			}
 		}
 	}
@@ -140,6 +127,17 @@ BKT_on_siege_completion = {
 			}
 			scope:barony.county = { change_development_progress_with_overflow = { value = development_level multiply = -10 } }
 		}
+		if = {
+			limit = { 
+				scope:county.holder = {
+					this = scope:county.county_controller
+					NOT = { has_perk = enduring_hardships_perk }
+				}
+			}
+			scope:county = {
+				change_county_control = -5
+			}
+		}
 	}
 }
 
@@ -151,6 +149,7 @@ BKT_on_siege_completion = {
 on_siege_looting = {
 	on_actions = {
 		BKT_on_siege_looting
+		BKT_occupied_opinions
 	}
 }
 	
@@ -184,6 +183,127 @@ BKT_on_siege_looting = {
 			every_army_in_location = {
 				add_supply = 10
 			}
+			if = {
+				limit = { has_province_modifier = recently_looted_no_holding_modifier }
+				remove_province_modifier = recently_looted_no_holding_modifier
+			}
+		}
+	}
+}
+
+BKT_occupied_opinions = {
+	trigger = {
+		scope:county.holder = { 
+			is_independent_ruler = no 
+			this = scope:barony.holder
+		}
+	}
+	effect = {
+		scope:county.holder = {
+			ordered_liege_or_above = {
+				#limit = { is_participant_in_war = scope:war }
+				limit = {
+					is_at_war_with = root
+				}
+				order_by = { 
+					value = 6
+					subtract = highest_held_title_tier
+				}
+				save_temporary_scope_as = nasty_liege
+				random_character_war = {
+					limit = {
+						root = { is_participant_in_war = prev }
+						scope:nasty_liege = { is_participant_in_war = prev }
+					}
+					save_temporary_scope_as = war
+				}
+			}
+			if = {
+				limit = { 
+					exists = scope:nasty_liege 
+					root != scope:nasty_liege
+				}
+				if = {
+					limit = { 
+						NOT = { is_participant_in_war = scope:war } 
+						#NOT = { is_at_war_with = root }
+						has_opinion_modifier = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							value > -150
+						}
+					}
+					if = {
+						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = {
+								value = -20
+								if = {
+									limit = { scope:barony.title_province = { is_county_capital = no } }
+									multiply = 0.5
+								}
+							}
+						}
+					}
+					else = {
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = {
+								value = -40
+								if = {
+									limit = { scope:barony.title_province = { is_county_capital = no } }
+									multiply = 0.5
+								}
+							}
+						}
+					}
+				}
+				every_liege_or_above = {
+					limit = { 
+						is_independent_ruler = no 
+						any_liege_or_above = {
+							this = scope:nasty_liege
+						}
+						NOT = { is_participant_in_war = scope:war }
+						#NOT = { is_at_war_with = root }
+						has_opinion_modifier = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							value > -150
+						}
+					}
+					if = {
+						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = {
+								value = -10
+								if = {
+									limit = { scope:barony.title_province = { is_county_capital = no } }
+									multiply = 0.5
+								}
+							}
+						}
+					}
+					else = {
+						add_opinion = {
+							target = scope:nasty_liege
+							modifier = let_me_be_occupied
+							opinion = {
+								value = -20
+								if = {
+									limit = { scope:barony.title_province = { is_county_capital = no } }
+									multiply = 0.5
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -208,6 +328,15 @@ BKT_on_raid_action_completion = {
 				limit = { scope:county.holder = { is_independent_ruler = no } }
 				scope:county.holder = {
 					if = {
+						limit = {
+							has_opinion_modifier = {
+								target = liege
+								modifier = let_me_be_raided
+								value > -100
+							}
+						}
+					}
+					else_if = {
 						limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
 						add_opinion = {
 							target = liege
@@ -223,7 +352,14 @@ BKT_on_raid_action_completion = {
 						}
 					}
 					every_liege_or_above = {
-						limit = { is_independent_ruler = no }
+						limit = { 
+							is_independent_ruler = no 
+							has_opinion_modifier = {
+								target = liege
+								modifier = let_me_be_raided
+								value > -100
+							}
+						}
 						if = {
 							limit = { vassal_contract_has_flag = cares_less_about_being_occcupied_raided }
 						}
@@ -236,6 +372,12 @@ BKT_on_raid_action_completion = {
 						}
 					}
 				}
+			}
+		}
+		scope:barony.title_province = {
+			if = {
+				limit = { has_province_modifier = recently_looted_no_holding_modifier }
+				remove_province_modifier = recently_looted_no_holding_modifier
 			}
 		}
 	}
@@ -279,6 +421,13 @@ BKT_recently_raided_county_modifier = {
 					add_county_modifier = {
 						modifier = recently_raided_county_modifier
 						years = 7			#prev 10
+					}
+				}
+				every_county_province = {
+					limit = { has_holding = no }
+					add_province_modifier = {
+						modifier = recently_looted_no_holding_modifier
+						years = 5
 					}
 				}
 			}

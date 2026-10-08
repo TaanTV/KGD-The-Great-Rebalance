@@ -33,6 +33,9 @@ bkt_swing_scales_cash_cost_value = {
 			limit = { scope:actor = { is_lowborn = no } }
 			multiply = scope:actor.swing_scales_cost_multipler_value
 		}
+		
+		#ADDED
+		round_to = 5
 	}
 }
 
@@ -67,6 +70,9 @@ bkt_swing_scales_influence_cost_value = {
 			limit = { scope:actor = { is_lowborn = no } }
 			multiply = scope:actor.swing_scales_cost_multipler_value
 		}
+		
+		#ADDED
+		round_to = 5
 	}
 }
 	
@@ -101,6 +107,9 @@ bkt_swing_scales_prestige_cost_value = {
 			limit = { scope:actor = { is_lowborn = no } }
 			multiply = scope:actor.swing_scales_cost_multipler_value
 		}
+		
+		#ADDED
+		round_to = 5
 	}
 }
 
@@ -140,5 +149,8 @@ bkt_swing_scales_piety_cost_value = {
 			limit = { scope:actor = { is_lowborn = no } }
 			multiply = scope:actor.swing_scales_cost_multipler_value
 		}
+		
+		#ADDED
+		round_to = 5
 	}
 }

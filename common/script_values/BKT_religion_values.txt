@@ -1,8 +1,196 @@
-﻿heretical_defector_fervor_gain = 10	#prev 15 # How much fervor Old Faith gains when a ruler splits off to a New Heresy
+﻿demand_conversion_likelihood_calculation = {
+	#Five times actor's-recipient's learning
+	add = demand_conversion_learning_difference
+
+	#Calculate each faith's fervor
+	add = demand_conversion_fervor_difference
+
+	#Within-faith rite spread (mainline benefits at high fervor, non-mainline at low fervor; zero across faith boundaries)
+	add = demand_conversion_rite_fervor_difference
+
+	#Calculate various Doctrines and Tenets
+	add = demand_conversion_tenet_impact
+
+	#if = {
+	#	limit = {
+	#		opinion = {
+	#			target = scope:actor
+	#			value < medium_negative_opinion
+	#		}
+	#	}
+	#	add = -50
+	#}
+	#else_if = {
+	#	limit = {
+	#		opinion = {
+	#			target = scope:actor
+	#			value < neutral_opinion
+	#		}
+	#	}
+	#	add = -25
+	#}
+	#else_if = {
+	#	limit = {
+	#		opinion = {
+	#			target = scope:actor
+	#			value >= medium_positive_opinion
+	#		}
+	#	}
+	#	add = 50
+	#}
+	#else_if = {
+	#	limit = {
+	#		opinion = {
+	#			target = scope:actor
+	#			value > neutral_opinion
+	#		}
+	#	}
+	#	add = 25
+	#}
+	#ADDED - just grab the opinion outright?
+	add = {
+		value = "opinion(scope:actor)"
+		multiply = 0.5
+	}
+	
+	#ADDED - add this one here too
+	if = {
+		limit = {  has_character_modifier = recently_converted_character_modifier }
+		add = -100
+	}
+
+	if = {
+		limit = {
+			scope:actor = { has_trait = savior }
+		}
+		add = 15	#prev 30
+	}
+	if = {
+		limit = {
+			scope:actor = { has_trait = divine_blood }
+		}
+		add = 5		#prev 15
+	}
+	if = {
+		limit = {
+			scope:actor = { has_fulfillment_parameter = sp_easier_conversion }
+		}
+		add = spiritual_fulfillment_easier_conversion_value
+	}
+	if = {
+		limit = {
+			scope:actor = { has_fulfillment_parameter = sp_harder_conversion }
+		}
+		add = spiritual_fulfillment_harder_conversion_value
+	}
+	
+	if = {
+		limit = {
+			has_trait = zealous
+		}
+		add = -50
+	}
+	if = {
+		limit = {
+			has_trait = cynical
+		}
+		add = 30
+	}
+
+	if = {
+		limit = {
+			has_trait = heresiarch
+		}
+		add = -200	#prev -100
+	}
+
+	#Add value if refusing is a Crime
+	if = {
+		limit = {
+			scope:actor = {
+				refusing_conversion_is_crime_trigger = {
+					CHARACTER = scope:recipient
+				}
+				#ADDED
+				target_is_vassal_or_below = scope:recipient
+			}
+		}
+		add = 50
+	}
+	
+	
+		
+	if = {
+		limit = {
+			scope:recipient = {
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 1
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:recipient = {
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 2
+				}
+			}
+		}
+		add = 20
+	}
+
+	max = 100
+}
+
+heretical_defector_fervor_gain = 10	#prev 15 # How much fervor Old Faith gains when a ruler splits off to a New Heresy
 
 great_holy_war_pledge_amount = {
 	value = root.yearly_character_income
 	#ADDED - lower that a bit
 	multiply = 0.75
 	min = 10
+}
+
+# Modify (multiply) the doctrine cost when creating a faith.
+# The returned value is interpreted as a multiplicative modifier (e.g. 0.5 means +50% cost).
+# scope:character = the creation character
+# scope:old_rite = the rite the character had before creating
+# scope:old_faith = the faith the character is converting from
+rite_creation_cost_mult = {
+	subtract = {
+		value = scope:old_faith.faith_conversion_fervor_mult
+		multiply = 0.5
+		desc = "faith_creation_cost_fervor_impact"
+		format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
+	}
+	if = {
+		limit = { 
+			scope:old_rite ?= {
+				head_of_rite ?= scope:character 
+				NOT = { rite_has_parameter = unreformed }
+			}
+		}
+		add = {
+			value = 1
+			desc = RITE_CREATION_VIEW_EDIT
+			format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
+		}
+		if = {
+			limit = { 
+				scope:old_faith ?= {
+					religious_head ?= scope:character
+					religious_head_title.tier >= tier_kingdom
+				}
+			}
+			add = {
+				value = 1
+				desc = pam_kingdom_of_heaven_decision_hof_tt
+				format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
+			}
+		}
+	}
 }

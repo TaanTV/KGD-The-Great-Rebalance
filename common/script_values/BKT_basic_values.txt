@@ -241,16 +241,20 @@ massive_devotion_loss = {
 	multiply = 2
 }
 
+revoke_title_tyranny_gain = 30				#prev 20
+
 #DE JURE DRIFT
 medium_de_jure_drift_progress_gain = 60		#prev 15
 medium_de_jure_drift_progress_loss = -60	#prev -15
 #Send Gift
 send_gift_opinion = {
-	value = 15	#prev 5
+	value = 5
 	add = {
+		#ADDED - higher base BUT gets nuked by things like HOF and such
+		add = 10
 		if = {
 			limit = {
-				scope:actor.diplomacy > 0
+				scope:puppet_or_actor.diplomacy > 0
 			}
 			add = {
 				value = scope:actor.diplomacy
@@ -268,29 +272,29 @@ send_gift_opinion = {
 		}
 		if = {
 			limit = {
-				scope:recipient.liege = scope:actor
+				scope:recipient.liege = scope:puppet_or_actor
 			}
 			divide = 1.5
 		}
 		if = {
 			limit = {
-				scope:recipient = scope:actor.faith.religious_head
+				scope:recipient = scope:puppet_or_actor.faith.religious_head
 			}
 			divide = 3
 		}
 		if = {
 			limit = {
-				scope:actor.culture ?= {
+				scope:puppet_or_actor.culture ?= {
 					has_innovation = fp3_innovation_fritware
 				}
 			}
 			multiply = 1.2
 		}
-		max = 85	#prev 100
+		max = 95	#prev 100
 	}
 	if = {
 		limit = {
-			scope:actor.culture = { has_cultural_parameter = more_gift_opinion }
+			scope:puppet_or_actor.culture = { has_cultural_parameter = more_gift_opinion }
 		}
 		multiply = 1.2
 	}
@@ -309,9 +313,26 @@ send_gift_opinion = {
 	}
 	if = {
 		limit = {
-			scope:actor = { has_perk = thoughtful_perk }
+			scope:puppet_or_actor = { has_perk = thoughtful_perk }
 		}
 		multiply = 1.5		#prev 2
+	}
+	if = {
+		limit = {
+			scope:puppet_or_actor = {
+				has_personal_tenet_flag = tenet_simony_personal_gifts
+			}
+		}
+		multiply = 1.25		#prev 2
+	}
+	#ADDED - change the end result slightly based on this 
+	if = {
+		limit = { scope:recipient = { debt_level >= 0 } }
+		multiply = 1.25
+	}
+	else_if = {
+		limit = { scope:recipient = { gold > medium_gold_value } }
+		multiply = 0.8
 	}
 }
 
@@ -325,11 +346,11 @@ gift_artifact_opinion = {
 		}
 		else_if = {
 			limit = { rarity = masterwork }
-			add = 10	#prev 25
+			add = 15	#prev 25
 		}
 		else_if = {
 			limit = { rarity = famed }
-			add = 20	#prev 50
+			add = 25	#prev 50
 		}
 		else = { add = 40 }	#prev 100
 		if = { # AI Greed
@@ -446,7 +467,7 @@ divorce_cost = {
 		add = -600
 	}
 	if = {
-		limit = { scope:actor.faith ?= { has_doctrine_parameter = divorce_allowed_cheaper_divorce } }
+		limit = { scope:actor.rite ?= { rite_has_parameter = divorce_allowed_cheaper_divorce } }
 		multiply = 2
 		divide = 3
 	}
@@ -454,10 +475,12 @@ divorce_cost = {
 
 
 
-death_chance_starts_health = 2.75	#prev 3
+#death_chance_starts_health = 2.75	#prev 3
 
 #This is from 00_invasion_values.txt but im not going to create the file for this one line
 almohad_appearance_base_chance = 5	#prev 1
 
 #This is from 00_bastardy_values.txt but i doubt its gonna change any time soon and idc for the rest of it soooo
 bastard_legitimization_prestige_cost = 350	#prev 150
+#ADDED - keep this 1 tier below bastard_legitimization_prestige_cost
+bastard_legitimization_lower_prestige_cost_malus = -150

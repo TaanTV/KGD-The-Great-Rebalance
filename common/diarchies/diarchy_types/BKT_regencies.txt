@@ -56,7 +56,14 @@ temporary_regency = {
 
 	succession = yes
 	# Candidate scoring for succession.
-	candidate_score = { add = diarchy_regent_succession_score_value }
+	candidate_score = { 
+		add = diarchy_regent_succession_score_value 
+		#ADDED
+		if = {
+			limit = { is_acclaimed = yes }
+			multiply = 0.5
+		}
+	}
 
 	# Container for hidden parameters.
 	power_level = {

@@ -26,11 +26,11 @@
 		}
 	}
 	
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_theocracy_lay_clergy
 		zealot_opinion = 10
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_theocracy_temporal
 		clergy_opinion = 10
 		#ADDED - 10 opinion with religious head is a bit much
@@ -75,20 +75,28 @@ prophet_perk = {
 		}
 	}
 	
+	#ADDED - removed the "unlock all doctrines" thing so those are here to compensate somewhat
+	character_modifier = {
+		rite_creation_piety_cost_mult = -0.15
+		study_faith_scheme_phase_duration_add = medium_scheme_phase_duration_bonus_value
+	}
+	
 	government_character_modifier = {
 		flag = government_has_merit
 		invert_check = yes
 		monthly_piety_gain_per_knight_mult = 0.02
-		faith_creation_piety_cost_mult = -0.25		#prev -0.5
 	}
 
 	government_character_modifier = {
 		flag = government_has_merit
 		monthly_merit_mult = 0.2
-		stress_loss_per_piety_level = 0.1
+		stress_loss_per_piety_level = 0.05	#prev 0.1
 	}
 	
 	effect = {
+		#custom_description_no_bullet = {
+		#	text = prophet_perk_unlock_tenets_effect
+		#}
 		if = {
 			limit = {
 				government_allows = state_faith
@@ -135,15 +143,15 @@ church_and_state_perk = {
 		}
 	}
 	
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_theocracy_lay_clergy
 		monthly_piety_from_buildings_mult = 0.75	#prev 1
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_theocracy_temporal
 		realm_priest_opinion = 25		#prev 50
 		#ADDED
-		theocracy_government_tax_contribution_add = 0.05
+		#theocracy_government_tax_contribution_add = 0.05
 	}
 
 	government_character_modifier = {
@@ -180,20 +188,20 @@ defender_of_the_faith_perk = {
 	parent = radiant_perk
 	parent = prophet_perk
 	
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_pluralism_fundamentalist
 		tolerance_advantage_mod = 5	#prev 10
 		prowess_per_piety_level = 2
 		clergy_opinion = 10			#prev 20
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_pluralism_righteous
 		zealot_opinion = 10			#prev 20
 		tyranny_gain_mult = -0.25
 		zealot_tax_contribution_mult = 0.05		#prev 0.35
 		zealot_levy_contribution_mult = 0.05		#prev 0.35
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		doctrine = doctrine_pluralism_pluralistic
 		diplomacy_per_piety_level = 1
 		monthly_piety_gain_mult = 0.2

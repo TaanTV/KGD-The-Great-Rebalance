@@ -1,10 +1,7 @@
 ﻿ep3_administrative_legacy_4 = { # The Eternal City
 	legacy = ep3_administrative_legacy_track
 
-	can_be_picked = {
-		has_ep3_dlc_trigger = yes
-		government_allows = administrative
-	}
+	can_be_picked = { eligible_for_ep3_administrative_legacy_trigger = yes }
 
 	effect = {
 		custom_description_no_bullet = { text = ep3_administrative_legacy_4_effect_cabinet_of_curiosities }

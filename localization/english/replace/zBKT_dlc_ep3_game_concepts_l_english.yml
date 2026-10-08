@@ -1,0 +1,2 @@
+﻿l_english: 
+ game_concept_adventurer_siege_replenishment_desc: "When an [adventurer|E] successfully [sieges|E] a [holding|E], a portion of their [men_at_arms|E] will be replenished.\n\nAll Men-at-Arms [regiments|E] in the [army|E] will be replenished by #V half#! the Holding's [loot|E] value.\n\n#weak The increase is made up of new recruits, the press-ganging of locals, and simply paying those who wandered off during the siege.#!"

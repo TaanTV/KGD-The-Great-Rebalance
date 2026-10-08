@@ -1124,7 +1124,7 @@ holy = {
 				has_legend_chronicle = saintly_location
 			}
 			legend_owner.faith = {
-				random_holy_site = {
+				random_holy_site_barony = {
 					limit = {
 						OR = {
 							holder = root.legend_owner
@@ -1275,7 +1275,10 @@ holy = {
 		}
 		if = { # If they already have the trait it makes no sense that they will get it again
 			limit = {
-				has_trait = saint
+				OR = {
+					has_trait = saint
+					has_trait = herald
+				}
 			}
 			add = -10
 		}

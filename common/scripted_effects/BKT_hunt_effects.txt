@@ -29,7 +29,7 @@ hunt_animal_melee_kill_effect = {
 			hunt_kill_hunter_modifiers = yes # HUNTER
 			if = { #chance_to_gain_prowess_during_bear_hunts parameter check
 				limit = {
-					faith = { has_doctrine_parameter = chance_to_gain_prowess_during_bear_hunts }
+					rite = { rite_has_parameter = chance_to_gain_prowess_during_bear_hunts }
 					scope:activity.var:animal_type = flag:bear
 				}
 				add_prowess_skill = 1
@@ -381,80 +381,6 @@ nerge_check_commander_trait_xp_effect = {
 				trait = $TRAIT$
 				value = 20	#prev 10
 			}
-		}
-	}
-}
-
-nerge_progression_effect = {
-	save_temporary_scope_as = root_scope
-	save_scope_value_as = {
-		name = amount_of_players
-		value = {
-			value = 1
-			scope:activity = {
-				every_attending_character = {
-					limit = {
-						is_ai = no
-					}
-					add = 1
-				}
-				subtract = 1
-			}
-			min = 1
-		}
-	}
-	if = {
-		limit = {
-			OR = {
-				is_ai = no
-				#AND = {
-				#	NOT = {
-				#		involved_activity = { any_attending_character = { is_ai = no } }
-				#	}
-				#	scope:root_scope = involved_activity.activity_host
-				#}
-				#ADDED - wtf is this thing above? Ew. Why does the player have to carry AI?
-				scope:root_scope = involved_activity.activity_host
-			}
-		}
-		scope:activity ?= {
-			if = {
-				limit = {
-					exists = var:activity_special_type_progression
-				}
-				change_variable = {
-					name = activity_special_type_progression
-					add = {
-						value = $VALUE$
-						multiply = nerge_score_multiplier_value
-						divide = scope:amount_of_players
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				$VALUE$ <= 2
-			}
-			custom_tooltip = nerge_outcome_boost_tiny
-		}
-		else_if = {
-			limit = {
-				$VALUE$ <= 5
-			}
-			custom_tooltip = nerge_outcome_boost_small
-		}
-		else_if = {
-			limit = {
-				$VALUE$ <= 9
-			}
-			custom_tooltip = nerge_outcome_boost_medium
-		}
-		else_if = {
-			limit = {
-				$VALUE$ >= 13
-			}
-			custom_tooltip = nerge_outcome_boost_large
 		}
 	}
 }

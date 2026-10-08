@@ -38,7 +38,7 @@ break_up_with_lover_interaction = {
 				#ADDED - reworked stress gain here
 				if = {
 					limit = { exists = scope:are_soulmates }
-					stress_impact = {
+					stress_and_fulfillment_impact = {
 						base = monumental_stress_gain	#or maybe this one? -> massive_stress_impact_gain
 						compassionate = major_stress_impact_gain
 						trusting = medium_stress_impact_gain
@@ -54,7 +54,7 @@ break_up_with_lover_interaction = {
 					
 				}
 				else = {
-					stress_impact = {
+					stress_and_fulfillment_impact = {
 						base = medium_stress_impact_gain
 						lustful = major_stress_impact_gain			#prev minor_stress_impact_gain
 						compassionate = medium_stress_impact_gain

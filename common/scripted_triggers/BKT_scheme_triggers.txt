@@ -29,9 +29,9 @@ build_murder_targets_trigger = {
 			add_to_temporary_list = murder_targets
 		}
 	}
-	#ADDED - potential rivals are too
+	#ADDED - and grudges.
 	any_relation = { 
-		type = potential_rival
+		type = grudge
 		count = all
 		trigger_if = {
 			limit = {
@@ -47,15 +47,15 @@ build_murder_targets_trigger = {
 			add_to_temporary_list = murder_targets
 		}
 	}
-	#ADDED - and grudges! But only if you're kind of evil
+	#ADDED - potential rivals are too! But only if you're kind of evil
 	any_relation = { 
-		type = grudge
+		type = potential_rival
 		count = all
 		trigger_if = {
 			limit = {
 				root = {
 					ai_honor <= medium_negative_ai_value
-					"opinion(prev)" < -35
+					"opinion(prev)" < -40
 					can_start_scheme = {
 						target_character = prev
 						type = murder
@@ -73,8 +73,8 @@ build_murder_targets_trigger = {
 			limit = {
 				save_temporary_scope_as = lover_scope
 				NOT = { has_trait = seducer }	#those guys are safe :P
+				NOT = { is_spouse_of = root }	#a small sanity check
 				primary_spouse ?= {
-					this != root
 					NOR = {
 						has_relation_potential_friend = root
 						has_relation_friend = root
@@ -99,6 +99,38 @@ build_murder_targets_trigger = {
 				}
 			}
 			primary_spouse = { add_to_temporary_list = murder_targets }
+		}
+	}
+	#ADDED - kill concubinist if u hate them enough and arent too forgiving
+	trigger_if = {
+		limit = {
+			is_concubine = yes
+			NOT = {	has_relation_lover = concubinist }
+			ai_compassion <= high_positive_ai_value
+			OR = {
+				ai_compassion <= low_positive_ai_value
+				has_opinion_modifier = {
+					target = concubinist
+					modifier = forced_me_concubine_marriage_opinion
+				}
+			}
+			opinion = {
+				target = concubinist
+				value < -60
+			}
+			OR = {
+				opinion = {
+					target = concubinist
+					value < -80
+				}
+				has_opinion_modifier = {
+					target = concubinist
+					modifier = concubine_with_monogamous_faith_opinion
+				}
+			}
+		}
+		concubinist = {
+			add_to_temporary_list = murder_targets
 		}
 	}
 	trigger_if = { # Greedy people have no qualms murdering their way up the succession...
@@ -133,14 +165,20 @@ build_murder_targets_trigger = {
 			ai_greed >= low_positive_ai_value
 			top_liege != this
 			government_has_flag = government_is_clan
-			liege ?= {
-				any_tax_collector = {
-					any_tax_collector_vassal = {
-						this = root
-					}
-					tax_collector_aptitude = {
-						target = clan_tax_slot
-						value >= 3	#prev 4
+			exists = liege
+		}
+		liege = {
+			any_tax_collector = {
+				count = all
+				trigger_if = {
+					limit = {
+						any_tax_collector_vassal = {
+							this = root
+						}
+						tax_collector_aptitude = {
+							target = clan_tax_slot
+							value >= 3
+						}
 					}
 					add_to_temporary_list = murder_targets
 				}
@@ -160,12 +198,16 @@ build_murder_targets_trigger = {
 		}
 		house = {
 			any_house_member = {
-				has_trait = extolled
-				add_to_temporary_list = murder_targets
+				count = all
+				trigger_if = {
+					limit = { has_trait = extolled }
+					add_to_temporary_list = murder_targets
+				}
 			}
 		}
 	}
 	any_consort = { # Unfaithful spouses
+		count = all
 		trigger_if = {
 			limit = {
 				root = {
@@ -176,15 +218,15 @@ build_murder_targets_trigger = {
 					}
 				}
 				exposed_cheating_on_spouse_trigger = { SPOUSE = root }
-				add_to_temporary_list = murder_targets
 			}
+			add_to_temporary_list = murder_targets
 		}
 	}
 	trigger_if = { # Certain vassals will plot against their liege under certain conditions
 		limit = {
 			highest_held_title_tier > tier_barony
 			exists = liege
-			#liege = {
+			#liege ?= {
 			#	tyranny >= medium_tyranny
 			#}
 			opinion = {
@@ -230,8 +272,14 @@ build_murder_targets_trigger = {
 		limit = {
 			is_landed = yes
 			primary_title.tier >= tier_duchy
-			any_targeting_faction = {
-			  	faction_type = claimant_faction
+		}
+		any_targeting_faction = {
+			faction_type = claimant_faction
+			count = all
+			trigger_if = {
+				limit = {
+					exists = special_character
+				}
 				special_character = {
 					add_to_temporary_list = murder_targets
 				}
@@ -245,23 +293,30 @@ build_murder_targets_trigger = {
 			is_landed = yes
 			has_trait = paranoid
 			primary_title.tier >= tier_duchy
-			any_held_title = {
-				any_claimant = {
+		}
+		any_held_title = {
+			count = all
+			any_claimant = {
+				count = all
+				trigger_if = {
+					limit = { NOT = { is_in_list = murder_targets } }
 					add_to_temporary_list = murder_targets
 				}
 			}
 		}
 	}
 	any_spouse = { # Murder infertile spouses if you've yet to have an heir (and you're heartless...)
+		count = all
 		trigger_if = {
 			limit = {
+				NOT = { is_in_list = murder_targets }
 				fertility < 0.1
 				#ADDED - OR and reverse_opinion
 				OR = {
 					is_ai = yes
 					reverse_opinion = {
 						target = prev
-						value < -50
+						value < -40
 					}
 				}
 				root = {
@@ -279,8 +334,64 @@ build_murder_targets_trigger = {
 						type = murder
 					}
 				}
-				add_to_temporary_list = murder_targets
 			}
+			add_to_temporary_list = murder_targets
+		}
+	}
+}
+
+has_access_to_claim_throne_scheme_trigger = {
+	OR = {
+		has_perk = meritocracy_perk
+		#ADDED - house and the AND bloc
+		house = $TARGET$.house
+		AND = {
+			is_powerful_vassal_of = $TARGET$
+			dynasty = $TARGET$.dynasty
+		}
+		AND = {
+			is_diarch_of_target = $TARGET$
+			$TARGET$ = {
+				#NOT = { has_diarchy_parameter = can_be_instantly_dismissed }
+				#ADDED - i think it's supposed to be this?
+				NOT = { has_diarchy_active_parameter = can_be_instantly_dismissed }
+			}
+		}
+		AND = {
+			is_powerful_vassal_of = $TARGET$
+			any_character_struggle = {
+				involvement = involved
+				has_struggle_phase_parameter = unlocks_claim_throne_for_powerful_vassals
+				is_secondary_character_involvement_involved_trigger = {
+					CHAR = $TARGET$
+				}
+			}
+		}
+		AND = {
+			any_character_struggle = {
+				involvement = involved
+				has_struggle_phase_parameter = unlocks_claim_throne_for_all
+				is_secondary_character_involvement_involved_trigger = {
+					CHAR = $TARGET$
+				}
+			}
+		}
+		AND = {
+			exists = title:d_sunni.holder
+			is_vassal_of = title:d_sunni.holder
+			any_character_struggle = {
+				involvement = involved
+				has_struggle_phase_parameter = unlocks_claim_throne_for_caliph_vassals
+			}
+		}
+		has_character_flag = confederation_claim_throne
+	}
+	trigger_if = {
+		limit = {
+			government_has_flag = government_is_celestial
+		}
+		NOT = {
+			any_liege_or_above = { has_title = title:h_china }
 		}
 	}
 }

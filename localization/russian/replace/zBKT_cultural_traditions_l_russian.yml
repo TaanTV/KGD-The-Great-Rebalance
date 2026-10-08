@@ -1,4 +1,5 @@
 ﻿l_russian:
  culture_parameter_romance_scheme_bonuses: "Успешное завершение [Concept( 'scheme', 'происков' )|E] «[GetScheme('courting').GetTypeName]» против [Concept( 'rulers', 'правителей' )|E] близким к вам по [Concept( 'rank', 'рангу' )|E] и их [Concept( 'close_family', 'близких родственников' )|E] дает [dynasty_prestige_i][Concept( 'dynasty_prestige', 'признание' )|E]"
  #culture_parameter_romance_scheme_penalty: "Неудачные [Concept( 'scheme', 'происки' )|E] «[GetScheme('courting').GetTypeName]» увеличивают [Concept( 'stress', 'стресс' )|E]"
- 
+ culture_parameter_rice_cultivators_can_construct_paddy_fields_in_hills_and_jungle: "Линию [Concept('buildings', 'зданий')|E] «[GetBuilding('paddy_fields_01').GetTypeName|V]» можно строить в регионах с типами местности «[GetTerrain( 'hills' ).GetName]» и «[GetTerrain( 'jungle' ).GetName]»"
+ tradition_female_only_inheritance_requirements: "Вы должны следовать [Concept( 'faith', 'конфессии' )|E] без доктрины «[GetFaithDoctrine('doctrine_gender_male_dominated').GetBaseName]» или иметь одно из следующих [Concept( 'heritage', 'наследий' )|E]: #V $heritage_akan_name$ое#!, #V $heritage_west_african_name$ое#!, #V $heritage_senegambian_name$ое#! или #V $heritage_yoruba_name$ое#!"

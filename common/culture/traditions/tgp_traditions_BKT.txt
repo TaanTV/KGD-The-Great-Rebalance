@@ -23,7 +23,6 @@
 			culture_tradition:tradition_horse_lords = { is_in_list = traits }
 			culture_tradition:tradition_devoted_horsemanship = { is_in_list = traits }
 			culture_tradition:tradition_tgp_imperial_peace = { is_in_list = traits }
-			culture_tradition:tradition_tgp_imperial_peace = { is_in_list = traits }
 		}
 	}
 
@@ -65,14 +64,14 @@ tradition_tgp_rice_cultivators = {
 		1 = asian
 		4 = svamp.dds
 	}
-	
+
 	is_shown = {
 		has_tgp_dlc_trigger = yes
 		NOT = {
 			culture_tradition:tradition_intensive_farming = { is_in_list = traits }
 		}
 	}
-	
+
 	can_pick = {
 		custom_tooltip = {
 			text = culture_in_terraced_hills_terrain_desc
@@ -83,7 +82,7 @@ tradition_tgp_rice_cultivators = {
 			}
 		}
 	}
-	
+
 	parameters = {
 		rice_cultivators_next_level_paddy_fields = yes
 		rice_cultivators_can_construct_paddy_fields_in_hills_and_jungle = yes
@@ -94,7 +93,7 @@ tradition_tgp_rice_cultivators = {
 		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
 		terraced_hills_levy_size = 0.1
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -127,11 +126,11 @@ tradition_tgp_rice_cultivators = {
 					desc = culture_in_terraced_hills_terrain_count_desc
 				}
 			}
-			
+
 			multiply = tradition_replacement_cost_if_relevant
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 400
 		if = {
@@ -173,7 +172,7 @@ tradition_tgp_inward_perfection = {
 		has_tgp_dlc_trigger = yes
 		has_east_asian_heritage_pillar_trigger = yes
 	}
-	
+
 	can_pick = {
 		# Mutually exclusive with other Isolationist
 		NOR = {
@@ -201,7 +200,7 @@ tradition_tgp_inward_perfection = {
 		monthly_lifestyle_xp_gain_mult = 0.05
 		diplomatic_range_mult = -0.25
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -224,7 +223,7 @@ tradition_tgp_inward_perfection = {
 			}
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 50
 	}
@@ -248,7 +247,7 @@ tradition_cultural_primacy = {
 			}
 		}
 	}
-	
+
 	can_pick = {
 		# Mutually exclusive with other Isolationist
 		NOR = {
@@ -260,6 +259,7 @@ tradition_cultural_primacy = {
 	parameters = {
 		innovation_from_learning_traits = yes
 		courtiers_less_likely_to_leave_same_culture_court = yes
+		less_likely_to_culture_convert = yes
 
 		reduced_marriage_acceptance_outside_culture = yes
 		reduced_marriage_acceptance_distant_realms = yes
@@ -301,7 +301,7 @@ tradition_cultural_primacy = {
 			}
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 50
 	}
@@ -327,7 +327,7 @@ tradition_maritime_way_of_life = {
 			}
 		}
 	}
-	
+
 	can_pick = {
 		has_cultural_pillar = heritage_austronesian
 		custom_description = {
@@ -340,7 +340,7 @@ tradition_maritime_way_of_life = {
 			}
 		}
 	}
-	
+
 	parameters = {
 		can_travel_along_rivers = yes
 		coastal_tribe_bonuses = yes #Maa bonuses for coastal tribal
@@ -349,10 +349,10 @@ tradition_maritime_way_of_life = {
 	character_modifier = {
 		embarkation_cost_mult = -0.45		#prev -0.85
 		naval_movement_speed_mult = 0.25
-		coastal_sea_travel_danger = medium_sea_danger_reduction
-		sea_travel_danger = medium_sea_danger_reduction
+		coastal_sea_travel_danger = low_sea_danger_reduction	#prev medium_sea_danger_reduction
+		sea_travel_danger = low_sea_danger_reduction			#prev medium_sea_danger_reduction
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -395,7 +395,7 @@ tradition_maritime_way_of_life = {
 					scope:character = {
 						has_variable = tradition_seafaring_travel_discount
 					}
-					
+
 				}
 
 				add = {
@@ -404,11 +404,11 @@ tradition_maritime_way_of_life = {
 				}
 			}
 
-			
+
 			multiply = tradition_replacement_cost_if_relevant
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 200
 		if = { # Make stacking more less common
@@ -457,11 +457,11 @@ tradition_tgp_hydraulic_builders = {
 		1 = asian
 		4 = wat.dds
 	}
-	
+
 	can_pick = {
 		scope:character = { government_has_flag = government_is_mandala }
 	}
-	
+
 	is_shown = {
 		has_tgp_dlc_trigger = yes
 		scope:character = { government_has_flag = government_is_mandala }
@@ -487,7 +487,7 @@ tradition_tgp_hydraulic_builders = {
 		terraced_hills_development_growth_factor = 0.1
 		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -518,11 +518,11 @@ tradition_tgp_hydraulic_builders = {
 					desc = inspired_by_culture_desc
 				}
 			}
-			
+
 			multiply = tradition_replacement_cost_if_relevant
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 400
 		if = {
@@ -552,40 +552,41 @@ tradition_nudists = {
 		1 = asian
 		4 = speech.dds		#prev jungle.dds
 	}
-	
+
 	parameters = {
 		naked_culture_active = yes
 		lustful_trait_less_common = yes
 	}
 	county_modifier = {
-		jungle_development_growth_factor = 0.05	#prev 0.2
+		#jungle_development_growth_factor = 0.2
 		#jungle_supply_limit_mult = 1
 		#jungle_provisions_use_mult = -0.75
-		jungle_barter_goods_mult = 0.05			#prev 0.15
+		#jungle_barter_goods_mult = 0.15
+		#ADDED
+		county_opinion_add = 5
 	}
 
 	character_modifier = {
 		stress_gain_mult = -0.1
-		#jungle_advantage = 5
+		jungle_advantage = 3	#prev 5
 		#jungle_travel_danger = jungle_medium_danger_reduction
+		#ADDED
+		winter_advantage = -3
+		winter_movement_speed = -0.05
+		monthly_prestige_gain_mult = -0.05
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
 				value = tradition_base_cost
 				#ADDED
-				multiply = 1.5
+				multiply = 2
 				desc = BASE
 				format = "BASE_VALUE_FORMAT"
 			}
 			if = {
 				limit = {
-					#NOR = {
-					#	any_in_list = { list = traits this = flag:ethos_courtly }
-					#	any_in_list = { list = traits this = flag:ethos_communal }
-					#	any_in_list = { list = traits this = flag:ethos_spiritual }
-					#}
 					#ADDED - fix that
 					NOR = {
 						culture_pillar:ethos_courtly = { is_in_list = traits }
@@ -651,7 +652,6 @@ tradition_tgp_mountain_island = {
 		1 = asian
 		4 = mountain.dds
 	}
-	
 	is_shown = {
 		NOR = { #This is replaced by Himalayan Settlers, Mountaineer Ruralism and Mountain Herding. 
 			has_cultural_tradition = tradition_himalayan_settlers
@@ -696,7 +696,7 @@ tradition_tgp_mountain_island = {
 		prestige_gain_on_building_complete_in_mountains_forest = yes
 	}
 	character_modifier = {
-		coastal_sea_travel_danger = medium_sea_danger_reduction
+		coastal_sea_travel_danger = low_sea_danger_reduction	#prev medium_sea_danger_reduction
 		mountains_travel_danger = mountains_medium_danger_reduction
 		hills_travel_danger = hills_medium_danger_reduction
 		forest_travel_danger = forest_medium_danger_reduction
@@ -711,7 +711,7 @@ tradition_tgp_mountain_island = {
 		forest_construction_gold_cost = -0.1
 		forest_holding_construction_gold_cost = -0.1
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -757,11 +757,11 @@ tradition_tgp_mountain_island = {
 					desc = inspired_by_culture_desc
 				}
 			}
-			
+
 			multiply = tradition_replacement_cost_if_relevant
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 100
 		if = {
@@ -811,7 +811,7 @@ tradition_intensive_farming = {
 			culture_tradition:tradition_tgp_rice_cultivators = { is_in_list = traits }
 		}
 	}
-	
+
 	can_pick = {
 		custom_tooltip = {
 			text = culture_in_farmlands_or_floodplains_terrain_desc
@@ -831,7 +831,7 @@ tradition_intensive_farming = {
 			}
 		}
 	}
-	
+
 	parameters = {
 		content_trait_more_common = yes
 		martial_education_worse_outcomes = yes
@@ -850,7 +850,7 @@ tradition_intensive_farming = {
 		terraced_hills_tax_mult = 0.05
 		terraced_hills_levy_size = 0.1
 	}
-	
+
 	cost = {
 		prestige = {
 			add = {
@@ -894,11 +894,11 @@ tradition_intensive_farming = {
 					desc = inspired_by_culture_desc
 				}
 			}
-			
+
 			multiply = tradition_replacement_cost_if_relevant
 		}
 	}
-	
+
 	ai_will_do = {
 		value = 400
 		if = {

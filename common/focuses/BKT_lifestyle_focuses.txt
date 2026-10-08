@@ -118,7 +118,7 @@ diplomacy_family_focus = {
 	
 	modifier = {
 		diplomacy = 2
-		fertility = 0.2
+		fertility = 0.15	#prev 0.2
 		#ADDED
 		spouse_opinion = 10
 	}
@@ -168,6 +168,8 @@ martial_strategy_focus = {
 	
 	modifier = {
 		martial = 3
+		#ADDED
+		counter_resistance = 0.15
 	}
 
 	auto_selection_weight = {
@@ -265,7 +267,7 @@ martial_chivalry_focus = {
 	}
 	
 	modifier = {
-		advantage = 5
+		advantage = 4		#prev 5
 		prowess = 3
 		attraction_opinion = 10
 	}

@@ -6,3 +6,8 @@ councillor_has_highest_stat_out_of_kurultai_members = {
 	cp:councillor_kurultai_3 ?= { $STAT$ <= scope:councillor.$STAT$ }
 	cp:councillor_kurultai_4 ?= { $STAT$ <= scope:councillor.$STAT$ }
 }	
+
+#gets overwritten by SBKT
+has_schizo_balance_loaded_trigger = {
+	always = no
+}

@@ -19,7 +19,7 @@
 @poor_tax_base = 0.125		#0.25
 @normal_tax_base = 0.2		#BKT 0.175	#0.35		#0.9.19 - changed for cleaner numbers.
 @good_tax_base = 0.25		#0.5
-@excellent_tax_base = 0.35	#0.7
+@excellent_tax_base = 0.325	#BKT 0.35	#0.7
 
 @copper_mine_tax_base = 1		#2
 @silver_mine_tax_base = 1.5		#3
@@ -601,32 +601,33 @@ building_disable_inefficient_value_add = 5
 @good_advantage_tier_7 = @[good_advantage_tier_6 + good_advantage_scale_addition_per_tier]
 @good_advantage_tier_8 = @[good_advantage_tier_7 + good_advantage_scale_addition_per_tier]
 
+#some changes here that i wont mark coz ehuhhh
 @cheap_cost_tier_1 = @[cheap_cost_base] #values progress quadratically with for from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@cheap_cost_tier_2 = @[cheap_cost_tier_1 + cheap_cost_scale_addition_per_tier]
-@cheap_cost_tier_3 = @[cheap_cost_tier_2 + 3*3*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_4 = @[cheap_cost_tier_3 + 4*4*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_5 = @[cheap_cost_tier_4 + 5*5*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_6 = @[cheap_cost_tier_5 + 6*6*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_7 = @[cheap_cost_tier_6 + 7*7*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_8 = @[cheap_cost_tier_7 + 8*8*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_2 = @[cheap_cost_tier_1 + cheap_cost_scale_addition_per_tier*0.5]
+@cheap_cost_tier_3 = @[cheap_cost_tier_2 + 2*2*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap*1.75 + 0]
+@cheap_cost_tier_4 = @[cheap_cost_tier_3 + 10*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]	#3x3x0.1 is awkward
+@cheap_cost_tier_5 = @[cheap_cost_tier_4 + 4*4*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_6 = @[cheap_cost_tier_5 + 5*5*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_7 = @[cheap_cost_tier_6 + 6*6*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_8 = @[cheap_cost_tier_7 + 7*7*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
 
 @normal_cost_tier_1 = @[normal_cost_base] #values progress quadratically with for from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@normal_cost_tier_2 = @[normal_cost_tier_1 + normal_cost_scale_addition_per_tier]
-@normal_cost_tier_3 = @[normal_cost_tier_2 + 3*3*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_4 = @[normal_cost_tier_3 + 4*4*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_5 = @[normal_cost_tier_4 + 5*5*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_6 = @[normal_cost_tier_5 + 6*6*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_7 = @[normal_cost_tier_6 + 7*7*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_8 = @[normal_cost_tier_7 + 8*8*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_2 = @[normal_cost_tier_1 + normal_cost_scale_addition_per_tier*0.5]
+@normal_cost_tier_3 = @[normal_cost_tier_2 + 2*2*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal*1.75 + 0]
+@normal_cost_tier_4 = @[normal_cost_tier_3 + 10*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]	#3x3x0.1 is awkward
+@normal_cost_tier_5 = @[normal_cost_tier_4 + 4*4*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_6 = @[normal_cost_tier_5 + 5*5*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_7 = @[normal_cost_tier_6 + 6*6*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_8 = @[normal_cost_tier_7 + 7*7*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
 
 @expensive_cost_tier_1 = @[expensive_cost_base] #values progress quadratically for tiers from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@expensive_cost_tier_2 = @[expensive_cost_tier_1 + expensive_cost_scale_addition_per_tier]
-@expensive_cost_tier_3 = @[expensive_cost_tier_2 + 3*3*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_4 = @[expensive_cost_tier_3 + 4*4*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_5 = @[expensive_cost_tier_4 + 5*5*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_6 = @[expensive_cost_tier_5 + 6*6*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_7 = @[expensive_cost_tier_6 + 7*7*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_8 = @[expensive_cost_tier_7 + 8*8*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_2 = @[expensive_cost_tier_1 + expensive_cost_scale_addition_per_tier*0.5]
+@expensive_cost_tier_3 = @[expensive_cost_tier_2 + 2*2*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive*1.75 + 0]
+@expensive_cost_tier_4 = @[expensive_cost_tier_3 + 10*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]	#3x3x0.1 is awkward
+@expensive_cost_tier_5 = @[expensive_cost_tier_4 + 4*4*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_6 = @[expensive_cost_tier_5 + 5*5*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_7 = @[expensive_cost_tier_6 + 6*6*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_8 = @[expensive_cost_tier_7 + 7*7*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
 
 @main_cost_tier_1 = @[main_cost_base]
 @main_cost_tier_2 = @[main_cost_tier_1 + main_cost_scale_addition_per_tier]

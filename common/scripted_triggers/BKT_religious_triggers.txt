@@ -1,134 +1,74 @@
 ﻿# Balance.
 
 refusing_conversion_is_crime_trigger = {
-	faith = {
-		trigger_if = { # Only apply imprisonment reason if actor's faith is not the state faith
-			limit = {
-				$CHARACTER$ = {
-					top_liege = { government_allows = state_faith }
-					faith = $CHARACTER$.top_liege.primary_title.state_faith
+	OR = {
+		has_title = title:e_minister_of_rites
+		rite = {
+			trigger_if = { # Only apply imprisonment reason if actor's rite is not the state rite
+				limit = {
+					$CHARACTER$ = {
+						top_liege = { government_allows = state_faith }
+						rite = $CHARACTER$.top_liege.primary_title.state_rite
+					}
 				}
+				always = no
 			}
-			always = no
-		}
-		#ADDED - this check
-		NOT = { has_doctrine_parameter = pluralism_pluralistic_demand_conversion_never_criminal }
-		OR = {
-			religion_tag = christianity_religion
-			religion_tag = islam_religion
-			religion_tag = judaism_religion
-			religion_tag = zoroastrianism_religion
-			#ADDED - you either have big authority or faith is fundamentalist
-			PREV = { has_realm_law_flag = refusing_conversion_is_crime_law_flag }
-			has_doctrine_parameter = pluralism_fundamentalist_demand_conversion_always_criminal
-		}
-		NAND = {		#prev NOT
-			faith_hostility_level = {
-				target = $CHARACTER$.faith
-				value <= faith_astray_level
-			}
-			#ADDED
-			NOT = { has_doctrine_parameter = pluralism_fundamentalist_demand_conversion_always_criminal }
-		}
-	}
-}
-
-
-valid_demand_conversion_conditions_trigger = {
-	scope:recipient = {
-		NOR = {
-			has_strong_hook = scope:actor
-			has_trait = devoted
-			has_trait = order_member
-			is_imprisoned_by = scope:actor
-			is_at_war_with = scope:actor
-		}
-	}
-	scope:actor = {
-		trigger_if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-				scope:recipient = { is_courtier_of = scope:actor }
-			}
-			custom_tooltip = {
-				text = valid_demand_conversion_conditions_trigger.tt.domicile_requires_shrine
-				domicile = { has_domicile_parameter = camp_enable_conversion }
-			}
-		}
-		#ADDED - trigger_if, rewritten stuff to be more logical
-		trigger_if = {
-			limit = { NOT = { government_has_flag = government_is_landless_adventurer } }
+			NOT = { rite_has_parameter = pluralism_pluralistic_demand_conversion_never_criminal }
 			OR = {
-				NOT = { has_trait = nomadic_philosophy }
-				has_trait = zealous
+				rite_religion_tag = christianity_religion
+				rite_religion_tag = islam_religion
+				rite_religion_tag = judaism_religion
+				rite_religion_tag = zoroastrianism_religion
+				#ADDED - you either have big authority or faith is fundamentalist
+				PREV = { has_realm_law_flag = refusing_conversion_is_crime_law_flag }
+				rite_has_parameter = pluralism_fundamentalist_demand_conversion_always_criminal
 			}
-		}
-		#NAND = {
-		#	has_trait = nomadic_philosophy
-		#	has_trait = zealous
-		#}
-	}
-
-	custom_description = {
-		text = "is_head_of_religion"
-		subject = scope:recipient
-		scope:recipient.faith.religious_head != scope:recipient
-	}
-
-	custom_description = {
-		text = "is_protected_via_contract"
-		subject = scope:recipient
-		# Vassal Contract forbids meddling by liege
-		NAND = {
-			exists = scope:recipient.liege
-			scope:recipient.liege = scope:actor
-			scope:recipient = {
-				is_ruler = yes
-				vassal_contract_has_flag = religiously_protected
-			}
-		}
-	}
-	trigger_if = {
-		limit = {
-			scope:recipient = {
-				AND = {
-					has_variable = cannot_be_converted_by_value
-					var:cannot_be_converted_by_value = scope:actor	
+			NAND = {		#prev NOT
+				rite_hostility_level = {
+					target = $CHARACTER$.rite
+					value <= faith_astray_level
 				}
+				#ADDED
+				NOT = { rite_has_parameter = pluralism_fundamentalist_demand_conversion_always_criminal }
 			}
 		}
-		custom_tooltip = {
-			text = promised_to_not_convert_character
-			scope:recipient = {
-				NOR = {
-					has_variable = cannot_be_converted_by_value
-					var:cannot_be_converted_by_value = scope:actor
-				}
-			}
-		}
-	}
-
-	custom_tooltip = {
-		text = cannot_take_overt_hostile_actions_against_diarch.tt
-		NOT = { scope:recipient ?= scope:actor.diarch }
 	}
 }
 
 
 ### Head of Faith
 can_create_temporal_head_of_faith_title_trigger = {
+	trigger_if = {
+		limit = {
+			this = faith:christian_faith
+			exists = situation:the_christian_church
+		}
+		custom_tooltip = {
+			text = pam_great_schism_decision_taken
+			has_global_variable = pam_great_schism_decision_taken
+		}
+	}
 	num_realm_holy_sites_faithful_holders = {
 		COUNT = holy_sites_to_create_temporal_head_of_faith
 		CHARACTER = ROOT
 	}
-	root = { piety_level >= high_piety_level }
-	trigger_if = {
-		limit = {
-			root = { top_liege != this }
-		}
-		custom_description = {
-			text = cannot_create_hof_title_at_or_above_liege_tier
-			root.liege.primary_title.tier > tier_duchy
+	root.piety_level >= high_piety_level
+	#trigger_if = {
+	#	limit = { root = { top_liege != this } }
+	#	custom_description = {
+	#		text = cannot_create_hof_title_at_or_above_liege_tier
+	#		root.liege.primary_title.tier > tier_duchy
+	#	}
+	#}
+	root = {
+		trigger_if = {
+			limit = { faith.religious_head ?= this }
+			NOT = {
+				custom_tooltip = {
+					text = empire_faith_gate_hof_temporal_is_hof
+					faith.religious_head ?= this
+				}
+			}
 		}
 	}
 	#ADDED
@@ -141,19 +81,169 @@ can_create_temporal_head_of_faith_title_trigger = {
 }
 
 can_create_spiritual_head_of_faith_title_trigger = {
+	trigger_if = {
+		limit = {
+			this = faith:christian_faith
+			exists = situation:the_christian_church
+		}
+		custom_tooltip = {
+			text = pam_great_schism_decision_taken
+			has_global_variable = pam_great_schism_decision_taken
+		}
+	}
     num_realm_holy_sites_faithful_holders = {
         COUNT = holy_sites_to_create_spiritual_head_of_faith
         CHARACTER = ROOT
     }
-    root = { piety_level >= medium_piety_level }
+	# Non-mainline rites need one more level of devotion than the mainline rite
+	trigger_if = {
+		limit = {
+			root = { NOT = { rite = faith.main_rite } }
+		}
+		root.piety_level >= high_piety_level
+	}
+	trigger_else = {
+		root.piety_level >= medium_piety_level
+	}
     trigger_if = {
         limit = { has_doctrine = special_doctrine_not_allowed_to_hof }
         NOT = { has_doctrine = special_doctrine_not_allowed_to_hof }
     }
-    NAND = {
-        exists = religious_head
-        has_doctrine_parameter = maintains_head_of_faith_on_creation
-    }
+	root = {
+		trigger_if = {
+			limit = { faith.religious_head ?= this }
+			NOT = {
+				custom_tooltip = {
+					text = can_create_spiritual_hof_title_trigger_is_hof_tt
+					faith.religious_head ?= this
+				}
+			}
+		}
+	}
 	#ADDED
 	root = { is_independent_ruler = yes }
+}
+
+
+# Can edit a rite
+can_edit_rite_trigger = {
+	is_adult = yes
+	is_at_war = no
+	custom_tooltip = {
+		text = ecumenical_council_already_ongoing_tt
+		NOT = { faith = { has_variable = ecumenical_council_ongoing } }
+	}
+	trigger_if = {
+		limit = {
+			is_clergy = no
+			highest_held_title_tier = tier_county
+			top_liege != this
+		}
+		custom_description = {
+			text = "faith_creation_duchy_or_higher"
+			highest_held_title_tier >= tier_duchy
+		}
+	}
+
+	trigger_if = {
+		limit = {
+			rite = {
+				rite_has_doctrine = doctrine_theocracy_temporal
+			}
+			is_clergy = no
+			has_puppet_type = theological_agent_puppet
+			# Allow Mandala God-Kings and Son of Heaven to create and edit rites freely
+			trigger_if = {
+				limit = {
+					top_overlord = this
+				}
+				NOR = {
+					government_has_flag = government_is_mandala
+					tgp_has_access_to_ministry_trigger = yes
+				}
+			}
+		}
+		is_puppet_action_valid = puppet_trigger_can_create_rite
+	}
+	
+	custom_description = {
+		text = "character_is_rite_head"
+		rite.head_of_rite == root
+	}
+
+	custom_description = {
+		text = "character_can_only_edit_one_rite"
+		NOT = { exists = var:has_edited_a_rite }
+	}
+
+	trigger_if = {
+		limit = {
+			faith = { has_doctrine_parameter = unreformed }
+		}
+
+		NOT = {
+			custom_description = {
+				text = faith_has_been_reformed
+				object = faith
+				exists = faith.var:has_been_reformed
+			}
+		}
+
+		trigger_if = {
+			limit = {
+				NOT = {
+					has_character_flag = ignore_3_holy_site_rule
+				}
+			}
+			# Empire Faith Gate: easier reformation path
+			trigger_if = {
+				limit = {
+					empire_faith_gate_enabled_trigger = yes
+				}
+				custom_tooltip = {
+					text = empire_faith_gate_reformation_piety_level
+					piety_level >= 2
+				}
+				custom_tooltip = {
+					text = empire_faith_gate_reformation_tribal_authority
+					has_realm_law = tribal_authority_3
+				}
+				custom_tooltip = {
+					text = empire_faith_gate_reformation_holy_site
+					faith = {
+						any_holy_site_barony = {
+							count >= 3
+							county.holder = {
+								faith = root.faith
+							}
+						}
+					}
+				}
+			}
+			# Vanilla: 3 holy sites
+			trigger_else = {
+				faith = {
+					num_realm_holy_sites_faithful_holders = {
+						CHARACTER = root
+						COUNT = 3
+					}
+				}
+			}
+		}
+
+		custom_tooltip = {
+			text = faith_reformation_via_decision
+			faith = {
+				NOT = { has_variable = block_reformation_var }
+			}
+		}
+	}
+	#ADDED - modifying a rite requires piety level
+	trigger_else = {
+		trigger_if = {
+			limit = { is_clergy = no }
+			piety_level >= 4
+		}
+		trigger_else = { piety_level >= 3 }
+	}
 }

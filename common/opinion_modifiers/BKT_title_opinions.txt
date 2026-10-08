@@ -1,3 +1,19 @@
-﻿became_vassal = {
+﻿# Pressed My [claim|E]
+pressed_my_claim = {
+	opinion = 100
+	years = 50
+	#ADDED
+	decaying = yes
+}
+
+# Revoked My Title
+revoked_title = {
+	opinion = -80
+	years = 40		#prev 10
+	#ADDED
+	decaying = yes
+}
+
+became_vassal = {
 	opinion = 40	#prev 10
 }

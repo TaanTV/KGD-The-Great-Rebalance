@@ -9,7 +9,7 @@ mpo_demand_obedience_interaction = {
 
 	ai_frequency_by_tier = {
 		barony = 0
-		county = 24
+		county = 0		#prev 24
 		duchy = 8		#prev 4
 		kingdom = 4
 		empire = 4
@@ -19,12 +19,17 @@ mpo_demand_obedience_interaction = {
 	pause_on_receive = yes
 	
 	#ADDED
-	cooldown = { months = 1 }
+	cooldown = { days = 10 }
+
+	is_available = {
+		government_allows = obedience
+		trigger_if = {
+			limit = { is_ai = yes }
+			primary_title.tier >= tier_duchy
+		}
+	}
 
 	is_shown = {
-		scope:actor = {
-			government_allows = obedience
-		}
 		scope:recipient = {
 			is_ai = yes
 			obedience_target ?= scope:actor
@@ -45,11 +50,6 @@ mpo_demand_obedience_interaction = {
 
 	cost = { prestige = miniscule_prestige_value }	#prev minor_prestige_value
 
-	ai_potential = {
-		government_allows = obedience
-		primary_title.tier >= tier_duchy
-	}
-
 	send_option = {
 		is_valid = {
 			scope:actor = {
@@ -68,20 +68,17 @@ mpo_demand_obedience_interaction = {
 		#ADDED
 		modifier = { # Less harsh than negotiating obedience
 			add = {
-				if = {  # Duke
-					limit = { scope:actor.highest_held_title_tier = tier_duchy }
-					add = -10
-				}
-				else_if = {  # King
-					limit = { scope:actor.highest_held_title_tier = tier_kingdom }
-					add = -30
-				}
-				else_if = {  # Emperor
+				value = -30
+				if = {  # Emperor
 					limit = { scope:actor.highest_held_title_tier = tier_empire }
 					add = -50
 				}
+				else_if = {  # Emperor
+					limit = { scope:actor.highest_held_title_tier = tier_hegemony }
+					add = -75
+				}
 			}
-			scope:actor.highest_held_title_tier >= tier_duchy
+			scope:actor.highest_held_title_tier >= tier_kingdom
 			desc = YOUR_TITLE_TIER_MODIFIER
 		}
 		#ADDED
@@ -242,13 +239,24 @@ mpo_demand_obedience_interaction = {
 			}
 			add = 75		#prev 25
 		}
+		#ADDED - the next couple of things
+		modifier = {
+			scope:recipient = {
+				is_vassal_of = scope:actor
+				is_a_faction_member = yes
+			}
+			add = 25
+		}
 		modifier = {
 			scope:recipient = { is_child_of = scope:actor }
+			scope:actor = { has_realm_law = single_heir_succession_kurultai_law }
 			add = 75
 		}
-		#ADDED
 		modifier = {
-			scope:actor.health < 3.5
+			scope:actor = {
+				health < 3.5
+				has_realm_law = single_heir_succession_kurultai_law 
+			}
 			scope:recipient = {
 				OR = {
 					is_child_of = scope:actor
@@ -258,7 +266,10 @@ mpo_demand_obedience_interaction = {
 			add = 45
 		}
 		modifier = {
-			scope:actor.age > 45
+			scope:actor = {
+				age > 45
+				has_realm_law = single_heir_succession_kurultai_law 
+			}
 			scope:recipient = {
 				OR = {
 					is_child_of = scope:actor
@@ -328,11 +339,10 @@ mpo_demand_obedience_interaction = {
 						}
 					}
 				}
-			}
-			#Unop Use the hook on the recipient
-			if = {
-				limit = { scope:hook = yes }
-				use_hook = scope:recipient
+				if = {
+					limit = { scope:hook = yes }
+					use_hook = scope:recipient
+				}
 			}
 		}
 	}
@@ -351,13 +361,24 @@ mpo_make_blood_brother = {
 	popup_on_receive = yes
 	ai_maybe = yes
 
+	filter_tags = { accolade }
+
 	cooldown = { months = 1 }
 	cooldown_against_recipient = { years = 5 }
+
+	is_available = {
+		mpo_valid_for_blood_brotherhood_trigger = yes
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_at_war = no
+			is_imprisoned = no
+			has_blood_brother = no
+		}
+	}
 
 	is_shown = {
 		# Scope:actor needs to have a suitable CulTrad.
 		scope:actor = {
-			mpo_valid_for_blood_brotherhood_trigger = yes
 			NOT = { var:had_mpo_temujin_flavor_0020 ?= scope:recipient }
 		}
 		scope:recipient = {
@@ -580,7 +601,37 @@ mpo_make_blood_brother = {
 				custom_tooltip = blood_brother_foe_modifier_tt
 			}
 		}
-
+		show_as_tooltip = {
+			if = {
+				limit = {
+					scope:recipient = {
+						is_acclaimed = yes
+						is_knight_of = scope:actor
+					}
+				}
+				scope:recipient = {
+					if = {
+						limit = {
+							scope:actor = {
+								prestige_level >= 4
+							}
+						}
+						custom_tooltip = recipient_accolade_major_glory_tt
+					}
+					else_if = {
+						limit = {
+							scope:actor = {
+								prestige_level >= 2
+							}
+						}
+						custom_tooltip = recipient_accolade_medium_glory_tt
+					}
+					else = {
+						custom_tooltip = recipient_accolade_minor_glory_tt
+					}
+				}
+			}
+		}
 		# If we're a clan this interaction affects unity
 		add_clan_unity_interaction_effect = {
 			CHARACTER = scope:actor
@@ -703,12 +754,6 @@ mpo_make_blood_brother = {
 			add = 30
 			desc = BLOOD_BROTHER_WAR_ALLIES_VALUE
 		}
-	}
-	## Performance-enhancement
-	ai_potential = {
-		is_imprisoned = no
-		is_at_war = no
-		has_blood_brother = no
 	}
 	ai_target_quick_trigger = { adult = yes }
 	ai_targets = {
@@ -866,20 +911,37 @@ mpo_retrieve_land_from_herder_interaction = {
 	popup_on_receive = yes
 	pause_on_receive = yes
 
-	interface_priority = 60
 	ai_min_reply_days = 4
 	ai_max_reply_days = 9
 
 	# actor character giving the titles
 	# recipient character receiving the titles
 
+	is_available = {
+		#ADDED
+		NOT = { government_has_flag = government_is_herder }
+		trigger_if = {
+			limit = { is_ai = yes }
+			primary_title.tier >= tier_county
+			#domain_size < domain_limit
+			#ADDED 
+			OR = {
+				domain_size < domain_limit
+				AND = {
+					government_has_flag = government_is_nomadic 
+					current_domain_fertility <= bad_county_fertility_level
+				}
+				AND = {
+					NOT = { government_has_flag = government_is_nomadic }
+					vassal_count < vassal_limit
+				}
+			}
+		}
+	}
+
 	is_shown = {
 		scope:recipient = {
 			government_has_flag = government_is_herder
-		}
-		#ADDED
-		scope:actor = {
-			NOT = { government_has_flag = government_is_herder }
 		}
 	}
 
@@ -894,9 +956,7 @@ mpo_retrieve_land_from_herder_interaction = {
 					text = mpo_retrieve_land_from_herder_interaction_neighbour_tt
 					any_sub_realm_county = {
 						any_neighboring_county = {
-							holder = {
-								this = scope:recipient
-							}
+							holder = scope:recipient
 						}
 					}
 				}
@@ -934,8 +994,6 @@ mpo_retrieve_land_from_herder_interaction = {
 	has_valid_target = {
 		scope:target = {
 			is_landless_type_title = no
-			NOT = { is_noble_family_title = yes }
-			NOT = { is_nomad_title = yes }
 		}
 	}
 
@@ -1007,6 +1065,10 @@ mpo_retrieve_land_from_herder_interaction = {
 			else = {
 				revoke_title_interaction_effect = yes
 			}
+			if = {
+				limit = { scope:hook = yes }
+				use_hook = scope:recipient
+			}
 		}
 		
 		#ADDED
@@ -1027,7 +1089,6 @@ mpo_retrieve_land_from_herder_interaction = {
 	# AI
 	ai_targets = {
 		ai_recipients = tributaries
-		ai_recipients = top_realm_domicile_owners
 	}
 	ai_targets = {
 		ai_recipients = neighboring_rulers
@@ -1042,23 +1103,6 @@ mpo_retrieve_land_from_herder_interaction = {
 		hegemony = 4
 	}
 
-	ai_potential = {
-		#domain_size < domain_limit
-		primary_title.tier >= tier_county
-		#ADDED - better logic
-		OR = {
-			domain_size < domain_limit
-			AND = {
-				government_has_flag = government_is_nomadic 
-				current_domain_fertility <= bad_county_fertility_level
-			}
-			AND = {
-				NOT = { government_has_flag = government_is_nomadic }
-				vassal_count < vassal_limit
-			}
-		}
-	}
-
 	ai_accept = {
 		base = 0
 		modifier = {
@@ -1067,7 +1111,9 @@ mpo_retrieve_land_from_herder_interaction = {
 			desc = YOU_ARE_AN_ADVENTURER_REASON
 		}
 		modifier = {
-			exists = scope:actor.suzerain
+			scope:recipient = {
+				is_tributary = yes
+			}
 			add = -25
 			desc = ADVENTURER_SUZERAIN_REASON
 		}
@@ -1141,8 +1187,10 @@ mpo_vassal_to_tributary_interaction = {
 	common_interaction = yes
 
 	desc = mpo_vassal_to_tributary_interaction_desc
+	notification_text = mpo_vassal_to_tributary_interaction_notification
 
 	#ai_frequency = 0
+	#ADDED
 	ai_frequency_by_tier = {
 		barony = 0
 		county = 48
@@ -1151,6 +1199,7 @@ mpo_vassal_to_tributary_interaction = {
 		empire = 120
 		hegemony = 0
 	}
+
 	popup_on_receive = yes
 	pause_on_receive = yes
 
@@ -1159,14 +1208,13 @@ mpo_vassal_to_tributary_interaction = {
 			is_ai = no
 			is_vassal_of = scope:recipient
 			government_has_flag = government_is_nomadic
-			#ADDED
-			scope:recipient = { is_independent_ruler = yes }
 		}
 	}
 
 	is_valid_showing_failures_only = {
 		scope:recipient = {
 			is_imprisoned = no
+			is_independent_ruler = yes
 		}
 		scope:actor = {
 			is_imprisoned = no
@@ -1210,9 +1258,6 @@ mpo_vassal_to_tributary_interaction = {
 			show_as_tooltip = {
 				break_subject_contract_and_establish_tributary_effect = { SUZERAIN = scope:recipient TRIBUTARY = scope:actor }
 			}
-		}
-		scope:actor = {
-			#Unop Use the hook on the recipient
 			if = {
 				limit = { scope:hook = yes }
 				use_hook = scope:recipient
@@ -1243,7 +1288,7 @@ mpo_vassal_to_tributary_interaction = {
 			multiplier = 1
 			desc = AI_OPINION_REASON
 		}
-		
+
 		# If you're friends
 		modifier = {
 			add = 50
@@ -1279,7 +1324,7 @@ mpo_vassal_to_tributary_interaction = {
 		# Are they Nomadic
 		modifier = {
 			add = 25
-			desc = game_concept_nomadic_government
+			desc = RECIPIENT_IS_NOMADIC_RERASON
 			scope:recipient = { government_has_flag = government_is_nomadic }
 		}
 	}
@@ -1305,7 +1350,7 @@ mpo_negotiate_obedience_interaction = {
 
 	ai_frequency_by_tier = {
 		barony = 0
-		county = 24
+		county = 0		#prev 24
 		duchy = 12		#prev 6
 		kingdom = 6
 		empire = 6
@@ -1315,19 +1360,25 @@ mpo_negotiate_obedience_interaction = {
 	pause_on_receive = yes
 	
 	#ADDED
-	cooldown = { months = 1 }
+	cooldown = { days = 10 }
+
+	is_available = {
+		government_allows = obedience
+		trigger_if = {
+			limit = { is_ai = yes }
+			prestige >= medium_prestige_value	#prev major_prestige_value
+			primary_title.tier >= tier_duchy
+		}
+	}
 
 	is_shown = {
-		scope:actor = {
-			government_allows = obedience
-		}
 		scope:recipient = {
 			is_ai = yes
 			obedience_target ?= scope:actor
 			is_obedient = no
 		}
 	}
-	
+
 	cost = {
 		prestige = {
 			value = minor_prestige_value	#prev medium_prestige_value
@@ -1397,9 +1448,9 @@ mpo_negotiate_obedience_interaction = {
 		}
 		trigger_if = {
 			limit = {
-				scope:recipient = { is_landed = yes top_liege != this }
+				scope:recipient = { is_landed = yes is_independent_ruler = no }
 			}
-			scope:recipient = { is_vassal_or_below_of = scope:actor }		
+			scope:recipient = { is_vassal_or_below_of = scope:actor }
 		}
 		trigger_else_if = {
 			limit = {
@@ -1408,19 +1459,13 @@ mpo_negotiate_obedience_interaction = {
 			scope:actor = {
 				custom_tooltip = {
 					text = mpo_interaction_not_neighbouring_tt
-					any_land_neighboring_realm_with_tributaries_owner = { 
+					any_land_neighboring_realm_with_tributaries_owner = {
 						this = scope:recipient
 					}
 				}
 			}
 		}
 		trigger_else = {}
-	}
-
-	ai_potential = {
-		government_allows = obedience
-		primary_title.tier >= tier_duchy
-		prestige >= medium_prestige_value	#prev major_prestige_value
 	}
 
 	send_option = {
@@ -1498,6 +1543,10 @@ mpo_negotiate_obedience_interaction = {
 				else_if = {  # Emperor
 					limit = { scope:actor.highest_held_title_tier = tier_empire }
 					add = -65
+				}
+				else_if = {  # Emperor
+					limit = { scope:actor.highest_held_title_tier = tier_hegemony }
+					add = -100
 				}
 			}
 			scope:actor.highest_held_title_tier >= tier_duchy
@@ -1724,7 +1773,7 @@ mpo_negotiate_obedience_interaction = {
 	}
 
 	ai_will_do = {
-		base = 0
+		base = 10				#prev 0
 		modifier = {
 			scope:herd ?= yes
 			add = -60			#prev -1
@@ -1745,6 +1794,14 @@ mpo_negotiate_obedience_interaction = {
 		}
 		#ADDED - all of the below
 		modifier = {
+			scope:recipient = {
+				is_vassal_of = scope:actor
+				is_a_faction_member = yes
+			}
+			add = 20
+		}
+		modifier = {
+			scope:actor = { has_realm_law = single_heir_succession_kurultai_law }
 			scope:recipient = { 
 				is_child_of = scope:actor 
 				liege ?= scope:actor
@@ -1753,7 +1810,10 @@ mpo_negotiate_obedience_interaction = {
 			add = 100
 		}
 		modifier = {
-			scope:actor.health < 3.5
+			scope:actor = {
+				health < 3.5
+				has_realm_law = single_heir_succession_kurultai_law 
+			}
 			scope:recipient = {
 				OR = {
 					is_child_of = scope:actor
@@ -1763,7 +1823,10 @@ mpo_negotiate_obedience_interaction = {
 			add = 45
 		}
 		modifier = {
-			scope:actor.age > 45
+			scope:actor = {
+				age > 45
+				has_realm_law = single_heir_succession_kurultai_law 
+			}
 			scope:recipient = {
 				OR = {
 					is_child_of = scope:actor
@@ -1788,9 +1851,9 @@ mpo_negotiate_obedience_interaction = {
 			add = 25
 		}
 	}
-	
+
 	cooldown_against_recipient = { years = 10 }
-	
+
 	ai_targets = { # They will try to get a Stable Succession
 		ai_recipients = councillors
 		#ADDED
@@ -1826,7 +1889,11 @@ mpo_negotiate_obedience_interaction = {
 				if = {
 					limit = { scope:herd = yes }
 					if = {
-						limit = { exists = scope:recipient.domicile }
+						limit = { 
+							exists = scope:recipient.domicile 
+							#ADDED - paradox?
+							scope:recipient = { government_has_flag = government_is_nomadic }
+						}
 						pay_herd = {
 							target = scope:recipient
 							value = domicile.medium_herd_value

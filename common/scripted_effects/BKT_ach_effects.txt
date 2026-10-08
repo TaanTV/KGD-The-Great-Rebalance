@@ -359,7 +359,7 @@ coronation_disburse_rewards_effect = {
 					limit = {
 						house ?= scope:host.house
 						is_ai = yes
-						NOT = { this = scope:host } #Unop: Prevent self char unity change
+						this != scope:host
 					}
 					switch = {
 						trigger = scope:coronation_reward_mult
@@ -465,37 +465,40 @@ coronation_disburse_rewards_effect = {
 		}
 	}
 
-	add_legitimacy = {
-		value = 25
-		multiply = {
-			value = number_of_vassal_supporters
-			#ADDED - some deminishing returns so big realms are not geting 13021030210 prestige 
-			max = 5		#first 5 are fully counted
-			add = {		#the next 10 are half-counted
+	if = {
+		limit = { has_legitimacy = yes }
+		add_legitimacy = {
+			value = 25
+			multiply = {
 				value = number_of_vassal_supporters
-				add = -5
-				min = 0
-				max = 10
-				multiply = 0.5
+				#ADDED - some deminishing returns so big realms are not geting 13021030210 prestige 
+				max = 5		#first 5 are fully counted
+				add = {		#the next 10 are half-counted
+					value = number_of_vassal_supporters
+					add = -5
+					min = 0
+					max = 10
+					multiply = 0.5
+				}
+				add = {		#the next 20 are quarter-counted
+					value = number_of_vassal_supporters
+					add = -15
+					min = 0
+					max = 20
+					multiply = 0.25
+				}
+				add = {		#the rest are tenth-counted
+					value = number_of_vassal_supporters
+					add = -35
+					min = 0
+					multiply = 0.1
+				}
+				min = 1
 			}
-			add = {		#the next 20 are quarter-counted
-				value = number_of_vassal_supporters
-				add = -15
-				min = 0
-				max = 20
-				multiply = 0.25
-			}
-			add = {		#the rest are tenth-counted
-				value = number_of_vassal_supporters
-				add = -35
-				min = 0
-				multiply = 0.1
-			}
-			min = 1
+			multiply = scope:coronation_reward_mult
+			min = 25
+			max = 1000
 		}
-		multiply = scope:coronation_reward_mult
-		min = 25
-		max = 1000
 	}
 	
 	# Renown if you have the Exalt the Crown Intent

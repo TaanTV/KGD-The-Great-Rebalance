@@ -245,6 +245,17 @@ spouse_task_skill_from_bonuses_value = {
 	}
 	if = {
 		limit = {
+			has_personal_tenet_flag = tenet_divine_marriage_spouse_contribution
+		}
+		add = {
+			value = scope:original_skill
+			multiply = 1.25
+			subtract = scope:original_skill
+		}
+		save_temporary_value_as = has_been_modified
+	}
+	if = {
+		limit = {
 			faith = { has_doctrine_parameter = divorce_disallowed_better_spouses }
 		}
 		add = {

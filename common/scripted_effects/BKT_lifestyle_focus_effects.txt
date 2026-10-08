@@ -1,0 +1,18 @@
+﻿mystical_communion_outcome_effect = {
+	# Limited to 2 effect lines due to showing up in a toast
+	add_learning_lifestyle_xp = medium_lifestyle_xp	#prev major_lifestyle_xp
+	add_character_modifier = {
+		modifier = divine_guidance_modifier
+		years = 5
+	}
+	change_spiritual_fulfillment = minor_spiritual_fulfillment_value
+	if = {
+		limit = {
+			has_trait = lifestyle_mystic
+		}
+		add_trait_xp = {
+			trait = lifestyle_mystic
+			value = lifestyle_mystic_xp_gain_minor_value
+		}
+	}
+}

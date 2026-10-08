@@ -1,0 +1,47 @@
+﻿# character having its birthday in root scope
+# tested after age has increased
+on_birthday = {
+	on_actions = {
+		on_child_birthday
+	}
+}
+
+on_child_birthday = {
+	trigger = {
+		is_adult = no
+	}
+	effect = {
+		if = {
+			limit = { age >= 14 }
+			remove_character_modifier = just_a_child_character_modifier
+			remove_character_modifier = still_a_child_character_modifier
+		}
+		else_if = {
+			limit = { age >= 7 }
+			if = {
+				limit = { NOT = { has_character_modifier = still_a_child_character_modifier } }
+				add_character_modifier = still_a_child_character_modifier
+			}
+			remove_character_modifier = just_a_child_character_modifier
+		}
+		else = {
+			if = {
+				limit = { NOT = { has_character_modifier = just_a_child_character_modifier } }
+				add_character_modifier = just_a_child_character_modifier
+			}
+		}
+	}
+}
+
+#sorry im lazy just re-do the stuff above.
+on_birth_child = {
+	on_actions = {
+		on_child_birthday
+	}
+}
+
+on_character_created = {
+	on_actions = {
+		on_child_birthday
+	}
+}

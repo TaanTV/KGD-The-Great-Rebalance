@@ -29,7 +29,7 @@ familial_familiar_perk = {
 		if = {
 			limit = {
 				has_ep3_dlc_trigger = yes
-				government_allows = administrative
+				government_has_mechanic = administrative
 			}
 			custom_description_no_bullet = {
 				text = admin_familial_familiar_perk_effect
@@ -57,6 +57,100 @@ familial_familiar_perk = {
 				NOT = { has_perk = befriend_perk }
 			}
 			multiply = 0
+		}
+	}
+}
+
+thicker_than_water_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = family
+	position = { 2 1.25 }
+	icon = node_diplomacy
+
+	parent = familial_familiar_perk
+	
+	effect = {
+		custom_description_no_bullet = {
+			text = thicker_than_water_perk_effect
+		}
+	}
+	
+	government_character_modifier = {
+		flag = government_is_nomadic
+		blood_brother_prestige_mult = 0.05
+	}
+}
+
+groomed_to_rule_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = family
+	position = { 2 2.5 }
+	icon = node_diplomacy
+	
+	parent = thicker_than_water_perk
+	
+	effect = {
+		custom_description_no_bullet = {
+			text = groomed_to_rule_perk_effect
+		}
+		# If a child has already gotten their childhood personality or education (and thus missed the skill gain), add it now.
+		hidden_effect = {
+			save_scope_as = parent
+			every_child = {
+				limit = {
+					OR = {
+						has_trait = curious
+						has_trait = rowdy
+						has_trait = charming
+						has_trait = pensive
+						has_trait = bossy
+						has_trait = education_martial
+						has_trait = education_intrigue
+						has_trait = education_stewardship
+						has_trait = education_learning
+						has_trait = education_diplomacy
+					}
+				}
+				groomed_to_rule_random_skills_effect = yes
+			}
+		}
+		if = {
+			limit = {
+				has_bp2_dlc_trigger = yes
+			}
+			custom_description_no_bullet = {
+				text = groomed_to_rule_perk_2_effect
+			}
+		}
+	}
+}
+
+sound_foundations_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = family
+	position = { 2 3.75 }
+	icon = node_diplomacy
+	
+	parent = groomed_to_rule_perk
+	
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_mandala
+				house ?= { has_house_aspiration_parameter = aspect_of_creation }
+				is_house_head = yes
+			}
+			custom_description_no_bullet = { text = mandala_sound_foundations_perk_effect }
+		}
+		else = {
+			custom_description_no_bullet = { text = sound_foundations_perk_effect }
+		}	
+		hidden_effect = {
+			every_child = {
+				root = {
+					sound_foundations_skill_gain_effect = yes
+				}
+			}
 		}
 	}
 }

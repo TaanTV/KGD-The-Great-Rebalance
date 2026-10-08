@@ -19,11 +19,20 @@ high_tier_vassal_capital_province_modifier = {
 	levy_size = 0.05	#prev 0.1
 }
 
-# Not applied for barons
+# Not applied for barons or characters with Bartering enabled governments
 capital_province_modifier = {
-	monthly_income = 0.75		#prev 1
+	monthly_income = 0.8		#prev 1
 	stationed_maa_damage_mult = normal_maa_damage_tier_1
 	stationed_maa_toughness_mult = normal_maa_toughness_tier_1
+	#ADDED
+	monthly_county_control_growth_add = 0.1
+	county_opinion_add = 10
+}
+
+nomad_capital_province_modifier = {
+	stationed_maa_damage_mult = normal_maa_damage_tier_1
+	stationed_maa_toughness_mult = normal_maa_toughness_tier_1
+	stationed_siege_weapon_siege_value_mult = low_maa_siege_value_tier_1
 	#ADDED
 	monthly_county_control_growth_add = 0.1
 	county_opinion_add = 10
@@ -36,7 +45,13 @@ capital_duchy_province_modifier = {
 	#ADDED
 	monthly_county_control_growth_add = 0.03	#0.1
 }
-# Referenced in code; blocks raiding when present on a province
+
+#county_capital_province_modifier = {
+#	fort_level = 1
+#	county_fertility_growth_add = 2
+#}
+
+# Referenced in code; blocks raiding & bartering  when present on a province
 recently_looted_modifier = {
 	icon = martial_negative
 	build_speed = 0.35					#prev 0.5
@@ -45,7 +60,7 @@ recently_looted_modifier = {
 	county_fertility_growth_mult = -0.2
 	#ADDED
 	levy_size = -0.15
-	supply_limit_mult = -0.25
+	supply_limit_mult = -0.35
 }
 
 # Referenced in code; blocks raiding & bartering when present on a province

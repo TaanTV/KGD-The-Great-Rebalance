@@ -9,9 +9,9 @@
 			limit = {
 				has_realm_law_flag = war_declaration_powerful_vassal_approval
 			}
-			custom_tooltip = war_declaration_powerful_vassal_approval.opinion_penalty
+			#custom_tooltip = war_declaration_powerful_vassal_approval.opinion_penalty
 			every_powerful_vassal = {
-				custom = custom.every_powerful_vassal
+				custom = custom.war_declaration_powerful_vassal_approval
 				add_opinion = {
 					target = prev
 					modifier = frustrated_opinion
@@ -23,9 +23,9 @@
 			limit = {
 				has_realm_law_flag = war_declaration_council_approval
 			}
-			custom_tooltip = war_declaration_council_approval.opinion_penalty
+			#custom_tooltip = war_declaration_council_approval.opinion_penalty
 			every_councillor = {
-				custom = custom.every_councillor
+				custom = custom.war_declaration_council_approval
 				limit = { 
 					NOR = { 
 						prev.cp:councillor_spouse ?= this

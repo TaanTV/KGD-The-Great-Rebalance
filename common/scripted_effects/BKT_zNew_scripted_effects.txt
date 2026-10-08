@@ -327,10 +327,18 @@ on_get_position_councillor_firing_cooldown_effect = {
 				var:block_fire_councillor = liege_or_court_owner
 			}
 		}
+		if = {
+			limit = { NOT = { has_variable = very_recently_fired } }
+			set_variable = {
+				name = block_fire_councillor
+				value = liege_or_court_owner
+				years = 5
+			}
+		}
 		set_variable = {
-			name = block_fire_councillor
-			value = liege_or_court_owner
-			years = 5
+			name = very_recently_hired
+			value = 1
+			days = 1
 		}
 	}
 }
@@ -512,6 +520,132 @@ throw_opinions_on_same_stance_vassals_of_liege = {
 					}
 				}
 			} 
+		}
+	}
+}
+
+mental_break_opt_out_faltering_heart_chance = {
+	if = {
+		limit = {
+			is_incapable = no
+			age > 30
+			NOR = {
+				has_trait = faltering_heart
+				has_game_rule = off_elderly_health
+				has_game_rule = infirm_only_elderly_health
+				has_trait_with_flag = is_immortal
+				AND = {
+					is_ai = yes
+					OR = {
+						has_game_rule = hard_difficulty
+						has_game_rule = very_hard_difficulty
+					}
+				}
+			}
+		}
+		if = {
+			limit = { 
+				static_group_filter = {
+					group = does_not_get_faltering_heart
+					match = 0.8
+				}
+			}
+			random = {
+				chance = {
+					value = $STRESS_LEVEL_CHANCE$
+					if = {
+						limit = { is_ai = yes }
+						max = 3		#AIs would roll this way too often, i suspect.
+					}
+				}
+				set_up_eldery_trait_cooldowns = yes
+				add_trait = faltering_heart
+			}
+		}
+		else = {		#those that are not destined to get the trait can still be spooked by this :P
+			show_as_tooltip = {
+				random = {
+					chance = {
+						value = $STRESS_LEVEL_CHANCE$
+					}
+					add_trait = faltering_heart
+				}
+			}
+		}
+	}
+}
+
+set_up_eldery_trait_cooldowns = {
+	hidden_effect = {
+		set_variable = {
+			name = eldery_traits_gain_hard_cooldown
+			years = 5
+		}
+		if = {
+			limit = { has_trait_with_flag = age_related_ailment }
+			set_variable = {
+				name = eldery_traits_gain_soft_cooldown
+				years = 15
+			}
+		}
+		else = {
+			set_variable = {
+				name = eldery_traits_gain_soft_cooldown
+				years = 10
+			}
+		}
+	}
+}
+
+#just coz this gets used SO MUCH and takes way too much space
+disable_random_event_option_if_not_ai = {
+	if = {
+		limit = { is_ai = no }
+		random_list = {
+			33 = {
+				save_scope_value_as = {
+					name = hide_option_1
+					value = yes
+				}
+			}
+			33 = {
+				save_scope_value_as = {
+					name = hide_option_2
+					value = yes
+				}
+			}
+			33 = {
+				save_scope_value_as = {
+					name = hide_option_3
+					value = yes
+				}
+			}
+		}
+	}
+}
+
+#fire from said baron scope plz
+baron_start_refusal_war = {
+	save_temporary_scope_as = warring_baron_scope
+	start_war = {
+		casus_belli = $CB$
+		target = $TARGET$
+	}
+	hidden_effect = {
+		capital_province = {
+			if = {
+				limit = { 
+					NOT = { has_schizo_balance_loaded_trigger = yes }
+					fort_level < 1
+				}
+				while = {
+					count = scope:warring_baron_scope.culture.culture_era_value
+					add_province_modifier = {
+						modifier = hastely_constructed_defences
+						years = 20		#just in case it fails to get removed
+					}
+				}
+			}
 		}
 	}
 }

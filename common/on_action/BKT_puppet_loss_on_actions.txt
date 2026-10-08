@@ -1,0 +1,151 @@
+﻿#An assortiment of on-action hooks to disable puppets in certain cases
+
+# Code on-action: character being imprisoned in root scope
+# imprisoning character set as scope:imprisoner
+on_imprison = {
+	on_actions = {
+		BKT_imprison_lose_puppets_unbecome_puppet
+	}
+}
+
+BKT_imprison_lose_puppets_unbecome_puppet = {
+	effect = {
+		if = {
+			limit = { 
+				exists = puppeteer 
+				puppeteer = {
+					NOR = {
+						this = scope:imprisoner
+						has_strong_hook = prev 
+					}
+				}
+			}
+			save_temporary_scope_as = recipient
+			puppeteer = {
+				send_interface_message = {
+					type = send_interface_message_bad
+					title = lose_puppet_prison_effect_notification
+					left_icon = this
+					right_icon = scope:recipient
+					custom_tooltip = fire_puppet_interaction_effect_tt
+				}
+			}
+			clear_puppet_status = yes
+			remove_puppet_modifiers_effect = yes
+		}
+		if = {
+			limit = { 
+				OR = {
+					exists = puppet:theological_agent_puppet 
+					exists = puppet:external_theological_agent_puppet 
+					exists = puppet:external_ruler_puppet 
+				}
+			}
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = lose_puppet_imprisoned_effect_notification
+				#left_icon = this
+				#right_icon = scope:recipient
+				if = {
+					limit = { 
+						exists = puppet:theological_agent_puppet 
+						NOT = { has_strong_hook = puppet:theological_agent_puppet }
+					}
+					puppet:theological_agent_puppet = { 
+						save_temporary_scope_as = recipient 
+						hidden_effect = {
+							clear_puppet_status = yes 
+							remove_puppet_modifiers_effect = yes
+						}
+					}
+					custom_tooltip = fire_puppet_interaction_effect_tt
+				}
+				if = {
+					limit = { 
+						exists = puppet:external_theological_agent_puppet 
+						NOT = { has_strong_hook = puppet:external_theological_agent_puppet }
+					}
+					puppet:external_theological_agent_puppet = { 
+						save_temporary_scope_as = recipient 
+						hidden_effect = {
+							clear_puppet_status = yes 
+							remove_puppet_modifiers_effect = yes
+						}
+					}
+					custom_tooltip = fire_puppet_interaction_effect_tt
+				}
+				if = {
+					limit = { 
+						exists = puppet:external_ruler_puppet 
+						NOT = { has_strong_hook = puppet:external_ruler_puppet }
+					}
+					puppet:external_ruler_puppet = { 
+						save_temporary_scope_as = recipient 
+						hidden_effect = {
+							clear_puppet_status = yes 
+							remove_puppet_modifiers_effect = yes
+						}
+					}
+					custom_tooltip = fire_puppet_interaction_effect_tt
+				}
+			}
+		}
+	}
+}
+
+
+# scope:target is the other character
+on_set_relation_rival = {
+	on_actions = {
+		BKT_rival_unbecome_puppet
+	}
+}
+
+# scope:target is the other character
+#not sure if this one is needed but just in case
+on_set_relation_nemesis = {
+	on_actions = {
+		BKT_rival_unbecome_puppet
+	}
+}
+
+BKT_rival_unbecome_puppet = {
+	effect = {
+		if = {
+			limit = { puppeteer ?= scope:target }
+			save_temporary_scope_as = recipient
+			
+			puppeteer = {
+				send_interface_message = {
+					type = send_interface_message_bad
+					title = lose_puppet_rivalry_effect_notification
+					left_icon = this
+					right_icon = scope:recipient
+					custom_tooltip = fire_puppet_interaction_effect_tt
+				}
+			}
+			
+			clear_puppet_status = yes
+			remove_puppet_modifiers_effect = yes
+		}
+		if = {
+			limit = { scope:target.puppeteer ?= this }
+			scope:target = { 
+				save_temporary_scope_as = recipient
+				
+				puppeteer = {
+					send_interface_message = {
+						type = send_interface_message_bad
+						title = lose_puppet_rivalry_effect_notification
+						left_icon = this
+						right_icon = scope:recipient
+						custom_tooltip = fire_puppet_interaction_effect_tt
+					}
+				}
+				
+				clear_puppet_status = yes 
+				remove_puppet_modifiers_effect = yes
+			}
+		}
+	}
+}

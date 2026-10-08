@@ -131,7 +131,9 @@ special_contract = {
 				if = {
 					limit = {
 						scope:liege = {
-							ai_should_focus_on_building_in_their_capital = yes
+							#ai_should_focus_on_building_in_their_capital = yes
+							#ADDED
+							ai_has_economical_boom_personality = yes
 						}
 					}
 					add = 10
@@ -226,6 +228,12 @@ special_contract = {
 					}
 					add = 10
 				}
+				else_if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = belligerent }
+					}
+					add = 5
+				}
 			}
 		}
 		special_contract_castellan = {
@@ -290,6 +298,13 @@ special_contract = {
 					}
 					add = 10
 				}
+				#ADDED
+				else_if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = belligerent }
+					}
+					add = 5
+				}
 			}
 		}
 		special_contract_palatinate = {
@@ -301,7 +316,7 @@ special_contract = {
 			}
 			parent = special_contract_none
 			position = { 1 2 }
-			score = 0
+			score = 1	#prev 0
 
 			tax_factor = palatinate_contract_taxes
 			levies_factor = palatinate_contract_levies
@@ -344,6 +359,13 @@ special_contract = {
 					}
 					add = 10
 				}
+				#ADDED
+				else_if = {
+					limit = { 
+						scope:subject = { has_vassal_stance = parochial }
+					}
+					add = 5
+				}
 			}
 		}
 	}
@@ -356,26 +378,18 @@ religious_rights = {
 		scope:subject.faith != scope:liege.faith
 		OR = {
 			NOT = {
-				scope:liege.faith = {
+				scope:liege = {
 					OR = {
-						has_doctrine = tenet_tax_nonbelievers
-						has_doctrine = special_doctrine_jizya
+						rite = { rite_has_tenet = tenet_tax_nonbelievers }
+						faith = { has_doctrine = special_doctrine_jizya }
 					}
 				}
 			}
-			AND = {
-				scope:liege.faith = {
-					OR = {
-						has_doctrine = tenet_tax_nonbelievers
-						has_doctrine = special_doctrine_jizya
-					}
+			scope:subject = {
+				NOT = {
+					vassal_contract_has_flag = vassal_contract_cannot_revoke_titles
 				}
-				scope:subject = {
-					NOT = {
-						vassal_contract_has_flag = vassal_contract_cannot_revoke_titles
-					}
-					vassal_contract_has_flag = religiously_protected
-				}
+				vassal_contract_has_flag = religiously_protected
 			}
 		}
 	}
@@ -390,6 +404,22 @@ religious_rights = {
 		religious_rights_protected = {
 			is_valid = {
 				scope:subject.faith != scope:liege.faith
+				OR = {
+					NOT = {
+						scope:liege = {
+							OR = {
+								rite = { rite_has_tenet = tenet_tax_nonbelievers }
+								faith = { has_doctrine = special_doctrine_jizya }
+							}
+						}
+					}
+					scope:subject = {
+						NOT = {
+							vassal_contract_has_flag = vassal_contract_cannot_revoke_titles
+						}
+						vassal_contract_has_flag = religiously_protected
+					}
+				}
 			}
 			parent = religious_rights_none
 			position = { 1 0 }
@@ -584,6 +614,11 @@ war_declaration_rights = {
 
 council_rights = {
 	display_mode = checkbox
+	is_shown = {
+		scope:liege = {
+			is_nomad = no
+		}
+	}
 	obligation_levels = {
 		council_rights_none = {
 			default = yes
@@ -625,15 +660,15 @@ title_revocation_rights = {
 		}
 	}
 	#ADDED
-	can_be_changed = {
-		NOT = { scope:subject = { is_imprisoned_by = scope:liege } }
-	}
+	#can_be_changed = {
+	#	NOT = { scope:subject = { is_imprisoned_by = scope:liege } }
+	#}
 	obligation_levels = {
 		title_revocation_rights_default = {
 			default = yes
 			position = { 0 0 }
 
-			ai_liege_desire = 1
+			ai_liege_desire = 3		#prev 1
 			ai_subject_desire = 0
 		}
 		title_revocation_rights_protected = {
@@ -672,10 +707,10 @@ title_revocation_rights = {
 jizya_special_rights = {
 	display_mode = checkbox
 	is_shown = {
-		scope:liege.faith = {
+		scope:liege = {
 			OR = {
-				has_doctrine = tenet_tax_nonbelievers
-				has_doctrine = special_doctrine_jizya
+				rite = { rite_has_tenet = tenet_tax_nonbelievers }
+				faith = { has_doctrine = special_doctrine_jizya }
 			}
 		}
 		scope:subject.faith != scope:liege.faith
@@ -702,13 +737,13 @@ jizya_special_rights = {
 		}
 		jizya_special_rights_granted = {
 			is_valid = {
-				scope:liege.faith = {
+				scope:liege = {
 					OR = {
-						has_doctrine = tenet_tax_nonbelievers
-						has_doctrine = special_doctrine_jizya
+						rite = { rite_has_tenet = tenet_tax_nonbelievers }
+						faith = { has_doctrine = special_doctrine_jizya }
 					}
 				}
-				NOT = {	scope:subject.faith = scope:liege.faith }
+				scope:subject.faith != scope:liege.faith
 			}
 			parent = jizya_special_rights_default
 			position = { 1 0 }
@@ -735,6 +770,11 @@ jizya_special_rights = {
 
 kurultai_rights = {
 	display_mode = checkbox
+	is_shown = {
+		scope:liege = {
+			is_nomad = yes
+		}
+	}
 	obligation_levels = {
 		kurultai_rights_none = {
 			default = yes

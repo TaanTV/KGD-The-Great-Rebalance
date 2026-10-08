@@ -27,6 +27,7 @@ foster_legitimacy_diarch_interaction = {
 	ai_frequency = 18
 	
 	is_shown = {
+		has_game_rule = bkt_additional_content_enabled
 		NOT = {
 			scope:recipient = scope:actor
 		}
@@ -40,8 +41,8 @@ foster_legitimacy_diarch_interaction = {
 			has_diarchy_type = regency
 		}
 		NAND = {
-			scope:actor = { government_allows = administrative }
-			scope:recipient = { government_allows = administrative }
+			scope:actor = { government_has_mechanic = administrative }
+			scope:recipient = { government_has_mechanic = administrative }
 		}
 	}
 
@@ -469,6 +470,7 @@ damage_legitimacy_diarch_interaction = {
 	ai_frequency = 18
 	
 	is_shown = {
+		has_game_rule = bkt_additional_content_enabled
 		NOT = {
 			scope:recipient = scope:actor
 		}
@@ -482,8 +484,8 @@ damage_legitimacy_diarch_interaction = {
 			has_diarchy_type = regency
 		}
 		NAND = {
-			scope:actor = { government_allows = administrative }
-			scope:recipient = { government_allows = administrative }
+			scope:actor = { government_has_mechanic = administrative }
+			scope:recipient = { government_has_mechanic = administrative }
 		}
 	}
 

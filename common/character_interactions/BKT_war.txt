@@ -3,18 +3,20 @@
 	common_interaction = yes
 	special_interaction = declare_war_interaction
 	interface = declare_war
-	interface_priority = 70
+	interface_priority = 80
 	popup_on_receive = yes
 	pause_on_receive = no # this is handled by the interface instead
 
 	desc = declare_war_desc
 
 	is_shown = {
+		scope:recipient != scope:puppet_or_actor
+		# Only differs from puppet_or_actor on puppet actions; a puppet cannot be ordered to attack their own puppeteer
 		scope:recipient != scope:actor
 		scope:recipient = {
 			is_playable_character = yes
 		}
-		scope:actor = {
+		scope:puppet_or_actor ?= {
 			NOT = {
 				is_at_war_with = scope:recipient
 			}
@@ -22,7 +24,7 @@
 	}
 
 	is_valid_showing_failures_only = {
-		scope:actor = {
+		scope:puppet_or_actor = {
 			#ADDED - heh.
 			#The one for AI is here because i ASSUME it's cheaper performance wise
 			#to just block the interaction entirely instead of every individual CB
@@ -35,238 +37,17 @@
 			#	}
 			#	can_declare_war_according_to_laws_trigger = yes
 			#}
-			custom_tooltip = {
-				text = sworn_peace_tt
-				NOT = { has_character_flag = sworn_peace }
-			}
-			NOT = { has_trait = incapable }
-			can_attack_in_hierarchy = scope:recipient
 			trigger_if = {
-				limit = {
-					NOT = {
-						government_has_flag = can_start_war_with_raised_troops
-					}
-				}
-				NOT = {
-					has_raised_armies = yes
+				limit = { government_has_flag = government_is_theocracy }
+				custom_tooltip = {
+					text = theocratic_government_war_restriction
+					has_any_display_cb_on = scope:recipient
 				}
 			}
 			trigger_else = {
-				custom_description = {
-					text = army_blocks_defender_army
-					NOT = {
-						any_army = {
-							location.county.holder ?= scope:recipient
-						}
-					}
-				}
+				has_any_display_cb_on = scope:recipient
 			}
-			has_any_display_cb_on = scope:recipient
-			NOT = {
-				is_allied_in_war = scope:recipient
-			}
-			custom_description = {
-				text = "is_not_bankrupt"
-				is_in_debt = no
-			}
-			NOT = {
-				custom_description = {
-					text = "is_in_an_activity"
-					exists = involved_activity
-				}
-			}
-			trigger_if = {
-				limit = {
-					culture = { has_cultural_parameter = cannot_attack_allies }
-				}
-				NOT = {
-					is_allied_to = scope:recipient
-				}
-			}
-			trigger_if = {
-				limit = {
-					culture = { has_cultural_parameter = cannot_attack_truces }
-				}
-				NOT = {
-					has_truce = scope:recipient
-				}
-			}
-			is_imprisoned = no
-			trigger_if = {
-				limit = {
-					has_variable_list = subjugation_offer_under_consideration
-				}
-				custom_description = {
-					text = is_not_considering_offer_of_subjugation
-					NOT = {
-						is_target_in_variable_list = {
-							name = subjugation_offer_under_consideration
-							target = scope:recipient
-						}
-					}
-				}
-			}
-			trigger_if = {
-				limit = {
-					has_realm_law = japanese_bureaucracy_3
-					this != top_liege
-				}
-				custom_tooltip = {
-					text = non_admin_vassal_japanese_bureaucracy_3
-					government_allows = administrative
-				}
-			}
-		}
-		scope:recipient = {
-			custom_tooltip = {
-				text = is_a_herder_recipient_tt
-				NOT = { government_has_flag = government_is_herder } # herders can't fight
-			}
-			NOT = { is_tributary_of_suzerain_or_above = scope:actor } # can't fight your tributaries or your tributaries' tributaries
-			NOT = { has_strong_hook = scope:actor }
-			trigger_if = {
-				limit = { is_imprisoned = yes }
-				imprisoner != scope:actor
-			}
-			#ADDED
-			trigger_if = {
-				limit = { 
-					top_liege != this
-					top_liege != scope:actor.top_liege 
-				}
-				custom_tooltip = {
-					text = cant_attack_lower_tier_foreign_vassals
-					highest_held_title_tier >= scope:actor.highest_held_title_tier
-				}
-			}
-		}
-		scope:actor = {
-			trigger_if = {
-				limit = {
-					NOT = { government_allows = administrative }
-					liege ?= {
-						has_realm_law_flag = vassal_all_wars_banned_permanent
-						this != scope:actor
-					}
-					#ADDED - feels like this one should be here?
-					NOT = { vassal_contract_has_flag = vassal_contract_war_override }
-				}
-				custom_tooltip = {
-					text = admin_all_vassal_wars_banned
-					always = no
-				}
-			}
-			trigger_if = {
-				limit = {
-					government_allows = administrative
-					top_liege = scope:recipient.top_liege
-					scope:recipient = { government_allows = administrative }
-					top_liege != scope:recipient
-					NOT = {
-						top_participant_group:dynastic_cycle ?= {
-							has_participant_group_parameter = dynastic_cycle_vassal_internal_wars_allowed
-						}
-					}
-				}
-				custom_tooltip = {
-					text = admin_cannot_declare_internal_wars
-					always = no
-				}
-			}
-			trigger_if = { # Admin - Laws only allow frontier and naval themes to declare war
-				limit = {
-					government_allows = administrative
-					top_liege != this
-					top_liege = {
-						this != scope:recipient.top_liege
-						has_realm_law_flag = admin_vassal_wars_restricted
-					}
-				}
-				custom_tooltip = {
-					text = admin_all_vassal_wars_banned
-					OR = {
-						vassal_contract_has_flag = admin_theme_frontier
-						vassal_contract_has_flag = admin_theme_naval
-					}
-				}
-			}
-			trigger_if = { # Admin - Laws only allow frontier and naval themes to declare war IF they have permission
-				limit = {
-					government_allows = administrative
-					OR = {
-						vassal_contract_has_flag = admin_theme_frontier
-						vassal_contract_has_flag = admin_theme_naval
-					}
-					top_liege = {
-						this != scope:recipient.top_liege
-						has_realm_law_flag = admin_vassal_wars_permission_only
-						NOT = { has_realm_law_flag = admin_vassal_wars_banned }
-					}
-				}
-				custom_tooltip = {
-					text = admin_vassal_wars_permission_only_desc
-					has_variable = admin_permission_to_declare_war
-				}
-			}
-			trigger_if = { # Admin - Laws prevent all vassals from declaring war
-				limit = {
-					government_allows = administrative
-					OR = {
-						vassal_contract_has_flag = admin_theme_frontier
-						vassal_contract_has_flag = admin_theme_naval
-					}
-					top_liege = {
-						this != scope:recipient.top_liege
-						has_realm_law_flag = admin_vassal_wars_banned
-					}
-				}
-				custom_tooltip = {
-					text = admin_all_vassal_wars_banned
-					always = no
-				}
-			}
-			trigger_if = {
-				limit = {
-					scope:recipient = {
-						OR = {
-							has_subject_contract_group = tributary_celestial
-							has_subject_contract_group = tributary_hegemonic
-						}
-					}
-					is_independent_ruler = no # to avoid duplicating tooltips already applying to the top_liege
-				}
-				NOT = {
-					scope:recipient = {
-						is_tributary_of = scope:actor.top_liege
-					}
-				}
-			}
-		}
-		scope:actor = {
-			trigger_if = {
-				limit = { has_government = landless_adventurer_government }
-				custom_tooltip = {
-					text = camp_located_in_defender_realm.tt
-					domicile.domicile_location.county.holder = {
-						NOR = {
-							this = scope:recipient
-							any_liege_or_above = { this = scope:recipient }
-						}
-					}
-				}
-			}
-		}
-		trigger_if = {
-			limit = {
-				scope:actor = {
-					is_confederation_member = yes
-				}
-			}
-			NOT = {
-				scope:recipient = {
-					is_member_of_confederation = scope:actor.confederation
-				}
-			}
+			allows_declaring_war_against_target_trigger = { TARGET = scope:recipient }
 		}
 	}
 
@@ -274,11 +55,11 @@
 		custom_description = {
 			text = "declare_war_hook_on_liege"
 			OR = {
-				war_declarer_needs_hook_on_liege = no
+				scope:puppet_or_actor = { war_declarer_needs_hook_on_liege = no }
 				always = scope:hook
 			}
 		}
-		scope:actor = {
+		scope:puppet_or_actor = {
 			NOR = {
 				is_at_war_with = scope:recipient
 				custom_description = { #A vassal cannot go to war against someone their Liege is already at war with
@@ -303,10 +84,10 @@
 	send_options_exclusive = no
 	send_option = {
 		is_shown = {
-			war_declarer_needs_hook_on_liege = yes
+			scope:puppet_or_actor = { war_declarer_needs_hook_on_liege = yes }
 		}
 		is_valid = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				has_usable_hook = liege
 			}
 		}
@@ -315,20 +96,20 @@
 		can_invalidate_interaction = yes
 	}
 	should_use_extra_icon = {
-		war_declarer_needs_hook_on_liege = yes
-		scope:actor = { has_usable_hook = liege }
+		scope:puppet_or_actor = { war_declarer_needs_hook_on_liege = yes }
+		scope:puppet_or_actor = { has_usable_hook = liege }
 	}
 	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
-	
+
 	on_accept = {
-		scope:actor = {
+		scope:puppet_or_actor = {
 			#Feedback!
 			hidden_effect = {
 				send_interface_toast = {
 					type = event_toast_effect_neutral
 					title = declare_war_interaction_notification
 
-					left_icon = scope:actor					
+					left_icon = scope:puppet_or_actor
 					right_icon = scope:recipient
 
 					custom_tooltip = declare_war_interaction_notification_tooltip
@@ -369,7 +150,7 @@
 					NOT = { has_relation_rival = scope:recipient } #To enable really strange love stories
 					any_character_war = {
 						casus_belli = {
-							primary_attacker = scope:actor
+							primary_attacker = scope:puppet_or_actor
 							primary_defender = scope:recipient
 							any_target_title = { }
 						}
@@ -389,7 +170,7 @@
 					limit = {
 						any_character_war = {
 							primary_attacker = {
-								is_vassal_or_below_of = scope:actor
+								is_vassal_or_below_of = scope:puppet_or_actor
 								trigger_if = { #Ai should never invalidate a player's war!
 									limit = {
 										this = { is_ai = no }
@@ -404,7 +185,7 @@
 					every_character_war = {
 						limit = {
 							primary_attacker = {
-								is_vassal_or_below_of = scope:actor
+								is_vassal_or_below_of = scope:puppet_or_actor
 								trigger_if = { #Ai should never invalidate a player's war!
 									limit = {
 										this = { is_ai = no }
@@ -428,7 +209,7 @@
 							save_temporary_scope_as = attacked_vassal
 							any_character_war = {
 								casus_belli = {
-									primary_attacker = scope:actor
+									primary_attacker = scope:puppet_or_actor
 									primary_defender = scope:recipient
 									any_target_title = {
 										holder = {
@@ -447,7 +228,7 @@
 						limit = {
 							any_character_war = {
 								casus_belli = {
-									primary_attacker = scope:actor
+									primary_attacker = scope:puppet_or_actor
 									primary_defender = scope:recipient
 									any_target_title = {
 										holder = {
@@ -464,7 +245,7 @@
 							type = msg_war_declared_on_liege
 							title = declare_war_interaction_notification
 
-							left_icon = scope:actor					
+							left_icon = scope:puppet_or_actor
 							right_icon = scope:recipient
 
 							custom_tooltip = declare_war_interaction_notification_tooltip
@@ -472,7 +253,7 @@
 					}
 				}
 			}
-			
+
 			# If you are admin and had permission to start war, spend said permission
 			if = {
 				limit = {
@@ -481,8 +262,26 @@
 				remove_variable = admin_permission_to_declare_war
 			}
 		}
+		hidden_effect = {
+			if = {
+				limit = {
+					scope:is_puppet_action ?= yes
+				}
+				scope:actor = {
+					send_interface_toast = {
+						type = event_toast_effect_neutral
+						title = declare_war_interaction_notification
+
+						left_icon = scope:puppet_or_actor
+						right_icon = scope:recipient
+
+						custom_tooltip = declare_war_interaction_notification_tooltip
+					}
+				}
+			}
+		}
 	}
-	
+
 	auto_accept = yes
 }
 
@@ -601,16 +400,20 @@ end_war_attacker_victory_interaction = {
 				save_scope_as = defender_loser
 			}
 		}
-
-		if = {
-			limit = {
-				scope:war ?= {
-					using_cb = fp3_free_house_member_cb
+		scope:war ?= {
+			casus_belli = {
+				primary_attacker = {
+					save_scope_as = attacker_winner
+					set_signature_weapon_effect = yes
+				}
+				primary_defender = {
+					save_scope_as = defender_loser
 				}
 			}
-		}
-		else = {
-			scope:war ?= { #Unop ck3-tiger
+			if = {
+				limit = {
+					NOT = { using_cb = fp3_free_house_member_cb }
+				}
 				release_prisoners_of_war_effect = yes
 			}
 		}
@@ -630,7 +433,7 @@ end_war_attacker_victory_interaction = {
 			if = {
 				limit = {
 					exists = scope:secondary_actor
-					scope:recipient = { is_landed_or_landless_administrative = yes }
+					scope:recipient = { is_landed_or_landless_administrative_or_theocratic = yes }
 				}
 				hostage_depart_effect = {
 					HOSTAGE = scope:secondary_actor
@@ -641,7 +444,7 @@ end_war_attacker_victory_interaction = {
 			if = {
 				limit = {
 					exists = scope:secondary_recipient
-					scope:actor = { is_landed_or_landless_administrative = yes }
+					scope:actor = { is_landed_or_landless_administrative_or_theocratic = yes }
 				}
 				hostage_depart_effect = {
 					HOSTAGE = scope:secondary_recipient
@@ -696,8 +499,7 @@ end_war_attacker_victory_interaction = {
 		#Special bookmark event for Aella of Northumbria
 		bookmark_867_northmen_aellas_capture_war_imprisonment_effect = yes
 
-		#ADDED - stolen from UNOP
-		scope:war ?= { #Unop ck3-tiger
+		scope:war ?= {
 			end_war = attacker
 		}
 	}
@@ -705,90 +507,6 @@ end_war_attacker_victory_interaction = {
 	on_decline = {
 	}
 
-	ai_potential = {
-		is_at_war = yes
-		any_character_war = {
-			is_war_leader = root
-			OR = {
-				attacker_war_score >= 100
-				AND = {
-					OR = {
-						attacker_war_score >= 90
-						AND = {
-							attacker_war_score >= 80
-							root = {
-								dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
-							}
-						}
-					}
-					root = {
-						has_perk = peacemaker_perk
-					}
-					primary_defender = {
-						is_ai = yes
-					}
-				}
-				AND = {
-					OR = {
-						attacker_war_score >= 90
-						AND = {
-							attacker_war_score >= 80
-							root = {
-								has_perk = peacemaker_perk
-							}
-						}
-					}
-					root = {
-						dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
-					}
-					primary_defender = {
-						is_ai = yes
-					}
-				}
-				#SENT A SCARY SEVERED HEAD AAAAHHH
-				AND = {
-					attacker_war_score >= 70
-					primary_defender = {
-						is_ai = yes
-						save_temporary_scope_as = defender
-					}
-					root = {
-						has_variable = peace_acceptance_head_scare
-						var:peace_acceptance_head_scare = {
-							this = scope:defender
-						}
-					}
-				}
-				primary_defender = {
-					is_ai = yes
-					has_variable = conqueror
-					#ADDED - the next two
-					prev.attacker_war_score > 10
-					NOT = { prev.primary_attacker = { has_variable = conqueror } }
-				}
-				#ADDED
-				AND = {
-					primary_defender = root
-					attacker_war_score >= 0
-					war_days >= 560		#no, 1.5 years #2 (730) years
-					NOR = {
-						using_cb = undirected_great_holy_war
-						using_cb = mongol_invasion_war
-						using_cb = mongol_realm_invasion_war
-					}
-					root = {
-						is_landed = yes
-						sub_realm_size < 15	
-						OR = {
-							current_military_strength < 100
-							current_raised_military_strength <= twenty_percent_of_max_military_strength
-						}
-					}
-				}
-					
-			}
-		}
-	}
 
 	ai_will_do = {
 		base = 0
@@ -896,11 +614,14 @@ end_war_attacker_victory_interaction = {
 					current_raised_military_strength <= twenty_percent_of_max_military_strength
 					current_military_strength < 100
 				}
-				any_war_ally = {
-					OR = {
-						current_raised_military_strength <= twenty_percent_of_max_military_strength	#They are dead
-						current_military_strength < 100
-						is_landed = no		#or they're LAAMP
+				trigger_if = {
+					limit = { any_war_ally = { exists = this } }
+					any_war_ally = {
+						OR = {
+							current_raised_military_strength <= twenty_percent_of_max_military_strength	#They are dead
+							current_military_strength < 100
+							is_landed = no		#or they're LAAMP
+						}
 					}
 				}
 				any_sub_realm_county = {
@@ -1010,8 +731,8 @@ end_war_attacker_victory_interaction = {
 		}
 		# This is a bit of a hidden modifier, only used to make sure we get the right icon when you force it through at 100 war score, and the opponent has more realm left
 		modifier = {
-			scope:war = { 
-				attacker_war_score >= 100 
+			scope:war = {
+				attacker_war_score >= 100
 				OR = {
 					exists = scope:secondary_actor
 					exists = scope:secondary_recipient
@@ -1047,7 +768,7 @@ end_war_attacker_victory_interaction = {
 					}
 					AND = {
 						scope:recipient = { is_ai = yes }
-						scope:war.casus_belli.primary_attacker = scope:recipient #Unop ck3-tiger
+						scope:war.casus_belli.primary_attacker ?= scope:recipient
 					}
 					scope:war = { # Conquerors know when to fold		#ADDED CHANGED removed .casus_belli 
 						#ADDED - nah you fight those until the bitter end! (and added warscore check)
@@ -1105,6 +826,90 @@ end_war_attacker_victory_interaction = {
 		}
 	}
 
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_at_war = yes
+			any_character_war = {
+				is_war_leader = root
+				OR = {
+					attacker_war_score >= 100
+					AND = {
+						primary_defender ?= {
+							is_ai = yes
+						}
+						OR = {
+							attacker_war_score >= 90
+							AND = {
+								root = {
+									dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+								}
+								attacker_war_score >= 80
+							}
+						}
+						root = {
+							has_perk = peacemaker_perk
+						}
+					}
+					AND = {
+						primary_defender ?= {
+							is_ai = yes
+						}
+						root = {
+							dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+						}
+						OR = {
+							attacker_war_score >= 90
+							AND = {
+								root = {
+									has_perk = peacemaker_perk
+								}
+								attacker_war_score >= 80
+							}
+						}
+					}
+					#SENT A SCARY SEVERED HEAD AAAAHHH
+					AND = {
+						primary_defender ?= {
+							save_temporary_scope_as = defender
+							is_ai = yes
+						}
+						attacker_war_score >= 70
+						root = {
+							has_variable = peace_acceptance_head_scare
+							var:peace_acceptance_head_scare ?= {
+								this = scope:defender
+							}
+						}
+					}
+					primary_defender ?= {
+						is_ai = yes
+						has_variable = conqueror
+					}
+					#ADDED
+					AND = {
+						primary_defender = root
+						attacker_war_score >= 0
+						war_days >= 560		#no, 1.5 years #2 (730) years
+						NOR = {
+							using_cb = undirected_great_holy_war
+							using_cb = mongol_invasion_war
+							using_cb = mongol_realm_invasion_war
+						}
+						root = {
+							is_landed = yes
+							sub_realm_size < 15	
+							OR = {
+								current_military_strength < 100
+								current_raised_military_strength <= twenty_percent_of_max_military_strength
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	is_valid_showing_failures_only = {
 		scope:war = {
 			has_valid_casus_belli = yes
@@ -1133,6 +938,527 @@ end_war_attacker_victory_interaction = {
 					}
 				}
 			}
+		}
+	}
+}
+
+end_war_attacker_defeat_interaction = {
+	special_interaction = end_war_attacker_defeat_interaction
+	hidden = yes
+	use_diplomatic_range = no
+	secondary_scopes_optional = yes
+
+	ai_targets = {
+		ai_recipients = primary_war_enemies
+	}
+	
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 1
+		duchy = 1
+		kingdom = 1
+		empire = 1
+		hegemony = 1
+	}
+	
+	# Depending on who was the attacker, we need to send a different notification message to the recipient.
+	notification_text = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:recipient = {
+						any_character_war = {
+							casus_belli = {
+								primary_attacker = scope:actor
+							}
+						}
+					}
+				}
+				desc = end_war_attacker_defeat_attacker_desc
+			}
+			desc = end_war_attacker_defeat_defender_desc
+		}
+	}
+	
+	populate_actor_list = {
+		scope:actor = {
+			every_close_family_member = {
+				limit = {
+					# Unlanded, at sender's court, child/sibling/nibling/grandchild
+					bp2_valid_to_offer_as_hostage_trigger = { SENDER = scope:actor }
+				}
+				add_to_list = characters
+			}
+		}
+	}
+
+	populate_recipient_list = {
+		scope:recipient = {
+			every_close_family_member = {
+				limit = {
+					# Unlanded, at sender's court, child/sibling/nibling/grandchild
+					bp2_valid_to_offer_as_hostage_trigger = { SENDER = scope:recipient }
+				}
+				add_to_list = characters
+			}
+		}
+	}
+
+	can_be_picked = {
+		scope:war ?= {
+			custom_tooltip = {
+				text = hostage_exchange_invalid_for_crusade_tt
+				NOR = {
+					using_cb = undirected_great_holy_war
+					using_cb = directed_great_holy_war
+				}
+			}
+			custom_tooltip = {
+				text = hostage_exchange_invalid_for_cb_tt
+				bp2_hostage_exchange_invalid_cb_trigger = no
+			}
+		}
+	}
+
+	redirect = {
+		# secondary recipient is always set, so we need to clear it
+		# if can_send condition depends on the scope being empty
+		clear_saved_scope = secondary_recipient
+	}
+
+	on_accept = {
+		scope:war ?= {
+			casus_belli = {
+				primary_attacker = {
+					save_scope_as = attacker_loser
+				}
+				primary_defender = {
+					save_scope_as = defender_winner
+					set_signature_weapon_effect = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { using_cb = fp3_free_house_member_cb }
+				}
+				release_prisoners_of_war_effect = yes
+			}
+		}
+
+		# Hostages
+		# Save scopes for clarity
+		if = {
+			limit = {
+				scope:war ?= {
+					NOR = {
+						using_cb = undirected_great_holy_war
+						using_cb = directed_great_holy_war
+					}
+					bp2_hostage_exchange_invalid_cb_trigger = no
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:secondary_actor
+					scope:recipient = { is_landed = yes }
+				}
+				hostage_depart_effect = {
+					HOSTAGE = scope:secondary_actor
+					WARDEN = scope:recipient
+					HOME_COURT = scope:actor
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:secondary_recipient
+					scope:actor = { is_landed = yes }
+				}
+				hostage_depart_effect = {
+					HOSTAGE = scope:secondary_recipient
+					WARDEN = scope:actor
+					HOME_COURT = scope:recipient
+				}
+			}
+		}
+
+		#Send notification to vassals
+		hidden_effect = {
+			scope:attacker_loser = {
+				if = {
+					limit = {
+						any_vassal = {
+							this != scope:defender_winner
+						}
+					}
+					every_vassal = {
+						limit = {
+							this != scope:defender_winner
+						}
+						send_interface_toast = {
+							type = msg_liege_war_ended_defender_win
+							title = war_event.notification_liege_loss.t
+							left_icon = scope:attacker_loser
+							right_icon = scope:defender_winner
+							custom_tooltip = war_event.1905
+						}
+					}
+				}
+			}
+			scope:defender_winner = {
+				if = {
+					limit = {
+						any_vassal = { this != scope:attacker_loser }
+					}
+					every_vassal = {
+						limit = {
+							this != scope:attacker_loser
+						}
+						send_interface_toast = {
+							type = msg_liege_war_ended_defender_win
+							title = war_event.notification_liege_win.t
+							left_icon = scope:defender_winner
+							right_icon = scope:attacker_loser
+							custom_tooltip = war_event.1906
+						}
+					}
+				}
+			}
+		}
+
+		scope:war ?= {
+			end_war = defender
+		}
+	}
+
+	on_decline = {
+
+	}
+
+	ai_will_do = {
+		base = 0
+		
+		modifier = {
+			scope:war = {
+				primary_defender = scope:actor
+				OR = {
+					defender_war_score >= 100
+					AND = {
+						defender_war_score >= 90
+						scope:actor = {
+							OR = {
+								has_perk = peacemaker_perk
+								culture = {
+									has_cultural_parameter = can_end_defensive_wars_earlier
+								}
+							}
+						}
+						primary_attacker = {
+							is_ai = yes
+						}
+					}
+					AND = {
+						defender_war_score >= 90
+						scope:actor = {
+							dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+						}
+						primary_attacker = {
+							is_ai = yes
+						}
+					}
+					AND = {
+						defender_war_score >= 70
+						primary_attacker = {
+							is_ai = yes
+							save_temporary_scope_as = attacker
+						}
+						root = {
+							has_variable = peace_acceptance_head_scare
+							var:peace_acceptance_head_scare = {
+								this = scope:attacker
+							}
+						}
+					}
+					#ADDED - maybe surrender if the war is hopeless? Baron edition
+					AND = {
+						scope:recipient.highest_held_title_tier = tier_barony
+						scope:war = {
+							primary_attacker = scope:recipient
+							OR = {
+								defender_war_score > 10	#any defeat on top of the occupation will do
+								AND = {
+									scope:recipient.current_raised_military_strength < 100
+									war_days > 180		#makes cheese inconvenient 
+								}
+								AND = {		#if the war is long enough and they're not winning they'll surrender
+									defender_war_score > 0
+									war_days > 365
+								}
+							}
+						}
+						scope:recipient = {
+							#highest_held_title_tier = tier_barony
+							OR = {		#again, trying to prevent real long wars.
+								primary_title.title_province = { 
+									OR = {
+										is_occupied = yes 
+										fort_level < 1
+									}
+								}
+								scope:war.defender_war_score > 50
+								scope:war = {
+									defender_war_score > 0
+									war_days > 730
+								}
+							}
+							trigger_if = {
+								limit = { any_war_ally = { exists = this } }
+								OR = {
+									scope:war = {
+										defender_war_score > 0
+										war_days > 730
+									}
+									any_war_ally = {
+										OR = {
+											current_raised_military_strength <= twenty_percent_of_max_military_strength	#They are dead
+											current_military_strength < 100
+											is_landed = no		#or they're LAAMP
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		modifier = {
+			scope:war = {
+				primary_attacker = scope:actor
+				defender_war_score >= 100
+				days_since_max_war_score >= 180
+			}
+			add = 100
+		}
+	}
+	
+	ai_accept = {
+		base = -99
+
+		compare_modifier = {
+			target = scope:war
+			value = defender_war_score
+			desc = "WARSCORE_MODIFIER"
+		}
+		modifier = {
+			add = 1000
+			scope:war.casus_belli = {
+				primary_defender = scope:recipient
+			}
+			desc = "WOULD_WIN_MODIFIER"
+		}
+		modifier = {
+			scope:war.casus_belli = {
+				primary_defender = {
+					has_perk = peacemaker_perk
+					this != scope:recipient
+				}
+			}
+			
+			add = peacemaker_value
+			
+			desc = "PEACEMAKER_PERK_MODIFIER"
+		}
+		modifier = {
+			scope:war.casus_belli = {
+				primary_defender = {
+					dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+					NOT = { this = scope:recipient }
+				}
+			}
+			
+			add = 10
+			
+			desc = "NOMAD_LEGACY_PERK_MODIFIER"
+		}
+
+		modifier = {
+			scope:war.casus_belli = {
+				primary_attacker = {
+					is_ai = yes
+					save_temporary_scope_as = attacker
+				}
+				primary_defender = {
+					has_variable = peace_acceptance_head_scare
+					var:peace_acceptance_head_scare = {
+						this = scope:attacker
+					}
+				}
+			}
+			add = 30
+			desc = "COWED_BY_SEVERED_HEAD_MODIFIER"
+		}
+		modifier = {
+			scope:war.casus_belli = {
+				primary_defender = {
+					culture = {
+						has_cultural_parameter = can_end_defensive_wars_earlier
+					}
+					this != scope:recipient
+				}
+			}
+			
+			add = 10
+			
+			desc = "TRADITION_BONUS_DEFENSIVE_WARS"
+		}
+		# Hostages
+		modifier = {
+			exists = scope:secondary_actor
+			add = war_actor_hostage_value
+			desc = WAR_OVERVIEW_HOSTAGE_OFFER_VALUE
+		}
+		modifier = {
+			exists = scope:secondary_recipient
+			add = war_recipient_hostage_value
+			desc = WAR_OVERVIEW_HOSTAGE_DEMAND_VALUE
+		}
+	}
+
+	auto_accept = {
+		OR = {
+			scope:war ?= {
+				defender_war_score >= 100
+			}
+			AND = {
+				scope:recipient = { is_ai = yes }
+				scope:war.casus_belli.primary_defender ?= scope:recipient
+			}
+			#ADDED - maybe surrender if the war is hopeless? Baron edition
+			AND = {
+				custom_description = {
+					text = auto_accept_interaction_ai	
+					object = scope:recipient
+					scope:recipient.highest_held_title_tier = tier_barony
+					scope:war = {
+						primary_attacker = scope:recipient
+						OR = {
+							defender_war_score > 10	#any defeat on top of the occupation will do
+							AND = {
+								scope:recipient.current_raised_military_strength < 100
+								war_days > 180		#makes cheese inconvenient 
+							}
+							AND = {		#if the war is long enough and they're not winning they'll surrender
+								defender_war_score > 0
+								war_days > 365
+							}
+						}
+					}
+					scope:recipient = {
+						#highest_held_title_tier = tier_barony
+						OR = {		#again, trying to prevent real long wars.
+							primary_title.title_province = { 
+								OR = {
+									is_occupied = yes 
+									fort_level < 1
+								}
+							}
+							scope:war.defender_war_score > 50
+							scope:war = {
+								defender_war_score > 0
+								war_days > 730
+							}
+						}
+						trigger_if = {
+							limit = { any_war_ally = { exists = this } }
+							OR = {
+								scope:war = {
+									defender_war_score > 0
+									war_days > 730
+								}
+								any_war_ally = {
+									OR = {
+										current_raised_military_strength <= twenty_percent_of_max_military_strength	#They are dead
+										current_military_strength < 100
+										is_landed = no		#or they're LAAMP
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_at_war = yes
+			any_character_war = {
+				is_war_leader = root
+				OR = {
+					defender_war_score >= 100
+					AND = {
+						primary_defender ?= {
+							is_ai = yes
+						}
+						OR = {
+							attacker_war_score >= 90
+							AND = {
+								root = {
+									dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+								}
+								attacker_war_score >= 80
+							}
+						}
+						root = {
+							has_perk = peacemaker_perk
+						}
+					}
+					AND = {
+						primary_defender ?= {
+							is_ai = yes
+						}
+						root = {
+							dynasty ?= { has_dynasty_perk = mpo_nomad_legacy_3 }
+						}
+						OR = {
+							attacker_war_score >= 90
+							AND = {
+								root = {
+									has_perk = peacemaker_perk
+								}
+								attacker_war_score >= 80
+							}
+						}
+					}
+					AND = {
+						primary_attacker ?= {
+							save_temporary_scope_as = attacker
+							is_ai = yes
+						}
+						defender_war_score >= 70
+						root = {
+							has_variable = peace_acceptance_head_scare
+							var:peace_acceptance_head_scare ?= {
+								this = scope:attacker
+							}
+						}
+					}
+					#ADDED
+					AND = {
+						defender_war_score > 0
+						primary_attacker.highest_held_title_tier = tier_barony
+					}
+				}
+			}
+		}
+	}
+	
+	is_valid_showing_failures_only = {
+		scope:war ?= {
+			has_valid_casus_belli = yes
 		}
 	}
 }

@@ -1,0 +1,181 @@
+﻿namespace = ep3_laamps
+
+####
+# ep3_laamps.0001-0003 - Become Adventurer - Conquest
+# ep3_laamps.0010-0012 - Become Adventurer - Succession
+# ep3_laamps.0020-0021 - Become Adventurer - Exile
+# ep3_laamps.0030-0032 - Become Adventurer - Voluntary
+# ep3_laamps.0040-0042 - Become Adventurer - Revocation
+# ep3_laamps.0050-0051 - Become Adventurer - Runaway
+# ep3_laamps.0100-0102 - Become Landed - Purchase
+# ep3_laamps.0200-0201 - Become Landed - Sponsored Invasion
+# ep3_laamps.0300-0302 - Become Landed - Negotiated
+# ep3_laamps.0400-0412 - Become Landed - Seize Realm
+##
+# 5000-5998 - Generalist LAAMP events
+###
+
+#  //\         /\\
+# || * \ . . / * ||
+#  \\____\X/____//
+#   / *  /O\  * \
+#   \__/  "  \__/
+#      BRÖTHER
+# I CRAVE THE LAAMP
+
+
+##################################################
+# Become Adventurer - Succession
+# by Joe Parkin
+# 0010-0012
+##################################################
+
+# Setup event - heir
+ep3_laamps.0011 = {
+	type = character_event
+	hidden = yes
+	#ADDED 
+	id_override_priority = 228
+
+	trigger = {
+		save_temporary_scope_as = heir_temp
+		any_sibling = {
+			#ADDED - only ones standing to inherit 
+			trigger_if = {
+				limit = { 
+					scope:heir_temp = {
+						is_male = yes
+						OR = { has_realm_law = male_only_law has_realm_law = male_preference_law }
+					} 
+				}
+				is_male = yes
+			}
+			trigger_else_if = {
+				limit = { 
+					scope:heir_temp = {
+						is_female = yes 
+						OR = { has_realm_law = female_only_law has_realm_law = female_preference_law } 
+					}
+				}
+				is_female = yes
+			}
+			trigger_else = { }
+			ep3_laamp_interesting_sibling_trigger = { COMPARISON = scope:heir_temp }
+		}
+	}
+
+	immediate = {
+		save_scope_as = heir
+		# Save potential laamp
+		ordered_sibling = {
+			limit = {
+				#ADDED - only ones standing to inherit 
+				trigger_if = {
+					limit = { 
+						scope:heir = {
+							is_male = yes
+							OR = { has_realm_law = male_only_law has_realm_law = male_preference_law }
+						} 
+					}
+					is_male = yes
+				}
+				trigger_else_if = {
+					limit = { 
+						scope:heir = {
+							is_female = yes 
+							OR = { has_realm_law = female_only_law has_realm_law = female_preference_law }
+						}
+					}
+					is_female = yes
+				}
+				trigger_else = { }
+				ep3_laamp_interesting_sibling_trigger = { COMPARISON = scope:heir }
+			}
+			order_by = ep3_laamp_chance_score_value
+			save_scope_as = potential_laamp
+		}
+		random = {
+			chance = 0
+			modifier = { # Bonus for players
+				is_ai = no
+				add = 25
+			}
+			modifier = { add = scope:potential_laamp.ep3_laamp_chance_score_value }
+			if = {
+				limit = {
+					is_ai = yes
+					ai_can_valid_to_create_laamp_trigger = yes
+				}
+				scope:potential_laamp = {
+					create_landless_adventurer_title_effect = {
+						REASON = flag:succession
+						FLAVOR_CHAR = scope:heir
+					}
+				}
+				if = { # Debug tracking
+					limit = { exists = global_var:ai_succession_laamp_count }
+					change_global_variable = {
+						name = ai_succession_laamp_count
+						add = 1
+					}
+				}
+				else = {
+					set_global_variable = {
+						name = ai_succession_laamp_count
+						value = 1
+					}
+				}
+				debug_log = "AI became adventurer by succession"
+				debug_log_scopes = yes
+			}
+			else = { trigger_event = ep3_laamps.0010 }
+		}
+	}
+}
+
+# Setup event - deceased
+ep3_laamps.0012 = {
+	hidden = yes
+	type = character_event
+	#ADDED 
+	id_override_priority = 228
+
+	trigger = {
+		has_ep3_dlc_trigger = yes
+		is_landed = yes
+		#ADDED
+		save_temporary_scope_as = deceased_scope
+		player_heir ?= {
+			save_temporary_scope_as = heir_temp
+			any_sibling = {
+				#ADDED - only ones standing to inherit 
+				trigger_if = {
+					limit = { 
+						scope:heir_temp = { is_male = yes }
+						scope:deceased_scope = { OR = { has_realm_law = male_only_law has_realm_law = male_preference_law } } 
+					}
+					is_male = yes
+				}
+				trigger_else_if = {
+					limit = { 
+						scope:heir_temp = { is_female = yes }
+						scope:deceased_scope = { OR = { has_realm_law = female_only_law has_realm_law = female_preference_law } }
+					}
+					is_female = yes
+				}
+				trigger_else = { }
+				ep3_laamp_interesting_sibling_trigger = { COMPARISON = scope:heir_temp }
+			}
+		}
+	}
+
+	immediate = {
+		save_scope_as = deceased
+		player_heir = {
+			trigger_event = {
+				id = ep3_laamps.0011
+				days = 5
+			}
+		}
+	}
+}

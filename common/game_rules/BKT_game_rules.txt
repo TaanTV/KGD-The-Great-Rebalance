@@ -81,11 +81,23 @@ bkt_own_war_declaration_law_toggle = {
 		difficulty
 	}
 	
-	default = bkt_own_war_declaration_law_toggle_enabled
+	default = bkt_own_war_declaration_law_toggle_disabled
 	#dlc = "The Northern Lords"
 	bkt_own_war_declaration_law_toggle_enabled = { flag = GG_can_change_rule }
 	bkt_own_war_declaration_law_toggle_player_only = { flag = GG_can_change_rule }
 	bkt_own_war_declaration_law_toggle_disabled = { flag = GG_can_change_rule }
+}
+
+bkt_gender_laws = {
+	
+	categories = {
+		tweaks
+	}
+	
+	default = bkt_gender_laws_default
+	#dlc = "The Northern Lords"
+	bkt_gender_laws_default = { flag = GG_can_change_rule }
+	bkt_gender_laws_prefer_extreme = { flag = GG_can_change_rule }
 }
 
 bkt_additional_content = {
@@ -94,7 +106,7 @@ bkt_additional_content = {
 		tweaks
 	}
 	
-	default = bkt_additional_content_enabled
+	default = bkt_additional_content_disabled
 	#dlc = "The Northern Lords"
 	bkt_additional_content_enabled = { flag = GG_can_change_rule }
 	bkt_additional_content_disabled = { flag = GG_can_change_rule }

@@ -65,7 +65,7 @@
 ###	random = {
 ###		chance = 33
 ###		modifier = {
-###			government_allows = administrative
+###			government_has_mechanic = administrative
 ###			add = -18
 ###		}
 ###		set_variable = {

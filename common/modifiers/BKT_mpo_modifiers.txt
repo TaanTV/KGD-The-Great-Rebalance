@@ -2,6 +2,7 @@
 develop_fertility_modifier = {
 	icon = county_fertility_positive
 	county_fertility_growth_mult = 0.15
+	#ADDED
 	county_fertility_growth_add = 0.5
 }
 
@@ -10,5 +11,6 @@ stolen_ewes_and_mares_modifier = {
 	icon = county_fertility_positive
 	stacking = yes
 	#county_fertility_growth_mult = 0.1
+	#ADDED
 	county_fertility_growth_add = 0.5
 }

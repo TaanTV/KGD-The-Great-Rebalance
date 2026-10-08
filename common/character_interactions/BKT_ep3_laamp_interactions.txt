@@ -5,7 +5,6 @@
 
 purchase_land_interaction = {
 	category = interaction_category_laamp
-	#interface_priority = 30 #Unop ck3-tiger already defined below
 	icon = purchase_land_interaction
 
 	desc = purchase_land_interaction_desc
@@ -54,21 +53,16 @@ purchase_land_interaction = {
 
 	send_options_exclusive = no
 
+	is_available = {
+		government_has_flag = government_is_landless_adventurer
+	}
+
 	is_shown = {
 		has_ep3_dlc_trigger = yes
-		scope:actor = {
-			government_has_flag = government_is_landless_adventurer
-		}
 		scope:recipient = {
 			is_landed = yes
 			# Need to own the land/cannot directly buy a governorship (procure estate first)
-			NOR = { 
-				government_has_flag = government_is_administrative
-				government_has_flag = government_is_japan_administrative
-				government_has_flag = government_is_japan_feudal
-				government_has_flag = government_is_celestial
-				government_has_flag = government_is_meritocratic
-			} 
+			NOT = { government_allows = noble_families }
 		}
 		scope:recipient != scope:actor
 	}
@@ -161,6 +155,15 @@ purchase_land_interaction = {
 				}
 			}
 		}
+		custom_tooltip = {
+			text = PURCHASE_LAND_COMPLETE_CONTROL_TT
+			trigger_if = {
+				limit = { scope:target = { tier = tier_duchy } }
+				scope:recipient = {
+					completely_controls = scope:target
+				}
+			}
+		}
 		trigger_if = {
 			limit = { exists = scope:target.holder }
 			scope:target.holder = scope:recipient
@@ -168,21 +171,19 @@ purchase_land_interaction = {
 	}
 
 	is_valid_showing_failures_only = {
-		scope:actor = { top_liege = this }
 		scope:actor = {
+			top_liege = this
 			prestige_level >= 2
-		}
-		scope:actor = {
-			NOT = {
+			NOR = {
 				has_trait = gallowsbait
-			}
-		}
-		scope:actor = {
-			NOT = {
 				has_trait = gallivanter
 			}
 		}
-		scope:recipient = { is_at_war = no }
+		scope:recipient = {
+			is_contact_of = scope:actor
+			is_at_war = no
+			NOT = { has_strong_hook = scope:actor }
+		}
 		trigger_if = { # Can't purchase Baronies
 			limit = {
 				scope:target ?= { tier = tier_barony }
@@ -240,9 +241,6 @@ purchase_land_interaction = {
 				always = no
 			}
 		}
-		scope:recipient = {
-			NOT = { has_strong_hook = scope:actor }
-		}
 		#Has to be used instead of diplo range checks in laamp to landed interactions
 		ep3_laamp_diplo_range_trigger = {
 			TARGET = scope:recipient
@@ -275,7 +273,7 @@ purchase_land_interaction = {
 					}
 				}
 			}
-			if = { # Unop: This check was missing from this block, (found inside on_accept)
+			if = {
 				limit = {
 					scope:actor = { has_variable = ep3_grace_to_the_family_var }
 				}
@@ -291,12 +289,43 @@ purchase_land_interaction = {
 	on_accept = {
 		scope:actor = { save_scope_as = adventurer }
 		scope:target = {
+			save_scope_as = purchase_land_target
 			add_to_list = purchased_titles
 			if = {
 				limit = { tier = tier_duchy }
 				every_de_jure_county = {
-					limit = { ep3_purchase_land_valid_county_trigger = yes }
-					add_to_list = purchased_titles
+					limit = {
+						holder ?= {
+							OR = {
+								this = scope:recipient
+								target_is_liege_or_above = scope:recipient
+							}
+						}
+					}
+					if = {
+						limit = { holder = scope:recipient }
+						add_to_list = purchased_titles
+					}
+					else_if = {
+						limit = {
+							holder ?= {
+								highest_held_title_tier < scope:purchase_land_target.tier
+								NOT = { government_has_flag = government_is_administrative }
+								target_is_liege_or_above = scope:recipient
+							}
+						}
+						holder = {
+							if = {
+								limit = {
+									NOT = { is_in_list = purchase_land_vassals_taken }
+								}
+								add_to_list = purchase_land_vassals_taken
+							}
+						}
+					}
+					else = {
+						add_to_list = purchased_titles
+					}
 				}
 			}
 		}
@@ -308,15 +337,17 @@ purchase_land_interaction = {
 		save_scope_value_as = {
 			name = purchase_land_cost
 			value = {
-				every_in_list = {
-					list = purchased_titles
-					if = {
-						limit = { tier = tier_county }
-						add = purchase_land_county_cost_value
-					}
-					else_if = {
-						limit = { tier = tier_duchy }
-						add = purchase_land_duchy_cost_value
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = purchase_land_county_cost_value
+				}
+				else = {
+					add = purchase_land_duchy_cost_value
+					scope:target = {
+						every_de_jure_county = {
+							limit = { ep3_purchase_land_valid_county_trigger = yes }
+							add = purchase_land_county_cost_value
+						}
 					}
 				}
 				if = {
@@ -326,9 +357,7 @@ purchase_land_interaction = {
 					multiply = 0.5
 				}
 				if = {
-					limit = {
-						scope:offer_gold = yes
-					}
+					limit = { scope:offer_gold = yes }
 					multiply = 2
 				}
 			}
@@ -349,20 +378,22 @@ purchase_land_interaction = {
 						}
 						else = { add = medium_legitimacy_loss }
 					}
-				}	
+				}
 			}
 		}
-		show_as_tooltip = { purchase_land_interaction_shortened_effect = yes }
+		show_as_tooltip = {
+			scope:actor = { purchase_land_interaction_effect = yes }
+		}
 		if = {
 			limit = { always = scope:hook }
 			scope:actor = { use_hook = scope:recipient }
 		}
-		scope:actor = { trigger_event = ep3_laamps.0100 }
-		hidden_effect = { # Unop: Give the actor the gold that was taken from the cost = {} block, since it will be taken inside purchase_land_interaction_effect to be given to the recipient
-			scope:recipient = {	#ADDED - actually seems like it doesnt deduct gold anymore, so we'll just give it to the recipient instead
+		hidden_effect = { # will be paid again so refund same amount as cost
+			scope:actor = {
 				add_gold = scope:purchase_land_cost
 			}
 		}
+		scope:actor = { trigger_event = ep3_laamps.0100 }
 	}
 
 	on_decline = {
@@ -451,7 +482,6 @@ purchase_land_interaction = {
 		}
 		modifier = { # Land is foreign
 			add = 10
-			#desc = PURCHASE_LAND_FOREIGN_COUNTY_CULTURE_REASON #Unop: Desc already defined below but this yml does not exists
 			add = {
 				value = 0
 				if = {
@@ -597,7 +627,7 @@ purchase_land_interaction = {
 				min = -200
 			}
 			desc = PURCHASE_LAND_MY_FAITH_REASON
-			scope:actor.faith != scope:recipient.faith	
+			scope:actor.faith != scope:recipient.faith
 			trigger_if = {
 				limit = { scope:target.tier = tier_county }
 				scope:target.faith = scope:recipient.faith
@@ -672,7 +702,7 @@ purchase_land_interaction = {
 					AND = {
 						scope:target.tier = tier_county
 						scope:target.culture = scope:recipient.culture
-					}		
+					}
 					scope:target = {
 						any_de_jure_county = {
 							ep3_purchase_land_valid_county_trigger = yes
@@ -716,7 +746,7 @@ purchase_land_interaction = {
 					AND = {
 						scope:target.tier = tier_county
 						scope:target.culture = scope:recipient.culture
-					}		
+					}
 					scope:target = {
 						any_de_jure_county = {
 							ep3_purchase_land_valid_county_trigger = yes
@@ -782,7 +812,7 @@ purchase_land_interaction = {
 			add = 80
 			scope:vassal_obligation = yes
 			desc = PURCHASE_LAND_OBLIGATIONS_REASON
-		}	
+		}
 	}
 
 	ai_will_do = {
@@ -799,6 +829,814 @@ purchase_land_interaction = {
 		modifier = {
 			gold > 2000
 			add = 50
+		}
+	}
+}
+
+##################
+# Hire LAAMP as mercenaries
+# by Arkadiusz Majewski
+# As a landed ruler hire a LAAMP to join your war
+##################
+
+hire_laamp_mercenaries_interaction = {
+	category = interaction_category_diplomacy
+	icon = alliance
+	desc = hire_laamp_mercenaries_interaction_desc
+
+	greeting = positive
+	notification_text = hire_laamp_mercenaries_interaction_notification
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	interface_priority = 60
+	ai_min_reply_days = 0
+	ai_max_reply_days = 0
+
+	cooldown_against_recipient = { years = 3 }
+	can_send_despite_rejection = yes
+	ai_accept_negotiation = yes
+	send_options_exclusive = no
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			any_character_war = {
+				is_war_leader = prev
+			}
+			war_chest_gold >= quarter_ai_war_chest_gold_maximum
+		}
+	}
+
+	is_shown = {
+		has_ep3_dlc_trigger = yes
+		scope:recipient = {
+			has_government = landless_adventurer_government
+		}
+		scope:puppet_or_actor ?= {
+			this != scope:recipient
+			trigger_if = { # Avoid calling Adventurers without armies
+				limit = {
+					scope:actor = { is_ai = yes }
+				}
+				scope:recipient.current_military_strength >= 100
+				scope:recipient = {
+					NOT = {
+						has_character_flag = ai_hire_blocker
+					}
+				}
+			}
+		}
+	}
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_travelling = no
+			is_at_war = no
+			is_imprisoned = no
+		}
+		scope:puppet_or_actor = {
+			custom_tooltip = {
+				text = MERCENARY_COMPANY_COST_BANKRUPTCY
+				debt_level <= 1
+			}
+			is_at_war = yes
+			custom_tooltip = {
+				text = I_MUST_BE_THE_WAR_LEADER
+				any_character_war = {
+					is_war_leader = scope:puppet_or_actor
+				}
+			}
+			NOT = {
+				is_at_war_with = scope:recipient
+			}
+		}
+		scope:puppet_or_actor = {
+			NOT = {
+				any_war_ally = {
+					count >= 3
+					has_government = landless_adventurer_government
+				}
+			}
+		}
+		scope:puppet_or_actor = {
+			OR = {
+				scope:actor = { is_ai = no }
+				any_character_war = {
+					count = all
+					OR = {
+						AND = {
+							primary_attacker = scope:puppet_or_actor
+							defender_war_score <= 95
+						}
+						AND = {
+							primary_defender = scope:puppet_or_actor
+							attacker_war_score <= 95
+						}
+					}
+				}
+			}
+		}
+		# Adventurers can't join wars in places they're exiled from.
+		trigger_if = {
+			limit = {
+				scope:puppet_or_actor = { top_liege != this }
+			}
+			custom_tooltip = {
+				text = the_wake_1
+				NOT = {
+					is_laamp_exiled_from_province_trigger = {
+						PROVINCE = scope:puppet_or_actor.capital_province
+						LAAMP = scope:recipient
+					}
+				}
+			}
+		}
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:puppet_or_actor
+			object = scope:recipient
+			scope:hook = yes
+			scope:puppet_or_actor = { has_strong_hook = scope:recipient }
+		}
+	}
+
+	on_accept = {
+		scope:puppet_or_actor = {
+			every_character_war = {
+				add_to_list = actor_wars
+			}
+		}
+		every_in_list = {
+			list = actor_wars
+			limit = {
+				primary_defender = scope:puppet_or_actor
+			}
+			add_to_list = join_as_defender
+			remove_from_list = actor_wars
+		}
+		every_in_list = {
+			list = actor_wars
+			limit = {
+				primary_attacker = scope:puppet_or_actor
+			}
+			add_to_list = join_as_attacker
+			remove_from_list = actor_wars
+		}
+
+		every_in_list = {
+			list = join_as_attacker
+			add_attacker = scope:recipient
+		}
+		every_in_list = {
+			list = join_as_defender
+			add_defender = scope:recipient
+		}
+		#list all wars that scope:recipient can't join
+		every_in_list = {
+			list = actor_wars
+			custom = hire_laamp_mercenaries_interaction.not_primary_side
+			# I swear it was the only way to make the tooltip look nice
+			every_in_list = {
+				list = actor_wars
+				save_temporary_scope_as = war
+				custom_tooltip = hire_laamp_mercenaries_interaction.war
+			}
+		}
+		scope:puppet_or_actor = {
+			if = {
+				limit = {
+					has_treasury = no
+				}
+				pay_short_term_gold = {
+					target = scope:recipient
+					gold = ep3_hire_laamp_mercs_cost_value
+				}
+			}
+			else = {
+				pay_short_term_treasury = {
+					target = scope:recipient
+					treasury = ep3_hire_laamp_mercs_cost_value
+				}
+			}
+			add_to_variable_list = {
+				name = hired_mercenaries
+				target = scope:recipient
+			}
+			custom_tooltip = hire_laamp_mercenaries_interaction.contribution_pay
+			if = {
+				limit = {
+					has_title = title:h_china
+					situation:dynastic_cycle ?= {
+						situation_top_has_catalyst = catalyst_hegemon_hired_mercenary
+					}
+				}
+				situation:dynastic_cycle ?= {
+					trigger_situation_catalyst = {
+						catalyst = catalyst_hegemon_hired_mercenary
+						character = scope:puppet_or_actor
+					}
+				}
+			}
+		}
+		scope:recipient = {
+			set_variable = {
+				name = joined_as_mercenary
+				value = scope:puppet_or_actor
+			}
+		}
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = medium_unity_gain
+			DESC = clan_unity_alliance.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+		debug_log = "Landed ruler hired a LAAMP to join wars"
+		debug_log_scopes = yes
+		#for debug purposes:
+		#if = {
+		#	limit = { NOT = { exists = global_var:hire_laamp_as_mercs_accepted } }
+		#	set_global_variable = {
+		#		name = hire_laamp_as_mercs_accepted
+		#		value = 0
+		#	}
+		#}
+		#else = {
+		#	change_global_variable = {
+		#		name = hire_laamp_as_mercs_accepted
+		#		add = 1
+		#	}
+		#}
+	}
+
+	on_decline = {
+		scope:recipient = {
+			trigger_event = ep3_interactions_events.0111
+			custom_tooltip = hire_laamp_mercenaries_interaction.negotiation_offer
+		}
+		#for debug purposes:
+		#if = {
+		#	limit = { NOT = { exists = global_var:hire_laamp_as_mercs_rejected } }
+		#	set_global_variable = {
+		#		name = hire_laamp_as_mercs_rejected
+		#		value = 0
+		#	}
+		#}
+		#else = {
+		#	change_global_variable = {
+		#		name = hire_laamp_as_mercs_rejected
+		#		add = 1
+		#	}
+		#}
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_loss
+			DESC = clan_unity_alliance_refusal.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	# Use hook
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:puppet_or_actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 12
+		duchy = 12
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_targets = {
+		ai_recipients = nearby_domicile_owners
+	}
+	ai_accept = {
+		base = -20
+
+		modifier = {  # merc laamp wants to join
+			add = 50
+			scope:recipient = {
+				has_realm_law = camp_purpose_mercenaries
+			}
+			desc = camp_purpose_mercenaries_reason
+		}
+
+		modifier = {  # don't join many losing wars
+			save_temporary_scope_value_as = {
+				name = attacker_war
+				value = 2
+			}
+			scope:puppet_or_actor = {
+				any_character_war = {
+					primary_attacker = scope:puppet_or_actor
+					attacker_war_score < 0
+					save_temporary_scope_value_as = {
+						name = attacker_war
+						value = {
+							value = scope:attacker_war
+							multiply = attacker_war_score
+						}
+					}
+				}
+			}
+			add = scope:attacker_war
+			desc = attacker_losisng_too_much_reason
+		}
+		modifier = {  # don't join many losing wars
+			add = scope:defender_war
+			save_temporary_scope_value_as = {
+				name = defender_war
+				value = 2
+			}
+			scope:puppet_or_actor = {
+				any_character_war = {
+					primary_defender = scope:puppet_or_actor
+					defender_war_score < 0
+					save_temporary_scope_value_as = {
+						name = defender_war
+						value = {
+							value = scope:defender_war
+							multiply = defender_war_score
+						}
+					}
+				}
+			}
+			desc = defender_losisng_too_much_reason
+		}
+
+		modifier = {  # Refuse call against Heir
+			add = -1000
+			exists = scope:recipient.player_heir
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						primary_defender = scope:recipient.player_heir
+						primary_attacker = scope:recipient.player_heir
+					}
+				}
+			}
+			desc = WONT_FIGHT_HEIR_REASON
+		}
+
+		modifier = {  # Refuse call against Spouse
+			add = -1000
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						primary_defender = {
+							is_spouse_of = scope:recipient
+						}
+						primary_attacker =  {
+							is_spouse_of = scope:recipient
+						}
+					}
+				}
+			}
+			desc = WONT_FIGHT_SPOUSE_REASON
+		}
+
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:puppet_or_actor
+			desc = AI_OPINION_REASON
+		}
+
+		modifier = {  # Tends to join if low on cash
+			add = 50
+			scope:recipient = {
+				short_term_gold <= minor_gold_value
+			}
+			desc = NEEDS_CASH
+		}
+
+		modifier = {  # Tends to join defensive wars
+			add = 50
+			scope:puppet_or_actor = {
+				any_character_war = {
+					primary_defender = scope:puppet_or_actor
+				}
+			}
+			desc = DEFENSIVE_WAR_REASON
+		}
+
+		modifier = { # Same language
+			add = 5
+			desc = speaks_same_language_interaction_reason
+			scope:puppet_or_actor = {
+				knows_language_of_culture = scope:recipient.culture
+			}
+		}
+
+		compare_modifier = { # Likes fighting infidels
+			trigger = {
+				scope:recipient.faith = scope:puppet_or_actor.faith
+				scope:puppet_or_actor = {
+					any_character_war = {
+						trigger_if = {
+							limit = {
+								primary_defender = scope:puppet_or_actor
+							}
+							primary_attacker = {
+								faith = {
+									faith_hostility_level = {
+										target = scope:puppet_or_actor.faith
+										value >= religious_cb_enabled_hostility_level
+									}
+								}
+							}
+						}
+						trigger_else_if = {
+							limit = {
+								primary_attacker = scope:puppet_or_actor
+							}
+							primary_defender = {
+								faith = {
+									faith_hostility_level = {
+										target = scope:puppet_or_actor.faith
+										value >= religious_cb_enabled_hostility_level
+									}
+								}
+							}
+						}
+						trigger_else = {
+							always = no
+						}
+					}
+				}
+			}
+			target = scope:recipient
+			value = ai_zeal
+			desc = "ZEAL_AGAINST_INFIDELS"
+			min = 0
+			multiplier = 0.5
+		}
+
+		modifier = {  # Reluctant to attack another ally
+			add = -50
+			scope:puppet_or_actor = {
+				any_character_war = {
+					primary_defender != scope:puppet_or_actor
+					primary_defender = {
+						is_allied_to = scope:recipient
+					}
+				}
+			}
+			desc = ATTACK_ON_ALLY_REASON
+		}
+
+		modifier = {  # Reluctant to defend against another ally
+			add = -25
+			scope:puppet_or_actor = {
+				any_character_war = {
+					primary_attacker != scope:puppet_or_actor
+					primary_attacker = {
+						is_allied_to = scope:recipient
+					}
+				}
+			}
+			desc = WAR_WITH_ALLY_REASON
+		}
+
+		modifier = {  # Reluctant to join wars against religious brethren.
+			add = -50
+			scope:recipient.faith != scope:puppet_or_actor.faith
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						using_cb = minor_religious_war
+						using_cb = religious_war
+						using_cb = major_religious_war
+						using_cb = undirected_great_holy_war
+						using_cb = directed_great_holy_war
+						OR = {
+							AND = {
+								primary_attacker != scope:puppet_or_actor
+								primary_attacker.faith = scope:recipient.faith
+							}
+							AND = {
+								primary_defender != scope:puppet_or_actor
+								primary_defender.faith = scope:recipient.faith
+							}
+						}
+					}
+				}
+			}
+			desc = WONT_ATTACK_RELIGIOUS_BRETHREN_REASON
+		}
+
+		modifier = { # Reluctant to join against Friends
+			add = -50
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						AND = {
+							primary_attacker != scope:puppet_or_actor
+							primary_attacker = {
+								has_relation_friend = scope:recipient
+							}
+						}
+						AND = {
+							primary_defender != scope:puppet_or_actor
+							primary_defender = {
+								has_relation_friend = scope:recipient
+							}
+						}
+					}
+				}
+			}
+		}
+
+		modifier = { # Reluctant to join against Best Friends
+			add = -100
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						AND = {
+							primary_attacker != scope:puppet_or_actor
+							primary_attacker = {
+								has_relation_best_friend = scope:recipient
+							}
+						}
+						AND = {
+							primary_defender != scope:puppet_or_actor
+							primary_defender = {
+								has_relation_best_friend = scope:recipient
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = { # Reluctant to join against Lovers
+			add = -100
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						AND = {
+							primary_attacker != scope:puppet_or_actor
+							primary_attacker = {
+								has_relation_lover = scope:recipient
+							}
+						}
+						AND = {
+							primary_defender != scope:puppet_or_actor
+							primary_defender = {
+								has_relation_lover = scope:recipient
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = { # Reluctant to join against Soul mate
+			add = -200
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						AND = {
+							primary_attacker != scope:puppet_or_actor
+							primary_attacker = {
+								has_relation_soulmate = scope:recipient
+							}
+						}
+						AND = {
+							primary_defender != scope:puppet_or_actor
+							primary_defender = {
+								has_relation_soulmate = scope:recipient
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = {  # Refuse call for hostages' safety
+			any_home_court_hostage = {
+				warden = {
+					OR = {
+						is_at_war_with = scope:puppet_or_actor
+						any_ally = { is_at_war_with = scope:puppet_or_actor }
+					}
+				}
+			}
+			add = {
+				value = 0
+				every_home_court_hostage = {
+					limit = {
+						warden = {
+							OR = {
+								is_at_war_with = scope:puppet_or_actor
+								any_ally = { is_at_war_with = scope:puppet_or_actor }
+							}
+						}
+					}
+					subtract = call_to_arms_hostage_value
+				}
+				multiply = 0.25
+			}
+			desc = HOSTAGE_ENEMY_CALL_TO_ARMS_REASON
+		}
+
+		fp3_struggle_resist_allied_wars_modifier = yes
+	}
+
+	ai_will_do = {
+		base = 0		#prev 50
+
+		#don't do it if hired army wouldn't have an impact
+		modifier = {
+			scope:puppet_or_actor = {
+				any_character_war = {
+					count = all
+					OR = {
+						AND = {
+							primary_attacker = scope:puppet_or_actor
+							primary_defender.current_military_strength > {
+								value = scope:recipient.current_military_strength
+								add = scope:puppet_or_actor.current_military_strength
+								multiply = 1.5
+							}
+						}
+						AND = {
+							primary_defender = scope:puppet_or_actor
+							primary_attacker.current_military_strength > {
+								value = scope:recipient.current_military_strength
+								add = scope:puppet_or_actor.current_military_strength
+								multiply = 1.5
+							}
+						}
+					}
+				}
+			}
+			add = -100
+		}
+
+		#don't do it if you are stronger than the enemy
+		modifier = {
+			scope:puppet_or_actor = {
+				any_character_war = {
+					count = all
+					OR = {
+						AND = {
+							primary_attacker = scope:puppet_or_actor
+							primary_defender.current_military_strength < scope:puppet_or_actor.current_military_strength
+						}
+						AND = {
+							primary_defender = scope:puppet_or_actor
+							primary_attacker.current_military_strength < scope:puppet_or_actor.current_military_strength
+						}
+					}
+				}
+			}
+			add = -200
+		}
+
+		#more likely to ask if on contact list
+		modifier = {
+			scope:puppet_or_actor = {
+				is_contact_of = scope:recipient
+			}
+			add = 100
+		}
+
+		#merc laamp wants to join, so why not asking them more?
+		modifier = {
+			scope:recipient = {
+				has_realm_law = camp_purpose_mercenaries
+			}
+			add = 50
+		}
+
+		#more likely to ask if losing
+		modifier = {
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						AND = {
+							primary_attacker = scope:puppet_or_actor
+							defender_war_score > 25
+						}
+						AND = {
+							primary_defender = scope:puppet_or_actor
+							attacker_war_score > 25
+						}
+					}
+				}
+			}
+			add = 20
+		}
+
+		#don't do it if they betrayed you already in any of your ongoing wars
+		modifier = {
+			scope:puppet_or_actor = {
+				any_character_war = {
+					OR = {
+						is_target_in_variable_list = {
+							name = already_switched_side
+							target = scope:recipient
+						}
+						is_target_in_variable_list = {
+							name = left_voluntarily
+							target = scope:recipient
+						}
+					}
+				}
+			}
+			add = -1000
+		}
+
+		#don't do it if you cannot afford it
+		modifier = {
+			scope:puppet_or_actor = {
+				war_chest_gold < ep3_hire_laamp_mercs_cost_value
+			}
+			add = -100		#prev -50
+		}
+		modifier = {
+			scope:puppet_or_actor = {
+				gold < ep3_hire_laamp_mercs_cost_value
+			}
+			add = -1000
+		}
+		
+		#ADDED
+		modifier = { # Do not call the player into religious wars vs their own faith
+			scope:recipient = {
+				is_ai = no
+			}
+			scope:recipient.faith != scope:actor.faith
+			any_character_war = {
+				count = all
+				primary_attacker = scope:puppet_or_actor
+				primary_defender.faith = scope:recipient.faith
+				OR = {
+					using_cb = minor_religious_war
+					using_cb = religious_war
+					using_cb = major_religious_war
+					using_cb = undirected_great_holy_war
+					using_cb = directed_great_holy_war
+				}
+			}
+			factor = 0
+		}
+		
+		#ADDED
+		modifier = { # Do not call the player into wars you're winning #UPD: actually just dont call anyone lol.
+			#scope:recipient = {
+			#	is_ai = no
+			#}
+			any_character_war = {
+				count = all
+				save_temporary_scope_as = target
+				trigger_if = {
+					limit = { scope:target.primary_attacker = scope:actor }
+					scope:target.attacker_war_score > -10
+					OR = {
+						scope:target.attacker_war_score > 25
+						scope:actor.current_military_power_this_plus_war_allies_in_target_war_value > scope:target.primary_defender.double_current_military_power_this_plus_war_allies_in_target_war_value
+					}
+				}
+				trigger_else = {
+					scope:target.defender_war_score > -10
+					OR = {
+						scope:target.defender_war_score > 25
+						scope:actor.current_military_power_this_plus_war_allies_in_target_war_value > scope:target.primary_attacker.double_current_military_power_this_plus_war_allies_in_target_war_value
+					}
+				}
+			}
+			factor = 0
+		}
+		
+		#ADDED
+		modifier = { # Do not call anyone into peasant/populist revolts unless you're losing
+			any_character_war = {
+				count = all
+				primary_defender = scope:actor
+				OR = {
+					using_cb = populist_war
+					using_cb = peasant_war
+				}
+				defender_war_score > -10
+				OR = {
+					scope:recipient = { is_ai = yes }
+					defender_war_score > -20
+				}
+			}
+			factor = 0
 		}
 	}
 }

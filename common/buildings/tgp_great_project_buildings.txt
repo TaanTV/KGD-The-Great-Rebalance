@@ -511,22 +511,23 @@ celestial_great_barracks_01 = {
 	character_modifier = {
 		monthly_influence_mult = 0.05
 		men_at_arms_title_limit = 1
-		men_at_arms_title_cap = 1
+		#men_at_arms_title_cap = 1
 		men_at_arms_recruitment_cost = -0.1
-		men_at_arms_maintenance = -0.12
+		men_at_arms_maintenance = -0.1		#prev -0.12
 	}
 
 	duchy_capital_county_modifier = {
 		supply_limit_mult = 1
 		garrison_size = 1.5
 		hostile_raid_time = 0.5
-		defender_holding_advantage = 15
+		defender_holding_advantage = 10		#prev 15
 		additional_fort_level = normal_building_fort_level_tier_6
 		travel_danger = -30
 		monthly_county_control_growth_add = 0.2
 	}
 
 	type = duchy_capital
+	flag = duchy_building
 }
 
 # The Great Wall - Qin Era

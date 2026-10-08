@@ -1,6 +1,6 @@
 ﻿ce1_lasting_line = {
 	icon = family_positive
-	legitimacy_gain_mult = 0.25		#prev 0.1
+	legitimacy_gain_mult = 0.1
 	#ADDED
 	monthly_legitimacy_add = 0.5
 }

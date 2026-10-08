@@ -1,0 +1,90 @@
+﻿namespace = birth
+
+#Sickly child recovery - for child
+birth.3034 = {
+	type = character_event
+	title = birth.3034.t
+	desc = birth.3034.desc
+	theme = physical_health
+	left_portrait = {
+		character = root
+		animation = happiness
+	}
+	#ADDED 
+	id_override_priority = 228
+
+	immediate = {
+		play_music_cue = mx_cue_positive_effect
+		save_scope_as = child
+		set_favorite_toy_effect = yes
+		if = {
+			limit = {
+				exists = mother
+			}
+			mother = {
+				trigger_event = birth.3035
+			}
+		}
+		if = {
+			limit = {
+				exists = father
+			}
+			father = {
+				trigger_event = birth.3035
+			}
+		}
+	}
+
+	option = {
+		name = birth.3034.a
+		remove_trait = sickly
+		#ADDED
+		if = {
+			limit = { NOT = { has_trait = physique_good } }
+			random = {
+				chance = 25
+				add_trait_force_tooltip = weak
+			}
+		}
+	}
+}
+
+
+#Sickly child recovery - for mother and father
+birth.3035 = {
+	type = character_event
+	title = birth.3034.t
+	desc = birth.3035.desc
+	theme = physical_health
+	left_portrait = {
+		character = scope:child
+		animation = happiness
+	}
+	#ADDED 
+	id_override_priority = 228
+
+	immediate = {
+		play_music_cue = mx_cue_positive_effect
+		scope:child = {
+			show_as_tooltip = {
+				remove_trait_force_tooltip = sickly
+			}
+		}
+	}
+
+	option = {
+		name = birth.3035.a
+		#ADDED
+		scope:child = {
+			show_as_tooltip = {
+				if = {
+					limit = { NOT = { has_trait = physique_good } }
+					random = {
+						chance = 25
+						add_trait_force_tooltip = weak
+					}
+				}
+			}
+		}
+	}
+}

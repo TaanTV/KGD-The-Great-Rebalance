@@ -110,6 +110,11 @@ nomadic_capital_main_building_4 = {
 		limit = { free_external_domicile_building_slots > 2 }
 		multiply = 0.01
 	}
+	#ADDED - since i forbid dukes from building it...
+	if = {
+		limit = { owner.highest_held_title_tier < tier_kingdom }
+		multiply = 0
+	}
 }
 
 nomadic_capital_main_building_5 = {
@@ -138,6 +143,11 @@ nomadic_capital_main_building_5 = {
 		limit = { free_external_domicile_building_slots > 1 }
 		multiply = 0.01
 	}
+	#ADDED - since i forbid dukes from building it...
+	if = {
+		limit = { owner.highest_held_title_tier < tier_kingdom }
+		multiply = 0
+	}
 }
 
 nomadic_capital_main_building_6 = {
@@ -165,6 +175,11 @@ nomadic_capital_main_building_6 = {
 	if = {
 		limit = { free_external_domicile_building_slots > 0 }
 		multiply = 0.01
+	}
+	#ADDED - since i forbid kings from building it...
+	if = {
+		limit = { owner.highest_held_title_tier < tier_empire }
+		multiply = 0
 	}
 }
 

@@ -133,7 +133,7 @@ iron_constitution_perk = {
 	parent = restraint_perk
 	
 	character_modifier = {
-		negate_health_penalty_add = 1.5		#prev 2
+		negate_health_penalty_add = 1.25		#prev 2
 		negate_fertility_penalty_add = 0.2	#prev 0.3
 	}
 }

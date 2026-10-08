@@ -30,6 +30,21 @@
 #	}
 #}
 
+random_harm_target = {
+		
+	categories = {
+		difficulty health
+	}
+		
+	default = harm_target_all	#prev harm_target_ai_only
+	
+	harm_target_all = {}
+		
+	harm_target_player_only = {}
+		
+	harm_target_ai_only = {}
+}
+
 conquerors_bonuses = {
 	
 	categories = {
@@ -50,7 +65,8 @@ conquerors_bonuses = {
 	
 	}
 	
-	reduced_random_conquerors_bonuses = {
+	#ADDED
+	more_random_conquerors_bonuses = {
 	
 	}
 	
@@ -58,7 +74,7 @@ conquerors_bonuses = {
 	
 	}
 	
-	more_random_conquerors_bonuses = {
+	reduced_random_conquerors_bonuses = {
 	
 	}
 }
@@ -82,21 +98,4 @@ conquerors_inheritance = {
 	no_conquerors_inheritance = {
 	
 	}
-}
-
-
-
-random_harm_target = {
-		
-	categories = {
-		difficulty health
-	}
-		
-	default = harm_target_all	#prev harm_target_ai_only
-	
-	harm_target_all = {}
-		
-	harm_target_player_only = {}
-		
-	harm_target_ai_only = {}
 }

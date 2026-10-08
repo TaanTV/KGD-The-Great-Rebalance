@@ -1,7 +1,9 @@
 ﻿sodomite_crime = {
 	opinion = -25		#prev -15
 	imprisonment_reason = yes
-	revoke_title_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	banish_reason = yes
 }
 
 sodomite_intolerant = {
@@ -19,9 +21,11 @@ cannibal_crime = {
 }
 
 witchcraft_crime = {
-	opinion = -30		#prev -15
+	opinion = -25		#prev -15
 	imprisonment_reason = yes
 	execute_reason = yes
+	#ADDED - where?
+	banish_reason = yes
 }
 
 witchcraft_intolerant = {
@@ -31,7 +35,9 @@ witchcraft_intolerant = {
 deviant_crime = {
 	opinion = -30		#prev -15
 	imprisonment_reason = yes
-	revoke_title_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	banish_reason = yes
 }
 
 deviant_intolerant = {
@@ -63,7 +69,9 @@ denounced_trait_crime = {
 adulterer_crime = {
 	opinion = -20		#prev -5
 	imprisonment_reason = yes
-	revoke_title_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	banish_reason = yes
 }
 
 adulterer_intolerant = {
@@ -73,9 +81,21 @@ adulterer_intolerant = {
 fornicator_crime = {
 	opinion = -15		#prev -5
 	imprisonment_reason = yes
-	revoke_title_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	banish_reason = yes
 }
 
 fornicator_intolerant = {
 	opinion = -10		#prev -5
+}
+
+# Known [GetTrait('murderer').GetName( Getnullcharacter )]
+murderer_crime = {
+	opinion = -20		#prev -15
+	imprisonment_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	execute_reason = yes
+	banish_reason = yes
 }

@@ -46,6 +46,13 @@ obedience_threshold = {
 			desc = empire
 		}
 	}
+	else_if = {  # Emperor
+		limit = { obedience_target.primary_title.tier ?= tier_hegemony }
+		add = {
+			value = 90		#prev 100
+			desc = hegemony
+		}
+	}
 	if = {  # Yeke Jarquchi / Chief Law Overseer bonus
 		limit = { exists = overlord.court_position:yeke_jarquchi_court_position }
 		add = {
@@ -77,14 +84,14 @@ obedience_value = {
 			add = 5
 			if = {
 				limit = { is_lowborn = yes }
-				add = 5
+				add = 10
 			}
 		}
 		desc = BASE
 	}
 	if = {
 		limit = {
-			exists = obedience_target 
+			exists = obedience_target
 		}
 		if = {
 			limit = { # Herders are ALWAYS obedient -- we don't even run the rest of calculations
@@ -360,15 +367,15 @@ obedience_value = {
 			# Legitimacy
 			if = {
 				limit = {
-					obedience_target = {
-						has_nomadic_legitimacy = yes
-						legitimacy_level >= 3
-					}
+					obedience_target = { has_legitimacy = yes }
 				}
-				add = { value = 25 desc = obedience_value_high_legitimacy }
-			}
-			else = {
-				add = { value = -15 desc = obedience_value_low_legitimacy }
+				if = {
+					limit = { obedience_target = { legitimacy_level >= 3 } }
+					add = { value = 25 desc = obedience_value_high_legitimacy }
+				}
+				else = {
+					add = { value = -15 desc = obedience_value_low_legitimacy }
+				}
 			}
 			
 			# Traits
@@ -470,9 +477,11 @@ obedience_value = {
 			if = { # Larger Herd
 				limit = {
 					government_has_flag = government_has_herd
+					obedience_target = {
+						government_has_flag = government_has_herd
+						exists = domicile
+					}
 					exists = domicile
-					#ADDED - next line
-					obedience_target = { government_has_flag = government_has_herd }
 					domicile.herd >= 100
 					domicile.herd > obedience_target.domicile.herd
 				}

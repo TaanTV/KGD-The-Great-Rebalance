@@ -515,7 +515,12 @@ scripted_trigger stress_threshold_special_2001_valid_attraction_target_trigger =
 		target = root
 		value >= low_positive_opinion
 	}
-	is_eunuch_trigger = no
+	trigger_if = {
+		limit = {
+			is_spouse_or_romantic_partner_of_root = no
+		}
+		might_cheat_on_every_partner_trigger = yes
+	}
 	# Disqualifying conditions for target character
 	NOR = {
 		has_trait = chaste
@@ -674,7 +679,6 @@ stress_threshold_special.2001 = {
 					NOT = {
 						any_in_list = {
 							list = potential_noble_targets
-							exists = this
 						}
 					}
 				}
@@ -770,12 +774,12 @@ stress_threshold_special.2001 = {
 		name = stress_threshold_special.2001.b
 		remove_trait = rakish
 		if = {
-			limit = { faith = { trait_is_sin = lustful }}
+			limit = { rite = { trait_is_sin_rite = lustful }}
 			add_piety = medium_piety_gain
 		}
 		#ADDED
 		else_if = {
-			limit = { faith = { trait_is_virtue = lustful }}
+			limit = { rite = { trait_is_virtue_rite = lustful }}
 			add_piety = major_piety_loss
 			add_piety_experience = major_piety_loss
 		}

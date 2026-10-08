@@ -75,6 +75,9 @@ rival = {
 	}
 	corresponding = rival
 	opinion = -50	#prev -60
+	
+	#ADDED
+	fertility = -1
 
 	flags = { vizierate_relation }
 }
@@ -93,6 +96,9 @@ nemesis = {
 	relation_aliases = { rival }
 	corresponding = nemesis
 	opinion = -100	#prev -120
+	
+	#ADDED
+	fertility = -2
 
 	flags = { vizierate_relation }
 }

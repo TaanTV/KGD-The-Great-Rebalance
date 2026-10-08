@@ -62,6 +62,10 @@ innovation_fire_medicine = {
 		unlock_fire_lancers_units = yes
 		unlock_powder_magazines = yes
 	}
+
+	flag = global_maa
+	flag = early_medieval_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -71,10 +75,6 @@ innovation_fire_medicine = {
 			multiply = 0.001
 		}
 	}
-
-	flag = global_maa
-	flag = early_medieval_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_champa_rice = {
@@ -101,15 +101,15 @@ innovation_champa_rice = {
 		champa_rice_building_bonuses = yes
 		champa_rice_wet_land_paddies = yes
 	}
+
+	flag = global_regional
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_regional
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_rocket_cart = { # Singijeon & Hwacha, and the Huo Che
@@ -155,6 +155,9 @@ innovation_rocket_cart = { # Singijeon & Hwacha, and the Huo Che
 	province_modifier = {
 		defender_holding_advantage = 5
 	}
+
+	flag = global_regional
+	flag = late_medieval_era_regional
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -164,9 +167,6 @@ innovation_rocket_cart = { # Singijeon & Hwacha, and the Huo Che
 			multiply = 0.001
 		}
 	}
-
-	flag = global_regional
-	flag = late_medieval_era_regional
 }
 
 innovation_sericulture = { # VICTORIA TECHS ARE BACK BABEYYY AWOOOOU (wolf howl)
@@ -176,22 +176,7 @@ innovation_sericulture = { # VICTORIA TECHS ARE BACK BABEYYY AWOOOOU (wolf howl)
 	icon = @sericulture
 
 	potential = {
-		has_tgp_dlc_trigger = yes
-		#ADDED - stop showing up
-		OR = {
-			has_cultural_pillar = heritage_chinese
-			has_cultural_pillar = heritage_byzantine
-		}
-	}
-
-	can_progress = {
-		custom_tooltip = {
-			text = silk_road_sericulture_trigger_tt
-			OR = {
-				has_cultural_pillar = heritage_chinese
-				has_cultural_pillar = heritage_byzantine
-			}
-		}
+		silk_road_innovation_trigger = { INNOVATION = sericulture }
 	}
 
 	parameters = {
@@ -203,15 +188,15 @@ innovation_sericulture = { # VICTORIA TECHS ARE BACK BABEYYY AWOOOOU (wolf howl)
 	character_modifier = {
 		monthly_prestige_gain_per_legitimacy_level_add = 0.1
 	}
+
+	flag = global_regional
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_regional
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_compass = {
@@ -234,6 +219,9 @@ innovation_compass = {
 		cheaper_adventure_inspiration = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = silk_road_innovation
+	flag = early_medieval_era_regional
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -243,9 +231,6 @@ innovation_compass = {
 			multiply = 0.001
 		}
 	}
-
-	flag = silk_road_innovation
-	flag = early_medieval_era_regional
 }
 
 innovation_dragon_kiln = {
@@ -262,15 +247,15 @@ innovation_dragon_kiln = {
 		unlock_dragon_kiln_buildings = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = global_regional
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_regional
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_block_printing = {
@@ -297,14 +282,14 @@ innovation_block_printing = {
 		block_printing_university_bonuses = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = global_regional
+	flag = tribal_era_regional
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_regional
-	flag = tribal_era_regional
 }
 
 innovation_grenades = {
@@ -338,6 +323,10 @@ innovation_grenades = {
 	parameters = {
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = global_maa
+	flag = early_medieval_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -347,10 +336,6 @@ innovation_grenades = {
 			multiply = 0.001
 		}
 	}
-
-	flag = global_maa
-	flag = early_medieval_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_cupellation = {
@@ -373,15 +358,15 @@ innovation_cupellation = {
 		silk_road_innovation_parameter = yes
 		cupellation_mine_building_bonuses = yes
 	}
+
+	flag = global_maa
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_maa
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_lacquered_armor = {
@@ -416,15 +401,15 @@ innovation_lacquered_armor = {
 		higher_quality_armor_artifacts_parameter = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = global_maa
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_maa
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_double_entry_bookkeeping = {
@@ -445,6 +430,9 @@ innovation_double_entry_bookkeeping = {
 		bookkeeping_collect_taxes_bonus = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = early_medieval_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -454,9 +442,6 @@ innovation_double_entry_bookkeeping = {
 			multiply = 0.001
 		}
 	}
-
-	flag = early_medieval_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_bulkheads = {
@@ -470,13 +455,16 @@ innovation_bulkheads = {
 	}
 
 	character_modifier = {
-		coastal_sea_travel_danger = medium_sea_danger_reduction
-		sea_travel_danger = medium_sea_danger_reduction
+		coastal_sea_travel_danger = low_sea_danger_reduction	#prev medium_sea_danger_reduction
+		sea_travel_danger = low_sea_danger_reduction			#prev medium_sea_danger_reduction
 	}
 
 	parameters = {
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = early_medieval_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
@@ -486,9 +474,6 @@ innovation_bulkheads = {
 			multiply = 0.001
 		}
 	}
-
-	flag = early_medieval_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_coking = {
@@ -516,14 +501,14 @@ innovation_coking = {
 		coking_smith_bonuses = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_composite_crossbow = {
@@ -568,15 +553,15 @@ innovation_composite_crossbow = {
 	parameters = {
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = global_maa
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = global_maa
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_pharmacopoeia = {
@@ -599,14 +584,14 @@ innovation_pharmacopoeia = {
 		physician_pharmacopoeia_bonus = yes
 		silk_road_innovation_parameter = yes
 	}
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
 
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_waterworks = {
@@ -626,14 +611,14 @@ innovation_waterworks = {
 		unlocks_waterworks_buildings = yes
 		silk_road_innovation_parameter = yes
 	}
+
+	flag = tribal_era_regional
+	flag = silk_road_innovation
 	
 	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
-
-	flag = tribal_era_regional
-	flag = silk_road_innovation
 }
 
 innovation_tiefutu = {

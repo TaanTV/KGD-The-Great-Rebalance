@@ -24,7 +24,9 @@
 				if = {
 					limit = {
 						scope:liege = {
-							ai_should_focus_on_building_in_their_capital = yes
+							#ai_should_focus_on_building_in_their_capital = yes
+							#ADDED
+							ai_has_economical_boom_personality = yes
 						}
 						scope:subject = {
 							AND = {
@@ -61,7 +63,9 @@
 				if = {
 					limit = {
 						scope:liege = {
-							ai_should_focus_on_building_in_their_capital = yes
+							#ai_should_focus_on_building_in_their_capital = yes
+							#ADDED
+							ai_has_economical_boom_personality = yes
 						}
 						scope:subject = {
 							AND = {
@@ -98,7 +102,9 @@
 				if = {
 					limit = {
 						scope:liege = {
-							ai_should_focus_on_building_in_their_capital = yes
+							#ai_should_focus_on_building_in_their_capital = yes
+							#ADDED
+							ai_has_economical_boom_personality = yes
 						}
 						scope:subject = {
 							AND = {
@@ -126,7 +132,9 @@
 				if = {
 					limit = {
 						scope:liege = {
-							ai_should_focus_on_building_in_their_capital = yes
+							#ai_should_focus_on_building_in_their_capital = yes
+							#ADDED
+							ai_has_economical_boom_personality = yes
 						}
 						scope:subject = {
 							AND = {

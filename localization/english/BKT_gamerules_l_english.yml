@@ -23,9 +23,9 @@
  
  rule_bkt_additional_content: "$bkt_rule_prefix$ Additional content"
  setting_bkt_additional_content_disabled: "#high Disabled#!"
- setting_bkt_additional_content_disabled_desc: "Disables all new systems and events added by the mod. Might cause unintended balance changes."
+ setting_bkt_additional_content_disabled_desc: "Disables most non-essential for balance systems and events added by the mod"
  setting_bkt_additional_content_enabled: "#high All#!"
- setting_bkt_additional_content_enabled_desc: "Enables all new systems and events added by the mod"
+ setting_bkt_additional_content_enabled_desc: "Enables all non-essential for balance new systems and events added by the mod"
  
  bkt_difficulty_higher_player: "#high Additional Difficulty#!"
  bkt_difficulty_higher_player_desc: "Marriage acceptance malus increases for [matrilineal|E] marriages in male dominated [faith|e] (and vise versa)\n[marriage|E] acceptance: #n -20#!\n[alliance|E] acceptance: #n -20#!\nCall to Arms acceptance: #n -35#!"
@@ -58,8 +58,14 @@
  
  rule_bkt_own_war_declaration_law_toggle: "$bkt_rule_prefix$ [GetLawGroup('own_war_declaration_law').GetName]"
  setting_bkt_own_war_declaration_law_toggle_enabled: "#high Enabled#!"
- setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Everyone#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors."
+ setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Everyone#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors. Might slow AI down somewhat."
  setting_bkt_own_war_declaration_law_toggle_player_only: "#high Player only#!"
- setting_bkt_own_war_declaration_law_toggle_player_only_desc: "The #V Player#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors."
+ setting_bkt_own_war_declaration_law_toggle_player_only_desc: "The #V Player#! gets a new set of laws, depending on which declaring war may require consent of powerful vassals or councillors. Will cause AI to have a minor powerful vassal opinion buff."
  setting_bkt_own_war_declaration_law_toggle_disabled: "#high Disabled#!"
  setting_bkt_own_war_declaration_law_toggle_disabled_desc: "War never changes."
+  
+ rule_bkt_gender_laws: "$bkt_rule_prefix$ [GetLawGroup('succession_gender_laws').GetName]"
+ setting_bkt_gender_laws_default: "Default"
+ setting_bkt_gender_laws_default_desc: "[gender_laws|E] will behave in mostly vanilla ways"
+ setting_bkt_gender_laws_prefer_extreme: "Strict"
+ setting_bkt_gender_laws_prefer_extreme_desc: "Most [rulers|E] will avoid [GetLaw('male_preference_law').GetName] and [GetLaw('female_preference_law').GetName] [gender_laws|E]. Tribals and characters of pluralistic or unreformed faiths or certain cultures may be an exception."

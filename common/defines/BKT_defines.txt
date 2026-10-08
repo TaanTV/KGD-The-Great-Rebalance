@@ -8,8 +8,8 @@ NCharacter = {
 	RANDOM_CHARACTER_MIN_FERTILITY = 0.25	#prev 0.5
 	RANDOM_CHARACTER_MAX_FERTILITY = 0.55	#prev 0.6
 	
-	RANDOM_CHARACTER_MIN_HEALTH = 3.25		#prev 4.0		#BKT prev: 3
-	RANDOM_CHARACTER_MAX_HEALTH = 4.75		#prev 5.0		#BKT prev: 4
+	RANDOM_CHARACTER_MIN_HEALTH = 3.5		#prev 4.0		#BKT prev: 3.25
+	RANDOM_CHARACTER_MAX_HEALTH = 5.0		#BKT prev: 4.75
 	
 	DREAD_MONTHLY_CHANGE = 0.4		#prev 0.5	# dread is drifiting changing by this value towards character's base dread value each month
 	
@@ -23,7 +23,7 @@ NCharacter = {
 	STRIFE_OPINION_MONTHLY_CHANGE = -0.5	#prev -0.2	# strife opinion is changing by this value each month
 	
 	BASE_FERTILITY = 0.4	#prev 0.5
-	BASE_HEALTH = 4.0		#prev 5.0
+	BASE_HEALTH = 4.25		#prev 5.0
 
 	# experience needed for piety/prestige/influence levels - first/negative level requires 1000, then 350 etc.
 	# evety character by default starts at respective ZERO_LEVEL with enough experience for it
@@ -39,13 +39,13 @@ NCharacter = {
 	LEVEL_DROP_MAX_RETAINED_PROGRESS_MERIT = 0.8		#prev 0.5
 	
 	#Health levels and descriptions for every level
-	HEALTH_STATE_LEVELS_VALUES = {
-		0.0
-		1.0
-		2.75	#prev 3.0
-		5.0
-		7.0
-	}
+	#HEALTH_STATE_LEVELS_VALUES = {
+	#	0.0
+	#	1.0
+	#	2.75	#prev 3.0
+	#	5.0
+	#	7.0
+	#}
 	#HEALTH_STATE_LEVELS_TEXTS = {
 	#	"HEALTH_DYING"
 	#	"HEALTH_NEAR_DEATH"
@@ -78,7 +78,12 @@ NCharacter = {
 	#DESIRED_CONCUBINES_PER_TIER = { 0 0 0 1 2 3 }
 	PRESTIGE_LOSS_PER_MISSING_CONCUBINE = 0.5	#prev 0.1 # Monthly prestige loss per missing (fertile) concubine
 
-	GENDER_PREFERENCE_PROBABILITY = 0.55		#prev 0.75 # chance (0-1) of a character created from pool being from prefered gender of gender preference law
+	GENDER_PREFERENCE_PROBABILITY = 1		#BKT prev 0.55 # chance (0-1) of a character created from pool being from prefered gender of gender preference law
+
+	# On succession how much of the old ruler's legitimacy should be applied to their heir
+	# Only applied if the title they inherit is a greater tier than their old title, a king inheriting
+	# a duchy has their own legitimacy they already care about
+	LEGITIMACY_INHERITED = 0.2		#prev 0.25
 
 	MONTHLY_INFLUENCE_GAIN_ALLIED_TO_TOP_LIEGE = 1		#prev 1.5 # Monthly influence gained for admin rulers in admin realm if you are allied to your top liege
 	MONTHLY_INFLUENCE_GAIN_ALLIED_TO_HOUSE_HEAD = 0.35	#prev 1 # Monthly influence gained for admin rulers when are allied to admin ruler house head
@@ -86,10 +91,8 @@ NCharacter = {
 }
 
 NOldAge = {
-	HEALTH_PENALTY_PER_YEAR_IN_POOL = 0.04	#BKT prev 0.05	#prev 0.1 # For each year in the pool, your effective health is this much lower. This disappears entirely when you leave the pool
-	# This DIE values are used with a quadratic chance.
-	DIE_HEALTH_TRESHOLD = 2.75		#prev 3.0 # Characters have a chance to die each month they have less health than this
-	#DIE_HEALTH_CHANCE_ZERO = 0.25 	# This is the month chance that a character dies at zero health (or lower)
+	#LOWER_HEALTH_YEARLY_INCREASE = 0.026	#prev 0.022 # This is the yearly increase of the chance to lose health
+	HEALTH_PENALTY_PER_YEAR_IN_POOL = 0.04	#prev 0.1 # For each year in the pool, your effective health is this much lower. This disappears entirely when you leave the pool
 }
 
 
@@ -99,7 +102,7 @@ NChildbirth = {
 	MIN_FERTILITY_CHANCE = 0.5		#prev 1
 	#MAX_FERTILITY_CHANCE = 25
 	FEMALE_CHANCE = 50					#prev 49
-	NEWBORN_HEALTH_BASE = 4.00			#prev 4.5		#BKT prev 3.75
+	NEWBORN_HEALTH_BASE = 4.25			#BKT pre 1.19 4		#prev 4.5
 	NEWBORN_HEALTH_SPAN = 0.75			#prev 0.5
 	#NEWBORN_HEALTH_FEMALE_BONUS = 0.5
 	
@@ -155,9 +158,11 @@ NCharacterOpinion = {
 
 	#SAME_DYNASTY = 5
 
-	PIOUS = { -15 0 3 5 8 10 13 16 20 }				#prev -10 0 5 10 20 30 40 55 75
-	PRESTIGIOUS = { -20 0 3 5 8 10 }			#prev -10 0 5 10 20 30 
+	PIOUS = { -15 0 3 5 8 10 13 16 20 }					#prev -10 0 5 10 20 30 40 55 75
+	PRESTIGIOUS = { -20 0 3 5 8 10 }					#prev -10 0 5 10 20 30 
 	PIOUS_MAGNIFICENCE = { -10 0 2 4 6 8 10 13 15 }		#prev -5 0 3 5 10 15 20 25 35 # This is piety for lay clergy
+	# TODO_PAM_DESIGN TIT-76476 Balance these numbers - These are opinion bonus on secular rulers towards theocratic clergy based on clergy piety level
+	PIOUS_CLERGY = { -10 0 2 4 6 8 10 13 15 }			#prev -5 0 3 5 10 15 20 25 35 # secular opinion bonus towards clergy in theocratic clergy faiths
 
 	SHORT_REIGN_YEARS = 15	#prev 10
 	LONG_REIGN_YEARS = 15	#prev 10
@@ -229,6 +234,8 @@ NCombat = {
 NArmy = {
 	REGIMENT_MONTHLY_REINFORCE_SPEED = 0.02 	#prev 0.03		# Monthly reinforcement percentage of unraised chunks [0-1]
 	GOLD_COST_PER_SOLDIER = 0.002				#prev 0.003		# Gold maintenance cost per soldier
+	RAID_ARMY_COST_MULT = 0.6					#prev 0.5		# Maintenance of raid armies is multiplied by this
+	BARTER_ARMY_COST_MULT = 0.6					#prev 0.5 		# Maintenance of barter armies is multiplied by this
 	REGIMENT_DEFAULT_STACK_SIZE = 40			#prev 100
 	#REGIMENT_DEFAULT_MAX_SIZE = 3				# Number of regiment chunks
 	REGIMENT_MAA_CAP_BY_TIER = { 0 1 2 2 3 3 4 }	#BKT prev 0 1 1 2 3 3 4	#prev 0 1 2 3 4 5 6
@@ -289,9 +296,22 @@ NPowerfulVassal = {
 	#VALUE_TIER_MULT = 100					# Multiplier applied to the tier of the vassal
 	#VALUE_INCOME_MULT = 50					# Multiplier applied to the income of the vassal
 }
+NFaith = {
+	#BASE_FERVOR = 55 #so heresies dont pop right away	#prev 50.0				# Default fervor
+}
+
+NRite = {
+	#RITE_CREATION_PIETY_COST = 1.0	# Fixed cost how much piety it costs to branch off a Faith with new Rite
+	RITE_DIVERGENCE_HERETICAL_THRESHOLD = 60	#prev 65 # Divergence above which a Rite is considered heretical
+	#RITE_DIVERGENCE_HOSTILITY_THRESHOLD = 1 # Divergence below that will lower faith hostility by 1 level
+	RITE_DIVERGENCE_GRACE_THRESHOLD = 20		#prev 0 # rites below this divergence will not add to the yearly fervor decrease
+
+	# Values are Unknown, Known, Prohibited, Permitted, Core
+	# Core tenets are checked both ways
+	#TENET_STATUS_DIVERGENCE = { 15 15 30 5 -5 }
+}
 
 NReligion = {
-	DEFAULT_FERVOR = 55 #so heresies dont pop right away	#prev 50	# Default fervor
 	#TIME_AT_PEACE_FOR_PIETY = 730 # For faiths with a doctrine with piety_from_long_peace, how long do they need to be at peace (in days)
 
 	# Hostility levels start at 0 (same faith or equivalent to same faith)
@@ -309,8 +329,17 @@ NReligion = {
 		-45
 	}
 	# Maybe up the ones above too?
-	GHW_COST_PIETY_CHANGE_TARGET = 1500		#prev 250  # cost to chagne GHW target. Grows linearly with each change
 	PREFERRED_GENDER_CHANCE = 9				#prev 3 # When deciding if clergy characters should be male or female a 3 here means that the preferred gender will be three times as likely
+	GHW_COST_PIETY_CHANGE_TARGET = 1000		#prev 250  # cost to chagne GHW target. Grows linearly with each change
+	
+	# stress gain due to traits is going to be multiplied by tenet weight and divided by this number to yield the Spiritual Fulfillment change.
+	SPIRITUAL_FULFILLMENT_FOR_STRESS_DIVIDE_FACTOR = 400	#prev 100
+
+	# Monthly percent progress for same-faith rite spread in a clerical region, per neighbor
+	MONTHLY_RITE_CONVERSION_PROCESS_PER_NEIGHBORING_COUNTY = 1		#prev 2
+
+	# How many rarity levels are required for a Ruler to create a holy site
+	CREATE_HOLY_SITE_RARITY_REQUIRED = 4	#prev 3
 }
 
 NTitle = {
@@ -324,15 +353,16 @@ NTitle = {
 }
 
 NSiege = {
-	BASE_DEFENDER_MORALE = 25				#BKT prev 50	#prev 100	# Defender morale with no buildings, garrison etc
-	DEFENDER_MORALE_PER_FORT_LEVEL = 100	#prev 75					# Defender morale added to the base per for level
-	MIN_DAILY_MORALE_LOSS = 0.35							#prev 0.5	# Minimum daily morale loss for the defenders
+	BASE_DEFENDER_MORALE = 25					#BKT prev 50	#prev 100	# Defender morale with no buildings, garrison etc
+	#DEFENDER_MORALE_PER_FORT_LEVEL = 75					# Defender morale added to the base per for level
+	#BASE_DAILY_MORALE_LOSS = 1								# How much morale is lost every day of the siege
+	MIN_DAILY_MORALE_LOSS = 0.5								# Minimum daily morale loss for the defenders
 	DAILY_MORALE_LOSS_FROM_RELATIVE_ATTACKER_MEN = 0.05		#prev 0.01	# How much morale is lost every day of the siege for extra stack of men defined in RELATIVE_ATTACKER_MEN_STACK_SIZE
-	#RELATIVE_ATTACKER_MEN_STACK_SIZE = 200						# Extra stack size of men to start getting daily morale loss
-	MONTHLY_ATTRITION = 0.02					#prev 0.01		# Monthly attrition during siege
-	#BREACH_ASSAULT_PROGRESS_CHUNK = 100						# How many mens take an impact in the assault (rounds up)
-	BREACH_ASSAULT_PROGRESS_PER_CHUNK = 0.25	#prev 0.2		# How much impact in assault will have every chunk
-	SIEGE_FORT_THRESHOLD_IMPACT = 0.6			#prev 0.7 		# What is the impact of not having enough siege tier? Siege speed is multiplied for this for each missing tier. E.G., if siege tier is 0, and fort level is 4, siege speed is multiplied by 0.5 * 0.5
+	#RELATIVE_ATTACKER_MEN_STACK_SIZE = 200					# Extra stack size of men to start getting daily morale loss
+	MONTHLY_ATTRITION = 0.02					#prev 0.01	# Monthly attrition during siege
+	#BREACH_ASSAULT_PROGRESS_CHUNK = 100					# How many mens take an impact in the assault (rounds up)
+	BREACH_ASSAULT_PROGRESS_PER_CHUNK = 0.25	#prev 0.2	# How much impact in assault will have every chunk
+	SIEGE_FORT_THRESHOLD_IMPACT = 0.6			#prev 0.7 	# What is the impact of not having enough siege tier? Siege speed is multiplied for this for each missing tier. E.G., if siege tier is 0, and fort level is 4, siege speed is multiplied by 0.5 * 0.5
 }
 
 NCounty = {
@@ -343,6 +373,7 @@ NCounty = {
 NProvince = {
 	SUPPLY_PER_DEVELOPMENT = 100	#prev 150
 	RAZE_HOLDING_COOLDOWN_YEARS = 3	#prev 5 	# Sets the cooldown perid in years for nomads razing holdings that they completely control
+	MAX_BUILDINGS = 8				#prev 7 	# Maximum number of building slots that a province can have
 }
 
 NDynasty = {
@@ -375,17 +406,20 @@ NHouse = {
 
 NHouseRelation = {
 	MAX_CHANGES_TO_REMEMBER = 75			#prev 100   # How many changes to house relations are remembered before the oldest are removed.
-	DECAY_TOWARDS_NEUTRAL_AFTER_YEARS = 20	#prev 50	# Years without change before house relation moves one level towards neutral.
-	CEASE_FROM_NEUTRAL_AFTER_YEARS = 10		#prev 75	# Years without change at neutral level before house relation is removed.
+	DECAY_TOWARDS_NEUTRAL_AFTER_YEARS = 25	#prev 50	# Years without change before house relation moves one level towards neutral.
+	CEASE_FROM_NEUTRAL_AFTER_YEARS = 20		#prev 75	# Years without change at neutral level before house relation is removed.
 
 	#IMPROVEMENT_FROM_MARRIAGE = 0.1         # How much a house relation will change from a single marriage.
 }
 
 NDomain = {
+	#STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE = 101		#prev 6		 # domain limit += floor( <stewardship skill> / STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE )
+
 	LEVIES_AT_MAX_COUNTY_DEVELOPMENT = 0.75	#prev 0.5		# How many % levies bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100	
-	TAX_AT_MAX_COUNTY_DEVELOPMENT = 0.75	#prev 0.5			# How much % tax bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100
+	TAX_AT_MAX_COUNTY_DEVELOPMENT = 0.75	#prev 0.5		# How much % tax bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100
 	
-	STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE = 101	#prev 6		 # domain limit += floor( <stewardship skill> / STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE )
+	#THIS DOES NOT WORK!
+	#HOLDING_GRACE_PERIOD = 180				#prev 365		# How many days do newly gained holdings not count towards the domain size for the purposes of penalties (but also not produce any levies)
 }
 
 NPathFinding = {
@@ -481,16 +515,16 @@ NRaid = {
 	RAID_LOOT_PER_SOLDIER = 0.15		#prev 0.1		# How much loot can a single soldier carry? Minimum increment is 0.001
 	MIN_SOLDIERS_TO_RAID = 150			#prev 200		# How small can a raid army be and still be able to loot?
 	MONTHLY_ATTRITION = 0.02			#BKT prev 0.015	#prev 0.01	# How much attrition do you take while looting a province? 0.01 = 1% per month
-	MONTHS_OF_RAID_LOOT = 18			#prev 12		# How many months of holding income (with owner effects discounted) does raiding provide?
+	#MONTHS_OF_RAID_LOOT = 12							# How many months of holding income (with owner effects discounted) does raiding provide?
 	
-	LESS_MONTHS_OF_RAID_LOOT = 9		#prev 6 		# This is subtracted from MONTHS_OF_RAID_LOOT if you have the goverment 'barter = yes'
+	#LESS_MONTHS_OF_RAID_LOOT = 6 		# This is subtracted from MONTHS_OF_RAID_LOOT if you have the goverment 'barter = yes'
 	
 	# Progress cannot be lower than 1/day (except when interrupted by combat)
 	BASE_PROGRESS = 10		#BKT prev 5		#prev 20	# How much base raid action progress do you get per day?
 	#PROGRESS_PER_SOLDIER = 0.01				# How much raid action progress do you get per day per soldier? Minimum resolution is 0.001
-	BASE_DIFFICULTY = 250					#prev 350	# How much base progress is needed?
-	DIFFICULTY_PER_FORT_LEVEL = 200			#prev 350	# How much progress is needed per fort level in the holding?
-	DIFFICULTY_PER_COUNTY_FORT_LEVEL = 150	#prev 250	# How much progress is needed per fort level in the county *outside* the holding?
+	BASE_DIFFICULTY = 250						#prev 350	# How much base progress is needed?
+	DIFFICULTY_PER_FORT_LEVEL = 200				#prev 350	# How much progress is needed per fort level in the holding?
+	DIFFICULTY_PER_COUNTY_FORT_LEVEL = 150		#prev 250	# How much progress is needed per fort level in the county *outside* the holding?
 	#DAYS_OF_HOSTILITY = 180					# How long after raiding do hostilities last?
 	#DAYS_OF_IMMUNITY = 1825					# How long does raid immunity after defeating a raid army last?
 	#RAID_REALM_AI_COOLDOWN = 1				# How many years the AI should wait before considering raiding again, after any AI raiders have been defeated previously
@@ -504,8 +538,18 @@ NRulerDesigner = {
 	# The above one is the vanilla one							  			  v - this is 30.
 	AGE_LEVEL_MULTIPLIERS = { 10.0 6.5 5.2 4.5 4.0 3.6 3.4 3.2 3.0 2.8 2.6 2.4 2.2 1.9 1.6 1.3 1.2 1.1 1 0.9 0.7 0.5 0.3 0.3 0.2 0.2 0.1 0.1 0.1 0.0 0.0 0.0 0.0 -0.1 -0.3 -0.5 } # Multiplier on age for points used
 	DEFAULT_EDUCATION_TRAIT = "education_stewardship_1"	# XD
-	BASE_HEALTH = 4		#prev 5.0	#BKT prev 4.25
+	BASE_HEALTH = 4.5		#prev 5.0	#BKT pre 1.19 4
 }
+
+# Settings for character based travel (not army travel)
+NTravel = {
+	BASE_TRAVEL_SPEED_LAND = 7		#prev 5 # The base speed used when traveling from a land province
+	BASE_TRAVEL_SPEED_WATER = 10	#prev 7 # The base speed used when traveling from a water province
+
+	#TRAVEL_EMBARK_COST = 14	# The cost in days added to traveling from a land province to a water province
+	TRAVEL_DISEMBARK_COST = 7	#prev 5 	# The cost in days added to traveling from a water province to a land province
+}
+
 
 NDiarchy = {
 	#DIARCHY_SUCCESSION_SIZE = 5 # How many people are in diarchy line of succession. Active or designated diarch takes 1st spot there
@@ -515,13 +559,7 @@ NDiarchy = {
 }
 
 NVassalStance = {
-	PREFERRED_HEIR_LEGITIMACY_EXPECTATION_YEARS = 20	#prev 10 # How many years the preferred heir status lasts
-}
-
-NAccolade = {
-	# I HATE THIS SHIT. 
-	SUCCESSION_GLORY_LOSS_SMALL = 0.1	#prev 0.15		# how much glory is lost, in percent, upon accolade succession
-	SUCCESSION_GLORY_LOSS_LARGE = 0.2	#prev 0.30		# how much glory is lost, in percent, upon accolade succession if the successor only fulfils the requirement of one attribute
+	PREFERRED_HEIR_LEGITIMACY_EXPECTATION_YEARS = 15	#prev 10 # How many years the preferred heir status lasts
 }
 
 NActivity = {

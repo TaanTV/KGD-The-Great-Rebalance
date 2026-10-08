@@ -45,10 +45,7 @@ wind_furnace_01 = {
 		stationed_maa_toughness_mult = high_maa_toughness_tier_1
 		monthly_income = good_building_tax_tier_1
 	}
-	character_modifier = {
-		#knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_1
-	}
-
+	
 	on_complete = {
 		#Mandala Creator Aspect
 		creator_mandala_built_regular_building_piety_effect = yes
@@ -81,12 +78,12 @@ wind_furnace_02 = {
 	can_construct_potential = {
 		building_wind_furnace_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
-		}
 	}
 
 	can_construct_showing_failures_only = {
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 		building_requirement_tribal = no
 	}
 	
@@ -97,10 +94,7 @@ wind_furnace_02 = {
 		stationed_maa_toughness_mult = high_maa_toughness_tier_2
 		monthly_income = good_building_tax_tier_2
 	}
-	character_modifier = {
-		#knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_2
-	}
-
+	
 	on_complete = {
 		#Mandala Creator Aspect
 		creator_mandala_built_regular_building_piety_effect = yes
@@ -434,20 +428,24 @@ powder_magazine_01 = {
 				has_any_main_economic_building = yes
 			}
 		}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			factor = 0
 			has_holding_type = city_holding
@@ -749,13 +747,13 @@ workshops_01 = {
 	can_construct_potential = {
 		building_workshops_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
-		scope:holder.culture = {
-			has_innovation = innovation_advanced_bowmaking
-		}
 	}
 
 	can_construct_showing_failures_only = {
 		building_requirement_tribal = no
+		scope:holder.culture = {
+			has_innovation = innovation_advanced_bowmaking
+		}
 	}
 	
 	cost_gold = expensive_building_tier_1_cost
@@ -816,13 +814,13 @@ workshops_02 = {
 	can_construct_potential = {
 		building_workshops_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
-		scope:holder.culture = {
-			has_innovation = innovation_advanced_bowmaking
-		}
 	}
 
 	can_construct_showing_failures_only = {
 		building_requirement_tribal = no
+		scope:holder.culture = {
+			has_innovation = innovation_advanced_bowmaking
+		}
 	}
 	
 	cost_gold = expensive_building_tier_2_cost
@@ -876,8 +874,6 @@ workshops_03 = {
 	}
 	
 	cost_gold = expensive_building_tier_3_cost
-	
-	
 	
 	province_modifier = {
 		monthly_income = normal_building_tax_tier_3
@@ -1207,20 +1203,24 @@ horse_pastures_01 = {
 				has_building_or_higher = regimental_grounds_01
 			}
 		}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			add = -9
 			has_building_or_higher = city_01
@@ -1253,12 +1253,12 @@ horse_pastures_02 = {
 
 	can_construct_potential = {
 		building_horse_pastures_requirement_terrain = yes
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
-		}
 	}
 
 	can_construct_showing_failures_only = {
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 	}
 	
 	cost_gold = cheap_building_tier_2_cost
@@ -1619,7 +1619,6 @@ hillside_grazing_01 = {
 		stationed_heavy_cavalry_damage_mult = normal_maa_damage_tier_1
 		stationed_archer_cavalry_damage_mult = normal_maa_damage_tier_1
 		monthly_income = super_poor_building_tax_tier_1
-
 	}
 
 	on_complete = {
@@ -1642,27 +1641,33 @@ hillside_grazing_01 = {
 		ai_archer_cavalry_modifier = yes
 		ai_light_cavalry_modifier = yes
 		ai_heavy_cavalry_modifier = yes
-		#modifier = {
-		#	factor = 0
-		#	building_regimental_grounds_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = regimental_grounds_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_regimental_grounds_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = regimental_grounds_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			add = -10
 			has_building_or_higher = city_01
@@ -1692,12 +1697,12 @@ hillside_grazing_02 = {
 
 	can_construct_potential = {
 		building_hillside_grazing_requirement_terrain = yes
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
-		}
 	}
 
 	can_construct_showing_failures_only = {
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 		#ADDED
 		building_requirement_tribal = no
 	}
@@ -2027,6 +2032,18 @@ warrior_lodges_01 = {
 	}
 	can_construct_potential = {
 		building_warrior_lodges_requirement_terrain = yes
+		trigger_if = {
+			limit = {
+				scope:holder = {
+					NOT = {
+						government_has_flag = government_is_tribal
+					}
+				}
+			}
+			NOT = {
+				has_holding_type = tribal_holding
+			}
+		}
 	}
 
 	can_construct_showing_failures_only = {
@@ -2066,27 +2083,33 @@ warrior_lodges_01 = {
 		ai_skirmisher_modifier = yes
 		ai_pikemen_modifier = yes
 		ai_heavy_infantry_modifier = yes
-		#modifier = {
-		#	factor = 0
-		#	building_regimental_grounds_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = regimental_grounds_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_regimental_grounds_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = regimental_grounds_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			add = -10
 			has_building_or_higher = city_01
@@ -2129,12 +2152,24 @@ warrior_lodges_02 = {
 	}
 	can_construct_potential = {
 		building_warrior_lodges_requirement_terrain = yes
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
+		trigger_if = {
+			limit = {
+				scope:holder = {
+					NOT = {
+						government_has_flag = government_is_tribal
+					}
+				}
+			}
+			NOT = {
+				has_holding_type = tribal_holding
+			}
 		}
 	}
 
 	can_construct_showing_failures_only = {
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 		#ADDED
 		building_requirement_tribal = no
 	}
@@ -2188,6 +2223,18 @@ warrior_lodges_03 = {
 		scope:holder.culture = {
 			has_innovation = innovation_burhs
 		}
+		trigger_if = {
+			limit = {
+				scope:holder = {
+					NOT = {
+						government_has_flag = government_is_tribal
+					}
+				}
+			}
+			NOT = {
+				has_holding_type = tribal_holding
+			}
+		}
 	}
 
 	can_construct_showing_failures_only = {
@@ -2239,6 +2286,18 @@ warrior_lodges_04 = {
 		building_requirement_castle_city_church = { LEVEL = 02 }
 		scope:holder.culture = {
 			has_innovation = innovation_burhs
+		}
+		trigger_if = {
+			limit = {
+				scope:holder = {
+					NOT = {
+						government_has_flag = government_is_tribal
+					}
+				}
+			}
+			NOT = {
+				has_holding_type = tribal_holding
+			}
 		}
 	}
 
@@ -2545,48 +2604,60 @@ military_camps_01 = {
 				has_stationed_regiment_of_base_type = archers
 			}
 		}
-		#modifier = {
-		#	factor = 0
-		#	building_regimental_grounds_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = regimental_grounds_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_horse_pastures_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = horse_pastures_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_hillside_grazing_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = hillside_grazing_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_warrior_lodges_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = warrior_lodges_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_regimental_grounds_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = regimental_grounds_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_horse_pastures_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = horse_pastures_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_hillside_grazing_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = hillside_grazing_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_warrior_lodges_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = warrior_lodges_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			add = -9
 			has_building_or_higher = city_01
@@ -3696,6 +3767,8 @@ outposts_01 = {
 			NOT = {
 				has_building_or_higher = camel_farms_01
 			}
+			#ADDED - disable that
+			always = no
 		}
 		modifier = {
 			factor = 0
@@ -3703,6 +3776,8 @@ outposts_01 = {
 			NOT = {
 				has_building_or_higher = horse_pastures_01
 			}
+			#ADDED - disable that
+			always = no
 		}
 		modifier = {
 			factor = 0
@@ -3710,6 +3785,8 @@ outposts_01 = {
 			NOT = {
 				has_building_or_higher = hillside_grazing_01
 			}
+			#ADDED - disable that
+			always = no
 		}
 		modifier = {
 			factor = 0
@@ -3717,6 +3794,8 @@ outposts_01 = {
 			NOT = {
 				has_building_or_higher = warrior_lodges_01
 			}
+			#ADDED - disable that
+			always = no
 		}
 		modifier = { # It now has a small economic component; build it last
 			add = -3
@@ -3752,12 +3831,12 @@ outposts_02 = {
 	can_construct_potential = {
 		building_outposts_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
-		}
 	}
 
 	can_construct_showing_failures_only = {
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 		building_requirement_tribal = no
 	}
 	
@@ -4220,10 +4299,9 @@ barracks_01 = {
 		monthly_piety = 0.1
 	}
 
-	#ADDED
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1
+		levy_size = 0.02	#prev 0.01
 	}
 
 	province_culture_modifier = {
@@ -4263,24 +4341,27 @@ barracks_01 = {
 			add = -9
 			has_building_or_higher = city_01
 		}
-		#modifier = {
-		#	add = -10
-		#	scope:holder = {
-		#		has_government = theocracy_government
-		#		highest_held_title_tier <= tier_barony
-		#	}
-		#}
+		modifier = {
+			add = -10
+			scope:holder = {
+				has_government = theocracy_government
+				highest_held_title_tier <= tier_barony
+			}
+		}
+		modifier = {
+			add = 5
+			scope:holder = { 
+				ai_has_pious_builder_personality = yes
+				culture = { has_cultural_parameter = building_barracks_piety_bonuses }
+			}
+			#ADDED - disable that
+			always = no
+		}
 		#ADDED - yk lessee is a thing too right?
 		modifier = {
 			add = -10
 			scope:holder = {
-				OR = {
-					AND = {
-						government_has_flag = government_is_theocracy
-						highest_held_title_tier <= tier_barony
-					}
-					is_theocratic_lessee = yes
-				}
+				is_theocratic_lessee = yes
 			}
 		}
 		#ADDED
@@ -4300,6 +4381,9 @@ barracks_02 = {
 	can_construct_potential = {
 		building_barracks_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
+	}
+
+	can_construct_showing_failures_only = {
 		trigger_if = {
 			limit = {
 				NOT = {
@@ -4317,9 +4401,6 @@ barracks_02 = {
 				has_cultural_parameter = next_level_barracks
 			}
 		}
-	}
-
-	can_construct_showing_failures_only = {
 		building_requirement_tribal = no
 	}
 	
@@ -4337,9 +4418,9 @@ barracks_02 = {
 		monthly_piety = 0.2
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1
+		levy_size = 0.04	#prev 0.01
 	}
 
 	province_culture_modifier = {
@@ -4417,9 +4498,9 @@ barracks_03 = {
 		monthly_piety = 0.3
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1
+		levy_size = 0.06	#prev 0.02
 	}
 
 	province_culture_modifier = {
@@ -4498,9 +4579,9 @@ barracks_04 = {
 		monthly_piety = 0.4
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1		#prev 2
+		levy_size = 0.08	#prev 0.02
 	}
 
 	province_culture_modifier = {
@@ -4568,7 +4649,7 @@ barracks_05 = {
 	levy = normal_building_levy_tier_5
 	
 	county_modifier = {
-		levy_reinforcement_rate = normal_levy_reinforcement_rate_tier_2
+		#levy_reinforcement_rate = normal_levy_reinforcement_rate_tier_2
 		#levy_size = 0.01
 		#garrison_size = 0.01
 	}
@@ -4584,9 +4665,9 @@ barracks_05 = {
 		monthly_piety = 0.5
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1		#prev 2
+		levy_size = 0.1		#prev 0.03
 	}
 
 	province_culture_modifier = {
@@ -4670,9 +4751,9 @@ barracks_06 = {
 		monthly_piety = 0.6
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1		#prev 3
+		levy_size = 0.13	#prev 0.03
 	}
 
 	province_culture_modifier = {
@@ -4756,9 +4837,9 @@ barracks_07 = {
 		monthly_piety = 0.7
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1		#prev 3
+		levy_size = 0.16	#prev 0.04
 	}
 
 	province_culture_modifier = {
@@ -4842,9 +4923,9 @@ barracks_08 = {
 		monthly_piety = 0.8
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1		#prev 4
+		levy_size = 0.2		#prev 0.04
 	}
 
 	province_culture_modifier = {
@@ -4953,13 +5034,13 @@ camel_farms_02 = {
 	can_construct_potential = {
 		building_camel_farms_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
-		scope:holder.culture = {
-			has_innovation = innovation_barracks
-		}
 	}
 	
 	can_construct_showing_failures_only = {
 		building_requirement_tribal = no
+		scope:holder.culture = {
+			has_innovation = innovation_barracks
+		}
 	}
 
 	cost_gold = normal_building_tier_2_cost
@@ -5405,35 +5486,45 @@ stables_01 = {
 			NOT = {
 				has_building_or_higher = regimental_grounds_01
 			}
+			#ADDED - disable that
+			always = no
 		}
-		#modifier = {
-		#	factor = 0
-		#	building_farm_estates_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = farm_estates_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_orchards_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = orchards_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_hillside_grazing_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = hillside_grazing_01
-		#	}
-		#}
-		#modifier = {
-		#	factor = 0
-		#	building_warrior_lodges_requirement_terrain = yes
-		#	NOT = {
-		#		has_building_or_higher = warrior_lodges_01
-		#	}
-		#}
+		modifier = {
+			factor = 0
+			building_farm_estates_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = farm_estates_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_orchards_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = orchards_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_hillside_grazing_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = hillside_grazing_01
+			}
+			#ADDED - disable that
+			always = no
+		}
+		modifier = {
+			factor = 0
+			building_warrior_lodges_requirement_terrain = yes
+			NOT = {
+				has_building_or_higher = warrior_lodges_01
+			}
+			#ADDED - disable that
+			always = no
+		}
 		modifier = {
 			add = -9
 			has_building_or_higher = city_01
@@ -5476,6 +5567,9 @@ stables_02 = {
 	can_construct_potential = {
 		building_stables_requirement_terrain = yes
 		building_requirement_castle_city_church = { LEVEL = 01 }
+	}
+
+	can_construct_showing_failures_only = {
 		trigger_if = {
 			limit = {
 				NOT = {
@@ -5493,9 +5587,6 @@ stables_02 = {
 				has_cultural_parameter = next_level_stables
 			}
 		}
-	}
-
-	can_construct_showing_failures_only = {
 		building_requirement_tribal = no
 	}
 	
@@ -5979,12 +6070,6 @@ smiths_01 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_1
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 1
-		#ADDED
-		men_at_arms_limit = 1
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_1
@@ -6147,11 +6232,6 @@ smiths_02 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_2
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 1
-		men_at_arms_limit = 1
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_2
@@ -6231,11 +6311,6 @@ smiths_03 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_3
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 1		#prev 2
-		men_at_arms_limit = 1
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_3
@@ -6249,7 +6324,6 @@ smiths_03 = {
 		#Mandala Creator Aspect
 		creator_mandala_built_regular_building_piety_effect = yes
 	}
-	
 	
 	next_building = smiths_04
 	
@@ -6312,11 +6386,6 @@ smiths_04 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_4
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 1		#prev 2
-		men_at_arms_limit = 1
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_4
@@ -6391,11 +6460,6 @@ smiths_05 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_5
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 2		#prev 3
-		men_at_arms_limit = 1
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_5
@@ -6470,11 +6534,6 @@ smiths_06 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_6
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 2		#prev 3
-		men_at_arms_limit = 1	#prev 2
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_6
@@ -6549,11 +6608,6 @@ smiths_07 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_7
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 2		#prev 4
-		men_at_arms_limit = 1	#prev 2
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_7
@@ -6628,11 +6682,6 @@ smiths_08 = {
 		knight_effectiveness_mult = normal_knight_effectiveness_mult_tier_8
 	}
 
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		knight_limit = 2		#prev 4
-		men_at_arms_limit = 1	#prev 3
-	}
 	province_culture_modifier = {
 		parameter = coking_smith_bonuses
 		stationed_maa_toughness_mult = normal_maa_toughness_tier_8

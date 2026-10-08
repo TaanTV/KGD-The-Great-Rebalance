@@ -2,3 +2,13 @@
 	value = 100
 	subtract = bellum_justum_discount_percentage
 }
+
+at_any_cost_perk_discount_percentage = {
+	value = 15
+}
+
+at_any_cost_perk_discount_multiplier = {
+	value = 100
+	subtract = at_any_cost_perk_discount_percentage
+	multiply = 0.01
+}

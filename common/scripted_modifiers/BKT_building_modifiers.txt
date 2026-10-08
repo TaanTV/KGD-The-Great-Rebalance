@@ -20,7 +20,7 @@ ai_general_building_modifier = {
 
 ai_tier_1_economical_building_preference_modifier = {
 	modifier = { # Economy boom AI's like economy buildings
-		add = 5
+		add = 2		#prev 5
 		scope:holder = {
 			OR = {
 				ai_has_economical_boom_personality = yes

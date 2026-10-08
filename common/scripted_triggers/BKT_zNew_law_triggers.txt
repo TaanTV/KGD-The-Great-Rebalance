@@ -9,6 +9,17 @@
 }
 
 realm_law_use_own_war_declaration_law_trigger = {
+	NOT = { has_game_rule = bkt_own_war_declaration_law_toggle_disabled }
+	#OR = {
+	#	has_game_rule = bkt_own_war_declaration_law_toggle_enabled
+	#	AND = {
+	#		has_game_rule = bkt_own_war_declaration_law_toggle_player_only
+	#		OR = {
+	#			is_ai = no
+	#			has_variable = currently_dying
+	#		}
+	#	}
+	#}
 	NOR = {
 		government_has_flag = government_is_landless_adventurer
 		government_has_flag = government_is_herder
@@ -19,29 +30,25 @@ realm_law_use_own_war_declaration_law_trigger = {
 			top_liege = this
 		}
 		#Covered separatly
-		#government_allows = administrative
+		#government_has_mechanic = administrative
 		#government_allows = deny_powerful_vassal
-	}
-	OR = {
-		has_game_rule = bkt_own_war_declaration_law_toggle_enabled
-		AND = {
-			is_ai = no
-			has_game_rule = bkt_own_war_declaration_law_toggle_player_only
-		}
 	}
 }
 
 can_declare_war_according_to_laws_trigger = {
 	trigger_if = {
-		limit = { 		#I cheat here for AI counts coz they dont get the opportunity pulse to sway councillors
-			is_ai = yes
-			highest_held_title_tier <= tier_county
-		}
-		always = yes
-	}
-	trigger_if = {
-		limit = { 		#Conquerors are cheaty bastards so they can just cheat through the thing.
-			has_variable = conqueror
+		limit = { 		
+			OR = {
+				has_game_rule = bkt_own_war_declaration_law_toggle_disabled
+				has_variable = conqueror		#Conquerors are cheaty bastards so they can just cheat through the thing.
+				AND = {
+					is_ai = yes
+					OR = {
+						has_game_rule = bkt_own_war_declaration_law_toggle_player_only
+						highest_held_title_tier <= tier_county	#I cheat here for AI counts coz they dont get the opportunity pulse to sway councillors
+					}
+				}
+			}
 		}
 		always = yes
 	}
@@ -108,13 +115,17 @@ can_pass_own_war_declaration_law_1 = {
 		}
 	}
 	trigger_else_if = {
-		limit = { government_allows = administrative }
+		limit = { government_has_mechanic = administrative }
 	}
 	trigger_else = {
 		custom_description = {
 			text = "has_law_allowing_title_revocation_crown"
 			has_realm_law_flag = title_revocation_allowed
 		}
+	}
+	trigger_if = {
+		limit = { is_ai = yes }
+		NOT = { has_game_rule = bkt_own_war_declaration_law_toggle_player_only }
 	}
 }
 
@@ -130,7 +141,7 @@ can_pass_own_war_declaration_law_2 = {
 			OR = {
 				government_has_flag = government_is_feudal
 				government_has_flag = government_is_clan
-				government_allows = administrative
+				government_has_mechanic = administrative
 				government_has_flag = government_is_japan_feudal
 				tgp_has_ceremonial_liege_title_trigger = yes
 				government_has_flag = government_is_mandala	#isnt included in the tooltip but who cares really
@@ -150,7 +161,7 @@ can_pass_own_war_declaration_law_2 = {
 			}
 		}
 	}
-	trigger_if = { # We split the tooltip into two, to make sure we don't show admin unless you actually have it
+	trigger_if = { 
 		limit = {
 			government_has_flag = government_is_mandala
 			exists = culture
@@ -162,7 +173,7 @@ can_pass_own_war_declaration_law_2 = {
 			OR = {
 				government_has_flag = government_is_feudal
 				government_has_flag = government_is_clan
-				government_allows = administrative
+				government_has_mechanic = administrative
 				government_has_flag = government_is_japan_feudal
 				tgp_has_ceremonial_liege_title_trigger = yes
 			}
@@ -175,4 +186,29 @@ can_pass_own_war_declaration_law_2 = {
 	trigger_else = {
 		always = yes
 	}
+	trigger_if = {
+		limit = { is_ai = yes }
+		NOT = { has_game_rule = bkt_own_war_declaration_law_toggle_player_only }
+	}
+}
+
+not_has_discontent_liberty_faction_trigger = {
+	custom_tooltip = {
+		text = has_active_liberty_faction
+		NOT = { any_targeting_faction = { faction_type = liberty_faction discontent_per_month > 0 } }
+	}
+}
+
+#rite scope
+rite_prefers_extreme_gender_laws = {
+	OR = {
+		rite_has_parameter = pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
+		AND = {
+			has_game_rule = bkt_gender_laws_prefer_extreme
+			NOR = { 
+				rite_has_doctrine = doctrine_pluralism_pluralistic 
+			}
+		}
+	}
+	NOT = { rite_has_parameter = unreformed }
 }

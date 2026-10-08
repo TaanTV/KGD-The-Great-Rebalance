@@ -42,24 +42,34 @@ royal_architect_fortify_lands = {
 
 	scaling_employer_modifiers = {
 		terrible = {
-			additional_fort_level = 1
+			#additional_fort_level = 1
 			garrison_size = 0.01
+			#ADDED
+			capital_fort_level = 1
 		}
 		poor = {
-			additional_fort_level = 1
+			#additional_fort_level = 1
 			garrison_size = 0.02
+			#ADDED
+			capital_fort_level = 1
 		}
 		average = {
-			additional_fort_level = 2
+			#additional_fort_level = 2
 			garrison_size = 0.04
+			#ADDED
+			capital_fort_level = 2
 		}
 		good = {
-			additional_fort_level = 2
+			#additional_fort_level = 2
 			garrison_size = 0.07
+			#ADDED
+			capital_fort_level = 2
 		}
 		excellent = {
-			additional_fort_level = 3
+			#additional_fort_level = 3
 			garrison_size = 0.1
+			#ADDED
+			capital_fort_level = 3
 		}
 	}
 

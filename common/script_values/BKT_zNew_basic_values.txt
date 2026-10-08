@@ -177,31 +177,6 @@ revoke_title_succession_law_prestige_cost = {
 	value = change_title_succession_law_prestige_cost
 	#multiply = 2
 }
-
-own_war_declaration_law_prestige_cost = {
-	if = {
-		limit = {
-			OR = {
-				has_realm_law_in_group = crown_authority 
-				government_allows = administrative
-			}
-		}
-		add = increase_crown_authority_prestige_cost
-	}
-	else_if = {
-		limit = {
-			OR = {
-				has_realm_law_in_group = tribal_authority 
-				has_realm_law_in_group = nomadic_authority 
-			}
-		}
-		add = increase_tribal_authority_prestige_cost
-	}
-	else = {
-		add = 1000
-	}
-}
-
 #Dynamic gold stuff
 
 #tiny_gold_max_value_static = 50
@@ -403,7 +378,7 @@ monumental_gold_max_less_scaled_value = {
 }
 
 #province scope
-excepted_combined_building_level = {
+expected_combined_building_level = {
 	value = 1	#dunno if holding level counts, but 1 is the absolute minimum for sure
 	county.holder.culture ?= {
 		if = {
@@ -465,15 +440,9 @@ excepted_combined_building_level = {
 		
 		if = {
 			limit = { 
-				has_innovation = innovation_battlements
+				has_innovation = innovation_machicolations
 			}
-			max = 2
-		}
-		else_if = {
-			limit = { 
-				has_innovation = innovation_battlements
-			}
-			max = 4
+			max = 8
 		}
 		else_if = {
 			limit = { 
@@ -483,17 +452,105 @@ excepted_combined_building_level = {
 		}
 		else_if = {
 			limit = { 
-				has_innovation = innovation_machicolations
+				has_innovation = innovation_battlements
 			}
-			max = 8
+			max = 4
+		}
+		else = {
+			max = 2
 		}
 	}
 		
 	multiply = building_slots
 }
 
-excepted_combined_building_level_halved = { 
-	value = excepted_combined_building_level
+expected_combined_building_level_halved = { 
+	value = expected_combined_building_level
 	multiply = 0.5
 	ceiling = yes
+}
+
+#more or less the same as total_county_levies but a biiiiit different
+total_barony_levies = {
+	value = 0
+
+	# Get the base levies from each province.
+	title_province = {
+		add = building_levies
+		add = combined_building_level
+		add = building_max_garrison
+	}
+
+	# Levy size multipliers (excluding ruler-specific modifiers, such as Martial skill).
+	multiply = {
+		# 100% Levy Base
+		value = 1
+
+		# Adds bonus levies from Development (at base 20 development, +20% levies).
+		add = {
+			add = county.development_level
+			multiply = 0.01
+		}
+
+		# Adds bonus levies from cultural innovations.
+		if = {
+			limit = {
+				county.culture = {
+					has_innovation = innovation_bannus
+				}
+			}
+			add = 0.1
+		}
+	}
+}
+
+#culture scope
+culture_era_value = {
+	if = {
+		limit = {
+			has_cultural_era_or_later = culture_era_late_medieval
+		}
+		value = 4
+	}
+	else_if = {
+		limit = {
+			has_cultural_era_or_later = culture_era_high_medieval
+		}
+		value = 3
+	}
+	else_if = {
+		limit = {
+			has_cultural_era_or_later = culture_era_early_medieval
+		}
+		value = 2
+	}
+	else = {
+		value = 1
+	}
+}
+
+#Those 2 exist just so i hopefully wont have to touch that loc ever again
+offer_courtier_dynasty_prestige_gain = 30
+offer_courtier_dynasty_prestige_gain_halved = 15
+
+council_task_control_multiplier = {
+	value = 1
+	if = {
+		limit = {
+			exists = scope:county
+			scope:county.county_control <= 99
+		}
+		multiply = {
+			value = scope:county.county_control
+			round = yes
+			divide = 100
+			min = 0.01
+			desc = bkt_low_county_control_desc
+		}
+	}
+}
+
+study_faith_ask_for_emissary_gold_value = {
+	value = 10
+	multiply = culture.culture_era_value
 }

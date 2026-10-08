@@ -5,6 +5,7 @@
 
 #got_council_position_effect: 			gives the corresponding opinion to the liege
 #fired_from_council_position_effect: 	gives the corresponding opinion to the liege
+#assign_landed_realm_priest_effect: 	puts the most appropriate landed clergy vassal in the Realm Priest seat
 
 #####################################################################
 # COUNCIL EFFECTS
@@ -54,6 +55,22 @@ got_council_position_effect = {
 	}
 
 	add_character_flag = is_in_the_council
+	if = {
+		limit = {
+			has_pam_dlc_trigger = yes
+			NOT = { religion = religion:christianity_religion }
+			scope:councillor_liege ?= {
+				highest_held_title_tier >= tier_kingdom
+				any_character_situation = {
+					situation_type = the_christian_church
+					situation_top_has_catalyst = catalyst_the_christian_church_ruler_hired_non_christian_councillor
+				}
+			}
+		}
+		situation:the_christian_church = {
+			trigger_situation_catalyst = catalyst_the_christian_church_ruler_hired_non_christian_councillor
+		}
+	}
 	
 	#ADDED
 	if = {

@@ -62,7 +62,7 @@ fp1_scandi_adventurer_conquest = {
 				}
 				trigger_event = {
 					id = fp1_trade_events.1131
-					days = 30
+					days = 60	#prev 30
 				}
 			}
 		}
@@ -203,7 +203,7 @@ fp1_scandi_adventurer_conquest = {
 		hidden_effect = {
 			scope:attacker = {
 				if = {
-					limit = { government_has_flag = government_is_nomadic }
+					limit = { government_has_flag = government_is_nomadic exists = culture }
 					culture = { save_temporary_scope_as = old_culture }
 					create_divergent_culture_with_side_effects_excluding_cost = yes 
 					culture ?= {
@@ -239,6 +239,7 @@ fp1_scandi_adventurer_conquest = {
 						limit = { culture = scope:old_culture }
 						set_county_culture = scope:attacker.culture
 					}
+					domicile ?= { set_domicile_culture = prev.culture }
 				}
 			}
 		}
@@ -333,9 +334,11 @@ fp1_scandi_adventurer_conquest = {
 
 		# Prestige loss for the attacker
 		scope:attacker = {
-			#pay_short_term_gold_reparations_effect = {
-			#	GOLD_VALUE = 5
-			#}
+			#ADDED note: moved down below
+			if = {
+				limit = { scope:war ?= { NOT = { has_variable = no_gold_reparations } } }
+				#pay_short_term_gold_reparations_effect = { GOLD_VALUE = 5 }
+			}
 			add_prestige = {
 				value = major_prestige_value
 				multiply = -1.0
@@ -385,7 +388,8 @@ fp1_scandi_adventurer_conquest = {
 			else_if = {
 				limit = {
 					has_variable = fp1_has_beaten_sa_progress
-					var:fp1_has_beaten_sa_progress <= 8 #Unop: Was 9, but the nick should be unlock at the 10th not 11th
+					## If <9 adventurers has already been defeated, add +1 otherwise...
+					var:fp1_has_beaten_sa_progress <= 8
 				}
 				change_variable = {
 					name = fp1_has_beaten_sa_progress
@@ -393,6 +397,7 @@ fp1_scandi_adventurer_conquest = {
 				}
 			}
 			## ... towards a pay-off.
+			## if >8 adventures has already been defeated give nickname
 			else_if = {
 				limit = {
 					OR = {
@@ -431,11 +436,12 @@ fp1_scandi_adventurer_conquest = {
 		}
 
 		# Since they lost, take away their efficacy loan.
+		#save_temporary_scope_as = war
 		scope:attacker = { 
-			#remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value 
+			remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value 
 			#ADDED CHANGED please pay something to the defender
 			if = {
-				limit = { root.war.defender_war_score > 50 }	#not sure if that would stop it giving gold for fp1_trade_events.1131.c option
+				limit = { scope:war ?= { NOT = { has_variable = no_gold_reparations } } }
 				pay_short_term_gold = { 
 					target = scope:defender
 					gold = {
@@ -443,19 +449,39 @@ fp1_scandi_adventurer_conquest = {
 						multiply = 0.5
 					}
 				}
-			}
-			else = {
-				show_as_tooltip = {
-					pay_short_term_gold = { 
-						target = scope:defender
-						gold = {
-							value = scandinavian_adventurer_efficacy_loan_value
-							multiply = 0.5
+				if = {
+					limit = { scope:defender = { is_ai = no } }
+					hard_imprison_character_effect = {
+						TARGET = scope:attacker
+						IMPRISONER = scope:defender
+					}
+				}
+				else = {
+					show_as_tooltip = {
+						hard_imprison_character_effect = {
+							TARGET = scope:attacker
+							IMPRISONER = scope:defender
+						}
+					}
+					hidden_effect = {
+						scope:defender = {
+							add_courtier = scope:attacker 
+							remove_opinion = { 
+								target = scope:attacker 
+								modifier = declared_war
+							}
+						}
+						scope:attacker = {
+							set_character_faith = scope:defender.faith
+							add_opinion = {
+								modifier = compelled_me_to_convert_opinion
+								target = scope:defender
+								opinion = -10
+							}
 						}
 					}
 				}
 			}
-			remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value
 		}
 
 		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold

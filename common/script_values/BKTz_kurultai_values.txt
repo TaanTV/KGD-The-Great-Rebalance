@@ -86,3 +86,87 @@ kurultai_exploit_area_fertility_final_value = {
 	max = 7.5	#perv 1.5
 }
 
+
+
+#those shouldnt be there but i aint creating files for all that
+### Kurultai Learn on the Job modifier
+kurultai_chancellor_learn_on_the_job_scale = {
+	value = 0
+	if = {
+		limit = {
+			exists = liege
+			liege = { has_perk = learn_on_the_job_perk }
+			highest_skill = diplomacy
+		}
+		add = diplomacy
+		multiply = {
+			add = learn_on_the_job_percentage
+			divide = 100
+			#ADDED
+			multiply = 2
+			divide = 3
+		}
+		floor = yes
+		min = 1
+	}
+}
+
+kurultai_steward_learn_on_the_job_scale = {
+	value = 0
+	if = {
+		limit = {
+			liege = { has_perk = learn_on_the_job_perk }
+			highest_skill = stewardship
+		}
+		add = stewardship
+		multiply = {
+			add = learn_on_the_job_percentage
+			divide = 100
+			#ADDED
+			multiply = 2
+			divide = 3
+		}
+		floor = yes
+		min = 1
+	}
+}
+
+kurultai_marshal_learn_on_the_job_scale = {
+	value = 0
+	if = {
+		limit = {
+			liege = { has_perk = learn_on_the_job_perk }
+			highest_skill = martial
+		}
+		add = martial
+		multiply = {
+			add = learn_on_the_job_percentage
+			divide = 100
+			#ADDED
+			multiply = 2
+			divide = 3
+		}
+		floor = yes
+		min = 1
+	}
+}
+
+kurultai_court_chaplain_learn_on_the_job_scale = {
+	value = 0
+	if = {
+		limit = {
+			liege = { has_perk = learn_on_the_job_perk }
+			highest_skill = learning
+		}
+		add = learning
+		multiply = {
+			add = learn_on_the_job_percentage
+			divide = 100
+			#ADDED
+			multiply = 2
+			divide = 3
+		}
+		floor = yes
+		min = 1
+	}
+}

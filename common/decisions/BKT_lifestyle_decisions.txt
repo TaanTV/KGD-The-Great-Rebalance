@@ -135,12 +135,12 @@ extort_subjects_decision = {
 	cooldown = { days = @extort_subjects_cooldown_time }
 
 	is_shown = {
-		is_landless_adventurer = no
 		OR = {
 			#has_perk = it_is_my_domain_perk	#nope!
 			has_character_modifier = fp3_justification_for_taxation_modifier
 			has_character_modifier = fp3_excuses_for_extortion_modifier
 		}
+		is_landless_adventurer = no
 	}
 
 	is_valid_showing_failures_only = {
@@ -173,7 +173,7 @@ extort_subjects_decision = {
 			days = { 3 5 }
 		}
 
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			generous = major_stress_gain
 		}
 	}

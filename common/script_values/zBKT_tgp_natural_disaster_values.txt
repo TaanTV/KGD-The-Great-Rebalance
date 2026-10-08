@@ -4,10 +4,8 @@
 natural_disaster_contributions_cost_value = {
 	add = {
 		add = scope:great_project.great_project_owner.minor_gold_value
-		min = 100
+		min = 50			#prev 100
 		multiply = 0.66		#prev 0.5
-		#ADDED
-		floor = yes
 		multiply = {
 			add = 1
 			add = { # first value added as a mult for each county beyond the first
@@ -18,6 +16,8 @@ natural_disaster_contributions_cost_value = {
 				}
 			}
 		}
+		#ADDED
+		floor = yes
 		desc = great_project_contribution_cost_num_affected_realm_counties
 	}
 }
@@ -25,10 +25,8 @@ natural_disaster_contributions_cost_value = {
 natural_disaster_contributions_cost_treasury_value = {
 	add = {
 		add = scope:great_project.great_project_owner.minor_gold_value
-		min = 100
+		min = 50			#prev 100
 		multiply = 0.66		#prev 0.5
-		#ADDED
-		floor = yes
 		multiply = {
 			add = 1
 			add = { # first value added as a mult for each county beyond the first
@@ -44,12 +42,14 @@ natural_disaster_contributions_cost_treasury_value = {
 			limit = { highest_held_title_tier >= tier_empire }
 			multiply = 2
 		}
+		#ADDED
+		floor = yes
 		desc = great_project_contribution_cost_num_affected_realm_counties
 	}
 }
 
 natural_disaster_legitimacy_loss_value = {
-	value = -150	#prev -50
+	value = -300	#prev -50
 	if = {
 		limit = { title:h_china.holder ?= this }
 		#multiply = 2 # Disasters hit the Legitimacy of the Chinese Emperor harder
@@ -65,15 +65,19 @@ natural_disaster_legitimacy_loss_value = {
 			multiply = 2 # Especially during unstable phases of the Dynastic Cycle
 		}
 	}
-	#ADDED
+	#ADDED - less of a penalty for dukes and below, more of a penalty to admin realms
 	if = {
-		limit = { government_allows = administrative }
-		multiply = 2
+		limit = { highest_held_title_tier < tier_kingdom }
+		add = 100
+	}
+	if = {
+		limit = { government_has_mechanic = administrative }
+		multiply = 1.5
 	}
 }
 
 natural_disaster_great_project_mandatory_investment_legitimacy_gain_value = {
-	value = 50	#prev 25
+	value = 100	#prev 25
 	if = {
 		limit = { 
 			title:h_china.holder ?= this 
@@ -89,7 +93,7 @@ natural_disaster_great_project_mandatory_investment_legitimacy_gain_value = {
 }
 
 natural_disaster_great_project_optional_investment_legitimacy_gain_value = {
-	value = 100	#prev 50
+	value = 200	#prev 50
 	if = {
 		limit = { 
 			title:h_china.holder ?= this 
@@ -101,5 +105,25 @@ natural_disaster_great_project_optional_investment_legitimacy_gain_value = {
 			}
 		}
 		multiply = 2 # The Emperor resolving disasters during Instability is proof of the Mandate of Heaven
+	}
+}
+
+natural_disaster_earthquake_max_severity = {
+	#ADDED
+	value = 1
+	switch = {
+		trigger = geographical_region
+		geographical_region:himalaya_earthquake_region = { value = 3 }
+		geographical_region:mongolia_baikal_earthquake_region = { value = 3 }
+		geographical_region:sichuan_myanmar_earthquake_region = { value = 3 }
+		geographical_region:world_europe_west_britannia = { value = 1 }
+		geographical_region:world_europe_north = { value = 1 }
+		geographical_region:world_middle_east_arabia = { value = 1 }
+		geographical_region:world_india = { value = 1 }  # himalaya and burma strips fired before, rest of india is basically safe
+		geographical_region:world_africa_west = { value = 1 }
+		geographical_region:world_steppe_west = { value = 1 }
+		geographical_region:world_siberia = { value = 1 }
+		geographical_region:world_asia_southeast_islands_weak_earthquake_region = { value = 1 }
+		geographical_region:world_asia_north_east_and_korea_weak_earthquake_region = { value = 1 }
 	}
 }

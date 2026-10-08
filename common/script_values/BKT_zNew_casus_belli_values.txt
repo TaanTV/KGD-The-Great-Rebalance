@@ -2,9 +2,9 @@
 	if = {
 		limit = {
 			exists = scope:claimant
-			scope:attacker.faith ?= {
-				this = scope:defender.faith
-				has_doctrine_parameter = excommunication_active
+			scope:attacker ?= {
+				faith = scope:defender.faith
+				rite = { rite_has_parameter = pressing_claims_vs_same_faith_cost_piety }
 			}
 			NOT = { scope:defender = { has_trait = excommunicated } }
 		}

@@ -12,3 +12,34 @@ tgp_natural_disaster_resettlement_taxation_loss = {
 	icon = economy_negative
 	tax_mult = -0.25	#prev -0.5
 }
+
+tgp_natural_disaster_memorial_fortifications = {
+	icon = county_modifier_development_positive
+	additional_fort_level = 1	#prev 2
+	#ADDED - all below except stacking = yes
+	garrison_size = 0.05
+	county_opinion_add = 5
+	stacking = yes
+}
+
+tgp_natural_disaster_memorial_fortifications_wierdijks = {
+	icon = county_modifier_development_positive
+	additional_fort_level = 2	#prev 3
+	#ADDED - all below except stacking = yes
+	garrison_size = 0.1
+	county_opinion_add = 10
+	stacking = yes
+}
+
+tgp_natural_disaster_flood_fertility_county_modifier = {
+	icon = county_modifier_development_positive
+	development_growth_factor = 0.25		#prev 0.15
+	supply_limit_mult = 0.25
+	county_fertility_growth_mult = 0.25
+	#ADDED
+	development_growth = 0.1
+}
+tgp_natural_disaster_drainage_reduce_levies = {
+	icon = martial_negative
+	levy_size = -0.35			#prev -0.5
+}

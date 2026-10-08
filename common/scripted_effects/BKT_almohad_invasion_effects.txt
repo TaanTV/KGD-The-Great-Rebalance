@@ -12,10 +12,14 @@ spawn_second_almohad_troops_effect = {
 		limit = {
 			is_at_war = yes
 		}
-		#Yes, twice.
+		#Yes, twice... but only sometimes
 		save_temporary_scope_as = root_scope
+		save_temporary_scope_as = recalc_base_troop_count	#just in case, im def overengineering this
 		spawn_almohad_troops_effect = { TROOPS_NAME = second_almohad_event_troops }
-		spawn_almohad_troops_effect = { TROOPS_NAME = second_almohad_event_troops }
+		if = {
+			limit = { current_military_strength < 10000 }
+			spawn_almohad_troops_effect = { TROOPS_NAME = second_almohad_event_troops }
+		}
 		#ADDED - also become conqueror coz why not really
 		trigger_event = conqueror.0001
 	}
@@ -23,6 +27,13 @@ spawn_second_almohad_troops_effect = {
 
 spawn_almohad_troops_effect = {
 	if = {
+		limit = { 
+			exists = scope:base_troop_count 
+			NOT = { exists = scope:recalc_base_troop_count }
+		}
+		#do nothing
+	}
+	else_if = {
 		limit = {
 			is_at_war = yes
 		}
@@ -52,9 +63,8 @@ spawn_almohad_troops_effect = {
 		name = $TROOPS_NAME$
 		levies = {
 			value = scope:base_troop_count
-			divide = 2000
-			ceiling = yes	#to round to nearest 500
-			multiply = 500
+			divide = 4
+			round_to = 500
 		}
 		men_at_arms = {
 			type = mulaththamun
@@ -91,9 +101,8 @@ spawn_almohad_troops_effect = {
 		name = $TROOPS_NAME$
 		levies = {
 			value = scope:base_troop_count
-			divide = 1500
-			ceiling = yes	#to round to nearest 500
-			multiply = 500
+			divide = 3
+			round_to = 500
 		}
 		men_at_arms = {
 			type = abudrar
@@ -121,9 +130,8 @@ spawn_almohad_troops_effect = {
 		name = $TROOPS_NAME$
 		levies = {
 			value = scope:base_troop_count
-			divide = 1500
-			ceiling = yes	#to round to nearest 500
-			multiply = 500
+			divide = 3
+			round_to = 500
 		}
 		men_at_arms = {
 			type = abudrar

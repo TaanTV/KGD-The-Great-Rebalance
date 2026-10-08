@@ -49,7 +49,7 @@ innovation_battlements = {
 	custom = unlock_fortification_rights_contract
 	
 	character_modifier = {
-		men_at_arms_maintenance = -0.05
+		#men_at_arms_maintenance = -0.05
 	}
 	
 	#ADDED
@@ -221,10 +221,10 @@ innovation_horseshoes = {
 	character_modifier = {
 		movement_speed = 0.05		#prev 0.1
 		#ADDED
-		light_cavalry_maintenance_mult = -0.15
-		heavy_cavalry_maintenance_mult = -0.15
-		archer_cavalry_maintenance_mult = -0.15
-		camel_cavalry_maintenance_mult = -0.15
+		light_cavalry_maintenance_mult = -0.05
+		heavy_cavalry_maintenance_mult = -0.05
+		archer_cavalry_maintenance_mult = -0.05
+		camel_cavalry_maintenance_mult = -0.05
 	}
 	maa_upgrade = {
 		type = light_cavalry
@@ -345,9 +345,12 @@ innovation_development_02 = {
 
 	custom = reduce_develop_county_penalty_02
 	
-	#ADDED
+	#ADDED - the next 2
+	character_modifier = {
+		domain_limit = 1
+	}
 	ai_weight_for_fascination = {
-		value = 100
+		value = 750	#almost 
 		if = {
 			limit = { NOT = { has_cultural_era_or_later = culture_era_early_medieval } }
 			multiply = 0.001
@@ -574,6 +577,8 @@ innovation_ghilman = {
 
 	character_modifier = {
 		men_at_arms_maintenance = -0.15
+		#ADDED
+		men_at_arms_recruitment_cost = 0.15
 	}
 	
 	#ADDED

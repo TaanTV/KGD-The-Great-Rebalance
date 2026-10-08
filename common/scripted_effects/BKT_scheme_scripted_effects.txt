@@ -1,73 +1,7 @@
 ﻿# If appropriate, murder anyone travelling with scope:target.
 murder_entourage_list_effect = {
 	# Pick three random entourage members to kill
-	scope:target = {
-		current_travel_plan = {
-			#ADDED - now in random (note - no proper tabulation for easier compare time)
-			random = {
-				chance = 60
-			random_entourage_character = {
-				limit = {
-					this != scope:target
-				}
-				scope:owner = {
-					add_to_variable_list = {
-						name = entourage_members_to_kill
-						target = prev
-					}
-				}
-			}
-			}
-			#ADDED - now in random (note - no proper tabulation for easier compare time)
-			random = {
-				chance = 30
-			random_entourage_character = {
-				limit = {
-					NOR = {
-						this = scope:target
-						this = scope:owner
-						scope:owner = {
-							is_target_in_variable_list = {
-								name = entourage_members_to_kill
-								target = prev
-							}
-						}
-					}
-				}
-				scope:owner = {
-					add_to_variable_list = {
-						name = entourage_members_to_kill
-						target = prev
-					}
-				}
-			}
-			}
-			#ADDED - now in random (note - no proper tabulation for easier compare time)
-			random = {
-				chance = 15
-			random_entourage_character = {
-				limit = {
-					NOR = {
-						this = scope:target
-						this = scope:owner
-						scope:owner = {
-							is_target_in_variable_list = {
-								name = entourage_members_to_kill
-								target = prev
-							}
-						}
-					}
-				}
-				scope:owner = {
-					add_to_variable_list = {
-						name = entourage_members_to_kill
-						target = prev
-					}
-				}
-			}
-			}
-		}
-	}
+	#ADDED - actually dont do that at all, wtf.
 }
 
 
@@ -92,6 +26,10 @@ owner_seduce_outcome_become_lovers_option_effects = {
 		}
 		add_piety = minor_piety_gain
 	}
+	sacred_shadows_personal_tenet_scheme_reward_effect = yes
+	polyamory_personal_tenet_scheme_reward_effect = yes
+	carnal_exaltation_personal_tenet_scheme_reward_effect = yes
+	pam_seduction_piety_reward_effect = yes
 
 	if = {
 		limit = {
@@ -162,6 +100,8 @@ end_court_scheme_effect = {
 						has_sexuality = asexual
 						scope:target = { has_sexuality = asexual }
 					}
+					#ADDED
+					always = no
 				}
 				had_sex_with_effect = { #Run this in target scope because owner has own tooltip
 					CHARACTER = scope:target
@@ -180,6 +120,7 @@ end_court_scheme_effect = {
 						limit = {
 							has_trait = lustful
 							is_ai = yes
+							accepts_adultery_without_penalty_trigger = no
 							any_relation = {
 								type = lover
 								this != scope:owner
@@ -204,11 +145,10 @@ end_court_scheme_effect = {
 										}
 									}
 								}
-								#ADDED - temp scope, stolen from UNOP
-								save_temporary_scope_as = lover #Unop ck3-tiger
+								save_temporary_scope_as = lover
 								lover_breakup_effect = {
 									BREAKER = scope:target
-									LOVER = scope:lover	#this
+									LOVER = scope:lover
 								}
 							}
 						}
@@ -236,6 +176,44 @@ end_court_scheme_effect = {
 			limit = { scope:court_outcome = flag:failure_hard }
 			#Shared effect with Seduce because failure in one scheme should block the other
 			scope:target = { seduction_block_character_effect = { CHARACTER = scope:owner } }
+		}
+
+		if = {
+			limit = {
+				OR = {
+					scope:court_outcome = flag:success_soulmate
+					scope:court_outcome = flag:success_kiss
+				}
+			}
+			polyamory_personal_tenet_scheme_reward_effect = yes
+		}
+
+		if = {
+			limit = {
+				OR = {
+					scope:court_outcome = flag:success_soulmate
+					scope:court_outcome = flag:success_kiss
+				}
+				is_spouse_of = scope:target
+				rite = { rite_has_parameter = tenet_be_fruitful_and_multiply_easy_spouse_romance }
+			}
+			add_character_modifier = {
+				modifier = tenet_be_fruitful_and_multiply_spouse_romance_fertility
+				years = 5
+			}
+			scope:target = {
+				add_character_modifier = {
+					modifier = tenet_be_fruitful_and_multiply_spouse_romance_fertility
+					years = 5
+				}
+			}
+			if = {
+				limit = { can_set_relation_friend_trigger = { CHARACTER = scope:target } }
+				set_relation_friend = {
+					target = scope:target
+					reason = friend_rekindled_spouse_romance
+				}
+			}
 		}
 		
 		# Tradition bonuses
@@ -335,4 +313,17 @@ end_court_scheme_effect = {
 	}
 
 	scope:scheme = { end_scheme = yes }
+}
+
+add_scheme_starting_opportunities_intrigue_effect = {
+	if = {
+		limit = { scheme_owner.intrigue >= scheme_starting_opportunities_per_intrigue_threshold_value }
+		change_opportunities = {
+			value = scheme_owner.intrigue
+			subtract = scheme_starting_opportunities_per_intrigue_threshold_value
+			divide = scheme_starting_opportunities_per_intrigue_increment_value
+			ceiling = yes
+			max = 0		#prev 4
+		}
+	}
 }

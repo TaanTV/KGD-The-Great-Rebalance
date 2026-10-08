@@ -198,6 +198,21 @@ natural_disaster_flood = { # Flood (River)
 	##################################################
 
 	on_start = {
+		#ADDED
+		every_situation_county = {
+			limit = {
+				OR = {
+					has_county_modifier = tgp_natural_disaster_memorial_fortifications
+					has_county_modifier = tgp_natural_disaster_memorial_fortifications_wierdijks
+				}
+			}
+			random = {
+				chance = 50
+				remove_county_modifier = tgp_natural_disaster_memorial_fortifications
+				remove_county_modifier = tgp_natural_disaster_memorial_fortifications_wierdijks
+				change_development_level = 2	#a small compensation :P
+			}
+		}	
 	}
 
 	on_end = {

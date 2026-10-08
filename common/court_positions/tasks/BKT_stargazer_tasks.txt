@@ -32,15 +32,7 @@ court_astrologer_handling_weather = {
 			capital_province.county ?= {
 				random_county_situation_sub_region = {
 					limit = {
-						OR = {
-							sub_region_current_phase = situation_steppe_abundant_grazing_season
-							sub_region_current_phase = situation_steppe_warm_nights_season
-							sub_region_current_phase = situation_steppe_sky_blessing_season
-							sub_region_current_phase = situation_steppe_white_zud_season
-							sub_region_current_phase = situation_steppe_cold_zud_season
-							sub_region_current_phase = situation_steppe_severe_drought_season
-							sub_region_current_phase = situation_steppe_havsarsan_zud_season
-						}
+						situation_sub_region_has_county = prev
 					}
 					switch = {
 						trigger = sub_region_current_phase
@@ -93,7 +85,10 @@ court_astrologer_handling_weather = {
 						OR = {
 							sub_region_current_phase = situation_steppe_abundant_grazing_season		#15% herd gain
 							#sub_region_current_phase = situation_steppe_warm_nights_season			#10 vassal opinion
-							#sub_region_current_phase = situation_steppe_sky_blessing_season		#3 piety (flat)
+							AND = {
+								sub_region_current_phase = situation_steppe_sky_blessing_season		#3 piety (flat)
+								root.piety < major_piety_value		#250
+							}
 							#sub_region_current_phase = situation_steppe_white_zud_season			#20% fertility gain
 							#sub_region_current_phase = situation_steppe_cold_zud_season			#30% fertility gain
 							sub_region_current_phase = situation_steppe_severe_drought_season		#-30% fetility decline

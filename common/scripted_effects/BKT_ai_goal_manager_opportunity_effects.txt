@@ -47,12 +47,13 @@ ai_goal_manager_opportunity_pulse_effect = {
 				gold > major_gold_value
 				prestige > 150
 				piety > 100
-				NOT = {
+				NOR = {
+					has_trait = compassionate
+					confederation ?= { is_house_based = no }
 					any_targeting_faction = {
 						discontent_per_month > 0
 					}
 				}
-				NOT = { has_trait = compassionate }
 				current_military_strength >= eighty_percent_of_max_military_strength
 			}
 			modifier = {
@@ -75,6 +76,7 @@ ai_goal_manager_opportunity_pulse_effect = {
 				OR = {
 					has_variable = martial_oath_1		#reconquest oath
 					has_variable = martial_oath_2		#conquest oath
+					has_character_modifier = true_heresiarch_modifier
 				}
 			}
 			ai_goal_manager_opportunity_pulse_war_effect = yes
@@ -118,6 +120,7 @@ ai_goal_manager_opportunity_pulse_effect = {
 	}
 	if = {
 		limit = { 
+			always = no			#depricated as i found a better place to do it
 			is_at_war = no		#I assume War! triggered and they're now at war?..
 			gold > major_gold_value
 			NOR = {
@@ -179,16 +182,20 @@ ai_goal_manager_opportunity_pulse_war_effect = {
 			top_liege != this
 		}
 		modifier = {
-			government_allows = administrative
+			government_has_mechanic = administrative
 			top_liege != this
 			factor = 0.5
+		}
+		modifier = {
+			has_character_modifier = true_heresiarch_modifier
+			add = 10
 		}
 		save_temporary_scope_as = can_wage_war
 	}
 	random = {
 		chance = 33
 		modifier = {
-			government_allows = administrative
+			government_has_mechanic = administrative
 			add = -23
 		}
 		set_variable = {
@@ -416,7 +423,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					name = temp_opinion_scope
 					target = scope:root_scope
 				}
-				scope:temp_opinion_scope < 75
+				scope:temp_opinion_scope < 60	#prev 75
 				OR = {
 					scope:temp_opinion_scope < 35
 					NOT = {
@@ -459,6 +466,10 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					has_realm_law_flag = war_declaration_powerful_vassal_approval
 					factor = 5
 				}
+				modifier = {	#to feudalise 
+					government_has_flag = government_is_tribal
+					factor = 2
+				}
 				trigger = {
 					NOT = { government_allows = deny_powerful_vassal }
 					any_powerful_vassal = {
@@ -466,7 +477,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -501,7 +512,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -553,7 +564,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -588,7 +599,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -637,7 +648,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -673,7 +684,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -777,7 +788,23 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							}
 						}
 					}
-					order_by = max_military_strength
+					order_by = {
+						value = max_military_strength
+						if = {
+							limit = { is_liege_or_above_of = scope:root_scope }
+							multiply = 0.1
+						}
+						else_if = {
+							limit = { 
+								is_vassal_or_below_of = scope:root_scope 
+								NAND = {
+									government_has_flag = can_call_vassals_into_wars
+									scope:root_scope = { government_has_flag = can_call_vassals_into_wars }
+								}
+							}
+							multiply = 0.1
+						}
+					}
 					save_scope_as = target_scope
 				}
 				if = {
@@ -789,10 +816,18 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							interaction = gift_interaction
 							recipient = scope:target_scope
 						}
-						NOT = {
+						NOR = {
 							reverse_has_opinion_modifier = {
 								target = scope:root_scope
 								modifier = gift_opinion
+							}
+							is_liege_or_above_of = scope:root_scope
+							AND = {
+								is_vassal_or_below_of = scope:root_scope 
+								NAND = {
+									government_has_flag = can_call_vassals_into_wars
+									scope:root_scope = { government_has_flag = can_call_vassals_into_wars }
+								}
 							}
 						}
 					}
@@ -918,7 +953,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -953,7 +988,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 60	#prev 75
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -994,16 +1029,16 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 								name = temp_opinion_scope
 								target = scope:root_scope
 							}
-							scope:temp_opinion_scope < 50
-							OR = {
-								scope:temp_opinion_scope < 25
-								NOT = {
-									has_opinion_modifier = {
-										target = scope:root_scope
-										modifier = scheme_sway_opinion
-									}
-								}
-							}
+							scope:temp_opinion_scope < 30
+							#OR = {
+							#	scope:temp_opinion_scope < 25
+							#	NOT = {
+							#		has_opinion_modifier = {
+							#			target = scope:root_scope
+							#			modifier = scheme_sway_opinion
+							#		}
+							#	}
+							#}
 							NOT = {
 								has_opinion_modifier = {
 									target = scope:root_scope
@@ -1026,7 +1061,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 				}
 				modifier = {
 					has_trait = ambitious
-					factor = 2
+					factor = 4
 				}
 				modifier = {
 					prestige_level >= 3
@@ -1037,7 +1072,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							prestige_level < scope:root_scope.prestige_level
 						}
 					}
-					factor = 2
+					factor = 8
 				}
 				confederation = {
 					random_confederation_member = {
@@ -1121,7 +1156,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 50
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -1284,7 +1319,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 							name = temp_opinion_scope
 							target = scope:root_scope
 						}
-						scope:temp_opinion_scope < 75
+						scope:temp_opinion_scope < 50
 						OR = {
 							scope:temp_opinion_scope < 25
 							NOT = {
@@ -1317,7 +1352,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 			}
 		}
 		if = {
-			limit = { exists = scope:target_scope }
+			limit = { exists = scope:target_scope scope:target_scope = { is_alive = yes } }
 			start_scheme = {
 				type = sway
 				target_character = scope:target_scope

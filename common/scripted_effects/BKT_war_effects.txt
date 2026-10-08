@@ -1,122 +1,6 @@
-﻿on_declared_war = {
-	###############################
-	##### Attacker music
-	###############################
-	if = {
-		limit = {
-			exists = scope:war # silence error when building description before war exists
-			scope:war = { using_holy_war_cb_trigger = yes } # going CB->war->is this war's CB a certain type->yes
-		}
-		scope:attacker = { play_music_cue = mx_cue_crusade_starts }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			has_mpo_dlc_trigger = yes
-			OR = {
-				scope:attacker = {
-					government_has_flag = government_is_nomadic
-			  		any_character_situation = {
-			  			this = situation:the_great_steppe
-			  		}
-				}
-				scope:defender = {
-					government_has_flag = government_is_nomadic
-			  		any_character_situation = {
-			  			this = situation:the_great_steppe
-			  		}
-				}
-			}
-		}
-		scope:attacker = { play_music_cue = mx_cue_the_khans_glory }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			OR = {
-				scope:attacker = { fp3_character_any_involvement_persian_struggle_trigger = yes }
-				scope:defender = { fp3_character_any_involvement_persian_struggle_trigger = yes }
-			}
-		}
-		scope:attacker = { play_music_cue = strugglewar_cue }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			OR = {
-				scope:attacker = { fp2_character_any_involvement_iberian_struggle_trigger = yes }
-				scope:defender = { fp2_character_any_involvement_iberian_struggle_trigger = yes }
-			}
-		}
-		scope:attacker = { play_music_cue = mx_IberiaWar }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			scope:attacker = { fp1_is_norse_tribal = yes }
-		}
-		scope:attacker = { play_music_cue = mx_raid }
-	}
-	else = {
-		scope:attacker = { play_music_cue = mx_cue_war_declared }
-	}
-	###############################
-	##### Defender music
-	###############################
-	if = {
-		limit = {
-			exists = scope:war
-			OR = {
-				scope:attacker = { fp2_character_any_involvement_iberian_struggle_trigger = yes }
-				scope:defender = { fp2_character_any_involvement_iberian_struggle_trigger = yes }
-			}
-		}
-		scope:defender = { play_music_cue = mx_IberiaWar }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			has_mpo_dlc_trigger = yes
-			OR = {
-				scope:attacker = {
-					government_has_flag = government_is_nomadic
-			  		any_character_situation = {
-			  			this = situation:the_great_steppe
-			  		}
-				}
-				scope:defender = {
-					government_has_flag = government_is_nomadic
-			  		any_character_situation = {
-			  			this = situation:the_great_steppe
-			  		}
-				}
-			}
-		}
-		scope:defender = { play_music_cue = mx_cue_the_khans_glory }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			OR = {
-				scope:attacker = { fp3_character_any_involvement_persian_struggle_trigger = yes }
-				scope:defender = { fp3_character_any_involvement_persian_struggle_trigger = yes }
-			}
-		}
-		scope:defender = { play_music_cue = strugglewar_cue }
-	}
-	else_if = {
-		limit = {
-			exists = scope:war
-			scope:attacker = { fp1_is_norse_tribal = yes }
-		}
-		scope:defender = { play_music_cue = mx_raid }
-	}
-
-	else = {
-		scope:defender = {
-			play_music_cue = mx_cue_war_declared
-		}
-	}
+﻿
+on_declared_war = {
+	on_declared_war_play_music = yes
 
 	###############################
 	##### Effects
@@ -130,13 +14,13 @@
 					government_has_flag = government_is_feudal
 					government_has_flag = government_is_clan
 					government_has_flag = government_is_tribal
-				}			
+				}
 				liege ?= {
-					government_has_flag = government_is_administrative
+					government_has_mechanic = administrative
 				}
 			}
 			scope:defender = {
-				government_has_flag = government_is_administrative
+				government_has_mechanic = administrative
 				liege ?= scope:attacker.liege
 			}
 		}
@@ -163,6 +47,32 @@
 			custom_description_no_bullet = {
 				text = attack_breaking_truce_text
 			}
+			# PAM Peace of God: breaking a truce with a co-religionist draws the ban
+			if = {
+				limit = {
+					rite = {
+						rite_has_parameter = tenet_peace_of_god_excommunication_truce
+					}
+					scope:defender = { faith = scope:attacker.faith }
+					NOT = { has_trait = excommunicated }
+					faith = {
+						OR = {
+							AND = {
+								exists = religious_head
+								has_doctrine = doctrine_spiritual_head
+							}
+							has_doctrine_parameter = has_clerical_regions
+							any_faith_ruler = {
+								highest_held_title_tier >= tier_duchy
+								government_has_flag = government_is_theocracy
+							}
+						}
+						faith_has_sacraments_central_trigger = yes
+						NOT = { religious_head ?= scope:attacker }
+					}
+				}
+				add_excommunication_actual_effect = yes
+			}
 
 			# Remove the war target from the bought_truce_list if they're in it
 			if = {
@@ -171,7 +81,7 @@
 				}
 				remove_list_variable = {
 					name = bought_truce_list
-					target = scope:recipient
+					target = scope:defender
 				}
 			}
 
@@ -184,7 +94,7 @@
 			}
 
 			if = {
-				limit = { 
+				limit = {
 					government_has_flag = government_is_mandala
 					scope:defender = { var:recent_mandala_suzerain ?= scope:attacker }
 				}
@@ -234,6 +144,21 @@
 					}
 				}
 			}
+		}
+	}
+	# PAM Peace of God: warring on a co-religionist costs piety
+	if = {
+		limit = {
+			scope:defender = { faith = scope:attacker.faith }
+			scope:attacker.rite ?= {
+				rite_has_parameter = tenet_peace_of_god_same_faith_war_piety_penalty
+			}
+		}
+		scope:attacker = {
+			custom_description_no_bullet = {
+				text = attack_same_faith_peace_of_god_text
+			}
+			add_piety = medium_piety_loss
 		}
 	}
 	# Breaking Betrothals
@@ -293,7 +218,7 @@
 						has_dlc_feature = friends_and_foes
 						exists = scope:attacker.house.house_head
 						exists = scope:defender.house.house_head
-						NOT = { scope:attacker.house = scope:defender.house}
+						scope:attacker.house != scope:defender.house
 					}
 					house_feud_start_effect = {
 						#Feuding House Head
@@ -309,7 +234,7 @@
 					}
 				}
 				#Then remove promise
-				remove_variable = promised_grand_wedding_marriage_countdown
+				clean_grand_wedding_betrothal_variables = yes
 			}
 			every_close_family_member = {
 				limit = {
@@ -560,7 +485,7 @@
 			}
 		}
 	}
-	
+
 	scope:attacker = {
 		if = {
 			limit = {
@@ -583,7 +508,7 @@
 		#ADDED - war stuff
 		war_declaration_law_effect = yes
 	}
-	
+
 	# If we're a clan this interaction affects unity
 	add_clan_unity_interaction_effect = {
 		CHARACTER = scope:attacker
@@ -592,7 +517,7 @@
 		DESC = clan_unity_declared_war.desc
 		REVERSE_NON_HOUSE_TARGET = no
 	}
-	
+
 	intrigue_duel_on_attack_effect = yes
 }
 
@@ -613,6 +538,9 @@ on_claimant_faction_war_win_common = {
 			suzerain = { save_scope_as = handover_suzerain }
 		}
 	}
+	$ATTACKER$.joined_faction.special_title ?= {
+		save_scope_as = faction_targeted_title
+	}
 	$CLAIMANT$ = {
 		save_scope_as = the_claimant
 	}
@@ -624,35 +552,18 @@ on_claimant_faction_war_win_common = {
 			$ATTACKER$.joined_faction.special_title ?= $DEFENDER$.primary_title
 			$DEFENDER$ = { is_imprisoned = no }
 		}
-		scope:the_claimant = {
-			imprison = {
-				target = $DEFENDER$
-				type = dungeon
-			}
-			add_to_variable_list = {
-				name = claimant_won_against_those
-				target = $DEFENDER$
-				years = 30
-			}
-			if = {
-				limit = { 
-					$DEFENDER$.primary_heir = {
-						exists = this
-						is_courtier_of = $DEFENDER$
-						dynasty ?= $DEFENDER$.dynasty
-						is_imprisoned = no 
-					}
-				}
-				imprison = {
-					target = $DEFENDER$.primary_heir 
-					type = dungeon
-				}
-				add_to_variable_list = {
-					name = claimant_won_against_those
-					target = $DEFENDER$.primary_heir 
-					years = 30
+		$DEFENDER$ = { 
+			save_scope_as = will_be_imprisoned 
+		}
+		if = {
+			limit = { 
+				$DEFENDER$.primary_heir ?= {
+					is_courtier_of = $DEFENDER$
+					dynasty ?= $DEFENDER$.dynasty
+					is_imprisoned = no 
 				}
 			}
+			$DEFENDER$.primary_heir = { save_scope_as = heir_to_be_imprisoned }
 		}
 	}
 	#Unop ck3-tiger Set faction_targeted_title from faction special_title
@@ -723,7 +634,7 @@ on_claimant_faction_war_win_common = {
 				}
 				add_prestige = major_prestige_gain
 			}
-			
+
 			# Save the number of faction members for use further down
 			add_to_list = num_faction_members
 			#ADDED - some breathing room, at least from those vassals
@@ -746,8 +657,8 @@ on_claimant_faction_war_win_common = {
 	# Ceremonial Liege
 	if = {
 		limit = {
-			exists = $DEFENDER$.top_liege.primary_title.var:administrative_ui_special_title #Unop Use correct scope
-			scope:faction_targeted_title = $DEFENDER$.top_liege.primary_title.var:administrative_ui_special_title
+			exists = $DEFENDER$.top_liege.primary_title.var:administrative_ui_special_title
+			scope:faction_targeted_title ?= $DEFENDER$.top_liege.primary_title.var:administrative_ui_special_title
 		}
 		$DEFENDER$ = {
 			every_held_title = {
@@ -772,7 +683,7 @@ on_claimant_faction_war_win_common = {
 		if = {
 			limit = {
 				top_liege = this
-				government_allows = administrative
+				government_has_mechanic = administrative
 				primary_title = { is_in_list = faction_titles }
 			}
 			every_held_title = {
@@ -817,12 +728,12 @@ on_claimant_faction_war_win_common = {
 	# Ensure that the liege structure is preserved
 	if = {
 		limit = {
-			scope:target_title.holder = { top_liege != this }
+			scope:target_holder = { top_liege != this }
 			scope:the_claimant.primary_title.tier < scope:target_title.tier
 		}
 		scope:the_claimant = {
 			change_liege = {
-				liege = scope:target_title.holder.liege
+				liege = scope:target_holder.liege
 				change = scope:change
 			}
 		}
@@ -831,7 +742,7 @@ on_claimant_faction_war_win_common = {
 	# Preserve Grandeur
 	if = {
 		limit = {
-			scope:target_title.holder = {
+			scope:target_holder = {
 				has_royal_court = yes
 				has_dlc_feature = royal_court
 			}
@@ -846,13 +757,13 @@ on_claimant_faction_war_win_common = {
 			}
 		}
 	}
-	
+
 	hidden_effect = {
 		if = {
 			limit = {
-				exists = scope:target_title.holder.dynasty
+				exists = scope:target_holder.dynasty
 				exists = scope:the_claimant.dynasty
-				scope:target_title.holder = {
+				scope:target_holder = {
 					has_variable = conqueror
 					scope:target_title.holder.dynasty = scope:the_claimant.dynasty
 				}
@@ -882,7 +793,7 @@ on_claimant_faction_war_win_common = {
 	}
 
 	resolve_title_and_vassal_change = scope:change
-	
+
 	# We give you decent Legitimacy so you don't get immediately deposed - people _really_ want you in the throne
 	# Can you even get Legitimacy?
 	if = {
@@ -894,7 +805,7 @@ on_claimant_faction_war_win_common = {
 		# Per tier
 		if = {
 			limit = {
-				scope:target_title.tier = tier_empire
+				scope:target_title.tier >= tier_empire
 			}
 			scope:the_claimant = {
 				add_legitimacy = {
@@ -966,6 +877,34 @@ on_claimant_faction_war_win_common = {
 			}
 			change_current_court_grandeur = massive_court_grandeur_gain # Gain a bonus to Grandeur for winning a claim faction
 		}
+		
+		#ADDED
+		if = {
+			limit = { exists = scope:will_be_imprisoned }
+			imprison = {
+				target = scope:will_be_imprisoned
+				type = dungeon
+			}
+			add_to_variable_list = {
+				name = claimant_won_against_those
+				target = scope:will_be_imprisoned
+				years = 30
+			}
+			if = {
+				limit = { 
+					exists = scope:heir_to_be_imprisoned
+				}
+				imprison = {
+					target = scope:heir_to_be_imprisoned
+					type = dungeon
+				}
+				add_to_variable_list = {
+					name = claimant_won_against_those
+					target = scope:heir_to_be_imprisoned
+					years = 30
+				}
+			}
+		}
 	}
 
 	# Byzantine flavor
@@ -974,7 +913,7 @@ on_claimant_faction_war_win_common = {
 			scope:target_title = title:e_byzantium
 			has_ep3_dlc_trigger = yes
 		}
-		scope:the_claimant = { 
+		scope:the_claimant = {
 			trigger_event = {
 				id = ep3_emperor_yearly.2030
 				days = 15
@@ -994,12 +933,16 @@ on_claimant_faction_war_win_common = {
 		}
 	}
 
-	# TODO Add prestige effects based on $ATTACKER_PRESTIGE$ and $DEFENDER_PRESTIGE$
 }
 
 pay_short_term_gold_reparations_effect = {
 	if = {
-		limit = { has_government = landless_adventurer_government }
+		limit = { 
+			OR = {
+				has_government = landless_adventurer_government 
+				monthly_character_income <= 0 # accommodate for reparations by characters without income, like viking conquerors
+			}
+		}
 		#pay_short_term_gold = {
 		#	gold = {
 		#		value = medium_gold_value
@@ -1157,6 +1100,311 @@ pay_short_term_gold_reparations_effect = {
 			pay_short_term_gold = {
 				gold = scope:total_gold_to_pay
 				target = scope:defender
+			}
+		}
+	}
+}
+
+# ROOT is a combat side in this scripted effect, but the THIS scope should be the commander
+commander_trait_leveling_leveling_effect = {
+	if = { # Terrain Based
+		limit = {
+			OR = {
+				has_trait = desert_warrior
+				has_trait = open_terrain_expert
+				has_trait = rough_terrain_expert
+				has_trait = forest_fighter
+				has_trait = jungle_stalker
+			}
+		}
+		if = {
+			limit = {
+				has_trait = desert_warrior
+				location = {
+					OR = {
+						terrain = drylands
+						terrain = desert
+						terrain = desert_mountains
+						terrain = oasis
+					}
+				}
+			}
+			add_trait_xp = {
+				trait = desert_warrior
+				value = {
+					value = $XP$
+					multiply = 2
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = open_terrain_expert
+				location = {
+					OR = {
+						terrain = farmlands
+						terrain = plains
+						terrain = steppe
+					}
+				}
+			}
+			add_trait_xp = {
+				trait = open_terrain_expert
+				value = {
+					value = $XP$
+					multiply = 2
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = rough_terrain_expert
+				location = {
+					OR = {
+						terrain = hills
+						terrain = mountains
+						#terrain = wetlands
+					}
+				}
+			}
+			add_trait_xp = {
+				trait = rough_terrain_expert
+				value = {
+					value = $XP$
+					multiply = 2
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = forest_fighter
+				location = {
+					OR = {
+						terrain = forest
+						terrain = taiga
+					}
+				}
+			}
+			add_trait_xp = {
+				trait = forest_fighter
+				value = {
+					value = $XP$
+					multiply = 2
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = jungle_stalker
+				location = {
+					terrain = jungle
+				}
+			}
+			add_trait_xp = {
+				trait = jungle_stalker
+				value = {
+					value = $XP$
+					multiply = 2
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+	}
+	if = { # Forder
+		limit = {
+			has_trait = forder
+			location = {
+				OR = {
+					is_coastal = yes
+					is_riverside_province = yes
+					#ADDED
+					terrain = wetlands
+					terrain = floodplains
+				}
+			}
+		}
+		add_trait_xp = {
+			trait = forder
+			value = {
+				value = $XP$
+				multiply = 2
+				add = {
+					value = martial
+					divide = 10
+				}
+			}
+		}
+	}
+	if = { # Attackers/Defenders
+		limit = {
+			OR = {
+				has_trait = aggressive_attacker
+				has_trait = unyielding_defender
+			}
+		}
+		if = {
+			limit = {
+				has_trait = aggressive_attacker
+				root = { is_combat_side_attacker = yes }
+			}
+			add_trait_xp = {
+				trait = aggressive_attacker
+				value = {
+					value = $XP$
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = unyielding_defender
+				root = { is_combat_side_attacker = no }
+			}
+			add_trait_xp = {
+				trait = unyielding_defender
+				value = {
+					value = $XP$
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+	}
+	if = { # Flexible Leader
+		limit = {
+			has_trait = flexible_leader
+		}
+		add_trait_xp = {
+			trait = flexible_leader
+			value = {
+				value = $XP$
+				multiply = 0.5
+				add = {
+					value = martial
+					divide = 10
+				}
+			}
+		}
+	}
+	if = { # Religious
+		limit = {
+			has_trait = holy_warrior
+			root.enemy_side.side_commander.religion != root.side_commander.religion
+		}
+		add_trait_xp = {
+			trait = holy_warrior
+			value = {
+				value = $XP$
+				multiply = 0.75
+				add = {
+					value = martial
+					divide = 10
+				}
+			}
+		}
+	}
+	if = { # Larger Armies
+		limit = {
+			OR = {
+				has_trait = reckless
+				has_trait = cautious_leader
+			}
+			#root = { troops_ratio < 0.95 }
+		}
+		if = {
+			limit = {
+				has_trait = reckless
+				#ADDED
+				root = { troops_ratio < 0.95 }
+			}
+			add_trait_xp = {
+				trait = reckless
+				value = {
+					value = $XP$
+					multiply = 3
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_trait = cautious_leader
+				#ADDED
+				root = { troops_ratio > 1.05 }
+			}
+			add_trait_xp = {
+				trait = cautious_leader
+				value = {
+					value = $XP$
+					multiply = 3
+					add = {
+						value = martial
+						divide = 10
+					}
+				}
+			}
+		}
+	}
+	if = { # Seasonal
+		limit = {
+			has_trait = winter_soldier
+			location = { has_winter_combat_trigger = yes }
+		}
+		add_trait_xp = {
+			trait = winter_soldier
+			value = {
+				value = $XP$
+				multiply = 0.75
+				add = {
+					value = martial
+					divide = 10
+				}
+			}
+		}
+	}
+	if = { # Peasant Leader fighting non peasants
+		limit = {
+			has_trait = peasant_leader
+			root.enemy_side.side_commander ?= {
+				is_lowborn = no
+			}
+		}
+		add_trait_xp = {
+			trait = peasant_leader
+			value = {
+				value = $XP$
+				multiply = 0.75
+				add = {
+					value = martial
+					divide = 10
+				}
 			}
 		}
 	}

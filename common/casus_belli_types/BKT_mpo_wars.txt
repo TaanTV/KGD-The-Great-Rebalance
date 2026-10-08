@@ -11,6 +11,9 @@ mpo_nomad_invasion_cb = {
 	mutually_exclusive_titles = { always = yes }
 	allow_hostages = no
 
+	defender_score_from_occupation_scale = 50
+	attacker_score_from_occupation_scale = 150
+
 	allowed_for_character = {
 		is_independent_ruler = yes
 		government_has_flag = government_is_nomadic
@@ -18,14 +21,16 @@ mpo_nomad_invasion_cb = {
 			limit = {
 				is_ai = yes
 			}
+			#ADDED
+			any_character_situation = {
+				situation:the_great_steppe ?= this
+			}
 			OR = {
 				is_landed = no
 				capital_county = {
-					any_county_situation = {
-						any_situation_sub_region = {
-							sub_region_current_phase = situation_steppe_havsarsan_zud_season
-							situation_sub_region_has_county = root.capital_county
-						}
+					any_county_situation_sub_region = {
+						situation_sub_region_has_county = prev
+						sub_region_current_phase = situation_steppe_havsarsan_zud_season
 					}
 				}
 				AND = {
@@ -34,27 +39,33 @@ mpo_nomad_invasion_cb = {
 						has_bad_season_nomadic_capital_root_trigger = yes
 					}
 				}
+				mpo_nomad_invasion_war_ai_trigger = { NOMAD = root }
 			}
 			trigger_if = {
 				limit = {
 					NOT = {
 						capital_county = {
-							any_county_situation = {
-								any_situation_sub_region = {
-									sub_region_current_phase = situation_steppe_havsarsan_zud_season
-									situation_sub_region_has_county = root.capital_county
-								}
+							any_county_situation_sub_region = {
+								situation_sub_region_has_county = prev
+								sub_region_current_phase = situation_steppe_havsarsan_zud_season
 							}
 						}
 					}
 				}
-				NOR = {
-					realm_size >= 30
-					is_confederation_member = yes
+				NOR = {	#prev NOT
+					sub_realm_size > 40
 					#ADDED
 					highest_held_title_tier > tier_kingdom
+					domicile ?= { has_domicile_building_or_higher = yurt_main_04 }
 				}
 			}
+			#ADDED - stop plz.
+			NAND = {
+				has_game_rule = launch_historical
+				culture ?= { has_cultural_pillar = heritage_magyar }
+				current_year < 880	#historical launches in about 870, give it a bit more time
+			}
+			NOT = { domicile ?= { has_domicile_building_or_higher = yurt_main_05 } }
 		}
 	}
 
@@ -74,6 +85,10 @@ mpo_nomad_invasion_cb = {
 	target_title_tier = kingdom
 	target_de_jure_regions_above = yes
 
+	ai_can_target_all_titles = {
+		always = yes
+	}
+
 	max_ai_diplo_distance_to_title = 1000
 	ai_score = {
 		value = {
@@ -82,11 +97,9 @@ mpo_nomad_invasion_cb = {
 					limit = {
 						scope:attacker = {
 							capital_county = {
-								any_county_situation = {
-									any_situation_sub_region = {
-										sub_region_current_phase = situation_steppe_havsarsan_zud_season
-										situation_sub_region_has_county = scope:attacker.capital_county
-									}
+								any_county_situation_sub_region = {
+									situation_sub_region_has_county = prev
+									sub_region_current_phase = situation_steppe_havsarsan_zud_season
 								}
 							}
 						}
@@ -110,24 +123,13 @@ mpo_nomad_invasion_cb = {
 								AND = {
 									ai_boldness >= 50
 									capital_county = {
-										any_county_situation = {
+										any_county_situation_sub_region = {
+											situation_sub_region_has_county = prev
 											OR = {
-												any_situation_sub_region = {
-													sub_region_current_phase = situation_steppe_white_zud_season
-													situation_sub_region_has_county = scope:attacker.capital_county
-												}
-												any_situation_sub_region = {
-													sub_region_current_phase = situation_steppe_cold_zud_season
-													situation_sub_region_has_county = scope:attacker.capital_county
-												}
-												any_situation_sub_region = {
-													sub_region_current_phase = situation_steppe_severe_drought_season
-													situation_sub_region_has_county = scope:attacker.capital_county
-												}
-												any_situation_sub_region = {
-													sub_region_current_phase = situation_steppe_havsarsan_zud_season
-													situation_sub_region_has_county = scope:attacker.capital_county
-												}
+												sub_region_current_phase = situation_steppe_white_zud_season
+												sub_region_current_phase = situation_steppe_cold_zud_season
+												sub_region_current_phase = situation_steppe_severe_drought_season
+												sub_region_current_phase = situation_steppe_havsarsan_zud_season
 											}
 										}
 									}
@@ -146,6 +148,37 @@ mpo_nomad_invasion_cb = {
 						}
 					}
 				}
+				#IF THERE IS A SHOT ON ANATOLIA, TAKE IT TURKS!
+				if = {
+					limit = {
+						scope:attacker = {
+							culture = {
+								has_cultural_pillar = heritage_turkic
+							}
+						}
+						any_in_list = {
+							list = target_titles
+							tier = tier_kingdom
+							this = title:k_anatolia
+							OR = {
+								scope:defender.culture = {
+									has_cultural_pillar = heritage_byzantine
+								}
+								scope:defender = {
+									primary_title = title:e_byzantium
+								}
+								NOT = {
+									any_de_jure_county = {
+										culture = {
+											has_cultural_pillar = heritage_turkic
+										}
+									}
+								}
+							}
+						}
+					}
+					multiply = 20
+				}
 				if = {
 					limit = {
 						scope:attacker = {
@@ -157,21 +190,31 @@ mpo_nomad_invasion_cb = {
 							list = target_titles
 							tier = tier_kingdom
 							OR = {
-								title:k_anatolia ?= this
-								title:k_pontus ?= this
-								title:k_delhi ?= this
-								title:k_bulgaria ?= this
+								this = title:k_anatolia
+								this = title:k_pontus
+								this = title:k_delhi
+								this = title:k_bulgaria
+								this = title:k_syria
+								this = title:k_nikaea
+								this = title:k_georgia
+								this = title:k_armenia
+								this = title:k_galicia-volhynia
+								this = title:k_goguryeo
+								this = title:k_ruthenia
 								empire = {
 									OR = {
-										title:e_persia ?= this
-										title:e_turan ?= this
-										title:e_yongliang ?= this
-										title:e_zhongyuan ?= this
-										title:e_carpathia ?= this
-										title:e_great_yuan ?= this
-										title:e_chagatai ?= this
-										title:e_ilkhanate ?= this
-										title:e_golden_horde ?= this
+										this = title:e_persia
+										this = title:e_turan
+										this = title:e_yongliang
+										this = title:e_zhongyuan
+										this = title:e_carpathia
+										this = title:e_great_yuan
+										this = title:e_chagatai
+										this = title:e_ilkhanate
+										this = title:e_golden_horde
+										this = title:e_tartaria
+										this = title:e_andong
+										this = title:e_caspian-pontic_steppe
 									}
 								}
 							}
@@ -220,6 +263,58 @@ mpo_nomad_invasion_cb = {
 							}
 						}
 					}
+					multiply = 0.25
+				}
+				if = {
+					limit = {
+						scope:defender = {
+							any_character_war = {
+								using_cb = mpo_nomad_invasion_cb
+							}
+						}
+					}
+					multiply = 0.33
+				}
+				if = {
+					limit = {
+						any_in_list = {
+							list = target_titles
+							has_variable = was_overrun
+						}
+					}
+					multiply = 0.1		#prev 0.2
+				}
+				#Should not target islands... ever
+				if = {
+					limit = {
+						any_in_list = {
+							list = target_titles
+							tier = tier_kingdom		#prev tier_duchy
+							OR = {
+								this = title:k_hitakami
+								this = title:k_aynumosir
+								this = title:k_sardinia
+								this = title:k_krete
+								this = title:k_cyprus
+								empire ?= {
+									OR = {
+										this = title:e_japan
+										this = title:e_britannia
+										this = title:e_nusantara
+										this = title:e_srivijaya
+									}
+								}
+							}
+						}
+					}
+					multiply = 0
+				}
+				if = {
+					limit = {
+						scope:defender = {
+							current_military_strength > scope:attacker.eighty_percent_of_current_military_strength
+						}
+					}
 					multiply = 0.1
 				}
 			}
@@ -243,9 +338,6 @@ mpo_nomad_invasion_cb = {
 				multiply = 5
 			}
 		}
-	}
-	ai_can_target_all_titles = {
-		always = yes
 	}
 	ai_score_mult = {
 		value = 1
@@ -331,7 +423,17 @@ mpo_nomad_invasion_cb = {
 		}
 	}
 
-	on_invalidated_desc = msg_invasion_war_invalidated_message
+	on_invalidated_desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:attacker = { is_alive = no }
+				}
+				desc = msg_claim_war_invalidated_claimant_unavailable_dead_attacker_message
+			}
+			desc = msg_claim_war_invalidated_message
+		}
+	}
 
 	on_invalidated = {
 	}
@@ -343,23 +445,19 @@ mpo_nomad_invasion_cb = {
 			multiply = 1.5
 		}
 		prestige = {
-			add = {
-				value = 2000
-
-				desc = CB_BASE_COST
-			}
-			multiply = common_cb_prestige_cost_multiplier
-			if = {
-				limit = {
-					scope:attacker = { is_ai = yes }
-				}
-				multiply = 0.5
-			}
+			value = nomad_invasion_cb_prestige_cost
 		}
 	}
 
 	on_declaration = {
 		on_declared_war = yes
+		random_in_list = {
+			list = target_titles
+			limit = {
+				tier = tier_kingdom
+			}
+			save_scope_as = target
+		}
 	}
 
 	on_victory_desc = {
@@ -431,8 +529,21 @@ mpo_nomad_invasion_cb = {
 	
 		scope:attacker = { show_pow_release_message_effect = yes }
 
-		# Legitimacy
-		scope:attacker = { add_legitimacy = medium_legitimacy_gain }
+		# Legitimacy and gold
+		scope:attacker = {
+			if = {
+				limit = {
+					scope:defender = {
+						government_has_flag = government_is_tribal
+					}
+				}
+				add_short_term_gold = medium_gold_value
+			}
+			else = {
+				add_short_term_gold = major_gold_value
+			}
+			add_legitimacy = medium_legitimacy_gain
+		}
 
 		#EP2 accolade glory gain for winning against higher ranked enemy
 		scope:attacker = { accolade_attacker_war_end_glory_gain_high_effect = yes }
@@ -449,6 +560,10 @@ mpo_nomad_invasion_cb = {
 				tier = tier_kingdom
 			}
 			save_scope_as = target
+			set_variable = {
+				name = was_overrun
+				years = 50	#prev 20
+			}
 		}
 		scope:attacker = {
 			if = {
@@ -586,18 +701,16 @@ mpo_nomad_invasion_cb = {
 				}
 			}
 		}
-
-
-		create_title_and_vassal_change = {
-			type = conquest
-			save_scope_as = change
-			add_claim_on_loss = yes
-		}
 		scope:target = {
 			custom_tooltip = invasion_title_transfer_tt
 		}
 
 		hidden_effect = {
+			create_title_and_vassal_change = {
+				type = conquest
+				save_scope_as = change
+				add_claim_on_loss = yes
+			}
 			setup_invasion_cb = {
 				titles = target_titles
 				attacker = scope:attacker
@@ -605,36 +718,37 @@ mpo_nomad_invasion_cb = {
 				change = scope:change
 				take_occupied = no
 			}
-		}
-		every_in_list = {
-			list = target_titles
-			if = {
-				limit = {
-					tier = tier_duchy
-					OR = {
-						NOT = { exists = holder }
-						holder.top_liege = scope:defender
+			every_in_list = {
+				list = target_titles
+				if = {
+					limit = {
+						tier = tier_duchy
+						OR = {
+							NOT = { exists = holder }
+							holder.top_liege = scope:defender
+						}
+					}
+					change_title_holder = {
+						holder = scope:attacker
+						change = scope:change
 					}
 				}
-				change_title_holder = {
-					holder = scope:attacker
-					change = scope:change
+				every_in_de_jure_hierarchy = {
+					limit = {
+						holder.top_liege = scope:defender
+						tier = tier_county
+					}
+					change_title_holder = {
+						holder = scope:attacker
+						change = scope:change
+					}
 				}
 			}
-			every_in_de_jure_hierarchy = {
-				limit = {
-					holder.top_liege = scope:defender
-					tier = tier_county
-				}
-				change_title_holder = {
-					holder = scope:attacker
-					change = scope:change
-				}
-			}
+	
+			resolve_title_and_vassal_change = scope:change
 		}
 
-		resolve_title_and_vassal_change = scope:change
-
+		
 		#Should gain target title, if possible
 		scope:attacker = {
 			if = {
@@ -718,6 +832,7 @@ mpo_nomad_invasion_cb = {
 								holder = scope:attacker
 								change = scope:change_2
 							}
+							set_color_from_title = scope:target
 						}
 						resolve_title_and_vassal_change = scope:change_2
 						scope:new_title = { generate_coa = yes }
@@ -927,7 +1042,7 @@ mpo_nomad_invasion_cb = {
 				}
 				while = {
 					limit = {
-						scope:invading_herd_value >= 3000
+						scope:invading_herd_value >= 5000
 						any_sub_realm_county = {
 							NOT = {
 								culture = scope:invading_culture
@@ -968,12 +1083,35 @@ mpo_nomad_invasion_cb = {
 						}
 						set_county_culture = scope:invading_culture
 						set_county_faith = scope:invading_faith
+						#Convert additional tribal county if possible
+						ordered_neighboring_county = {
+							order_by = {
+								value = development_level
+								multiply = -1
+							}
+							limit = {
+								NOT = { culture = scope:invading_culture }
+								title_province = {
+									has_holding_type = tribal_holding
+								}
+								OR = {
+									holder = scope:attacker
+									holder = {
+										any_liege_or_above = {
+											this = scope:attacker
+										}
+									}
+								}
+							}
+							set_county_culture = scope:invading_culture
+							set_county_faith = scope:invading_faith
+						}
 					}
 					save_scope_value_as = {
 						name = invading_herd_value
 						value = {
 							add = scope:invading_herd_value
-							subtract = 3000
+							subtract = 5000
 						}
 					}
 				}
@@ -992,8 +1130,12 @@ mpo_nomad_invasion_cb = {
 					}
 					if = {
 						limit = {
-							any_county_province = {
-								has_holding_type = tribal_holding
+							title_province = {
+								OR = {
+									has_holding_type = tribal_holding
+									has_holding_type = nomad_holding
+									has_holding_type = herder_holding
+								}
 							}
 						}
 						change_development_level = -1
@@ -1019,7 +1161,7 @@ mpo_nomad_invasion_cb = {
 						change_development_level = -3
 					}
 					else = {
-						change_development_level = -4
+						change_development_level = -5
 					}
 				}
 			}
@@ -1095,14 +1237,14 @@ mpo_nomad_invasion_cb = {
 			add_dread = minor_dread_loss
 			add_legitimacy = minor_legitimacy_loss
 			add_prestige = mongol_invasion_cb_prestige_white_peace
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				ambitious = medium_stress_impact_gain
 				arrogant = medium_stress_impact_gain
 			}
 		}
 
 		scope:defender = {
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				arrogant = medium_stress_impact_gain
 			}
 		}
@@ -1148,7 +1290,7 @@ mpo_nomad_invasion_cb = {
 			add_dread = major_dread_loss
 			add_legitimacy = major_legitimacy_loss
 			pay_short_term_gold_reparations_effect = {
-				GOLD_VALUE = 8	#prev 5
+				GOLD_VALUE = 6	#prev 5
 			}
 			add_prestige = {
 				value = massive_prestige_value

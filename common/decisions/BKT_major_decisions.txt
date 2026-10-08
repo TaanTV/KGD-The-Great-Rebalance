@@ -1,4 +1,318 @@
 ﻿##################################################
+# Convert Realm to Feudalism/Clan
+# by Linnéa Thimrén
+##################################################
+
+# A decision to feudalize the entire realm (wow!)
+### Adopt [ROOT.Char.Custom('GetTribalReformGovernment')|U] Ways ###
+convert_whole_realm_to_feudalism_decision = {
+	picture = {
+		trigger = {
+			has_tgp_dlc_trigger = yes
+			liege = {
+				culture = { has_cultural_pillar = heritage_japonic }
+			}
+		}
+		reference = "gfx/interface/illustrations/decisions/tgp_dominance.dds"
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	}
+	decision_group_type = major
+	desc = convert_whole_realm_to_feudalism_decision_desc
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	is_shown = {
+		government_has_flag = government_is_tribal
+		trigger_if = {
+			limit = { 
+				government_has_flag = government_is_wanua
+				is_ai = yes
+			}
+			faith = { has_doctrine = doctrine_monotheist }
+		}
+		trigger_if = {
+			limit = { top_liege != this }
+			liege = {
+				NOR = {
+					government_has_flag = government_is_feudal
+					government_has_flag = government_is_clan
+					government_has_flag = government_is_japan_feudal
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		has_realm_law = tribal_authority_3
+		custom_description = {
+			text = faith_is_reformed
+			subject = root
+			faith = { NOT = { has_doctrine_parameter = unreformed } }
+		}
+		prestige_level >= 2
+		capital_province.county = {
+			development_level >= convert_to_feudalism_development_requirement
+		}
+		custom_description = { #You need to have 70% of all (non-regional/unique) tribal innovations!
+			text = has_all_tribal_innovations
+			subject = root.culture
+			culture = {
+				calc_true_if = {
+					amount >= 9
+					has_innovation = innovation_motte
+					has_innovation = innovation_catapult
+					has_innovation = innovation_barracks
+					has_innovation = innovation_mustering_grounds
+					has_innovation = innovation_bannus
+					has_innovation = innovation_quilted_armor
+					has_innovation = innovation_gavelkind
+					has_innovation = innovation_crop_rotation
+					has_innovation = innovation_city_planning
+					has_innovation = innovation_casus_belli
+					has_innovation = innovation_plenary_assemblies
+					has_innovation = innovation_ledger
+					has_innovation = innovation_development_01
+					has_innovation = innovation_currency_01
+				}
+			}
+		}
+		trigger_if = {
+			limit = { 
+				government_has_flag = government_is_wanua
+				#is_ai = yes
+			}
+			faith = { has_doctrine = doctrine_monotheist }
+		}
+		#ADDED - more requirements! 
+		trigger_if = {
+			limit = {
+				#top_liege = this
+				#is_ai = no
+				highest_held_title_tier > tier_county
+			}
+			custom_tooltip = {
+				text = all_powerful_vassals_required_tt
+				any_powerful_vassal = {
+					count = all
+					opinion = {
+						target = root
+						value >= 50
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = { 
+				top_liege != this
+				liege = { 
+					OR = { 
+						government_has_flag = government_is_tribal 
+						government_has_flag = government_is_nomadic 
+					} 
+				} 
+			}
+			OR = {
+				NOT = { liege = { has_realm_law = tribal_authority_3 } }
+				prestige_level >= 4
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		custom_tooltip = {
+			text = permafrost_feudal_ban
+			NOT = { culture = { has_cultural_parameter = permafrost_cannot_become_feudal } }
+		}
+	}
+
+	cost = {
+		prestige = {
+			value = 500	#prev 200
+			if = {
+				limit = { 
+					top_liege != this
+					highest_held_title_tier = tier_county
+					
+				}
+				multiply = 2
+				if = {
+					limit = { capital_province = { has_holding_type = tribal_holding } }
+					multiply = 2
+				}
+			}
+		}
+	}
+
+	effect = {
+		gain_legitimizing_legend_seed_tooltip_effect = yes
+		add_character_flag = ready_to_receive_seed
+		trigger_event = major_decisions.0001
+		save_scope_as = actor
+		convert_whole_realm_to_feudalism_effect = yes
+		hidden_effect = {
+			every_vassal = {
+				trigger_event = {
+					id = major_decisions.0002
+					days = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		NOT = { mpo_has_gok_mongol_empire_trigger = yes } #Stop the Mongols from slowing their conquest. 
+		#ADDED
+		NOR = { 
+			has_trait = stubborn 		#stuck in their own ways
+			has_trait = lazy 			#way too much effort
+			has_variable = conqueror	#that would slow them down
+		}
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}
+
+##################################################
+# Convert Realm to Feudalism (West African Pagan)
+# by Ewan Cowhig Croft
+##################################################
+
+# A decision for West African pagans to feudalise without reforming.
+### Adopt [ROOT.Char.Custom('GetTribalReformGovernment')|U] Ways: #weak (West African Pagan)#! ###
+convert_whole_realm_to_feudalism_west_african_pagan_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	}
+	decision_group_type = major
+	desc = convert_whole_realm_to_feudalism_west_african_pagan_decision_desc
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+
+	is_shown = {
+		# Only tribals need formalise.
+		government_has_flag = government_is_tribal
+		# Unreformed West African Pagans are our targets.
+		faith_qualifies_for_west_african_pagan_feudalisation_trigger = yes
+	}
+
+	is_valid = {
+		# Repeat the faith requirements, so that the player knows what's up.
+		faith_qualifies_for_west_african_pagan_feudalisation_trigger = yes
+		# Must have suitable authority.
+		has_realm_law = tribal_authority_3
+		# Independents only.
+		top_liege = this
+		# West Africans feudalise from large empires.
+		calc_true_if = {
+			amount >= 4
+			realm_size >= minor_realm_size
+			highest_held_title_tier >= tier_kingdom
+			custom_tooltip = {
+				text = convert_whole_realm_to_feudalism_west_african_pagan_decision.tt.vassal_count
+				any_vassal = { count >= convert_whole_realm_to_feudalism_west_african_pagan_decision_vassal_count_value }
+			}
+			prestige_level >= high_prestige_level
+			piety_level >= high_piety_level
+			custom_tooltip = {
+				text = convert_whole_realm_to_feudalism_west_african_pagan_decision.tt.wa_capital_development
+				capital_county = {
+					development_level >= convert_whole_realm_to_feudalism_west_african_pagan_decision_wa_capital_development_value
+					title_province = { geographical_region = world_africa_west }
+				}
+			}
+		}
+		# You need to have 70% of all (non-regional/unique) tribal innovations!
+		custom_description = {
+			text = has_all_tribal_innovations
+			subject = root.culture
+			culture = {
+				calc_true_if = {
+					amount >= 9
+					has_innovation = innovation_motte
+					has_innovation = innovation_catapult
+					has_innovation = innovation_barracks
+					has_innovation = innovation_mustering_grounds
+					has_innovation = innovation_bannus
+					has_innovation = innovation_quilted_armor
+					has_innovation = innovation_gavelkind
+					has_innovation = innovation_crop_rotation
+					has_innovation = innovation_city_planning
+					has_innovation = innovation_casus_belli
+					has_innovation = innovation_plenary_assemblies
+					has_innovation = innovation_ledger
+					has_innovation = innovation_development_01
+					has_innovation = innovation_currency_01
+				}
+			}
+		}
+		#ADDED - more requirements! 
+		custom_tooltip = {
+			text = all_powerful_vassals_required_tt
+			any_powerful_vassal = {
+				count = all
+				opinion = {
+					target = root
+					value >= 50
+				}
+			}
+		}
+	}
+
+	cost = { prestige = 500 }
+
+	effect = {
+		#ADDED - the next 2 lines coz why?..
+		gain_legitimizing_legend_seed_tooltip_effect = yes
+		add_character_flag = ready_to_receive_seed
+		trigger_event = major_decisions.0001
+		save_scope_as = actor
+		convert_whole_realm_to_feudalism_effect = yes
+		hidden_effect = {
+			every_vassal = {
+				trigger_event = {
+					id = major_decisions.0002
+					days = 3
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		# Cut down on checks for other tribals.
+		exists = capital_county.title_province
+		capital_county.title_province = { geographical_region = world_africa_west }
+		#ADDED
+		NOR = { 
+			has_trait = stubborn 		#stuck in their own ways
+			has_trait = lazy 			#way too much effort
+			has_variable = conqueror	#that would slow them down
+		}
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}
+
+##################################################
 # Adopt Special Succession
 # by Ewan Cowhig Croft
 ##################################################
@@ -21,40 +335,41 @@ adopt_special_succession_decision = {
 	}
 
 	is_shown = {
-		OR = {	#Must be eligible for a special succession type.
-			special_succession_witengamot_trigger = yes
-			special_succession_thing_trigger = yes
-			special_succession_tanistry_trigger = yes
-			special_succession_jirga_trigger = yes
-		}
 		AND = {
-			is_landed_or_landless_administrative = yes
+			#is_landed_or_landless_administrative = yes
 			highest_held_title_tier >= tier_kingdom
 			has_realm_law_flag = partition_succession_law
 			any_held_title = {
 				title_tier >= kingdom
 				NOR = {
-					has_title_law_flag = advanced_succession_law
 					has_title_law_flag = elective_succession_law
+					has_title_law_flag = advanced_succession_law
 				}
 			}
+			is_landed_or_landless_administrative_or_theocratic = yes
 		}
-		current_date < 1100.1.1	#Curtail special succession types as the centuries wear on. Ever on.
-		
+		OR = {	#Must be eligible for a special succession type.
+			special_succession_tanistry_trigger = yes
+			special_succession_thing_trigger = yes
+			special_succession_witengamot_trigger = yes
+			special_succession_jirga_trigger = yes
+		}
 		trigger_if = { # Prevent Norway from essentially giving England back to the Anglo-Saxons
 			limit = {
-				is_ai = yes
-				special_succession_thing_trigger = yes
 				any_held_title = {
 					this = title:k_england
 				}
+				special_succession_thing_trigger = yes
 				NAND = { # If they're on the isle itself, it's fine
 					primary_title = title:k_england
 					capital_county.kingdom = title:k_england
 				}
+				is_ai = yes
 			}
 			always = no
 		}
+		current_date < 1100.1.1	#Curtail special succession types as the centuries wear on. Ever on.
+
 	}
 
 	is_valid = {
@@ -147,17 +462,17 @@ found_duchy_decision = {
 	is_shown = {
 		highest_held_title_tier = tier_county
 		is_landed = yes
+		NOR = {
+			government_has_mechanic = administrative
+			government_has_flag = government_is_nomadic
+			government_is_japanese_trigger = yes
+		}
 		OR = {
+			has_game_rule = on_custom_duchies
 			AND = {
 				is_ai = no
 				has_game_rule = on_custom_duchies_player
 			}
-			has_game_rule = on_custom_duchies
-		}
-		NOR = {
-			government_allows = administrative
-			government_has_flag = government_is_nomadic
-			government_is_japanese_trigger = yes
 		}
 	}
 
@@ -244,17 +559,17 @@ expand_duchy_decision = {
 	ai_check_interval_by_tier = {
 		barony = 0
 		county = 0
-		duchy = 0		#prev 240
-		kingdom = 0		#prev 240
-		empire = 0		#prev 240
-		hegemony = 0	#prev 240
+		duchy = 240
+		kingdom = 240
+		empire = 240
+		hegemony = 240
 	}
 
 	cooldown = { years = 10 }
 
 	widget = {
 		controller = create_holy_order
-		barony_valid = {
+		title_valid = {
 			scope:ruler = {
 				trigger_if = {
 					limit = {
@@ -298,13 +613,6 @@ expand_duchy_decision = {
 	is_shown = {
 		save_temporary_scope_as = root_scope_temporary
 		highest_held_title_tier >= tier_duchy
-		OR = {
-			AND = {
-				is_ai = no
-				has_game_rule = on_custom_duchies_player
-			}
-			has_game_rule = on_custom_duchies
-		}
 		is_landed_or_landless_administrative = yes
 		trigger_if = {
 			limit = {
@@ -324,7 +632,15 @@ expand_duchy_decision = {
 				save_temporary_scope_as = duchy_title
 			}
 		}
-		scope:duchy_title = {
+		OR = {
+			has_game_rule = on_custom_duchies
+			AND = {
+				is_ai = no
+				has_game_rule = on_custom_duchies_player
+			}
+		}
+		save_temporary_scope_as = root_scope_temporary
+		scope:duchy_title ?= {
 			any_de_jure_county = {
 				count < expand_duchy_max_size_value
 			}
@@ -394,6 +710,11 @@ expand_duchy_decision = {
 			}
 			scope:barony.county ?= {
 				title_held_years >= 5
+			}
+			#ADDED
+			trigger_if = {
+				limit = { is_ai = yes }
+				NOT = { scope:barony.county = scope:barony.duchy.title_capital_county }
 			}
 		}
 	}
@@ -483,7 +804,7 @@ expand_duchy_decision = {
 	}
 
 	ai_potential = {
-		always = no		#prev yes
+		always = yes
 	}
 
 	ai_will_do = {
@@ -552,7 +873,7 @@ set_de_jure_capital_decision = {
 				#ADDED
 				has_title = capital_county.duchy
 			}
-			current_description = hire_physician_decision_desc
+			current_description = set_de_jure_capital_decision
 			localization = set_de_jure_capital_duchy
 			icon = "gfx/interface/icons/duchy_crown.dds"
 			ai_chance = { value = 100 }
@@ -568,8 +889,12 @@ set_de_jure_capital_decision = {
 			#ADDED
 			is_valid = {
 				has_title = capital_county.kingdom
+				trigger_if = {
+					limit = { is_ai = yes }
+					capital_county.duchy.title_capital_county = capital_county
+				}
 			}
-			current_description = hire_physician_decision_desc
+			current_description = set_de_jure_capital_decision
 			localization = set_de_jure_capital_kingdom
 			icon = "gfx/interface/icons/kingdom_crown.dds"
 			ai_chance = { value = 100 }
@@ -585,19 +910,44 @@ set_de_jure_capital_decision = {
 			#ADDED
 			is_valid = {
 				has_title = capital_county.empire
+				trigger_if = {
+					limit = { is_ai = yes }
+					capital_county.duchy.title_capital_county = capital_county
+				}
 			}
-			current_description = hire_physician_decision_desc
+			current_description = set_de_jure_capital_decision
 			localization = set_de_jure_capital_empire
 			icon = "gfx/interface/icons/empire_crown.dds"
+			ai_chance = { value = 100 }
+		}
+
+		item = { # Hegemony
+			value = set_hegemony_capital
+			is_shown = {
+				root = {
+					highest_held_title_tier >= tier_hegemony
+				}
+			}
+			#ADDED
+			is_valid = {
+				has_title = capital_county.hegemony
+				trigger_if = {
+					limit = { is_ai = yes }
+					capital_county.duchy.title_capital_county = capital_county
+				}
+			}
+			current_description = set_de_jure_capital_decision
+			localization = set_de_jure_capital_hegemony
+			icon = "gfx/interface/icons/hegemony_crown.dds"
 			ai_chance = { value = 100 }
 		}
 	}
 
 	is_shown = {
-		#ADDED
+		#ADDED - the next 2
 		is_landed = yes
+		exists = capital_county
 		highest_held_title_tier >= tier_duchy
-		highest_held_title_tier < tier_hegemony
 		any_held_title = {
 			tier >= tier_duchy
 			NOR = {
@@ -617,6 +967,10 @@ set_de_jure_capital_decision = {
 			AND = {
 				highest_held_title_tier >= tier_empire
 				NOT = { root.capital_county = root.capital_county.empire.title_capital_county }
+			}
+			AND = {
+				highest_held_title_tier >= tier_hegemony
+				NOT = { root.capital_county = root.capital_county.hegemony.title_capital_county }
 			}
 		}
 	}
@@ -640,6 +994,10 @@ set_de_jure_capital_decision = {
 						highest_held_title_tier = tier_empire
 						scope:set_empire_capital = yes
 					}
+					AND = {
+						highest_held_title_tier = tier_hegemony
+						scope:set_hegemony_capital = yes
+					}
 				}
 			}
 			root.primary_title = {
@@ -657,6 +1015,9 @@ set_de_jure_capital_decision = {
 				}
 				scope:set_empire_capital = {
 					root.capital_county.empire = { save_temporary_scope_as = current_de_jure }
+				}
+				scope:set_hegemony_capital = {
+					root.capital_county.hegemony = { save_temporary_scope_as = current_de_jure }
 				}
 			}
 		}
@@ -705,6 +1066,7 @@ set_de_jure_capital_decision = {
 					scope:set_duchy_capital = { value = 500 }
 					scope:set_kingdom_capital = { value = 750 }
 					scope:set_empire_capital = { value = 1000 }
+					scope:set_hegemony_capital = { value = 1500 }
 				}
 			}
 			else = {
@@ -732,6 +1094,10 @@ set_de_jure_capital_decision = {
 						highest_held_title_tier = tier_empire
 						scope:set_empire_capital = yes
 					}
+					AND = {
+						highest_held_title_tier = tier_hegemony
+						scope:set_hegemony_capital = yes
+					}
 				}
 			}
 			root.primary_title = {
@@ -756,6 +1122,12 @@ set_de_jure_capital_decision = {
 				}
 				scope:set_empire_capital = {
 					root.capital_county.empire = {
+						title_capital_county = { save_scope_as = old_capital }
+						save_scope_as = current_de_jure_scope
+					}
+				}
+				scope:set_hegemony_capital = {
+					root.capital_county.hegemony = {
 						title_capital_county = { save_scope_as = old_capital }
 						save_scope_as = current_de_jure_scope
 					}
@@ -786,12 +1158,7 @@ set_de_jure_capital_decision = {
 			}
 			scope:old_capital ?= {
 				duchy = { save_scope_as = current_duchy }
-				random_duchy = {
-					limit = {
-						NOT = { this = scope:current_duchy }
-						is_noble_family_title = no
-						is_mercenary_company = no
-					}
+				title:d_zun_warriors = {
 					save_scope_as = placeholder_duchy
 				}
 				scope:current_duchy = {
@@ -813,9 +1180,112 @@ set_de_jure_capital_decision = {
 
 	ai_potential = {
 		always = yes
+		
 	}
 
 	ai_will_do = {
 		base = 100
+	}
+}
+
+
+# Restore Carthage 
+
+restore_carthage_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_dynasty_house.dds"
+	}
+	decision_group_type = major
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 120
+		empire = 0
+		hegemony = 0
+	}
+
+	desc = restore_carthage_decision_desc
+	selection_tooltip = restore_carthage_decision_tooltip
+
+	is_shown = {
+		culture ?= {
+			OR = {
+				#ADDED 
+				trigger_if = {
+					limit = { NOT = { has_game_rule = bkt_additional_content_enabled } }
+					this = culture:levantine
+				}
+				has_cultural_pillar = heritage_syriac
+				has_cultural_pillar = heritage_phoenician
+			}
+		}
+		is_playable_character = yes
+
+		# Not repeatable.
+		NOT = {
+			is_target_in_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:flag_restored_carthage
+			}
+		}
+		is_ruler = yes
+	}
+
+	is_valid = { 
+		is_independent_ruler = yes
+		highest_held_title_tier < tier_empire
+		#ADDED - show this here too.
+		trigger_if = {
+			limit = { has_game_rule = bkt_additional_content_enabled }
+			culture = { has_cultural_pillar = heritage_syriac }
+		}
+		trigger_else = {
+			OR = {
+				culture = { has_cultural_pillar = heritage_syriac }
+				culture = culture:levantine
+			}
+		}
+		
+
+		prestige_level >= 4
+
+		completely_controls_region = custom_carthage
+		completely_controls_region = custom_tripolitania
+		completely_controls_region = custom_mauretania
+		completely_controls_region = custom_carthago_nova
+		rule_title_creation_imperial_power_projection_title_creation_trigger = yes
+		
+	}
+
+	is_valid_showing_failures_only = {
+		top_liege = this
+		is_available_adult = yes
+	}
+
+	cost = {
+		gold = {
+			value = 1200
+		}
+	}
+
+	effect = {
+		save_scope_as = founder 
+		show_as_tooltip = { restore_carthage_scripted_effect = yes }
+
+		hidden_effect = {
+			add_to_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:flag_restored_carthage
+			}
+		}
+
+		#ADDED - swap things if thingy is enabled
+		if = {
+			limit = { has_game_rule = bkt_additional_content_enabled }
+			trigger_event = bkt_misc_events.0030
+		}
+		else = { trigger_event = major_decisions.3300 }
 	}
 }

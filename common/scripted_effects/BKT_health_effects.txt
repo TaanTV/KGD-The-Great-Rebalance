@@ -4,11 +4,136 @@ increase_wounds_no_death_effect = {
 		name = treatment_type
 		value = flag:$REASON$
 	}
+	save_temporary_scope_value_as = {
+		name = exaltation_of_pain_wounded_spiritual_fulfillment
+		value = no
+	}
 
-	change_trait_rank = {
-		trait = wounded
-		rank = 1
-		max = 3
+	if = {
+		limit = {
+			has_personal_tenet_flag = tenet_exaltation_of_pain_wounded_spiritual_fulfillment
+			NOT = {
+				has_trait_rank = {
+					trait = wounded
+					rank = 3
+				}
+			}
+		}
+		save_temporary_scope_value_as = {
+			name = exaltation_of_pain_wounded_spiritual_fulfillment
+			value = yes
+		}
+	}
+
+	if = {
+		limit = {
+			has_trait_xp = { trait = fragile_bones track = fragile_bones value >= 50 }
+		}
+		change_trait_rank = {
+			trait = wounded
+			rank = 3
+			max = 3
+		}
+	}
+	else_if = {
+		limit = {
+			has_trait = fragile_bones
+		}
+		change_trait_rank = {
+			trait = wounded
+			rank = 2
+			max = 3
+		}
+	}
+	else = {
+		change_trait_rank = {
+			trait = wounded
+			rank = 1
+			max = 3
+		}
+	}
+
+	if = {
+		limit = {
+			scope:exaltation_of_pain_wounded_spiritual_fulfillment = yes
+			has_trait_rank = {
+				trait = wounded
+				rank = 1
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			send_interface_toast = {
+				type = event_generic_good
+				title = exaltation_of_pain_wounded_spiritual_fulfillment_toast
+				left_icon = this
+				change_spiritual_fulfillment = minor_spiritual_fulfillment_value
+			}
+		}
+		else = {
+			change_spiritual_fulfillment = minor_spiritual_fulfillment_value
+		}
+	}
+	else_if = {
+		limit = {
+			scope:exaltation_of_pain_wounded_spiritual_fulfillment = yes
+			has_trait_rank = {
+				trait = wounded
+				rank = 2
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			send_interface_toast = {
+				type = event_generic_good
+				title = exaltation_of_pain_wounded_spiritual_fulfillment_toast
+				left_icon = this
+				change_spiritual_fulfillment = medium_spiritual_fulfillment_value
+			}
+		}
+		else = {
+			change_spiritual_fulfillment = medium_spiritual_fulfillment_value
+		}
+	}
+	else_if = {
+		limit = {
+			scope:exaltation_of_pain_wounded_spiritual_fulfillment = yes
+			has_trait_rank = {
+				trait = wounded
+				rank = 3
+			}
+		}
+		if = {
+			limit = { is_ai = no }
+			send_interface_toast = {
+				type = event_generic_good
+				title = exaltation_of_pain_wounded_spiritual_fulfillment_toast
+				left_icon = this
+				change_spiritual_fulfillment = major_spiritual_fulfillment_value
+			}
+		}
+		else = {
+			change_spiritual_fulfillment = major_spiritual_fulfillment_value
+		}
+	}
+
+	# PAM - Mortification of the Flesh PT: offer the pain of the flesh to God
+	if = {
+		limit = { has_personal_tenet_flag = tenet_mortification_suffering_sanctifies }
+		if = {
+			limit = { is_ai = no }
+			send_interface_toast = {
+				type = event_generic_good
+				title = pam_mortification_suffering_sanctifies_toast
+				left_icon = this
+				add_piety = minor_piety_value
+				add_stress = minor_stress_loss
+			}
+		}
+		else = {
+			add_piety = minor_piety_value
+			add_stress = minor_stress_loss
+		}
 	}
 
 	if = { #Wounds from treatments give no infection and no additional treatment

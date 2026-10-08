@@ -2,7 +2,7 @@
 	#Use hook
 	if = {
 		limit = { always = scope:hook }
-		scope:actor = {
+		scope:puppet_or_actor = {
 			use_hook = scope:recipient
 		}
 		#To make sure betrothals can't be broken if a hook was used
@@ -40,40 +40,40 @@
 	}
 	
 	#ADDED - compensate landless chars somewhat
-	if = {
-		limit = {
-			OR = {
-				NOT = { exists = scope:secondary_actor }
-				NOT = { exists = scope:secondary_recipient }
-				scope:secondary_actor.age < 16
-				scope:secondary_recipient.age < 16
-			}
-		}
-		#Yes, this is a structure indeed.
-	}
-	else_if = {
-		limit = {
-			scope:actor = {
-				is_ruler = yes
-				this = scope:secondary_actor
-				government_has_flag = government_is_landless_adventurer
-			}
-		}
-		scope:actor = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
-	}
-	else_if = {
-		limit = {
-			scope:recipient = {
-				is_ruler = yes
-				this = scope:secondary_recipient
-				government_has_flag = government_is_landless_adventurer
-			}
-		}
-		scope:recipient = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
-	}
+	#if = {
+	#	limit = {
+	#		OR = {
+	#			NOT = { exists = scope:secondary_actor }
+	#			NOT = { exists = scope:secondary_recipient }
+	#			scope:secondary_actor.age < 16
+	#			scope:secondary_recipient.age < 16
+	#		}
+	#	}
+	#	#Yes, this is a structure indeed.
+	#}
+	#else_if = {
+	#	limit = {
+	#		scope:puppet_or_actor = {
+	#			is_ruler = yes
+	#			this = scope:secondary_actor
+	#			government_has_flag = government_is_landless_adventurer
+	#		}
+	#	}
+	#	scope:puppet_or_actor = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
+	#}
+	#else_if = {
+	#	limit = {
+	#		scope:recipient = {
+	#			is_ruler = yes
+	#			this = scope:secondary_recipient
+	#			government_has_flag = government_is_landless_adventurer
+	#		}
+	#	}
+	#	scope:recipient = { add_prestige_no_experience = { value = define:NCharacter|MARRIAGE_TIER_DIFF_PRESTIGE_MULT multiply = 2 } }
+	#}
 			
 	#Penalties for marrying a lowborn
-	scope:actor = {
+	scope:puppet_or_actor = {
 		if = {
 			limit = {
 				this = scope:secondary_actor # We check that you're marrying them yourself
@@ -84,13 +84,14 @@
 			show_as_tooltip = {
 				vassals_dislike_marry_lowborn_effect = {
 					SPOUSE = scope:secondary_recipient
-					RULER = scope:actor
+					RULER = scope:puppet_or_actor
 				}
 			}
 			#Legitimacy loss for marrying a lowborn
 			if = {
 				limit = {
 					is_valid_for_legitimacy_change = yes
+					NOT = { rite = { rite_has_parameter = piety_from_marrying_lowborn_active } }
 					NOT = { has_variable = lowborn_legitimacy_cooldown }
 					OR = {
 						NOT = { exists = primary_spouse }
@@ -100,26 +101,22 @@
 				if = {
 					limit = { is_ai = no }
 					send_interface_toast = {
-						type = event_toast_effect_good
+						type = event_toast_effect_neutral
 						title = married_lowborn_toast
-						left_icon = scope:actor
+						left_icon = scope:puppet_or_actor
 						add_legitimacy = {
 							value = medium_legitimacy_loss
-							#multiply = scope:actor.primary_title.tier
+							#multiply = scope:puppet_or_actor.primary_title.tier
 							#ADDED - CHANGED to be a bit less punishing for counts and count in religion
-							multiply = { value = -1 add = scope:actor.primary_title.tier min = 0 }
-							if = {
-								limit = { scope:actor.faith = { has_doctrine_parameter = piety_from_marrying_lowborn_active } }
-								value = miniscule_legitimacy_loss
-							}
+							multiply = { value = -1 add = scope:puppet_or_actor.primary_title.tier min = 0 }
 						}
 					}
 				}
 				else = { # To avoid destroying polygamy AIs
 					send_interface_toast = {
-						type = event_toast_effect_good
+						type = event_toast_effect_neutral
 						title = married_lowborn_toast
-						left_icon = scope:actor
+						left_icon = scope:puppet_or_actor
 						add_legitimacy = { value = minor_legitimacy_loss }
 					}
 					hidden_effect = {
@@ -131,9 +128,19 @@
 				}
 			}
 		}
+		else_if = { # If they're not a lowborn AND you and the recipient are both Nomad we may give you some Legitimacy
+			limit = {
+				#ADDED - disabled that
+				always = no
+				this = scope:secondary_actor # We check that you're marrying them yourself
+				scope:secondary_recipient = { is_lowborn = no }
+				is_valid_for_nomadic_legitimacy_change = yes
+				scope:recipient = { government_has_flag = government_is_nomadic }
+				mpo_lower_nomad_authority_trigger = { CHARACTER = scope:recipient } # Only if recipient has higher Dominance than you
+			}
+			add_legitimacy = medium_legitimacy_gain
+		}
 	}
-	#Unop Rework the section below for the recipient, as it was (presumably) intended
-	# For the actor, this = scope:secondary_recipient is always false
 	scope:recipient = {
 		if = {
 			limit = {
@@ -145,13 +152,14 @@
 			show_as_tooltip = {
 				vassals_dislike_marry_lowborn_effect = {
 					SPOUSE = scope:secondary_actor
-					RULER = scope:recipient #Unop
+					RULER = scope:recipient
 				}
 			}
 			#Legitimacy loss for marrying a lowborn
 			if = {
 				limit = {
 					is_valid_for_legitimacy_change = yes
+					NOT = { rite = { rite_has_parameter = piety_from_marrying_lowborn_active } }
 					NOT = { has_variable = lowborn_legitimacy_cooldown }
 					OR = {
 						NOT = { exists = primary_spouse }
@@ -161,26 +169,22 @@
 				if = {
 					limit = { is_ai = no }
 					send_interface_toast = {
-						type = event_toast_effect_good
+						type = event_toast_effect_neutral
 						title = married_lowborn_toast
-						left_icon = scope:recipient #Unop
+						left_icon = scope:recipient
 						add_legitimacy = {
 							value = medium_legitimacy_loss
 							#multiply = scope:recipient.primary_title.tier #Unop
 							#ADDED - CHANGED to be a bit less punishing for counts and count in religion
 							multiply = { value = -1 add = scope:recipient.primary_title.tier min = 0 }
-							if = {
-								limit = { scope:recipient.faith = { has_doctrine_parameter = piety_from_marrying_lowborn_active } }
-								value = miniscule_legitimacy_loss
-							}
 						}
 					}
 				}
 				else = { # To avoid destroying polygamy AIs
 					send_interface_toast = {
-						type = event_toast_effect_good
+						type = event_toast_effect_neutral
 						title = married_lowborn_toast
-						left_icon = scope:recipient #Unop
+						left_icon = scope:recipient
 						add_legitimacy = { value = minor_legitimacy_loss }
 					}
 					hidden_effect = {
@@ -192,16 +196,18 @@
 				}
 			}
 		}
-		#else = { # If they're not a lowborn AND you and the recipient are both Nomad we may give you some Legitimacy
-		#	if = {
-		#		limit = {
-		#			is_valid_for_nomadic_legitimacy_change = yes
-		#			scope:recipient = { government_has_flag = government_is_nomadic }
-		#			mpo_lower_nomad_authority_trigger = { CHARACTER = scope:recipient } # Only if recipient has higher Dominance than you
-		#		}
-		#		add_legitimacy = medium_legitimacy_gain
-		#	}
-		#}
+		else_if = { # If they're not a lowborn AND you and the recipient are both Nomad we may give you some Legitimacy
+			limit = {
+				#ADDED - disabled that
+				always = no
+				this = scope:secondary_recipient # We check that you're marrying them yourself
+				scope:secondary_actor = { is_lowborn = no }
+				is_valid_for_nomadic_legitimacy_change = yes
+				scope:puppet_or_actor = { government_has_flag = government_is_nomadic }
+				mpo_lower_nomad_authority_trigger = { CHARACTER = scope:puppet_or_actor } # Only if recipient has higher Dominance than you
+			}
+			add_legitimacy = medium_legitimacy_gain
+		}
 	}
 		
 	#ADDED - would be nice if this was prettier but euhhhhhhhhhhhhhhhh idc
@@ -216,7 +222,7 @@
 				government_has_flag = government_is_herder
 			}
 		}
-		scope:actor = {
+		scope:puppet_or_actor = {
 			switch = {
 				trigger = has_government
 				feudal_government = {
@@ -276,14 +282,14 @@
 		set_grand_wedding_betrothal_variables = {
 			SPOUSE_1 = scope:secondary_actor
 			SPOUSE_2 = scope:secondary_recipient
-			HOST = scope:actor
+			HOST = scope:puppet_or_actor
 			PROMISEE = scope:recipient
 		}
 	}
 
 	#Marriage notification events
 	hidden_effect = {
-		scope:actor = {
+		scope:puppet_or_actor = {
 			if = {
 				limit = { this != scope:recipient }
 				trigger_event = marriage_interaction.0010
@@ -331,8 +337,8 @@
 					limit = {
 						NOR = {
 							culture = { has_cultural_tradition = tradition_polygamous }
-							faith = { has_doctrine = doctrine_polygamy }
-							faith = { has_doctrine = doctrine_concubines }
+							rite = { rite_has_doctrine = doctrine_polygamy }
+							rite = { rite_has_doctrine = doctrine_concubines }
 						}
 					}
 
@@ -342,8 +348,8 @@
 							limit = { 
 								NOR = {
 									culture = { has_cultural_tradition = tradition_polygamous }
-									faith = { has_doctrine = doctrine_polygamy }
-									faith = { has_doctrine = doctrine_concubines }
+									rite = { rite_has_doctrine = doctrine_polygamy }
+									rite = { rite_has_doctrine = doctrine_concubines }
 								}
 							}
 							add_opinion = {
@@ -429,7 +435,7 @@
 			scope:secondary_actor = {
 				has_character_modifier = heir_easier_to_marry_off_modifier
 			}
-			scope:actor = { player_heir = scope:secondary_actor }
+			scope:puppet_or_actor = { player_heir = scope:secondary_actor }
 		}
 		scope:secondary_actor = {
 			remove_character_modifier = heir_easier_to_marry_off_modifier
@@ -438,7 +444,7 @@
 	if = {
 		limit = {
 			scope:secondary_actor = {
-				is_child_of = scope:actor
+				is_child_of = scope:puppet_or_actor
 				has_character_modifier = child_easier_to_marry_off_modifier
 			}
 		}
@@ -470,55 +476,36 @@
 	}
 
 	# Struggle parameters
-
-	#interfaith wedding costs piety
-	if = {
-		limit = {
-			scope:actor = scope:secondary_actor #Unop Actor should only gain piety if marrying themselves
-			scope:secondary_actor = {
-				faith != scope:secondary_recipient.faith
-			}
-			scope:actor ={
-				any_character_struggle = {
-					has_struggle_phase_parameter = interfaith_marriages_between_involved_characters_costs_piety
-				}
-			}
-		}
-		scope:actor = {
-			add_piety = major_piety_loss
-		}
-	}
 	#interfaith wedding provides piety
 	if = {
 		limit = {
-			scope:actor = scope:secondary_actor #Unop Actor should only gain piety if marrying themselves
+			scope:puppet_or_actor = scope:secondary_actor
 			scope:secondary_actor = {
 				faith != scope:secondary_recipient.faith
 			}
-			scope:actor ={
+			scope:puppet_or_actor = {
 				any_character_struggle = {
 					has_struggle_phase_parameter = interfaith_marriages_between_involved_characters_gives_piety
 				}
 			}
 		}
-		scope:actor = {
+		scope:puppet_or_actor = {
 			add_piety = medium_piety_gain
 		}
 	}
-
 	#other stuff 
 	#Khurramites and Mazdakists gain piety from marrying lowborn
 	if = {
 		limit = {
-			scope:actor = scope:secondary_actor #Unop Actor should only gain piety if marrying themselves
+			scope:puppet_or_actor = scope:secondary_actor
 			scope:secondary_recipient = {
 				is_lowborn = yes 
 			}
-			scope:actor.faith = {
-				has_doctrine_parameter = piety_from_marrying_lowborn_active		#prev has_doctrine = tenet_communal_possessions 
+			scope:puppet_or_actor.rite = {
+				rite_has_parameter = piety_from_marrying_lowborn_active
 			}
 		}
-		scope:actor = {
+		scope:puppet_or_actor = {
 			add_piety = medium_piety_gain
 		}
 	}

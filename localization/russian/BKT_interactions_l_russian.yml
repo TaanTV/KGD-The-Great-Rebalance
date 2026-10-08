@@ -23,3 +23,13 @@
  vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties: "Вы увеличите [Concept('county_corruption', 'коррупцию')|E] или присвоите [Concept('control', 'контроль')|E] в некоторых [Concept('counties', 'графствах')|E] вашего [Concept('liege', 'сюзерена')|E]"
  
  cant_attack_lower_tier_foreign_vassals: "Невозможно атаковать чужого [Concept('vassal', 'вассала')|E] чей [rank|E] ниже вашего"
+ you_have_troops_in_their_subrealm: "Ваши армии находятся на их [Concept('subrealm', 'землях')|E]"
+ 
+ none_subjugated_tribute_taxes: "[Concept('tributary_contract', 'Договор о дани')|E] изначально имеет пункт «[GetSubjectContractType( 'default_tributary_taxes' ).GetObligationName( 'tributary_tax_none' )]»"
+ high_subjugated_tribute_prestige: "[Concept('tributary_contract', 'Договор о дани')|E] изначально имеет пункт «[GetSubjectContractType( 'default_tributary_prestige' ).GetObligationName( 'prestige_transfer_high' )]»"
+
+ BARON_RECOVATION_WEAK_TT: "Слабые [vassals|E] [Concept( 'title_tier', 'ранга' )|E] [Concept( 'barony', 'баронства' )|E] не могут возражать против [Concept( 'revocation', 'отъема титула' )|E]"
+ 
+ bkt_hof_or_challenger_of_recipient_tt: "Вы — [Concept('head_of_faith', 'глава конфессии')|E] или [challenger_hof|E] персонажа [recipient.GetShortUIName]"
+ bkt_non_clergy_dread_or_hook_tt: "[actor.GetShortUIName|U] должен выполнить одно из этих условий:\n$EFFECT_LIST_BULLET$Держать персонажа [recipient.GetShortUIName] @weak_hook_icon![Concept('hook', 'на крючке')|E]\n$EFFECT_LIST_BULLET$Привести персонажа [recipient.GetShortUIName] в [terrified_i][Concept('cowed', 'ужас')|E]\n$EFFECT_LIST_BULLET$Быть [Concept('head_of_faith', 'главой конфессии')|E] или [challenger_hof|E] персонажа [recipient.GetShortUIName]"
+ faith_has_no_head_hof_doctrine: "$doctrine_head_of_faith_name$: [GetDoctrineType('doctrine_no_head').GetBaseName]: $VALUE|=+0$"

@@ -195,7 +195,7 @@ governor_efficiency = {
 		# Aspirations
 		if = {
 			limit = { # Service
-				house ?= { has_house_power_parameter = service_house_governor_efficiency_bonus }
+				house ?= { has_house_aspiration_parameter = service_house_governor_efficiency_bonus }
 			}
 			add = {
 				add = {
@@ -208,7 +208,7 @@ governor_efficiency = {
 		}
 		if = {
 			limit = { # Governance
-				house ?= { has_house_power_parameter = governance_improved_governor_efficiency_bonus }
+				house ?= { has_house_aspiration_parameter = governance_improved_governor_efficiency_bonus }
 			}
 			add = {
 				add = {
@@ -692,10 +692,8 @@ governor_efficiency = {
 		}
 		if = { # The Forbidden City special building bonus
 			limit = {
-				top_liege ?= {
-					capital_province ?= {
-						has_building_or_higher = forbidden_city_01
-					}
+				top_liege.capital_province ?= {
+					has_building_or_higher = forbidden_city_01
 				}
 			}
 			add = {
@@ -709,7 +707,7 @@ governor_efficiency = {
 		if = { # The Great Barracks duchy building bonus (great project)
 			limit = {
 				OR = {
-					vassal_contract_has_flag = celestial_military_appointment # Only for celestial military governors
+					vassal_contract_has_flag = province_military # Only for military governors
 					government_has_flag = government_is_administrative # All regular admin types are eligible
 					is_independent_ruler = yes # The top liege can always use it
 				}
@@ -816,6 +814,47 @@ governor_efficiency_presented = {
 }
 
 
+appointment_non_preferred_gender_penalty_value = 0.5	#prev 0.8
+appointment_opposite_gender_penalty_value = 0.8			#prev 1
+
+adventurer_siege_replenish_amount = {
+	value = 0
+	add = scope:barony.title_province.available_loot
+	multiply = {
+		value = 0.5		#prev 2
+		if = {
+			limit = {
+				root = { has_perk = a_mans_home_perk }
+			}
+			add = 2
+		}
+	}
+	#ADDED - just in case
+	round = yes
+}
+
+
+reinforce_soldiers_regiment_max_value = {
+	value = 10		#prev 25
+	if = {
+		limit = {
+			scope:actor = { has_perk = soldiers_of_lesser_fortune_perk }
+		}
+		multiply = 4
+	}
+}
+
+reinforce_soldiers_regiment_max_value_tooltip = {
+	value = 10		#prev 25
+	if = {
+		limit = {
+			has_perk = soldiers_of_lesser_fortune_perk
+		}
+		multiply = 4
+	}
+}
+
+
 latin_emp_army_levies_value = {
 	value = 750		#prev 100
 	if = {
@@ -871,5 +910,3 @@ latin_emp_army_maa_value = {
 		add = 3		#prev 1
 	}
 }
-appointment_non_preferred_gender_penalty_value = 0.5	#prev 0.8
-appointment_opposite_gender_penalty_value = 0.8			#prev 1

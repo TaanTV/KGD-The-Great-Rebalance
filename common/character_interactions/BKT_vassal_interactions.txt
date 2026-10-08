@@ -1,4 +1,457 @@
-﻿retract_vassal_interaction = {
+﻿#Interactions relating to vassals
+
+grant_vassal_interaction = {
+	category = interaction_category_vassal
+	common_interaction = no
+	interface = transfer_vassal
+	icon = icon_vassal
+
+	special_interaction = grant_vassal_interaction
+
+	populate_actor_list = {
+		scope:puppet_or_actor = {
+			every_vassal = {
+				add_to_list = characters
+			}
+		}
+	}
+
+	desc = grant_vassal_interaction_desc
+
+	prompt = GRANT_VASSAL_SELECT_VASSAL_TO_TRANSFER
+
+	greeting = positive
+	notification_text = GRANT_VASSAL_PROPOSAL
+
+	pre_answer_yes_key = ACCEPT
+	pre_answer_no_key = DECLINE
+
+	is_shown = {
+		scope:recipient != scope:puppet_or_actor
+		OR = {
+			AND = {
+				exists = scope:recipient.liege
+				scope:recipient.liege ?= scope:puppet_or_actor
+			}
+			AND = {
+				exists = scope:puppet_or_actor.liege
+				scope:puppet_or_actor.liege ?= scope:recipient
+			}
+			AND = {
+				scope:puppet_or_actor.faith.religious_head ?= scope:recipient
+				scope:recipient = {
+					top_liege = this
+				}
+			}
+		}
+		scope:recipient.highest_held_title_tier > tier_barony
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_landed = yes # Landless rulers should not have Vassals
+			# Gallivanters won't accept additional responsibilities.
+			NOT = { has_trait = gallivanter }
+		}
+		NOT = { scope:puppet_or_actor = { is_at_war_with = scope:recipient } }
+		trigger_if = {
+			limit = { exists = scope:secondary_actor }
+			NOT = { scope:secondary_actor = { is_at_war_with = scope:recipient } }
+			scope:recipient.primary_title.tier > scope:secondary_actor.primary_title.tier
+		}
+		trigger_if = {
+			limit = {
+				scope:puppet_or_actor = { is_ai = yes }
+				exists = scope:secondary_actor
+			}
+			trigger_if = {
+				limit = {
+					NOT = {
+						scope:recipient.primary_title = {
+							any_in_de_jure_hierarchy = {
+								holder = scope:secondary_actor
+							}
+						}
+					}
+				}
+				scope:recipient.vassal_count < scope:recipient.vassal_limit # Avoid creating vassals with unsustainable situations
+			}
+			scope:secondary_actor = {
+				NOT = { has_character_flag = ai_should_not_transfer }
+			}
+		}
+		trigger_if = {
+			limit = { scope:recipient.highest_held_title_tier <= tier_county }
+			scope:recipient = { highest_held_title_tier > tier_county }
+		}
+		trigger_else = {
+			scope:puppet_or_actor = {
+				custom_description = {
+					text = "basic_valid_vassal_to_tranfer"
+					object = scope:recipient
+					any_vassal = {
+						NOT = { highest_held_title_tier = tier_barony }
+						scope:recipient.highest_held_title_tier > highest_held_title_tier
+					}
+				}
+			}
+		}
+		# Prevent Admin AI transferring admin vassals under non-admin vassals
+		NAND = {
+			scope:puppet_or_actor ?= {
+				is_ai = yes
+				government_has_mechanic = administrative
+			}
+			scope:recipient ?= {
+				NOT = { government_has_mechanic = administrative }
+			}
+			scope:secondary_actor ?= { government_has_mechanic = administrative }
+		}
+		# Ritsuryo cannot transfer Soryo to Ritsuryo
+		custom_tooltip = {
+			text = ritsuryo_to_soryo_invalid_to_transfer
+			NAND = {
+				scope:puppet_or_actor ?= { has_government = japan_administrative_government }
+				scope:recipient ?= { has_government = japan_administrative_government }
+				scope:secondary_actor ?= { has_government = japan_feudal_government }
+			}
+		}
+		custom_tooltip = {
+			text = cannot_transfer_bloc_leader_as_vassal_tt
+			NOT = {
+				scope:secondary_actor ?= {
+					exists = house.house_confederation.leading_house
+					house.house_confederation.leading_house ?= house
+					is_house_head = yes
+				}
+			}
+		}
+		
+		#ADDED - cant transfer vasssals that are in angy factions (NOTE: may need a custom_tooltip)
+		trigger_if = {
+			limit = {
+				exists = scope:secondary_actor
+				scope:secondary_actor = { is_a_faction_member = yes }
+			}
+			scope:secondary_actor.joined_faction = { discontent_per_month <= 0 }
+		}
+		
+		#scope:secondary_actor ?= {
+		#	trigger_if = {
+		#		limit = { is_a_faction_member = yes }
+		#	}
+		#}
+	}
+
+	can_be_picked = {
+		scope:recipient != root
+		highest_held_title_tier > tier_barony
+		highest_held_title_tier < scope:recipient.highest_held_title_tier
+
+		trigger_if = {
+			limit = { scope:puppet_or_actor.liege = scope:recipient }
+			custom_tooltip = {
+				text = is_de_jure_liege_of_target
+				NOT = {
+					primary_title = {
+						any_this_title_or_de_jure_above = {
+							holder = scope:puppet_or_actor
+						}
+					}
+				}
+			}
+		}
+
+		# You can't give your diarch away as a vassal.
+		custom_description = {
+			text = cannot_grant_own_diarch_as_vassal
+			subject = scope:puppet_or_actor.diarch
+			NOT = { scope:puppet_or_actor.diarch ?= root }
+		}
+
+		# Not at war with the vassal being transferred (blocks explicit transfer of war enemies, which invalidates the war).
+		custom_description = {
+			text = "basic_is_at_war_with_vassal"
+			subject = root
+			object = scope:puppet_or_actor
+			NOT = {
+				root = {
+					is_at_war_with = scope:puppet_or_actor
+				}
+			}
+		}
+
+		# Not at war with a vassal under the vassal being transferred (blocks implicit transfers of war enemies).
+		custom_description = {
+			text = "basic_is_at_war_with_sub_vassal"
+			subject = root
+			object = scope:puppet_or_actor
+			NOT = {
+				scope:puppet_or_actor = {
+					any_vassal_or_below = {
+						is_at_war_with = root
+					}
+				}
+			}
+		}
+
+		# EP3 Admin - You cannot give away noble families
+		custom_description = {
+			text = admin_cannot_grant_vassal_noble_family
+			subject = root
+			any_held_title = {
+				is_noble_family_title = no
+			}
+		}
+	}
+
+	auto_accept = {
+		scope:recipient = {
+			custom_description = {
+				text = wants_more_vassals
+				is_ai = yes
+			}
+		}
+	}
+
+	on_accept = {
+		#Holy Order patronage loss warning
+		if = {
+			limit = {
+				#Holy order is actually involved
+				scope:puppet_or_actor = {
+					any_patroned_holy_order = {
+						leader.capital_county.holder ?= {
+    						target_is_same_character_or_above = scope:secondary_actor
+						}
+    				}
+				}
+				scope:recipient = {
+					highest_held_title_tier >= tier_duchy
+				}
+			}
+			scope:puppet_or_actor = {
+				custom_tooltip = holy_order_control_loss_warning_tt
+			}
+		}
+
+		scope:puppet_or_actor = {
+			send_interface_toast = {
+				type = event_toast_effect_good
+				title = grant_vassal_interaction_notification
+				right_icon = scope:recipient
+				left_icon = scope:secondary_actor
+
+				# If we're granting a vassal to our liege, gain a truce with our former vassal (we can't immediately reconquer them, and they can't attack us either).
+				if = {
+					limit = {
+						scope:puppet_or_actor = {
+							is_vassal_of = scope:recipient
+						}
+					}
+					add_truce_both_ways = {
+						character = scope:secondary_actor
+						days = 3650
+						name = TRUCE_GRANT_INDEPENDENCE
+					}
+				}
+
+				# Transfer the vassal over to their new liege.
+				create_title_and_vassal_change = {
+					type = granted
+					save_scope_as = change
+					add_claim_on_loss = no
+				}
+				scope:secondary_actor = {
+					change_liege = {
+						liege = scope:recipient
+						change = scope:change
+					}
+				}
+				resolve_title_and_vassal_change = scope:change
+
+				# Gain an opinion bonus with the person we gave a vassal to.
+				scope:recipient = {
+					add_opinion = {
+						target = scope:puppet_or_actor
+						modifier = granted_vassal
+					}
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = miniscule_unity_gain
+			DESC = clan_unity_grant_vassal.desc
+			REVERSE_NON_HOUSE_TARGET = yes
+		}
+
+		hidden_effect = {
+			# Struggle catalyst
+			if = {
+				limit = {
+					fp3_struggle_involves_one_supporter_and_one_detractor = {
+						FIRST = scope:puppet_or_actor
+						SECOND = scope:recipient
+					}
+					scope:puppet_or_actor = {
+						any_character_struggle	 = {
+							involvement = involved
+							phase_has_catalyst = catalyst_grants_vassal_to_de_jure_liege_supporter_detractor
+							is_secondary_character_involvement_involved_trigger = {
+								CHAR = scope:recipient
+							}
+						}
+					}
+					scope:recipient.primary_title = {
+						any_this_title_or_de_jure_above = {
+							holder = scope:secondary_actor
+						}
+					}
+				}
+				scope:puppet_or_actor = {
+					every_character_struggle = {
+						involvement = involved
+						activate_struggle_catalyst = {
+							catalyst = catalyst_grants_vassal_to_de_jure_liege_supporter_detractor
+							character = scope:puppet_or_actor
+						}
+						log_debug_variable_for_persian_struggle_effect = { VAR = concession_catalyst_grants_vassal_to_de_jure_liege_supporter_detractor }
+					}
+				}
+			}
+			if = {
+				limit = {
+					scope:recipient = {
+						government_has_flag = government_is_nomadic
+					}
+				}
+				while = {
+					limit = {
+						scope:secondary_actor ?= {
+							any_held_title = {
+								vassal_grant_de_jure_shift_trigger = yes
+							}
+						}
+					}
+					scope:secondary_actor ?= {
+						random_held_title = {
+							limit = {
+								vassal_grant_de_jure_shift_trigger = yes
+							}
+							set_de_jure_liege_title = scope:recipient.primary_title
+						}
+					}
+				}
+			}
+		}
+		#Opinion loss with underlings who think they should get the vassal you're granting
+		if = {
+			limit = {
+				#AI will usually grant title to de jure holders, it's players who could use this steering
+				scope:puppet_or_actor = {
+					is_ai = no
+				}
+			}
+			scope:secondary_actor = {
+				if = {
+					limit = {
+						any_held_title = {
+							any_claimant = {
+								this = scope:recipient
+							}
+						}
+					}
+					ordered_held_title = {
+						order_by = tier
+						limit = {
+							any_claimant = {
+								this = scope:recipient
+							}
+						}
+						save_scope_as = highest_claim
+					}
+					scope:recipient = { claimant_jealousy_immunity_effect = yes }
+				}
+				every_held_title = {
+					limit = {
+						tier >= tier_county
+						tier = scope:secondary_actor.primary_title.tier
+					}
+					save_scope_as = title_transfered
+					scope:puppet_or_actor = {
+						title_granting_controversy_effect = {
+							TITLE = scope:title_transfered
+							INTERACTION = grant_vassal_interaction
+						}
+					}
+				}
+				every_in_list = {
+					list = strong_claimants
+					limit = {
+						NOT = { this = scope:recipient }
+					}
+					save_scope_as = claimer
+					scope:secondary_actor = {
+						ordered_held_title = {
+							limit = {
+								any_claimant = {
+									this = scope:claimer
+								}
+							}
+							save_scope_as = highest_denied_claim
+						}
+					}
+					claimant_rivalry_mercy_effect = yes
+				}
+			}
+			#Being given to a non de jure liege should piss vassals off
+			if = {
+				limit = {
+					NOT = {
+						scope:secondary_actor = {
+							any_held_title = {
+								any_this_title_or_de_jure_above = {
+									holder ?= scope:recipient
+								}
+							}
+						}
+					}
+				}
+				scope:secondary_actor = {
+					add_opinion = {
+						modifier = subordinated_to_non_de_jure_liege_opinion
+						target = scope:puppet_or_actor
+						opinion = -30 
+					}
+				}
+			}
+			
+		}
+	}
+
+	on_decline = {
+		scope:puppet_or_actor = {
+			trigger_event = char_interaction.0211
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:recipient
+			TARGET = scope:puppet_or_actor
+			VALUE = miniscule_unity_loss
+			DESC = clan_unity_grant_vassal_decline.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	# AI handled entirely though code
+}
+
+retract_vassal_interaction = {
 	category = interaction_category_vassal
 	special_interaction = retract_vassal_interaction
 	interface = transfer_vassal
@@ -27,11 +480,19 @@
 		}
 	}
 
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			has_realm_law_flag = title_revocation_allowed
+			primary_title.tier > tier_county
+		}
+	}
+
 	is_shown = {
-		scope:recipient != scope:actor
+		scope:recipient != scope:puppet_or_actor
 		scope:recipient = {
 			highest_held_title_tier > tier_barony
-			liege = scope:actor
+			liege ?= scope:puppet_or_actor
 		}
 	}
 
@@ -41,13 +502,14 @@
 		scope:recipient = {
 			custom_description = {
 				text = "basic_vassal_to_retract"
+				object = scope:actor
 				any_vassal = {
 					highest_held_title_tier > tier_barony
 				}
 			}
 		}
 		# Plus make sure there's a legal right to retract.
-		scope:actor = {
+		scope:puppet_or_actor = {
 			trigger_if = {
 				limit = {
 					government_has_flag = government_is_tribal
@@ -66,31 +528,54 @@
 					has_realm_law_flag = vassal_retraction_allowed
 				}
 			}
+			trigger_else_if = {
+				limit = {
+					realm_law_use_church_authority = yes
+				}
+				custom_description = {
+					text = "has_law_allowing_vassal_retraction_church"
+					has_realm_law_flag = vassal_retraction_allowed
+				}
+			}
 			trigger_else = {
 				custom_description = {
 					text = "has_law_allowing_vassal_retraction_crown"
 					has_realm_law_flag = vassal_retraction_allowed
 				}
 			}
-		}
-		trigger_if = {
-			limit = { exists = scope:secondary_recipient }
+			#ADDED
+			underage_diarch_loyalty_restriction = yes
 		}
 		scope:recipient = {
-			NOT = { has_strong_hook = scope:actor }
+			NOT = { has_strong_hook = scope:puppet_or_actor }
 		}
 		custom_tooltip = {
 			text = cannot_take_overt_hostile_actions_against_diarch.tt
-			NOT = { scope:recipient ?= scope:actor.diarch }
+			NOT = { scope:recipient ?= scope:puppet_or_actor.diarch }
 		}
 	}
 
 	can_send = {
-		scope:actor = {
+		scope:puppet_or_actor = {
 			custom_description = {
 				text = "character_interactions_hostile_actions_disabled_delay"
 				NOT = { has_character_flag = flag_hostile_actions_disabled_delay }
 			}
+		}
+		
+		#ADDED - cant provoke revolts while your troops are in their lands, unless its autoaccept.
+		trigger_if = {
+			limit = { 
+				scope:puppet_or_actor = { is_ai = no }
+				scope:recipient = {
+					is_imprisoned = no
+					NAND = {
+						scope:hook = yes
+						scope:puppet_or_actor = { has_strong_hook = scope:recipient }
+					}
+				}
+			}
+			puppet_or_actor_doesnt_have_troops_in_recipient_lands = yes
 		}
 	}
 
@@ -100,11 +585,18 @@
 
 	cost = {
 		# Usually, this action is free, but during certain diarchies, we want it to cost.
-		prestige = liege_diarchy_surcharge_interaction_retract_vassal_interaction_value
+		prestige = {
+			value = liege_diarchy_surcharge_interaction_retract_vassal_interaction_value
+
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				multiply = 0
+			}
+		}
 	}
 
 	on_send = {
-		scope:actor = {
+		scope:puppet_or_actor = {
 			add_character_flag = {
 				flag = flag_hostile_actions_disabled_delay
 				days = 10
@@ -125,42 +617,46 @@
 
 		if = {
 			limit = {
-				scope:actor = { has_character_flag = flag_hostile_actions_disabled_delay }
+				scope:puppet_or_actor = { has_character_flag = flag_hostile_actions_disabled_delay }
 			}
-			scope:actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
+			scope:puppet_or_actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
 		}
 
-		scope:actor = {
+		scope:puppet_or_actor = {
 			trigger_event = char_interaction.0220
 		}
 	}
 
 	on_decline = {
-		scope:actor = { vassal_revocation_tyranny_effect = yes }
+		scope:puppet_or_actor = { vassal_revocation_tyranny_effect = yes }
 		
 		#ADDED - this if and put the war into ELSE
 		if = {
 			limit = {
-				scope:actor = { has_legitimacy_flag = vassals_refuse_retract_with_no_war }
+				scope:puppet_or_actor = { has_legitimacy_flag = vassals_refuse_retract_with_no_war }
 			}
-			scope:actor = { 
+			scope:puppet_or_actor = { 
 				add_prestige = medium_prestige_loss
 			}
 		}
 		else = {
-			war_for_retraction_effect = yes
+			war_for_retraction_effect = {
+				LIEGE = scope:puppet_or_actor
+				REBEL = scope:recipient
+				SUBVASSAL = scope:secondary_recipient
+			}
 		}
 		scope:recipient = {
 			add_opinion = {
-				target = scope:actor
+				target = scope:puppet_or_actor
 				modifier = retracted_vassal
 			}
 		}
 		if = {
 			limit = {
-				scope:actor = { has_realm_law_flag = vassal_refusal_is_treason }
+				scope:puppet_or_actor = { has_realm_law_flag = vassal_refusal_is_treason }
 			}
-			scope:actor = {
+			scope:puppet_or_actor = {
 				add_opinion = {
 					target = scope:recipient
 					modifier = treasonous_retract_refusal
@@ -169,23 +665,25 @@
 		}
 		if = {
 			limit = {
-				scope:actor = { has_character_flag = flag_hostile_actions_disabled_delay }
+				scope:puppet_or_actor = { has_character_flag = flag_hostile_actions_disabled_delay }
 			}
-			scope:actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
+			scope:puppet_or_actor = { remove_character_flag = flag_hostile_actions_disabled_delay }
 		}
 	}
 
 	auto_accept = {
 		OR = {
 			scope:recipient = {
-				is_imprisoned_by = scope:actor
+				#is_imprisoned_by = scope:puppet_or_actor
+				#ADDED - just check the general imprisonment
+				is_imprisoned = yes
 			}
 			custom_description = {
 				text = "spending_hook"
-				subject = scope:actor
+				subject = scope:puppet_or_actor
 				object = scope:recipient
 				scope:hook = yes
-				scope:actor = { has_strong_hook = scope:recipient }
+				scope:puppet_or_actor = { has_strong_hook = scope:recipient }
 			}
 		}
 	}
@@ -194,11 +692,11 @@
 		custom_description = { #Hook from Recipient can counteract, but only if Actor is not forcing the action via Strong Hook.
 			text = "spending_hook"
 			subject = scope:recipient
-			object = scope:actor
-			scope:recipient = { has_hook = scope:actor }
+			object = scope:puppet_or_actor
+			scope:recipient = { has_hook = scope:puppet_or_actor }
 			NAND = {
 				scope:hook = yes
-				scope:actor = { has_strong_hook = scope:recipient }
+				scope:puppet_or_actor = { has_strong_hook = scope:recipient }
 			}
 		}
 	}
@@ -206,13 +704,17 @@
 	on_blocked_effect = {
 		scope:recipient = {
 			remove_hook = {
-				target = scope:actor
+				target = scope:puppet_or_actor
 			}
 		}
 	}
 
 	ai_accept = {
 		base = 0 # Try to make it 0 for most interactions
+
+		legalism_lawful_authority_acceptance_modifier = {
+			ACTOR = scope:puppet_or_actor
+		}
 
 		modifier = {
 			has_game_rule = hard_difficulty
@@ -248,14 +750,14 @@
 
 		opinion_modifier = { # Opinion Factor
 			who = scope:recipient
-			opinion_target = scope:actor
+			opinion_target = scope:puppet_or_actor
 			multiplier = 1.0
 			desc = AI_OPINION_REASON
 		}
 
 		modifier = {
 			add = 25
-			scope:actor = {
+			scope:puppet_or_actor = {
 				has_realm_law_flag = vassal_refusal_is_treason
 			}
 			desc = AI_REFUSAL_IS_TREASON
@@ -279,7 +781,7 @@
 
 		modifier = {
 			add = 20
-			scope:actor.current_military_strength > scope:recipient.current_military_strength
+			scope:puppet_or_actor.current_military_strength > scope:recipient.current_military_strength
 			scope:recipient = {
 				has_trait = craven
 			}
@@ -302,23 +804,23 @@
 						scope:recipient = { #If AI is honorable and the law compels to obey the liege, AI will be more likely to obey.
 							ai_honor > 0
 						}
-						scope:actor = {
+						scope:puppet_or_actor = {
 							has_realm_law_flag = vassal_refusal_is_treason
 						}
 					}
-					value = 0.75
+					value = 0.5		#prev 0.75
 				}
 			}
 		}
 		modifier = {
-			exists = scope:actor.primary_title.title_capital_county
+			exists = scope:puppet_or_actor.primary_title.title_capital_county
 			scope:secondary_recipient = {
 				OR = {
 					any_sub_realm_county = {
-						this = scope:actor.primary_title.title_capital_county
+						this = scope:puppet_or_actor.primary_title.title_capital_county
 					}
 					any_sub_realm_duchy = {
-						this = scope:actor.primary_title.title_capital_county.de_jure_liege
+						this = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege
 					}
 				}
 			}
@@ -327,19 +829,19 @@
 		}
 
 		modifier = {
-			exists = scope:actor.primary_title.title_capital_county
+			exists = scope:puppet_or_actor.primary_title.title_capital_county
 			scope:secondary_recipient = {
 				NOR = {
 					any_sub_realm_county = {
-						this = scope:actor.primary_title.title_capital_county
+						this = scope:puppet_or_actor.primary_title.title_capital_county
 					}
 					any_sub_realm_duchy = {
-						this = scope:actor.primary_title.title_capital_county.de_jure_liege
+						this = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege
 					}
 				}
 				primary_title.tier = tier_county
 				any_sub_realm_county = {
-					de_jure_liege = scope:actor.primary_title.title_capital_county.de_jure_liege
+					de_jure_liege = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege
 				}
 			}
 			add = 30
@@ -359,7 +861,7 @@
 		}
 		modifier = { #Sub-Vassal is De jure of liege title.
 			add = 15
-			scope:actor = {
+			scope:puppet_or_actor = {
 				any_held_title = {
 					this = scope:secondary_recipient.primary_title.de_jure_liege
 				}
@@ -370,7 +872,7 @@
 			add = intimidated_halved_reason_value
 			scope:recipient = {
 				has_dread_level_towards = {
-					target = scope:actor
+					target = scope:puppet_or_actor
 					level = 1
 				}
 			}
@@ -380,7 +882,7 @@
 			add = cowed_halved_reason_value
 			scope:recipient = {
 				has_dread_level_towards = {
-					target = scope:actor
+					target = scope:puppet_or_actor
 					level = 2
 				}
 			}
@@ -392,19 +894,21 @@
 				value = 1
 				subtract = {
 					value = scope:recipient.current_military_strength
-					divide = { value = scope:actor.current_military_strength min = 1 }
+					divide = { value = scope:puppet_or_actor.current_military_strength min = 1 }
 				}
 				multiply = 100
+				#ADDED
+				max = 20
 			}
 		}
 		modifier = { #Different faith, no pluralism.
 			desc = AI_REFUSAL_SPLITTING_SAME_FAITH_VASSALS
 			trigger = {
-				scope:actor.faith = scope:secondary_recipient.faith #Will not care as much if the vassal being retracted is of a different faith.
-				scope:actor = {
+				scope:puppet_or_actor.faith = scope:secondary_recipient.faith #Will not care as much if the vassal being retracted is of a different faith.
+				scope:puppet_or_actor = {
 					NOR = { #Of two different faiths AND the potential vassal's faith is not pluralistic.
 						faith = scope:recipient.faith
-						faith = { has_doctrine = doctrine_pluralism_pluralistic }
+						rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 					}
 				}
 			}
@@ -412,7 +916,7 @@
 				value = -25
 				if = {
 					limit = {
-						scope:actor.faith = {
+						scope:puppet_or_actor.faith = {
 							faith_hostility_level = {
 								target = scope:recipient.faith
 								value >= faith_hostile_level
@@ -423,7 +927,7 @@
 				}
 				if = {
 					limit = {
-						scope:actor.faith = {
+						scope:puppet_or_actor.faith = {
 							faith_hostility_level = {
 								target = scope:recipient.faith
 								value >= faith_evil_level
@@ -435,7 +939,7 @@
 			}
 		}
 		modifier = { # AI Mongols, tyranny wars just delay the inevitable fun!
-			scope:actor = {
+			scope:puppet_or_actor = {
 				is_ai = yes
 				OR = {
 					has_trait = greatest_of_khans
@@ -459,7 +963,7 @@
 	#Use hook
 	send_option = {
 		is_valid = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				has_usable_hook = scope:recipient
 			}
 		}
@@ -467,7 +971,7 @@
 		localization = SCHEME_HOOK
 	}
 	should_use_extra_icon = {
-		scope:actor = { has_usable_hook = scope:recipient }
+		scope:puppet_or_actor = { has_usable_hook = scope:recipient }
 	}
 	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
 
@@ -488,11 +992,6 @@
 		hegemony = 12
 	}
 
-	ai_potential = {
-		has_realm_law_flag = title_revocation_allowed
-		primary_title.tier > tier_county
-	}
-
 	ai_will_do = {
 		base = -1000
 
@@ -500,7 +999,7 @@
 		# And even if we can avoid tyranny we don't want to retract just because we can, so this only gets us to -10
 		# Certain characters will retract despite tyranny, if their rationality is sufficiently low
 		modifier = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				OR = {
 					has_revoke_title_reason = scope:recipient
 					AND = {
@@ -520,40 +1019,40 @@
 		modifier = {
 			years_from_game_start >= 3
 			OR = {
-				scope:actor = {
+				scope:puppet_or_actor = {
 					is_at_war = no
 					gold > 0
 				}
 				scope:recipient = {
-					is_imprisoned_by = scope:actor
+					is_imprisoned_by = scope:puppet_or_actor
 				}
 			}
-			scope:actor = { # The HRE doesn't need endless civil wars
+			scope:puppet_or_actor = { # The HRE doesn't need endless civil wars
 				NOT = {
 					primary_title = title:e_hre
 				}
 			}
-			exists = scope:actor.primary_title.title_capital_county
+			exists = scope:puppet_or_actor.primary_title.title_capital_county
 			OR = {
-				scope:actor = {
+				scope:puppet_or_actor = {
 					any_held_title = {
-						this = scope:actor.primary_title.title_capital_county.de_jure_liege
+						this = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege
 					}
 				}
-				scope:actor.primary_title.title_capital_county.de_jure_liege = {
+				scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege = {
 					is_title_created = no
 				}
 			}
 			scope:secondary_recipient = {
 				any_sub_realm_county = {
-					this = scope:actor.primary_title.title_capital_county
+					this = scope:puppet_or_actor.primary_title.title_capital_county
 				}
 			}
 			NAND = { # Don't retract player vassals tyrannically
 				scope:recipient = {
 					is_ai = no
 				}
-				scope:actor = {
+				scope:puppet_or_actor = {
 					NOT = { has_revoke_title_reason = scope:recipient }
 				}
 			}
@@ -562,50 +1061,50 @@
 		# If below domain limit, try to revoke counties in your capital duchy despite tyranny, sometimes
 		modifier = {
 			years_from_game_start >= 3
-			scope:actor = { is_at_war = no }
-			scope:actor = { # The HRE doesn't need endless civil wars
+			scope:puppet_or_actor = { is_at_war = no }
+			scope:puppet_or_actor = { # The HRE doesn't need endless civil wars
 				NOT = {
 					primary_title = title:e_hre
 				}
 			}
-			scope:actor.domain_size < scope:actor.domain_limit
-			scope:actor.primary_title.tier >= tier_kingdom
+			scope:puppet_or_actor.domain_size < scope:puppet_or_actor.domain_limit
+			scope:puppet_or_actor.primary_title.tier >= tier_kingdom
 			trigger_if = {
 				limit = {
-					scope:actor = {
+					scope:puppet_or_actor = {
 						domain_size > 3
 					}
 				}
-				scope:actor = {
+				scope:puppet_or_actor = {
 					NOR = {
 						has_trait = generous
 						has_trait = just
 					}
 				}
 			}
-			exists = scope:actor.primary_title.title_capital_county
+			exists = scope:puppet_or_actor.primary_title.title_capital_county
 			OR = {
-				scope:actor.primary_title.title_capital_county.holder = scope:actor # You have your de jure capital already
+				scope:puppet_or_actor.primary_title.title_capital_county.holder = scope:puppet_or_actor # You have your de jure capital already
 				NOT = {
-					scope:actor.primary_title.title_capital_county.holder.top_liege = scope:actor.top_liege # Or your De Jure capital isn't in your realm
+					scope:puppet_or_actor.primary_title.title_capital_county.holder.top_liege = scope:puppet_or_actor.top_liege # Or your De Jure capital isn't in your realm
 				}
 			}
 			scope:secondary_recipient = {
 				primary_title.tier = tier_county
 				any_sub_realm_county = {
-					de_jure_liege = scope:actor.primary_title.title_capital_county.de_jure_liege # Under the same Duchy as your capital
+					de_jure_liege = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege # Under the same Duchy as your capital
 				}
 			}
 			OR = { # And the capital duchy, if it exists at all
 				AND = {
-					exists = scope:actor.primary_title.title_capital_county.de_jure_liege.holder
-					scope:actor.primary_title.title_capital_county.de_jure_liege.holder = scope:actor
+					exists = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege.holder
+					scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege.holder = scope:puppet_or_actor
 				}
 				AND = {
-					exists = scope:actor.primary_title.title_capital_county.de_jure_liege.holder
-					scope:actor.primary_title.title_capital_county.de_jure_liege.holder.top_liege != scope:actor.top_liege
+					exists = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege.holder
+					scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege.holder.top_liege != scope:puppet_or_actor.top_liege
 				}
-				scope:actor.primary_title.title_capital_county.de_jure_liege = {
+				scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege = {
 					is_title_created = no
 				}
 			}
@@ -616,37 +1115,37 @@
 
 			OR = { # Tyranny tolernance is based on rationality
 				AND = {
-					scope:actor.ai_rationality < 0
-					scope:actor.tyranny <= 15 # Don't go crazy with tyranny, just a bit is fine
+					scope:puppet_or_actor.ai_rationality < 0
+					scope:puppet_or_actor.tyranny <= 15 # Don't go crazy with tyranny, just a bit is fine
 				}
 				AND = {
-					scope:actor.ai_rationality >= 0
-					scope:actor.ai_rationality < 50
-					scope:actor.tyranny <= 5 # Don't go crazy with tyranny, just a bit is fine
+					scope:puppet_or_actor.ai_rationality >= 0
+					scope:puppet_or_actor.ai_rationality < 50
+					scope:puppet_or_actor.tyranny <= 5 # Don't go crazy with tyranny, just a bit is fine
 				}
 				AND = {
-					scope:actor.ai_rationality >= 50
-					scope:actor.tyranny <= 0 # Don't go crazy with tyranny, just a bit is fine
+					scope:puppet_or_actor.ai_rationality >= 50
+					scope:puppet_or_actor.tyranny <= 0 # Don't go crazy with tyranny, just a bit is fine
 				}
 				AND = {
-					scope:actor.ai_rationality >= 0
+					scope:puppet_or_actor.ai_rationality >= 0
 					scope:recipient = {
-						is_imprisoned_by = scope:actor
+						is_imprisoned_by = scope:puppet_or_actor
 					}
-					scope:actor = { has_revoke_title_reason = scope:recipient }
+					scope:puppet_or_actor = { has_revoke_title_reason = scope:recipient }
 				}
 				AND = {
-					scope:actor.ai_rationality < 0
+					scope:puppet_or_actor.ai_rationality < 0
 					scope:recipient = {
-						is_imprisoned_by = scope:actor
+						is_imprisoned_by = scope:puppet_or_actor
 					}
 				}
 			}
 			# To do this, the target must be weak or willing in some way
 			OR = {
-				scope:actor.current_military_strength > scope:recipient.current_military_strength # Must be stronger
+				scope:puppet_or_actor.current_military_strength > scope:recipient.current_military_strength # Must be stronger
 				scope:recipient = {
-					is_imprisoned_by = scope:actor
+					is_imprisoned_by = scope:puppet_or_actor
 				}
 			}
 			scope:recipient = {
@@ -655,12 +1154,12 @@
 					has_trait = content
 					has_trait = trusting
 					has_dread_level_towards = {
-						target = scope:actor
+						target = scope:puppet_or_actor
 						level >= 1
 					}
-					opinion = { target = scope:actor value >= 40 }
-					is_imprisoned_by = scope:actor
-					scope:actor = { has_revoke_title_reason = scope:recipient }
+					opinion = { target = scope:puppet_or_actor value >= 40 }
+					is_imprisoned_by = scope:puppet_or_actor
+					scope:puppet_or_actor = { has_revoke_title_reason = scope:recipient }
 				}
 			}
 
@@ -668,17 +1167,17 @@
 		}
 		# Always retract preferred capital duchy
 		modifier = {
-			exists = scope:actor.primary_title.title_capital_county
+			exists = scope:puppet_or_actor.primary_title.title_capital_county
 			scope:secondary_recipient = {
 				any_sub_realm_duchy = {
-					this = scope:actor.primary_title.title_capital_county.de_jure_liege
+					this = scope:puppet_or_actor.primary_title.title_capital_county.de_jure_liege
 				}
 			}
 			NAND = { # Don't retract player vassals tyranically
 				scope:recipient = {
 					is_ai = no
 				}
-				scope:actor = {
+				scope:puppet_or_actor = {
 					NOT = { has_revoke_title_reason = scope:recipient }
 				}
 			}
@@ -686,15 +1185,15 @@
 		}
 		# Retract vassal we're dejure liege of if below domain limit
 		modifier = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				vassal_limit_available > 0
 			}
-			scope:secondary_recipient.primary_title.de_jure_liege.holder = scope:actor
+			scope:secondary_recipient.primary_title.de_jure_liege.holder = scope:puppet_or_actor
 			add = 500
 		}
 		# Retract non-De Jure vassals from Megadukes (only if a revoke reason is present, so we don't end up in massive tyranny war spirals)
 		modifier = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				has_revoke_title_reason = scope:recipient
 			}
 			scope:recipient = {
@@ -708,7 +1207,7 @@
 		}
 		# Do not revoke titles from certain characters
 		modifier = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				OR = {
 					has_relation_friend = scope:recipient
 					has_relation_best_friend = scope:recipient
@@ -723,14 +1222,14 @@
 		modifier = {
 			NOT = {
 				scope:recipient = {
-					is_imprisoned_by = scope:actor
+					is_imprisoned_by = scope:puppet_or_actor
 				}
 			}
-			scope:actor = {
+			scope:puppet_or_actor = {
 				OR = {
 					gold < minimum_ai_gold_value_for_tyranny_wars
 					AND = {
-						scope:actor.current_military_strength < scope:recipient.current_military_strength
+						scope:puppet_or_actor.current_military_strength < scope:recipient.current_military_strength
 						gold < comfortable_ai_gold_value_for_tyranny_wars
 					}
 				}
@@ -750,24 +1249,24 @@
 
 		modifier = { # Avoid triggering Tyranny wars mid-war
 			factor = 0
-			scope:actor = {
+			scope:puppet_or_actor = {
 				is_at_war = yes
 			}
 			scope:recipient = {
 				NOT = {
-					is_imprisoned_by = scope:actor
+					is_imprisoned_by = scope:puppet_or_actor
 				}
 			}
 		}
 
 		modifier = { # Avoid triggering Tyranny wars mid-grand activity
 			factor = 0
-			scope:actor = {
+			scope:puppet_or_actor = {
 				has_ongoing_grand_activity_trigger = yes
 			}
 			NOR = {
 				scope:recipient = {
-					is_imprisoned_by = scope:actor
+					is_imprisoned_by = scope:puppet_or_actor
 				}
 				scope:recipient = {
 					highest_held_title_tier = tier_barony
@@ -809,7 +1308,7 @@ stop_attacker_vassal_war_interaction = {
 			liege ?= scope:actor
 			highest_held_title_tier > tier_barony
 			any_character_war = {
-				primary_attacker = scope:recipient
+				primary_attacker ?= scope:recipient
 				save_temporary_scope_as = target_war
 			}
 		}
@@ -978,7 +1477,7 @@ stop_defender_vassal_war_interaction = {
 			liege ?= scope:actor
 			highest_held_title_tier > tier_barony
 			any_character_war = {
-				primary_defender = scope:recipient
+				primary_defender ?= scope:recipient
 				save_temporary_scope_as = target_war
 			}
 		}
@@ -1109,7 +1608,7 @@ ask_for_pardon_interaction = {
 		first_valid = {
 			triggered_desc = {
 				trigger = {
-					scope:actor != scope:recipient.liege
+					scope:actor.top_liege != scope:recipient
 				}
 				desc = ask_for_pardon_interaction_minister_desc
 			}
@@ -1121,9 +1620,9 @@ ask_for_pardon_interaction = {
 	is_shown = {
 		ask_for_pardon_available_trigger = { ACTOR = scope:actor }
 		OR = {
-			scope:actor.top_liege = scope:recipient
+			scope:actor.top_liege ?= scope:recipient
 			scope:recipient = {
-				top_liege = scope:actor.top_liege
+				top_liege ?= scope:actor.top_liege
 				has_title = title:e_minister_of_justice
 			}
 		}
@@ -1150,9 +1649,9 @@ ask_for_pardon_interaction = {
 
 	is_highlighted = {
 		OR = {
-			#has_usable_hook = scope:recipient
-			#ADDED - fixed this
-			scope:actor = { has_usable_hook = scope:recipient }
+			scope:actor = {
+				has_usable_hook = scope:recipient
+			}
 			AND = {
 				scope:recipient = {
 					has_title = title:e_minister_of_justice
@@ -1166,9 +1665,34 @@ ask_for_pardon_interaction = {
 			}
 		}
 	}
+	
+	#ADDED
+	cost = {
+		influence = {
+			value = 0
+			if = {
+				limit = {
+					scope:actor = { government_has_flag = government_has_influence }
+					scope:recipient = { government_has_flag = government_has_influence }
+				}
+				add = medium_influence_value
+			}
+		}
+		prestige = {
+			value = medium_prestige_value
+			if = {
+				limit = {
+					scope:actor = { government_has_flag = government_has_influence }
+					scope:recipient = { government_has_flag = government_has_influence }
+				}
+				#Yes this is a value overwrite.
+				value = minor_prestige_value
+			}
+		}
+	}
 
 	ai_accept = {
-		base = -50
+		base = -45		#prev -50
 
 		#How bad is it, really?
 		modifier = {
@@ -1250,6 +1774,18 @@ ask_for_pardon_interaction = {
  			add_merit_if_relevant_effect = {
  				MERIT = minor_merit_value
  			}
+			#ADDED
+			if = {
+				limit = {
+					scope:actor = { government_has_flag = government_has_influence }
+					scope:recipient = { government_has_flag = government_has_influence }
+				}
+				add_prestige = miniscule_prestige_gain
+				change_influence = minor_influence_gain
+			}
+			else = {
+				add_prestige = minor_prestige_gain
+			}
 		}
 
 		# If we're a clan this interaction affects unity
@@ -1378,6 +1914,405 @@ ask_for_pardon_interaction = {
 				value = scope:recipient.ai_compassion
 				multiply = 0.5
 			}
+		}
+		
+		modifier = {
+			factor = 0
+			scope:recipient.current_military_strength < scope:actor.current_military_strength
+		}
+	}
+}
+
+pardon_interaction = {
+	category = interaction_category_friendly
+	icon = scroll_scales
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor != scope:recipient.liege
+				}
+				desc = pardon_interaction_minister_desc
+			}
+			desc = pardon_interaction_desc
+		}
+		triggered_desc = {
+			trigger = {
+				scope:puppet_or_actor = {
+					culture = {
+						has_cultural_parameter = pardoning_gives_prestige
+					}
+				}
+			}
+			desc = pardon_interaction_has_jirga_desc
+		}
+	}
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			OR = {
+				ai_vengefulness <= 0
+				culture ?= {
+					has_cultural_parameter = pardoning_gives_loyalty
+				}
+			}
+		}
+	}
+	is_shown = {
+		scope:puppet_or_actor ?= {
+			OR = {
+				has_imprisonment_reason = scope:recipient
+				#ADDED
+				has_revoke_title_reason = scope:recipient
+				AND = {
+					has_title = title:e_minister_of_justice
+					scope:recipient = {
+						any_liege_or_above = {
+							has_imprisonment_reason = scope:recipient
+						}
+					}
+				}
+			}
+		}
+		scope:recipient = {
+			OR = {
+				scope:puppet_or_actor ?= {
+					has_title = title:e_minister_of_justice
+					top_liege ?= scope:recipient.top_liege
+				}
+				target_is_liege_or_above = scope:puppet_or_actor
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		trigger_if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				influence >= pardon_interaction_influence_cost_value
+			}
+		}
+		trigger_if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				treasury >= pardon_interaction_treasury_cost_value
+			}
+		}
+	}
+	cost = {
+		influence = {
+			value = pardon_interaction_influence_cost_value
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				multiply = 0
+			}
+		}
+		treasury = {
+			value = pardon_interaction_treasury_cost_value
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				multiply = 0
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	is_highlighted = {
+		scope:recipient = {
+			is_imprisoned = no
+		}
+		scope:puppet_or_actor = {
+			has_title = title:e_minister_of_justice
+		}
+	}
+
+	on_accept = {
+		if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				if = {
+					limit = { pardon_interaction_influence_cost_value > 0 }
+					change_influence = {
+						value = {
+							add = pardon_interaction_influence_cost_value
+							max = influence
+							multiply = -1
+						}
+					}
+				}
+				if = {
+					limit = { pardon_interaction_treasury_cost_value > 0 }
+					remove_treasury = {
+						value = {
+							add = pardon_interaction_treasury_cost_value
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:puppet_or_actor = {
+					has_title = title:e_minister_of_justice
+				}
+			}
+			scope:puppet_or_actor = {
+	 			add_merit_if_relevant_effect = {
+	 				MERIT = minor_merit_value
+	 			}
+				if = {
+					limit = {
+						government_has_flag = government_has_influence
+					}
+					change_influence = {
+						value = minor_influence_gain
+						multiply = scope:recipient.highest_held_title_tier
+					}
+				}
+			}
+			scope:recipient = {
+				send_interface_toast = {
+					type = event_toast_effect_neutral
+					title = pardon_interaction_toast_title
+					desc = pardon_interaction_toast_minister
+					right_icon = scope:puppet_or_actor
+					if = {
+						limit = {
+							OR = {
+								scope:recipient.liege = {
+									has_extra_criminal_reason_against_trigger = {
+										CRIMINAL = scope:recipient
+									}
+								}
+								is_close_or_extended_family_of = scope:puppet_or_actor
+							}
+						}
+						scope:puppet_or_actor = {
+							change_strife_opinion = massive_strife_gain
+							situation:dynastic_cycle = {
+								trigger_situation_catalyst = {
+									catalyst = catalyst_minister_pardoned_dangerous_criminal
+									character = scope:puppet_or_actor
+								}
+							}
+						}
+					}
+					consume_all_criminal_reasons_effect = {
+						LIEGE = scope:recipient.liege
+						CRIMINAL = scope:recipient
+					}
+	            }
+            }
+            hidden_effect = {
+				scope:recipient.liege = {
+					send_interface_toast = {
+						type = event_toast_effect_neutral
+						title = pardon_interaction_toast_title
+						desc = pardon_interaction_toast_minister_liege
+						right_icon = scope:puppet_or_actor
+						left_icon = scope:recipient
+						show_as_tooltip = {
+							if = {
+								limit = {
+									OR = {
+										has_extra_criminal_reason_against_trigger = {
+											CRIMINAL = scope:recipient
+										}
+										scope:recipient = {
+											is_close_or_extended_family_of = scope:puppet_or_actor
+										}
+									}
+								}
+								scope:puppet_or_actor = {
+									change_strife_opinion = massive_strife_gain
+									situation:dynastic_cycle = {
+										trigger_situation_catalyst = {
+											catalyst = catalyst_minister_pardoned_dangerous_criminal
+											character = scope:puppet_or_actor
+										}
+									}
+								}
+							}
+							consume_all_criminal_reasons_effect = {
+								LIEGE = scope:recipient.liege
+								CRIMINAL = scope:recipient
+							}
+		            	}
+		            }
+		        }
+	        }
+		}
+		else = {
+			scope:recipient = {
+				send_interface_toast = {
+					type = event_toast_effect_neutral
+					title = pardon_interaction_toast_title
+					desc = pardon_interaction_toast
+					right_icon = scope:puppet_or_actor
+					consume_all_criminal_reasons_effect = {
+						LIEGE = scope:puppet_or_actor
+						CRIMINAL = scope:recipient
+					}
+	            }
+            }
+		}
+
+		scope:puppet_or_actor = {
+			stress_and_fulfillment_impact = {
+				forgiving =  medium_stress_loss
+			}
+			#ADDED
+			add_dread = -5
+		}
+
+		scope:puppet_or_actor = {
+			if = {
+				limit = {
+					culture = {
+						has_cultural_parameter = pardoning_gives_prestige
+					}
+				}
+				add_prestige = minor_prestige_gain
+			}
+
+			hidden_effect = {
+			# Struggle catalysts
+				if = {
+					limit = {
+						fp3_struggle_involves_one_supporter_and_one_detractor = {
+							FIRST = scope:puppet_or_actor
+							SECOND = scope:recipient
+						}
+						scope:recipient = {
+							any_character_struggle	 = {
+								involvement = involved
+								phase_has_catalyst = catalyst_grants_pardon_supporter_detractor
+								is_secondary_character_involvement_involved_trigger = {
+									CHAR = scope:puppet_or_actor
+								}
+							}
+						}
+					}
+					every_character_struggle = {
+						involvement = involved
+						activate_struggle_catalyst = {
+							catalyst = catalyst_grants_pardon_supporter_detractor
+							character = scope:recipient
+						}
+						log_debug_variable_for_persian_struggle_effect = { VAR = concession_catalyst_grants_pardon_supporter_detractor }
+					}
+				}
+			}
+		}
+
+		scope:recipient = {
+			if = {
+				limit = {
+					scope:puppet_or_actor = {
+						culture = {
+							has_cultural_parameter = pardoning_gives_loyalty
+						}
+					}
+				}
+				add_opinion = {
+					modifier = loyal_servant
+					target = scope:puppet_or_actor
+				}
+				scope:puppet_or_actor = {
+					if = {
+						limit = {
+							can_add_hook = {
+								target = scope:recipient
+								type = loyalty_hook
+							}
+						}
+						add_hook = {
+							type = loyalty_hook
+							target = scope:recipient
+						}
+					}
+				}
+			}
+			else = {
+				add_opinion = {
+					target = scope:puppet_or_actor
+					modifier = grateful_opinion
+					opinion = 20	#prev 15
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_gain
+			DESC = clan_unity_forgiveness.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+	ai_targets = {
+		ai_recipients = vassals
+	}
+	ai_targets = {
+		ai_recipients = courtiers
+		chance = 0.25
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 144
+		duchy = 72
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+	ai_will_do = {
+		base = 0
+
+		modifier = {
+			add = 100
+			scope:recipient = {
+				OR = {
+					has_relation_friend = scope:puppet_or_actor
+					has_relation_best_friend = scope:puppet_or_actor
+					has_relation_lover = scope:puppet_or_actor
+					has_relation_soulmate = scope:puppet_or_actor
+					is_primary_heir_of = scope:puppet_or_actor
+				}
+			}
+		}
+
+		modifier = {
+			add = 25
+			scope:puppet_or_actor = {
+				scope:puppet_or_actor.ai_vengefulness <= 0
+				culture = {
+					has_cultural_parameter = pardoning_gives_loyalty
+				}
+			}
+		}
+
+		modifier = {
+			add = {
+				value = ai_vengefulness
+				multiply = -0.5		#prev -1
+			}
+			scope:puppet_or_actor.ai_vengefulness <= -25
+		}
+		
+		#ADDED
+		opinion_modifier = {
+			who = scope:puppet_or_actor
+			opinion_target = scope:recipient
+			multiplier = 0.25
+		}
+		
+		#ADDED
+		modifier = {
+			add = -25
+			scope:puppet_or_actor.dread >= 30
 		}
 	}
 }

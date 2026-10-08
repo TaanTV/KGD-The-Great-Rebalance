@@ -92,7 +92,7 @@ court_warlike = {
 				}
 				if = {
 					limit = {
-						faith = { has_doctrine = tenet_warmonger }
+						rite = { rite_has_tenet = tenet_warmonger }
 					}
 					add = 25
 				}
@@ -167,7 +167,7 @@ court_administrative = {
 	level_perk = {
 		court_grandeur = 7
 		owner_modifier = {
-			character_capital_county_monthly_development_growth_add = 0.02	#prev 0.2
+			character_capital_county_monthly_development_growth_add = 0.03	#prev 0.2
 		}
 	}
 	

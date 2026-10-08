@@ -3,16 +3,21 @@
  own_war_declaration_law_singular: "$own_war_declaration_law$"
  own_war_declaration_law_0: "Powerful Vassal Approval"
  own_war_declaration_law_0_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Disgruntled Adult [powerful_vassals|E] will block war declaration the same way they block [succession_law|E] changes#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Declaring wars slightly decreases opinion of all [powerful_vassals|E]#!"
- war_declaration_powerful_vassal_approval.opinion_penalty: "Because you require [powerful_vassal|E] approval to declare war:"
+ war_declaration_powerful_vassal_approval.opinion_penalty: "Because you require [powerful_vassal|E] approval to declare war"
+ custom.war_declaration_powerful_vassal_approval: "#Bold #Italic $war_declaration_powerful_vassal_approval.opinion_penalty$#!#!\n $custom.every_powerful_vassal$"
  own_war_declaration_law_1: "Council Approval"
  own_war_declaration_law_1_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 Disgruntled [councillors|E] will block war declaration the same way [powerful_vassals|E] block [succession_law|E] changes#!\n$EFFECT_LIST_BULLET$#indent_newline:3 Declaring wars slightly decreases opinion of all [councillors|E]#!"
- war_declaration_council_approval.opinion_penalty: "Because you require [council|E] approval to declare war:"
+ war_declaration_council_approval.opinion_penalty: "Because you require [council|E] approval to declare war"
+ custom.war_declaration_council_approval: "#Bold #Italic $war_declaration_council_approval.opinion_penalty$#!#!\n $custom.every_councillor$"
  own_war_declaration_law_2: "No Approval"
  own_war_declaration_law_2_effects: "$EFFECT_LIST_BULLET$#indent_newline:3 You answer to no one when it comes to declaring wars#!"
  need_to_have_max_authority: "You do not have the maximum possible authority"
  must_be_feudal_clan_or_admin_or_any_tribal_game: "You must have the [feudal|E], [clan|E], [administrative|E], [tribal|E], [wanua|E] or [nomadic|E] [government|E]"
-
-
+ same_religion_only_law: "Same Religion"
+ same_religion_only_law_effects: "Only characters of the same [religion|E] as the current [ruler|E] can inherit."
+ same_religious_family_only_law: "Same Religious Family"
+ same_religious_family_only_law_effects: "Only characters of the same [religious_family|E] as the current [ruler|E] can inherit."
+ 
  no_powerful_vassal_with_negative_opinion_war: "You have two or more [powerful_vassals|E] who have a negative opinion of you and are blocking war declarations"
  no_real_councillor_with_negative_opinion_war: "You have two or more [councillors|E] who have a negative opinion of you and are blocking war declarations"
  

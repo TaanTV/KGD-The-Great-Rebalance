@@ -136,10 +136,7 @@ task_kurultai_fertility_1 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -1095,10 +1092,7 @@ task_kurultai_exploit_area_1 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -1711,10 +1705,7 @@ task_kurultai_fertility_2 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -2673,10 +2664,7 @@ task_kurultai_exploit_area_2 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -3268,10 +3256,7 @@ task_kurultai_fertility_3 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -4231,10 +4216,7 @@ task_kurultai_exploit_area_3 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -4826,10 +4808,7 @@ task_kurultai_fertility_4 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {
@@ -5788,10 +5767,7 @@ task_kurultai_exploit_area_4 = {
 		custom_tooltip = {
 			text = task_kurultai_use_fertility
 			scope:county.holder = { 
-				OR = {
-					government_has_flag = government_is_nomadic 
-					government_has_flag = government_is_herder
-				}
+				government_has_flag = government_is_in_steppe
 			}
 		}
 		custom_tooltip = {

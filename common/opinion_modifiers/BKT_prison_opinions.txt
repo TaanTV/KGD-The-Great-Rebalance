@@ -1,11 +1,69 @@
-﻿imprisoned_me = {
+﻿# In Prison
+imprisoned_me = {
 	opinion = -50	#prev -30
-	years = 20		#prev 10
+	years = 25		#prev 10
 	decaying = yes
 }
 
 imprisoned_me_dungeon = {
 	opinion = -75	#prev -40
 	years = 30		#prev 20
+	decaying = yes
+}
+
+
+# Imprisoned Me
+imprisoned_me_past = {
+	opinion = -45	#prev -30
+	years = 15		#prev 10
+	decaying = yes
+}
+
+# Released from Prison
+released_from_prison = {
+	opinion = 30	#prev 20
+	years = 20		#prev 10
+	decaying = yes
+}
+
+# Forced to Renounce Claims
+demanded_claim_renouncement = {
+	opinion = -40	#prev -30
+	years = 10
+	decaying = yes
+}
+
+# Banished
+banished_me = {
+	opinion = -30	#prev -20
+	years = 10
+	decaying = yes
+}
+
+# Demanded Taking Vows
+demanded_taking_vows = {
+	opinion = -25	#prev -10
+	years = 10
+	decaying = yes
+}
+
+# Demanded a Hook
+demanded_hook = {
+	opinion = -30	#prev -20
+	years = 10
+	decaying = yes
+}
+
+# Forcibly Recruited
+demanded_recruitment = {
+	opinion = -25	#prev -15
+	years = 10
+	decaying = yes
+}
+
+# Ransomed Recently
+ransomed_from_prison = {
+	opinion = 30	#prev 20
+	years = 20		#prev 10
 	decaying = yes
 }

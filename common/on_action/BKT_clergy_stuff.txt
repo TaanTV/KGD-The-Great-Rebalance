@@ -6,9 +6,10 @@
 
 BKT_state_clergy_pulse = {
 	trigger = {
+		always = no
 		has_game_rule = bkt_additional_content_enabled
-		faith = {
-			has_doctrine = doctrine_theocracy_temporal
+		rite = {
+			rite_has_doctrine = doctrine_theocracy_temporal
 		}
 		NOR = { 
 			government_has_flag = government_is_theocracy 

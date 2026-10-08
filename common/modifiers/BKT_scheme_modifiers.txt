@@ -1,0 +1,16 @@
+﻿study_faith_ask_directly_modifier = {
+	icon = learning_positive
+	scheme_phase_duration = medium_scheme_phase_duration_bonus_value
+	scheme_success_chance = 10
+}
+
+study_faith_ask_for_emissary_modifier = {
+	icon = learning_mixed
+	scheme_phase_duration = minor_scheme_phase_duration_bonus_value	#prev microscopic_scheme_phase_duration_bonus_value
+}
+
+study_faith_study_from_afar_modifier = {
+	icon = learning_negative
+	scheme_phase_duration = massive_scheme_phase_duration_malus_value	#prev medium_scheme_phase_duration_malus_value
+	scheme_success_chance = -10
+}

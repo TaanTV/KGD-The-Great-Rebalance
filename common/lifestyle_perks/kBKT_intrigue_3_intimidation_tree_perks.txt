@@ -19,7 +19,7 @@ divine_retribution_perk = {
 	
 	#ADDED
 	character_modifier = {
-		monthly_piety_gain_per_dread_mult = 0.005
+		monthly_piety_gain_per_dread_mult = 0.002
 	}
 }
 
@@ -41,47 +41,6 @@ thriving_in_chaos_perk = {
 		prowess_per_stress_level = 6
 		#ADDED
 		
-	}
-}
-
-malice_implicit_perk = {
-	lifestyle = intrigue_lifestyle
-	tree = intimidation
-	position = { 1 2 }
-	icon = node_intrigue
-
-	parent = divine_retribution_perk
-	parent = thriving_in_chaos_perk
-	
-	name = {
-		first_valid = {
-			triggered_desc = {
-				trigger = { has_government = landless_adventurer_government }
-				desc = malice_implicit_perk_adventurer_name
-			}
-			desc = malice_implicit_perk_name
-		}
-	}
-	
-	can_be_picked = {
-		always = yes
-	}
-	
-	government_character_modifier = {
-		flag = government_is_landless_adventurer
-		invert_check = yes
-		dread_per_tyranny_add = 0.5
-	}
-	
-	effect = {
-		if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-			}	
-			custom_tooltip = {
-				text = adventurer_malice_implicit_perk_effect
-			}
-		}
 	}
 }
 
@@ -177,6 +136,11 @@ fear_tax_perk = {
 		flag = government_is_nomadic
 		intimidated_vassal_herd_contribution_mult = 0.1			#prev 0.15
 		cowed_vassal_herd_contribution_mult = 0.2				#prev 0.3
+	}
+
+	government_character_modifier = {
+		flag = government_uses_domain_limit #True for governments that do not use domain_limit_max or that do not hold _any_ land.
+		#domain_limit = 1
 	}
 	
 	effect = {

@@ -59,13 +59,13 @@ education_martial = {
 			}
 			trigger_else = { # Does not have the Royal Court and thus combatant is governed by faith
 				OR = {
-					faith = { has_doctrine_parameter = combatant_can_be_either_gender_if_no_roco }
+					rite = { rite_has_parameter = combatant_can_be_either_gender_if_no_roco }
 					AND = {
-						faith = { has_doctrine_parameter = combatant_must_be_male_if_no_roco }
+						rite = { rite_has_parameter = combatant_must_be_male_if_no_roco }
 						is_male = yes
 					}
 					AND = {
-						faith = { has_doctrine_parameter = combatant_must_be_female_if_no_roco }
+						rite = { rite_has_parameter = combatant_must_be_female_if_no_roco }
 						is_female = yes
 					}
 				}
@@ -161,6 +161,8 @@ education_martial = {
 				liege ?= { is_ai = yes }
 				government_has_flag = government_is_nomadic
 				can_be_combatant_based_on_gender_trigger = { ARMY_OWNER = root }
+				#ADDED - those guys are a bit weird
+				NOT = { has_trait = eccentric } 
 			}
 			add = 10000
 		}
@@ -186,13 +188,13 @@ education_martial = {
 					}
 					trigger_else = { # Does not have the Royal Court and thus combatant is governed by faith
 						OR = {
-							faith = { has_doctrine_parameter = combatant_can_be_either_gender_if_no_roco }
+							rite = { rite_has_parameter = combatant_can_be_either_gender_if_no_roco }
 							AND = {
-								faith = { has_doctrine_parameter = combatant_must_be_male_if_no_roco }
+								rite = { rite_has_parameter = combatant_must_be_male_if_no_roco }
 								is_male = yes
 							}
 							AND = {
-								faith = { has_doctrine_parameter = combatant_must_be_female_if_no_roco }
+								rite = { rite_has_parameter = combatant_must_be_female_if_no_roco }
 								is_female = yes
 							}
 						}

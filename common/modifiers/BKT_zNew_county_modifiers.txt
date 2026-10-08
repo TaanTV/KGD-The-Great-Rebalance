@@ -6,22 +6,20 @@
 	development_decline = -0.35
 	development_decline_factor = 0.5
 	travel_danger = 20
-	supply_limit_mult = -0.25
-	#1.16
+	#supply_limit_mult = -0.2
 	county_fertility_growth_add = -0.5
 }
 
 recently_raided_county_modifier = {
 	icon = prison_negative
 	build_speed = 0.35
-	development_growth_factor = -0.5
+	development_growth_factor = -0.35	#prev -0.5
 	tax_mult = -0.1
 	development_decline = -0.2
 	development_decline_factor = 0.25
 	travel_danger = 10
 	county_fertility_growth_add = -0.15
-	#1.16
-	supply_limit_mult = -0.25
+	#supply_limit_mult = -0.2
 }
 
 #development_county_modifier = {
@@ -40,4 +38,10 @@ harsh_climate_county_modifier = {
 	defender_holding_advantage = 5
 	development_growth_factor = -1
 	monthly_county_control_growth_factor = -0.25
+}
+
+# For hungarian plains, boost so magyars feel a bit better hanging out there
+fertile_grazing_lands_county_modifier = {
+	icon = county_fertility_positive
+	county_fertility_decline_add = 5	#33% less decline relatively speaking
 }

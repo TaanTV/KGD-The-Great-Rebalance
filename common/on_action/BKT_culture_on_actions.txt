@@ -42,6 +42,17 @@ BKT_on_culture_created = {
 			}
 			leave_era = culture_era_early_medieval
 		}
+		
+		if = {
+			limit = {
+				has_cultural_pillar = language_carthaginian
+				scope:founder = {
+					has_variable = legendary_culture
+					var:legendary_culture = culture:carthaginian
+				}
+			}
+			set_name_list = name_list_carthaginian
+		}
 	}
 }
 

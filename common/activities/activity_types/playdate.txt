@@ -1,57 +1,32 @@
 ﻿activity_playdate = {
 	is_shown = {
 		highest_held_title_tier > tier_barony
-		trigger_if = {
+		trigger_if = { # Throttle Counts
 			limit = {
 				highest_held_title_tier = tier_county
-			}
-			top_liege != this
-		}
-		is_landed_or_landless_administrative = yes
-		trigger_if = {
-			limit = {
 				is_ai = yes
+				#ADDED 
+				stress < 75
 			}
-			#is_at_war = no
-			NOT = { has_variable = conqueror }
-			trigger_if = { # Throttle Counts
-				limit = {
-					highest_held_title_tier = tier_county
-				}
-				ai_sociability >= 75	#prev 100
-			}
+			ai_sociability >= 75	#prev 100
 		}
 		is_adult = no
-		age < less_than_two_years_to_adulthood_value #Consistency!
-		#Every other activity must be blocked until an uncrowned AI crowns themselves
-		#ADDED - nah, you're good, go for it.
-		trigger_if = {
-			limit = {
-				is_ai = yes
-				age >= 16	#prev 12
-			}
-			NOT = {
-				has_realm_law = uncrowned
-			}
-		}
+		ai_activity_war_check = yes
+		#ai_activity_coronation_check = yes
 	}
 
 	can_start_showing_failures_only = {
 		NOT = { is_activity_type_on_cooldown = activity_playdate }
 		is_available = yes
 		age >= 4
-	}
-	
-	#ADDED - just so its a bit more clear
-	can_start = {
 		age < less_than_two_years_to_adulthood_value #Consistency!
+		is_landed_or_landless_administrative_or_theocratic = yes
 	}
 
 	is_valid = {
 		scope:host = {
-			is_imprisoned = no
-			is_landed_or_landless_administrative = yes
-			NOT = { is_incapable = yes }
+			is_physically_able = yes
+			is_landed_or_landless_administrative_or_theocratic = yes
 		}
 		# If no one shows up
 		trigger_if = {
@@ -79,42 +54,18 @@
 				trigger_event = playdate.0021
 			}
 		}
-		# Host becomes unlanded
-		if = {
-			limit = {
-				scope:host = {
-					is_landed_or_landless_administrative = no
-				}
-			}
-			scope:activity = {
-				activity_type = { save_scope_as = activity_type }
-			}
-			every_attending_character = {
-				trigger_event = activity_system.0320
-			}
-		}
-		if = {
-			limit = {
-				scope:host = { is_incapable = yes }
-			}
-			scope:activity = {
-				activity_type = { save_scope_as = activity_type }
-			}
-			scope:host = {
-				trigger_event = activity_system.0330
-			}
-			every_attending_character = {
-				limit = { this != scope:host }
-				trigger_event = activity_system.0331
-			}
-		}
-		if = { # No one shows up
+		else_if = { # No one shows up
 			limit = {
 				has_attending_activity_guests = no
 			}
 			scope:host = {
 				trigger_event = playdate.2003
 			}
+		}
+		else = {
+			invalidation_unlanded_non_nf_effect = yes
+			invalidation_incapable_effect = yes
+			invalidation_host_isolated_effect = yes
 		}
 	}
 
@@ -272,6 +223,7 @@
 						}
 					}
 					trigger_event = playdate.9001
+					pam_vows_of_poverty_host_completion_piety_effect = yes
 				}
 				else = {
 					trigger_event = playdate.9002
@@ -281,7 +233,7 @@
 	}
 
 	wait_time_before_start = { days = 7 }
-	max_guest_arrival_delay_time = { months = 4 }	#prev 8
+	max_guest_arrival_delay_time = { months = 4 }	#prev 5
 	
 	
 	###################
@@ -337,56 +289,7 @@
 			}
 			add = -75
 		}
-		# Plague
-		if = {
-        	limit = {
-        	    any_held_title = {
-					title_tier = county
-        	        has_province_with_epidemic = { intensity < apocalyptic }
-        	    }
-        	    would_follow_social_distancing_value >= -1
-        	}
-        	add = {
-        	    value = -60
-        	    desc = "Plague in Domain"
-        	}
-    	}
-    	else_if = {
-    	    limit = {
-    	        any_realm_county = {
-    	            has_province_with_epidemic = { intensity < apocalyptic }
-    	        }
-    	        would_follow_social_distancing_value >= -1
-    	    }
-    	    add = {
-    	        value = -20
-    	        desc = "Plague in Top Realm"
-    	    }
-    	}
-    	if = {
-    	    limit = {
-    	        any_held_title = {
-					title_tier = county
-    	            has_province_with_epidemic = { intensity = apocalyptic }
-    	        }
-    	    }
-    	    add = {
-    	        value = -200
-    	        desc = "Apocalyptic Plague in Domain"
-    	    }
-    	}
-    	else_if = {
-    	    limit = {
-    	        any_held_title = {
-					title_tier = county
-    	            has_province_with_epidemic = { intensity = apocalyptic }
-    	        }
-    	    }
-    	    add = {
-    	        value = -40
-    	        desc = "Apocalyptic Plague in Top Realm"
-    	    }
-    	}
+		add = activity_general_ai_will_do_value
 	}
 
 	ai_check_interval_by_tier = {
@@ -470,6 +373,8 @@
 	###################
 	# GRAPHICS
 	###################
+
+	header_background = "gfx/interface/illustrations/activity_header_backgrounds/activity_playdate.dds"
 
 	# Travel
 	background = { # Bridge

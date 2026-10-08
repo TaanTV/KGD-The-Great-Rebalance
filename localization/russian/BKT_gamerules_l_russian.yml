@@ -22,10 +22,10 @@
  setting_rolehard_difficulty_player_desc: "Усложненный вариант Ролевой сложности. Эффект на Игрока: [GetModifier('rolehard_difficulty_player').GetNameWithTooltip]. Никаких модификаторов для ИИ." 
 
  rule_bkt_additional_content: "$bkt_rule_prefix$ Доп. Контент"
- setting_bkt_additional_content_enabled: "#high Весь#!"
- setting_bkt_additional_content_enabled_desc: "Включает новые системы и ивенты, добавленные модом."
  setting_bkt_additional_content_disabled: "#high Выключен#!"
- setting_bkt_additional_content_disabled_desc: "Выключает все новые системы и ивенты, добавленные модом. Может повлиять на баланс."
+ setting_bkt_additional_content_disabled_desc: "Выключает большинство некритических для баланса систем и ивентов, добавленных модом"
+ setting_bkt_additional_content_enabled: "#high Весь#!"
+ setting_bkt_additional_content_enabled_desc: "Включает некритические для баланса системы и ивенты, добавленные модом."
  
  bkt_difficulty_higher_player: "#high Доп. Сложность#!"
  bkt_difficulty_higher_player_desc: "Штраф к принятию увеличивается для [Concept('matrilineal','матрилинейных')|E] браков в [Concept('faith','вере')|E] с Доминированием Мужчин (и наоборот)\nПринятие предложений [Concept('marriage','брака')|E]: #n -20#!\nПринятие [Concept('alliance','предложений союза')|E]: #n -20#!\nПринятие Призывов в Войну: #n -35#!"
@@ -56,8 +56,15 @@
  
  rule_bkt_own_war_declaration_law_toggle: "$bkt_rule_prefix$ [GetLawGroup('own_war_declaration_law').GetName]"
  setting_bkt_own_war_declaration_law_toggle_enabled: "#high Включен#!"
- setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Все#! получают новый набор законов, в зависимости от которых объявление войны может требовать согласия могущественных вассалов или совета."
+ setting_bkt_own_war_declaration_law_toggle_enabled_desc: "#V Все#! получают новый набор законов, в зависимости от которых объявление войны может требовать согласия могущественных вассалов или совета. Может несколько затормозить расширение для ИИ."
  setting_bkt_own_war_declaration_law_toggle_player_only: "#high Только Игрок#!"
  setting_bkt_own_war_declaration_law_toggle_player_only_desc: "#V Игрок#! получает новый набор законов, в зависимости от которых объявление войны может требовать согласия могущественных вассалов или совета."
  setting_bkt_own_war_declaration_law_toggle_disabled: "#high Выключен#!"
  setting_bkt_own_war_declaration_law_toggle_disabled_desc: "Война никогда не меняется."
+ 
+ rule_bkt_gender_laws: "$bkt_rule_prefix$ [GetLawGroup('succession_gender_laws').GetName]"
+ setting_bkt_gender_laws_default: "По умолчанию"
+ setting_bkt_gender_laws_default_desc: "Законы [Concept( 'gender_laws', 'Примогенитуры' )|E] ведут себя так же, как в ванили. По большей части."
+ setting_bkt_gender_laws_prefer_extreme: "Строгая"
+ setting_bkt_gender_laws_prefer_extreme_desc: "Все, за исключением племен и последователей плюралистических или нереформированных вер или определенных культур, будут избегать [Concept( 'gender_laws', 'законов' )|E] [GetLaw('male_preference_law').GetName] и [GetLaw('female_preference_law').GetName]"
+ #setting_bkt_gender_laws_prefer_extreme_desc: "Большинство [Concept( 'rulers', 'правителей' )|E] будут избегать [Concept( 'gender_laws', 'законов' )|E] [GetLaw('male_preference_law').GetName] и [GetLaw('female_preference_law').GetName]. Племена и последователи плюралистических или нереформированных вер или определенных культур могут быть исключением." #setting_bkt_gender_laws_prefer_extreme_desc: "Большинство [Concept( 'rulers', 'правителей' )|E] будут избегать [Concept( 'gender_laws', 'законов' )|E] [GetLaw('male_preference_law').GetName] и [GetLaw('female_preference_law').GetName]. Племена и последователи плюралистических или нереформированных вер или определенных культур могут быть исключением."

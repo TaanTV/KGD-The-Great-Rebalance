@@ -18,6 +18,30 @@
 # OPINIONS #
 ############
 
+
+# Theft
+theft_opinion = {
+	opinion = -20
+	decaying = yes
+	years = 20
+	#imprisonment_reason = yes
+	execute_reason = yes
+	#ADDED
+	banish_reason = yes
+}
+
+# Embezzled from Me
+embezzled_opinion = {
+	opinion = -30
+	decaying = yes
+	years = 15	#prev 10
+	imprisonment_reason = yes
+	#revoke_title_reason = yes
+	#ADDED
+	execute_reason = yes
+	banish_reason = yes
+}
+
 ###MURDER###
 
 #Crime opinions

@@ -94,6 +94,9 @@ BKT_global_development_update_pulse = {
 }
 
 BKT_mercenary_castles_pulse = {
+	trigger = {
+		has_game_rule = bkt_additional_content_enabled
+	}
 	effect = {
 		every_mercenary_company = { 
 			limit = {
@@ -165,11 +168,8 @@ BKT_prestige_convertion = {
 			name = currency_to_add
 			value = {
 				value = prestige		#Keep in mind this should be negative
-				divide = 50
-				#floor = yes
 				multiply = 0.66
-				ceiling = yes
-				multiply = 50
+				round_to = 50
 				max = 750
 				multiply = -1
 			}
@@ -214,11 +214,8 @@ BKT_piety_convertion = {
 			name = currency_to_add
 			value = {
 				value = piety		#Keep in mind this should be negative
-				divide = 50
-				#floor = yes
 				multiply = 0.66
-				ceiling = yes
-				multiply = 50
+				round_to = 50
 				max = 750
 				multiply = -1
 			}
@@ -256,6 +253,7 @@ BKT_piety_convertion = {
 BKT_herd_decay = {
 	trigger = {
 		has_government = nomad_government
+		has_domicile = yes
 		domicile ?= { is_domicile_type = yurt }
 		NOR = { 
 			domicile.herd < 1000		#that's kind of mean
@@ -366,16 +364,19 @@ five_year_playable_pulse = {
 		BKT_ai_bastard_legitimization_pulse
 		BKT_herder_vassals_fix_pulse
 		BKT_additional_difficulty_buildings_cheat
+		delay = { days = { 60 130 } }
+		BKT_settled_nomads_culture_diverge_hybridize
 	}
 }
 
 
 BKT_ai_self_legitimization_pulse = {
 	trigger = {
+		always = no 	#i'll keep it around for a bit but seems like this can no longer happen.
 		is_ai = yes
 		has_dynasty = yes
-		faith = {
-			has_doctrine_parameter = bastards_legitimize
+		rite = {
+			rite_has_parameter = bastards_legitimize
 		}
 		house.house_head = this
 		has_trait = bastard
@@ -400,11 +401,11 @@ BKT_ai_bastard_legitimization_pulse = {
 	trigger = {
 		is_ai = yes
 		has_dynasty = yes
-		faith = {
-			has_doctrine_parameter = bastards_legitimize
+		rite = {
+			rite_has_parameter = bastards_legitimize
 		}
-		house.house_head.faith ?= {
-			has_doctrine_parameter = bastards_legitimize
+		house.house_head.rite ?= {
+			rite_has_parameter = bastards_legitimize
 		}
 		OR = {
 			health < 3.5
@@ -416,8 +417,8 @@ BKT_ai_bastard_legitimization_pulse = {
 			is_alive = yes
 			dynasty ?= prev.dynasty
 			has_trait = bastard
-			faith = {
-				has_doctrine_parameter = bastards_legitimize
+			rite = {
+				rite_has_parameter = bastards_legitimize
 			}
 		}
 		OR = {
@@ -484,8 +485,8 @@ BKT_ai_bastard_legitimization_pulse = {
 					is_alive = yes
 					house ?= scope:root_scope.house
 					has_trait = bastard
-					faith = {
-						has_doctrine_parameter = bastards_legitimize
+					rite = {
+						rite_has_parameter = bastards_legitimize
 					}
 					trigger_if = {
 						limit = { scope:root_scope = { has_realm_law = male_only_law } }
@@ -600,11 +601,7 @@ BKT_herder_vassals_fix_pulse = {
 
 BKT_additional_difficulty_buildings_cheat = {
 	trigger = {
-		OR = {
-			has_game_rule = bkt_difficulty_higher
-			has_game_rule = hard_difficulty
-			has_game_rule = very_hard_difficulty
-		}
+		#always = no	#lets see how AI does without it for now
 		is_landed = yes
 		NOR = {
 			government_has_flag = government_is_tribal
@@ -615,30 +612,67 @@ BKT_additional_difficulty_buildings_cheat = {
 		is_ai = yes
 		trigger_if = {
 			limit = { government_allows = treasury }
-			treasury >= medium_gold_max_value
+			OR = {
+				treasury >= medium_gold_max_value
+				gold >= major_gold_max_value
+			}
 		}
 		trigger_else = {
 			gold >= medium_gold_max_value
 		}
 		any_held_county = {
 			is_landless_type_title = no
-			title_province = { combined_building_level < excepted_combined_building_level }
+			title_province = { 
+				has_ongoing_construction = no
+				is_occupied = no
+				NOR = {
+					has_holding_type = tribal_holding
+					has_holding_type = nomad_holding
+					has_holding_type = herder_holding
+				}
+				combined_building_level < expected_combined_building_level 
+			}
 		}
 	}
 	effect = {
 		random = {
-			chance = 75
+			chance = {
+				value = 40
+				if = {
+					limit = {
+						OR = {
+							has_game_rule = bkt_difficulty_higher
+							has_game_rule = hard_difficulty
+							has_game_rule = very_hard_difficulty
+						}
+					}
+					value = 90
+				}
+			}
 			
 			random_held_county = {
 				limit = { 
 					is_landless_type_title = no
-					title_province = { combined_building_level < excepted_combined_building_level } 
+					title_province = { 
+						has_ongoing_construction = no
+						is_occupied = no
+						NOR = {
+							has_holding_type = tribal_holding
+							has_holding_type = nomad_holding
+							has_holding_type = herder_holding
+						}
+						combined_building_level < expected_combined_building_level 
+					} 
 				}
 				weight = {
 					base = 10
 					modifier = {
 						holder.capital_county ?= this
 						add = 10
+					}
+					modifier = {
+						title_province = { combined_building_level < { value = building_slots multiply = 2.5 ceiling = yes } }
+						factor = 0.25
 					}
 				}
 				title_province = {
@@ -651,16 +685,119 @@ BKT_additional_difficulty_buildings_cheat = {
 						limit = { combined_building_level > scope:current_combined_building_level }
 						county.holder = { 
 							if = {
-								limit = { government_allows = treasury }
+								limit = { 
+									government_allows = treasury 
+									treasury >= medium_gold_max_value
+								}
 								remove_short_term_treasury = medium_gold_max_value
 							}
 							else = {
 								remove_short_term_gold = medium_gold_max_value 
 							}
 						}
+						barony = { save_scope_as = barony_scope }
+						debug_log = "Smth got built via the pulse somewhere"
+						debug_log_scopes = yes
 					}
 				}
 			}
 		}
 	}
+}
+
+BKT_player_only_war_declaration_law_revert_ai_pulse = {
+	trigger = { 
+		has_game_rule = bkt_own_war_declaration_law_toggle_player_only
+		is_ai = yes
+		has_realm_law_in_group = own_war_declaration_law 
+		NOT = { has_realm_law = own_war_declaration_law_0 }
+	}
+	effect = {
+		add_realm_law_skip_effects = own_war_declaration_law_0
+	}
+}
+
+BKT_settled_nomads_culture_diverge_hybridize = {
+	trigger = {
+		has_dlc_feature = diverge_culture
+		NOR = {
+			has_game_rule = none_divergent_culture_ai_frequency
+			exists = global_var:has_ai_divergence_event_cooldown 
+		}
+		is_available_quick = {
+			ai = yes
+			adult = yes
+			incapable = no
+			imprisoned = no
+			advanced_ruler = yes
+		}
+		top_liege = this
+		sub_realm_size > 5
+		primary_title ?= {
+			tier >= tier_kingdom
+			title_held_years >= 10
+			previous_holder.culture ?= culture
+		}
+		NOT = { government_allows = uses_county_fertility }
+		save_temporary_scope_as = root_scope
+		culture ?= { 
+			culture_age >= culture_divergence_cooldown
+			has_cultural_pillar = head_determination_herd 
+			culture_head ?= { 
+				this != scope:root_scope
+				OR = {
+					government_allows = uses_county_fertility 
+					AND = {
+						government_has_flag = government_is_tribal
+						scope:root_scope = { NOT = { government_has_flag = government_is_tribal } }
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		random = {
+			chance = {
+				value = 20
+				if = {
+					limit = {
+						government_has_flag = government_is_tribal
+					}
+					value = 10
+				}
+			}
+			# Global cooldowns for the lower frequency game rule settings
+			# Not 3650 coz this is a forced divergence 
+			if = {
+				limit = {
+					has_game_rule = less_common_divergent_culture_ai_frequency
+				}
+				set_global_variable = { name = has_ai_divergence_event_cooldown value = yes days = 1800 }
+			}
+			#i hate how those scopes are more or less required.
+			save_scope_as = diverge_dummy
+			culture = { save_scope_as = culture_check_2 }
+			capital_county.duchy = { save_scope_as = duchy_title }
+			create_divergent_culture_with_side_effects_excluding_cost = yes
+			trigger_event = culture_emergence_events.0004 # Jump to the next event to make sure the new culture is resolved
+			
+			debug_log = "Former nomad diverged a culture!"
+			debug_log_date = yes
+			debug_log_scopes = yes
+		}
+	}
+	#random_events = {			#dunno if 0001 is needed here but juuuuust in case
+	#	chance_of_no_event = { 	#throttle tribals coz they cant advance the tech either
+	#		value = 0
+	#		if = {
+	#			limit = {
+	#				government_has_flag = government_is_tribal
+	#			}
+	#			value = 75
+	#		}
+	#	}
+	#	98 = 0
+	#	1 = culture_emergence_events.0001 # Create a hybrid culture with your capital culture
+	#	1 = culture_emergence_events.0002 # Create a divergent culture
+	#}
 }

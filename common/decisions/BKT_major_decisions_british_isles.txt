@@ -17,49 +17,51 @@ embrace_english_culture_decision = {
 	desc = embrace_english_culture_decision_desc
 
 	is_shown = {
-		game_start_date < 1178.1.1
-		culture = {
+		culture ?= {
 			OR = {
+				has_cultural_pillar = heritage_frankish
 				any_parent_culture = {
 					this = culture:norman
 				}
-				has_cultural_pillar = heritage_frankish
 			}
 			NOT = {
 				this = culture:english
 			}
 			#ADDED
-			any_parent_culture = { 
-				NOR = {
-					this = culture:english
-					this = culture:anglo_saxon
-					this = culture:scottish
+			NOT = { 
+				any_parent_culture = {
+					OR = {
+						this = culture:english
+						this = culture:anglo_saxon
+						this = culture:scottish
+					}
 				}
 			}
 		}
 		OR = {
 			any_claim = {
-				this = title:e_britannia
-			}
-			any_claim = {
 				this = title:k_england
 			}
-			OR = {	
+			OR = {
 				title:k_england = {
 					any_in_de_jure_hierarchy = {
 						root.primary_title = this
 					}
 				}
-				root.primary_title = title:e_britannia
+				root.primary_title ?= title:e_britannia
+			}
+			any_claim = {
+				this = title:e_britannia
 			}
 		}
-		
+
 		NOT = {
 			is_target_in_global_variable_list = {
 				name = unavailable_unique_decisions
 				target = flag:embrace_english_culture_decision
 			}
 		}
+		game_start_date < 1178.1.1
 	}
 
 	is_valid = {

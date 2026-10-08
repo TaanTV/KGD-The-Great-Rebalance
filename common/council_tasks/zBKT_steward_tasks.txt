@@ -793,6 +793,9 @@ task_promote_culture = {
 				desc = improve_promote_culture_modifier
 			}
 		}
+		
+		#ADDED - scale with control
+		multiply = council_task_control_multiplier
 	}
 
 	potential_county = {
@@ -839,7 +842,7 @@ task_promote_culture = {
 				OR = {
 					NOT = {
 						scope:county.culture = {
-							cultural_acceptance = { target = scope:councillor_liege.culture value >= 65 }	#prev value >= 50 
+							cultural_acceptance = { target = scope:councillor_liege.culture value >= 75 }	#prev value >= 50 
 						}
 					}
 					scope:county = {
@@ -857,11 +860,19 @@ task_promote_culture = {
 						any_parent_culture = {
 							this = scope:county.culture
 						}
+						#ADDED - but not THAT much
+						culture_age < 100	#by that point they diverged enough i feel 
+						OR = {
+							culture_age < 10
+							NOT = { cultural_acceptance = { target = scope:county.culture value >= 85 } }
+						}
 					}
 					culture = { # Small cultures want to grow a bit
 						any_culture_county = {
 							count < 10
 						}
+						#ADDED - but not THAT much
+						NOT = { cultural_acceptance = { target = scope:county.culture value >= 85 } }
 					}
 					scope:county.culture = { # 'dead' small cultures can go away
 						OR = {
@@ -881,13 +892,18 @@ task_promote_culture = {
 					#ADDED
 					# Convert hybrdids and especially divergents back lol
 					scope:county.culture = {
+						culture_age < 100	#by that point they diverged enough i feel 
 						any_parent_culture = {
 							this = scope:councillor_liege.culture
 						}
 					}
 					#ADDED - young cultures can grow a bit
-					NAND = {
-						culture.culture_age > 35
+					culture = {
+						OR = {
+							is_divergent_culture = yes
+							is_hybrid_culture = yes
+						}
+						culture_age < 25
 					}
 					AND = {
 						# Scottish rulers should convert counties of 'old' cultures to the new one.
@@ -921,7 +937,7 @@ task_promote_culture = {
 					}
 					#ADDED a bit more railroading
 					AND = {
-						# Russian rulers should convert counties of 'old' cultures to the new one.
+						# Russian rulers should convert counties of 'old' cultures.
 						scope:councillor_liege.culture = { has_cultural_pillar = heritage_east_slavic }
 						culture = { has_cultural_pillar = heritage_volga_finnic }
 					}
@@ -988,8 +1004,12 @@ task_promote_culture = {
 						}
 					}
 					#ADDED - young cultures can grow a bit
-					NAND = {
-						culture.culture_age > 35
+					culture = {
+						OR = {
+							is_divergent_culture = yes
+							is_hybrid_culture = yes
+						}
+						culture_age < 35
 					}
 				}
 			}
@@ -1003,7 +1023,10 @@ task_promote_culture = {
 				#Rewritten some logic and cleaned it up
 				# Start with the capital
 				scope:councillor_liege = {
-					is_independent_ruler = yes
+					OR = {
+						is_independent_ruler = yes
+						highest_held_title_tier >= tier_kingdom
+					}
 					capital_county = {
 						this = scope:county
 						title_held_years > 20
@@ -1184,6 +1207,8 @@ task_promote_culture = {
 							}
 						}
 						AND = {
+							#ADDED - check this first
+							is_landed = yes
 							culture = culture:japanese
 							capital_county.empire = title:e_japan
 						}
@@ -1224,8 +1249,12 @@ task_promote_culture = {
 								count < 35
 							}
 						}
-						NAND = { # if its a young culture
-							culture.culture_age > 35
+						culture = { # if its a young culture
+							OR = {
+								is_divergent_culture = yes
+								is_hybrid_culture = yes
+							}
+							culture_age < 35
 						}
 					}
 				}
@@ -1318,8 +1347,12 @@ task_promote_culture = {
 						}
 					}
 					#ADDED
-					NAND = { # ignore it if its a young culture
-						culture.culture_age > 25
+					culture = { # ignore it if its a young culture
+						OR = {
+							is_divergent_culture = yes
+							is_hybrid_culture = yes
+						}
+						culture_age < 25
 					}
 				}
 			}

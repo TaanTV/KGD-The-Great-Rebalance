@@ -17,7 +17,7 @@ base_legitimacy_value = { # Split into separate values for easy debugging/visibi
 	add = base_legitimacy_dynasty_prestige_level_value
 
 	# LEGITIMACY BLOODLINE DYNASTY PERKS
-	add = base_legitimacy_track_perks_value
+	#add = base_legitimacy_track_perks_value
 
 	# COUNTY OPINION - derived from average of held counties
 	add = base_legitimacy_county_opinion_value
@@ -47,7 +47,7 @@ base_legitimacy_value = { # Split into separate values for easy debugging/visibi
 	if = {
 		limit = {
 			exists = this
-			government_allows = administrative
+			government_has_mechanic = administrative
 		}
 		multiply = 0.75 # To reduce the overall base values
 		add = base_legitimacy_admin_value # And add anything admin specific
@@ -75,6 +75,12 @@ base_legitimacy_value = { # Split into separate values for easy debugging/visibi
 			multiply = 15	#a bit less than usual because idk this is cheesable
 		}
 	}
+	
+	#ADDED - seems like legitimacy is being pretty bad at game start sooooo
+	if = {
+		limit = { months_from_game_start <= 0 }
+		multiply = 1.5
+	}
 
 	min = 100 # No one starts with Level 0
 	round = yes
@@ -95,7 +101,7 @@ succession_legitimacy_value = { # Split into separate values for easy debugging/
 	add = succession_legitimacy_dynasty_prestige_level_value
 
 	# LEGITIMACY BLOODLINE DYNASTY PERKS
-	add = base_legitimacy_track_perks_value
+	#add = base_legitimacy_track_perks_value
 
 	# COUNTY OPINION - derived from average of held counties
 	add = base_legitimacy_county_opinion_value
@@ -123,12 +129,12 @@ succession_legitimacy_value = { # Split into separate values for easy debugging/
 
 	# DIPLOMACY SKILLS
 	add = base_legitimacy_diplomacy_value
-	
+
 	# ADMINISTRATIVE
 	if = {
 		limit = {
 			exists = this
-			government_allows = administrative
+			government_has_mechanic = administrative
 		}
 		multiply = 0.75 # To reduce the overall base values
 		add = base_legitimacy_admin_value # And add anything admin specific

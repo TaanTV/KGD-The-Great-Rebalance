@@ -12,6 +12,7 @@
 		allow_out_of_realm_inheritance = yes
 		use_as_base_on_landed = yes
 		use_maa_maintenance = no
+		allow_accolades = no
 	}
 
 	domicile_type = camp
@@ -27,7 +28,6 @@
 	valid_holdings = { tribal_holding church_holding castle_holding city_holding temple_citadel_holding }
 
 	character_modifier = {
-		active_accolades = -100
 		knight_limit = 3		#prev 2 - compatibility with adventurer nerfs
 		men_at_arms_cap = -2	#prev -3
 		men_at_arms_limit = -2
@@ -57,6 +57,7 @@
 	flags = {
 		cannot_be_vassal_or_liege
 		government_is_landless_adventurer
+		government_has_camp
 		has_unique_government_perks
 	}
 

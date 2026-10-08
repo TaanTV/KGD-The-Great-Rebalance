@@ -33,7 +33,7 @@
 				has_trait = governor
 			}
 		}
-		NOT = { has_trait = incapable }
+		is_incapable = no
 	}
 
 	valid = {
@@ -51,7 +51,7 @@
 					has_trait = governor
 				}
 			}
-			NOT = { has_trait = incapable }
+			is_incapable = no
 			NOT = { is_at_war_with = scope:target }
 		}
 		scope:target = {

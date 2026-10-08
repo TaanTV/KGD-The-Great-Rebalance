@@ -1,0 +1,8 @@
+﻿accolade_piety_reduction_value = {
+	value = 0.75	#prev 0.5
+	desc = CB_REDUCED_HOLY_WAR_COST_ACCOLADE
+}
+accolade_piety_reduction_value_high = {
+	value = 0.5		#prev 0.25
+	desc = CB_REDUCED_HOLY_WAR_COST_ACCOLADE
+}

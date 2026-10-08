@@ -85,7 +85,7 @@ eparch_appease_populace = {
 	}
 
 	ai_will_do = {
-		value = 50		#prev 0
+		value = 0
 		
 		if = {
 			limit = {
@@ -111,8 +111,6 @@ eparch_appease_populace = {
 				}
 				add = 50	#prev 25
 			}
-		#ADDED - moved those out of the IF because yes.
-		}
 			
 			# Gold reasons
 			if = {
@@ -129,6 +127,7 @@ eparch_appease_populace = {
 				}
 				add = -1000
 			}
+		}
 	}
 }
 

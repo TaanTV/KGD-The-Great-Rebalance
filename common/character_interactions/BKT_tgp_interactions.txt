@@ -1,4 +1,292 @@
-﻿# Default Request Great Project Contribution
+﻿
+# Send Treasury
+celestial_give_treasury_interaction = {
+	icon = icon_imperial_treasury
+	category = interaction_category_vassal
+	send_name = celestial_give_treasury_interaction_send_name
+	desc = celestial_give_treasury_interaction_desc
+	notification_text = celestial_give_treasury_interaction_recipient_desc
+	common_interaction = no
+
+	filter_tags = { dynastic_cycle }
+
+	interface_priority = 62
+
+	is_available = {
+		has_treasury = yes
+		trigger_if = {
+			limit = { is_ai = yes }
+			treasury > 1000 # Let's make sure the AI don't spend their treasury needlessly
+			is_adult = yes
+		}
+	}
+
+	is_shown = {
+		scope:recipient = {
+			has_treasury = yes
+			this != scope:actor
+			top_liege ?= scope:actor.top_liege
+		}
+	}
+
+	is_valid = {
+	}
+
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			treasury >= give_treasury_value
+			NOT = { is_at_war_with = scope:recipient }
+		}
+	}
+
+	is_highlighted = { # Highlight the interaction if they have a very small treasury
+		scope:recipient = {
+			treasury < 50
+		}
+	}
+
+	highlighted_reason = HIGHLIGHTED_GIVE_TREASURY
+
+	auto_accept = {
+		custom_description = {
+			text = auto_accept_interaction_ai
+			object = scope:recipient
+			scope:recipient = {
+				is_ai = yes
+			}
+		}
+	}
+
+	on_auto_accept = {
+		scope:recipient = {
+			# When recipient is AI, let's figure out if they would be greatful - But we want to keep the overall chance fairly small
+			random = {
+				chance = {
+					value = 0
+					if = { # They REALLY need the extra treasury
+						limit = {
+							treasury < 0
+						}
+						add = 20
+					}
+					else_if = { # They need the extra treasury
+						limit = {
+							treasury < 50
+						}
+						add = 12
+					}
+					else_if = { # The contribution would still be nice
+						limit = {
+							treasury < 100
+						}
+						add = 5
+					}
+					if = {
+						limit = {
+							has_trait = humble
+						}
+						add = 8
+					}
+					if = {
+						limit = {
+							has_trait = just
+						}
+						add = 6
+					}
+					if = {
+						limit = {
+							has_trait = generous
+						}
+						add = 6
+					}
+					if = {
+						limit = {
+							has_trait = trusting
+						}
+						add = 5
+					}
+				}
+				modifier = { # The top liege does not give gifts back
+					factor = 0
+					this = top_liege
+				}
+
+				# If true, provide actor with a reward
+				scope:actor = {
+					trigger_event = {
+						id = tgp_interaction_event.0001
+						days = { 30 60 }
+					}
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			# Let the player know they won't get additional opinion
+			if = {
+				limit = {
+					scope:recipient = {
+						has_opinion_modifier = {
+							target = scope:actor
+							modifier = treasury_gift_opinion
+						}
+					}
+				}
+				custom_tooltip = ALREADY_SENT_TREASURY_WARNING
+			}
+			send_interface_toast = {
+				type = event_toast_effect_good
+				title = celestial_give_treasury_interaction
+				right_icon = scope:recipient
+
+				# Transfer treasury amount
+				pay_short_term_treasury = {
+					target = scope:recipient
+					treasury = give_treasury_value
+				}
+
+				# Advancement movement members get merit when in the advancement phase
+				if = {
+					limit = {
+						top_participant_group:dynastic_cycle ?= {
+							has_participant_group_parameter = dynastic_cycle_send_treasury_for_merit
+						}
+						#ADDED
+						scope:recipient.highest_held_title_tier > tier_barony
+					}
+					change_merit = medium_merit_value
+				}
+
+				#ADDED - moved this into an if to prevent some CHEESE
+				if = {
+					limit = { 
+						government_has_flag = government_has_influence
+						#ADDED
+						scope:recipient.highest_held_title_tier > tier_barony 
+					}
+					change_influence = medium_influence_value
+				}
+
+				scope:recipient = {
+					# They will like actor for it
+					add_opinion = {
+						target = scope:actor
+						modifier = treasury_gift_opinion
+						opinion = 20
+					}
+				}
+			}
+		}
+	}
+
+	on_decline = {
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	ai_targets = {
+		ai_recipients = vassals
+	}
+	ai_targets = {
+		ai_recipients = situation_participant_group
+		parameter = dynastic_cycle
+		max = 20
+	}
+
+	ai_will_do = {
+		base = 0
+
+		# Opinion
+		opinion_modifier = {
+			opinion_target = scope:recipient
+			multiplier = -0.25
+		}
+
+		# Personality
+		modifier = {
+			add = -30
+			has_trait = greedy
+		}
+		modifier = {
+			add = -20
+			has_trait = ambitious
+		}
+		modifier = {
+			add = 10
+			has_trait = trusting
+		}
+		modifier = {
+			add = 15
+			has_trait = generous
+		}
+
+		# Support your fellow movement members
+		modifier = {
+			factor = {
+				value = 1.5
+				if = {
+					limit = {
+						is_in_pro_hegemon_or_hegemon_movement = yes
+					}
+					multiply = 1.5
+				}
+			}
+			is_in_same_movement_as = { TARGET = scope:recipient }
+		}
+
+		# Slight preference to do this towards players
+		modifier = {
+			factor = 1		#prev 1.5
+			scope:recipient = {
+				is_ai = no
+			}
+		}
+
+		# Don't support bad relations
+		modifier = {
+			factor = 0
+			OR = {
+				has_relation_rival = scope:recipient
+				has_relation_nemesis = scope:recipient
+			}
+		}
+
+		# Don't support characters who doesn't need it
+		modifier = {
+			factor = 0
+			scope:recipient = {
+				treasury > 150
+			}
+		}
+
+		# Avoid sending treasury multiple times
+		modifier = {
+			factor = 0
+			scope:recipient = {
+				has_opinion_modifier = {
+					target = scope:actor
+					modifier = treasury_gift_opinion
+				}
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 100
+	}
+}
+
+
+# Default Request Great Project Contribution
 # REFERENCED BY CODE, DO NOT REMOVE OR RENAME
 request_great_project_contribution_interaction = {
 	special_interaction = request_great_project_contribution
@@ -37,7 +325,7 @@ request_great_project_contribution_interaction = {
 			# Offer Hook
 			if = {
 				limit = { always = scope:offer_hook }
-				stress_impact = {
+				stress_and_fulfillment_impact = {
 					base = minor_stress_impact_gain
 					paranoid = major_stress_impact_gain
 				}
@@ -51,7 +339,7 @@ request_great_project_contribution_interaction = {
 			# Offer Strong Hook
 			if = {
 				limit = { always = scope:offer_hook_strong }
-				stress_impact = { base = major_stress_impact_gain }
+				stress_and_fulfillment_impact = { base = major_stress_impact_gain }
 				scope:recipient = {
 					add_hook = {
 						type = strong_favor_hook
@@ -120,9 +408,9 @@ request_great_project_contribution_interaction = {
 
 		#Personality
 		modifier = { # the greedier they are, the less likely they will agree to this
-			scope:recipient = { 
+			scope:recipient = {
 				is_tributary_of = scope:actor
-				ai_greed > 0 
+				ai_greed > 0
 			}
 			add = {
 				value = scope:recipient.ai_greed
@@ -170,7 +458,7 @@ request_great_project_contribution_interaction = {
 						great_project_type = mandala_capital_01
 					}
 				}
-			}	
+			}
 			scope:recipient = { gold <= mandala_contribution_low_gold_cost }
 			add = -25
 			desc = recipient_has_low_funds
@@ -183,6 +471,17 @@ request_great_project_contribution_interaction = {
 			}
 			add = tgp_sea_legacy_gp_contribution_value
 			desc = tgp_sea_legacy_tributaries_likely_to_contribute
+		}
+		modifier = {
+			scope:actor = {
+				dynasty ?= { has_dynasty_perk = pam_legacy_2 }
+			}
+			scope:recipient = {
+				faith ?= scope:actor.faith
+				government_has_flag = government_is_ecclesiastical
+			}
+			add = 25
+			desc = REQUEST_ECCLESIASTICAL_TREASURY_LEGACY_DYNASTY_REASON
 		}
 
 		#Are they a competing Mandala?
@@ -314,8 +613,8 @@ request_great_project_contribution_interaction = {
 	send_option = {
 		flag = offer_influence
 		is_shown = {
-			scope:actor = { government_allows = administrative }
-			scope:recipient = { government_allows = administrative }
+			scope:actor = { government_has_flag = government_has_influence }
+			scope:recipient = { government_has_flag = government_has_influence }
 		}
 		localization = OFFER_INFLUENCE
 	}

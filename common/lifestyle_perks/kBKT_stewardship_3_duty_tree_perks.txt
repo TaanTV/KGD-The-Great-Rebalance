@@ -51,7 +51,7 @@ positions_of_power_perk = {
 		if = {
 			limit = {
 				has_ep3_dlc_trigger = yes
-				government_allows = administrative
+				government_has_mechanic = administrative
 			}
 			custom_description_no_bullet = {
 				text = admin_positions_of_power_effect
@@ -234,7 +234,7 @@ large_levies_perk = {
 				desc = large_levies_perk_adventurer_name
 			}
 			triggered_desc = {
-				trigger = { government_allows = administrative }
+				trigger = { government_has_mechanic = administrative }
 				desc = admin_large_levies_perk_name
 			}
 			triggered_desc = {
@@ -413,7 +413,7 @@ honored_to_serve_perk = {
 			custom_description_no_bullet = { text = add_mandala_radiance_perk_effect }
 		}
 		if = {
-			limit = { government_allows = administrative }
+			limit = { government_has_mechanic = administrative }
 			custom_description_no_bullet = { text = admin_council_cost_perk_effect }
 		}
 		if = {

@@ -19,8 +19,8 @@ ai_wants_matrilineal_marriage = {
 		OR = { # Either Matrilineal Marriages are the norm
 			has_realm_law = female_only_law
 			has_realm_law = female_preference_law
-			faith = {
-				has_doctrine_parameter = female_dominated_law
+			rite = {
+				rite_has_parameter = female_dominated_law
 			}
 			AND = {
 				exists = dynasty
@@ -64,8 +64,8 @@ ai_wants_matrilineal_marriage = {
 		OR = { # Matrilineal Marriages are the norm
 			has_realm_law = female_only_law
 			has_realm_law = female_preference_law
-			faith = {
-				has_doctrine_parameter = female_dominated_law
+			rite = {
+				rite_has_parameter = female_dominated_law
 			}
 		}
 	}
@@ -76,8 +76,8 @@ ai_wants_matrilineal_marriage = {
 		OR = { # Either Matrilineal Marriages are the norm
 			has_realm_law = female_only_law
 			has_realm_law = female_preference_law
-			faith = {
-				has_doctrine_parameter = female_dominated_law
+			rite = {
+				rite_has_parameter = female_dominated_law
 			}
 			AND = { # Or there's a good reason to pursue them, such as being of a Reputable dynasty or ruling a Duchy
 				exists = dynasty
@@ -146,8 +146,8 @@ ai_wants_matrilineal_marriage = {
 		OR = { # Either Matrilineal Marriages are the norm
 			has_realm_law = female_only_law
 			has_realm_law = female_preference_law
-			faith = {
-				has_doctrine_parameter = female_dominated_law
+			rite = {
+				rite_has_parameter = female_dominated_law
 			}
 			AND = { # Or there's a good reason to pursue them, such as being of a Reputable dynasty or ruling a Duchy
 				exists = dynasty
@@ -323,7 +323,7 @@ ai_wants_grand_wedding_promise = {
 ai_wants_to_create_own_legend = {
 	top_liege = this
 	highest_held_title_tier >= tier_kingdom
-	scope:num_legends <= 3	#prev 5
+	scope:num_legends <= 4	#prev 5
 	#ADDED
 	gold > monumental_gold_value
 }
@@ -353,6 +353,7 @@ ai_wants_to_migrate = {
 		limit = {
 			capital_county = {
 				any_county_situation_sub_region = {
+					situation_sub_region_has_county = prev
 					sub_region_current_phase = situation_steppe_havsarsan_zud_season
 				}
 			}
@@ -408,15 +409,27 @@ ai_should_create_title = {
 		scope:title.tier >= tier_kingdom
 		scope:title.tier <= tier_empire
 		#ADDED - actually create kingdoms if you're low on vassal limit
-		or = {
-			scope:title.tier > tier_kingdom
-			vassal_count <= { value = vassal_limit add = -3 }
-		}
+		#or = {
+		#	scope:title.tier > tier_kingdom
+		#	vassal_count <= { value = vassal_limit add = -3 }
+		#}
 	}
-	
+
 	# hegemons should not create empires / hegemonies
 	nand = {
 		root.primary_title.tier = tier_hegemony
 		scope:title.tier >= tier_empire
+	}
+	
+	#ADDED - actually this weird arrengment to use ?= doesnt help with error logging, oh well
+	nand = {
+		current_year < 1050
+		dynasty:597 ?= root.dynasty
+		title:k_andalusia ?= root.primary_title
+		OR = {
+			title:k_valencia ?= scope:title
+			title:k_badajoz ?= scope:title
+			scope:title.empire ?= { title:e_spain ?= this }
+		}
 	}
 }

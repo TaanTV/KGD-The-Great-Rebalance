@@ -22,6 +22,7 @@
 # flag:swear_fealty
 # flag:stepped_down
 
+
 # A title is destroyed
 # root = the holder before destruction
 # scope:landed_title = the title that is being destroyed
@@ -52,6 +53,7 @@ BKT_on_empire_destroyed = {
 on_title_gain = {
 	on_actions = {
 		BKT_on_empire_created
+		BKT_on_barony_gained
 	}
 }
 
@@ -83,6 +85,8 @@ BKT_on_empire_created = {
 on_rank_up = { # Will not fire during history execution or for dying characters
 	on_actions = {
 		BKT_on_landed
+		delay = { days = 1 }
+		BKT_on_landed_treasury_fix
 	}
 }
 
@@ -92,6 +96,134 @@ BKT_on_landed = {
 		is_landed = yes
 	}
 	effect = {
-		
+		if = {
+			limit = { 
+				top_liege != this
+				highest_held_title_tier > tier_barony
+				NOT = { government_has_flag = government_is_tribal }
+				liege = { government_has_flag = government_is_tribal }
+				OR = {
+					culture ?= liege.culture
+					culture.culture_head ?= { government_has_flag = government_is_tribal }
+				}
+				primary_title ?= { recent_history = { type = granted days = 1 } }
+			}
+			if = {
+				limit = { liege = { has_government = tribal_government } }
+				change_government = tribal_government
+			}
+			else_if = {
+				limit = { liege = { has_government = wanua_government } }
+				change_government = wanua_government
+			}
+		}
+	}
+}
+
+
+# A vassal changes their liege
+# root = vassal changing their status
+# scope:old_liege = the previous liege of the vassal
+# It is also fired for rulers gaining independence, those can be identified by checking current liege
+on_vassal_change = {
+	on_actions = {
+		BKT_vassal_change_tyrannical_changes_maintenance
+	}
+}
+
+BKT_vassal_change_tyrannical_changes_maintenance = {
+	trigger = {
+		vassal_contract_has_modifiable_obligations = yes
+		has_variable = had_their_contract_tyranically_changed
+	}
+	effect = {
+		save_temporary_scope_as = root_scope
+		if = {
+			limit = { top_liege = this }
+			remove_variable = had_their_contract_tyranically_changed
+			set_vassal_contract_modification_blocked = no
+			scope:old_liege ?= {
+				if = {
+					limit = { 
+						is_alive = yes 
+						has_variable_list = had_their_contract_tyranically_changed_list
+						any_in_list = {
+							variable = had_their_contract_tyranically_changed_list
+							this = scope:root_scope
+						} 
+					}
+					remove_list_variable = {
+						name = had_their_contract_tyranically_changed_list
+						target = scope:root_scope
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { 
+				subject_contract_is_blocked_from_modification = yes
+				var:had_their_contract_tyranically_changed = scope:old_liege
+			}
+			set_vassal_contract_modification_blocked = no
+			#add toasts and stuff
+			if = {
+				limit = { scope:old_liege = { is_alive = yes } }
+				send_interface_message = {
+					type = send_interface_message
+					title = contract_unlocked_by_liege_change_death_title
+					#desc = negative_piety_convertion_desc
+					right_icon = root
+					custom_tooltip = contract_unlocked_by_liege_change_tt
+					show_as_tooltip = { set_vassal_contract_modification_blocked = no }
+				}
+			}
+			else = {
+				send_interface_message = {
+					type = send_interface_message
+					title = contract_unlocked_by_liege_change_death_title
+					#desc = negative_piety_convertion_desc
+					right_icon = root
+					custom_tooltip = contract_unlocked_by_liege_death_tt
+					show_as_tooltip = { set_vassal_contract_modification_blocked = no }
+				}
+			}
+		}
+	}
+}
+
+BKT_on_barony_gained = {
+	trigger = {
+		OR = {
+			scope:transfer_type = flag:granted
+			scope:transfer_type = flag:appointment
+		}
+		scope:title.tier = tier_barony
+	}
+	effect = { 
+		set_variable = {
+			name = got_barony_granted
+			days = 2
+		}
+	}
+}
+
+BKT_on_landed_treasury_fix = {
+	trigger = {
+		NOT = { exists = scope:title }
+		government_allows = treasury
+		#gold = treasury
+		gold > 0
+		OR = {
+			AND = {
+				highest_held_title_tier = tier_barony
+				has_variable = got_barony_granted
+			}
+			primary_title ?= {
+				recent_history = { type = appointment days = 1 }
+			}
+		}
+	}
+	effect = {
+		remove_treasury = gold
 	}
 }

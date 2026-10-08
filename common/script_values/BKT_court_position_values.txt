@@ -1,7 +1,1152 @@
 ﻿
+tiny_court_position_salary = {
+	add = {
+		value = 0.05
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			scope:liege.sub_realm_size >= 120
+		}
+		multiply = {
+			value = 1.6
+			desc = enormous_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 90
+		}
+		multiply = {
+			value = 1.4
+			desc = large_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 60
+		}
+		multiply = {
+			value = 1.2
+			desc = medium_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 30
+		}
+		multiply =  {
+			value =  1.1
+			desc = small_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
+		}
+		multiply =  {
+			value =  1.75
+			desc = culture_era_late_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.5
+			desc = culture_era_high_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = culture_era_early_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				highest_held_title_tier >= tier_empire
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = empire_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = tribal_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_nomadic
+			}
+		}
+		multiply = {
+			value = 0.5
+			desc = nomad_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
+minor_court_position_salary = {
+	add = {
+		value = 0.1	#prev 0.12
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			scope:liege.sub_realm_size >= 120
+		}
+		multiply = {
+			value = 1.6
+			desc = enormous_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 90
+		}
+		multiply = {
+			value = 1.4
+			desc = large_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 60
+		}
+		multiply = {
+			value = 1.2
+			desc = medium_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 30
+		}
+		multiply =  {
+			value =  1.1
+			desc = small_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
+		}
+		multiply =  {
+			value =  1.75
+			desc = culture_era_late_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.5
+			desc = culture_era_high_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = culture_era_early_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				highest_held_title_tier >= tier_empire
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = empire_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = tribal_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_nomadic
+			}
+		}
+		multiply = {
+			value = 0.5
+			desc = nomad_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	# TGP parameters
+	if = {
+		limit = {
+			scope:liege = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+		}
+		multiply = {
+			value = {
+				value = 1
+				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			}
+			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
+medium_court_position_salary = {
+	add = {
+		value = 0.25
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			scope:liege.sub_realm_size >= 120
+		}
+		multiply = {
+			value = 1.6
+			desc = enormous_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 90
+		}
+		multiply = {
+			value = 1.4
+			desc = large_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 60
+		}
+		multiply = {
+			value = 1.2
+			desc = medium_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 30
+		}
+		multiply =  {
+			value =  1.1
+			desc = small_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.75
+			desc = culture_era_late_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.5
+			desc = culture_era_high_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = culture_era_early_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				highest_held_title_tier >= tier_empire
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = empire_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = tribal_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_nomadic
+			}
+		}
+		multiply = {
+			value = 0.5
+			desc = nomad_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	# TGP parameters
+	if = {
+		limit = {
+			scope:liege = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+		}
+		multiply = {
+			value = {
+				value = 1
+				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			}
+			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+major_court_position_salary = {
+	add = {
+		value = 0.5
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			scope:liege.sub_realm_size >= 120
+		}
+		multiply = {
+			value = 1.6
+			desc = enormous_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 90
+		}
+		multiply = {
+			value = 1.4
+			desc = large_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 60
+		}
+		multiply = {
+			value = 1.2
+			desc = medium_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 30
+		}
+		multiply =  {
+			value =  1.1
+			desc = small_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.75
+			desc = culture_era_late_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.5
+			desc = culture_era_high_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = culture_era_early_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				highest_held_title_tier >= tier_empire
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = empire_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = tribal_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_nomadic
+			}
+		}
+		multiply = {
+			value = 0.5
+			desc = nomad_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	# TGP parameters
+	if = {
+		limit = {
+			scope:liege = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+		}
+		multiply = {
+			value = {
+				value = 1
+				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			}
+			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
+court_position_physician_salary = {
+	add = {
+		value = 0.1
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			exists = scope:liege
+		}
+		scope:liege = {
+			culture = {
+				if = {
+					limit = {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+					multiply =  {
+						value =  1.75
+						desc = culture_era_late_medieval_salary_mod
+						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+					}
+				}
+				else_if = {
+					limit = {
+						has_cultural_era_or_later = culture_era_high_medieval
+					}
+					multiply = {
+						value = 1.5
+						desc = culture_era_high_medieval_salary_mod
+						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+					}
+				}
+				else_if = {
+					limit = {
+						has_cultural_era_or_later = culture_era_early_medieval
+					}
+					multiply = {
+						value = 1.25
+						desc = culture_era_early_medieval_salary_mod
+						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+					} 
+				}
+			}
+			if = {
+				limit = {
+					highest_held_title_tier >= tier_empire
+				}
+				multiply = {
+					value = 1.25
+					desc = empire_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				} 
+			}
+			#ADDED
+			if = {
+				limit = {
+					has_perk = at_any_cost_perk
+				}
+				multiply = {
+					value = at_any_cost_perk_discount_multiplier
+					desc = at_any_cost_perk_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = {
+					government_has_flag = government_is_tribal
+				}
+				multiply = {
+					value = 0.25
+					desc = tribal_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				} 
+			}
+			if = {
+				limit = {
+					government_has_flag = government_is_ecclesiastical
+				}
+				multiply = {
+					value = 0.25
+					desc = ecclesiastical_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = {
+					culture = {
+						has_cultural_parameter = cheaper_court_positions
+					}
+				}
+				multiply = {
+					value = 0.8
+					desc = esteemed_hospitality_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = {
+					scope:liege = {
+						has_title = title:h_china
+						top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+					}
+				}
+				multiply = {
+					value = {
+						value = 1
+						add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+					}
+					desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				} 
+			}
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege ?= {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
+court_position_antiquarian_salary = {
+	add = {
+		value = 0.15
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	if = {
+		limit = {
+			scope:liege.sub_realm_size >= 120
+		}
+		multiply = {
+			value = 1.6
+			desc = enormous_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 90
+		}
+		multiply = {
+			value = 1.4
+			desc = large_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 60
+		}
+		multiply = {
+			value = 1.2
+			desc = medium_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege.sub_realm_size >= 30
+		}
+		multiply =  {
+			value =  1.1
+			desc = small_realm_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
+		}
+		multiply =  {
+			value =  1.75
+			desc = culture_era_late_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.5
+			desc = culture_era_high_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = culture_era_early_medieval_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				highest_held_title_tier >= tier_empire
+			}
+		}
+		multiply = {
+			value = 1.25
+			desc = empire_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		} 
+	}
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = tribal_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		} 
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	# TGP parameters
+	if = {
+		limit = {
+			scope:liege = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+		}
+		multiply = {
+			value = {
+				value = 1
+				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			}
+			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
+court_position_travel_leader_salary = {
+	add = {
+		value = 0.1
+		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
+		format = "BASE_VALUE_FORMAT_DECIMALS"
+	}
+	
+	#ADDED
+	if = {
+		limit = {
+			scope:liege = {
+				has_perk = at_any_cost_perk
+			}
+		}
+		multiply = {
+			value = at_any_cost_perk_discount_multiplier
+			desc = at_any_cost_perk_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		multiply = {
+			value = 0.25
+			desc = ecclesiastical_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	if = {
+		limit = {
+			scope:liege = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
+				}
+			}
+		}
+		multiply = {
+			value = 0.8
+			desc = esteemed_hospitality_salary_mod
+			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+	}
+	# TGP parameters
+	if = {
+		limit = {
+			scope:liege = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+		}
+		multiply = {
+			value = {
+				value = 1
+				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			}
+			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		}
+	} 
+	if = {
+		limit = {
+			OR = {
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
+			}
+			scope:liege = {
+				is_ai = yes
+			}
+		}
+		multiply = 0
+	}
+}
+
 medium_court_position_prestige_salary = {
 	add = {
-		value = 0.1			#prev 0.2
+		value = 0.15		#prev 0.2
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
@@ -152,7 +1297,7 @@ medium_court_position_prestige_salary = {
 }
 major_court_position_prestige_salary = {
 	add = {
-		value = 0.15			#prev 0.3
+		value = 0.20			#prev 0.3
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}

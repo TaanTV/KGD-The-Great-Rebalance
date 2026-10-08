@@ -40,7 +40,7 @@
 #
 refund_perks_stress_impact = 200	#prev 100
 
-mental_break_opt_out_stress_gain = 60		#prev 25
+mental_break_opt_out_stress_gain = 50		#prev 25
 #hunt_stress_loss_value = -15				#prev -30
 #meager_feast_stress_loss_value = -5			#prev -10
 #feast_stress_loss_value = -10				#prev -30

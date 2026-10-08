@@ -192,7 +192,7 @@ bhakti_germanic_generic_freyr = {	# A god of peace, the harvest, and benign rule
 
 
 astrology_great_battle = {
-	icon = magic_positive
+	icon = magic_mixed
 	martial = 2
 	learning = -2
 	monthly_martial_lifestyle_xp_gain_mult = 0.15	#prev 0.25
@@ -201,7 +201,7 @@ astrology_great_battle = {
 }
 
 astrology_new_friends = {
-	icon = magic_positive
+	icon = magic_mixed
 	diplomacy = 2
 	martial = -2
 	monthly_diplomacy_lifestyle_xp_gain_mult = 0.15	#prev 0.25
@@ -210,7 +210,7 @@ astrology_new_friends = {
 }
 
 astrology_hard_work = {
-	icon = magic_positive
+	icon = magic_mixed
 	stewardship = 2
 	intrigue = -2
 	monthly_stewardship_lifestyle_xp_gain_mult = 0.15	#prev 0.25
@@ -219,7 +219,7 @@ astrology_hard_work = {
 }
 
 astrology_betrayal = {
-	icon = magic_positive
+	icon = magic_mixed
 	intrigue = 2
 	diplomacy = -2
 	monthly_intrigue_lifestyle_xp_gain_mult = 0.15	#prev 0.25
@@ -228,7 +228,7 @@ astrology_betrayal = {
 }
 
 astrology_new_beginnings = {
-	icon = magic_positive
+	icon = magic_mixed
 	learning = 2
 	stewardship = -2
 	monthly_learning_lifestyle_xp_gain_mult = 0.15	#prev 0.25

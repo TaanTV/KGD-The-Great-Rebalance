@@ -2,6 +2,7 @@
 give_sop_swing_to_liege_for_completed_activity_effect = {
 	if = {
 		limit = {
+			has_game_rule = bkt_additional_content_enabled
 			this = scope:host
 			has_active_diarchy = yes
 			exists = diarch					#just in case?
@@ -69,6 +70,23 @@ bkt_diarch_changed_own_contract_effect = {
  			error_log = "bkt_diarch_changed_own_contract_effect called but scope:actor isnt a diarch"
  			debug_log = "bkt_diarch_changed_own_contract_effect called but scope:actor isnt a diarch"
 			debug_log_scopes = yes
+		}
+	}
+}
+
+stress_child_intermediary_out_for_refusal = {
+	if = {
+		limit = { age < 4 }
+		stress_impact = {
+			base = 200
+			arbitrary = -50
+		}
+	}
+	else_if = {
+		limit = { age < 16 }
+		stress_impact = {
+			base = major_stress_impact_gain
+			arbitrary = minor_stress_impact_loss
 		}
 	}
 }

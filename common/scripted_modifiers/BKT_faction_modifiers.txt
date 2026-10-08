@@ -22,6 +22,14 @@
 		SCORE_PER_TRAIT = 25
 	}
 
+	# -15 join chance per sin of the potential rebel themselves
+	tenet_purgatory_sin_faction_modifier = yes
+
+	# -75 when a Divine Marriage adherent's liege is married to close or extended family
+	tenet_divine_marriage_incestuous_liege_faction_modifier = {
+		TARGET = $FACTION_TARGET$
+	}
+
 	# -100 join chance from intimidation, -1000 join chance from terrified. This modifier doesn't apply if a faction is above the power threshold
 	intimidated_from_faction_modifier = {
 		TARGET = $FACTION_TARGET$
@@ -73,6 +81,13 @@
 		$FACTION_TARGET$ = {
 			has_variable = court_position_faction_commitment_task
 		}
+	}
+
+	#ADDED - tribals are annoying
+	modifier = {
+		desc = "FACTION_REASON_TRIBAL"
+		add = 20
+		government_has_flag = government_is_tribal_excluding_wanua
 	}
 
 	# Difficulty Settings
@@ -183,21 +198,46 @@
 			}
 		}
 	}
-		
+	#ADDED - ally that you kind of like in same faction
+	modifier = {
+		desc = "ALLY_IN_FACTION_REASON"
+		add = 15
+		exists = scope:faction
+		save_temporary_scope_as = root_scope
+		scope:faction = {
+			any_faction_member = {
+				this != scope:root_scope
+				is_allied_to = scope:root_scope
+				reverse_opinion = {
+					target = scope:root_scope
+					value > 0
+				}
+			}
+		}
+	}
+	#ADDED - friend in same faction
+	modifier = {
+		desc = "FRIEND_IN_FACTION_REASON"
+		add = 15
+		exists = scope:faction
+		save_temporary_scope_as = root_scope
+		scope:faction = {
+			any_faction_member = {
+				this != scope:root_scope
+				has_relation_friend = scope:root_scope
+			}
+		}
+	}
+
 	# Nomads - Obedient characters less likely to create factions
 	modifier = {
 		desc = "MPO_OBEDIENT_NOMAD"
 		is_obedient_to = $FACTION_TARGET$
 		#ADDED
-		OR = {
-			government_allows = obedience
-			$FACTION_TARGET$ = {
-				government_allows = obedience
-			}
-		}
+		$FACTION_TARGET$ = { government_allows = obedience }
 		add = -75
 	}
-		
+
 	# Nomads - But disobedient characters are more likely to cause trouble...
 	modifier = {
 		desc = "MPO_NON_OBEDIENT_NOMAD"
@@ -206,28 +246,23 @@
 			is_obedient_to = $FACTION_TARGET$
 		}
 		#ADDED
-		OR = {
-			government_allows = obedience
-			$FACTION_TARGET$ = {
-				government_allows = obedience
-			}
-		}
+		$FACTION_TARGET$ = { government_allows = obedience }
 		add = 75
 	}
-	
+
 	modifier = {
 		$FACTION_TARGET$ = {
-			any_memory = { 
+			any_memory = {
 				has_memory_type = nomad_showed_weakness_in_war
 			}
 		}
-		
+
 		add = {
 			value = 25
 			if = {
 				limit = {
-					$FACTION_TARGET$ = { 
-						any_memory = { 
+					$FACTION_TARGET$ = {
+						any_memory = {
 							has_memory_type = nomad_showed_weakness_in_war
 							memory_age_years < 10
 						}
@@ -241,7 +276,7 @@
 
 	modifier = {
 		$FACTION_TARGET$ = {
-			any_memory = { 
+			any_memory = {
 				has_memory_type = had_chaotic_kurultai_succession
 			}
 		}
@@ -249,8 +284,8 @@
 			value = 25
 			if = {
 				limit = {
-					$FACTION_TARGET$ = { 
-						any_memory = { 
+					$FACTION_TARGET$ = {
+						any_memory = {
 							has_memory_type = had_chaotic_kurultai_succession
 							memory_age_years < 10
 						}
@@ -420,19 +455,34 @@
 	}
 	modifier = {
 		add = 500
-		#ADDED
-		exists = scope:faction
-		confederation.leading_house.house_head.joined_faction ?= scope:faction
-		scope:faction.faction_leader ?= confederation.leading_house.house_head
+		trigger_if = {
+			limit = {
+				exists = scope:actor
+			}
+			confederation.leading_house.house_head.joined_faction ?= scope:actor.joined_faction
+			scope:actor.joined_faction.faction_leader ?= confederation.leading_house.house_head
+		}
+		trigger_else = {
+			confederation.leading_house.house_head.joined_faction ?= scope:faction
+			scope:faction.faction_leader ?= confederation.leading_house.house_head
+		}
 		desc = "FACTION_REASON_BLOC_LEADER"
 	}
 	modifier = {
 		add = 300
 		desc = FACTION_REASON_DETRACTOR
 		has_variable = detractor_faction
-		#ADDED
-		exists = scope:faction
-		var:detractor_faction = scope:faction.faction_target
+		var:detractor_faction ?= $FACTION_TARGET$
+	}
+	modifier = {
+		desc = "FACTION_REASON_SPIRITUAL_FULFILLMENT_DOOMED_CLERGY"
+		add = 25
+		$FACTION_TARGET$ = {
+			has_fulfillment_parameter = sp_clerical_vassals_faction_more
+		}
+		highest_held_title_tier > tier_barony
+		government_has_flag = government_is_theocracy
+		faith = $FACTION_TARGET$.faith
 	}
 }
 
@@ -480,7 +530,8 @@ independence_faction_modifiers = {
 			#ADDED
 			if = {
 				limit = { primary_title = { any_this_title_or_de_jure_above = { this = $FACTION_TARGET$.primary_title } } }
-				add = -50
+				multiply = 0.5
+				ceiling = yes
 			}
 		}
 		OR = {
@@ -522,7 +573,7 @@ independence_faction_modifiers = {
 				}
 			}
 		}
-		NOT = { government_allows = administrative } # Admin kings like being vassals, and don't get a boost
+		NOT = { government_has_mechanic = administrative } # Admin kings like being vassals, and don't get a boost
 		highest_held_title_tier = tier_kingdom
 	}
 
@@ -685,22 +736,24 @@ independence_faction_modifiers = {
 			target = $FACTION_TARGET$
 		}
 	}
-	
+
 	# Admin vassals are generally want independence a bit less than others
 	modifier = {
 		desc = "FACTION_REASON_ADMINISTRATIVE"
 		add = -25
-		government_allows = administrative
+		government_has_mechanic = administrative
 	}
-	
+
 	# Nomads want to break free from non-nomads badly
 	modifier = {
 		desc = "FACTION_REASON_NOMADIC"
 		add = 150
 		government_has_flag = government_is_nomadic
 		$FACTION_TARGET$ = {
-			NOT = {
+			#ADDED - now a NOR + additional flag check
+			NOR = {
 				government_has_flag = government_is_nomadic
+				government_has_flag = government_is_steppe_admin
 			}
 		}
 	}
@@ -710,7 +763,7 @@ independence_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_NOMADIC"
 		add = {
-			value = 125
+			value = 100		#prev 125
 			# Larger realms are inherently more rebellious.
 			add = {
 				value = sub_realm_size
@@ -719,6 +772,21 @@ independence_faction_modifiers = {
 		}
 		government_has_flag = government_is_nomadic
 	}
+
+	#ADDED - kill them.
+	modifier = {
+		add = 50
+		NOT = { government_has_mechanic = administrative }
+		$FACTION_TARGET$ ?= { government_has_mechanic = administrative }
+		desc = FACTION_REASON_NOT_ADMINISTRATIVE
+	}
+
+	modifier = {
+		add = 100
+		has_trait = heresiarch
+		rite != $FACTION_TARGET$.rite
+		desc = FACTION_REASON_IS_HERESIARCH
+	}
 }
 
 
@@ -726,15 +794,46 @@ claimant_faction_modifiers = {
 	# Gender concerns (general)
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_GENDER"
-		add = -250		#prev -50
+		#add = -50
+		#ADDED
+		add = {
+			value = -250
+			if = {
+				limit = {
+					OR = {
+						culture ?= {
+							$FACTION_CLAIMANT$ = { is_female = yes }
+							OR = {
+								has_cultural_parameter = female_only_inheritance
+								has_cultural_parameter = female_preference_inheritance
+							}
+						}
+						culture ?= {
+							$FACTION_CLAIMANT$ = { is_male = yes }
+							OR = {
+								has_cultural_parameter = male_only_inheritance
+								has_cultural_parameter = male_preference_inheritance
+							}
+						}
+					}
+				}
+				add = 200
+			}
+			else_if = {
+				limit = {
+					culture ?= { has_cultural_parameter = gender_equal_inheritance }
+				}
+				add = 125
+			}
+		}
 		NOT = { $FACTION_CLAIMANT$ = root }
 		OR = {
 			AND = {
-				faith = { has_doctrine = doctrine_gender_female_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
 				$FACTION_CLAIMANT$ = { is_male = yes }
 			}
 			AND = {
-				faith = { has_doctrine = doctrine_gender_male_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
 				$FACTION_CLAIMANT$ = { is_female = yes }
 			}
 		}
@@ -743,10 +842,41 @@ claimant_faction_modifiers = {
 	# Gender concerns (target of wrong gender)
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_GENDER_VS_TARGET"
-		add = 75		#prev 25
+		#add = 25
+		#ADDED
+		add = {
+			value = 80
+			if = {
+				limit = {
+					OR = {
+						culture ?= {
+							$FACTION_TARGET$ = { is_female = yes }
+							OR = {
+								has_cultural_parameter = female_only_inheritance
+								has_cultural_parameter = female_preference_inheritance
+							}
+						}
+						culture ?= {
+							$FACTION_TARGET$ = { is_male = yes }
+							OR = {
+								has_cultural_parameter = male_only_inheritance
+								has_cultural_parameter = male_preference_inheritance
+							}
+						}
+					}
+				}
+				add = -65
+			}
+			else_if = {
+				limit = {
+					culture ?= { has_cultural_parameter = gender_equal_inheritance }
+				}
+				add = -40
+			}
+		}
 		OR = {
 			AND = {
-				faith = { has_doctrine = doctrine_gender_female_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
 				$FACTION_TARGET$ = { is_male = yes }
 				$FACTION_CLAIMANT$ = {
 					is_female = yes
@@ -754,7 +884,7 @@ claimant_faction_modifiers = {
 				}
 			}
 			AND = {
-				faith = { has_doctrine = doctrine_gender_male_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
 				$FACTION_TARGET$ = { is_female = yes }
 				$FACTION_CLAIMANT$ = {
 					is_male = yes
@@ -991,7 +1121,7 @@ claimant_faction_modifiers = {
 		NOT = { this = $FACTION_CLAIMANT$ }
 		is_extended_family_of = $FACTION_CLAIMANT$
 		NOT = { is_extended_family_of = $FACTION_TARGET$ }
-		add = 15		#prev 10 
+		add = 15		#prev 10
 		desc = FACTION_REASON_CLAIMANT_EXTENDED_FAMILY
 	}
 	# Heir
@@ -1191,7 +1321,7 @@ claimant_faction_modifiers = {
 		desc = "FACTION_REASON_PREFER_INDEPENDENCE_FACTION"
 		add = -200
 		liege = { top_liege = this }
-		NOT = { government_allows = administrative }
+		NOT = { government_has_mechanic = administrative }
 		NOT = {
 			$FACTION_TARGET$ = { is_rightful_liege_of = root }
 		}
@@ -1201,13 +1331,13 @@ claimant_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_LIEGE_IS_UNPREFERRED_HEIR"
 		#add = 25
-		#ADDED 
+		#ADDED
 		add = {
 			value = 50		#prev 25
 			#If liege doesnt have partition succession and no elections - double it
 			if = {
 				limit = {
-					$FACTION_TARGET$ = { 
+					$FACTION_TARGET$ = {
 						NOR = {
 							has_realm_law_flag = partition_succession_law
 							primary_title ?= { has_title_law_flag = elective_succession_law }
@@ -1219,7 +1349,7 @@ claimant_faction_modifiers = {
 			#If liege has high partition specifically and no elections - increase it A BIT
 			else_if = {
 				limit = {
-					$FACTION_TARGET$ = { 
+					$FACTION_TARGET$ = {
 						has_realm_law = high_partition_succession_law
 						NOR = {
 							primary_title ?= { has_title_law_flag = elective_succession_law }
@@ -1366,57 +1496,55 @@ claimant_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_HARRYING_RESISTANCE"
 		$FACTION_TARGET$ = {
-			AND = {
-				any_owned_story = {
-					story_type = story_cycle_harrying_of_the_north
-					var:resistance > 7
-					var:resistance > var:pacification
-				}
+			any_owned_story = {
+				type = story_cycle_harrying_of_the_north
+				var:resistance > 7
+				var:resistance > var:pacification
 			}
 		}
 		add = {
 			value = 0
 			if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
-							story_type = story_cycle_harrying_of_the_north
+							type = story_cycle_harrying_of_the_north
 							var:resistance > 7
 						}
-					} 
+					}
 				}
 				add = 15
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
-							story_type = story_cycle_harrying_of_the_north
+							type = story_cycle_harrying_of_the_north
 							var:resistance > 10
 						}
-					} 
+					}
 				}
 				add = 30
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 13
 						}
-					} 
+					}
 				}
 				add = 50
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 16
 						}
-					} 
+					}
 				}
 				add = 80
 			}
@@ -1437,46 +1565,46 @@ claimant_faction_modifiers = {
 		add = {
 			value = 0
 			if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 5
 						}
-					} 
+					}
 				}
 				add = -5
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 8
 						}
-					} 
+					}
 				}
 				add = -10
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 11
 						}
-					} 
+					}
 				}
 				add = -15
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 14
 						}
-					} 
+					}
 				}
 				add = -20
 			}
@@ -1577,8 +1705,8 @@ claimant_faction_modifiers = {
 							}
 							OR = {
 								AND = {
-									root.faith = { has_doctrine = doctrine_pluralism_pluralistic }
-									faith = { has_doctrine = doctrine_pluralism_pluralistic }
+									root.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+									rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 								}
 								faith = root.faith
 							}
@@ -1616,17 +1744,48 @@ ceremonial_claimant_faction_modifiers = {
 	# Gender concerns (general)
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_GENDER"
-		add = -250		#prev -50
+		#add = -50
+		#ADDED
+		add = {
+			value = -250
+			if = {
+				limit = {
+					OR = {
+						culture ?= {
+							$FACTION_CLAIMANT$ = { is_female = yes }
+							OR = {
+								has_cultural_parameter = female_only_inheritance
+								has_cultural_parameter = female_preference_inheritance
+							}
+						}
+						culture ?= {
+							$FACTION_CLAIMANT$ = { is_male = yes }
+							OR = {
+								has_cultural_parameter = male_only_inheritance
+								has_cultural_parameter = male_preference_inheritance
+							}
+						}
+					}
+				}
+				add = 200
+			}
+			else_if = {
+				limit = {
+					culture ?= { has_cultural_parameter = gender_equal_inheritance }
+				}
+				add = 125
+			}
+		}
 		$FACTION_CLAIMANT$ ?= {
 			NOT = { this = root }
 		}
 		OR = {
 			AND = {
-				faith = { has_doctrine = doctrine_gender_female_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
 				$FACTION_CLAIMANT$ = { is_male = yes }
 			}
 			AND = {
-				faith = { has_doctrine = doctrine_gender_male_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
 				$FACTION_CLAIMANT$ = { is_female = yes }
 			}
 		}
@@ -1635,12 +1794,43 @@ ceremonial_claimant_faction_modifiers = {
 	# Gender concerns (target of wrong gender)
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_GENDER_VS_TARGET"
-		add = 75		#prev 25
+		#add = 25
+		#ADDED
+		add = {
+			value = 80
+			if = {
+				limit = {
+					OR = {
+						culture ?= {
+							$FACTION_TARGET$ = { is_female = yes }
+							OR = {
+								has_cultural_parameter = female_only_inheritance
+								has_cultural_parameter = female_preference_inheritance
+							}
+						}
+						culture ?= {
+							$FACTION_TARGET$ = { is_male = yes }
+							OR = {
+								has_cultural_parameter = male_only_inheritance
+								has_cultural_parameter = male_preference_inheritance
+							}
+						}
+					}
+				}
+				add = -65
+			}
+			else_if = {
+				limit = {
+					culture ?= { has_cultural_parameter = gender_equal_inheritance }
+				}
+				add = -40
+			}
+		}
 		exists = $FACTION_TARGET$
 		exists = $FACTION_CLAIMANT$
 		OR = {
 			AND = {
-				faith = { has_doctrine = doctrine_gender_female_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
 				$FACTION_TARGET$ = { is_male = yes }
 				$FACTION_CLAIMANT$ = {
 					is_female = yes
@@ -1648,7 +1838,7 @@ ceremonial_claimant_faction_modifiers = {
 				}
 			}
 			AND = {
-				faith = { has_doctrine = doctrine_gender_male_dominated }
+				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
 				$FACTION_TARGET$ = { is_female = yes }
 				$FACTION_CLAIMANT$ = {
 					is_male = yes
@@ -1669,11 +1859,11 @@ ceremonial_claimant_faction_modifiers = {
 			is_powerful_vassal = yes
 			OR = {
 				is_close_family_of = $FACTION_CLAIMANT$
-				is_close_family_of = $FACTION_CLAIMANT$.primary_spouse
+				$FACTION_CLAIMANT$.primary_spouse ?= { is_close_family_of = prev }
 			}
 			NOR = {
 				is_close_family_of = $FACTION_TARGET$
-				is_close_family_of = $FACTION_TARGET$.primary_spouse
+				$FACTION_CLAIMANT$.primary_spouse ?= { is_close_family_of = prev }
 			}
 		}
 		who = root
@@ -1726,13 +1916,13 @@ ceremonial_claimant_faction_modifiers = {
 		$FACTION_CLAIMANT$ ?= {
 			NOT = { this = root }
 		}
-		save_temporary_opinion_value_as = { 
-			name = opinion_of_current_liege 
-			target = $FACTION_TARGET$ 
+		save_temporary_opinion_value_as = {
+			name = opinion_of_current_liege
+			target = $FACTION_TARGET$
 		}
-		save_temporary_opinion_value_as = { 
-			name = opinion_of_claimant 
-			target = $FACTION_CLAIMANT$ 
+		save_temporary_opinion_value_as = {
+			name = opinion_of_claimant
+			target = $FACTION_CLAIMANT$
 		}
 		scope:opinion_of_claimant > liege_opinion_value
 		scope:opinion_of_claimant > 0
@@ -2178,7 +2368,7 @@ ceremonial_claimant_faction_modifiers = {
 		desc = "FACTION_REASON_PREFER_INDEPENDENCE_FACTION"
 		add = -200
 		liege = { top_liege = this }
-		NOT = { government_allows = administrative }
+		NOT = { government_has_mechanic = administrative }
 		NOT = {
 			$FACTION_TARGET$ ?= { is_rightful_liege_of = root }
 		}
@@ -2188,13 +2378,13 @@ ceremonial_claimant_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_LIEGE_IS_UNPREFERRED_HEIR"
 		#add = 25
-		#ADDED 
+		#ADDED
 		add = {
 			value = 50		#prev 25
 			#If liege doesnt have partition succession and no elections - double it
 			if = {
 				limit = {
-					$FACTION_TARGET$ = { 
+					$FACTION_TARGET$ = {
 						NOR = {
 							has_realm_law_flag = partition_succession_law
 							primary_title ?= { has_title_law_flag = elective_succession_law }
@@ -2206,7 +2396,7 @@ ceremonial_claimant_faction_modifiers = {
 			#If liege has high partition specifically and no elections - increase it A BIT
 			else_if = {
 				limit = {
-					$FACTION_TARGET$ = { 
+					$FACTION_TARGET$ = {
 						has_realm_law = high_partition_succession_law
 						NOR = {
 							primary_title ?= { has_title_law_flag = elective_succession_law }
@@ -2359,46 +2549,46 @@ ceremonial_claimant_faction_modifiers = {
 		add = {
 			value = 0
 			if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 7
 						}
-					} 
+					}
 				}
 				add = 15
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 10
 						}
-					} 
+					}
 				}
 				add = 30
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 13
 						}
-					} 
+					}
 				}
 				add = 50
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:resistance > 16
 						}
-					} 
+					}
 				}
 				add = 80
 			}
@@ -2419,46 +2609,46 @@ ceremonial_claimant_faction_modifiers = {
 		add = {
 			value = 0
 			if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 5
 						}
-					} 
+					}
 				}
 				add = -5
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 8
 						}
-					} 
+					}
 				}
 				add = -10
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 11
 						}
-					} 
+					}
 				}
 				add = -15
 			}
 			else_if = {
-				limit = { 
-					$FACTION_TARGET$ = { 
+				limit = {
+					$FACTION_TARGET$ = {
 						any_owned_story = {
 							type = story_cycle_harrying_of_the_north
 							var:pacification > 14
 						}
-					} 
+					}
 				}
 				add = -20
 			}
@@ -2557,8 +2747,8 @@ ceremonial_claimant_faction_modifiers = {
 							}
 							OR = {
 								AND = {
-									root.faith = { has_doctrine = doctrine_pluralism_pluralistic }
-									faith = { has_doctrine = doctrine_pluralism_pluralistic }
+									root.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+									rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 								}
 								faith = root.faith
 							}

@@ -6,7 +6,7 @@
 tribe_01 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		# Emishi/Amuric - Falls back to Japanese or Steppe
 		asset = {
 			type = pdxmesh
@@ -22,8 +22,17 @@ tribe_01 = {
 		asset = {
 			type = pdxmesh
 			names = {
-				building_western_tribal_01_a_mesh
+				"building_western_tribal_01_a_mesh"
 			}
+			illustration = @holding_illustration_grass
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
+		}
+		asset = {
+			type = pdxmesh
+			names = {
+				"building_african_tribal_01_a_mesh"
+			}
+			graphical_cultures = { african_building_gfx }
 			illustration = @holding_illustration_grass
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
 		}
@@ -57,15 +66,6 @@ tribe_01 = {
 		asset = {
 			type = pdxmesh
 			names = {
-				"building_african_tribal_01_a_mesh"
-			}
-			graphical_cultures = { african_building_gfx }
-			illustration = @holding_illustration_grass
-			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
-		}
-		asset = {
-			type = pdxmesh
-			names = {
 				"fp1_building_norse_tribal_mesh"
 			}
 			requires_dlc_flag = the_northern_lords
@@ -83,6 +83,17 @@ tribe_01 = {
 			illustration = @holding_illustration_seasia
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
 		}
+		# Western Generic
+		asset = {
+			type = pdxmesh
+			names = {
+				building_western_tribal_01_a_mesh
+			}
+			graphical_cultures = { western_building_gfx }
+			illustration = @holding_illustration_grass
+			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
+		}
+	}
 
 	is_enabled = {
 		building_requirement_tribal = yes
@@ -151,8 +162,8 @@ tribe_01 = {
 		parameter = government_is_wanua
 		max_loot_mult = 0.05
 	}
-	
-	next_building = tribe_02
+
+	flag = tribe
 
 	type_icon = "icon_building_longhouses.dds"
 
@@ -165,7 +176,7 @@ tribe_01 = {
 tribe_02 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		# Emishi/Amuric - Falls back to Japanese or Steppe
 		asset = {
 			type = pdxmesh
@@ -191,7 +202,7 @@ tribe_02 = {
 			names = {
 				"building_mena_tribal_01_a_mesh"
 			}
-			graphical_cultures = { arabic_group_building_gfx berber_group_building_gfx mena_building_gfx mena_building_gfx }
+			graphical_cultures = { arabic_group_building_gfx berber_group_building_gfx mena_building_gfx }
 			illustration = @holding_illustration_grass
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
 		}
@@ -242,6 +253,7 @@ tribe_02 = {
 			illustration = @holding_illustration_seasia
 			soundeffect = { soundeffect = "event:/SFX/Ambience/3DMapEmitters/Holdings/City/tribal_city" soundparameter = { "Tier" = 0 } }
 		}
+	}
 
 	is_enabled = {
 		building_requirement_tribal = yes
@@ -249,11 +261,21 @@ tribe_02 = {
 	can_construct_potential = {
 	}
 	can_construct_showing_failures_only = {
-		OR = {
+		trigger_if = { #Unop: Do not call mpo_permafrost_building_trigger = yes, instead do it like this so the condition to upgrade will be respected and shown if not
+			limit = {
+				county = {
+					has_county_modifier = mpo_siberian_permafrost_modifier
+				}		
+			}
+			culture ?= scope:holder.culture
+			culture ?= {
+				has_cultural_tradition = tradition_mpo_northern_tribes
+			}
+		}
+		trigger_else = {
 			scope:holder = {
 				culture = { has_innovation = innovation_plenary_assemblies }
 			}
-			mpo_permafrost_building_trigger = yes
 		}
 	}
 	
@@ -317,6 +339,8 @@ tribe_02 = {
 		max_loot_mult = 0.1
 	}
 	
+	flag = tribe
+	
 	ai_value = {
 		base = 3		#prev 1
 	}
@@ -369,12 +393,22 @@ longhouses_02 = {
 		scope:holder = { NOT = { government_has_flag = government_is_wanua } }
 	}
 	can_construct_showing_failures_only = {
-		OR = {
-			mpo_permafrost_building_trigger = yes
+		trigger_if = { #Unop: Do not call mpo_permafrost_building_trigger = yes, instead do it like this so the condition to upgrade will be respected and shown if not
+			limit = {
+				county = {
+					has_county_modifier = mpo_siberian_permafrost_modifier
+				}		
+			}
+			culture ?= scope:holder.culture
+			culture ?= {
+				has_cultural_tradition = tradition_mpo_northern_tribes
+			}
+		}
+		trigger_else = {
 			scope:holder = {
 				culture = { has_innovation = innovation_barracks }
 			}
-		}		
+		}
 	}
 	
 	cost_prestige = expensive_building_tier_2_cost
@@ -432,16 +466,15 @@ war_camps_01 = {
 		stationed_maa_screen_mult = low_maa_screen_tier_1
 	}
 
+	county_culture_modifier = {
+		parameter = strength_in_numbers_maa_limit_bonus 
+		levy_size = 0.05	#prev 0.01
+	}
+
 	province_terrain_modifier = {
 		parameter = coastal_tribe_bonuses
 		is_coastal = yes
 		stationed_maa_toughness_mult = low_maa_toughness_tier_1	#prev normal_maa_toughness_tier_1
-	}
-	
-	#ADDED - coz komi start with this it makes sense for it to work here
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		men_at_arms_limit = 1
 	}
 	
 	next_building = war_camps_02
@@ -452,11 +485,6 @@ war_camps_01 = {
 		base = 10	#prev 1
 		ai_tier_1_building_modifier = yes
 		directive_to_build_military_modifier = yes
-		#ADDED
-		modifier = {
-			scope:holder.culture = { has_cultural_parameter = frugal_blacksmith_maa_size } 
-			add = 1
-		}
 	}
 }
 
@@ -472,8 +500,18 @@ war_camps_02 = {
 		scope:holder = { NOT = { government_has_flag = government_is_wanua } }
 	}
 	can_construct_showing_failures_only = {
-		OR = {
-			mpo_permafrost_building_trigger = yes
+		trigger_if = { #Unop: Do not call mpo_permafrost_building_trigger = yes, instead do it like this so the condition to upgrade will be respected and shown if not
+			limit = {
+				county = {
+					has_county_modifier = mpo_siberian_permafrost_modifier
+				}		
+			}
+			culture ?= scope:holder.culture
+			culture ?= {
+				has_cultural_tradition = tradition_mpo_northern_tribes
+			}
+		}
+		trigger_else = {
 			scope:holder = {
 				culture = { has_innovation = innovation_barracks }
 			}
@@ -509,15 +547,9 @@ war_camps_02 = {
 		stationed_maa_toughness_mult = low_maa_toughness_tier_2	#prev normal_maa_toughness_tier_2
 	}
 
-	character_culture_modifier = {
+	county_culture_modifier = {
 		parameter = strength_in_numbers_maa_limit_bonus 
-		men_at_arms_limit = 1
-	}
-	
-	#ADDED - coz komi start with this it makes sense for it to work here
-	character_culture_modifier = {
-		parameter = frugal_blacksmith_maa_size 
-		men_at_arms_limit = 1
+		levy_size = 0.1	#prev 0.01
 	}
 	
 	ai_value = {
@@ -571,12 +603,6 @@ palisades_01 = {
 		base = 10	#prev 1
 		ai_tier_1_building_modifier = yes
 		directive_to_build_military_modifier = yes
-		#ADDED
-		modifier = {
-			scope:holder.culture = { has_cultural_parameter = frugal_blacksmith_maa_size } 
-			NOT = { has_building_or_higher = war_camps_01 }
-			add = -2
-		}
 	}
 }
 
@@ -591,13 +617,23 @@ palisades_02 = {
 		scope:holder = { NOT = { government_has_flag = government_is_wanua } }
 	}
 	can_construct_showing_failures_only = {
-		OR = {
-			mpo_permafrost_building_trigger = yes
+		trigger_if = { #Unop: Do not call mpo_permafrost_building_trigger = yes, instead do it like this so the condition to upgrade will be respected and shown if not
+			limit = {
+				county = {
+					has_county_modifier = mpo_siberian_permafrost_modifier
+				}		
+			}
+			culture ?= scope:holder.culture
+			culture ?= {
+				has_cultural_tradition = tradition_mpo_northern_tribes
+			}
+		}
+		trigger_else = {
 			scope:holder = {
 				culture = { has_innovation = innovation_barracks }
 			}
 		}
-	}
+	}	
 	
 	cost_prestige = expensive_building_tier_2_cost
 	cost_gold = tribal_building_tier_2_cost
@@ -691,8 +727,18 @@ market_villages_02 = {
 		scope:holder = { NOT = { government_has_flag = government_is_wanua } }
 	}
 	can_construct_showing_failures_only = {
-		OR = {
-			mpo_permafrost_building_trigger = yes
+		trigger_if = { #Unop: Do not call mpo_permafrost_building_trigger = yes, instead do it like this so the condition to upgrade will be respected and shown if not
+			limit = {
+				county = {
+					has_county_modifier = mpo_siberian_permafrost_modifier
+				}		
+			}
+			culture ?= scope:holder.culture
+			culture ?= {
+				has_cultural_tradition = tradition_mpo_northern_tribes
+			}
+		}
+		trigger_else = {
 			scope:holder = {
 				culture = { has_innovation = innovation_barracks }
 			}
@@ -722,6 +768,7 @@ market_villages_02 = {
 		directive_to_build_economy_modifier = yes
 	}
 }
+
 # Wanua buildings
 
 # Idjang Forts
@@ -793,7 +840,7 @@ idjang_forts_02 = {
 	max_garrison = normal_building_max_garrison_tier_2
 	province_modifier = {
 		defender_holding_advantage = normal_building_advantage_tier_2
-		fort_level = normal_building_fort_level_tier_2
+		fort_level = normal_building_fort_level_tier_1		#prev normal_building_fort_level_tier_2
 	}
 	
 	province_modifier = {
@@ -833,7 +880,7 @@ idjang_forts_03 = {
 	max_garrison = normal_building_max_garrison_tier_3
 	province_modifier = {
 		defender_holding_advantage = normal_building_advantage_tier_3
-		fort_level = normal_building_fort_level_tier_3
+		fort_level = normal_building_fort_level_tier_2	#prev normal_building_fort_level_tier_3
 	}
 	
 	province_modifier = {
@@ -877,7 +924,7 @@ idjang_forts_04 = {
 	max_garrison = normal_building_max_garrison_tier_4
 	province_modifier = {
 		defender_holding_advantage = normal_building_advantage_tier_4
-		fort_level = normal_building_fort_level_tier_4
+		fort_level = normal_building_fort_level_tier_2		#prev normal_building_fort_level_tier_4
 	}
 	
 	province_modifier = {

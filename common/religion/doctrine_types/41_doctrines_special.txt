@@ -1,0 +1,102 @@
+﻿
+
+special_doctrine_is_islamic_faith = {
+	doctrine_group_type = is_islamic_faith
+	icon = "special_doctrine_teachings_of_the_prophet"
+
+	parameters = {
+		islamic_syncretic_recipient
+		#ADDED
+		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
+	}
+
+	special_parameters = {
+		# Since doctrines cannot modify other faith's views of us, only our view of others, all Islamic faiths are given this special doctrine which makes them friendlier to Faiths with the Islamic Syncretism tenet.
+		hostility_level_override = {
+			tenet_islamic_syncretism = astray
+		}
+
+		parameter_opinion_override = {
+			islamic_syncretic_actor = 30
+		}
+	}
+}
+
+unreformed_faith_doctrine = {
+	doctrine_group_type = unreformed_faith
+	icon = "special_doctrine_default"
+	index = 0
+	visible = no
+
+	parameters = {
+		# also serves as the basis for the unreformed_syncretic tenet.
+		unreformed
+		conquest_cb_enabled
+		faith_can_raid
+		unreformed_syncretic_recipient
+	}
+	
+	special_parameters = {
+		unreformed = yes
+		hostility_level_override = {
+			tenet_unreformed_syncretism = hostile
+		}
+		parameter_opinion_override = {
+			unreformed_syncretic_actor = 30
+		}
+	}
+
+	character_modifier = {
+		monthly_prestige_gain_mult = 0.2
+		clan_government_vassal_opinion = -20
+		feudal_government_vassal_opinion = -20
+		republic_government_vassal_opinion = -20
+		#ADDED
+		different_faith_county_opinion_mult = -0.33
+	}
+}
+west_african_unreformed_faith_doctrine = {
+	doctrine_group_type = unreformed_faith
+	icon = "special_doctrine_default"
+	index = 1
+	visible = no
+
+	parameters = {
+		unreformed
+		conquest_cb_enabled
+		faith_can_raid
+		unreformed_syncretic_recipient
+	}
+	
+	special_parameters = {
+		# unreformed = yes also serves as the basis for the unreformed_syncretic tenet.
+		unreformed = yes
+		hostility_level_override = {
+			tenet_unreformed_syncretism = hostile
+		}
+		parameter_opinion_override = {
+			unreformed_syncretic_actor = 30
+		}
+	}
+
+	character_modifier = {
+		monthly_prestige_gain_mult = 0.1
+		#ADDED
+		different_faith_county_opinion_mult = -0.33
+	}
+}
+
+special_doctrine_jizya = {
+	doctrine_group_type = has_jizya_doctrine
+	icon = "special_doctrine_jizya"
+
+	character_modifier = {
+		domain_tax_different_faith_mult = 0.2
+		levy_reinforcement_rate_same_faith = 0.15				#prev 0.25
+		levy_reinforcement_rate_different_faith = -0.15			#prev -0.25
+	}
+
+	parameters = {
+		unlock_jizya_contract
+	}
+}

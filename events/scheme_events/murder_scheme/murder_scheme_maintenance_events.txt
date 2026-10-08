@@ -23,6 +23,7 @@ murder_scheme_maintenance.1 = {
 				has_any_court_position = no
 				is_councillor = no
 				is_diarch = no
+				is_concubine = no
 				NAND = {
 					is_married = yes
 					primary_spouse ?= { is_ruler = yes }
@@ -30,13 +31,15 @@ murder_scheme_maintenance.1 = {
 			}
 			static_group_filter = {
 				group = landless_murder_block
-				match = 0.15	#prev 0.25
+				match = 0.25
 			}
 		}
-		NOT = {
+		NOR = {
 			any_scheme = {
 				is_hostile = yes
 			}
+			has_character_modifier = pam_granted_indulgences_modifier
+			has_character_modifier = pam_granted_indulgences_modifier_small
 		}
 
 		build_murder_targets_trigger = yes
@@ -174,15 +177,9 @@ murder_scheme_maintenance.1 = {
 								any_tax_collector_vassal = {
 									this = root
 								}
-								OR = { #Unop Instead of VALUE >= 4
-									check_tax_collector_aptitude = {
-										CHARACTER = this
-										VALUE = 3	#prev 4
-									}
-									check_tax_collector_aptitude = {
-										CHARACTER = this
-										VALUE = 4	#prev 5
-									}
+								tax_collector_aptitude = {
+									target = clan_tax_slot
+									value >= 3
 								}
 							}
 						}
@@ -254,21 +251,7 @@ murder_scheme_maintenance.1 = {
 					}
 				}
 				#Scope:target has caused internal strife in the realm
-				modifier = {
-					add = strife_opinion
-					save_temporary_scope_as = the_murder_target
-					
-					exists = root.liege
-					liege ?= root.liege
-					strife_opinion >= strife_harm_threshold_value
-					root = {
-						opinion = {
-							target = scope:the_murder_target
-							value < -25	#prev 0
-						}
-					}
-				}
-				#character_hates_scope_due_to_strife_modifier = { TARGET = this } #Unop: Removed because of the code just before that is the extract of this modifier
+				character_hates_scope_due_to_strife_modifier = { TARGET = this }
 				modifier = { # Family Feud
 					add = 50
 					save_temporary_scope_as = the_murder_target
@@ -459,6 +442,22 @@ murder_scheme_maintenance.1 = {
 							add = -1000
 						}
 					}
+				}
+				#ADDED - reduce it for non-rulers
+				modifier = {
+					is_ruler = no
+					factor = 0.75
+				}
+				#ADDED - reduce it again for less important ones 
+				modifier = {
+					is_ruler = no
+					is_councillor = no
+					is_diarch = no
+					NAND = {
+						is_married = yes
+						primary_spouse ?= { is_ruler = yes }
+					}
+					factor = 0.5
 				}
 				root = {
 					start_scheme = {

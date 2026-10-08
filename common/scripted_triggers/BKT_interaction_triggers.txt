@@ -1,4 +1,62 @@
-﻿title_revocation_is_tyrannical_trigger = {
+﻿
+kick_from_court_validity_trigger = {
+	NOR = {
+		is_spouse_of = scope:actor
+		is_concubine_of = scope:actor
+		#is_close_family_of = scope:actor
+		#ADDED - actually....
+		trigger_if = {
+			limit = { NOT = { has_trait = bastard } }
+			is_close_family_of = scope:actor
+		}
+		#has_council_position = councillor_court_chaplain
+		is_diarch = yes
+		#ADDED - next two, nope.
+		has_any_court_position = yes
+		is_councillor = yes
+		# Marriage major partners of diarchs.
+		## Female.
+		AND = {
+			is_married = yes
+			is_female = yes
+			matrilinear_marriage = yes
+			any_consort = { 
+				#is_diarch = yes 
+				#ADDED - sanity check and OR and all that stuff
+				is_courtier_of = scope:actor
+				OR = {
+					is_diarch = yes 
+					has_any_court_position = yes
+					is_councillor = yes
+				}
+			}
+		}
+		## Male.
+		AND = {
+			is_married = yes
+			is_male = yes
+			patrilinear_marriage = yes
+			any_consort = {
+				#is_diarch = yes 
+				#ADDED - sanity check and OR and all that stuff
+				is_courtier_of = scope:actor
+				OR = {
+					is_diarch = yes 
+					has_any_court_position = yes
+					is_councillor = yes
+				}
+			}
+		}
+		#ADDED - cant just kick influential eunuchs out.
+		has_character_modifier = admin_eunuch_eunuch_4_modifier
+		has_character_modifier = admin_eunuch_eunuch_5_modifier
+		has_character_modifier = admin_eunuch_eunuch_6_modifier
+		has_character_modifier = admin_eunuch_eunuch_7_modifier
+		has_character_modifier = admin_eunuch_eunuch_8_modifier
+	}
+}
+
+title_revocation_is_tyrannical_trigger = {
 	NOR = {
 		exists = scope:administrative_revocation
 		has_revoke_title_reason = $VASSAL$
@@ -7,31 +65,46 @@
 			has_claim_on = scope:landed_title
 		}
 		title_revocation_is_admin_governor_trigger = { VASSAL = $VASSAL$ }
-		faith = {
+		AND = {
+			rite = { rite_has_parameter = tenet_legalism_sinful_revocation }
 			$VASSAL$ = {
-				NOT = { vassal_contract_has_flag = religiously_protected}
+				num_sinful_traits = {
+					value > 0
+					target = prev.rite
+				}
+			}
+		}
+		AND = {
+			$VASSAL$ = {
+				NOT = { vassal_contract_has_flag = religiously_protected }
 			}
 			OR = {
 				AND = {
-					has_doctrine_parameter = pluralism_righteous_revocation_tyranny_reduced
-					faith_hostility_level = {
-						target = $VASSAL$.faith
-						value = faith_evil_level
+					rite = { rite_has_parameter = pluralism_righteous_revocation_tyranny_reduced }
+					faith = {
+						faith_hostility_level = {
+							target = $VASSAL$.faith
+							value = faith_evil_level
+						}
 					}
 				}
 				AND = {
-					has_doctrine_parameter = pluralism_fundamentalist_revocation_tyranny_minimal
-					faith_hostility_level = {
-						target = $VASSAL$.faith
-						value >= faith_hostile_level
+					rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_minimal }
+					faith = {
+						faith_hostility_level = {
+							target = $VASSAL$.faith
+							value >= faith_hostile_level
+						}
 					}
 				}
 				#ADDED
 				AND = {
-					has_doctrine_parameter = pluralism_fundamentalist_revocation_tyranny_none
-					faith_hostility_level = {
-						target = $VASSAL$.faith
-						value >= faith_astray_level
+					rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_none }
+					faith = {
+						faith_hostility_level = {
+							target = $VASSAL$.faith
+							value >= faith_astray_level
+						}
 					}
 				}
 			}
@@ -43,31 +116,35 @@ vassal_revocation_is_tyrannical_trigger = {
 	NOR = {
 		exists = scope:administrative_revocation
 		AND = {
-			government_allows = administrative
+			government_has_mechanic = administrative
 			$VASSAL$ = {
-			 	government_allows = administrative
+			 	government_has_mechanic = administrative
 			}
 		}
 		has_revoke_title_reason = $VASSAL$
-		faith = {
-			OR = {
-				AND = {
-					has_doctrine_parameter = pluralism_righteous_revocation_tyranny_reduced
+		OR = {
+			AND = {
+				rite = { rite_has_parameter = pluralism_righteous_revocation_tyranny_reduced }
+				faith = {
 					faith_hostility_level = {
 						target = $VASSAL$.faith
 						value = faith_evil_level
 					}
 				}
-				AND = {
-					has_doctrine_parameter = pluralism_fundamentalist_revocation_tyranny_minimal
+			}
+			AND = {
+				rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_minimal }
+				faith = {
 					faith_hostility_level = {
 						target = $VASSAL$.faith
 						value >= faith_hostile_level
 					}
 				}
-				#ADDED
-				AND = {
-					has_doctrine_parameter = pluralism_fundamentalist_revocation_tyranny_none
+			}
+			#ADDED
+			AND = {
+				rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_none }
+				faith = {
 					faith_hostility_level = {
 						target = $VASSAL$.faith
 						value >= faith_astray_level

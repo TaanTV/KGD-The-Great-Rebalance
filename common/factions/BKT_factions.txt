@@ -127,14 +127,6 @@
 		independence_faction_modifiers = {
 			FACTION_TARGET = scope:target
 		}
-		
-		#ADDED - i dont want to overwrite the one above sooooo
-		modifier = {
-			add = 75
-			NOT = { government_allows = administrative }
-			scope:target = { government_allows = administrative }
-			desc = FACTION_REASON_NOT_ADMINISTRATIVE
-		}
 
 		#House Hostility from Armenian tradition
 	    modifier = {
@@ -198,14 +190,6 @@
 
 		independence_faction_modifiers = {
 			FACTION_TARGET = scope:faction.faction_target
-		}
-		
-		#ADDED - i dont want to overwrite the one above sooooo
-		modifier = {
-			add = 75
-			NOT = { government_allows = administrative }
-			scope:faction.faction_target = { government_allows = administrative }
-			desc = FACTION_REASON_NOT_ADMINISTRATIVE
 		}
 
 		# Small multiplier for my neighbors already in the Faction
@@ -315,7 +299,7 @@
 		
 		trigger_if = {
 			limit = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 			}
 			custom_tooltip = {
 				text = admin_high_tier_vassal_create_faction
@@ -377,8 +361,8 @@
 				has_trait = arrogant
 				scope:target = { has_character_modifier = fully_autonomous_vassals_bkt_character_modifier }
 				AND = {		#plz explode
-					NOT = { government_allows = administrative }
-					scope:target = { government_allows = administrative }
+					NOT = { government_has_mechanic = administrative }
+					scope:target = { government_has_mechanic = administrative }
 				}
 				any_neighboring_realm_same_rank_owner = { top_liege != root.top_liege }	#border vassals.
 		        any_sub_realm_county = {
@@ -411,7 +395,7 @@
 		
 		trigger_if = {
 			limit = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 			}
 			custom_tooltip = {
 				text = admin_high_tier_vassal_create_faction
@@ -466,7 +450,7 @@
 		
 		trigger_if = {
 			limit = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 			}
 			custom_tooltip = {
 				text = admin_high_tier_vassal_join_faction
@@ -545,47 +529,9 @@
 liberty_faction = {
 	casus_belli = liberty_faction_war
 
-	desc = {
-		first_valid = {
-			triggered_desc = {
-				trigger = {
-					faction_target = { government_has_flag = government_is_administrative }
-				}
-				desc = liberty_faction_desc_admin
-			}
-			triggered_desc = {
-				trigger = {
-					faction_target = { government_has_flag = government_is_tribal }
-				}
-				desc = liberty_faction_desc_tribal
-			}
-			triggered_desc = {
-				trigger = {
-					faction_target = { government_has_flag = government_is_feudal }
-				}
-				desc = liberty_faction_desc_feudal
-			}
-			desc = liberty_faction_desc
-		}
-	}
+	desc = liberty_faction_desc
 
-	short_effect_desc = {
-		first_valid = {
-			triggered_desc = {
-				trigger = {
-					faction_target = { government_has_flag = government_is_administrative }
-				}
-				desc = liberty_faction_short_effect_desc_admin
-			}
-			triggered_desc = {
-				trigger = {
-					faction_target = { government_has_flag = government_is_tribal }
-				}
-				desc = liberty_faction_short_effect_desc_tribal
-			}
-			desc = liberty_faction_short_effect_desc
-		}
-	}
+	short_effect_desc = liberty_faction_short_effect_desc
 
 	sort_order = 4
 
@@ -734,7 +680,7 @@ liberty_faction = {
 		
 		trigger_if = {
 			limit = {
-				scope:target = { government_allows = administrative }
+				scope:target = { government_has_mechanic = administrative }
 			}
 			is_vassal_of = scope:target.top_liege
 		}
@@ -753,7 +699,7 @@ liberty_faction = {
 		
 		trigger_if = {
 			limit = {
-				scope:target = { government_allows = administrative }
+				scope:target = { government_has_mechanic = administrative }
 			}
 			is_vassal_of = scope:target.top_liege
 		}
@@ -772,7 +718,7 @@ liberty_faction = {
 		
 		trigger_if = {
 			limit = {
-				scope:faction.faction_target = { government_allows = administrative }
+				scope:faction.faction_target = { government_has_mechanic = administrative }
 			}
 			is_vassal_of = scope:faction.faction_target
 		}

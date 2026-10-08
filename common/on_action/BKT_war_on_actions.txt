@@ -11,6 +11,7 @@ on_war_won_attacker = { # As in, won BY attacker. Only one of the two on_actions
 		BKT_more_player_truces_attacker
 		BKT_conqueror_war_attacker_win
 		BKT_populist_win_extra
+		BKT_remove_hastely_constructed_defences_if_relevant
 	}
 }
 
@@ -136,6 +137,7 @@ on_war_won_defender = {
 	on_actions = {
 		BKT_more_player_truces_defender
 		BKT_conqueror_war_defender_win
+		BKT_remove_hastely_constructed_defences_if_relevant
 	}
 }
 
@@ -230,5 +232,29 @@ BKT_conqueror_war_defender_win = {
 			}
 			trigger_event = conqueror.0002
 		}
+	}
+}
+
+# NOTE: exists scope:attacker and scope:defender
+on_war_white_peace = {
+	on_actions = {
+		BKT_remove_hastely_constructed_defences_if_relevant
+	}
+}
+
+# NOTE: exists scope:attacker and scope:defender
+on_war_white_pon_war_invalidatedeace = {
+	on_actions = {
+		BKT_remove_hastely_constructed_defences_if_relevant
+	}
+}
+
+BKT_remove_hastely_constructed_defences_if_relevant = {
+	trigger = { 
+		scope:attacker.highest_held_title_tier = tier_barony
+		scope:attacker.capital_province = { has_province_modifier = hastely_constructed_defences }
+	}
+	effect = {
+		scope:attacker.capital_province = { remove_all_province_modifier_instances = hastely_constructed_defences }
 	}
 }

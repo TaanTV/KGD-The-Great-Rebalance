@@ -15,7 +15,7 @@ form_portugal_decision = {
 	desc = form_portugal_decision_desc
 
 	is_shown = {
-		culture = { has_cultural_pillar = heritage_iberian }
+		culture ?= { has_cultural_pillar = heritage_iberian }
 		NOT = {
 			is_target_in_global_variable_list = {
 				name = unavailable_unique_decisions
@@ -62,15 +62,11 @@ form_portugal_decision = {
 			has_primary_title = title:k_badajoz
 		}
 		
-		#ADDED - now an OR bloc
-		OR = {
-			has_title = title:d_porto
-			has_title = title:d_coimbra
-			has_title = title:d_beja
-			#has_title = title:d_algarve
+		any_held_title = {
+			count >= 2
+			tier = tier_duchy
 		}
 		
-		#ADDED - u gotta control that shit man
 		completely_controls = title:d_porto
 		completely_controls = title:d_coimbra
 		completely_controls = title:d_beja

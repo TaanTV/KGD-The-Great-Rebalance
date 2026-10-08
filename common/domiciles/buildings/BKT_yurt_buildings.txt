@@ -1,4 +1,7 @@
-﻿@yurt_main_construction_time_tier_2 = 180
+﻿#Thanks to Taan for providing very minmaxy expertise for those changes
+#without him i would never figure out that +% fertility is a trash bonus in vanilla
+#and some other stuff as well
+@yurt_main_construction_time_tier_2 = 180
 @yurt_main_construction_time_tier_3 = 360
 @yurt_main_construction_time_tier_4 = 520 
 @yurt_main_construction_time_tier_5 = 600
@@ -98,6 +101,8 @@ yurt_main_01 = {
 		#ADDED
 		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5
+		army_damage_mult = 0.1
+		army_toughness_mult = 0.1
 	}
 
 	province_modifier = {
@@ -138,6 +143,8 @@ yurt_main_02 = {
 		additional_fort_level = 1
 		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5	#total 10
+		army_damage_mult = -0.05
+		army_toughness_mult = -0.05
 	}
 
 	province_modifier = {
@@ -192,6 +199,8 @@ yurt_main_03 = {
 		#ADDED
 		capital_additional_fort_level = 1
 		domicile_monthly_herd_add = 5	#total 15
+		army_damage_mult = -0.05
+		army_toughness_mult = -0.05
 	}
 
 	province_modifier = {
@@ -229,7 +238,9 @@ yurt_main_04 = {
 				has_realm_law = nomadic_authority_4
 				has_realm_law = nomadic_authority_5
 			}	
-		}	
+		}
+		#ADDED - dunno how that will localize but i want this gate here
+		highest_held_title_tier >= tier_kingdom
 	}
 
 	cost = {
@@ -248,7 +259,7 @@ yurt_main_04 = {
 		herd_capacity_add = 2000
 		#ADDED
 		capital_additional_fort_level = 1
-		domicile_monthly_herd_add = 10	#total 25
+		domicile_monthly_herd_add = 5	#total 20 			#PREV 10 	#total 25
 	}
 
 	province_modifier = {
@@ -288,6 +299,8 @@ yurt_main_05 = {
 				has_realm_law = nomadic_authority_5
 			}	
 		}	
+		#ADDED - dunno how that will localize but i want this gate here
+		highest_held_title_tier >= tier_kingdom
 	}
 
 	cost = {
@@ -306,7 +319,7 @@ yurt_main_05 = {
 		herd_capacity_add = 2000
 		#ADDED
 		capital_additional_fort_level = 1
-		domicile_monthly_herd_add = 10	#total 35
+		domicile_monthly_herd_add = 5	#total 25 		#PREV 10	#total 35
 	}
 
 	province_modifier = {
@@ -344,6 +357,11 @@ yurt_main_06 = {
 				has_realm_law = nomadic_authority_4
 				has_realm_law = nomadic_authority_5
 			}	
+		}
+		#ADDED - i want this gate here
+		custom_tooltip = {
+			text = legalistic_yurt_01_unlock
+			highest_held_title_tier >= tier_empire
 		}	
 	}
 
@@ -362,7 +380,7 @@ yurt_main_06 = {
 		herd_capacity_add = 5000
 		#ADDED
 		capital_additional_fort_level = 1
-		domicile_monthly_herd_add = 15	#total 50
+		domicile_monthly_herd_add = 10	#total 35 	#PREV 15	#total 50
 	}
 
 	province_modifier = {
@@ -4975,7 +4993,7 @@ bodyguard_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_1 = yes
+		estate_increase_bodyguard_aptitude_1 = yes
 	}
 
 	character_modifier = {
@@ -5008,7 +5026,7 @@ bodyguard_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_1 = yes
+		estate_increase_bodyguard_aptitude_2 = yes
 	}
 
 	character_modifier = {
@@ -5043,7 +5061,7 @@ bodyguard_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_2 = yes
+		estate_increase_bodyguard_aptitude_3 = yes
 	}
 
 	character_modifier = {
@@ -5080,7 +5098,7 @@ bodyguard_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_2 = yes
+		estate_increase_bodyguard_aptitude_4 = yes
 	}
 
 	character_modifier = {
@@ -5118,7 +5136,7 @@ bodyguard_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_3 = yes
+		estate_increase_bodyguard_aptitude_5 = yes
 	}
 
 	character_modifier = {
@@ -5155,7 +5173,7 @@ bodyguard_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_bodyguard_aptitude_lvl_3 = yes
+		estate_increase_bodyguard_aptitude_6 = yes
 	}
 
 	character_modifier = {
@@ -5394,6 +5412,7 @@ mass_warfare_yurt_01 = {
 
 	parameters = {
 		unlock_maa_heavy_horse_archers = yes
+		nomad_yurt_unlock_master_the_art_of_command = yes
 	}
 
 	ai_value = {
@@ -7614,7 +7633,7 @@ secret_scheme_yurt_01 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 2		#prev 4
-		scheme_discovery_chance_mult = 0.02	#prev 0.04
+		enemy_scheme_secrecy_add = -2		#prev -4
 	}
 
 	ai_value = {
@@ -7653,7 +7672,7 @@ secret_scheme_yurt_02 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 2
-		scheme_discovery_chance_mult = 0.02	#prev 0.04
+		enemy_scheme_secrecy_add = -2	#prev -4
 	}
 
 	ai_value = {
@@ -7682,7 +7701,7 @@ secret_scheme_yurt_03 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 2		#prev 4
-		scheme_discovery_chance_mult = 0.02	#prev 0.08
+		enemy_scheme_secrecy_add = -2		#prev -8
 	}
 
 	ai_value = {
@@ -7713,7 +7732,7 @@ secret_scheme_yurt_04 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 3		#prev 4
-		scheme_discovery_chance_mult = 0.03	#prev 0.08
+		enemy_scheme_secrecy_add = -2		#prev -8
 	}
 
 	ai_value = {
@@ -7744,7 +7763,7 @@ secret_scheme_yurt_05 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 3		#prev 6
-		scheme_discovery_chance_mult = 0.03	#prev 0.16
+		enemy_scheme_secrecy_add = -3		#prev -4
 	}
 
 	ai_value = {
@@ -7775,7 +7794,7 @@ secret_scheme_yurt_06 = {
 
 	character_modifier = {
 		owned_scheme_secrecy_add = 3		#prev 10
-		scheme_discovery_chance_mult = 0.03	#prev 0.16
+		enemy_scheme_secrecy_add = -3		#prev -4
 	}
 
 	ai_value = {
@@ -9291,8 +9310,8 @@ wet_nurse_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_1 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_1 = yes
+		domicile_increased_wet_nurse_aptitude_1 = yes
+		estate_increased_tutor_aptitude_1 = yes
 	}
 
 	ai_value = {
@@ -9326,8 +9345,8 @@ wet_nurse_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_1 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_1 = yes
+		domicile_increased_wet_nurse_aptitude_2 = yes
+		estate_increased_tutor_aptitude_2 = yes
 	}
 
 	character_modifier = {
@@ -9361,8 +9380,8 @@ wet_nurse_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_2 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_1 = yes
+		domicile_increased_wet_nurse_aptitude_3 = yes
+		estate_increased_tutor_aptitude_3 = yes
 	}
 
 	character_modifier = {
@@ -9396,8 +9415,8 @@ wet_nurse_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_2 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_2 = yes
+		domicile_increased_wet_nurse_aptitude_4 = yes
+		estate_increased_tutor_aptitude_4 = yes
 	}
 
 	character_modifier = {
@@ -9431,8 +9450,8 @@ wet_nurse_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_3 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_3 = yes
+		domicile_increased_wet_nurse_aptitude_5 = yes
+		estate_increased_tutor_aptitude_5 = yes
 	}
 
 	character_modifier = {
@@ -9466,8 +9485,8 @@ wet_nurse_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_wet_nurse_aptitude_lvl_4 = yes
-		nomad_yurt_court_tutor_aptitude_lvl_4 = yes
+		domicile_increased_wet_nurse_aptitude_6 = yes
+		estate_increased_tutor_aptitude_6 = yes
 	}
 
 	character_modifier = {
@@ -11149,7 +11168,7 @@ physician_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_1 = yes
+		estate_increase_physician_aptitude_1 = yes
 	}
 
 	character_modifier = {
@@ -11182,7 +11201,7 @@ physician_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_1 = yes
+		estate_increase_physician_aptitude_2 = yes
 	}
 
 	character_modifier = {
@@ -11217,7 +11236,7 @@ physician_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_2 = yes
+		estate_increase_physician_aptitude_3 = yes
 	}
 
 	character_modifier = {
@@ -11252,7 +11271,7 @@ physician_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_2 = yes
+		estate_increase_physician_aptitude_4 = yes
 	}
 
 	character_modifier = {
@@ -11287,7 +11306,7 @@ physician_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_3 = yes
+		estate_increase_physician_aptitude_5 = yes
 	}
 
 	character_modifier = {
@@ -11322,7 +11341,7 @@ physician_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_increased_physician_aptitude_lvl_4 = yes
+		estate_increase_physician_aptitude_6 = yes
 	}
 
 	character_modifier = {
@@ -12413,8 +12432,7 @@ trade_yurt_01 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12463,8 +12481,7 @@ trade_yurt_02 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12515,8 +12532,7 @@ trade_yurt_03 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12567,8 +12583,7 @@ trade_yurt_04 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12624,8 +12639,7 @@ trade_yurt_05 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12677,8 +12691,7 @@ trade_yurt_06 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_herder
-					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -13175,8 +13188,7 @@ merchant_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
-		nomad_yurt_merchant_bonus_lvl_1 = yes
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
 	}
 
 	character_modifier = {
@@ -13212,8 +13224,7 @@ merchant_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
-		nomad_yurt_merchant_bonus_lvl_1 = yes
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
 	}
 
 	ai_value = {
@@ -13247,8 +13258,7 @@ merchant_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-		nomad_yurt_merchant_bonus_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13282,8 +13292,7 @@ merchant_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-		nomad_yurt_merchant_bonus_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13317,8 +13326,7 @@ merchant_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-		nomad_yurt_merchant_bonus_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13352,8 +13360,7 @@ merchant_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_3 = yes
-		nomad_yurt_merchant_bonus_lvl_3 = yes
+		nomad_yurt_paiza_more_gold_lvl_3 = yes
 	}
 
 	ai_value = {

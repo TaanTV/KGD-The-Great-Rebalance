@@ -1,0 +1,943 @@
+﻿##############
+# Decisions for PAM
+# pam_decision_confession
+# pam_decision_act_of_devotion
+# pam_mentor_sp_decision
+# pam_establish_theocratic_dynasty_decision
+# pam_convert_to_theocracy_decision
+# pam_convert_theocracy_to_feudal_decision
+# pam_determine_patron_saint_decision
+# pam_decision_last_rites
+# create_hof_decision
+# pam_levy_the_tithes_decision
+# pam_send_legatine_mission_decision
+# pam_reform_monastic_endowment_decision
+# pam_kingdom_of_heaven_decision
+# pam_shape_the_christian_church_decision
+# pam_declare_rite_heresy_decision
+# pam_permit_tenet_decision
+# pam_prohibit_tenet_decision
+# pam_raise_khachkar_decision
+# pam_proclaim_crusade_age_tenet_decision
+# pam_secure_pilgrim_routes_decision
+# pam_prevent_great_schism_decision
+# pam_cause_great_schism_decision
+#################
+
+
+# Head of Faith: formally take a stance on a tenet known to the faith or learned personally.
+pam_permit_tenet_decision = {
+
+	#ADDED - title!
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOR = {
+						faith.religious_head ?= this
+						AND = {
+							OR = {
+								government_has_flag = government_is_theocracy
+								government_has_flag = government_is_mandala
+							}
+							rite.head_of_rite = this
+							faith = { 
+								has_doctrine_parameter = no_head_of_faith
+								OR = {
+									main_rite = root.rite
+									has_doctrine_parameter = unreformed
+								}
+							}
+						}
+					}
+				}
+				desc = pam_permit_tenet_decision_via_puppet
+			}
+			desc = pam_permit_tenet_decision
+		}
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/event_story/pam_the_christian_church_stability.dds"
+	}
+	decision_group_type = major
+
+	desc = pam_permit_tenet_decision_desc
+	selection_tooltip = pam_permit_tenet_decision_tooltip
+	confirm_text = pam_permit_tenet_decision_confirm
+
+	sort_order = 110
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	is_shown = {
+		#this = faith.religious_head
+		faith = { has_papacy_trigger = no } # The pope uses bulls
+		#ADDED - can be pressed if you are the puppeteer too, or if you're head of rite and there's no HOF
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			faith = {
+				OR = {
+					main_rite = root.rite
+					has_doctrine_parameter = unreformed
+				}
+				trigger_if = {
+					limit = { this = faith:christian_faith }
+					has_global_variable = pam_great_schism_prevented
+				}
+			}
+			this = rite.head_of_rite
+			trigger_if = {
+				limit = { is_clergy = no NOT = { government_has_flag = government_is_mandala } }
+				puppet:theological_agent_puppet ?= { rite = prev.rite }
+			}
+		}
+		trigger_else = {
+			exists = faith.religious_head
+			OR = {
+				this = faith.religious_head
+				faith.religious_head.puppeteer ?= this
+			}
+		}
+	}
+	
+	#ADDED - this just looks better
+	is_valid = {
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			OR = {
+				custom_tooltip = {
+					text = manage_holy_sites_realm_priest_puppet_tt
+					# puppet: errors on non-playable characters, so we only check playable ones and tooltips never run it
+					trigger_if = {
+						limit = { is_playable_character = yes }
+						exists = puppet:theological_agent_puppet
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				government_has_flag = government_is_theocracy
+				government_has_flag = government_is_mandala
+			}
+			trigger_if = {
+				limit = { NOR = { government_has_flag = government_is_theocracy government_has_flag = government_is_mandala } }
+				puppet:theological_agent_puppet = { piety >= major_piety_value } 
+			}
+			custom_tooltip = {
+				text = pam_shape_the_christian_church_decision_hor_tt
+				always = yes		#already checked in is_shown anyway
+			}
+			custom_tooltip = {
+				text = manage_holy_sites_piety_level_tt
+				piety_level >= 4
+			}
+		}
+		trigger_else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { 
+				save_temporary_scope_as = faith_authority
+				piety >= major_piety_value 
+			}
+			custom_tooltip = {
+				text = puppeting_faith_authority_tt
+				always = yes		#already checked in is_shown anyway
+			}
+		}
+		trigger_else = { }
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+		#ADDED - also check HOF or whatever if need be
+		trigger_if = {
+			limit = { 
+				faith = { has_doctrine_parameter = no_head_of_faith } 
+				NOR = { 
+					government_has_flag = government_is_mandala 
+					government_has_flag = government_is_theocracy
+				} 
+			}
+			puppet:theological_agent_puppet = { is_available_adult = yes } 
+		}
+		trigger_else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { is_available_adult = yes }
+		}
+		trigger_else = { }
+		custom_tooltip = {
+			text = pam_tenet_stance_select_tt
+			exists = scope:selected_item
+		}
+		custom_tooltip = {
+			text = ecumenical_council_already_ongoing_tt
+			NOT = { faith = { has_variable = ecumenical_council_ongoing } }
+		}
+		#ADDED - faith wide cooldown coz F you
+		faith = { save_temporary_scope_as = faith_scope }
+		custom_tooltip = {
+			text = tenet_permit_cooldown_tt
+			NOT = { faith = { has_variable = tenet_permit_cooldown } }
+		}
+	}
+
+	cooldown = { years = 5 }	#prev 3
+
+	cost = {
+		#piety = medium_piety_value
+		#ADDED - diff cost if you're not the HOF
+		piety = {
+			value = major_piety_value
+			if = {
+				limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+				value = 3000
+			}
+			else_if = {
+				limit = { this != faith.religious_head }
+				value = 1500
+			}
+		}
+	}
+
+	effect = {
+		#save_scope_as = pam_tenet_stance_issuer
+		#ADDED choose the issuer
+		if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			puppet:theological_agent_puppet ?= { save_scope_as = pam_tenet_stance_issuer }
+			if = {
+				limit = { OR = { government_has_flag = government_is_theocracy government_has_flag = government_is_mandala } }
+				save_scope_as = pam_tenet_stance_issuer
+			}
+		}
+		else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { save_scope_as = pam_tenet_stance_issuer }
+		}
+		else = { save_scope_as = pam_tenet_stance_issuer }
+		save_scope_as = pam_tenet_stance_permit
+		scope:selected_item = { save_scope_as = pam_tenet_stance_tenet }
+		#ADDED
+		if = {
+			limit = { scope:pam_tenet_stance_issuer != this }
+			scope:pam_tenet_stance_issuer = { add_piety = major_piety_loss }
+		}
+		faith = {
+			set_tenet_status = {
+				tenet = scope:selected_item
+				status = permitted
+			}
+			change_fervor = {
+				#value = significant_fervor_loss
+				#ADDED - worse fervor impact for hofless
+				value = {
+					value = significant_fervor_loss
+					if = {
+						limit = { has_doctrine_parameter = no_head_of_faith }
+						value = substantial_fervor_loss
+					}
+				}
+				desc = fervor_loss_pam_tenet_permitted
+			}
+			if = {
+				limit = { has_tenet_popularity_trigger = yes }
+				change_tenet_popularity = {
+					target = scope:selected_item
+					change = medium_tenet_popularity_gain
+				}
+			}
+			pam_faith_cleanup_forbidden_personal_tenet_secrets_effect = yes
+			every_faith_character = {
+				limit = {
+					is_ruler = yes
+					this != scope:pam_tenet_stance_issuer
+				}
+				trigger_event = { id = pam_decision_events.0011 days = 1 }
+			}
+			#ADDED - faith-wide cooldown
+			hidden_effect = {
+				set_variable = {
+					name = tenet_permit_cooldown
+					years = 5
+				}
+			}
+		}
+	}
+
+	widget = {
+		gui = "decision_view_widget_select_tenet"
+		controller = select_scope_object
+		show_from_start = yes
+		decision_to_second_step_button = "SELECT"
+
+		# List is tenets the HoF personally knows + tenets the rite knows
+		setup_items = {
+			scope:actor = {
+				ordered_character_tenet = {
+					knowledge_filter = known
+					order_by = {
+						value = pam_raw_tenet_popularity_value
+						multiply = -1
+					}
+					max = 200
+					check_range_bounds = no
+					add_to_list = item_list
+				}
+			}
+		}
+
+		default_item = {
+			scope:actor = {
+				random_character_tenet = {
+					knowledge_filter = known
+					limit = { pam_tenet_can_be_permitted_trigger = yes }
+					save_scope_as = selected_item
+				}
+			}
+		}
+
+		is_item_valid = {
+			pam_tenet_can_be_permitted_trigger = yes
+		}
+
+		ai_select_item = {
+			scope:actor = {
+				if = { # A tenet the faith adores gets sanctioned whether or not the Head of Faith cares for it
+					limit = {
+						#ADDED - check this?????
+						faith = { has_tenet_popularity_trigger = yes }
+						any_character_tenet = {
+							knowledge_filter = known
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_is_overwhelmingly_popular_trigger = { CHARACTER = scope:actor }
+						}
+					}
+					ordered_character_tenet = {
+						knowledge_filter = known
+						limit = {
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_is_overwhelmingly_popular_trigger = { CHARACTER = scope:actor }
+						}
+						order_by = pam_raw_tenet_popularity_value
+						position = 0
+						save_scope_as = selected_item
+					}
+				}
+				#ADDED - intercept for faiths with no tenet popularity
+				else_if = {
+					limit = {
+						NOT = { faith = { has_tenet_popularity_trigger = yes } }
+					}
+					random_desired_tenet = {
+						limit = {
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_ai_may_permit_trigger = { CHARACTER = scope:actor }
+						}
+						only_positive = yes
+						threshold = 1
+						selection_count = 5
+						weight = {
+							base = 10
+						}
+						save_scope_as = selected_item
+					}
+				}
+				else = {
+					random_desired_tenet = {
+						limit = {
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_ai_may_permit_trigger = { CHARACTER = scope:actor }
+						}
+						only_positive = yes
+						threshold = 1
+						selection_count = 97
+						weight = {
+							base = 10
+							modifier = {
+								add = pam_tenet_popularity_impact_value
+							}
+						}
+						save_scope_as = selected_item
+					}
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		#this = faith.religious_head
+		#ADDED - kind of changed the whole thing tbh
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			this = rite.head_of_rite
+			puppet:theological_agent_puppet ?= { rite = prev.rite }
+		}
+		trigger_else = {
+			exists = faith.religious_head
+			OR = {
+				this = faith.religious_head
+				faith.religious_head.puppeteer ?= this
+			}
+		}
+		trigger_if = {
+			faith = { has_tenet_popularity_trigger = yes }
+			OR = {
+				any_desired_tenet = {
+					only_positive = yes
+					threshold = 1
+					selection_count = 97
+					root.rite = {
+						NOR = {
+							has_tenet_status = { tenet = prev status = permitted }
+							has_tenet_status = { tenet = prev status = core }
+						}
+					}
+					pam_tenet_ai_may_permit_trigger = { CHARACTER = root }
+				}
+				any_character_tenet = {
+					knowledge_filter = known
+					pam_tenet_can_be_permitted_no_actor_trigger = yes
+					pam_tenet_is_overwhelmingly_popular_trigger = { CHARACTER = root }
+				}
+			}
+		}
+		trigger_else = {
+			any_desired_tenet = {
+				only_positive = yes
+				threshold = 1
+				selection_count = 5
+				root.rite = {
+					NOR = {
+						has_tenet_status = { tenet = prev status = permitted }
+						has_tenet_status = { tenet = prev status = core }
+					}
+				}
+				pam_tenet_ai_may_permit_trigger = { CHARACTER = root }
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 50
+		modifier = {
+			add = 20
+			has_trait = zealous
+		}
+		modifier = {
+			add = 20
+			has_trait = theologian
+		}
+		modifier = {
+			add = -30
+			has_trait = cynical
+		}
+
+		modifier = {
+			add = 200
+			any_personal_tenet = {
+				this = scope:selected_item
+			}
+		}
+		
+		#ADDED - slow that down if you're puppeted by a player
+		modifier = {
+			this = faith.religious_head
+			puppeteer ?= { is_ai = no }
+			factor = 0.1
+		}
+		
+		#ADDED - slow that down/speed it up based on fervor
+		modifier = {
+			faith.fervor < 40
+			factor = 0.5
+		}
+		modifier = {
+			faith.fervor > 60
+			factor = 2
+		}
+	}
+}
+
+
+pam_prohibit_tenet_decision = {
+
+	#ADDED - title!
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOR = {
+						faith.religious_head ?= this
+						AND = {
+							OR = {
+								government_has_flag = government_is_theocracy
+								government_has_flag = government_is_mandala
+							}
+							rite.head_of_rite = this
+							faith = { 
+								has_doctrine_parameter = no_head_of_faith
+								OR = {
+									main_rite = root.rite
+									has_doctrine_parameter = unreformed
+								}
+							}
+						}
+					}
+				}
+				desc = pam_prohibit_tenet_decision_via_puppet
+			}
+			desc = pam_prohibit_tenet_decision
+		}
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/event_story/pam_the_christian_church_instability.dds"
+	}
+	decision_group_type = major
+
+	desc = pam_prohibit_tenet_decision_desc
+	selection_tooltip = pam_prohibit_tenet_decision_tooltip
+	confirm_text = pam_prohibit_tenet_decision_confirm
+
+	sort_order = 109
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	is_shown = {
+		#this = faith.religious_head
+		faith = { has_papacy_trigger = no } # The pope uses bulls
+		#ADDED - can be pressed if you are the puppeteer too, or if you're head of rite and there's no HOF
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			faith = {
+				OR = {
+					main_rite = root.rite
+					has_doctrine_parameter = unreformed
+				}
+				trigger_if = {
+					limit = { this = faith:christian_faith }
+					has_global_variable = pam_great_schism_prevented
+				}
+			}
+			this = rite.head_of_rite
+			trigger_if = {
+				limit = { is_clergy = no }
+				puppet:theological_agent_puppet ?= { rite = prev.rite }
+			}
+		}
+		trigger_else = {
+			exists = faith.religious_head
+			OR = {
+				this = faith.religious_head
+				faith.religious_head.puppeteer ?= this
+			}
+		}
+	}
+	
+	#ADDED - this just looks better
+	is_valid = {
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			OR = {
+				custom_tooltip = {
+					text = manage_holy_sites_realm_priest_puppet_tt
+					# puppet: errors on non-playable characters, so we only check playable ones and tooltips never run it
+					trigger_if = {
+						limit = { is_playable_character = yes }
+						exists = puppet:theological_agent_puppet
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+				government_has_flag = government_is_theocracy
+				government_has_flag = government_is_mandala
+			}
+			trigger_if = {
+				limit = { NOR = { government_has_flag = government_is_theocracy government_has_flag = government_is_mandala } }
+				puppet:theological_agent_puppet = { piety >= major_piety_value } 
+			}
+			custom_tooltip = {
+				text = pam_shape_the_christian_church_decision_hor_tt
+				always = yes		#already checked in is_shown anyway
+			}
+			custom_tooltip = {
+				text = manage_holy_sites_piety_level_tt
+				piety_level >= 4
+			}
+		}
+		trigger_else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { 
+				save_temporary_scope_as = faith_authority
+				piety >= major_piety_value 
+			}
+			custom_tooltip = {
+				text = puppeting_faith_authority_tt
+				always = yes		#already checked in is_shown anyway
+			}
+		}
+		trigger_else = { }
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+		#ADDED - also check HOF or whatever if need be
+		trigger_if = {
+			limit = { 
+				faith = { has_doctrine_parameter = no_head_of_faith } 
+				NOR = { 
+					government_has_flag = government_is_mandala 
+					government_has_flag = government_is_theocracy
+				} 
+			}
+			puppet:theological_agent_puppet = { is_available_adult = yes } 
+		}
+		trigger_else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { is_available_adult = yes }
+		}
+		trigger_else = { }
+		custom_tooltip = {
+			text = pam_tenet_stance_select_tt
+			exists = scope:selected_item
+		}
+		custom_tooltip = {
+			text = ecumenical_council_already_ongoing_tt
+			NOT = { faith = { has_variable = ecumenical_council_ongoing } }
+		}
+		#ADDED - faith wide cooldown coz F you
+		faith = { save_temporary_scope_as = faith_scope }
+		custom_tooltip = {
+			text = tenet_prohibit_cooldown_tt
+			NOT = { faith = { has_variable = tenet_prohibit_cooldown } }
+		}
+	}
+
+	cooldown = { years = 5 }	#prev 3
+
+	cost = {
+		#piety = medium_piety_value
+		#ADDED - diff cost if you're not the HOF
+		piety = {
+			value = major_piety_value
+			if = {
+				limit = { this != faith.religious_head }
+				value = 2000
+			}
+		}
+	}
+
+	effect = {
+		#save_scope_as = pam_tenet_stance_issuer
+		#ADDED choose the issuer
+		if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			puppet:theological_agent_puppet ?= { save_scope_as = pam_tenet_stance_issuer }
+			if = {
+				limit = { OR = { government_has_flag = government_is_theocracy government_has_flag = government_is_mandala } }
+				save_scope_as = pam_tenet_stance_issuer
+			}
+		}
+		else_if = {
+			limit = { this != faith.religious_head }
+			faith.religious_head = { save_scope_as = pam_tenet_stance_issuer }
+		}
+		else = { save_scope_as = pam_tenet_stance_issuer }
+		save_scope_as = pam_tenet_stance_permit
+		scope:selected_item = { save_scope_as = pam_tenet_stance_tenet }
+		#ADDED
+		if = {
+			limit = { scope:pam_tenet_stance_issuer != this }
+			scope:pam_tenet_stance_issuer = { add_piety = major_piety_loss }
+		}
+		faith = {
+			set_tenet_status = {
+				tenet = scope:selected_item
+				status = prohibited
+			}
+			change_fervor = {
+				#value = notable_fervor_value
+				#ADDED - worse fervor impact for hofless
+				value = {
+					value = notable_fervor_value
+					if = {
+						limit = { has_doctrine_parameter = no_head_of_faith }
+						value = slight_fervor_value
+					}
+				}
+				desc = fervor_gain_pam_tenet_prohibited
+			}
+			if = {
+				limit = { has_tenet_popularity_trigger = yes }
+				change_tenet_popularity = {
+					target = scope:selected_item
+					change = major_tenet_popularity_loss
+				}
+			}
+			pam_faith_cleanup_forbidden_personal_tenet_secrets_effect = yes
+			pam_faith_grant_forbidden_personal_tenet_secrets_effect = { TENET = scope:selected_item }
+			every_faith_character = {
+				limit = {
+					is_ruler = yes
+					this != scope:pam_tenet_stance_issuer
+				}
+				trigger_event = { id = pam_decision_events.0013 days = 1 }
+			}
+			#ADDED - faith-wide cooldown
+			hidden_effect = {
+				set_variable = {
+					name = tenet_prohibit_cooldown
+					years = 5
+				}
+			}
+		}
+	}
+
+	widget = {
+		gui = "decision_view_widget_select_tenet"
+		controller = select_scope_object
+		show_from_start = yes
+		decision_to_second_step_button = "SELECT"
+
+		# List is tenets the HoF personally knows + tenets the rite knows
+		setup_items = {
+			scope:actor = {
+				ordered_character_tenet = {
+					knowledge_filter = known
+					order_by = {
+						value = pam_raw_tenet_popularity_value
+						multiply = -1
+					}
+					max = 200
+					check_range_bounds = no
+					add_to_list = item_list
+				}
+			}
+		}
+
+		default_item = {
+			scope:actor = {
+				random_character_tenet = {
+					knowledge_filter = known
+					limit = { pam_tenet_can_be_prohibited_trigger = yes }
+					save_scope_as = selected_item
+				}
+			}
+		}
+
+		is_item_valid = {
+			pam_tenet_can_be_prohibited_trigger = yes
+		}
+
+		ai_select_item = {
+			scope:actor = {
+				if = { # Reform moves against the most entrenched vice whether or not the Head of Faith minds it
+					limit = {
+						#ADDED - check this?????
+						faith = { has_tenet_popularity_trigger = yes }
+						any_character_tenet = {
+							knowledge_filter = known
+							pam_tenet_can_be_prohibited_trigger = yes
+							pam_tenet_ai_should_purge_trigger = { CHARACTER = scope:actor }
+						}
+					}
+					ordered_character_tenet = {
+						knowledge_filter = known
+						limit = {
+							pam_tenet_can_be_prohibited_trigger = yes
+							pam_tenet_ai_should_purge_trigger = { CHARACTER = scope:actor }
+						}
+						order_by = pam_raw_tenet_popularity_value
+						position = 0
+						save_scope_as = selected_item
+					}
+				}
+				#ADDED - intercept for faiths with no tenet popularity
+				else_if = {
+					limit = {
+						faith.fervor < 40
+					}
+					random_undesired_tenet = {
+						limit = {
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_ai_may_permit_trigger = { CHARACTER = scope:actor }
+						}
+						known_tenets = yes
+						only_negative = yes
+						threshold = -1
+						selection_count = 30
+						weight = {
+							base = 10
+							modifier = {
+								add = pam_tenet_unpopularity_impact_value
+							}
+						}
+						save_scope_as = selected_item
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { faith = { has_tenet_popularity_trigger = yes } }
+					}
+					random_undesired_tenet = {
+						limit = {
+							pam_tenet_can_be_permitted_trigger = yes
+							pam_tenet_ai_may_permit_trigger = { CHARACTER = scope:actor }
+						}
+						known_tenets = yes
+						only_negative = yes
+						threshold = -1
+						selection_count = 5
+						weight = {
+							base = 10
+						}
+						save_scope_as = selected_item
+					}
+				}
+				else = {
+					random_undesired_tenet = {
+						limit = {
+							pam_tenet_can_be_prohibited_trigger = yes
+							pam_tenet_ai_may_prohibit_trigger = { CHARACTER = scope:actor }
+						}
+						known_tenets = yes
+						only_negative = yes
+						threshold = -1
+						selection_count = 15	#prev 97
+						weight = {
+							base = 10
+							modifier = {
+								add = pam_tenet_unpopularity_impact_value
+							}
+						}
+						save_scope_as = selected_item
+					}
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		#this = faith.religious_head
+		#ADDED - kind of changed the whole thing tbh
+		trigger_if = {
+			limit = { faith = { has_doctrine_parameter = no_head_of_faith } }
+			this = rite.head_of_rite
+			puppet:theological_agent_puppet ?= { rite = prev.rite }
+		}
+		trigger_else = {
+			exists = faith.religious_head
+			OR = {
+				this = faith.religious_head
+				faith.religious_head.puppeteer ?= this
+			}
+		}
+		trigger_if = {
+			limit = { faith.fervor < 40 }
+			any_undesired_tenet = {
+				known_tenets = yes
+				only_negative = yes
+				threshold = -1
+				selection_count = 30
+				root.rite = {
+					NOR = {
+						has_tenet_status = { tenet = prev status = prohibited }
+						has_tenet_status = { tenet = prev status = core }
+					}
+				}
+				pam_tenet_ai_may_prohibit_trigger = { CHARACTER = root }
+			}
+		}
+		trigger_else_if = {
+			limit = { faith = { has_tenet_popularity_trigger = yes } }
+			OR = {
+				any_character_tenet = {
+					knowledge_filter = known
+					pam_tenet_can_be_prohibited_no_actor_trigger = yes
+					pam_tenet_ai_should_purge_trigger = { CHARACTER = root }
+				}
+				any_undesired_tenet = {
+					known_tenets = yes
+					only_negative = yes
+					threshold = -1
+					selection_count = 15	#prev 97
+					root.rite = {
+						NOR = {
+							has_tenet_status = { tenet = prev status = prohibited }
+							has_tenet_status = { tenet = prev status = core }
+						}
+					}
+					pam_tenet_ai_may_prohibit_trigger = { CHARACTER = root }
+				}
+			}
+		}
+		trigger_else = {
+			any_undesired_tenet = {
+				known_tenets = yes
+				only_negative = yes
+				threshold = -1
+				selection_count = 5
+				root.rite = {
+					NOR = {
+						has_tenet_status = { tenet = prev status = prohibited }
+						has_tenet_status = { tenet = prev status = core }
+					}
+				}
+				pam_tenet_ai_may_prohibit_trigger = { CHARACTER = root }
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 50
+		modifier = {
+			add = 25
+			has_trait = zealous
+		}
+		modifier = {
+			add = 15
+			has_trait = theologian
+		}
+		modifier = {
+			add = -25
+			has_trait = cynical
+		}
+
+		modifier = {
+			add = -200
+			any_personal_tenet = {
+				this = scope:selected_item
+			}
+		}
+		
+		#ADDED - slow that down if you're puppeted by a player
+		modifier = {
+			this = faith.religious_head
+			puppeteer ?= { is_ai = no }
+			factor = 0.1
+		}
+		
+		#ADDED - slow that down/speed it up based on fervor
+		modifier = {
+			faith.fervor < 40
+			factor = 2
+		}
+		modifier = {
+			faith.fervor > 60
+			factor = 0.5
+		}
+	}
+}

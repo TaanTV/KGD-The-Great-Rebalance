@@ -3,8 +3,8 @@
 	BUDGET_CATEGORY = {									# The last category is the main category
 		0.0												# Reserved (only used for certain types of characters, like the Pope)
 		0.0												# War chest; has its own logic
-		0.40	#prev 0.20								# LongTerm
-		0.60	#prev 0.80								# ShortTerm
+		0.25	#prev 0.20								# LongTerm
+		0.75	#prev 0.80								# ShortTerm
 	}
 	
 	### Brief: MIN_WAR_CHEST ( Array of int32 )
@@ -33,6 +33,13 @@
 	# gets filled first)
 	#
 	PERCENTAGE_INTO_WAR_CHEST = 0.5				#prev 0.6
+	
+    ### Brief: BUILDING_MIN_SCORE_COMPARED_TO_BEST ( Fixed Point )
+	# Any potential building with a score lower than this ratio of the
+	# best available building (even if the AI can't afford it right
+	# now) will be discarded
+	#
+	#BUILDING_MIN_SCORE_COMPARED_TO_BEST = 0.8	#BKT prev 0.75
 	
     ### Brief: BETROTHAL_MIN_AGE ( int32 )
     # The AI will not betroth nor seek betrothals with characters 
@@ -80,13 +87,6 @@
 	# of the desired lineality (matrilineal vs. patrilineal).
 	#
 	SPOUSE_SCORE_LINEALITY_MISMATCH_SCORE = -850	#prev -700
-	
-    ### Brief: BUILDING_MIN_SCORE_COMPARED_TO_BEST ( Fixed Point )
-	# Any potential building with a score lower than this ratio of the
-	# best available building (even if the AI can't afford it right
-	# now) will be discarded
-	#
-	#BUILDING_MIN_SCORE_COMPARED_TO_BEST = 0.8	#BKT prev 0.75
 	
 	MEN_AT_ARMS_REALM_SIZE_FOR_COST_EFFECTIVENESS_START = 0	#prev 5	# At realm sizes of this and below, men at arms quality is based on stat points compared to cost
 	MEN_AT_ARMS_REALM_SIZE_FOR_COST_EFFECTIVENESS_END = 0	#prev 50	# At realm sizes after this, men at arms quality is completely unaffected by cost. Between the two values, we interpolate between the unmodified and modified quality
@@ -142,8 +142,30 @@
 	# The AI will never declare a war below this ratio of the best war 
 	# it has available
 	#
-	MIN_SCORE_RATIO_FOR_CASUS_BELLI = 0.85	#prev 0.9				
-	
+	MIN_SCORE_RATIO_FOR_CASUS_BELLI = 0.85	#prev 0.9		
+
+	### Brief: CB_SCORE_DE_JURE_MULTIPLIER ( Fixed Point )
+	# If the title is de jure under the AI character
+	#
+	CB_SCORE_DE_JURE_MULTIPLIER = 200					#prev 100
+
+	### Brief: CB_SCORE_DE_JURE_UNDER_LIEGE_MULTIPLIER ( Fixed Point )
+	# If the title is de jure under the AI character's liege
+	#
+	CB_SCORE_DE_JURE_UNDER_LIEGE_MULTIPLIER = 2			#prev 1.5
+
+	### Brief: CB_SCORE_DE_JURE_UNDER_HIGHER_TITLE_MULTIPLIER ( Fixed Point )
+	# If the title is de jure under the de jure title directly above an
+	# independent AI character
+	#
+	CB_SCORE_DE_JURE_UNDER_HIGHER_TITLE_MULTIPLIER = 50	#prev 25
+
+	### Brief: CB_SCORE_MULT_NEIGHBOR_TITLE ( Fixed Point )
+	# The AI will multiply the score of neighboring titles taken by a
+	# CB by this much
+	#
+	CB_SCORE_MULT_NEIGHBOR_TITLE = 25	#prev 15
+
 	### Brief: TARGET_MAX_DEFENSIVE_WARS ( Fixed Point )
 	# AI won't declare war on someone who already has this many or more
 	# defensive wars
@@ -155,7 +177,20 @@
 	# this ratio of troops compared to the enemy. Uses current power
 	# for own side, max power for enemy side.
 	#
-	DESIRED_WAR_SIDE_POWER = 1.35			#prev 1.25			
+	DESIRED_WAR_SIDE_POWER = 1.35			#prev 1.25
+	
+	### Brief: CB_TARGET_MAX_POWER ( Fixed Point )
+	# AI won't look for CB:s against anyone stronger than this. Used by
+	# independent rulers.
+	#
+	#CB_TARGET_MAX_POWER = 5.0			#prev 3.0
+
+	### Brief: CB_TARGET_MAX_POWER_VASSAL ( Fixed Point )
+	# AI won't look for CB:s against anyone stronger than this. Used by
+	# vassal rulers.
+	#
+	#CB_TARGET_MAX_POWER_VASSAL = 3.5	#prev 2.0
+
 
 	### Brief: CB_TARGET_AT_WAR_POWER_RATIO_MAX ( Fixed Point )
 	# AI won't declare a war on someone stronger than this if they are 
@@ -177,18 +212,33 @@
 	# attack. 
 	#
 	ADMIN_REALM_TOTAL_POWER_ADJUSTMENT_TOP_LIEGE = 0.45		#prev 0.4		
-	
-	### Brief: CB_TARGET_MAX_POWER ( Fixed Point )
-	# AI won't look for CB:s against anyone stronger than this. Used by
-	# independent rulers.
+	### Brief: MIN_STRENGTH_TO_RAID_VASSAL (  Fixed Point  )
+	# How strong do vassals have to be for the AI to go raiding?
 	#
-	#CB_TARGET_MAX_POWER = 5.0			#prev 3.0
+	MIN_STRENGTH_TO_RAID_VASSAL = 300		#prev 500
 
-	### Brief: CB_TARGET_MAX_POWER_VASSAL ( Fixed Point )
-	# AI won't look for CB:s against anyone stronger than this. Used by
-	# vassal rulers.
+	### Brief: MIN_STRENGTH_TO_RAID_INDEPENDENT (  Fixed Point  )
+	# How strong do independent rulers have to be for the AI to go
+	# raiding?
 	#
-	#CB_TARGET_MAX_POWER_VASSAL = 3.5	#prev 2.0
+	MIN_STRENGTH_TO_RAID_INDEPENDENT = 200	#prev 300
+
+	### Brief: RAID_CHANCE_AT_MAX_GREED ( Fixed Point )
+	# Chance to go raiding each year if at 100 greed. 0.0 at -100 greed.
+	# Must still meet all other conditions.
+	#
+	RAID_CHANCE_AT_MAX_GREED = 1.0		#prev 0.9
+
+	### Brief: MAX_RAID_DAYS ( int32 )
+	# After this long, the AI will go home when a raid action concludes.
+	#
+	MAX_RAID_DAYS = 545		#prev 365
+
+	### Brief: RAID_COOLDOWN_DAYS ( int32 )
+	# The AI won't start a new raid for this long after last having
+	# started one.
+	#
+	RAID_COOLDOWN_DAYS = 1095			#prev 1825
 	
 	### Brief: DISEMBARK_POWER_PENALTY ( FixedPoint )
 	# Multiplier to apply to a embarked unit's power projection onto

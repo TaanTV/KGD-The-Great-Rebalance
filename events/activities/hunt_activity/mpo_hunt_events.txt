@@ -71,7 +71,7 @@ mpo_hunt.0001 = {
 		}
 		add_prestige = medium_prestige_gain
 		
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			brave = major_stress_impact_loss
 			craven = major_stress_impact_gain
 			lazy = major_stress_impact_gain
@@ -126,7 +126,7 @@ mpo_hunt.0001 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			gregarious = medium_stress_impact_loss
 			callous = medium_stress_impact_gain
 			sadistic = medium_stress_impact_gain
@@ -202,7 +202,7 @@ mpo_hunt.0001 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			calm = medium_stress_impact_gain
 			ambitious = medium_stress_impact_loss
 		}
@@ -222,7 +222,7 @@ mpo_hunt.0001 = {
 	option = { # Let's get out of here
 		name = mpo_hunt.0001.d
 		hunt_activity_success_change_effect = { CHANGE = increase_medium }
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			diligent = medium_stress_impact_loss
 			ambitious = medium_stress_impact_gain
 			brave = medium_stress_impact_gain
@@ -272,11 +272,11 @@ scripted_effect mpo_hunt_0010_success_effect = {
 	}
 	else_if = {
 		limit = {
+			might_cheat_on_every_partner_trigger = yes
 			scope:target = {
-				is_attracted_to_gender_of = root
 				might_cheat_on_every_partner_trigger = yes
 			}
-			is_attracted_to_gender_of = scope:target
+			can_set_relation_lover_trigger = { CHARACTER = scope:target }
 		}
 		#set_relation_lover = {
 		#	reason = lover_hunt_impressed
@@ -403,7 +403,7 @@ mpo_hunt.0010 = {
 			value = medium_trait_xp
 		}
 		
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			arrogant = medium_stress_impact_loss
 			humble = medium_stress_impact_gain
 		}
@@ -471,7 +471,7 @@ mpo_hunt.0010 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			humble = medium_stress_impact_gain
 			arrogant = medium_stress_impact_loss
 		}
@@ -522,7 +522,7 @@ mpo_hunt.0010 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			brave = major_stress_impact_loss
 			compassionate = medium_stress_impact_loss
 			callous = medium_stress_impact_gain
@@ -551,7 +551,11 @@ mpo_hunt.0010 = {
 		name = mpo_hunt.0010.d
 		scope:target = {
 			#increase_wounds_no_death_effect = { REASON = wild_animal }
-			#ADDED - let them fend off for themselves
+			#ADDED - let them fend off for themselves + opinion loss
+			add_opinion = {
+				modifier = abandoned_me_opinion
+				target = root
+			}
 			duel = {
 				skill = prowess
 				value = medium_skill_rating
@@ -567,6 +571,11 @@ mpo_hunt.0010 = {
 					send_interface_toast = {
 						title = mpo_nerge.1050.c.tt.success
 						left_icon = scope:target
+						#ADDED
+						add_opinion = {
+							modifier = abandoned_me_opinion
+							target = root
+						}
 					}
 					hidden_effect = {
 						prev = {
@@ -594,9 +603,9 @@ mpo_hunt.0010 = {
 						increase_wounds_no_death_effect = { REASON = wild_animal }
 					}
 				}
+			}
 		}
-		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			sadistic = medium_stress_impact_loss
 			callous = medium_stress_impact_loss
 			compassionate = major_stress_impact_gain
@@ -627,7 +636,7 @@ mpo_hunt.0010 = {
 #######################
 
 scripted_trigger mpo_hunt_0020_zud_season_trigger = {
-	situation:the_great_steppe = {
+	situation:the_great_steppe ?= {
 		OR = {
 			any_situation_sub_region = {
 				sub_region_current_phase = situation_steppe_white_zud_season
@@ -700,8 +709,11 @@ mpo_hunt.0020 = {
 				is_adult = yes
 				NOT = { this = root }
 			}
+			activity_host ?= prev
+			activity_location = {
+				hunt_animal_wolf_trigger = yes
+			}
 		}
-		involved_activity.activity_host ?= this
 	}
 
 	immediate = {
@@ -765,24 +777,8 @@ mpo_hunt.0020 = {
 		show_as_tooltip = {
 			scope:newly_created_artifact = { set_owner = root }
 		}
-		stress_impact = {
-			brave = major_stress_impact_loss
-			craven = major_stress_impact_gain
-			lazy = major_stress_impact_gain
-		}
 		ai_chance = {
 			base = 100
-			modifier = {
-				factor = 2
-				has_trait = brave
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					has_trait = craven
-					has_trait = lazy
-				}
-			}
 		}
 	}
 	
@@ -806,6 +802,9 @@ mpo_hunt.0020 = {
 					title = mpo_hunt.0020.b.tt.success
 					left_icon = root
 					add_prestige = medium_prestige_gain
+					show_as_tooltip = {
+						scope:newly_created_artifact = { set_owner = root }
+					}
 					if = {
 						limit = {
 							OR = {
@@ -836,6 +835,9 @@ mpo_hunt.0020 = {
 				}
 				min = 5
 				desc = mpo_hunt.0020.b.tt.failure
+				hidden_effect = {
+					destroy_artifact = scope:newly_created_artifact
+				}
 				send_interface_toast = {
 					title = mpo_hunt.0020.b.tt.failure
 					left_icon = root
@@ -845,21 +847,21 @@ mpo_hunt.0020 = {
 			}
 		}
 		stress_impact = {
-			gregarious = medium_stress_impact_loss
-			callous = medium_stress_impact_gain
-			sadistic = medium_stress_impact_gain
+			brave = major_stress_impact_loss
+			craven = major_stress_impact_gain
+			lazy = major_stress_impact_gain
 		}
 		ai_chance = {
 			base = 100
 			modifier = {
 				factor = 2
-				has_trait = gregarious
+				has_trait = brave
 			}
 			modifier = {
 				factor = 0
 				OR = {
-					has_trait = callous
-					has_trait = sadistic
+					has_trait = craven
+					has_trait = lazy
 				}
 			}
 		}
@@ -896,6 +898,9 @@ mpo_hunt.0020 = {
 				}
 				min = 5
 				desc = mpo_hunt.0020.b.tt.failure
+				hidden_effect = {
+					destroy_artifact = scope:newly_created_artifact
+				}
 				send_interface_toast = {
 					title = mpo_hunt.0020.b.tt.failure
 					left_icon = root
@@ -903,7 +908,7 @@ mpo_hunt.0020 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			calm = medium_stress_impact_gain
 			ambitious = medium_stress_impact_loss
 		}
@@ -926,7 +931,7 @@ mpo_hunt.0020 = {
 		hidden_effect = {
 			destroy_artifact = scope:newly_created_artifact
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			diligent = medium_stress_impact_loss
 			ambitious = medium_stress_impact_gain
 			brave = medium_stress_impact_gain
@@ -1042,7 +1047,7 @@ mpo_hunt.0030 = {
 			TARGET = scope:warrior 
 			IMPRISONER = root
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			callous = major_stress_impact_loss
 			sadistic = major_stress_impact_loss
 			paranoid = major_stress_impact_loss
@@ -1080,7 +1085,7 @@ mpo_hunt.0030 = {
 				opinion = -10
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			callous = medium_stress_impact_gain
 			sadistic = medium_stress_impact_gain
 		}
@@ -1103,7 +1108,7 @@ mpo_hunt.0030 = {
 			gold = tiny_gold_value
 		}
 		add_piety = minor_piety_gain
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			greedy = medium_stress_impact_gain
 			zealous = medium_stress_impact_loss
 			generous = medium_stress_impact_loss
@@ -1127,7 +1132,7 @@ mpo_hunt.0030 = {
 	option = { # Bye
 		name = mpo_hunt.0030.d
 		
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			arrogant = medium_stress_impact_loss
 			compassionate = medium_stress_impact_gain
 		}
@@ -1209,7 +1214,7 @@ mpo_hunt.0040 = {
 			track = hunter
 			value = 15
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			patient = miniscule_stress_impact_loss
 			lazy = minor_stress_impact_gain
 			impatient = minor_stress_impact_gain
@@ -1235,7 +1240,7 @@ mpo_hunt.0040 = {
 		name = mpo_hunt.0040.b
 		hunt_activity_success_change_effect = { CHANGE = increase_minor }
 		remove_short_term_gold = minor_gold_value
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			gregarious = miniscule_stress_impact_loss
 			paranoid = miniscule_stress_impact_gain
 		}
@@ -1273,7 +1278,7 @@ mpo_hunt.0040 = {
 				change_herd = minor_herd_loss
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			diligent = miniscule_stress_impact_loss
 			content = minor_stress_impact_gain
 			craven = miniscule_stress_impact_gain
@@ -1299,7 +1304,7 @@ mpo_hunt.0040 = {
 	option = {
 		name = mpo_hunt.0040.d
 		hunt_activity_success_change_effect = { CHANGE = decrease_minor }
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			content = miniscule_stress_impact_loss
 			ambitious = minor_stress_impact_gain
 			diligent = miniscule_stress_impact_gain
@@ -1405,7 +1410,7 @@ mpo_hunt.0050 = {
 			type = obligation_hook
 		}
 		custom_tooltip = obligation_hook_tt
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			generous = miniscule_stress_impact_loss
 		}
 	}
@@ -1416,7 +1421,7 @@ mpo_hunt.0050 = {
 		domicile = {
 			change_herd = miniscule_herd_loss
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			ambitious = miniscule_stress_impact_loss
 			stubborn = miniscule_stress_impact_gain
 		}
@@ -1534,7 +1539,7 @@ mpo_hunt.0050 = {
 				}
 			}
 		}
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			greedy = miniscule_stress_impact_loss
 			craven = minor_stress_impact_gain
 			generous = miniscule_stress_impact_gain
@@ -1570,7 +1575,7 @@ mpo_hunt.0050 = {
 	option = {
 		name = mpo_hunt.0050.d
 		add_prestige = miniscule_prestige_gain
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			arrogant = miniscule_stress_impact_loss
 		}
 		ai_chance = {
@@ -1659,7 +1664,7 @@ mpo_hunt.0060 = {
 		name = mpo_hunt.0060.a
 		add_treasury_or_gold = major_treasury_or_gold_value
 		add_stewardship_lifestyle_xp = minor_lifestyle_xp
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			greedy = miniscule_stress_impact_loss
 			impatient = miniscule_stress_impact_gain
 		}
@@ -1674,7 +1679,7 @@ mpo_hunt.0060 = {
 		name = mpo_hunt.0060.b
 		add_treasury_or_gold = medium_treasury_or_gold_value
 
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			greedy = miniscule_stress_impact_loss
 			diligent = miniscule_stress_impact_gain
 			impatient = miniscule_stress_impact_gain
@@ -1689,7 +1694,7 @@ mpo_hunt.0060 = {
 	option = {
 		name = mpo_hunt.0060.c
 		hunt_activity_success_change_effect = { CHANGE = increase_minor }
-		stress_impact = {
+		stress_and_fulfillment_impact = {
 			impatient = miniscule_stress_impact_loss
 			greedy = minor_stress_impact_gain
 		}

@@ -3,3 +3,10 @@
  usurp_caliph_title_decision_desc: "TODO"
  usurp_caliph_title_decision_tooltip: "#V You#! will become the Caliph"
  usurp_caliph_title_decision_confirm: "#V I#! am the Caliph" 
+ 
+ 
+ 
+ pam_permit_tenet_decision_via_puppet: "$pam_permit_tenet_decision$ via a Puppet"
+ pam_prohibit_tenet_decision_via_puppet: "$pam_prohibit_tenet_decision$ via a Puppet"
+ tenet_permit_cooldown_tt: "$pam_permit_tenet_decision$ unavailable until [GetCurrentDateWithDiff( GetVarTimeRemaining( faith_scope.MakeScope, 'tenet_permit_cooldown') )]"
+ tenet_prohibit_cooldown_tt: "$pam_permit_tenet_decision$ unavailable until [GetCurrentDateWithDiff( GetVarTimeRemaining( faith_scope.MakeScope, 'tenet_prohibit_cooldown') )]"

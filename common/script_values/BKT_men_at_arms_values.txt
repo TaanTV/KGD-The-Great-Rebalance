@@ -356,6 +356,10 @@ guanch_vaulter_recruitment_cost = @[skirmisher_recruitment_cost * 1.2]
 guanch_vaulter_low_maint_cost = @[skirmisher_low_maint_cost * 1.2]
 guanch_vaulter_high_maint_cost = @[skirmisher_high_maint_cost * 1.2]
 
+teulu_recruitment_cost = @[light_cavalry_recruitment_cost * 1.2]
+teulu_low_maint_cost = @[light_cavalry_low_maint_cost * 1.2]
+teulu_high_maint_cost = @[light_cavalry_high_maint_cost * 1.2]
+
 ###Accolade MaA
 
 accolade_skirmisher_recruitment_cost = @[skirmisher_recruitment_cost * 2]
@@ -458,6 +462,7 @@ counter_synergy_ai_weight_skirmishers = {
 		limit = {
 			is_landed = yes
 			NOT = { has_game_rule = bkt_difficulty_higher }
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -553,6 +558,7 @@ counter_synergy_ai_weight_archers = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -644,6 +650,7 @@ counter_synergy_ai_weight_pikemen = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -741,6 +748,7 @@ counter_synergy_ai_weight_heavy_infantry = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -844,6 +852,7 @@ counter_synergy_ai_weight_gunpowder = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -935,6 +944,7 @@ counter_synergy_ai_weight_light_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -1027,6 +1037,7 @@ counter_synergy_ai_weight_heavy_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {
@@ -1174,6 +1185,7 @@ counter_synergy_ai_weight_camel_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			months_from_game_start > 0
 			any_held_title = {
 				tier = tier_barony
 				OR = {

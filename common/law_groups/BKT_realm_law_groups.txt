@@ -1,0 +1,8 @@
+﻿own_war_declaration_law = {
+	can_have_group = {
+		realm_law_use_own_war_declaration_law_trigger = yes
+	}
+	default = own_war_declaration_law_0
+	cumulative = no
+	flag = imperial_policy
+}

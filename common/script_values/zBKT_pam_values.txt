@@ -1,0 +1,5 @@
+﻿# years before being able to convert again
+#pam_ui_conversion_cooldown = 5
+pam_same_faith_rite_knowledge_requirement = 0.5			#prev 0.4
+pam_same_religion_rite_knowledge_requirement = 0.7		#prev 0.5
+pam_other_religion_rite_knowledge_requirement = 0.9		#prev 0.6

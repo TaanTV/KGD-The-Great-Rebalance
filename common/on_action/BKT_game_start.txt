@@ -12,10 +12,6 @@ BKT_loaded_on_action = {
 	effect = {
 		set_global_variable = KGD_the_great_rebalance_is_loaded
 		set_global_variable = got_war_dec_laws_fixed
-		if = {
-			limit = { always = no }
-			set_global_variable = KGD_schizo_balance_is_loaded
-		}
 	}
 }
 
@@ -24,15 +20,32 @@ BKT_error_supress_on_action = {
 		always = no 
 	}
 	effect = {
-		if = { 
-			limit = { has_global_variable = KGD_the_great_rebalance_is_loaded }
+		if = {
+			limit = { 
+				has_global_variable = KGD_the_great_rebalance_is_loaded
+				has_global_variable = KGD_schizo_balance_is_loaded
+			}
+			set_global_variable = KGD_schizo_balance_is_loaded
 		}
 		random_county = {
 			title_province ?= {
 				if = { limit = { has_province_modifier = somewhat_recently_looted_modifier } }
 			}
 			holder ?= {
-				if = { limit = { has_character_modifier = dummy_mp_rules_description_modifier } }
+				if = { 
+					limit = { 
+						has_character_modifier = dummy_mp_rules_description_modifier 
+						has_character_modifier = support_religious_art_bkt_county_modifier 
+						has_character_modifier = artifact_domain_limit_1_modifier 	#not sure if i even need to keep it or not
+						has_variable = currently_dying
+					} 
+				}
+				set_variable = got_secret_faith_through_mental_break_event
+				set_variable = heresy_power
+				add_to_variable_list = {
+					name = entourage_members_to_kill
+					target = this
+				}
 			}
 		}
 	}
@@ -51,36 +64,41 @@ BKT_admin_ghana_fix = {
 					limit = {
 						title_province = { has_holding_type = tribal_holding }
 					}
-					title_province = { set_holding_type = castle_holding }
-					if = {
-						limit = {
-							any_county_province = {
-								has_holding = no 
-								NOT = { barony_cannot_construct_holding = yes }
-							}
-						}
+					title_province = { 
+						set_holding_type = castle_holding 
+						generate_building = yes
 						random = {
-							chance = 25
-							random_list = {
-								10 = {
-									random_county_province = {
-										limit = { 
-											has_holding = no 
-											NOT = { barony_cannot_construct_holding = yes }
-										}
-										set_holding_type = city_holding
-									}
-								}
-								10 = {
-									random_county_province = {
-										limit = { 
-											has_holding = no 
-											NOT = { barony_cannot_construct_holding = yes }
-										}
-										set_holding_type = church_holding
-									}
+							chance = {
+								value = 25
+								if = {
+									limit = { duchy.title_capital_county.title_province = this }
+									value = 50
 								}
 							}
+							generate_building = yes
+						}
+					}
+					random_county_province = {
+						limit = { 
+							has_holding = no 
+							NOT = { barony_cannot_construct_holding = yes }
+						}
+						random_list = {
+							10 = {
+								set_holding_type = city_holding
+								random = {
+									chance = 50
+									generate_building = yes
+								}
+							}
+							10 = {
+								set_holding_type = church_holding
+								random = {
+									chance = 50
+									generate_building = yes
+								}
+							}
+							60 = { }	#to retain the original 25% of this happening at all
 						}
 					}
 				}
@@ -115,6 +133,22 @@ BKT_on_start_misc = {
 				add_county_modifier = harsh_climate_county_modifier
 			}
 		}
+		title:k_hungary ?= {
+			every_in_de_jure_hierarchy = {
+				limit = { 
+					tier = tier_county 
+					duchy ?= {		#the mountainous ones.
+						NOR = {
+							title:d_transcarpathia ?= this
+							title:d_transylvania ?= this
+							title:d_ungvar ?= this
+							title:d_nyitra ?= this
+						}
+					}
+				}
+				add_county_modifier = fertile_grazing_lands_county_modifier
+			}
+		}	
 		title:k_romagna.holder ?= {
 			destroy_title = title:k_romagna
 		}
@@ -124,18 +158,196 @@ BKT_on_start_misc = {
 				remove_building = curtain_walls_01
 			}
 		}
+		#Add some known tenets and doctrines where it makes sense
+		faith:norse_pagan = {
+			set_tenet_status = {
+				tenet = tenet:tenet_pursuit_of_power
+				status = known
+			}
+		}
+		faith:tengri_pagan = {
+			set_tenet_status = {
+				tenet = tenet:tenet_pursuit_of_power
+				status = known
+			}
+		}
+		
 		if = {
+			limit = { 
+				game_start_date = 867.1.1 
+			}
+			if = {
+				limit = {
+					exists = character:70019
+					exists = character:73772
+					character:70019 = { is_married = no }
+					character:73772 = { is_married = no }
+				}
+				#help mr alphonso out a bit, he aint winning that
+				character:70019 = {
+					marry = character:73772
+					if = {
+						limit = { is_ruler = yes }
+						random_character_war = { save_scope_as = war }
+						if = {
+							limit = { exists = scope:war }
+							spawn_army = {
+								name = event_troop_default_name
+								levies = 350
+								men_at_arms = {
+									type = caballero
+									stacks = 5		#200
+								}
+								men_at_arms = {
+									type = light_footmen
+									stacks = 4		#200
+								}
+								location = capital_province
+								origin = capital_province
+								inheritable = no
+								war = scope:war
+							}
+							spawn_army = {
+								name = event_troop_default_name
+								levies = 100
+								men_at_arms = {
+									type = onager
+									stacks = 5		#50
+								}
+								men_at_arms = {
+									type = light_footmen
+									stacks = 2		#100
+								}
+								location = capital_province
+								origin = capital_province
+								inheritable = no
+								war = scope:war
+							}
+							add_prestige_no_experience = 350
+						}
+						if = {
+							limit = {
+								exists = character:70292
+								character:70292 = { is_ruler = yes }
+							}
+							create_alliance = {
+								target = character:70292
+								allied_through_owner = character:70019
+								allied_through_target = character:73772
+							}
+							add_opinion = {
+								target = character:70292
+								modifier = friendliness_opinion
+								opinion = 20
+							}
+							reverse_add_opinion = {
+								target = character:70292
+								modifier = friendliness_opinion
+								opinion = 20
+							}
+						}
+					}
+				}
+			}
+			#louis the younger should be the karling's house head, actually.
+			if = {
+				limit = {
+					exists = title:k_italy.holder
+					title:k_italy.holder = {
+						dynasty:25061 ?= dynasty 
+						house.house_head != this
+					}
+				}
+				title:k_italy.holder = { house = { set_house_head = prev } }
+			}
+			#bohemia should pay tribute to SOMEONE, lets say east francia coz why not really
+			if = {
+				limit = {
+					exists = title:d_bohemia.holder
+					exists = title:k_moravia.holder
+					title:k_moravia.holder = {
+						top_liege = this
+						rite = { NOT = { rite_has_parameter = unreformed } }
+					}
+					title:d_bohemia.holder = {
+						top_liege = this
+						is_tributary = no
+						rite = { rite_has_parameter = unreformed }
+					}
+				}
+				title:d_bohemia.holder = { 
+					save_scope_value_as = {
+						name = low_obligations
+						value = yes
+					}
+					break_subject_contract_and_establish_tributary_effect = { SUZERAIN = title:k_moravia.holder TRIBUTARY = this } 
+					clear_saved_scope = low_obligations
+				}
+			}
+			#he should be a supporter, the game literally describes him as one
+			if = {
+				limit = {
+					has_game_rule = struggle_persia_toggle_on
+					exists = title:k_khorasan.holder
+					title:k_khorasan.holder = {
+						dynasty:811 ?= dynasty
+						NOT = { has_trait = fp3_struggle_supporter }
+					}
+				}
+				title:k_khorasan.holder = { 
+					add_trait = fp3_struggle_supporter
+				}
+			}
+		}
+		else_if = {
 			limit = {
 				game_start_date = 1178.10.1
-				exists = title:k_rum
-				exists = title:k_anatolia
-				title:k_rum = { is_titular = no }
-				title:k_anatolia = { is_titular = no }
 			}
-			title:k_anatolia = {
-				every_in_de_jure_hierarchy = {
-					limit = { tier = tier_duchy }
-					set_de_jure_liege_title = title:k_rum
+			if = {
+				limit = {
+					exists = title:k_rum
+					exists = title:k_anatolia
+					title:k_rum = { is_titular = no }
+					title:k_anatolia = { is_titular = no }
+				}
+				title:k_anatolia = {
+					every_in_de_jure_hierarchy = {
+						limit = { tier = tier_duchy }
+						set_de_jure_liege_title = title:k_rum
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = title:k_jerusalem
+					title:k_jerusalem.holder ?= { 
+						has_trait = leper
+					}
+				}
+				title:k_jerusalem.holder = {
+					add_character_flag = do_not_generate_starting_family
+				}
+			}
+		}
+		else = {
+			#Tuscany was a march.
+			title:d_toscana.holder ?= {
+				if = {
+					limit = { 
+						top_liege != this
+						government_has_flag = government_is_feudal
+					}
+					vassal_contract_set_obligation_level = { type = special_contract level = 2 }	#march
+					additional_flavor_check_effect = yes
+				}
+			}
+			title:c_bayeux.holder ?= {
+				if = {
+					limit = {
+						top_liege != this
+						government_has_flag = government_is_feudal
+					}
+					change_government = ecclesiastical_government
 				}
 			}
 		}
@@ -172,30 +384,6 @@ BKT_extra_fixes = {
 			culture:beja ?= { set_culture_pillar = head_determination_domain }
 			culture:somali ?= { set_culture_pillar = head_determination_domain }
 			culture:afar ?= { set_culture_pillar = head_determination_domain }
-		}
-		every_ruler = {
-			if = {
-				limit = { prestige < 0 }
-				add_prestige_no_experience = {
-					add = 150	#start with at least 150
-					multiply = { value = highest_held_title_tier add = -1 min = 1 }
-					subtract = prestige
-				}
-			}
-			#Help nomads out a bit
-			if = {
-				limit = { has_government = nomad_government }
-				domicile ?= {
-					change_herd = {
-						value = owner.highest_held_title_tier
-						add = 1
-						multiply = owner.highest_held_title_tier
-						multiply = owner.highest_held_title_tier
-						multiply = 85
-						multiply = { 0.8 1.25 }
-					}
-				}
-			}
 		}
 	}
 }
@@ -283,6 +471,7 @@ BKT_on_start_female_pool = {
 						dynasty = generate
 						location = scope:title_of_origin.title_province
 						faith = scope:title_of_origin.faith
+						rite = scope:title_of_origin.rite
 						culture = scope:title_of_origin.culture
 						random_traits = yes
 						#save_scope_as = bookmaker
@@ -304,7 +493,42 @@ BKT_on_start_female_pool = {
 BKT_initial_opinion_boost = {
 	effect = {
 		every_ruler = {
+			#moved this here to not iterate every_ruler too much
+			if = {
+				limit = { prestige < 0 }
+				add_prestige_no_experience = {
+					add = 150	#start with at least 150
+					multiply = { value = highest_held_title_tier add = -1 min = 1 }
+					subtract = prestige
+				}
+			}
+			#Help nomads out a bit
+			if = {
+				limit = { has_government = nomad_government }
+				domicile ?= {
+					change_herd = {
+						value = owner.highest_held_title_tier
+						add = 1
+						multiply = owner.highest_held_title_tier
+						multiply = owner.highest_held_title_tier
+						multiply = 85
+						multiply = { 0.8 1.25 }
+					}
+				}
+			}
+			#Make karlings male_only
+			#if = {
+			#	limit = { 
+			#		dynasty:25061 ?= dynasty 
+			#	}
+			#	add_realm_law_skip_effects = male_only_law
+			#	if = {
+			#		limit = { any_held_title ?= { title_tier >= duchy has_title_law = male_only_law } }
+			#		every_held_title = { title_tier >= duchy remove_title_law = male_only_law }
+			#	}
+			#}
 			every_courtier = {
+				limit = { NOT = { has_relation_rival = prev } }
 				add_opinion = {
 					target = prev
 					modifier = respect_opinion
@@ -313,7 +537,7 @@ BKT_initial_opinion_boost = {
 			}
 			#Im pretty sure this should be more performant than iterating on every vassal
 			if = {
-				limit = { top_liege != this }
+				limit = { top_liege != this NOT = { has_relation_rival = liege } }
 				add_opinion = {
 					target = liege
 					modifier = respect_opinion

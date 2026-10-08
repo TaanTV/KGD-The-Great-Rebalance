@@ -5,7 +5,7 @@
 		limit = {
 			is_ruler = no #Rulers can always get additional titles
 			is_theocratic_lessee = no #Theocratic lessees use other gender checks
-			NOT = { $RULER$ = { government_allows = administrative } }
+			NOT = { $RULER$ = { government_has_mechanic = administrative } }
 			NOT = {
 				$RULER$.faith = {
 					has_dominant_ruling_gender = scope:title_grantee
@@ -16,13 +16,13 @@
 			limit = {
 				$RULER$ = { government_allows = state_faith }
 			}
-			$RULER$.primary_title.state_faith = {
-				has_dominant_ruling_gender = scope:title_grantee
+			$RULER$.primary_title.state_rite = {
+				rite_has_dominant_ruling_gender = scope:title_grantee
 			}
 		}
 		trigger_else = {
-			$RULER$.faith = {
-				has_dominant_ruling_gender = scope:title_grantee
+			$RULER$.rite = {
+				rite_has_dominant_ruling_gender = scope:title_grantee
 			}
 		}
 	}
@@ -31,7 +31,7 @@
 			is_ruler = no #Rulers can always get additional titles
 			is_theocratic_lessee = no #Theocratic lessees use other gender checks
 			$RULER$ = {
-				government_allows = administrative
+				government_has_mechanic = administrative
 				NOT = { has_realm_law = equal_law }
 			}
 		}
@@ -61,7 +61,7 @@
 		limit = {
 			$RULER$.faith.religious_head = scope:title_grantee
 			NOR = { 
-				target_is_liege_or_above = $RULER$ 	#granting to a vassal if a fine game.
+				target_is_liege_or_above = $RULER$ 	#granting to a vassal is fine game.
 				liege = $RULER$.liege				#within the same realm is fine game.
 			} 
 		}

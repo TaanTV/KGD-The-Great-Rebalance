@@ -1,0 +1,270 @@
+﻿
+tenet_unrelenting_faith = {
+	icon = tenet_unrelenting_faith
+
+	piety_cost = {
+		if = {
+			limit = {
+				OR = {
+					rite_religion_tag = judaism_religion
+					rite_religion_tag = islam_religion
+					rite_has_doctrine = pagan_hostility_doctrine
+				}
+			}
+			value = faith_tenet_cost_low
+		}
+		else_if = {
+			limit = {
+				OR = {
+					rite_religion_tag = buddhism_religion
+					rite_religion_tag = jainism_religion
+				}
+			}
+			value = faith_tenet_cost_high
+		}
+		else = {
+			value = faith_tenet_cost_mid
+		}
+
+		# Multiplier for keeping same tenet
+		if = {
+			limit = { rite_has_tenet = tenet_unrelenting_faith }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	character_modifier = {
+		prowess = 3					#prev 4
+		tolerance_advantage_mod = 2	#prev 4
+		#levy_size = 0.1
+		different_faith_county_opinion_mult = 0.1
+	}
+
+	parameters = {
+		clergy_can_fight
+		tenet_adaptive_conversion_resistance
+	}
+
+	personal_tenet_parameters = {
+		tenet_unrelenting_faith_blademaster_trait
+		clergy_can_fight_personal
+		tenet_unrelenting_faith_sparring
+	}
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					pam_latin_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_latin_name
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					pam_greek_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_greek_name
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					pam_greek_as_liturgical_language_trigger = no
+					pam_latin_as_liturgical_language_trigger = no
+				}
+				desc = tenet_unrelenting_faith_default_name
+			}
+			triggered_desc = {
+				trigger = {
+					OR = { 
+						rite_has_doctrine = doctrine_heretic_branch_zandik
+						rite_has_tenet = tenet_pastoral_isolation
+					}
+				}
+				desc = tenet_unrelenting_faith_zandik_name
+			}
+			desc = tenet_unrelenting_faith_name
+		}
+	}
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_latin_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_latin_desc
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_greek_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_greek_desc
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_greek_as_liturgical_language_trigger = no
+					pam_latin_as_liturgical_language_trigger = no
+				}
+				desc = tenet_unrelenting_faith_default_desc
+			}
+			triggered_desc = {
+				trigger = {
+					OR = { 
+						rite_has_doctrine = doctrine_heretic_branch_zandik
+						rite_has_tenet = tenet_pastoral_isolation
+					}
+				}
+				desc = tenet_unrelenting_faith_zandik_desc
+			}
+			desc = tenet_unrelenting_faith_desc
+		}
+	}
+
+	traits = {
+		# This is THE zealous tenet; only place in repo where zeal is doctrinally codified.
+		virtues = {
+			zealous = { weight = 25 scale = 2 }
+		}
+		sins = {
+			cynical = { weight = 25 scale = 2 }
+		}
+	}
+}
+
+
+tenet_ancestor_worship = {
+	icon = tenet_ancestor_worship
+
+	piety_cost = {
+		value = faith_tenet_cost_low
+
+		# Multiplier for keeping same tenet
+		if = {
+			limit = { rite_has_tenet = tenet_ancestor_worship }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	can_pick = {
+		has_doctrine = pagan_hostility_doctrine
+	}
+
+	parameters = {
+		pilgrimage_decision_active
+		sanctify_artifacts_ancestral
+		tenet_ancestor_worship_renown_on_death
+		tenet_ancestor_worship_seek_ancestral_guidance
+	}
+
+	special_parameters = {
+		increased_dynasty_prestige_birth_mult = 0.5		#prev 1
+		increased_dynasty_prestige_marriage_mult = 0.5	#prev 1
+		increased_dynasty_prestige_long_reign_mult = 0.5
+	}
+
+	personal_tenet_modifier = {
+		monthly_dynasty_prestige = 0.05		#prev 0.1
+		stress_loss_mult = 0.15
+		stress_gain_mult = -0.1				#prev -0.15
+	}
+
+	traits = {
+		virtues = {
+			loyal = { weight = 10 scale = 1 }
+			humble = { weight = 10 scale = 1 }
+		}
+		sins = {
+			arrogant = { weight = 10 scale = 1 }
+		}
+	}
+}
+
+
+# Islamic Syncretism
+tenet_islamic_syncretism = {
+	icon = tenet_islamic_syncretism
+
+	piety_cost = {
+		if = {
+			limit = {
+				OR = {
+					rite_religion_tag = christianity_religion
+					rite_religion_tag = dualism_religion
+				}
+			}
+			value = faith_tenet_cost_low
+		}
+		else = {
+			value = faith_tenet_cost_mid
+		}
+
+		# Multiplier for keeping same tenet
+		if = {
+			limit = { rite_has_parameter = islamic_syncretic_actor }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	can_pick = {
+		NOT = { religion = religion:islam_religion }
+		unique_syncretism_trigger = yes
+		trigger_if = {
+			limit = { scope:actor ?= { is_ai = yes } }
+			scope:actor = { pam_ai_meaningful_islamic_presence_trigger = yes }
+		}
+	}
+
+	can_pick_as_personal_tenet = {
+		NOT = {
+			faith = { religion = religion:islam_religion }
+		}
+		trigger_if = {
+			limit = { is_ai = yes }
+			pam_ai_meaningful_islamic_presence_trigger = yes
+		}
+	}
+
+	personal_tenet_parameters = {
+		tenet_syncretism_invite_religious_exiles
+		tenet_syncretism_county_bonus
+		can_use_islamic_artifacts
+		tenet_islamic_syncretism_study_rite_bonus
+	}
+
+	parameters = {
+		can_use_islamic_artifacts
+		islamic_syncretic_actor
+		tenet_islamic_syncretism_study_rite_bonus
+		unreformed_syncretic_conversion_malus_active
+		#ADDED
+		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
+	}
+	
+	special_parameters = {
+		hostility_level_override = {
+			special_doctrine_is_islamic_faith = astray
+		}
+		parameter_opinion_override = {
+			#Sync this to syncretic_mutual_opinion_bonus_value
+			islamic_syncretic_recipient = 30
+		}
+	}
+
+	traits = {
+		virtues = { 
+			generous = { weight = 15 scale = 1 }
+		}
+		sins = { 
+			greedy = { weight = 10 scale = 1 }
+			arbitrary = { weight = 10 scale = 1 }
+		}
+	}
+}

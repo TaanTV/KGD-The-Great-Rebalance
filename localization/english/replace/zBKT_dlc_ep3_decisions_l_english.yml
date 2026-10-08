@@ -11,3 +11,5 @@
  backwater_county_eligible_modifier_removal_tt: "The [development|E] of at least one sub-realm [county|E] with the [GetModifier('backwater_county_modifier').GetName] [county_modifier|E] is #V [root_scope.MakeScope.ScriptValue('backwater_development_value')|V0]#! or higher"
  #restored_greek_theme_modifier: "Restored Theme"
  #restored_greek_theme_modifier_desc: "This character has restored a Theme to surpass the golden days of old.\n[governor_efficiency|E]: @governor_efficiency!#P +10%#!"
+
+ convert_to_administrative_meritocratic_desc: "You do #bold not#! fulfill at least one of the following:\n$EFFECT_LIST_BULLET$Your [realm|E] borders a [ruler|E] with a [government|E] using [merit|E]\n$EFFECT_LIST_BULLET$Your [capital|E] is located in [GetGeographicalRegion('world_asia').GetName], [GetGeographicalRegion('world_tibet').GetName], [GetGeographicalRegion('world_burma').GetName], or [GetGeographicalRegion('world_steppe_east').GetName]\n$EFFECT_LIST_BULLET$Your [culture|E] has [GetCultureTradition('tradition_sinophilic').GetName] [tradition|E]"

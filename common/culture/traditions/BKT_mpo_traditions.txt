@@ -209,7 +209,6 @@ tradition_mpo_wolves_of_the_deep_steppe = {
 	}
 }
 
-
 tradition_devoted_horsemanship = {
 	category = regional
 

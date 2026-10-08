@@ -5,7 +5,7 @@ start_found_despotate_interaction = {
 	interface_priority = 60
 	common_interaction = yes
 	category = interaction_category_friendly
-	send_name = START_SCHEME 
+	send_name = START_SCHEME
 	scheme = found_despotate
 	ignores_pending_interaction_block = yes
 	ai_frequency_by_tier = {
@@ -53,19 +53,19 @@ start_found_despotate_interaction = {
 			scope:recipient.top_liege = { completely_controls = scope:target }
 		}
 	}
-	
+
 	has_valid_target_showing_failures_only = {
 		scope:target ?= {
 			tier = tier_kingdom
 		}
 	}
-	
+
 	# We do this via redirects because recipient_de_jure_titles did not turn up for work today.
 	redirect = {
 		scope:actor = {
 			top_liege ?= { save_scope_as = secondary_recipient }
 			if = {
-				limit = { 
+				limit = {
 					exists = primary_title.kingdom
 					primary_title.tier = tier_duchy
 				}
@@ -76,11 +76,27 @@ start_found_despotate_interaction = {
 
 	cooldown = { years = 5 }
 
-	is_shown = {
-		scope:actor = {
-			is_governor = yes
-			NOT = { government_is_japanese_trigger = yes }
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			#has_trait = ambitious
+			NOT = {
+				any_scheme = { is_scheme_category = political }
+			}
+			#ADDED - check greed and boldness instead of just ambitious trait
+			NOT = { has_trait = content }
+			OR = {
+				ai_greed > 65
+				ai_boldness > 65
+			}
+			ai_greed > 35
+			ai_boldness > 35
 		}
+		is_governor = yes
+		government_is_japanese_trigger = no
+	}
+
+	is_shown = {
 		scope:recipient = scope:actor
 	}
 
@@ -108,7 +124,6 @@ start_found_despotate_interaction = {
 						is_landless_type_title = no
 					}
 				}
-				
 			}
 		}
 		scope:actor = {
@@ -201,19 +216,32 @@ start_found_despotate_interaction = {
 		flag = agent_focus_speed
 		current_description = start_found_despotate_interaction.tt.agent_focus_speed
 	}
+	on_send = {
+		scope:actor = {
+			if = {
+				limit = {
+					OR = {
+						has_character_modifier = pam_granted_indulgences_modifier
+						has_character_modifier = pam_granted_indulgences_modifier_small
+					}
+				}
+				change_spiritual_fulfillment = minor_spiritual_fulfillment_loss
+			}
+		}
+	}
 
 	on_accept = {
 		scope:actor = {
 			send_interface_toast = {
 				type = event_toast_effect_neutral
 				title = start_found_despotate_notification
-				left_icon = scope:recipient					
+				left_icon = scope:recipient
 				right_icon = scope:target
 				scope:recipient = {
 					send_interface_toast = {
 						type = event_toast_effect_bad
 						title = start_found_despotate_notification
-						left_icon = scope:actor					
+						left_icon = scope:actor
 						right_icon = scope:target
 						scope:actor = {
 							# Success.
@@ -258,34 +286,18 @@ start_found_despotate_interaction = {
 
 			custom_tooltip = found_despotate_success_tt
 
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				content = minor_stress_impact_gain
 				humble = minor_stress_impact_gain
 			}
 		}
-	}
-
-	ai_potential = {
-		#has_trait = ambitious
-		is_governor = yes
-		NOR = {
-			has_trait = content
-			any_scheme = { is_scheme_category = political }
-		}
-		#ADDED - check greed and boldness instead of just ambitious trait
-		OR = {
-			ai_greed > 65
-			ai_boldness > 65
-		}
-		ai_greed > 35
-		ai_boldness > 35
 	}
 	
 	auto_accept = yes
 
 	ai_will_do = {
 		base = 15
-		#ADDED - some modifiers
+		#ADDED - some modifiers, all but last
 		modifier = {
 			add = {
 				add = ai_greed
@@ -332,6 +344,14 @@ start_found_despotate_interaction = {
 			scope:agent_focus_speed ?= yes
 			factor = 0.5
 		}
+		#Promised to abstain from sin
+		modifier = {
+			OR = {
+				has_character_modifier = pam_granted_indulgences_modifier
+				has_character_modifier = pam_granted_indulgences_modifier_small
+			}
+			factor = 0.1
+		}
 	}
 }
 
@@ -341,7 +361,7 @@ start_teach_governor_interaction = {
 	interface_priority = 20
 	category = interaction_category_vassal
 	filter_tags = { admin_governor }
-	send_name = START_SCHEME 
+	send_name = START_SCHEME
 	scheme = teach_governor
 	ai_targets = {
 		ai_recipients = peer_vassals
@@ -372,20 +392,27 @@ start_teach_governor_interaction = {
 
 	cooldown_against_recipient = { years = 15 }
 
+	is_available = {
+		government_has_mechanic = administrative
+		domicile ?= { has_domicile_parameter = estate_unlock_teach_governor_interaction }
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_governor = yes
+			NOR = {
+				has_trait = lazy
+				scheme_generic_ai_blocker_trigger = yes
+			}
+		}
+	}
+
 	is_shown = {
-		scope:actor = { government_allows = administrative }
 		scope:recipient != scope:actor
 		scope:recipient = {
 			is_alive = yes
-			top_liege = scope:actor.top_liege
+			top_liege ?= scope:actor.top_liege
 			in_diplomatic_range = scope:actor
 			#ADDED
 			is_close_or_extended_family_of = scope:actor
-		}
-
-		scope:actor = {
-			exists = domicile
-			domicile = { has_domicile_parameter = estate_unlock_teach_governor_interaction }
 		}
 	}
 
@@ -429,7 +456,7 @@ start_teach_governor_interaction = {
 	on_accept = {
 		scope:actor = {
 			custom_tooltip = teach_governor_actor_reward_tt
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				humble = minor_stress_impact_gain
 				lazy = medium_stress_impact_gain
 			}
@@ -439,13 +466,13 @@ start_teach_governor_interaction = {
 			send_interface_toast = {
 				type = event_toast_effect_neutral
 				title = start_teach_governor_notification
-				left_icon = scope:recipient					
+				left_icon = scope:recipient
 				right_icon = scope:recipient.primary_title
 				scope:recipient = {
 					send_interface_toast = {
 						type = event_toast_effect_bad
 						title = start_teach_governor_notification
-						left_icon = scope:actor					
+						left_icon = scope:actor
 						right_icon = scope:actor.primary_title
 						scope:actor = {
 							begin_scheme_basic_effect = {
@@ -486,14 +513,6 @@ start_teach_governor_interaction = {
 			}
 			else = { trigger_event = scheme_critical_moments.8046 }
 		}
-	}
-
-	ai_potential = {
-		NOR = {
-			has_trait = lazy
-			scheme_generic_ai_blocker_trigger = yes
-		}
-		is_governor = yes
 	}
 
 	ai_accept = {
@@ -581,7 +600,7 @@ start_teach_governor_interaction = {
 			has_relation_best_friend = scope:actor
 			add = 30
 		}
-		modifier = { # Rival 
+		modifier = { # Rival
 			desc = offer_vassalization_interaction_aibehavior_rival_tt
 			has_relation_rival = scope:actor
 			NOT = { has_relation_nemesis = scope:actor }
@@ -726,7 +745,7 @@ start_teach_governor_interaction = {
 			house_has_feud_relation_with_trigger = { TARGET = scope:recipient }
 			add = -50
 		}
-		
+
 		modifier = {
 			add = 10
 			scope:actor = {

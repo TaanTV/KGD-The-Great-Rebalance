@@ -1,0 +1,148 @@
+﻿namespace = spymaster_task
+
+################################
+# Fabricate a Hook on a Courtier
+# by Petter Vilberg
+################################
+spymaster_task.0381 = {
+	type = letter_event
+	opening = spymaster_task.0381.opening
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:target_character = root
+				}
+				desc = spymaster_task.0381.desc_your_court
+			}
+			desc = spymaster_task.0381.desc_other_court
+		}
+		desc = spymaster_task.0381.desc
+	}
+	sender = scope:councillor
+	#ADDED 
+	id_override_priority = 228
+	
+	trigger = {
+		has_perk = truth_is_relative_perk
+		scope:target_character = {
+			any_courtier_or_guest = {
+				spymaster_task_courtier_valid_for_hook_fabrication_trigger = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		base = 1
+		modifier = {
+			add = 2
+			any_scheme = {
+				scheme_target_character = scope:target_character
+				is_hostile = yes
+			}
+		}
+
+		modifier = {
+			add = 4
+			scope:councillor = {
+				has_trait = lazy # They're not really trying to find real secrets...
+			}
+		}
+	}
+
+	immediate = {
+		scope:target_character = {
+			random_courtier_or_guest = {
+				limit = {
+					spymaster_task_courtier_valid_for_hook_fabrication_trigger = yes
+				}
+				weight = {
+					base = 1
+					modifier = { # Prioritise actual Courtiers
+						add = 3
+						is_courtier_of = scope:target_character
+					}
+				}
+				save_scope_as = character_to_hook
+			}
+		}
+	}
+
+	option = {
+		name = spymaster_task.0381.a
+		custom_tooltip = spymaster_task.0381.a.truth_is_relative_unlock
+		add_hook = {
+			target = scope:character_to_hook
+			type = fabrication_hook
+		}
+		remove_short_term_gold = medium_gold_value
+		stress_and_fulfillment_impact = {
+			honest = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				scope:character_to_hook = {
+					is_vassal_of = root
+				}
+			}
+			modifier = {
+				factor = 0
+				short_term_gold <= major_gold_value
+			}
+			#ai_value_modifier = {
+			#	ai_honor = -1
+			#	ai_greed = -0.5
+			#}
+		}
+	}
+
+	option = {
+		name = spymaster_task.0381.b
+		flavor = spymaster_task.0381.b.flavor
+		scope:character_to_hook = {
+			add_opinion = {
+				target = root
+				modifier = grateful_opinion
+				opinion = 10	#prev 30
+			}
+		}
+		ai_chance = {
+			base = 20
+			#ai_value_modifier = {
+			#	ai_compassion = 0.5
+			#}
+		}
+	}
+}
+
+#Your vassal has been and continues to snoop on you
+spymaster_task.3005 = {
+	type = character_event
+	title = spymaster_task.3002.t
+	desc = {
+		desc = spymaster_task.3005.opening
+		desc = spymaster_task.3005.end
+	}
+	theme = intrigue
+	left_portrait = {
+		character = scope:councillor_liege
+		animation = scheme
+	}
+	right_portrait = {
+		character = scope:councillor
+		animation = disapproval
+	}
+	#ADDED 
+	id_override_priority = 228
+	
+	option = {
+		name = spymaster_task.3005.a
+		add_opinion = {
+			target = scope:councillor_liege
+			modifier = spying_on_liege_opinion	#prev angry_opinion
+			#opinion = -30
+		}
+	}
+}

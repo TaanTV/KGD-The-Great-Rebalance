@@ -1,0 +1,159 @@
+﻿#Whoever at paradox did this - wtf?
+meritocratic_treasury = {
+	display_mode = tree
+	is_shown = {
+		scope:subject.primary_title.tier >= tier_duchy
+	}
+	obligation_levels = {
+		treasury_very_low = {
+			position = { 0 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_liege_mult = -0.10
+			}
+
+			ai_liege_desire = 5
+			ai_subject_desire = 1
+
+			subject_opinion = -30	#prev -25
+
+			score = -2
+		}
+		treasury_low = {
+			parent = treasury_very_low
+			position = { 1 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_liege_mult = -0.05
+			}
+
+			ai_liege_desire = 4
+			ai_subject_desire = 2
+
+			subject_opinion = -15
+
+			score = -1
+		}
+		treasury_medium = {
+			parent = treasury_low
+			default = yes
+			position = { 2 0 }
+
+			ai_liege_desire = 3
+			ai_subject_desire = 3
+
+			score = 0
+		}
+		treasury_high = {
+			parent = treasury_medium
+			position = { 3 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_liege_mult = 0.05
+			}
+
+			ai_liege_desire = 2
+			ai_subject_desire = 4
+
+			subject_opinion = 10	#prev 5
+
+			score = 1
+		}
+		treasury_very_high = {
+			parent = treasury_high
+			position = { 4 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_liege_mult = 0.10
+			}
+
+			ai_liege_desire = 1
+			ai_subject_desire = 5
+
+			subject_opinion = 20	#prev 10
+
+			score = 2
+		}
+	}
+}
+
+meritocratic_salary = {
+	display_mode = tree
+	is_shown = {
+		scope:subject.primary_title.tier >= tier_duchy
+	}
+	obligation_levels = {
+		salary_very_low = {
+			position = { 0 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_salary_budget_mult = -0.5
+			}
+
+			ai_liege_desire = 5
+			ai_subject_desire = 1
+
+			subject_opinion = -30	#prev -25
+
+			score = -2
+		}
+		salary_low = {
+			parent = salary_very_low
+			position = { 1 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_salary_budget_mult = -0.25
+			}
+
+			ai_liege_desire = 4
+			ai_subject_desire = 2
+
+			subject_opinion = -15
+
+			score = -1
+		}
+		salary_medium = {
+			parent = salary_low
+			default = yes
+			position = { 2 0 }
+
+			subject_modifier = {
+			}
+
+			ai_liege_desire = 3
+			ai_subject_desire = 3
+
+			score = 0
+		}
+		salary_high = {
+			parent = salary_medium
+			position = { 3 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_salary_budget_mult = 0.25
+			}
+
+			ai_liege_desire = 2
+			ai_subject_desire = 4
+
+			subject_opinion = 10	#prev 5
+
+			score = 1
+		}
+		salary_very_high = {
+			parent = salary_high
+			position = { 4 0 }
+
+			subject_modifier = {
+				monthly_treasury_from_salary_budget_mult = 0.5
+			}
+
+			ai_liege_desire = 1
+			ai_subject_desire = 5
+
+			subject_opinion = 20	#prev 10
+
+			score = 2
+		}
+	}
+}

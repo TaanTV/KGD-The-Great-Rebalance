@@ -1,0 +1,56 @@
+﻿
+### Patron Saint
+pam_patron_saint_peter = {
+	icon = piety_positive
+	diplomacy = 2			#prev major_skill_bonus
+	clergy_opinion = 5		#prev 10
+	#ADDED
+	intrigue = -2
+}
+
+pam_patron_saint_paul = {
+	icon = piety_positive
+	learning = 2			#prev medium_skill_bonus
+	#ADDED
+	monthly_piety_gain_mult = 0.05
+	prowess = -3
+}
+
+pam_patron_saint_john = {
+	icon = piety_positive
+	#learning_per_piety_level = 1
+	#stewardship_per_piety_level = 1
+	stress_loss_per_piety_level = 0.05	#prev 0.1
+	#ADDED
+	stewardship = 1
+	learning = 1
+	martial = -2
+}
+
+pam_patron_saint_matthew = {
+	icon = piety_positive
+	stewardship = 2			#prev medium_skill_bonus
+	domain_tax_mult = 0.05	#prev 0.1
+	#ADDED
+	diplomacy = -2
+}
+
+pam_patron_saint_mark = {
+	icon = piety_positive
+	martial = 1				#prev medium_skill_bonus
+	prowess = 2				#prev medium_skill_bonus
+	monthly_county_control_growth_add = 0.1
+	#ADDED
+	stewardship = -2
+}
+
+pam_patron_saint_luke = {
+	icon = piety_positive
+	health = minor_health_bonus
+	monthly_piety_gain_mult = 0.1
+	#ADDED
+	diplomacy = -1
+	martial = -1
+	stewardship = -1
+	intrigue = -1
+}

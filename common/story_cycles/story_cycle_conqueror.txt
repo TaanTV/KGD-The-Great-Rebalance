@@ -1,4 +1,19 @@
 ﻿story_conqueror = {
+	visible = yes
+	
+	icon = {
+		trigger = {
+			always = yes
+		}
+		reference = "gfx/interface/icons/story_cycles/story_icon_conqueror.dds"
+	}
+	background = {
+		reference = "gfx/interface/illustrations/event_scenes/armory.dds"
+	}
+	
+	visualization = {
+		custom_string_key = "CONQUEROR_STORY_PRACTICAL_INFORMATION_STRING"
+	}
 	
 	on_setup = {
 		if = {
@@ -112,6 +127,12 @@
 				}
 				else = {
 					add_trait = conqueror
+				}
+				
+				#ADDED - leave the damn confederations omfg
+				if = {
+					limit = { confederation ?= { is_house_based = no } }
+					execute_decision = leave_confederation_decision
 				}
 			}
 		}
@@ -426,6 +447,8 @@
 						}
 						has_trait = incapable
 						highest_held_title_tier <= tier_county
+						#ADDED
+						is_tributary = yes
 					}
 				}
 			}

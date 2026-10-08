@@ -219,6 +219,7 @@ tradition_legalistic = {
 					OR = {
 						has_trait = just
 						has_trait = administrator
+						ai_honor > 95
 					}
 					NOT = { has_trait = arbitrary }
 				}
@@ -237,22 +238,10 @@ tradition_republican_legacy = {
 	}
 
 	is_shown = {
-		OR ={
-			this = culture:roman
-			any_parent_culture_or_above = {
-				this = culture:roman
-			}
-		}
+		culture_is_or_has_ancestor_trigger = { CULTURE = culture:roman }
 		NOT = { has_cultural_tradition = tradition_parochialism }
 	}
 	can_pick = {
-		OR ={
-			this = culture:roman
-			any_parent_culture_or_above = {
-				this = culture:roman
-			}
-		}
-		NOT = { has_cultural_tradition = tradition_parochialism }
 		custom_tooltip = {
 			text = cultrad_not_nomadic_government_type
 			scope:character = {
@@ -434,9 +423,9 @@ tradition_hereditary_hierarchy = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_variable = defensive_traditionalist_discount
-						has_variable = aggressive_traditionalist_discount
+					has_variable = {
+						name = defensive_traditionalist_discount
+						name = aggressive_traditionalist_discount
 					}
 				}
 				add = {
@@ -681,14 +670,8 @@ tradition_tribe_unity = {
 	
 	is_shown = { #Replaced by Strong Kinship
 		NOR = {
-			this = culture:gaelic
-			this = culture:scottish
-			any_parent_culture_or_above = {
-				OR = {
-					this = culture:gaelic
-					this = culture:scottish
-				}
-			}
+			culture_is_or_has_ancestor_trigger = { CULTURE = culture:gaelic }
+			culture_is_or_has_ancestor_trigger = { CULTURE = culture:scottish }
 		}
 	}
 	can_pick = {
@@ -899,7 +882,7 @@ tradition_collective_lands = {
 	parameters = {
 		grants_to_lowborns_bonuses = yes
 		collective_lands_farms_bonuses = yes
-		peasant_leader_is_inherited = yes
+		#peasant_leader_is_inherited = yes
 	}
 	county_modifier = {
 		development_growth_factor = 0.1
@@ -1013,16 +996,12 @@ tradition_female_only_inheritance = {
 				has_cultural_pillar = heritage_akan
 				has_cultural_pillar = heritage_west_african
 				has_cultural_pillar = heritage_yoruba
-				any_parent_culture_or_above = {
-					OR = {
-						this = culture:nubian
-						this = culture:daju
-					}
-				}
-				scope:character.faith = {
-					#has_doctrine_parameter = female_dominated_law
+				culture_is_or_has_ancestor_trigger = { CULTURE = culture:nubian }
+				culture_is_or_has_ancestor_trigger = { CULTURE = culture:daju }
+				scope:character.rite = {
+					#rite_has_parameter = female_dominated_law
 					#ADDED - relax it a bit
-					NOT = { has_doctrine_parameter = male_dominated_law }
+					NOT = { rite_has_parameter = male_dominated_law }
 				}
 			}
 			text = tradition_female_only_inheritance_requirements
@@ -1049,6 +1028,14 @@ tradition_female_only_inheritance = {
 		opinion_of_female_rulers = 10
 		opinion_of_male_rulers = -10
 	}
+	
+	#ADDED
+	faith_character_modifier = {
+		name = tradition_female_only_inheritance_name
+		doctrine = doctrine_gender_male_dominated
+		opinion_of_female_rulers = 20	#prev 10
+	}
+		
 	
 	cost = {
 		prestige = {
@@ -1144,15 +1131,15 @@ tradition_equal_inheritance = {
 	parameters = {
 		gender_equal_inheritance = yes
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		name = tradition_equal_inheritance_name
 		doctrine = doctrine_gender_male_dominated
-		opinion_of_female_rulers = 10
+		opinion_of_female_rulers = 20	#prev 10
 	}
-	doctrine_character_modifier = {
+	faith_character_modifier = {
 		name = tradition_equal_inheritance_name
 		doctrine = doctrine_gender_female_dominated
-		opinion_of_male_rulers = 10
+		opinion_of_male_rulers = 20		#prev 10
 	}
 	
 	cost = {
@@ -1227,14 +1214,14 @@ tradition_equal_inheritance = {
 				NOR = {
 					scope:character = {
 						is_female = yes
-						faith = {
-							has_doctrine_parameter = male_dominated_law
+						rite = {
+							rite_has_parameter = male_dominated_law
 						}
 					}
 					scope:character = {
 						is_male = yes
-						faith = {
-							has_doctrine_parameter = female_dominated_law
+						rite = {
+							rite_has_parameter = female_dominated_law
 						}
 					}
 				}
@@ -1687,7 +1674,7 @@ tradition_culture_blending = {
 		learns_more_languages = yes
 	}
 	culture_modifier = {
-		cultural_acceptance_gain_mult = 0.25
+		cultural_acceptance_gain_mult = 0.15	#prev 0.25
 	}
 	character_modifier = {
 		max_learn_language_schemes_add = 1
@@ -1719,7 +1706,7 @@ tradition_culture_blending = {
 						scope:character = {
 							any_sub_realm_county = {
 								percent >= 0.3
-								NOT = { culture = root }
+								culture != root
 							}
 						}
 					}
@@ -1834,9 +1821,9 @@ tradition_isolationist = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_variable = defensive_traditionalist_discount
-						has_variable = aggressive_traditionalist_discount
+					has_variable = {
+						name = defensive_traditionalist_discount
+						name = aggressive_traditionalist_discount
 					}
 				}
 				add = {
@@ -2173,6 +2160,19 @@ tradition_agrarian = {
 			}
 			multiply = 0
 		}
+		#ADDED
+		else_if = {
+			limit = {
+				any_culture_county = {
+					percent >= 0.5
+					county_has_province_with_terrain = {
+						terrain = farmlands
+						terrain = floodplains
+					}
+				}
+			}
+			multiply = 2
+		}			
 		if = {
 			limit = {
 				scope:character = {
@@ -2311,21 +2311,9 @@ tradition_parochialism = {
 
 	is_shown = { #Replaced by tradition_republican_legacy
 		NOT = { has_cultural_tradition = tradition_republican_legacy }
-		NOR ={
-			this = culture:roman
-			any_parent_culture_or_above = {
-				this = culture:roman
-			}
-		}
+		NOT = { culture_is_or_has_ancestor_trigger = { CULTURE = culture:roman } }
 	}
 	can_pick = {
-		NOR ={
-			this = culture:roman
-			any_parent_culture_or_above = {
-				this = culture:roman
-			}
-		}
-		NOT = { has_cultural_tradition = tradition_republican_legacy }
 		custom_tooltip = {
 			text = cultrad_not_nomadic_government_type
 			scope:character = {
@@ -2618,9 +2606,7 @@ tradition_staunch_traditionalists = {
 				limit = {
 					scope:character = {
 						any_sub_realm_county = {
-							NOT = {
-								culture = scope:character.culture
-							}
+							culture != scope:character.culture
 						}
 					}
 				}
@@ -2631,9 +2617,9 @@ tradition_staunch_traditionalists = {
 			}
 			if = {
 				limit = {
-					OR = {
-						has_variable = defensive_traditionalist_discount
-						has_variable = aggressive_traditionalist_discount
+					has_variable = {
+						name = defensive_traditionalist_discount
+						name = aggressive_traditionalist_discount
 					}
 				}
 				add = {
@@ -2702,12 +2688,7 @@ tradition_hill_dwellers = {
 
 	is_shown = { #Cannot be picked if you have access to Highland Farming
 		NOT = { has_cultural_tradition = tradition_amharic_highlanders }
-		NOR = {
-			this = culture:ethiopian
-			any_parent_culture_or_above = {
-				this = culture:ethiopian
-			}
-		}
+		NOT = { culture_is_or_has_ancestor_trigger = { CULTURE = culture:ethiopian } }
 	}
 	can_pick = {
 		custom_description = {
@@ -2759,9 +2740,7 @@ tradition_hill_dwellers = {
 					NOT = {
 						any_culture_county = {
 							percent >= 0.3
-						county_has_province_with_terrain = {
-								terrain = hills
-							}county_has_province_with_terrain = {
+							county_has_province_with_terrain = {
 								terrain = hills
 							}
 						}
@@ -2794,7 +2773,7 @@ tradition_hill_dwellers = {
 				NOT = {
 					scope:character = {
 						any_sub_realm_county = {
-							percent >= 0.2
+							percent >= 0.35		#prev 0.2
 							culture = scope:character.culture
 							county_has_province_with_terrain = {
 								terrain = hills
@@ -2808,13 +2787,13 @@ tradition_hill_dwellers = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = hills
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -2948,7 +2927,7 @@ tradition_forest_folk = {
 				NOT = {
 					scope:character = {
 						any_sub_realm_county = {
-							percent >= 0.2
+							percent >= 0.35		#prev 0.2
 							culture = scope:character.culture
 							county_has_province_with_terrain = {
 								terrain = forest
@@ -2963,14 +2942,14 @@ tradition_forest_folk = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = forest
 						terrain = taiga
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -3111,7 +3090,7 @@ tradition_mountain_homes = {
 				NOT = {
 					scope:character = {
 						any_sub_realm_county = {
-							percent >= 0.2
+							percent >= 0.35		#prev 0.2
 							culture = scope:character.culture
 							county_has_province_with_terrain = {
 								terrain = mountains
@@ -3126,14 +3105,14 @@ tradition_mountain_homes = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = mountains
 						terrain = desert_mountains
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -3262,7 +3241,7 @@ tradition_dryland_dwellers = {
 				NOT = {
 					scope:character = {
 						any_sub_realm_county = {
-							percent >= 0.2
+							percent >= 0.35		#prev 0.2
 							culture = scope:character.culture
 							county_has_province_with_terrain = {
 								terrain = drylands
@@ -3277,14 +3256,14 @@ tradition_dryland_dwellers = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = drylands
 						terrain = desert
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -3406,7 +3385,7 @@ tradition_jungle_dwellers = {
 				NOT = {
 					scope:character = {
 						any_sub_realm_county = {
-							percent >= 0.2
+							percent >= 0.35		#prev 0.2
 							culture = scope:character.culture
 							county_has_province_with_terrain = {
 								terrain = jungle
@@ -3420,13 +3399,13 @@ tradition_jungle_dwellers = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = jungle
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -3567,13 +3546,13 @@ tradition_wetlanders = {
 		else_if = {
 			limit = {
 				any_culture_county = {
-					percent >= 0.4		#prev 0.6
+					percent >= 0.6
 					county_has_province_with_terrain = {
 						terrain = wetlands
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 		#ADDED - get less of those plz
 		if = {
@@ -3694,7 +3673,7 @@ tradition_hidden_cities = {
 			limit = {
 				NOT = {
 					any_culture_county = {
-						percent >= 0.3
+						percent >= 0.35		#prev 0.3
 						county_has_province_with_terrain = {
 							terrain = jungle
 						}
@@ -3724,11 +3703,11 @@ tradition_hidden_cities = {
 				any_culture_county = {
 					percent >= 0.6
 					county_has_province_with_terrain = {
-						terrain = jungle		#prev wetlands
+						terrain = jungle
 					}
 				}
 			}
-			multiply = 8
+			multiply = 6	#prev 8
 		}
 
 	}
@@ -4178,8 +4157,8 @@ tradition_monastic_communities = {
 	
 	can_pick = {
 		scope:character = {
-			faith = {
-				has_doctrine_parameter = take_vows_active
+			rite = {
+				rite_has_parameter = take_vows_active
 			}
 		}
 		custom_tooltip = {

@@ -628,13 +628,87 @@
 			}
 		}
 	}
+	if = {
+		limit = {
+			scope:host = {
+				has_personal_tenet_flag = tenet_transubstantiation_feast_bonding
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = feast_transubstantiation_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				root = {
+					scope:activity = {
+						every_attending_character = {
+							limit = {
+								this != root
+								faith = root.faith
+							}
+							custom = custom.every_attending_character_of_same_faith
+							add_opinion = {
+								target = root
+								modifier = pious_opinion
+								opinion = 5
+							}
+							root = {
+								add_piety = 5
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	# Separate if: both personal tenets can pay
+	if = {
+		limit = {
+			scope:host = {
+				has_personal_tenet_flag = tenet_communion_shared_table
+			}
+		}
+		scope:activity = {
+			add_activity_log_entry = {
+				key = feast_communion_reward_tt
+				tags = { completed }
+				character = scope:root_scope
+				show_in_conclusion = yes
+				score = 50
+
+				root = {
+					scope:activity = {
+						every_attending_character = {
+							limit = {
+								this != root
+								faith = root.faith
+							}
+							custom = custom.every_attending_character_of_same_faith
+							add_opinion = {
+								target = root
+								modifier = pious_opinion
+								opinion = 10
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	# We give you the regular rewards
 	hosted_successful_feast_new_effect = yes
 	# We give out the Reveler trait/xp
 	disburse_feast_reveler_rewards = yes
+	hedonistic_feast_gout_risk_effect = yes
+	hedonistic_obesity_modifier_sync_effect = yes
 	#Accolade glory gain
-	accolades_activity_complete_feast_glory_effect = yes
+	hidden_effect = {
+		accolades_activity_complete_feast_glory_effect = yes
+	}
 	#Stress loss
 	if = {
 		limit = {
@@ -652,7 +726,7 @@
 				has_dlc_feature = royal_court
 					amenity_level = { target = court_food_quality value >= 5 }
 			}
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				base = exotic_feast_stress_loss_value
 				gluttonous = feast_stress_loss_value
 				gregarious = feast_stress_loss_value
@@ -669,7 +743,7 @@
 				has_dlc_feature = royal_court
 				amenity_level = { target = court_food_quality value >= 4 }
 			}
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				base = lavish_feast_stress_loss_value
 				gluttonous = feast_stress_loss_value
 				gregarious = feast_stress_loss_value
@@ -686,7 +760,7 @@
 				has_dlc_feature = royal_court
 				amenity_level = { target = court_food_quality value >= 3 }
 			}
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				base = medium_feast_stress_loss_value
 				gluttonous = feast_stress_loss_value
 				gregarious = feast_stress_loss_value
@@ -703,7 +777,7 @@
 				has_dlc_feature = royal_court
 				amenity_level = { target = court_food_quality value <= 1 }
 			}
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				base = meager_feast_stress_loss_value
 				gluttonous = feast_stress_loss_value
 				gregarious = feast_stress_loss_value
@@ -715,7 +789,7 @@
 			}
 		}
 		else = {
-			stress_impact = {
+			stress_and_fulfillment_impact = {
 				base = feast_stress_loss_value
 				gluttonous = activity_stress_loss_impact
 				gregarious = activity_stress_loss_impact
@@ -730,4 +804,5 @@
 
 	# Remove strife if relevant.
 	remove_strife_per_invited_powerful_vassal_effect = yes
+	pam_vows_of_poverty_host_completion_piety_effect = yes
 }

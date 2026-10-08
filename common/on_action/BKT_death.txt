@@ -5,9 +5,15 @@
 
 on_death = {
 	on_actions = {
+		BKT_dead_flag_setter
 		BKT_landless_gold_inherit
 		BKT_on_death_give_out_MAA
 		BKT_succession_truces
+	}
+}
+BKT_dead_flag_setter = {
+	effect = {		#no time limit here coz it will just get cleaned up anyway	
+		set_variable = currently_dying
 	}
 }
 
@@ -144,102 +150,51 @@ BKT_landless_gold_inherit = {
 			#debug_log = "Transferred landless character's gold to spouse"
 			#debug_log_scopes = yes
 		}
-		else_if = {
-			limit = { 
-				OR = {
-					AND = {
-						exists = location 
-						exists = location.county
-					}
-					AND = {
-						exists = court_owner
-						exists = court_owner.capital_county
-					}
-				}
-			}
-			if = {
-				limit = {
-					exists = location 
-					exists = location.county
-				}
-				location.county = { save_temporary_scope_as = county_to_dev_scope }
-			}
-			else = {
-				court_owner.capital_county = { save_temporary_scope_as = county_to_dev_scope }
-			}	
-			scope:county_to_dev_scope = {
-				if = {
-					limit = { 
-						exists = duchy 
-						NOT = { duchy = { has_variable = landless_development_cooldown } }
-					}
-					save_temporary_scope_value_as = {
-						name = dev_value_scope
-						value = {
-							value = scope:gold_of_character
-							multiply = 0.025		#40 to 1 conversion
-							if = {
-								limit = { any_county_province = { has_holding_type = tribal_holding } }
-								multiply = 0.1
-							}
-							# Scrap that. If anything this should scale DOWN with era instead..
-							#if = { 
-							#	limit = { 
-							#		exists = culture
-							#		culture = { has_cultural_era_or_later = culture_era_early_medieval }
-							#	}
-							#	if = {
-							#		limit = { culture = { has_cultural_era_or_later = culture_era_late_medieval } }
-							#		multiply = 4
-							#	}
-							#	else_if = {
-							#		limit = { culture = { has_cultural_era_or_later = culture_era_high_medieval } }
-							#		multiply = 3
-							#	}
-							#	else = {
-							#		multiply = 2
-							#	}
-							#}
-							floor = yes
-							max = 100
-						}
-					}
-					change_development_progress_with_overflow = scope:dev_value_scope
-					duchy = {
-						set_variable = {
-							name = landless_development_cooldown
-							years = 1
-						}
-					}
-					#debug_log = "Sank some gold into the ground"
-					#debug_log_scopes = yes
-				}
-			}
-		}
 	}
 }
 
 BKT_succession_truces = {
 	trigger = {
 		is_landed = yes
-		any_heir = {
-			count > 1
+		OR = {
+			has_realm_law_flag = partition_succession_law
+			has_realm_law_flag = bkt_clan_partition_succession_law
+			any_heir = { count > 1 }
 		}
 	}
 	effect = {
 		#give_out_succession_truces = yes
 		save_temporary_scope_as = dying_ruler_scope
-		every_heir = {
-			add_to_list = list_of_potential_heirs
-		}
-		every_child = {
-			add_to_list = list_of_potential_heirs
-		}
+		#every_heir = {
+		#	add_to_list = list_of_potential_heirs
+		#}
+		#every_child = {
+		#	limit = { 
+		#		NOR = { 
+		#			has_trait = bastard
+		#			has_trait = disinherited
+		#		}
+		#	}
+		#	add_to_list = list_of_potential_heirs
+		#}
 		primary_heir ?= {
 			add_to_list = list_of_potential_heirs
+			save_temporary_scope_as = primary_heir_scope
+		}
+		primary_title.current_heir ?= {
+			add_to_list = list_of_potential_heirs
+			if = {
+				limit = { NOT = { exists = scope:primary_heir_scope } }
+				save_temporary_scope_as = primary_heir_scope 
+			}
+		}
+		every_held_title = {
+			title_tier >= county
+			current_heir ?= { add_to_list = list_of_potential_heirs }
 		}
 		every_in_list = {		#every_heir doesnt seem to work properly
 			list = list_of_potential_heirs
+			limit = { is_alive = yes }
 			save_temporary_scope_as = some_heir_scope
 			add_to_list = got_their_truces_already
 			every_in_list = {		#every_heir doesnt seem to work properly
@@ -253,7 +208,7 @@ BKT_succession_truces = {
 				}
 			}
 			if = {
-				limit = { NOT = { is_primary_heir_of = scope:dying_ruler_scope } }
+				limit = { NOT = { scope:primary_heir_scope ?= this } }
 				set_variable = {
 					name = post_succession_warlike
 					years = 1

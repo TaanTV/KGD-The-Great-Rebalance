@@ -1,0 +1,178 @@
+﻿####################
+# MISC INTERACTIONS
+####################
+
+namespace = char_interaction
+
+# Your Contract was changed
+char_interaction.0250 = {
+	type = letter_event
+	opening = {
+		desc = char_interaction.0070.opening
+	}
+	desc = char_interaction.0250.desc
+	#ADDED 
+	id_override_priority = 228
+		
+	sender = scope:puppet_or_actor
+	
+	trigger = {
+		scope:puppet_or_actor = {
+			OR = {
+				has_usable_hook = scope:recipient
+				AND = {
+					government_has_mechanic = administrative
+					scope:recipient = { government_has_mechanic = administrative }
+				}
+				#ADDED
+				AND = {
+					scope:recipient = {
+						NOT = { has_variable = had_their_contract_tyranically_changed }
+						OR = {
+							AND = {
+								government_has_flag = government_is_feudal
+								OR = {
+									vassal_contract_obligation_level:feudal_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:feudal_government_levies < feudal_levies_normal_level
+								}
+							}
+							AND = {
+								government_has_flag = government_is_mandala
+								OR = {
+									vassal_contract_obligation_level:mandala_government_taxes < feudal_tax_normal_level
+									vassal_contract_obligation_level:mandala_government_levies < feudal_levies_normal_level
+								}
+							}
+							AND = {
+								scope:puppet_or_actor.ai_greed >= 75
+								scope:puppet_or_actor.ai_boldness >= 0
+								scope:puppet_or_actor.ai_compassion < 0
+							}
+						}
+					}
+					scope:puppet_or_actor = {
+						is_at_war = no
+						ai_greed >= -50
+						tyranny <= 10
+						OR = {
+							ai_boldness >= 20
+							ai_greed >= 50
+							AND = {
+								days_of_continuous_peace >= 1825	#5 years
+								ai_boldness >= -35
+							}
+						}
+						OR = {
+							current_military_strength > eighty_percent_of_max_military_strength
+							ai_rationality < -25
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		apply_ai_vassal_obligation_liege_most_desired = yes
+		#ADDED - changed this a bit, added else_if
+		if = {
+			limit = {
+				scope:puppet_or_actor = { has_usable_hook = scope:recipient }
+			}
+			scope:puppet_or_actor = {
+				if = {
+					limit = {
+						NOT = { government_has_mechanic = administrative }
+					}
+					use_hook = scope:recipient
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { government_has_mechanic = administrative }
+			}
+			scope:puppet_or_actor = { 
+				add_tyranny = 20 
+				add_to_variable_list = {
+					name = had_their_contract_tyranically_changed_list
+					target = scope:recipient
+				}
+			}
+			scope:recipient = { 
+				set_variable = {
+					name = had_their_contract_tyranically_changed 
+					value = scope:puppet_or_actor
+				}
+			}
+			debug_log = "Vassal obligations changed through tyranny"
+			debug_log_scopes = yes
+			debug_log_date = yes
+		}
+			
+	}
+
+	option = {
+		name = char_interaction.0250.a
+	}
+}
+
+# Vassal lowered their contract
+char_interaction.0251 = {
+	type = letter_event
+	opening = {
+		desc = char_interaction.0070.opening
+	}
+	desc = char_interaction.0251.desc
+	#ADDED 
+	id_override_priority = 228
+		
+	sender = scope:puppet_or_actor
+	
+	trigger = {
+		scope:puppet_or_actor = {
+			#has_usable_hook = scope:recipient
+			OR = {
+				has_usable_hook = scope:recipient
+				scope:recipient = {
+					has_active_diarchy = yes
+					diarch = scope:puppet_or_actor
+					has_diarchy_active_parameter = diarch_gets_a_free_change_on_vassal_contract
+					trigger_if = {
+						limit = { has_variable_list = diarch_contract_rights_used_list }
+						NOT = {
+							is_target_in_variable_list = {
+								name = diarch_contract_rights_used_list
+								target = scope:puppet_or_actor
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		scope:puppet_or_actor = {
+			apply_ai_vassal_obligation_vassal_most_desired = yes
+			set_subject_contract_modification_blocked = yes
+			#use_hook = scope:recipient
+			#ADDED
+			if = {
+				limit = { has_usable_hook = scope:recipient }
+				use_hook = scope:recipient
+			}
+			else = {
+				save_scope_value_as = {
+					name = diarch
+					value = yes
+				}
+				bkt_diarch_changed_own_contract_effect = yes
+			}
+		}
+	}
+
+	option = {
+		name = char_interaction.0250.a
+	}
+}

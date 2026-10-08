@@ -64,7 +64,7 @@ dragon_kiln_01 = {
 	ai_value = {
 		base = 44
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -88,6 +88,9 @@ dragon_kiln_02 = {
 	can_construct_potential = {
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		building_requirement_tribal = no
+	}
+
+	can_construct_showing_failures_only = {
 		county.holder.culture = { has_innovation = innovation_manorialism }		#prev innovation_windmills
 	}
 	
@@ -113,9 +116,9 @@ dragon_kiln_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -131,6 +134,9 @@ dragon_kiln_03 = {
 	can_construct_potential = {
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		building_requirement_tribal = no
+	}
+
+	can_construct_showing_failures_only = {
 		county.holder.culture = { has_innovation = innovation_windmills	}	#prev innovation_cranes
 	}
 	
@@ -156,9 +162,9 @@ dragon_kiln_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -216,7 +222,7 @@ examination_hall_01 = {
 	ai_value = {
 		base = 22
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = {
@@ -283,9 +289,9 @@ examination_hall_02 = {
 	flag = duchy_building
 
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -335,9 +341,9 @@ examination_hall_03 = {
 	flag = duchy_building
 
 	ai_value = {
-		base = 20
+		base = 5		#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -356,26 +362,26 @@ tower_of_silence_01 = {
 		building_requirement_tribal = no
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		scope:holder = {
-			faith = { has_doctrine_parameter = can_build_towers_of_silence_active }
+			rite = { rite_has_parameter = can_build_towers_of_silence_active }
 		}
 	}
 
 	is_enabled = {
 		custom_tooltip = {
 			text = tower_of_silence_01.tt.county_not_tos_users
-			county.faith = { has_doctrine_parameter = can_build_towers_of_silence_active }
+			county.rite = { rite_has_parameter = can_build_towers_of_silence_active }
 		}
 		custom_tooltip = {
 			text = tower_of_silence_01.tt.liege_not_approve_of_burial
 			scope:holder.liege ?= {
-				faith = {
-					NOT = { has_doctrine_parameter = can_build_towers_of_silence_active }
+				rite = {
+					NOT = { rite_has_parameter = can_build_towers_of_silence_active }
 				}
 			}
 		}
 		county.holder = {
 			has_title = prev.duchy
-			faith = { has_doctrine_parameter = can_build_towers_of_silence_active }
+			rite = { rite_has_parameter = can_build_towers_of_silence_active }
 		}
 	}
 	show_disabled = yes
@@ -438,14 +444,14 @@ charnel_grounds_01 = {
 	can_construct_potential = {
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		building_requirement_tribal = no
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
 	can_construct_showing_failures_only = {
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
@@ -493,7 +499,7 @@ charnel_grounds_01 = {
 		base = 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -509,14 +515,14 @@ charnel_grounds_02 = {
 	can_construct_potential = {
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		building_requirement_tribal = no
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
 	can_construct_showing_failures_only = {
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
@@ -560,10 +566,10 @@ charnel_grounds_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -575,14 +581,14 @@ charnel_grounds_03 = {
 	can_construct_potential = {
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		building_requirement_tribal = no
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
 	can_construct_showing_failures_only = {
-		faith = {
-			has_doctrine_parameter = sky_burials_active
+		rite = {
+			rite_has_parameter = sky_burials_active
 		}
 	}
 	
@@ -625,10 +631,10 @@ charnel_grounds_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -691,11 +697,12 @@ burial_site_01 = {
 	type = duchy_capital
 	
 	flag = duchy_building
+
 	ai_value = {
 		base = 10		#prev 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -761,10 +768,10 @@ burial_site_02 = {
 	
 	flag = duchy_building
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -822,10 +829,10 @@ burial_site_03 = {
 	flag = fully_upgraded_duchy_capital_building
 
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		ai_pious_building_preference_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -889,7 +896,7 @@ royal_garden_01 = {
 	ai_value = {
 		base = 19		#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -947,9 +954,9 @@ royal_garden_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -998,9 +1005,9 @@ royal_garden_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -1059,7 +1066,7 @@ military_academy_01 = {
 	ai_value = {
 		base = 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -1120,9 +1127,9 @@ military_academy_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -1174,9 +1181,9 @@ military_academy_03 = {
 	flag = fully_upgraded_duchy_capital_building
 
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -1237,7 +1244,7 @@ march_01 = {
 	ai_value = {
 		base = 18	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		culture_likely_to_fortify_modifier = yes
@@ -1308,9 +1315,9 @@ march_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		culture_likely_to_fortify_modifier = yes
@@ -1366,9 +1373,9 @@ march_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		culture_likely_to_fortify_modifier = yes
@@ -1422,7 +1429,7 @@ siege_works_01 = {
 	ai_value = {
 		base = 18		#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		#culture_likely_to_fortify_modifier = yes
@@ -1481,9 +1488,9 @@ siege_works_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		culture_likely_to_fortify_modifier = yes
@@ -1534,9 +1541,9 @@ siege_works_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		culture_likely_to_fortify_modifier = yes
@@ -1617,7 +1624,7 @@ royal_armory_01 = {
 	ai_value = {
 		base = 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -1703,9 +1710,9 @@ royal_armory_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -1781,9 +1788,9 @@ royal_armory_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -1857,7 +1864,7 @@ jousting_lists_01 = {
 		#ai_anti_synergy_armored_infantry_modifier = yes
 		#ai_anti_synergy_light_infantry_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		#ADDED
@@ -1974,9 +1981,9 @@ jousting_lists_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2043,9 +2050,9 @@ jousting_lists_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2142,7 +2149,7 @@ blacksmiths_01 = {
 		#ai_anti_synergy_cavalry_modifier = yes
 		#ai_anti_synergy_light_infantry_modifier = yes
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		#ADDED
@@ -2266,9 +2273,9 @@ blacksmiths_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2360,9 +2367,9 @@ blacksmiths_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2438,7 +2445,7 @@ archery_ranges_01 = {
 			}
 		}
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		#ADDED
@@ -2535,9 +2542,9 @@ archery_ranges_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2597,14 +2604,14 @@ archery_ranges_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
 }
- 
+
 tax_assessor_01 = {
 	construction_time = slow_construction_time
 
@@ -2647,7 +2654,7 @@ tax_assessor_01 = {
 	ai_value = {
 		base = 19	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		#modifier = {
@@ -2714,9 +2721,9 @@ tax_assessor_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2759,9 +2766,9 @@ tax_assessor_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2791,11 +2798,11 @@ leisure_palace_01 = {
 	cost_gold = expensive_building_tier_2_cost		#prev expensive_building_tier_3_cost
 	
 	character_modifier = {
-		monthly_prestige_gain_mult = 0.10	#prev 0.05
+		monthly_prestige_gain_mult = 0.05
 		stress_loss_mult = 0.05		#prev 0.15
 		owned_personal_scheme_success_chance_add = 5
 		#ADDED
-		enemy_hostile_scheme_phase_duration_add = 10
+		enemy_hostile_scheme_phase_duration_add = 5
 	}
 	
 	duchy_capital_county_modifier = {
@@ -2868,11 +2875,11 @@ leisure_palace_02 = {
 	cost_gold = expensive_building_tier_4_cost
 	
 	character_modifier = {
-		monthly_prestige_gain_mult = 0.2	#prev 0.1
+		monthly_prestige_gain_mult = 0.15	#prev 0.1
 		stress_loss_mult = 0.15		#prev 0.25
 		owned_personal_scheme_success_chance_add = 10	#prev 15
 		#ADDED
-		enemy_hostile_scheme_phase_duration_add = 20
+		enemy_hostile_scheme_phase_duration_add = 10
 	}
 	
 	duchy_capital_county_modifier = {
@@ -2893,9 +2900,9 @@ leisure_palace_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -2925,11 +2932,11 @@ leisure_palace_03 = {
 	cost_gold = expensive_building_tier_6_cost		#prev expensive_building_tier_5_cost
 	
 	character_modifier = {
-		monthly_prestige_gain_mult = 0.35		#prev 0.15
+		monthly_prestige_gain_mult = 0.25		#prev 0.15
 		stress_loss_mult = 0.25		#prev 0.35
 		owned_personal_scheme_success_chance_add = 20	#prev 25
 		#ADDED
-		enemy_hostile_scheme_phase_duration_add = 40	#prev 45
+		enemy_hostile_scheme_phase_duration_add = 20
 	}
 	
 	duchy_capital_county_modifier = {
@@ -2949,9 +2956,9 @@ leisure_palace_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -3011,7 +3018,7 @@ royal_forest_01 = {
 	ai_value = {
 		base = 18		#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 		modifier = { # Fill all building slots before going for duchy buildings
@@ -3067,9 +3074,9 @@ royal_forest_02 = {
 	flag = duchy_building
 	
 	ai_value = {
-		base = 20
+		base = 7	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -3116,9 +3123,9 @@ royal_forest_03 = {
 	flag = fully_upgraded_duchy_capital_building
 	
 	ai_value = {
-		base = 20
+		base = 5	#prev 20
 		modifier = {
-			factor = 2
+			factor = 1	#prev 2
 			scope:holder.capital_province = this
 		}
 	}
@@ -3137,8 +3144,8 @@ great_megalith_01 = {
 		building_requirement_tribal = no
 		building_requirement_castle_city_church = { LEVEL = 01 }
 		scope:holder = {
-			faith = {
-				has_doctrine_parameter = can_build_megaliths
+			rite = {
+				rite_has_parameter = can_build_megaliths
 			}
 		}
 	}
@@ -3146,7 +3153,7 @@ great_megalith_01 = {
 	is_enabled = {
 		custom_tooltip = {
 			text = province_is_of_a_megalith_faith_tt
-			county.faith = { has_doctrine_parameter = can_build_megaliths }
+			county.rite = { rite_has_parameter = can_build_megaliths }
 		}
 		county.holder = { has_title = prev.duchy }
 	}

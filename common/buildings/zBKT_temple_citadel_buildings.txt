@@ -17,7 +17,7 @@
 temple_citadel_01 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		#Generic Base:
 		asset = {
 			type = pdxmesh
@@ -625,6 +625,7 @@ temple_citadel_01 = {
 			}
 			graphical_regions = { graphical_western graphical_steppe graphical_east_asia graphical_siberia graphical_mediterranean graphical_india graphical_mena }
 		}
+	}
 
 	can_construct_potential = {
 		barony_cannot_construct_holding = no
@@ -749,7 +750,7 @@ temple_citadel_01 = {
 				}
 				faith = {
 					change_fervor = {
-						value = 5
+						value = notable_fervor_gain
 						desc = fervor_gain_built_temple_holding
 					}
 				}
@@ -757,7 +758,7 @@ temple_citadel_01 = {
 			else = {
 				faith = {
 					change_fervor = {
-						value = 1
+						value = trivial_fervor_gain
 						desc = fervor_gain_built_temple_holding
 					}
 				}
@@ -937,7 +938,7 @@ temple_citadel_01 = {
 temple_citadel_02 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		### GENERIC ###
 		#Generic Base:
 		asset = {
@@ -1541,6 +1542,7 @@ temple_citadel_02 = {
 			}
 			graphical_regions = { graphical_western graphical_steppe graphical_east_asia graphical_siberia graphical_mediterranean graphical_india graphical_mena }
 		}
+	}
 
 	can_construct_potential = {
 		building_requirement_tribal = no
@@ -1656,7 +1658,7 @@ temple_citadel_02 = {
 				}
 				faith = {
 					change_fervor = {
-						value = 2
+						value = small_fervor_gain
 						desc = fervor_gain_upgraded_temple_holding_culture_parameter
 					}
 				}
@@ -1728,20 +1730,20 @@ temple_citadel_02 = {
 	}
 
 	ai_value = {
-		base = 11	#prev 9
+		base = 6		#prev 9
 		ai_general_building_modifier = yes
 		modifier = {
-			add = 2	#prev 1
+			add = 2			#prev 1
 			scope:holder.culture = { has_cultural_parameter = ai_more_likely_to_castle }
 		}
 		modifier = {
 			add = 10
 			scope:holder.culture = { has_cultural_era_or_later = culture_era_high_medieval }
 		}
-		modifier = {
-			factor = 3
-			scope:holder.capital_province = this
-		}
+		#modifier = {
+		#	factor = 3
+		#	scope:holder.capital_province = this
+		#}
 		modifier = {
 			factor = 0.01	#prev 0.1
 			free_building_slots >= 1
@@ -1749,7 +1751,7 @@ temple_citadel_02 = {
 		}
 		modifier = {
 			factor = 0.1
-			combined_building_level <= 4	#prev 10
+			combined_building_level <= 5	#prev 10
 			years_from_game_start >= 1
 		}
 		#Needed for the initial construction setup for the AI (to avoid the AI spending their free construction setup on upgrading all holdings instead of building buildings)
@@ -1769,7 +1771,7 @@ temple_citadel_02 = {
 temple_citadel_03 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		### GENERIC ###
 		#Generic Base:
 		asset = {
@@ -2374,6 +2376,7 @@ temple_citadel_03 = {
 			}
 			graphical_regions = { graphical_western graphical_steppe graphical_east_asia graphical_mediterranean graphical_india graphical_mena }
 		}
+	}
 
 	can_construct_potential = {
 		building_requirement_tribal = no
@@ -2489,7 +2492,7 @@ temple_citadel_03 = {
 				}
 				faith = {
 					change_fervor = {
-						value = 2
+						value = small_fervor_gain
 						desc = fervor_gain_upgraded_temple_holding_culture_parameter
 					}
 				}
@@ -2546,7 +2549,7 @@ temple_citadel_03 = {
 	}
 
 	ai_value = {
-		base = 10		#prev 8
+		base = 4		#prev 8
 		ai_general_building_modifier = yes
 		modifier = {
 			add = 2			#prev 1
@@ -2556,10 +2559,10 @@ temple_citadel_03 = {
 			add = 10
 			scope:holder.culture = { has_cultural_era_or_later = culture_era_late_medieval }
 		}
-		modifier = {
-			factor = 3
-			scope:holder.capital_province = this
-		}
+		#modifier = {
+		#	factor = 3
+		#	scope:holder.capital_province = this
+		#}
 		modifier = {
 			factor = 0.2
 			combined_building_level <= 14	#prev 20
@@ -2582,7 +2585,7 @@ temple_citadel_03 = {
 temple_citadel_04 = {
 	construction_time = slow_construction_time
 
-	#Meshes (Indented for readability)
+	assets = {
 		### GENERIC ###
 		#Generic Base:
 		asset = {
@@ -3191,6 +3194,7 @@ temple_citadel_04 = {
 			}
 			graphical_regions = { graphical_western graphical_steppe graphical_east_asia graphical_mediterranean graphical_india graphical_mena }
 		}
+	}
 
 	can_construct_potential = {
 		building_requirement_tribal = no
@@ -3305,7 +3309,7 @@ temple_citadel_04 = {
 				}
 				faith = {
 					change_fervor = {
-						value = 2
+						value = small_fervor_gain
 						desc = fervor_gain_upgraded_temple_holding_culture_parameter
 					}
 				}
@@ -3363,16 +3367,16 @@ temple_citadel_04 = {
 	}
 
 	ai_value = {
-		base = 9		#prev 17
+		base = 2		#prev 17
 		ai_general_building_modifier = yes
 		modifier = {
 			add = 2			#prev 1
 			scope:holder.culture = { has_cultural_parameter = ai_more_likely_to_castle }
 		}
-		modifier = {
-			factor = 3
-			scope:holder.capital_province = this
-		}
+		#modifier = {
+		#	factor = 3
+		#	scope:holder.capital_province = this
+		#}
 		modifier = {
 			factor = 0.2
 			combined_building_level <= 28	#prev 30

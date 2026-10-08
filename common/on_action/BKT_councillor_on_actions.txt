@@ -14,3 +14,61 @@ BKT_demand_council_positiion_cooldown = {
 		}
 	}
 }
+
+# Fires when a councillor is fired, after on_fired_from_position is called. Scopes:
+#	root: the council owner
+#	council_task: the active_council_task that the councillor is being fired from
+#	councillor: the councillor being fired
+#	new_councillor: the councillor that will take their place (may be empty)
+on_fired_from_council = {
+	on_actions = {
+		BKT_fix_swapping_cooldown_on_fired
+	}
+}
+
+BKT_fix_swapping_cooldown_on_fired = {
+	effect = {
+		add_to_variable_list = {
+			name = very_recently_fired
+			target = scope:councillor
+			days = 1
+		}
+		scope:councillor = {
+			if = {
+				limit = { has_variable = very_recently_hired }
+				remove_variable = very_recently_hired
+			}
+		}
+	}
+}
+
+
+## Fires when two councillors are swapped.
+# Will fire after the two positions' on_get_position.
+# Root is one of the councillor
+# scope:councillor is the other councillor
+# scope:councillor_liege is the council owner
+on_councillors_swapped = {
+	on_actions = {
+		BKT_fix_swapping_cooldown_on_swapped
+	}
+}
+
+BKT_fix_swapping_cooldown_on_swapped = {
+	trigger = {
+		scope:councillor = { has_variable = very_recently_hired }
+		NAND = {
+			has_variable_list = very_recently_fired
+			is_target_in_variable_list = {
+				name = very_recently_fired
+				target = scope:councillor
+			}
+		}
+	}
+	effect = {
+		scope:councillor = {
+			remove_variable = very_recently_hired
+			remove_variable = block_fire_councillor
+		}
+	}		
+}

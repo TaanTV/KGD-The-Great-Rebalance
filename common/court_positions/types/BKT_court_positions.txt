@@ -35,7 +35,7 @@
 # charioteer_court_position
 # bookmaker_court_position
 # akolouthos_court_position
-# court_astrologer_court_position
+# court_brewmaster_court_position
 
 
 ### Regular Court Positions ### ( Sort order 299 - 200 )
@@ -80,7 +80,6 @@ seneschal_court_position = {
 	# How good is this character in this position? root scope is the holder of the court position
 	aptitude = {
 		value = 25
-		add = court_position_aptitude_boon_voyager_trait
 		add = {
 			value = stewardship
 			multiply = 2.5
@@ -114,10 +113,7 @@ seneschal_court_position = {
 				desc = court_position_organizer_trait
 			}
 		}
-		add = court_position_aptitude_traveling_friends_value
-		add = court_position_aptitude_eunuch_tradition_value
-		add = court_position_aptitude_family_business_value
-		add = court_position_aptitude_low_penalty_value
+
 		# Bonus from court.8311
 		if = {
 			limit = { var:bonus_aptitude_role ?= flag:seneschal }
@@ -129,19 +125,21 @@ seneschal_court_position = {
 		# Japan
 		if = {
 			limit = {
-				liege.house ?= { has_house_power_parameter = improved_stewardship_court_position_efficiency }
+				liege.house ?= { has_house_aspiration_parameter = improved_stewardship_court_position_efficiency }
 			}
 			add = {
 				value = cp_bonus_aptitude_value
 				desc = improved_stewardship_court_position_efficiency_desc
 			}
 		}
+		add = court_position_aptitude_low_penalty_value
+		add = general_aptitude_bonus_exclude_other_court_position
 	}
 
 	is_shown = {
-		is_landed_or_landless_administrative = yes
-		NOR = { 
-			government_has_flag = government_is_nomadic 
+		is_landed_or_landless_administrative_or_theocratic = yes
+		NOR = {
+			government_has_flag = government_is_nomadic
 			government_has_flag = government_is_mandala
 		}
 		trigger_if = {
@@ -155,7 +153,7 @@ seneschal_court_position = {
 
 	# Is this an available position for this court? (root is court owner)
 	valid_position = {
-		is_landed_or_landless_administrative = yes
+		is_landed_or_landless_administrative_or_theocratic = yes
 	}
 
 	is_shown_character = {
@@ -173,30 +171,8 @@ seneschal_court_position = {
 	revoke_cost = { # root is the liege, no other scopes are passed here!
 		prestige =  {
 			value = major_court_position_prestige_revoke_cost
-			# Set to 0 via obligation hook
 			if = {
-				limit = {
-					court_position_obligation_hook_salary_trigger = {
-						POS = seneschal
-						LIEGE = root
-					}
-				}
-				multiply = 0
-			}
-			# Avoid AI prestige issues
-			if = {
-				limit = {
-					exists = this
-					is_ai = yes
-				}
-				multiply = 0
-			}
-			# Special case for events
-			if = {
-				limit = {
-					exists = this
-					has_character_flag = free_revoke_cost
-				}
+				limit = { free_court_position_revoke_trigger = { POS = seneschal } }
 				multiply = 0
 			}
 			#Lowering for LAAMPS, to match Camp Officer revoke cost
@@ -325,6 +301,7 @@ seneschal_court_position = {
 	}
 }
 
+
 court_gardener_court_position = {
 	sort_order = 232
 	max_available_positions = 1
@@ -380,7 +357,6 @@ court_gardener_court_position = {
 
 	aptitude = {
 		value = 1
-		add = court_position_aptitude_boon_voyager_trait
 		add = {
 			value = stewardship
 			multiply = 2.5
@@ -423,41 +399,57 @@ court_gardener_court_position = {
 				desc = court_position_architect_trait
 			}
 		}
+		# Estate building bonus
 		if = {
-			limit = { exists = employer.domicile } #Unop: Do not check on a specific parameter as it will vanish after the upgrade
-			add = {
-				value = 0
+			limit = {
+				exists = liege.domicile
+			}
+			liege.domicile = {
 				if = {
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_6 } }
-					add = estate_increase_gardener_aptitude_value_6
+					limit = { has_domicile_parameter = increased_gardener_aptitude_6 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_6
+						desc = estate_garden_building
+					}
 				}
 				else_if = {
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_5 } }
-					add = estate_increase_gardener_aptitude_value_5
+					limit = { has_domicile_parameter = increased_gardener_aptitude_5 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_5
+						desc = estate_garden_building
+					}
 				}
 				else_if = {
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_4 } }
-					add = estate_increase_gardener_aptitude_value_4
+					limit = { has_domicile_parameter = increased_gardener_aptitude_4 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_4
+						desc = estate_garden_building
+					}
 				}
 				else_if = {
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_3 } }
-					add = estate_increase_gardener_aptitude_value_3
+					limit = { has_domicile_parameter = increased_gardener_aptitude_3 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_3
+						desc = estate_garden_building
+					}
 				}
 				else_if = {
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_2 } }
-					add = estate_increase_gardener_aptitude_value_2
+					limit = { has_domicile_parameter = increased_gardener_aptitude_2 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_2
+						desc = estate_garden_building
+					}
 				}
-				else_if = { #Unop Add missing check
-					limit = { employer.domicile ?= { has_domicile_parameter = increased_gardener_aptitude_1 } }
-					add = estate_increase_gardener_aptitude_value_1
+				else_if = {
+					limit = { has_domicile_parameter = increased_gardener_aptitude_1 }
+					add = {
+						value = estate_increase_gardener_aptitude_value_1
+						desc = estate_garden_building
+					}
 				}
-				desc = estate_garden_building
 			}
 		}
-		add = court_position_aptitude_traveling_friends_value
-		add = court_position_aptitude_eunuch_tradition_value
-		add = court_position_aptitude_family_business_value
-		#Unop Bonus from court.8311
+		#Bonus from court.8311
 		if = {
 			limit = { var:bonus_aptitude_role ?= flag:court_gardener }
 			add = {
@@ -465,45 +457,24 @@ court_gardener_court_position = {
 				desc = cp_bonus_aptitude
 			}
 		}
-		# Seneschal
-		if = {
-			limit = {
-				liege.court_position:seneschal_court_position ?= {
-					has_variable = performing_improve_court
-				}
-			}
-			add = {
-				value = liege.court_position:seneschal_court_position.seneschal_improve_court_value
-				desc = seneschal_improve_court_aptitude_desc
-			}
-		}
-		# Yeke Jarquchi
-		if = {
-			limit = {
-				liege.court_position:yeke_jarquchi_court_position ?= {
-					has_variable = performing_improve_court
-				}
-			}
-			add = {
-				value = liege.court_position:yeke_jarquchi_court_position.yeke_jarquchi_improve_court_value
-				desc = yeke_jarquchi_improve_court_aptitude_desc
-			}
-		}
 		# Japan
 		if = {
 			limit = {
-				liege.house ?= { has_house_power_parameter = improved_stewardship_court_position_efficiency }
+				liege.house ?= { has_house_aspiration_parameter = improved_stewardship_court_position_efficiency }
 			}
 			add = {
 				value = cp_bonus_aptitude_value
 				desc = improved_stewardship_court_position_efficiency_desc
 			}
 		}
+
+		add = court_position_aptitude_low_penalty_value
+		add = general_aptitude_bonus
 	}
 
 	# Is this an available position for this court? (root is court owner)
 	is_shown = {
-		is_landed_or_landless_administrative = yes
+		is_landed_or_landless_administrative_or_theocratic = yes
 		trigger_if = {
 			limit = {
 				is_ai = yes
@@ -520,7 +491,7 @@ court_gardener_court_position = {
 	}
 
 	valid_position = {
-		is_landed_or_landless_administrative = yes
+		is_landed_or_landless_administrative_or_theocratic = yes
 		culture = { has_cultural_parameter = can_appoint_court_gardener }
 	}
 
@@ -533,30 +504,8 @@ court_gardener_court_position = {
 	revoke_cost = { # root is the liege, no other scopes are passed here!
 		prestige =  {
 			value = major_court_position_prestige_revoke_cost
-			# Set to 0 via obligation hook
 			if = {
-				limit = {
-					court_position_obligation_hook_salary_trigger = {
-						POS = court_gardener
-						LIEGE = root
-					}
-				}
-				multiply = 0
-			}
-			# Avoid AI prestige issues
-			if = {
-				limit = {
-					exists = this
-					is_ai = yes
-				}
-				multiply = 0
-			}
-			# Special case for events
-			if = {
-				limit = {
-					exists = this
-					has_character_flag = free_revoke_cost
-				}
+				limit = { free_court_position_revoke_trigger = { POS = court_gardener } }
 				multiply = 0
 			}
 			#Lowering for LAAMPS, to match Camp Officer revoke cost
@@ -632,7 +581,7 @@ court_gardener_court_position = {
 	}
 
 	modifier = {
-		monthly_stewardship_lifestyle_xp_gain_mult = 0.05	#prev 0.1
+		monthly_stewardship_lifestyle_xp_gain_mult = 0.1
 		character_capital_county_monthly_development_growth_add = 0.04	#prev 0.02
 		stress_gain_mult = -0.1		#prev -0.25
 	}
@@ -746,7 +695,6 @@ royal_architect_court_position = { # EP1
 	# How good is this character in this position? root scope is the holder of the court position
 	aptitude = {
 		value = 25
-		add = court_position_aptitude_boon_voyager_trait
 		add = {
 			value = stewardship
 			multiply = 2.5
@@ -755,8 +703,7 @@ royal_architect_court_position = { # EP1
 		}
 		if = {
 			limit = {
-				exists = dynasty
-				dynasty = { has_dynasty_perk = fp3_khvarenah_legacy_1 }
+				dynasty ?= { has_dynasty_perk = fp3_khvarenah_legacy_1 }
 			}
 			add = {
 				value = 10
@@ -781,10 +728,6 @@ royal_architect_court_position = { # EP1
 				desc = court_position_blind_trait
 			}
 		}
-		add = court_position_aptitude_traveling_friends_value
-		add = court_position_aptitude_eunuch_tradition_value
-		add = court_position_aptitude_family_business_value
-		add = court_position_aptitude_low_penalty_value
 		# Bonus from court.8311
 		if = {
 			limit = { var:bonus_aptitude_role ?= flag:royal_architect }
@@ -793,34 +736,10 @@ royal_architect_court_position = { # EP1
 				desc = cp_bonus_aptitude
 			}
 		}
-		# Seneschal
-		if = {
-			limit = {
-				liege.court_position:seneschal_court_position ?= {
-					has_variable = performing_improve_court
-				}
-			}
-			add = {
-				value = liege.court_position:seneschal_court_position.seneschal_improve_court_value
-				desc = seneschal_improve_court_aptitude_desc
-			}
-		}
-		# Yeke Jarquchi
-		if = {
-			limit = {
-				liege.court_position:yeke_jarquchi_court_position ?= {
-					has_variable = performing_improve_court
-				}
-			}
-			add = {
-				value = liege.court_position:yeke_jarquchi_court_position.yeke_jarquchi_improve_court_value
-				desc = yeke_jarquchi_improve_court_aptitude_desc
-			}
-		}
 		# Japan
 		if = {
 			limit = {
-				liege.house ?= { has_house_power_parameter = improved_stewardship_court_position_efficiency }
+				liege.house ?= { has_house_aspiration_parameter = improved_stewardship_court_position_efficiency }
 			}
 			add = {
 				value = cp_bonus_aptitude_value
@@ -836,10 +755,13 @@ royal_architect_court_position = { # EP1
 				desc = court_position_architect_study_experience
 			}
 		}
+
+		# add = court_position_aptitude_low_penalty_value
+		add = general_aptitude_bonus
 	}
 
 	is_shown = {
-		is_landed_or_landless_administrative = yes
+		is_landed_or_landless_administrative_or_theocratic = yes
 		has_ep1_court_positions_dlc_trigger = yes
 		NOT = { government_has_flag = government_is_nomadic }
 		trigger_if = {
@@ -852,7 +774,7 @@ royal_architect_court_position = { # EP1
 	}
 
 	valid_position = {
-		is_landed_or_landless_administrative = yes
+		is_landed_or_landless_administrative_or_theocratic = yes
 		highest_held_title_tier >= tier_kingdom
 	}
 
@@ -871,35 +793,13 @@ royal_architect_court_position = { # EP1
 	revoke_cost = { # root is the liege, no other scopes are passed here!
 		prestige =  {
 			value = major_court_position_prestige_revoke_cost
-			# Set to 0 via obligation hook
 			if = {
-				limit = {
-					court_position_obligation_hook_salary_trigger = {
-						POS = royal_architect
-						LIEGE = root
-					}
-				}
-				multiply = 0
-			}
-			# Avoid AI prestige issues
-			if = {
-				limit = {
-					exists = this
-					is_ai = yes
-				}
-				multiply = 0
-			}
-			# Special case for events
-			if = {
-				limit = {
-					exists = this
-					has_character_flag = free_revoke_cost
-				}
+				limit = { free_court_position_revoke_trigger = { POS = royal_architect } }
 				multiply = 0
 			}
 			#Lowering for LAAMPS, to match Camp Officer revoke cost
 			if = {
-				limit = { 
+				limit = {
 					exists = this
 					government_has_flag = government_is_landless_adventurer
 				}

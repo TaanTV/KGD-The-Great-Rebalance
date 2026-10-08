@@ -7,7 +7,12 @@ diarch_loyalty_score_type_regency_value = {
 
 	if = {
 		# For performance reasons, you'll sometimes check this when you don't have a liege, so we need to check beforehand for error purposes.
-		limit = { exists = liege }
+		limit = { 
+			exists = liege 
+			#ADDED 
+			is_alive = yes
+			liege != this
+		}
 		# Add raw opinion.
 		add = {
 			desc = diarch_loyalty_score.regency.opinion_of_you
@@ -67,7 +72,15 @@ diarch_loyalty_score_type_regency_value = {
 			}
 			add = {
 				desc = game_concept_obedience
-				value = obedience_value
+				#value = obedience_value
+				#ADDED - forced obedience adds like a thousand here lol?
+				if = {
+					limit = { is_obedient_to = liege }
+					value = 25
+				}
+				else = {
+					value = -25
+				}
 			}
 		}
 		# Overrides.
@@ -84,8 +97,31 @@ diarch_loyalty_score_type_regency_value = {
 			add = {
 				desc = diarch_loyalty_score.regency.years_as_diarch
 				value = {
-					value = years_as_diarch
-					multiply = -25
+					value = -25
+					if = {
+						limit = {
+							OR = {
+								has_trait = patient
+								has_trait = content
+								has_trait = humble
+								has_trait = loyal
+							}
+						}
+						add = 10
+					}
+					if = {
+						limit = {
+							OR = {
+								has_trait = impatient
+								has_trait = ambitious
+								has_trait = arrogant
+								has_trait = disloyal
+							}
+						}
+						add = -5
+						max = -25	#so that it stays at base if you're both patient and disloyal
+					}
+					multiply = years_as_diarch
 				}
 			}
 		}
@@ -96,13 +132,330 @@ diarch_loyalty_score_type_regency_value = {
 			add = {
 				desc = diarch_loyalty_score.regency.years_as_diarch	#dont forget to actually add the loc bruh.
 				value = {
-					value = years_as_diarch
-					multiply = -3
+					value = -2
+					if = {
+						limit = {
+							OR = {
+								has_trait = patient
+								has_trait = content
+								has_trait = humble
+								has_trait = loyal
+							}
+						}
+						multiply = 0.5
+					}
+					if = {
+						limit = {
+							OR = {
+								has_trait = impatient
+								has_trait = ambitious
+								has_trait = arrogant
+								has_trait = disloyal
+							}
+						}
+						multiply = 1.5
+						max = -2	#so that it stays at base if you're both patient and disloyal
+					}
+					multiply = years_as_diarch
 				}
 			}
 		}
 	}
 }
+
+diarch_loyalty_score_standard_values_general_sympathies_value = {
+	# Compassion if liege is helpless.
+	if = {
+		limit = {
+			liege = {
+				OR = {
+					is_incapable = yes
+					is_adult = no
+				}
+			}
+		}
+		add = {
+			desc = diarch_loyalty_score.regency.compassion_for_helpless
+			value = root.ai_compassion
+		}
+	}
+	# Tyranny.
+	if = {
+		limit = { liege.tyranny >= 1 }
+		add = {
+			desc = diarch_loyalty_score.regency.tyranny
+			value = {
+				value = liege.tyranny
+				multiply = -1
+			}
+		}
+	}
+	#ADDED
+	if = {
+		limit = { 
+			is_landed = yes
+			exists = liege	#juuuuust in case
+			OR = {
+				has_opinion_modifier = {
+					modifier = received_title_barony
+					target = liege
+					value >= 10
+				}
+				has_opinion_modifier = {
+					modifier = received_title_county
+					target = liege
+					value >= 20
+				}
+				has_opinion_modifier = {
+					modifier = received_title_duchy
+					target = liege
+					value >= 30
+				}
+				has_opinion_modifier = {
+					modifier = received_title_kingdom
+					target = liege
+					value >= 40
+				}
+				has_opinion_modifier = {
+					modifier = received_title_empire
+					target = liege
+					value >= 50
+				}
+			}
+		}
+		add = {
+			desc = diarch_loyalty_score.regency.placated_by_granted_titles
+			value = {
+				value = 10
+				if = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = received_title_empire
+							target = liege
+							value >= 50
+						}
+					}
+					value = 50
+				}
+				else_if = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = received_title_kingdom
+							target = liege
+							value >= 40
+						}
+					}
+					value = 40
+				}
+				else_if = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = received_title_duchy
+							target = liege
+							value >= 30
+						}
+					}
+					value = 30
+				}
+				else_if = {
+					limit = {
+						has_opinion_modifier = {
+							modifier = received_title_county
+							target = liege
+							value >= 20
+						}
+					}
+					value = 20
+				}
+			}
+		}
+	}
+}
+
+
+diarch_loyalty_score_esoteric_values_heirage_situation_value = {
+	# Designated heirs feel happy for it.
+	if = {
+		limit = { liege.designated_heir ?= root }
+		# Designated heirs are happy for it.
+		add = {
+			desc = diarch_loyalty_score.co_rulership.designated_heir
+			value = 25
+		}
+	}
+	#ADDED - moved this up there
+	add = {
+		desc = diarch_loyalty_score.co_rulership.years_waiting
+		value = {
+			value = -2
+			#ADDED
+			if = {
+				limit = {
+					OR = {
+						has_trait = patient
+						has_trait = content
+						has_trait = humble
+						has_trait = loyal
+					}
+				}
+				multiply = 0.5
+			}
+			if = {
+				limit = {
+					OR = {
+						has_trait = impatient
+						has_trait = ambitious
+						has_trait = arrogant
+						has_trait = disloyal
+					}
+				}
+				multiply = 1.5
+				max = -2	#so that it stays at base if you're both patient and disloyal
+			}
+			multiply = years_as_diarch
+		}
+	}
+	# Unless we have a few specific traits, we get impatient for power over time.
+	if = {
+		limit = {
+			OR = {
+				# Something that makes us patient.
+				NOR = {
+					has_trait = patient
+					has_trait = content
+					has_trait = humble
+					has_trait = loyal
+				}
+				# Without something that stops us being impatient.
+				OR = {
+					has_trait = impatient
+					has_trait = ambitious
+					has_trait = arrogant
+					has_trait = disloyal
+				}
+			}
+		}
+		# Dedicating this section of the script to Ol' Charlie Boy.
+		#add = {
+		#	desc = diarch_loyalty_score.co_rulership.years_waiting
+		#	value = {
+		#		value = years_as_diarch
+		#		multiply = -2
+		#	}
+		#}
+		# Bonus if we're much younger than them/malus if older.
+		if = {
+			limit = { age != liege.age }
+			add = {
+				desc = diarch_loyalty_score.co_rulership.age_difference
+				value = {
+					value = liege.age
+					subtract = age
+				}
+			}
+		}
+		# Same again for health.
+		## 85+.
+		if = {
+			limit = {
+				liege.age >= 85
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.just_die_already
+				value = -55
+			}
+		}
+		## 80+.
+		else_if = {
+			limit = {
+				liege.age >= 80
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.your_time_is_up
+				value = -45
+			}
+		}
+		## 75+.
+		else_if = {
+			limit = {
+				liege.age >= 75
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.you_are_too_fit
+				value = -35
+			}
+		}
+		## 70+.
+		else_if = {
+			limit = {
+				liege.age >= 70
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.you_are_too_fit
+				value = -25
+			}
+		}
+		## 65+.
+		else_if = {
+			limit = {
+				liege.age >= 65
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.you_are_too_fit
+				value = -15
+			}
+		}
+		## 55+.
+		else_if = {
+			limit = {
+				liege.age >= 55
+				liege.health >= medium_health
+			}
+			add = {
+				desc = diarch_loyalty_score.co_rulership.showing_no_signs_of_slowing
+				value = -5
+			}
+		}
+		# But if we're unhealthy, ignore it — we've got other stuff to worry about.
+	}
+}
+
+liege_trust_diarch_trilateral_interaction_default_value = {
+	# Base for players.
+	value = 25
+	# But if we've got AI on either side of us, who're nicely weighted to be considerate to their liege, be a little more trusting.
+	if = {
+		limit = {
+			scope:actor = { is_ai = yes }
+			scope:recipient = { is_ai = yes }
+			#ADDED
+			scope:intermediary = { is_ai = yes }
+		}
+		add = 50	#prev 75
+	}
+	#ADDED - children are a bit less annoying
+	if = {
+		limit = { scope:intermediary.age < 4 }
+		add = 1000
+	}
+	else_if = {
+		limit = { scope:intermediary.age < 16 }
+		add = 25
+	}	
+}
+
+liege_diarchy_veto_prestige_cost_high = -500	#prev -250
+liege_diarchy_veto_prestige_cost_medium = -350	#prev -150
+liege_diarchy_veto_prestige_cost_low = -250		#prev -75
+
+liege_diarchy_veto_influence_cost_high = -250	#prev -150
+liege_diarchy_veto_influence_cost_medium = -150	#prev -100
+liege_diarchy_veto_influence_cost_low = -75		#prev -50
 
 syphon_treasury_gold_gain_low = {
 	value = 0
@@ -186,32 +539,45 @@ swing_scales_influence_cost_value = {
 	## Should only affect the regent, not the ruler
 	if = {
 		limit = {
-			scope:recipient = { is_liege_or_above_of = scope:actor }
+			scope:recipient = {
+				is_liege_or_above_of = scope:actor
+				has_legitimacy = yes
+			}
 		}
 		# 1
 		if = {
 			limit = { liege.legitimacy_level = 1 }
-			add = miniscule_influence_value
+			#add = miniscule_influence_value
+			#ADDED
+			multiply = 1.2
 		}
 		# 2
 		else_if = {
 			limit = { liege.legitimacy_level = 2 }
-			add = minor_influence_value
+			#add = minor_influence_value
+			#ADDED
+			multiply = 1.4
 		}
 		# 3
 		else_if = {
 			limit = { liege.legitimacy_level = 3 }
-			add = medium_influence_value
+			#add = medium_influence_value
+			#ADDED
+			multiply = 1.6
 		}
 		# 4
 		else_if = {
 			limit = { liege.legitimacy_level = 4 }
-			add = major_influence_value
+			#add = major_influence_value
+			#ADDED
+			multiply = 1.8
 		}
 		# 5
 		else_if = {
 			limit = { liege.legitimacy_level = 5 }
-			add = massive_influence_value
+			#add = massive_influence_value
+			#ADDED
+			multiply = 2.0
 		}
 		else = {
 			# Deliberately empty
@@ -243,32 +609,45 @@ swing_scales_prestige_cost_value = {
 	## Should only affect the regent, not the ruler
 	if = {
 		limit = {
-			scope:recipient = { is_liege_or_above_of = scope:actor }
+			scope:recipient = {
+				is_liege_or_above_of = scope:actor
+				has_legitimacy = yes
+			}
 		}
 		# 1
 		if = {
 			limit = { liege.legitimacy_level = 1 }
-			add = miniscule_prestige_value
+			#add = miniscule_prestige_value
+			#ADDED
+			multiply = 1.2
 		}
 		# 2
 		else_if = {
 			limit = { liege.legitimacy_level = 2 }
-			add = minor_prestige_value
+			#add = minor_prestige_value
+			#ADDED
+			multiply = 1.4
 		}
 		# 3
 		else_if = {
 			limit = { liege.legitimacy_level = 3 }
-			add = medium_prestige_value
+			#add = medium_prestige_value
+			#ADDED
+			multiply = 1.6
 		}
 		# 4
 		else_if = {
 			limit = { liege.legitimacy_level = 4 }
-			add = major_prestige_value
+			#add = major_prestige_value
+			#ADDED
+			multiply = 1.8
 		}
 		# 5
 		else_if = {
 			limit = { liege.legitimacy_level = 5 }
-			add = massive_prestige_value
+			#add = massive_prestige_value
+			#ADDED
+			multiply = 2.0
 		}
 		else = {
 			# Deliberately empty
@@ -314,47 +693,60 @@ swing_scales_piety_cost_value = {
 		## Count.
 		if = {
 			limit = { liege.highest_held_title_tier <= tier_county }
-			add = minor_piety_value
+			add = miniscule_piety_value		#prev minor_piety_value
 		}
 		## Duke.
 		else_if = {
 			limit = { liege.highest_held_title_tier <= tier_duchy }
-			add = medium_piety_value
+			add = minor_piety_value			#prev medium_piety_value
 		}
 		## King or Emperor
-		else = { add = major_piety_value }
+		else = { add = medium_piety_value }	#prev major_piety_value
 	}
 
 	# Adjust how much this swing costs due to Legitimacy
 	## Should only affect the regent, not the ruler
 	if = {
 		limit = {
-			scope:recipient = { is_liege_or_above_of = scope:actor }
+			scope:recipient = {
+				is_liege_or_above_of = scope:actor
+				has_legitimacy = yes
+			}
 		}
 		# 1
 		if = {
 			limit = { liege.legitimacy_level = 1 }
-			add = miniscule_piety_value
+			#add = miniscule_piety_value
+			#ADDED
+			multiply = 1.2
 		}
 		# 2
 		else_if = {
 			limit = { liege.legitimacy_level = 2 }
-			add = minor_piety_value
+			#add = minor_piety_value
+			#ADDED
+			multiply = 1.4
 		}
 		# 3
 		else_if = {
 			limit = { liege.legitimacy_level = 3 }
-			add = medium_piety_value
+			#add = medium_piety_value
+			#ADDED
+			multiply = 1.6
 		}
 		# 4
 		else_if = {
 			limit = { liege.legitimacy_level = 4 }
-			add = major_piety_value
+			#add = major_piety_value
+			#ADDED
+			multiply = 1.8
 		}
 		# 5
 		else_if = {
 			limit = { liege.legitimacy_level = 5 }
-			add = massive_piety_value
+			#add = massive_piety_value
+			#ADDED
+			multiply = 2.0
 		}
 		else = {
 			# Deliberately empty
@@ -414,40 +806,45 @@ swing_scales_cash_cost_value = {
 	## Should only affect the regent, not the ruler
 	if = {
 		limit = {
-			scope:recipient = { is_liege_or_above_of = scope:actor }
+			scope:recipient = {
+				is_liege_or_above_of = scope:actor
+				has_legitimacy = yes
+			}
 		}
 		# 1
 		if = {
 			limit = { liege.legitimacy_level = 1 }
 			#add = tiny_gold_value
+			#ADDED
+			multiply = 1.2
 		}
 		# 2
 		else_if = {
 			limit = { liege.legitimacy_level = 2 }
 			#add = minor_gold_value
 			#ADDED
-			add = scope:recipient.tiny_gold_value
+			multiply = 1.4
 		}
 		# 3
 		else_if = {
 			limit = { liege.legitimacy_level = 3 }
 			#add = medium_gold_value
 			#ADDED
-			add = scope:recipient.minor_gold_value
+			multiply = 1.6
 		}
 		# 4
 		else_if = {
 			limit = { liege.legitimacy_level = 4 }
 			#add = major_gold_value
 			#ADDED
-			add = scope:recipient.medium_gold_value
+			multiply = 1.8
 		}
 		# 5
 		else_if = {
 			limit = { liege.legitimacy_level = 5 }
 			#add = massive_gold_value
 			#ADDED
-			add = scope:recipient.major_gold_value
+			multiply = 2.0
 		}
 		else = {
 			# Deliberately empty

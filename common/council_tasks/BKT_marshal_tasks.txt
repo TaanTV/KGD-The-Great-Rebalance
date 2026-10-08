@@ -201,6 +201,20 @@
 				desc = MARSHAL_INCREASE_CONTROL_MIME_MODIFIER
 			}
 		}
+		# The Christian Church situation bonus
+		if = {
+			limit = {
+				scope:councillor_liege = {
+					top_participant_group:the_christian_church ?= {
+						has_participant_group_parameter = the_christian_church_faster_county_control_task
+					}
+				}
+			}
+			multiply = {
+				value = pam_the_christian_church_faster_county_control_task_value
+				desc = pam_the_christian_church_faster_county_control_task_desc
+			}
+		}
 	}
 
 	full_progress = marshal_increase_control_full_progress
@@ -219,6 +233,22 @@
 			# If the growth factor is 0, no amount of trying to control helps
 			# (happens when the county is under siege/occupied most likely)
 			monthly_county_control_growth_factor > 0
+		}
+		#ADDEd - focus on the capital if need be
+		trigger_if = {
+			limit = { 
+				scope:councillor_liege = { 
+					is_ai = yes 
+					capital_county = {
+						OR = {
+							has_county_corruption_trigger = yes
+							county_control < full_county_control
+						}
+						monthly_county_control_growth_factor > 0.25	#otherwise it's just way too low
+					}
+				} 
+			}
+			scope:councillor_liege.capital_county ?= scope:county 
 		}
 	}
 
@@ -256,7 +286,6 @@
 					location = scope:county.title_province
 					task_contract_employer = scope:councillor
 					target = scope:councillor.liege
-					#destination = scope:county.title_province #Unop Let the contract setup choose the destination
 					save_scope_as = task_contract					
 				}
 			}

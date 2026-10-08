@@ -1,46 +1,58 @@
 ﻿#On actions related to religion
 
-# Code on-action: character creates a faith
-# Root is the creator
+# Code on-action: a new faith is created (character create/convert, or a rite detaching into its own faith)
+# Root is the new faith; its head/leader is root.main_rite.head_of_rite (use it for faith-setup effects)
+# scope:founder is the acting character that triggered the creation (creator/converter, heresy declarer, or on a divergence the head of the diverging rite)
+# scope:founder can be absent - the game creates faiths with no acting character, so it is entered with ?=
 # scope:old_faith is the faith they used to have
+# scope:old_rite is the rite they used to have
+# scope:diverged (true/false) optional scope, true if the faith was created because of a Rite diverging too much. Notice create a 100+ divergence heresy at the start does not count.
 on_faith_created = {
 	on_actions = {
 		BKT_on_faith_created_judaic
-		BKT_on_faith_created_courtiers
 	}
 }
 
 BKT_on_faith_created_judaic = {
 	trigger = {
-		scope:old_faith ?= {
-			religion_tag = judaism_religion
-			has_doctrine = special_doctrine_not_allowed_to_hof
+		scope:old_rite ?= {
+			has_doctrine = special_doctrine_prophecy_of_malachi
 		}
+		NOT = { has_doctrine = special_doctrine_prophecy_of_malachi }
 	}
 	effect = {
-		faith = { add_doctrine = special_doctrine_not_allowed_to_hof }
+		add_doctrine = special_doctrine_prophecy_of_malachi
+		main_rite = { add_rite_doctrine = special_doctrine_prophecy_of_malachi }
 	}
 }
 
-BKT_on_faith_created_courtiers = {
-	effect = {
-		save_temporary_scope_as = root_scope
-		every_courtier = {
-			limit = { faith != scope:root_scope.faith }
-			run_interaction = {
-				interaction = ask_for_conversion_interaction
-				actor = scope:root_scope 
-				recipient = this
-				send_threshold = accept
-			}
-		}
+# Code on-action: character creates a rite
+# Root is the creator
+# scope:old_faith is the faith they used to have
+# scope:old_rite is the rite they used to have
+on_rite_created = {
+	on_actions = {
+		BKT_on_rite_created_judaic
 	}
 }
 
-# Code on-action: character changes faith. Not called when a character gets a faith on birth, creation, and similar
+BKT_on_rite_created_judaic = {
+	trigger = {
+		scope:old_rite ?= {
+			has_doctrine = special_doctrine_prophecy_of_malachi
+		}
+		rite ?= { NOT = { rite_has_doctrine = special_doctrine_prophecy_of_malachi } }
+	}
+	effect = {
+		rite = { add_rite_doctrine = special_doctrine_prophecy_of_malachi }
+	}
+}
+
+# Code on-action: character changes faith or rite. Not called when a character gets a faith on birth, creation, and similar
 # Root is the character
 # scope:old_faith is the faith they used to have
-on_character_faith_change = {
+# scope:old_rite is the rite they used to have (can be equal to current rite)
+on_rite_change = {
 	on_actions = {
 		BKT_on_character_faith_change
 	}
@@ -51,10 +63,20 @@ BKT_on_character_faith_change = {
 		if = {
 			limit = { 
 				age > 7		#Children probably dont have strong religious convictions....
+				NOT = { has_trait = zealous }	#unless they do.
 			}
-			add_character_modifier = {
-				modifier = recently_converted_character_modifier
-				years = 10
+			if = {
+				limit = { scope:old_faith != faith }
+				add_character_modifier = {
+					modifier = recently_converted_character_modifier
+					years = 10
+				}
+			}
+			else = {
+				add_character_modifier = {
+					modifier = recently_converted_character_modifier
+					years = 5
+				}
 			}
 			#Maybe have a chance to remove cynical?
 		}

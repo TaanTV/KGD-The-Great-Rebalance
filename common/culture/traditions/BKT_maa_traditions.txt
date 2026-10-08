@@ -442,21 +442,9 @@ tradition_amharic_highlanders = { #Ethiopian Unique Tradition, replaces hill dwe
 
 	is_shown = {
 		NOT = { has_cultural_tradition = tradition_hill_dwellers }
-		OR = {
-			this = culture:ethiopian
-			any_parent_culture_or_above = {
-				this = culture:ethiopian
-			}
-		}
+		culture_is_or_has_ancestor_trigger = { CULTURE = culture:ethiopian }
 	}
 	can_pick = {
-		NOT = { has_cultural_tradition = tradition_hill_dwellers }
-		OR = {
-			this = culture:ethiopian
-			any_parent_culture_or_above = {
-				this = culture:ethiopian
-			}
-		}
 		custom_description = {
 			text = culture_in_hills_desc
 			any_culture_county = {

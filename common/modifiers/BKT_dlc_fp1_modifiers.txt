@@ -1,4 +1,29 @@
-﻿
+﻿high_king_of_the_seas_fp1_modifier = {
+	icon = martial_positive
+	embarkation_cost_mult = -0.5
+	naval_movement_speed_mult = 0.25
+	vassal_opinion = 20						#prev 30
+	vassal_levy_contribution_mult = 0.25	#prev 0.5
+	life_expectancy = 5						#prev 10
+}
+
+high_queen_of_the_seas_fp1_modifier = {
+	icon = martial_positive
+	embarkation_cost_mult = -0.5
+	naval_movement_speed_mult = 0.25
+	vassal_opinion = 20						#prev 30
+	vassal_levy_contribution_mult = 0.25	#prev 0.5
+	life_expectancy = 5						#prev 10
+}
+
+north_sea_kingdom_coastal_modifier = {
+	icon = stewardship_positive
+	county_opinion_add = 15					#prev 25
+	monthly_county_control_growth_add = 0.2
+	tax_mult = 0.1
+	development_growth = 0.04				#prev 0.15
+}
+
 scandinavian_adventurer_fp1_modifier = {
 	icon = martial_positive
 	embarkation_cost_mult = -1
@@ -9,4 +34,9 @@ scandinavian_adventurer_fp1_modifier = {
 	maa_toughness_mult = 0.35
 	army_maintenance_mult = -1
 	mercenary_hire_cost_mult = 10
+}
+
+fp1_bathing_health_modifier = {
+	icon = health_positive
+	health = medium_health_bonus	#prev major_health_bonus
 }

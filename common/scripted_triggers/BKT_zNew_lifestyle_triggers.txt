@@ -27,7 +27,7 @@
 		}
 		flag:learning = {
 			has_perk = whole_of_body_perk
-			has_perk = scholar_perk
+			has_perk = erudite_perk
 			has_perk = theologian_perk
 		}
 		flag:wanderer = {

@@ -1,7 +1,7 @@
 ﻿
 governance_reduced_troop_levy_modifier = {
 	icon = county_modifier_development_positive
-	development_growth = 0.04	#prev 1
+	development_growth = 0.06	#prev 1
 	county_fertility_growth_mult = medium_county_fertility_growth_gain
 	levy_size = -0.5
 	travel_danger = 5

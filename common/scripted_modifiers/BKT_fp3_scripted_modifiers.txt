@@ -21,7 +21,7 @@ evaluate_action_decreasing_house_unity = {
 			# Warmonger and Ambitious AI wants a low unity to expand while peaceful and economy focused wants Harmonious
 			#ADDED - this part is rewritten
 			if = {
-				limit = { ai_wants_low_unity = no }
+				limit = { ai_wants_low_unity = yes }
 				multiply = 1
 			}
 			else = {
@@ -129,7 +129,7 @@ evaluate_action_increasing_house_unity = {
 			# Warmonger and Ambitious AI wants a low unity to expand while peaceful and economy focused wants Harmonious
 			#ADDED - this part is rewritten
 			if = {
-				limit = { ai_wants_high_unity = no }	#prev yes
+				limit = { ai_wants_high_unity = yes }	#prev yes
 				multiply = 1
 			}
 			else = {

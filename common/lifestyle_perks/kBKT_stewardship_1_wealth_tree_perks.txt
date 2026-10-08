@@ -255,7 +255,6 @@ detailed_ledgers_perk = {
 	}
 }
 
-
 # It Is MY Domain
 it_is_my_domain_perk = {
 	lifestyle = stewardship_lifestyle
@@ -279,11 +278,13 @@ it_is_my_domain_perk = {
 		}
 	}
 	
+	#ADDED
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		invert_check = yes
-		domain_limit = 1
-		stress_gain_mult = 0.2
+		#domain_limit = 1
+		#stress_gain_mult = 0.2
+		domain_tax_mult = 0.1
 	}
 	
 	government_character_modifier = {
@@ -294,10 +295,11 @@ it_is_my_domain_perk = {
 	#ADDED 
 	government_character_modifier = {
 		flag = government_is_nomadic
-		domicile_monthly_gold_mult = 0.1
-		domicile_monthly_herd_mult = 0.1
-		domain_limit = -1
-		stress_gain_mult = -0.2
+		#domain_limit = -1
+		#stress_gain_mult = -0.2
+		domain_tax_mult = -0.1
+		domicile_monthly_gold_mult = 0.05
+		monthly_income_from_herd_mult = 0.15
 	}
 	
 	effect = {
@@ -344,14 +346,14 @@ at_any_cost_perk = {
 
 
 	effect = {
-		#if = {
-		#	limit = {
-		#		NOT = { government_has_flag = government_is_landless_adventurer }
-		#	}
-		#	custom_description_no_bullet = {
-		#		text = at_any_cost_perk_effect
-		#	}
-		#}
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_is_landless_adventurer }
+			}
+			custom_description_no_bullet = {
+				text = bkt_at_any_cost_perk_effect	#prev at_any_cost_perk_effect
+			}
+		}
 		if = {
 			limit = {
 				government_has_flag = government_is_landless_adventurer
@@ -365,10 +367,27 @@ at_any_cost_perk = {
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		invert_check = yes
-		domain_tax_mult = 0.1
+		#domain_tax_mult = 0.1
+		#ADDED
+		men_at_arms_recruitment_cost = -0.15
+		mercenary_hire_cost_mult = -0.15
+	}
+	
+	#ADDED
+	government_character_modifier = {
+		flag = government_is_mandala
+		title_creation_piety_cost_mult = -0.15
+	}
+	government_character_modifier = {
+		flag = government_is_mandala
+		invert_check = yes
+		title_creation_cost_mult = -0.15
+	}
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		title_creation_cost_mult = 0.15
 	}
 }
-
 
 # Avaricious
 avaricious_perk = {

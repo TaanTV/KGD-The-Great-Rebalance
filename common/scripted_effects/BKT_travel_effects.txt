@@ -1,0 +1,32 @@
+﻿add_poi_stewardship_experience_effect = {
+	poi_lifestyle_experience_effect = {
+		LIFESTYLE = stewardship
+		VALUE = travel_medium_xp
+	}
+	#ADDED - this is just funnies
+	if = {
+		limit = { is_ruler = yes is_playable_character = yes }
+		if = {
+			limit = { scope:province = { has_building_with_flag = travel_point_of_interest_mummification } }
+			add_known_doctrine = doctrine_funeral_mummification
+		}
+		else_if = {
+			limit = { scope:province = province:747 }
+			add_known_doctrine = doctrine_funeral_cremation
+		}
+	}
+}
+
+add_poi_wanderer_experience_effect = {
+	if = {
+		limit = {
+			has_bp3_dlc_trigger = yes
+			#ADDED
+			NOT = { has_schizo_balance_loaded_trigger = yes }
+		}
+		poi_lifestyle_experience_effect = {
+			LIFESTYLE = wanderer
+			VALUE = travel_medium_xp
+		}
+	}
+}

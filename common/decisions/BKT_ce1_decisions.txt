@@ -45,20 +45,12 @@ isolate_capital_decision = {
 				is_ai = yes
 			}
 			#ADDED changed redid this whole logic so AI is a bit more proactive in handling plagues
-			capital_province.county = {
+			capital_county = {
 				OR = {
 					has_county_modifier = isolate_capital_decision_modifier
-					any_county_province = {
-						any_province_epidemic = {
-							count >= 1
-						}
-					}
+					has_province_with_epidemic = { intensity = any }
 					any_title_to_title_neighboring_and_across_water_county = {
-						any_county_province = {
-							any_province_epidemic = {
-								count >= 1
-							}
-						}
+						has_province_with_epidemic = { intensity = any }
 					}	
 				}
 			}
@@ -69,16 +61,14 @@ isolate_capital_decision = {
 					SIZE = 1
 					INTENSITY = minor
 				}
-				capital_county = {
+				capital_county ?= {
                     any_neighboring_county = {
-                        any_county_province = {
-                            any_province_epidemic = {
-                                count >= 1
-                            }
+                        any_county_province_epidemic = {
+                            count >= 1
                         }
                     }
                 }
-				capital_county = { has_county_modifier = isolate_capital_decision_modifier }
+				capital_county ?= { has_county_modifier = isolate_capital_decision_modifier }
 			}
 		}
 	}

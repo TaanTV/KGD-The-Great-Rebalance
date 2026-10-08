@@ -183,6 +183,21 @@ task_fabricate_claim = {
 			}
 		}
 
+		# tenet_transubstantiation
+		#De Corpore et Sanguine Domini: (...)Eucharist's transformation into the flesh and blood of Christ is possible because of the principle that God is truth; God is able to manipulate nature, as he created it
+
+		if = {
+			limit = {
+				scope:councillor.liege = {
+					rite = { rite_has_parameter = tenet_transubstantiation_faster_bishop_claims }
+				}
+			}
+			add = {
+				value = scope:councillor.court_chaplain_fabricate_claim_transubstantiation_bonus
+				desc = FABRICATE_CLAIM_TRANSUBSTANTIATION_BONUS
+			}
+		}
+
 		# Innovation Bonuses
 		if = {
 			limit = {
@@ -223,9 +238,9 @@ task_fabricate_claim = {
 		}
 		if = { #Progress penalty when fabricating on vassals
 			limit = {
-					exists = scope:county
-					scope:county.holder = {
-						target_is_liege_or_above = scope:councillor.liege 
+				exists = scope:county
+				scope:county.holder = {
+					target_is_liege_or_above = scope:councillor.liege 
 				}
 			}
 			multiply = {
@@ -248,6 +263,10 @@ task_fabricate_claim = {
 				divide = 4
 				desc = FABRICATE_CLAIM_ANY_STRUGGLE_BONUS
 			}
+		}
+		add = {
+			value = scope:councillor.estate_increase_fabricate_speed
+			desc = estate_increase_fabricate_speed_desc
 		}
 		if = {
 			limit = {
@@ -359,111 +378,28 @@ task_fabricate_claim = {
 				scope:county.holder.top_liege = scope:councillor_liege.top_liege
 			}
 			
-			if = {
-				limit = {
-					exists = scope:county.holder.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege
-						}
-					}
-					scope:county.holder.current_military_strength > scope:councillor_liege.council_task_fabricate_claim_relative_strength
-				}
-				subtract = 10000
-			}
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege
-						}
-					}
-				}
-				multiply = {
-					value = scope:councillor_liege.max_military_strength
-					divide = { value = scope:county.holder.current_military_strength min = 1 }
-				}
-			}
 			
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege
+			# power check
+			scope:county.holder ?= {
+				# find war target - who is direct vassal of lowest shared liege
+				ordered_liege_or_above = {
+					limit = {
+						scope:councillor_liege = { target_is_same_character_or_above = prev.liege }
+					}
+					order_by = {
+						value = 0
+						subtract = highest_held_title_tier
+					}
+					if = {
+						limit = { max_military_strength > scope:councillor_liege.council_task_fabricate_claim_relative_strength }
+						subtract = 10000
+					}
+					else = {
+						multiply = {
+							value = scope:councillor_liege.max_military_strength
+							divide = { value = max_military_strength min = 1 }
 						}
 					}
-					scope:county.holder.liege.current_military_strength > scope:councillor_liege.council_task_fabricate_claim_relative_strength
-				}
-				subtract = 10000
-			}
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege
-						}
-					}
-				}
-				multiply = {
-					value = scope:councillor_liege.max_military_strength
-					divide = { value = scope:county.holder.liege.current_military_strength min = 1 }
-				}
-			}
-			
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege.liege
-						}
-					}
-					scope:county.holder.liege.liege.current_military_strength > scope:councillor_liege.council_task_fabricate_claim_relative_strength
-				}
-				subtract = 10000
-			}
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege.liege
-						}
-					}
-				}
-				multiply = {
-					value = scope:councillor_liege.max_military_strength
-					divide = { value = scope:county.holder.liege.liege.current_military_strength min = 1 }
-				}
-			}
-			
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege.liege.liege
-						}
-					}
-					scope:county.holder.liege.liege.liege.current_military_strength > scope:councillor_liege.council_task_fabricate_claim_relative_strength
-				}
-				subtract = 10000
-			}
-			else_if = {
-				limit = {
-					exists = scope:county.holder.liege.liege.liege.liege
-					scope:councillor_liege = {
-						any_liege_or_above = {
-							this = scope:county.holder.liege.liege.liege.liege
-						}
-					}
-				}
-				multiply = {
-					value = scope:councillor_liege.max_military_strength
-					divide = { value = scope:county.holder.liege.liege.liege.current_military_strength min = 1 }
 				}
 			}
 		}
@@ -477,11 +413,13 @@ task_fabricate_claim = {
 		else_if = {
 			limit = { 
 				NOT = { scope:councillor_liege.top_liege = scope:county.holder.top_liege }
-				scope:councillor_liege.faith = {
-					NOT = { has_doctrine_parameter = pacifist_opinion_active }
-					faith_hostility_level = {
-						target = scope:county.holder.top_liege.faith
-						value >= faith_hostile_level
+				scope:councillor_liege = {
+					NOT = { rite = { rite_has_parameter = pacifist } }
+					faith = { 
+						faith_hostility_level = {
+							target = scope:county.holder.top_liege.faith
+							value >= faith_hostile_level
+						}
 					}
 				}
 			}
@@ -575,14 +513,11 @@ task_fabricate_claim = {
 		}
 		else_if = {
 			limit = {
-				#ADDED - should probably scope?
-				scope:councillor_liege = {
-					OR = {
-						#ai_greed <= ai_honor
-						#ai_greed <= 0
-						is_at_war = yes
-						gold < 150		#prev 100
-					}
+				OR = {
+					#ai_greed <= ai_honor
+					#ai_greed <= 0
+					is_at_war = yes
+					gold < 150		#prev 100
 				}
 			}
 			subtract = 1000
@@ -640,35 +575,29 @@ task_fabricate_claim = {
 		# Agenda impact
 		if = {
 			limit = {
-				#ADDED - should probably scope?
-				scope:councillor_liege = {
-					any_character_struggle = {
-						involvement = involved
-						is_struggle_type = iberian_struggle
-					}
+				any_character_struggle = {
+					involvement = involved
+					is_struggle_type = iberian_struggle
 				}
 			}
 			add = {
 				value = 0
-				#ADDED - should probably scope?
-				scope:councillor_liege = {
-					if = {
-						limit = {
-							any_character_struggle = {
-								phase_has_catalyst = catalyst_gain_claim_on_title_fp2
-							}
-							has_character_flag = agenda_towards_escalation
+				if = {
+					limit = {
+						any_character_struggle = {
+							phase_has_catalyst = catalyst_gain_claim_on_title_fp2
 						}
-						add = 200
+						has_character_flag = agenda_towards_escalation
 					}
-					else_if = {
-						limit = {
-							any_character_struggle = {
-								phase_has_catalyst = catalyst_gain_claim_on_title_fp2
-							}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						any_character_struggle = {
+							phase_has_catalyst = catalyst_gain_claim_on_title_fp2
 						}
-						add = -100
 					}
+					add = -100
 				}
 			}
 		}
@@ -676,60 +605,50 @@ task_fabricate_claim = {
 		
 		if = {
 			limit = {
-				#ADDED - Im pretty sure this was supposed to scope?
-				scope:councillor_liege = {
-					any_character_struggle = {
-						involvement = involved
-						is_struggle_type = persian_struggle
-					}
+				any_character_struggle = {
+					involvement = involved
+					is_struggle_type = persian_struggle
 				}
 			}
 			add = {
 				value = 0
-				#ADDED scoping to liege
-				scope:councillor_liege = {
-					if = {
-						limit = {
-							any_character_struggle = {
-								phase_has_catalyst = catalyst_gain_claim_on_title_fp3
-							}
-							has_trait = fp3_struggle_detractor
+				if = {
+					limit = {
+						any_character_struggle = {
+							phase_has_catalyst = catalyst_gain_claim_on_title_fp3
 						}
-						add = 200
+						has_trait = fp3_struggle_detractor
 					}
-					else_if = {
-						limit = {
-							any_character_struggle = {
-								phase_has_catalyst = catalyst_gain_claim_on_title_fp3
-							}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						any_character_struggle = {
+							phase_has_catalyst = catalyst_gain_claim_on_title_fp3
 						}
-						add = -100
 					}
+					add = -100
 				}
 			}
 		}
 		
 		#ADDED
 		if = {
-			limit = { scope:councillor_liege = { has_character_flag = fabricate_claim_cooldown } }
+			limit = { has_character_flag = fabricate_claim_cooldown }
 			multiply = 0
 		}
 		#ADDED ported from convert_culture_task
 		if = {
 			# Interrupt this task if you're bankrupt
 			limit = {
-				scope:councillor_liege = {
-					gold < 0
-				}
+				gold < 0
 			}
 			multiply = 0
 		}
 		#ADDED tribals dont need claims...
 		if = {
 			limit = {
-				scope:councillor_liege = {
-					can_use_conquest_cbs_trigger = yes
-				}
+				can_use_conquest_cbs_trigger = yes
 			}
 			multiply = 0
 		}

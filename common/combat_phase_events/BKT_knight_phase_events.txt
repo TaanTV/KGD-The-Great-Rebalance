@@ -14,6 +14,10 @@
 			is_ai = yes
 		}
 		modifier = {
+			factor = 1.25
+			is_acclaimed = yes
+		}
+		modifier = {
 			factor = 1.2		#prev 1.25
 			dynasty ?= {
 				has_dynasty_perk = warfare_legacy_3
@@ -43,6 +47,16 @@
 					rank = 3
 				}
 				has_trait = maimed
+			}
+		}
+		#ADDED - very unlikely to get wounded or whatever if the other side has literally no knights and u have any knights
+		modifier = {
+			factor = 2
+			scope:combat_side = {
+				any_side_knight = { exists = this }
+			}
+			scope:combat_side.enemy_side = {
+				NOT = { any_side_knight = { exists = this } }
 			}
 		}
 	}

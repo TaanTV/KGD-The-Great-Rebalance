@@ -1,0 +1,26 @@
+﻿can_do_lustful_stress_conversion = {
+	is_adult = yes
+	#Must either be able to convert to a new puritanical rite from shame or a new accepting rite from necessity
+	#OR = {
+	#	any_available_rite = {
+	#		this != root.rite
+	#		rite_forbids_the_secular_flesh_trigger = { #CHARACTER = root }
+	#	}
+	#	any_available_rite = {
+	#		this != root.rite
+	#		rite_embraces_the_secular_flesh_trigger = { #CHARACTER = root }
+	#	}
+	#}
+		
+	# So the Caliph doesn't just convert after a bad day
+	this != faith.religious_head
+
+	spiritual_fulfillment < spiritual_fulfillment_1
+	
+	#ADDED - no secret fatihs + stop holy orders from converting plz 
+	NOR = {
+		any_secret = { secret_type = secret_crypto_religionist }
+		exists = secret_faith
+		government_has_flag = government_is_holy_order
+	}
+}

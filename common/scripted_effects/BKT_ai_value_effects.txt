@@ -3,8 +3,10 @@ ai_chance_to_become_conqueror_effect = {
 	save_scope_as = possible_conqueror
 	if = {
 		limit = {
-			is_ai = yes		#ADDED
-			NOT = { government_has_flag = government_is_theocracy } #ADDED
+			#ADDED - the next 3
+			is_ai = yes
+			NOT = { government_has_flag = government_is_theocracy }
+			is_tributary = no
 			NOT = { has_game_rule = no_conquerors_frequency }
 			ai_has_cautious_personality = no
 			top_liege = this
@@ -64,7 +66,7 @@ ai_chance_to_become_conqueror_effect = {
 		}
 		random = {
 			chance = {
-				value = 0.25
+				value = 0.2		#prev 0.25
 				add = {
 					value = primary_title.tier
 					divide = 12
@@ -193,7 +195,7 @@ ai_chance_to_become_conqueror_effect = {
 				}
 				if = {
 					limit = {
-						faith = { has_doctrine = tenet_warmonger }
+						rite = { rite_has_tenet = tenet_warmonger }
 					}
 					add = 0.25
 				}
@@ -205,7 +207,7 @@ ai_chance_to_become_conqueror_effect = {
 				}
 				if = {
 					limit = {
-						faith = { has_doctrine_parameter = pacifist_opinion_active }
+						faith = { has_doctrine_parameter = pacifist }
 					}
 					add = -0.25
 				}
@@ -319,7 +321,7 @@ ai_chance_to_become_conqueror_effect = {
 							global_var:active_conquerors >= 5
 						}
 					}
-					add = -3.5
+					add = -2	#prev -3.5
 				}
 				if = {
 					limit = {
@@ -346,7 +348,7 @@ ai_chance_to_become_conqueror_effect = {
 					limit = {
 						highest_held_title_tier >= tier_empire
 					}
-					add = -1
+					add = -2
 				}
 				if = {
 					limit = {
@@ -405,6 +407,13 @@ ai_chance_to_become_conqueror_effect = {
 					add = 0.5
 					multiply = 2
 				}
+				#ADDED
+				if = {
+					limit = { 
+						confederation ?= { is_house_based = no }
+					}
+					multiply = 0.5
+				}
 			}
 			if = {
 				limit = {
@@ -417,6 +426,8 @@ ai_chance_to_become_conqueror_effect = {
 			}
 			else = {
 				trigger_event = conqueror.0001
+				#ADDED
+				remove_character_modifier = true_heresiarch_modifier
 			}
 		}
 	}
@@ -540,7 +551,7 @@ ai_chance_to_become_mandala_godking_effect = {
 				}
 				if = {
 					limit = {
-						house = { has_house_power_parameter = aspect_of_destruction }
+						house = { has_house_aspiration_parameter = aspect_of_destruction }
 						war_chest_gold >= war_chest_gold_maximum
 					}
 					add = 1
@@ -559,6 +570,8 @@ ai_chance_to_become_mandala_godking_effect = {
 				}
 			}
 			create_story = story_mandala
+			#ADDED
+			remove_character_modifier = true_heresiarch_modifier
 		}
 	}
 }
