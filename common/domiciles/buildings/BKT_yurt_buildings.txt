@@ -425,7 +425,7 @@ raid_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_1
+		value = 1 # add nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -455,7 +455,7 @@ raid_main_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
+		value = 1 # add nomadic_capital_interior_building_2
 	}
 
 	asset = {
@@ -485,7 +485,7 @@ raid_main_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = 1 # add nomadic_capital_interior_building_3
 		
 	}
 
@@ -516,7 +516,7 @@ raid_main_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4
+		value = 1 # add nomadic_capital_interior_building_4
 		
 	}
 
@@ -547,7 +547,7 @@ raid_main_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_5
+		value = 1 # add nomadic_capital_interior_building_5
 		
 	}
 
@@ -578,7 +578,7 @@ raid_main_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6
+		value = 1 # add nomadic_capital_interior_building_6
 		
 	}
 
@@ -608,7 +608,7 @@ herd_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2		#prev nomadic_capital_extremely_important_building
+		value = 1 # add nomadic_capital_interior_building_2		#prev nomadic_capital_extremely_important_building
 	}
 
 	asset = {
@@ -637,7 +637,7 @@ herd_main_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
+		value = 1 # add nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
 	}
 
 	asset = {
@@ -666,7 +666,7 @@ herd_main_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_3
+		value = 1 # add nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_3
 		
 	}
 
@@ -696,7 +696,7 @@ herd_main_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
+		value = 1 # add nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
 		
 	}
 
@@ -726,7 +726,7 @@ herd_main_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_5
+		value = 1 # add nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_5
 		
 	}
 
@@ -756,7 +756,7 @@ herd_main_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_5	#prev nomadic_capital_interior_building_6
+		value = 1 # add nomadic_capital_interior_building_5	#prev nomadic_capital_interior_building_6
 		
 	}
 
@@ -789,7 +789,7 @@ kurultai_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_1
+		value = 1 # add nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -822,7 +822,7 @@ kurultai_main_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
+		value = 1 # add nomadic_capital_interior_building_2
 	}
 
 	asset = {
@@ -855,7 +855,7 @@ kurultai_main_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = 1 # add nomadic_capital_interior_building_3
 		
 	}
 
@@ -889,7 +889,7 @@ kurultai_main_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4
+		value = 1 # add nomadic_capital_interior_building_4
 		
 	}
 
@@ -923,7 +923,7 @@ kurultai_main_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_5
+		value = 1 # add nomadic_capital_interior_building_5
 		
 	}
 
@@ -957,7 +957,7 @@ kurultai_main_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6
+		value = 1 # add nomadic_capital_interior_building_6
 		
 	}
 
@@ -1783,12 +1783,12 @@ herd_welfare_yurt_02 = {
 		value = nomadic_capital_exterior_building_1
 		if = {
 			limit = {
-				herd >= {
-					value = max_herd
-					multiply = 0.9
+				OR = {
+					herd >= 16000
+					herd >= { value = max_herd multiply = 0.8 }
 				}
 			}
-			add = 2
+			add = 2 # add 2
 		}
 	}
 
@@ -1824,12 +1824,12 @@ herd_welfare_yurt_03 = {
 		value = nomadic_capital_exterior_building_1	#prev nomadic_capital_exterior_building_2
 		if = {
 			limit = {
-				herd >= {
-					value = max_herd
-					multiply = 0.9
+				OR = {
+					herd >= 16000
+					herd >= { value = max_herd multiply = 0.8 }
 				}
 			}
-			add = 2
+			add = 2 # add 2
 		}
 		
 	}
@@ -1876,12 +1876,12 @@ herd_welfare_yurt_04 = {
 		value = nomadic_capital_exterior_building_3
 		if = {
 			limit = {
-				herd >= {
-					value = max_herd
-					multiply = 0.9
+				OR = {
+					herd >= 16000
+					herd >= { value = max_herd multiply = 0.8 }
 				}
 			}
-			add = 2
+			add = 2 # add 2
 		}
 	}
 
@@ -8055,7 +8055,7 @@ feast_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
+		value = 1 # add nomadic_capital_interior_building_2
 		
 		
 	}
@@ -8089,7 +8089,7 @@ feast_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = 1 # add nomadic_capital_interior_building_3
 		
 		
 	}
@@ -8123,7 +8123,7 @@ feast_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4
+		value = 1 # add nomadic_capital_interior_building_4
 		
 		
 	}
@@ -8157,7 +8157,7 @@ feast_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_5
+		value = 1 # add nomadic_capital_interior_building_5
 		
 		
 	}
@@ -8191,7 +8191,7 @@ feast_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6
+		value = 1 # add nomadic_capital_interior_building_6
 		
 		
 	}
@@ -13188,7 +13188,8 @@ merchant_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
+
 	}
 
 	character_modifier = {
@@ -13224,7 +13225,8 @@ merchant_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
+
 	}
 
 	ai_value = {
@@ -13258,7 +13260,8 @@ merchant_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
+
 	}
 
 	ai_value = {
@@ -13292,7 +13295,8 @@ merchant_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
+
 	}
 
 	ai_value = {
@@ -13326,7 +13330,8 @@ merchant_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
+
 	}
 
 	ai_value = {
@@ -13360,7 +13365,8 @@ merchant_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_3 = yes
+		nomad_yurt_paiza_more_gold_lvl_3 = yes
+
 	}
 
 	ai_value = {
