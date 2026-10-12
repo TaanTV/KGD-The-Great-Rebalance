@@ -1,0 +1,160 @@
+﻿laamp_decision_church_blessing_stress_loss_modifier = {
+	icon = piety_positive
+	stress_loss_mult = 0.05
+	monthly_piety = 0.2
+	life_expectancy = 1
+
+	scale = {
+		value = {
+			value = 0
+			if = {
+				limit = { piety_level >= max_piety_level }
+				add = 5
+			}
+			else_if = {
+				limit = { piety_level >= very_high_piety_level }
+				add = 4
+			}
+			else_if = {
+				limit = { piety_level >= high_piety_level }
+				add = 3
+			}
+			else_if = {
+				limit = { piety_level >= medium_piety_level }
+				add = 2
+			}
+			else = { add = 1 }
+		}
+		desc = MODIFIER_DEFINITION_VALUE_BASED_ON_PIETY_LEVEL
+		display_mode = scaled
+	}
+}
+
+ep3_fireside_chat_modifier_1 = {
+	icon = camp_positive
+	diplomacy = 1
+	learning = 1
+	monthly_lifestyle_xp_gain_mult = 0.1
+}
+
+ep3_fireside_chat_modifier_2 = {
+	icon = camp_positive
+	martial = 1
+	diplomacy = 1
+	stewardship = 1
+	intrigue = 1
+	learning = 1
+	monthly_lifestyle_xp_gain_mult = 0.1
+}
+
+ep3_fireside_chat_modifier_3 = {
+	icon = camp_positive
+	martial = 2
+	diplomacy = 2
+	stewardship = 2
+	intrigue = 2
+	learning = 2
+	monthly_lifestyle_xp_gain_mult = 0.1
+}
+
+ep3_fireside_chat_stewardship = {
+	icon = stewardship_positive
+	stewardship = 1
+}
+
+ep3_fireside_chat_martial = {
+	icon = martial_positive
+	martial = 1
+}
+
+ep3_fireside_chat_learning = {
+	icon = learning_positive
+	learning = 1
+}
+
+ep3_fireside_chat_diplomacy = {
+	icon = stewardship_positive
+	diplomacy = 1
+}
+
+ep3_fireside_chat_intrigue = {
+	icon = intrigue_positive
+	intrigue = 1
+}
+
+ep3_laamp_flavour_ewan_3011_d_presiding_over_lively_debates_modifier = {
+	icon = county_modifier_opinion_positive
+	diplomacy = 1
+	learning = 1
+}
+
+ep3_laamp_flavour_ewan_3011_d_presiding_over_debates_modifier = {
+	icon = county_modifier_opinion_positive
+	diplomacy = 1
+	learning = 1
+}
+
+ep3_laamp_flavour_ewan_3031_d_brooding_over_titles_modifier = {
+	icon = prestige_positive
+	martial = 1
+	prowess = 1
+}
+
+ep3_laamp_flavour_ewan_3061_peoples_and_places_modifier = {
+	icon = family_positive
+	diplomacy = 2
+}
+
+ep3_laamp_flavour_ewan_3061_prose_and_poetry_modifier = {
+	icon = diplomacy_positive
+	learning = 2
+}
+
+ep3_laamp_flavour_ewan_3061_plants_and_animals_modifier = {
+	icon = monkey_positive
+	diplomacy = 1
+	learning = 1
+}
+
+ep3_laamp_flavour_ewan_0051_check_building_mess_tent_modifier = {
+	icon = treat_positive
+	courtier_opinion = 10
+}
+
+ep3_laamp_flavour_ewan_0051_check_building_camp_fire_modifier = {
+	icon = outdoors_positive
+	diplomacy = 1
+}
+
+ep3_laamp_flavour_ewan_0051_check_building_proving_grounds_modifier = {
+	icon = martial_positive
+	martial = 1
+}
+
+ep3_laamp_flavour_ewan_0051_check_building_camp_perimeter_modifier = {
+	icon = county_modifier_control_positive
+	intrigue = 1
+}
+
+ep3_gave_out_provisions = {
+    icon = county_modifier_opinion_negative
+    stacking = yes
+	tax_mult = -0.02
+    county_opinion_add = -5
+    supply_limit_mult = -0.1
+}
+
+# Confidence trickster
+laamp_base_0041_success_employer_modifier = {
+	icon = diplomacy_negative
+	diplomacy = medium_skill_penalty	#was massive
+}
+laamp_base_0041_failure_employer_modifier = {
+	icon = diplomacy_positive
+	diplomacy = medium_skill_bonus		#was massive
+}
+
+ep3_laamp_flavour_ewan_0001_the_little_things_modifier = {
+	icon = travel_positive
+	stress_gain_mult = -0.25 #-0.5
+}

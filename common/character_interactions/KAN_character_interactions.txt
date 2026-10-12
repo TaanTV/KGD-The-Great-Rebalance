@@ -1,0 +1,256 @@
+﻿expose_secret_interaction = {
+	interface_priority = 120
+	common_interaction = no
+	category = interaction_category_hostile
+	interface = blackmail
+	icon = secret
+
+	desc = expose_secret_interaction_desc
+
+	is_shown = {
+		exists = scope:puppet_or_actor
+		scope:recipient = {
+			any_secret = {
+				is_known_by = scope:puppet_or_actor
+			}
+			this != scope:puppet_or_actor
+			age > 10
+		}
+	}
+
+	is_valid_showing_failures_only = {
+
+	}
+
+	on_accept = {
+
+		scope:puppet_or_actor = {
+			if = {
+				limit = {
+					is_landless_adventurer = yes
+					has_perk = court_of_shadows_perk
+				}
+				add_prestige = {
+					value = 25	#prev 100
+					multiply = {
+						value = scope:recipient.highest_held_title_tier
+						add = 1
+					}
+					min = 10	#prev 50
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:target
+				}
+				scope:target = {
+					expose_secret = scope:puppet_or_actor
+				}
+			}
+			else = {
+				every_known_secret = {
+					limit = {
+						secret_owner = scope:recipient
+					}
+					expose_secret = scope:puppet_or_actor
+				}
+			}
+			if = {
+				limit = {
+					has_title = title:e_minister_of_justice
+					top_participant_group:dynastic_cycle ?= {
+						NOT = { participant_group_type = other_rulers }
+					}
+					OR = {
+						scope:recipient = {
+							top_participant_group:dynastic_cycle ?= {
+								NOT = { participant_group_type = other_rulers }
+							}
+						}
+						scope:target.secret_target = {
+							top_participant_group:dynastic_cycle ?= {
+								NOT = { participant_group_type = other_rulers }
+							}
+						}
+					}
+				}
+				add_merit_if_relevant_effect = {
+					MERIT = minor_merit_value
+				}
+				if = {
+					limit = {
+						government_has_flag = government_has_influence
+					}
+					change_influence = {
+						value = minor_influence_gain
+						multiply = scope:recipient.highest_held_title_tier
+					}
+				}
+				situation:dynastic_cycle = {
+					if = {
+						limit = {
+							situation_top_has_catalyst = catalyst_minister_exposed_secret
+						}
+						trigger_situation_catalyst = {
+							catalyst = catalyst_minister_exposed_secret
+							character = scope:puppet_or_actor
+						}
+					}
+				}
+			}
+			# Only get stressed/SP penalties if you don't have the parameter
+			if = {
+				limit = {
+					NOT = { sp_hostile_schemes_except_murder_no_stress_or_fulfillment_trigger = yes }
+				}
+				stress_and_fulfillment_impact = {
+					honest = minor_stress_impact_loss
+					just = minor_stress_impact_loss
+					shy = miniscule_stress_impact_gain
+				}
+			}
+		}
+
+		# recipient gets the penalties even if they have the parameter
+		scope:recipient = {
+			stress_and_fulfillment_impact = {
+				honest = minor_stress_impact_loss
+				just = minor_stress_impact_loss
+				deceitful = minor_stress_impact_gain
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_clan_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = major_unity_loss
+			DESC = clan_unity_secret_exposure.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	auto_accept = yes
+
+	ai_will_do = {
+		base = 0
+
+		# Struggle
+		modifier = {
+			scope:recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+				is_important_or_vip_struggle_character = yes
+			}
+			scope:puppet_or_actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_important
+							}
+							has_character_flag = agenda_towards_escalation
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_important
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+		modifier = {
+			scope:recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+				has_trait = fp3_struggle_supporter
+			}
+			scope:puppet_or_actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_supporter
+							}
+							has_trait = fp3_struggle_detractor
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_supporter
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+		modifier = {
+			scope:recipient = {
+				any_character_struggle = {
+					involvement = involved
+				}
+				has_trait = fp3_struggle_detractor
+			}
+			scope:puppet_or_actor = {
+				any_character_struggle = {
+					involvement = involved
+				}
+			}
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_detractor
+							}
+							has_trait = fp3_struggle_supporter
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						scope:puppet_or_actor = {
+							any_character_struggle = {
+								phase_has_catalyst = catalyst_reveal_secret_detractor
+							}
+						}
+					}
+					add = -100
+				}
+			}
+		}
+
+		# Unity modifiers
+		evaluate_action_decreasing_house_unity = {
+			VALUE = 100
+		}
+	}
+}

@@ -1,0 +1,8 @@
+﻿#TODO_CD: please remove the # when modifier is first used. The # is currently to avoid start-up errors
+
+# Lifestyle Modifiers
+# Brought more in-line with lifestyle specific modifiers 
+artifact_monthly_lifestyle_xp_1_modifier = { monthly_lifestyle_xp_gain_mult = 0.05 }
+artifact_monthly_lifestyle_xp_2_modifier = { monthly_lifestyle_xp_gain_mult = 0.1 }
+artifact_monthly_lifestyle_xp_3_modifier = { monthly_lifestyle_xp_gain_mult = 0.15 }
+artifact_monthly_lifestyle_xp_4_modifier = { monthly_lifestyle_xp_gain_mult = 0.2 }

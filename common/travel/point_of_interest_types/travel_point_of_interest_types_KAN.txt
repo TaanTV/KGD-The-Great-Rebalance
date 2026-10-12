@@ -1,0 +1,189 @@
+﻿
+# Update points_of_interest_tracker_effect when you change this!
+
+# Capitals
+poi_capitals = {
+	build_province_list = {
+		every_kingdom = {
+			limit = {
+				this = this.holder.primary_title
+			}
+			holder.capital_province ?= {
+				add_to_list = provinces
+			}
+		}
+		every_empire = {
+			limit = {
+				this = this.holder.primary_title
+			}
+			holder.capital_province ?= {
+				add_to_list = provinces
+			}
+		}
+		every_hegemony = {
+			limit = {
+				this = this.holder.primary_title
+			}
+			holder.capital_province ?= {
+				add_to_list = provinces
+			}
+		}
+	}
+
+	on_visit = {
+		send_interface_toast = {
+			title = poi_capitals.visit
+			left_icon = root
+
+			scope:province.barony.holder = {
+				if = {
+					limit = {
+						primary_title = {
+							tier >= tier_empire
+						}
+					}
+					save_temporary_scope_value_as = {
+						name = xp_gain_amount
+						value = root.travel_major_xp
+					}
+				}
+				else = {
+					save_temporary_scope_value_as = {
+						name = xp_gain_amount
+						value = root.travel_medium_xp
+					}
+				}
+
+
+				if = { # Merit-government Capitals that have royal courts give merit and the regular reward
+					limit = {
+						has_royal_court = yes
+						government_allows = merit
+						root = {
+							government_allows = merit
+						}
+					}
+					root = {
+						change_merit = medium_merit_gain
+					}
+				}
+
+				if = { # Merit-government Capitals without royal courts give just merit (no diplo)
+					limit = {
+						has_royal_court = no
+						government_allows = merit
+						root = {
+							government_allows = merit
+						}
+					}
+					root = {
+						change_merit = medium_merit_gain
+					}
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_royal_court = no
+							has_court_type = court_diplomatic
+						}
+					}
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = diplomacy
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_court_type = court_warlike
+							has_court_type = court_tribal
+							has_court_type = court_nomadic
+						}
+					}
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = martial
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_court_type = court_administrative
+					}
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = stewardship
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_court_type = court_intrigue
+					}
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = intrigue
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_court_type = court_scholarly
+					}
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = learning
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				else = {
+					root = {
+						poi_lifestyle_experience_effect = {
+							LIFESTYLE = diplomacy
+							VALUE = scope:xp_gain_amount
+						}
+					}
+				}
+				# Prestige for Wanderers
+				wanderer_lifestyle_destination_effect = yes
+			}
+
+			traveler_travel_xp_effect = {
+				MIN = 3
+				MAX = 5
+			}
+			if = {
+				limit = {
+					has_government = landless_adventurer_government
+					has_perk = organized_muster_rolls_perk
+				}
+				add_gold = see_how_its_done_gold_reward_value
+			}
+			if = {
+				limit = {
+					has_government = landless_adventurer_government
+					has_perk = centralization_perk
+				}
+				custom_tooltip = {
+					text = adventurers_centralization_perk.effect
+				}
+				every_courtier = {
+					hidden_effect = {
+						random = {
+							chance = adventurers_centralization_perk_effect_chance
+						local_court_type_skill_point_effect = { PROVINCE = scope:province }
+						}
+					}
+				}
+			}
+		}
+
+		visiting_poi_effect = yes
+	}
+}

@@ -1,0 +1,160 @@
+﻿ducal_conquest_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = foreign_affairs
+	position = { 0 1.25 }
+	icon = node_diplomacy
+
+	parent = thoughtful_perk
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = ducal_conquest_perk_adventurer_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_japan_feudal }
+				desc = honor_perk_name
+			}
+			triggered_desc = {
+				trigger = { government_has_mechanic = administrative }
+				desc = friends_in_the_right_places
+			}
+			desc = ducal_conquest_perk_name
+		}
+	}
+
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		owned_contract_scheme_success_chance_add = 5	#prev 15
+		independent_ruler_opinion = 10					#prev 20
+	}
+	government_character_modifier = {
+		flag = government_is_mandala
+		title_creation_piety_cost_mult = -0.2
+	}
+	government_character_modifier = {
+		flag = has_unique_government_perks
+		invert_check = yes
+		title_creation_cost_mult = -0.2
+	}
+	government_character_modifier = {
+		flag = government_is_japan_feudal
+		domicile_monthly_prestige_mult = 0.05
+	}
+	effect = {
+		if = {
+			limit = {
+				NOR = {
+					government_has_flag = government_is_landless_adventurer
+					government_has_flag = government_is_nomadic
+					government_has_mechanic = administrative
+					government_has_flag = government_is_japan_feudal
+				}
+			}
+			custom_description_no_bullet = {
+				text = ducal_conquest_perk_effect
+			}
+		}
+		if = {
+			limit = {
+				government_has_mechanic = administrative
+			}
+			if = {
+				limit = {
+					government_allows = merit
+				}
+				custom_description_no_bullet = {
+					text = candidate_pool_ducal_conquest_perk_effect
+				}
+			}
+			else = {
+				custom_description_no_bullet = {
+					text = admin_ducal_conquest_perk_effect
+				}
+			}
+		}
+	}
+}
+
+adaptive_traditions_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = foreign_affairs
+	position = { 2 1.25 }
+	icon = node_diplomacy
+
+	parent = thoughtful_perk
+
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		different_culture_opinion = 10	#prev 15
+	}
+
+	effect = {
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_is_landless_adventurer }
+			}
+			custom_description_no_bullet = {
+				text = adaptive_traditions_perk_effect
+			}
+		}
+	}
+
+	character_modifier = {
+		max_learn_language_schemes_add = 1
+	}
+
+	government_character_modifier = {
+		flag = government_is_administrative
+		enemy_political_scheme_phase_duration_add = 30
+	}
+}
+
+accomplished_forger_perk = {
+	lifestyle = diplomacy_lifestyle
+	tree = foreign_affairs
+	position = { 2 3.75 }
+	icon = node_diplomacy
+
+	parent = forced_vassalage_perk
+	parent = flexible_truces_perk
+	parent = embassies_perk
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = accomplished_forger_perk_adventurer_name
+			}
+			desc = accomplished_forger_perk_name
+		}
+	}
+
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		owned_scheme_secrecy_add = 15	#prev 25
+	}
+
+	effect = {
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_is_landless_adventurer }
+			}
+			custom_description_no_bullet = {
+				text = accomplished_forger_perk_effect
+			}
+			custom_description_no_bullet = {
+				text = red_wedding_perk_effect
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = adventurer_accomplished_forger_perk_effect
+			}
+			custom_tooltip = {
+				text = adventurer_accomplished_forger_perk_effect_2
+			}
+		}
+	}
+}

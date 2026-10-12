@@ -1,0 +1,16 @@
+﻿# This is a bit jank but that way it doesnt desync too hard with time
+yearly_global_pulse = {
+	on_actions = { 
+		KAN_mod_exists
+	}
+}
+
+KAN_mod_exists = {
+	effect = {
+		remove_global_variable = kgd_adventurer_nerfs_enabled
+		set_global_variable  = { 
+			name = kgd_adventurer_nerfs_enabled 
+			days = 390 	# A bit more just in case
+		}
+	}
+}

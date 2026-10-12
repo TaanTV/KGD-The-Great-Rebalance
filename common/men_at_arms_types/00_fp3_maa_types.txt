@@ -5,23 +5,23 @@
 @cultural_maa_extra_ai_score = 60 # Equivalent to having 6 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 4
-@provisions_cost_infantry_moderate = 10
-@provisions_cost_infantry_expensive = 18
-@provisions_cost_infantry_bankrupting = 24
+@provisions_cost_infantry_cheap = 6
+@provisions_cost_infantry_moderate = 14
+@provisions_cost_infantry_expensive = 24
+@provisions_cost_infantry_bankrupting = 30
 
-@provisions_cost_cavalry_cheap = 12
-@provisions_cost_cavalry_moderate = 26
-@provisions_cost_cavalry_expensive = 34
-@provisions_cost_cavalry_bankrupting = 48
-@provisions_cost_cavalry_elephants = 64
+@provisions_cost_cavalry_cheap = 16
+@provisions_cost_cavalry_moderate = 34
+@provisions_cost_cavalry_expensive = 46
+@provisions_cost_cavalry_bankrupting = 64
+@provisions_cost_cavalry_elephants = 180
 
-@provisions_cost_special_cheap = 10
-@provisions_cost_special_moderate = 18
-@provisions_cost_special_expensive = 28
-@provisions_cost_special_bankrupting = 36
+@provisions_cost_special_cheap = 12
+@provisions_cost_special_moderate = 24
+@provisions_cost_special_expensive = 36
+@provisions_cost_special_bankrupting = 48
 
-# My idea of rebalance: All costs x1.5
+# My idea of rebalance: All costs doubled
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -35,8 +35,8 @@
 asawira = { #Iranian knights in early caliphal armies. Can be restored as a military unit with Khvarenah 4 dynasty legacy perk. 
 	type = archer_cavalry
 	
-	damage = 100	#90
-	toughness = 40	#35
+	damage = 90
+	toughness = 35
 	pursuit = 35
 	screen = 10
 	
@@ -70,12 +70,8 @@ asawira = { #Iranian knights in early caliphal armies. Can be restored as a mili
 	high_maintenance_cost = { gold = asawira_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 20
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 30] 
-		#ADDED
-		add = counter_synergy_ai_weight_archer_cavalry
-	}
+	stack = 50
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 30] }
 	icon = asawira
 }
 
@@ -99,7 +95,6 @@ tarkhan = {
 		heavy_infantry = 1
 		heavy_cavalry = 0.5
 		gunpowder = 1
-		# No archer cavalry countrting for you either
 	}
 
 	winter_bonus = {
@@ -116,7 +111,6 @@ tarkhan = {
 			}
 			culture = { has_cultural_parameter = unlock_maa_tarkhan }
 		}
-		#ADDED
 		NOT = {
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
 		}
@@ -127,12 +121,8 @@ tarkhan = {
 	high_maintenance_cost = { gold = cataphract_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 20
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 20] 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_cavalry
-	}
+	stack = 50
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 60] }
 	icon = tarkhan
 
 }
@@ -140,8 +130,8 @@ tarkhan = {
 zupin_warrior = {
 	type = pikemen
 	
-	damage = 18			#prev: 16
-	toughness = 20		#prev: 16
+	damage = 16
+	toughness = 16
 	pursuit = 0
 	screen = 10
 	
@@ -157,10 +147,10 @@ zupin_warrior = {
 	}
 	
 	terrain_bonus = {
-		mountains = { toughness = 16 }							#prev: 12
-		desert_mountains = { toughness = 16 }					#prev: 12
-		hills = { damage = 12 toughness = 16 }					#prev: 4 8
-		forest = { damage = 12 toughness = 16 pursuit = 12 }	#prev: 4 8 4
+		mountains = { toughness = 12 }
+		desert_mountains = { toughness = 12 }
+		hills = { damage = 4 toughness = 8 }
+		forest = { damage = 4 toughness = 8 pursuit = 4 }
 	}
 
 	counters = {
@@ -170,9 +160,7 @@ zupin_warrior = {
 	}
 
 	winter_bonus = {
-		normal_winter = { damage = 10 pursuit = 10 }		#prev: 4 5
-		# ADDED
-		harsh_winter = { damage = 12 pursuit = 12 }
+		normal_winter = { damage = 4 pursuit = 5 }
 	}
 
 	buy_cost = { gold = bondi_recruitment_cost }
@@ -180,20 +168,16 @@ zupin_warrior = {
 	high_maintenance_cost = { gold = bondi_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 20] 
-		#ADDED
-		add = counter_synergy_ai_weight_pikemen
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 20] }
 	icon = zupin_spearmen
 }
 
 tawashi = {
 	type = light_cavalry
 	
-	damage = 26		#prev 25
-	toughness = 16	#prev 15
+	damage = 25
+	toughness = 15
 	pursuit = 30
 	screen = 30
 	
@@ -232,11 +216,7 @@ tawashi = {
 	high_maintenance_cost = { gold = tawashi_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_moderate
 
-	stack = 40
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 40] 
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 40] }
 	icon = tawashi
 }

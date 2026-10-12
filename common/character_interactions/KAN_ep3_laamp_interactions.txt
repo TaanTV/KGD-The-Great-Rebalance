@@ -1,0 +1,3197 @@
+﻿##################
+# Negotiate Settlement
+# by Joe Parkin
+##################
+
+negotiate_settlement_interaction = {
+	common_interaction = yes
+	category = interaction_category_diplomacy
+	icon = negotiate_settlement_interaction
+
+	desc = negotiate_settlement_interaction_desc
+	target_type = title
+	target_filter = actor_domain_titles
+
+	cooldown_against_recipient = { years = 5 }
+
+	notification_text = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:actor = { top_liege != this }
+					scope:target = {
+						trigger_if = {
+							limit = { tier = tier_duchy }
+							scope:actor.highest_held_title_tier = tier_duchy
+						}
+						trigger_else = { scope:actor.highest_held_title_tier = tier_county }
+					}
+				}
+				desc = NEGOTIATE_SETTLEMENT_PROPOSAL_FELLOW_VASSAL
+			}
+			triggered_desc = {
+				trigger = {
+					scope:target = {
+						trigger_if = {
+							limit = { tier = tier_duchy }
+							scope:actor.highest_held_title_tier >= tier_kingdom
+						}
+						trigger_else = { scope:actor.highest_held_title_tier >= tier_duchy }
+					}
+				}
+				desc = NEGOTIATE_SETTLEMENT_PROPOSAL_LIEGE
+			}
+			desc = NEGOTIATE_SETTLEMENT_PROPOSAL
+		}
+	}
+
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	interface_priority = 60
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			OR = {
+				has_trait = generous
+				has_trait = craven
+				is_at_war = yes
+			}
+			OR = {
+				top_liege ?= this
+				highest_held_title_tier >= tier_kingdom
+			}
+			NOT = {
+				government_has_flag = government_is_nomadic
+			}
+		}
+		is_landed = yes
+		has_ep3_dlc_trigger = yes
+	}
+
+	is_shown = {
+		scope:recipient = {
+			government_has_flag = government_is_landless_adventurer
+		}
+		scope:recipient != scope:actor
+	}
+
+	can_be_picked_title = {
+		custom_tooltip = {
+			text = purchase_land_tier_tt
+			scope:target = {
+				tier >= tier_county
+				tier <= tier_duchy
+			}
+		}
+		custom_tooltip = {
+			text = purchase_land_capital_tt
+			NOR = {
+				scope:target = scope:actor.capital_county
+				scope:target = scope:actor.capital_county.duchy
+			}
+		}
+		custom_tooltip = {
+			text = purchase_land_primary_tt
+			scope:target != scope:actor.primary_title
+		}
+		custom_tooltip = {
+			text = negotiate_settlement_title_cant_receive_reason_higher_tier_without_county
+			scope:target = {
+				tier = tier_duchy
+				any_de_jure_county = {
+					ep3_negotiate_settlement_valid_county_trigger = yes
+				}
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:actor = { is_ai = yes }
+				scope:recipient = { is_ai = yes }
+				scope:target.tier < tier_duchy
+			}
+			scope:recipient = {
+				OR = {
+					current_military_strength < 1000 # You can do better
+					global_variable_list_size = {
+						name = laamps_tally
+						value >= too_many_laamps_value
+					}
+				}
+				OR = {
+					AND = {
+						has_character_modifier = ep3_lust_for_land_modifier
+						ai_greed >= 25
+						ai_boldness >= 25
+						ai_rationality <= -25
+					}
+					AND = {
+						has_trait = greedy
+						ai_rationality <= -50
+					}
+					global_variable_list_size = {
+						name = laamps_tally
+						value >= too_many_laamps_value
+					}
+				}
+			}
+		}
+	}
+
+	has_valid_target_showing_failures_only = {
+		trigger_if = { # Can't purchase HoF titles
+			limit = {
+				scope:target ?= { is_head_of_faith = yes }
+			}
+			custom_description = {
+				text = negotiate_settlement_religious_tt
+				always = no
+			}
+		}
+		trigger_if = { # Can't purchase nf titles
+			limit = {
+				scope:target ?= { is_noble_family_title = yes }
+			}
+			custom_description = {
+				text = negotiate_settlement_noble_family_tt
+				always = no
+			}
+		}
+		trigger_if = { # Can't purchase laamp titles
+			limit = {
+				scope:target ?= { has_variable = adventurer_creation_reason }
+			}
+			custom_description = {
+				text = negotiate_settlement_landless_adventurer_tt
+				always = no
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:actor = { government_has_flag = government_is_administrative }
+			}
+			scope:target.tier = tier_duchy
+		}
+		trigger_else = {
+			scope:target = {
+				tier >= tier_county
+				tier <= tier_duchy
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			custom_tooltip = {
+				text = negotiate_settlement_target_tt
+				OR = {
+					any_character_war = {
+						is_attacker = scope:recipient
+						primary_defender = scope:actor
+						save_temporary_scope_as = war_temp
+					}
+					AND = {
+						exists = scope:recipient.capital_province
+						scope:recipient.capital_province.county.holder.top_liege = scope:actor.top_liege
+					}
+				}
+			}
+		}
+		# Can only settle if not at risk of losing land, outside of war of adventurer
+		custom_tooltip = {
+			text = negotiate_settlement_defensive_wars_tt
+			scope:actor = {
+				NOT = {
+					any_character_war = {
+						any_war_defender = { this = scope:actor }
+						NOT = {
+							any_war_attacker = { this = scope:recipient }
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			scope:actor = { has_relation_nemesis = scope:recipient }
+		}
+		trigger_if = { # Can't purchase Baronies
+			limit = {
+				scope:target ?= { tier = tier_barony }
+			}
+			custom_description = {
+				text = negotiate_settlement_barony_tt
+				always = no
+			}
+		}
+		trigger_if = { # Can't purchase Kingdoms or Empires
+			limit = {
+				scope:target ?= { tier >= tier_kingdom }
+			}
+			custom_description = {
+				text = negotiate_settlement_kingdom_tt
+				always = no
+			}
+		}
+		scope:actor = {
+			custom_description = {
+				text = negotiate_settlement_minimum_county_tt
+				any_held_county = { count >= 2 }
+			}
+		}
+		scope:recipient = {
+			NOT = { has_strong_hook = scope:actor }
+		}
+		# Adventurers can't be negotiated back into places they're exiled from.
+		trigger_if = {
+			limit = {
+				scope:actor = { top_liege != this }
+			}
+			custom_tooltip = {
+				text = the_wake_1
+				NOT = {
+					is_laamp_exiled_from_province_trigger = {
+						PROVINCE = scope:actor.capital_province
+						LAAMP = scope:recipient
+					}
+				}
+			}
+		}
+		# Story blockers.
+		## Hereward cannot be exiled by active participants in the Harrying of the North.
+		disable_interaction_for_hereward_trigger = yes
+		## Hasan cannot be exiled by anyone during his story.
+		disable_interaction_for_hasan_trigger = yes
+	}
+
+	on_send = {
+		debug_log = "NEGOTIATE_SETTLEMENT"
+		debug_log_scopes = yes
+	}
+
+	on_accept = {
+		scope:actor = { save_scope_as = adventurer }
+		scope:target = {
+			add_to_list = offered_titles
+			if = {
+				limit = { tier = tier_duchy }
+				every_de_jure_county = {
+					limit = { ep3_negotiate_settlement_valid_county_trigger = yes }
+					add_to_list = offered_titles
+				}
+			}
+		}
+		ordered_in_list = {
+			list = offered_titles
+			save_scope_as = new_primary_title
+		}
+		show_as_tooltip = { scope:actor = { negotiate_settlement_interaction_effect = yes } }
+		scope:actor = { trigger_event = ep3_laamps.0300 }
+	}
+
+	on_decline = {
+		scope:actor = {
+			trigger_event = ep3_laamps.0302
+		}
+	}
+
+	ai_targets = {
+		ai_recipients = scripted_relations
+		max = 5
+	}
+	ai_targets = {
+		ai_recipients = top_realm_domicile_owners
+		ai_recipients = nearby_domicile_owners
+		max = 5
+	}
+	ai_targets = {
+		ai_recipients = war_enemies
+		max = 10
+	}
+
+	# Must be fairly common as it can happen during war
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 3
+		empire = 3
+		hegemony = 3
+	}
+
+	ai_accept = {
+		base = 0 # Try to make it 0 for most interactions
+
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+		ai_value_modifier = {
+			ai_boldness = -0.25
+			ai_energy = -0.25
+			ai_greed = 0.25
+		}
+		modifier = { # Claims
+			add = {
+				value = 0
+				if = {
+					limit = {
+						scope:recipient = { has_claim_on = scope:target }
+					}
+					add = 25
+				}
+				if = {
+					limit = { scope:target.tier = tier_duchy }
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								save_temporary_scope_as = claim_temp
+								scope:recipient = { has_claim_on = scope:claim_temp }
+							}
+							add = 25
+						}
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_CLAIM_REASON
+			OR = {
+				scope:recipient = { has_claim_on = scope:target }
+				trigger_if = {
+					limit = { scope:target.tier = tier_duchy }
+					scope:target = {
+						any_de_jure_county = {
+							ep3_negotiate_settlement_valid_county_trigger = yes
+							save_temporary_scope_as = county_temp
+							scope:recipient = { has_claim_on = scope:county_temp }
+						}
+					}
+				}
+				trigger_else = { always = no }
+			}
+		}
+		modifier = {
+			add = -300
+			scope:recipient = { has_realm_law = camp_purpose_legitimists }
+			desc = NEGOTIATE_SETTLEMENT_LEGITIMIST_REASON
+		}
+		modifier = { # Tier lower than war claim
+			add = {
+				value = 0
+				scope:recipient = {
+					every_character_war = {
+						limit = {
+							primary_attacker = scope:recipient
+							primary_defender = scope:actor
+							casus_belli = {
+								any_target_title = { tier > scope:target.tier }
+							}
+						}
+						casus_belli = {
+							every_target_title = {
+								limit = { tier > scope:target.tier }
+								add = -25
+							}
+						}
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_LOWER_THAN_WAR_TARGET_REASON
+			scope:recipient = {
+				any_character_war = {
+					primary_attacker = scope:recipient
+					primary_defender = scope:actor
+					casus_belli = {
+						any_target_title = { tier > scope:target.tier }
+					}
+				}
+			}
+		}
+		modifier = { # War Targets
+			add = {
+				value = 0
+				scope:recipient = {
+					every_character_war = {
+						limit = {
+							primary_attacker = scope:recipient
+							casus_belli = {
+								any_target_title = {
+									OR = {
+										this = scope:target
+										de_jure_liege = scope:target
+									}
+								}
+							}
+						}
+						casus_belli = {
+							every_target_title = {
+								limit = {
+									OR = {
+										this = scope:target
+										de_jure_liege = scope:target
+									}
+								}
+								add = 25
+							}
+						}
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_WAR_TARGET_REASON
+			scope:recipient = {
+				any_character_war = {
+					primary_attacker = scope:recipient
+					casus_belli = {
+						any_target_title = {
+							OR = {
+								this = scope:target
+								de_jure_liege = scope:target
+							}
+						}
+					}
+				}
+			}
+		}
+		modifier = { # Num of counties/duchy
+			add = {
+				value = 0
+				scope:target = {
+					if = {
+						limit = { tier = tier_county }
+						add = 25
+					}
+					else = {
+						add = 50
+						every_de_jure_county = {
+							limit = { ep3_negotiate_settlement_valid_county_trigger = yes }
+							add = 25
+						}
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_NUM_TITLES_REASON
+		}
+		modifier = { # Province value
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = scope:target.development_level
+					scope:target = {
+						every_county_province = { add = num_buildings }
+					}
+				}
+				else = {
+					scope:target = {
+						every_de_jure_county = {
+							limit = { ep3_negotiate_settlement_valid_county_trigger = yes }
+							add = development_level
+							every_county_province = { add = num_buildings }
+						}
+					}
+				}
+			}
+			#add = 1
+			desc = NEGOTIATE_SETTLEMENT_VALUE_REASON
+		}
+		modifier = { # Land is foreign
+			add = -10
+			desc = NEGOTIATE_SETTLEMENT_FOREIGN_COUNTY_CULTURE_REASON
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = -10
+				}
+				else = {
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								culture != scope:recipient.culture
+							}
+							add = -10
+						}
+					}
+				}
+				min = -30
+			}
+			desc = NEGOTIATE_SETTLEMENT_FOREIGN_CULTURE_REASON
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.culture != scope:recipient.culture
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						culture != scope:recipient.culture
+					}
+				}
+			}
+		}
+		modifier = { # Different faith
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = -10
+				}
+				else = {
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								faith != scope:recipient.faith
+							}
+							add = -10
+						}
+					}
+				}
+				min = -30
+			}
+			desc = NEGOTIATE_SETTLEMENT_DIFFERENT_FAITH_REASON
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.faith != scope:recipient.faith
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						faith != scope:recipient.faith
+					}
+				}
+			}
+		}
+		modifier = { # Losing/winning as attacker
+			add = {
+				value = 0
+				scope:recipient = {
+					ordered_character_war = {
+						limit = {
+							OR = {
+								primary_attacker = scope:actor
+								primary_defender = scope:actor
+							}
+							OR = {
+								primary_attacker = scope:recipient
+								primary_defender = scope:recipient
+							}
+						}
+						order_by = war_days
+						if = {
+							limit = {
+								primary_attacker = scope:actor
+								primary_defender = scope:recipient
+							}
+							add = defender_war_score
+						}
+						else = { add = attacker_war_score }
+					}
+				}
+				divide = 4
+			}
+			desc = NEGOTIATE_SETTLEMENT_LOSING_WAR_REASON
+			scope:recipient = {
+				any_character_war = {
+					OR = {
+						primary_attacker = scope:actor
+						primary_defender = scope:actor
+					}
+					OR = {
+						primary_attacker = scope:recipient
+						primary_defender = scope:recipient
+					}
+					trigger_if = {
+						limit = {
+							primary_attacker = scope:actor
+							primary_defender = scope:recipient
+						}
+						defender_war_score >= 25
+					}
+					trigger_else = { attacker_war_score >= 25 }
+				}
+			}
+		}
+		modifier = { # Losing/winning as defender
+			add = {
+				value = 0
+				scope:recipient = {
+					ordered_character_war = {
+						limit = {
+							OR = {
+								primary_attacker = scope:actor
+								primary_defender = scope:actor
+							}
+							OR = {
+								primary_attacker = scope:recipient
+								primary_defender = scope:recipient
+							}
+						}
+						order_by = war_days
+						if = {
+							limit = {
+								primary_attacker = scope:actor
+								primary_defender = scope:recipient
+							}
+							add = attacker_war_score
+						}
+						else = { add = defender_war_score }
+					}
+				}
+				divide = 4
+			}
+			desc = NEGOTIATE_SETTLEMENT_LOSING_WAR_REASON
+			scope:recipient = {
+				any_character_war = {
+					OR = {
+						primary_attacker = scope:actor
+						primary_defender = scope:actor
+					}
+					OR = {
+						primary_attacker = scope:recipient
+						primary_defender = scope:recipient
+					}
+					trigger_if = {
+						limit = {
+							primary_attacker = scope:actor
+							primary_defender = scope:recipient
+						}
+						attacker_war_score >= 25
+					}
+					trigger_else = { defender_war_score >= 25 }
+				}
+			}
+		}
+		modifier = { # Number of troops at peace,
+			add = {
+				add = current_military_strength
+				multiply = -0.02
+			}
+			desc = laamp_has_soldiers_negotiate_settlement_tt
+		}
+		modifier = {
+			add = -50000
+			scope:actor = { is_ai = yes }
+			NOT = {
+				scope:target.tier >= tier_duchy
+			}
+			scope:recipient = {
+				NOR = {
+					current_military_strength < 1000 # You can do better
+					global_variable_list_size = {
+						name = laamps_tally
+						value >= too_many_laamps_value
+					}
+				}
+				NOR = {
+					AND = {
+						has_character_modifier = ep3_lust_for_land_modifier
+						ai_greed >= 25
+						ai_boldness >= 25
+						ai_rationality <= -25
+					}
+					AND = {
+						has_trait = greedy
+						ai_rationality <= -50
+					}
+					global_variable_list_size = {
+						name = laamps_tally
+						value >= too_many_laamps_value
+					}
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = -100	#prev -25
+		modifier = {
+			add = 25
+			scope:actor.domain_size > scope:actor.domain_limit
+		}
+		opinion_modifier = {
+			who = scope:actor
+			opinion_target = scope:recipient
+			multiplier = 0.25
+		}
+		ai_value_modifier = {
+			ai_boldness = -0.25
+			ai_energy = -0.25
+			ai_greed = -0.25
+		}
+		modifier = { # Tier lower than war claim
+			add = {
+				value = 0
+				scope:recipient = {
+					every_character_war = {
+						limit = {
+							primary_attacker = scope:recipient
+							primary_defender = scope:actor
+							casus_belli = {
+								any_target_title = { tier > scope:target.tier }
+							}
+							attacker_war_score >= 50
+						}
+						add = 150
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_SAVE_TITLE_REASON
+			scope:recipient = {
+				any_character_war = {
+					primary_attacker = scope:recipient
+					primary_defender = scope:actor
+					casus_belli = {
+						any_target_title = { tier > scope:target.tier }
+					}
+					attacker_war_score >= 50
+				}
+			}
+		}
+		modifier = {
+			scope:recipient = {
+				has_government = landless_adventurer_government
+				has_realm_law = camp_purpose_legitimists
+				any_claim = {
+					OR = {
+						holder ?= {
+							target_is_same_character_or_above = scope:actor
+						}
+						target_is_de_jure_liege_or_above = scope:actor.primary_title
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_DE_JURE_LEGITIMIST_REASON
+			add = -150
+		}
+		modifier = { # Defending against a LAAMP
+			any_character_war = {
+				primary_defender = scope:actor
+				any_war_attacker = {
+					scope:recipient ?= this
+					has_government = landless_adventurer_government
+					NOT = { has_realm_law = camp_purpose_legitimists }
+					# Attacking laamp's troops at least 10% of defender's total troops	#20 actually
+					current_military_strength > prev.war_defender_total_strength_fifth_value	#prev war_defender_total_strength_tenth_value
+					#ADDED - actually participated.
+					"prev.war_contribution(scope:recipient)" > 100
+				}
+				OR = {
+					attacker_war_score >= 25
+					# Attackers outnumber defenders at least 2:1
+					war_attacker_total_current_strength_halved_value >= war_defender_total_current_strength_value
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_DEFENDING_REASON
+			add = {
+				value = 0
+				every_character_war = {
+					limit = {
+						primary_defender = scope:actor
+						any_war_attacker = {
+							scope:recipient ?= this
+							has_government = landless_adventurer_government
+							NOT = { has_realm_law = camp_purpose_legitimists }
+							# Attacking laamp's troops at least 10% of defender's total troops	#20 actually
+							current_military_strength > prev.war_defender_total_strength_fifth_value	#prev war_defender_total_strength_tenth_value
+							#ADDED - actually participated.
+							"prev.war_contribution(scope:recipient)" > 100
+						}
+					}
+					add = {
+						value = 25
+						add = {
+							value = attacker_war_score
+							subtract = 25
+							min = 0
+						}
+						if = {
+							limit = {
+								exists = primary_attacker
+								scope:recipient ?= primary_attacker
+							}
+							multiply = 2
+						}
+						# Difference in strength of attackers and defenders
+						multiply = war_attacker_total_current_strength_divided_by_defender_value
+					}
+				}
+			}
+		}
+		modifier = { # Attacking a LAAMP
+			any_character_war = {
+				primary_attacker = scope:actor
+				any_war_defender = {
+					scope:recipient ?= this
+					has_government = landless_adventurer_government
+					# Defending laamp's troops at least 10% of attacker's total troops	#20 actually
+					current_military_strength > prev.war_attacker_total_strength_fifth_value	#prev war_attacker_total_strength_tenth_value
+					#ADDED - actually participated.
+					"prev.war_contribution(scope:recipient)" > 100
+				}
+				OR = {
+					defender_war_score >= 25
+					# Defenders outnumber attackers at least 2:1
+					war_defender_total_current_strength_halved_value >= war_attacker_total_current_strength_value
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_ATTACKING_REASON
+			add = {
+				value = 0
+				every_character_war = {
+					limit = {
+						primary_attacker = scope:actor
+						any_war_defender = {
+							scope:recipient ?= this
+							has_government = landless_adventurer_government
+							# Defending laamp's troops at least 10% of attacker's total troops	#20 actually
+							current_military_strength > prev.war_attacker_total_strength_fifth_value	#prev war_attacker_total_strength_tenth_value
+							#ADDED - actually participated.
+							"prev.war_contribution(scope:recipient)" > 100
+						}
+					}
+					add = {
+						value = 25
+						add = {
+							value = defender_war_score
+							subtract = 25
+							min = 0
+						}
+						# Difference in strength of defenders and attackers
+						multiply = war_defender_total_current_strength_divided_by_attacker_value
+					}
+				}
+			}
+		}
+		modifier = { # Potential war target of a LAAMP
+			scope:recipient ?= {
+				ep3_adventurer_might_attack_target_trigger = { TARGET = scope:actor }
+				trigger_if = {
+					limit = {
+						NOT = { is_at_war_with = scope:actor }
+					}
+					ep3_laamp_diplo_range_trigger = {
+						TARGET = scope:actor
+						LAAMP = scope:recipient
+					}
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_POTENTIAL_WAR_TARGET_REASON
+			add = {
+				value = 25
+				multiply = recipient_strength_divided_by_actors_value
+				# Scale of threat
+				scope:recipient = {
+					if = {
+						limit = {
+							can_declare_war = {
+								casus_belli = ep3_laamp_adventurer_duchy_invasion
+								defender = scope:actor
+							}
+						}
+						multiply = 1.25
+					}
+					if = {
+						limit = {
+							can_declare_war = {
+								casus_belli = ep3_laamp_adventurer_kingdom_invasion
+								defender = scope:actor
+							}
+						}
+						multiply = 1.5
+					}
+					if = {
+						limit = {
+							can_declare_war = {
+								casus_belli = ep3_laamp_adventurer_empire_invasion
+								defender = scope:actor
+							}
+						}
+						multiply = 2
+					}
+				}
+				scope:actor = {
+					# Worried about ongoing wars
+					if = {
+						limit = {
+							any_character_war = {
+								primary_defender = scope:actor
+								# Only care if attackers are really a threat
+								war_attacker_total_current_strength_value > war_defender_total_current_strength_halved_value
+							}
+						}
+						multiply = 2
+					}
+					# Already at war
+					if = {
+						limit = { is_at_war_with = scope:recipient }
+						multiply = 0.5
+					}
+				}
+			}
+		}
+		modifier = { # Potential faction claimant
+			exists = scope:recipient
+			scope:actor = {
+				any_targeting_faction = {
+					special_character ?= scope:recipient
+					faction_power >= faction_power_threshold
+				}
+			}
+			desc = NEGOTIATE_SETTLEMENT_CLAIMANT_REASON
+			add = {
+				value = 0
+				every_targeting_faction = {
+					limit = {
+						special_character ?= scope:recipient
+						faction_power >= faction_power_threshold
+					}
+					add = 25
+				}
+			}
+		}
+		modifier = { # Give claims to laamps
+			scope:target ?= {
+				any_claimant = { scope:recipient ?= this }
+			}
+			desc = NEGOTIATE_SETTLEMENT_CLAIM_REASON
+			add = {
+				value = 25
+				if = {
+					limit = {
+						scope:target.tier = tier_county
+					}
+					subtract = scope:target.development_level
+				}
+				if = {
+					limit = {
+						scope:target.tier > tier_county
+					}
+					subtract = scope:target.title_capital_county.development_level
+				}
+			}
+		}
+		# Essentially the inverse of Purchase Land
+		modifier = { # Land is foreign
+			add = 10
+			desc = NEGOTIATE_SETTLEMENT_FOREIGN_COUNTY_CULTURE_REASON
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = 10
+				}
+				else = {
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								culture != scope:recipient.culture
+							}
+							add = 10
+						}
+					}
+				}
+				max = 30
+			}
+			desc = NEGOTIATE_SETTLEMENT_FOREIGN_CULTURE_REASON
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.culture != scope:actor.culture
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						culture != scope:actor.culture
+					}
+				}
+			}
+		}
+		modifier = { # Different faith
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = 10
+				}
+				else = {
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								faith != scope:actor.faith
+							}
+							add = 10
+						}
+					}
+				}
+				max = 30
+			}
+			desc = NEGOTIATE_SETTLEMENT_DIFFERENT_FAITH_REASON
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.faith != scope:actor.faith
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						faith != scope:actor.faith
+					}
+				}
+			}
+		}
+		modifier = { # My culture's lands
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = -15
+				}
+				else = {
+					add = -15
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								faith != scope:actor.faith
+							}
+							add = -15
+						}
+					}
+				}
+				if = {
+					limit = { scope:acceptance != 0 }
+					divide = scope:acceptance
+				}
+				min = -50
+			}
+			desc = NEGOTIATE_SETTLEMENT_MY_CULTURE_REASON
+			scope:actor.culture != scope:recipient.culture
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.culture = scope:actor.culture
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						culture = scope:actor.culture
+					}
+				}
+			}
+			scope:actor.culture = {
+				save_temporary_scope_value_as = {
+					name = acceptance
+					value = {
+						value = "cultural_acceptance(scope:recipient.culture)"
+						divide = 25
+						ceiling = yes
+					}
+				}
+			}
+		}
+		modifier = { # My faith's lands
+			add = {
+				value = 0
+				if = {
+					limit = { scope:target.tier = tier_county }
+					add = -15
+				}
+				else = {
+					add = -15
+					scope:target = {
+						every_de_jure_county = {
+							limit = {
+								ep3_negotiate_settlement_valid_county_trigger = yes
+								faith != scope:actor.faith
+							}
+							add = -15
+						}
+					}
+				}
+				if = {
+					limit = { scope:hostility != 0 }
+					multiply = scope:hostility
+				}
+				min = -50
+			}
+			desc = NEGOTIATE_SETTLEMENT_MY_FAITH_REASON
+			scope:actor.faith != scope:recipient.faith
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target.faith = scope:actor.faith
+			}
+			trigger_else = {
+				scope:target = {
+					any_de_jure_county = {
+						ep3_negotiate_settlement_valid_county_trigger = yes
+						faith = scope:actor.faith
+					}
+				}
+			}
+			scope:actor.faith = {
+				save_temporary_scope_value_as = {
+					name = hostility
+					value = "faith_hostility_level(scope:recipient.faith)"
+				}
+			}
+		}
+		modifier = { # Too close
+			add = {
+				value = 0
+				add = scope:distance
+				divide = scope:actor.highest_held_title_tier
+				if = {
+					limit = { scope:distance <= squared_distance_medium }
+					multiply = -0.01
+				}
+				else = { multiply = 0.0005 }
+				min = -25
+				max = 50
+			}
+			desc = NEGOTIATE_LAND_DISTANCE_REASON
+			trigger_if = {
+				limit = { scope:target.tier = tier_county }
+				scope:target = { save_temporary_scope_as = distance_target }
+			}
+			trigger_else = {
+				scope:target.title_capital_county = { save_temporary_scope_as = distance_target }
+			}
+			scope:actor.capital_county = {
+				save_temporary_scope_value_as = {
+					name = distance
+					value = "squared_distance(scope:distance_target)"
+				}
+			}
+		}
+	}
+}
+
+##################
+# Make a Request
+# by Arkadiusz Majewski
+# As a LAAMP you can ask characters on your contact list for something 
+##################
+
+contact_list_request_interaction = { # make a request, make_a_request
+	category = interaction_category_laamp
+	interface_priority = 110
+	icon = icon_scheme_befriend
+	desc = contact_list_request_interaction_desc
+	notification_text = contact_list_request_interaction_notification
+	common_interaction = yes
+
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	ai_min_reply_days = 0
+	ai_max_reply_days = 0
+
+	cooldown_against_recipient = { months = 8 }
+
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			government_has_flag = government_is_landless_adventurer
+		}
+	}
+
+	is_shown = {
+		scope:actor = { government_has_flag = government_is_landless_adventurer }
+		has_ep3_dlc_trigger = yes
+		scope:actor != scope:recipient
+	}
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_adult = yes
+			is_imprisoned = no
+			NOR = {
+				is_at_war_with = scope:actor
+				has_relation_rival = scope:actor
+				has_relation_nemesis = scope:actor
+				has_opinion_modifier = {
+					target = scope:actor
+					modifier = released_from_prison
+				}
+				has_opinion_modifier = {
+					target = scope:actor
+					modifier = eviction_ignored_opinion
+				}
+				house_has_feud_relation_with_trigger = { TARGET = scope:actor }
+			}
+		}
+		scope:actor = {
+			NOT = { has_truce = scope:recipient }
+		}
+		scope:recipient = {
+			trigger_if = {
+				limit = {
+					NOR = {
+						is_contact_of = scope:actor
+						is_close_or_extended_family_of = scope:actor
+						is_consort_of = scope:actor
+						AND = {
+							OR = {
+								capital_province ?= scope:actor.domicile.domicile_location
+								any_held_title = {
+									title_tier = county
+									any_county_province = {
+										this = scope:actor.domicile.domicile_location
+									}
+								}
+							}
+							scope:actor = { has_perk = embassies_perk }
+						}
+					}
+				}
+				is_contact_of = scope:actor
+			}
+		}
+		scope:recipient = {
+			custom_tooltip = {
+				text = RULER_DESIGNER_ACHIEVEMENTS_NOT_AVAILABLE
+				OR = {
+					is_landed = yes
+					gold > 20
+					AND = {
+						is_landed_or_landless_administrative_or_theocratic = yes
+						scope:actor.maa_regiments_count < scope:actor.maa_regiments_max_count
+					}
+					AND = {
+						#Recipient can marry the actor
+						can_marry_character_trigger = { CHARACTER = scope:actor }
+						#To account for a person marrying their concubines
+						trigger_if = {
+							limit = {
+								is_concubine = yes
+							}
+							is_concubine_of = scope:actor
+							can_marry_character_trigger = { CHARACTER = scope:actor }
+						}
+					}
+				}
+			}
+		}
+	}
+	is_highlighted = {
+		scope:actor = {
+			is_character_interaction_potentially_accepted = {
+				recipient = scope:recipient
+				interaction = contact_list_request_interaction
+			}
+		}
+	}
+	can_send = {
+		#Has to be used instead of diplo range checks in laamp to landed interactions
+		ep3_laamp_diplo_range_trigger = {
+			TARGET = scope:recipient
+			LAAMP = scope:actor
+		}
+	}
+	#request provisions
+	send_option = {
+		flag = request_provisions
+		is_valid = {
+			scope:recipient = {
+				is_landed = yes
+			}
+		}
+	}
+	#request gold
+	send_option = {
+		flag = request_gold
+		is_valid = {
+			custom_tooltip = {
+				scope:recipient.gold > 20
+				text = contact_list_request_interaction.request_gold_recipient_not_enough_gold
+			}
+		}
+	}
+	#request men-at-arms regiment
+	send_option = {
+		flag = request_maa
+		is_valid = {
+			scope:recipient = {
+				is_landed_or_landless_administrative_or_theocratic = yes
+			}
+			custom_tooltip = {
+				scope:actor.maa_regiments_count < scope:actor.maa_regiments_max_count
+				text = contact_list_request_interaction.request_maa_actor_too_many_regiments
+			}
+		}
+	}
+	#request a knight
+	send_option = {
+		flag = request_knights
+		is_shown = {
+			scope:recipient = { is_ai = yes }
+		}
+		is_valid = {
+			custom_tooltip = {
+				scope:recipient = {
+					any_knight = {
+						is_landed = no
+						count > 1
+					}
+				}
+				text = contact_list_request_interaction.request_knights_recipient_not_enough_knights
+			}
+		}
+	}
+	#request to arrange a marriage
+	send_option = {
+		flag = request_marriage
+		is_valid = {
+			#There is an available marriage, copied from 00_marriage_interactions is_valid_showing_failures_only
+			custom_description = {
+				text = "basic_can_marry_check_recipient"
+				subject = scope:actor
+				object = scope:recipient
+				scope:recipient = {
+					OR = {
+						AND = {
+							#Recipient can marry the actor
+							can_marry_character_trigger = { CHARACTER = scope:actor }
+							#To account for a person marrying their concubines
+							trigger_if = {
+								limit = {
+									is_concubine = yes
+								}
+								is_concubine_of = scope:actor
+								can_marry_character_trigger = { CHARACTER = scope:actor }
+							}
+						}
+						AND = {
+							is_ruler = yes #(Following are only for rulers)
+							OR = {
+								any_child = {
+									matchmaker = scope:actor
+									OR = {
+										#Any of recipient's children can marry
+										AND = {
+											can_marry_trigger = yes
+											#To account for a person marrying their concubines
+											trigger_if = {
+												limit = {
+													is_concubine = yes
+												}
+												is_concubine_of = scope:actor
+											}
+										}
+										#Any of recipient's children are ready to marry their betrothed
+										AND = {
+											ready_to_marry_betrothed_trigger = yes
+											betrothed.matchmaker = scope:actor
+										}
+									}
+								}
+								any_courtier = {
+									OR = {
+										#Any of recipient's courtiers can marry
+										AND = {
+											can_marry_trigger = yes
+											#To account for a person marrying their concubines
+											trigger_if = {
+												limit = {
+													is_concubine = yes
+												}
+												is_concubine_of = scope:actor
+											}
+										}
+										#Any of recipient's courtiers are ready to marry their betrothed
+										AND = {
+											ready_to_marry_betrothed_trigger = yes
+											betrothed.matchmaker = scope:actor
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	#request new contract
+	send_option = {
+		flag = request_contract
+		is_shown = {
+			scope:recipient = { is_ai = yes }
+		}
+		is_valid = {
+			custom_tooltip = {
+				text = contact_list_request_interaction.create_contracts.already_has_contract
+				scope:actor = {
+					any_character_task_contract = {
+						count = all
+						exists = task_contract_employer
+						task_contract_employer != scope:recipient
+					}
+					is_ai = no
+				}
+			}
+			custom_description = {
+				text = contact_list_request_interaction_create_contracts
+				object = scope:recipient
+				scope:actor = {
+					OR = {
+						can_create_task_contract = {
+							type_name = laamp_raid_contract
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_join_war_contract
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_steal_artifact_contract
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_construction_contract
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_treasure_hunting_contract
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_vip
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_artifact
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_gold
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_ward
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_explorer
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_transport_animal
+							employer = scope:recipient
+						}
+						can_create_task_contract = {
+							type_name = laamp_join_faction_contract
+							employer = scope:recipient
+						}
+					}
+				}
+			}
+		}
+	}
+	#request feast
+	send_option = {
+		flag = request_feast
+		is_shown = {
+			scope:actor = {
+				has_perk = inspiring_rule_perk
+			}
+			scope:recipient = {
+				is_landed_or_landless_administrative_or_theocratic = yes
+				capital_province ?= {
+					squared_distance = {
+						target = scope:actor.capital_province
+						value < define:NTaskContract|ADVENTURER_DISTANCE_RESTRICTION
+					}
+				}
+			}
+			scope:recipient = { is_ai = yes }
+		}
+		is_valid = {
+			scope:recipient = {
+				highest_held_title_tier > tier_barony
+				is_at_war = no
+				is_available_adult = yes
+			}
+			scope:actor = {
+				custom_tooltip = {
+					text = contact_list_request_interaction.request_feast_cooldown
+					NOT = { has_character_flag = laamp_recently_requested_feast }
+				}
+			}
+		}
+	}
+	#request tournament
+	send_option = {
+		flag = request_tournament
+		is_shown = {
+			has_ep2_dlc_trigger = yes
+			scope:actor = {
+				has_perk = stalwart_leader_perk
+			}
+			scope:recipient = {
+				is_landed = yes
+				NOT = { has_variable = conqueror }
+				capital_province ?= {
+					squared_distance = {
+						target = scope:actor.capital_province
+						value < define:NTaskContract|ADVENTURER_DISTANCE_RESTRICTION
+					}
+				}
+			}
+			scope:recipient = { is_ai = yes }
+		}
+		is_valid = {
+			scope:recipient = {
+				highest_held_title_tier > tier_barony
+				is_at_war = no
+				is_available_adult = yes
+			}
+			scope:actor = {
+				custom_tooltip = {
+					text = contact_list_request_interaction.request_tournament_cooldown
+					NOT = { has_character_flag = laamp_recently_requested_tourney }
+				}
+			}
+		}
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	cost = {
+		prestige = {
+			add = 100
+			# Upgrade for tier.
+			multiply = {
+				value = scope:recipient.highest_held_title_tier
+				# Discount barons.
+				add = -1
+			}
+			# Upgrade for the more egregious requests.
+			## Marriage.
+			if = {
+				limit = { scope:request_marriage = yes }
+				multiply = 1.5
+			}
+			## Activities.
+			### Tournament.
+			if = {
+				limit = { scope:request_tournament = yes }
+				multiply = 2
+			}
+			### Feast.
+			if = {
+				limit = { scope:request_feast = yes }
+				multiply = 1.25
+			}
+			#ADDED Discount for the less egregious requests.
+			## Marriage.
+			if = {
+				limit = { scope:request_contract = yes }
+				divide = 3
+			}
+			min = 50
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			switch = {
+				trigger = yes
+				scope:request_tournament ?= {
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion_special
+							target = scope:actor
+							opinion = -50
+						}
+						custom_tooltip = contact_list_request_interaction.request_tournament
+					}
+					hidden_effect = {
+						scope:recipient = {
+							add_character_flag = {
+								flag = tournament_ai_override
+							}
+							ai_attempt_to_host_activity = activity_tournament
+						}
+						scope:actor = {
+							add_character_flag = {
+								flag = laamp_recently_requested_tourney
+								days = 3650
+							}
+						}
+					}
+				}
+				scope:request_feast ?= {
+					scope:actor = { custom_tooltip = contact_list_request_interaction.request_feast_honor }
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion
+							target = scope:actor
+							opinion = -30
+						}
+						custom_tooltip = contact_list_request_interaction.request_feast
+					}
+					hidden_effect = {
+						scope:recipient = {
+							add_character_flag = {
+								flag = feast_ai_override
+							}
+							ai_attempt_to_host_activity = activity_feast
+						}
+						scope:actor = {
+							add_character_flag = {
+								flag = laamp_recently_requested_feast
+								days = 1875
+							}
+						}
+					}
+				}
+				scope:request_provisions ?= {
+					save_scope_value_as = {
+						name = provisions_to_add_value
+						value = {
+							if = {
+								limit = { scope:recipient.highest_held_title_tier >= tier_empire }
+								add = monumental_provisions_gain
+							}
+							else_if = {
+								limit = { scope:recipient.highest_held_title_tier >= tier_kingdom }
+								add = massive_provisions_gain
+							}
+							else_if = {
+								limit = { scope:recipient.highest_held_title_tier >= tier_duchy }
+								add = major_provisions_gain
+							}
+							else_if = {
+								limit = { scope:recipient.highest_held_title_tier >= tier_county }
+								add = medium_provisions_gain
+							}
+							else = { add = minor_provisions_gain }
+						}
+					}
+					if = {
+						limit = {
+							scope:actor.domicile.max_provisions < {
+								value = {
+									value = scope:provisions_to_add_value
+									add = scope:actor.domicile.provisions
+								}
+							}
+						}
+						save_scope_value_as = {
+							name = gained_provisions_value
+							value = {
+								value = scope:actor.domicile.max_provisions
+								subtract = scope:actor.domicile.provisions
+							}
+						}
+						save_scope_value_as = {
+							name = provisions_overflow_value
+							value = {
+								value = scope:provisions_to_add_value
+								subtract = scope:gained_provisions_value
+							}
+						}
+						save_scope_value_as = {
+							name = provisions_transformed_to_gold_value
+							value = {
+								value = scope:provisions_overflow_value
+								multiply = 0.05
+							}
+						}
+					}
+					else = {
+						save_scope_value_as = {
+							name = gained_provisions_value
+							value = scope:provisions_to_add_value
+						}
+					}
+					send_interface_toast = {
+						type = event_toast_effect_good
+						title = contact_list_request_interaction.request_provisions_tt
+						left_icon = scope:actor
+						right_icon = scope:recipient
+						scope:recipient = {
+							add_opinion = {
+								modifier = laamp_used_contact_opinion_special
+								target = scope:actor
+								opinion = -20
+							}
+							if = {
+								limit = {
+									exists = capital_county
+								}
+								hidden_effect = {
+									capital_county = {
+										add_county_modifier = {
+											modifier = ep3_gave_out_provisions
+											years = 3
+										}
+										#save it for loc in custom tooltip
+										save_scope_as = capital_county
+									}
+								}
+								custom_tooltip = contact_list_request_interaction.capital_county_modifier
+							}
+						}
+						scope:actor = {
+							custom_tooltip = contact_list_request_interaction.gained_provisions_value
+							hidden_effect = {
+								domicile = {
+									change_provisions = scope:gained_provisions_value
+								}
+							}
+							if = {
+								limit = {
+									exists = scope:provisions_transformed_to_gold_value
+								}
+								custom_tooltip = {
+									text = overflowing_provisions_to_gold.tt
+									add_gold = scope:provisions_transformed_to_gold_value
+								}
+							}
+						}
+					}
+				}
+				scope:request_gold ?= {
+					save_scope_value_as = {
+						name = requested_gold_value
+						value = {
+							value = scope:recipient.gold
+							divide = 4
+							multiply = {
+								value = scope:recipient.ai_greed
+								divide = -300
+								add = 1
+							}
+							if = {
+								limit = {
+									scope:recipient = {
+										has_any_best_good_relationship_with_character_trigger = { CHARACTER = scope:actor }
+									}
+								}
+								multiply = 1.5
+							}
+							else_if = {
+								limit = {
+									scope:recipient = {
+										has_any_moderate_good_relationship_with_character_trigger = { CHARACTER = scope:actor }
+									}
+								}
+								multiply = 1.25
+							}
+							max = {
+								value = scope:recipient.medium_gold_value
+								#Rounds up to the closest number divisible by 5, but also divide by 2.
+								divide = 10
+								floor = yes
+								multiply = 5
+								
+							}
+							#max = {
+							#	scope:recipient.culture = {
+							#		if = {
+							#			limit = {
+							#				has_cultural_era_or_later = culture_era_late_medieval
+							#			}
+							#			value = 150
+							#		}
+							#		else_if = {
+							#			limit = {
+							#				has_cultural_era_or_later = culture_era_high_medieval
+							#			}
+							#			value = 100
+							#		}
+							#		else_if = {
+							#			limit = {
+							#				has_cultural_era_or_later = culture_era_early_medieval
+							#			}
+							#			value = 75
+							#		}
+							#		else_if = {
+							#			limit = {
+							#				has_cultural_era_or_later = culture_era_tribal
+							#			}
+							#			value = 50
+							#		}
+							#		else = {
+							#			value = 25
+							#		}
+							#	}
+							#}
+						}
+					}
+					send_interface_toast = {
+						type = event_toast_effect_good
+						title = contact_list_request_interaction.request_gold_tt
+						left_icon = scope:actor
+						right_icon = scope:recipient
+						scope:actor = {
+							show_as_tooltip = {
+								add_gold = scope:requested_gold_value
+							}
+						}
+						scope:recipient = {
+							pay_short_term_gold = {
+								target = scope:actor
+								gold = scope:requested_gold_value
+							}
+							add_opinion = {
+								modifier = laamp_used_contact_opinion
+								target = scope:actor
+								opinion = -40
+							}
+						}
+					}
+				}
+				scope:request_maa ?= {
+					custom_tooltip = contact_list_request_interaction.request_maa
+					hidden_effect = {
+						ep3_pick_random_maa_regiment_effect = {
+							OWNER = scope:recipient
+							INCLUDE_BASIC_MAA = no
+							INCLUDE_SIEGE_MAA = no
+						}
+						send_interface_toast = {
+							type = event_toast_effect_good
+							title = contact_list_request_interaction.request_maa_tt
+							left_icon = scope:actor
+							right_icon = scope:recipient
+							ep3_create_random_maa_regiment_effect = {
+								OWNER = scope:actor
+								SIZE = 1
+							}
+						}
+					}
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion
+							target = scope:actor
+							opinion = -40
+						}
+					}
+				}
+				scope:request_knights ?= {
+					scope:actor = {
+						custom_tooltip = contact_list_request_interaction.request_knights
+						trigger_event = ep3_interactions_events.0101
+					}
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion
+							target = scope:actor
+							opinion = -30
+						}
+					}
+				}
+				scope:request_marriage ?= {
+					scope:actor = {
+						custom_tooltip = contact_list_request_interaction.request_marriage
+						custom_tooltip = contact_list_request_interaction.request_marriage.marriagable_women
+						custom_tooltip = contact_list_request_interaction.request_marriage.marriagable_men
+						custom_tooltip = contact_list_request_interaction.request_marriage.warning
+						if = {
+							limit = { is_ai = no }
+							open_interaction_window = {
+								interaction = arrange_marriage_interaction
+								actor = scope:actor
+								recipient = scope:recipient
+							}
+						}
+						add_to_variable_list = {
+							name = contact_list_marriage
+							target = scope:recipient
+						}
+					}
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion
+							target = scope:actor
+							opinion = -20		#prev -50
+						}
+					}
+				}
+				scope:request_contract ?= {
+					scope:actor = {
+						custom_tooltip = contact_list_request_interaction.request_contract
+						hidden_effect = {
+							random_list = {
+								#laamp_raid_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_raid_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_mercenaries
+									}
+									create_task_contract = {
+										task_contract_type = laamp_raid_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_raid_contract
+										value = yes
+									}
+								}
+								#laamp_join_war_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_join_war_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_mercenaries
+									}
+									create_task_contract = {
+										task_contract_type = laamp_join_war_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_join_war_contract
+										value = yes
+									}
+								}
+								#laamp_steal_artifact_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_steal_artifact_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_brigands
+									}
+									create_task_contract = {
+										task_contract_type = laamp_steal_artifact_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_steal_artifact_contract
+										value = yes
+									}
+								}
+								#laamp_construction_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_construction_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_scholars
+									}
+									create_task_contract = {
+										task_contract_type = laamp_construction_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_construction_contract
+										value = yes
+									}
+								}
+								#laamp_treasure_hunting_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_treasure_hunting_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										OR = {
+											has_realm_law = camp_purpose_brigands
+											has_realm_law = camp_purpose_explorers
+										}
+									}
+									create_task_contract = {
+										task_contract_type = laamp_treasure_hunting_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_treasure_hunting_contract
+										value = yes
+									}
+								}
+								#laamp_transport_vip
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_vip
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_explorers
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_vip
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_vip
+										value = yes
+									}
+								}
+								#laamp_transport_artifact
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_artifact
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										OR = {
+											has_realm_law = camp_purpose_brigands
+											has_realm_law = camp_purpose_explorers
+										}
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_artifact
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_artifact
+										value = yes
+									}
+								}
+								#laamp_transport_gold
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_gold
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										OR = {
+											has_realm_law = camp_purpose_brigands
+											has_realm_law = camp_purpose_explorers
+										}
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_gold
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_gold
+										value = yes
+									}
+								}
+								#laamp_transport_ward
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_ward
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_explorers
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_ward
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_ward
+										value = yes
+									}
+								}
+								#laamp_transport_explorer
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_explorer
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_explorers
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_explorer
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_explorer
+										value = yes
+									}
+								}
+								#laamp_transport_animal
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_transport_animal
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_explorers
+									}
+									create_task_contract = {
+										task_contract_type = laamp_transport_animal
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_transport_animal
+										value = yes
+									}
+								}
+								#laamp_join_faction_contract
+								1 = {
+									trigger = {
+										can_create_task_contract = {
+											type_name = laamp_join_faction_contract
+											employer = scope:recipient
+										}
+									}
+									modifier = {
+										add = 10
+										has_realm_law = camp_purpose_mercenaries
+									}
+									create_task_contract = {
+										task_contract_type = laamp_join_faction_contract
+										location = scope:recipient.capital_province
+										task_contract_employer = scope:recipient
+										task_contract_tier = scope:recipient.task_contract_tier_value
+										save_scope_as = new_contract
+									}
+									save_scope_value_as = {
+										name = create_laamp_join_faction_contract
+										value = yes
+									}
+								}
+							}
+							scope:new_contract = {
+								open_view_data = {
+									view = task_contract
+									player = scope:actor
+								}
+							}
+						}
+					}
+					scope:recipient = {
+						add_opinion = {
+							modifier = laamp_used_contact_opinion
+							target = scope:actor
+							opinion = -5
+						}
+						show_as_tooltip = {
+							custom_description_no_bullet = { text = contact_list_request_interaction_possible_outcomes }
+							if = {
+								limit = {
+									scope:create_laamp_raid_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_raid_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_join_war_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_join_war_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_construction_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_construction_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_steal_artifact_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_steal_artifact_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_treasure_hunting_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_treasure_hunting_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_vip ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_vip
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_artifact ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_artifact
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_gold ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_gold
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_ward ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_ward
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_explorer ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_explorer
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_transport_animal ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_transport_animal
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+							if = {
+								limit = {
+									scope:create_laamp_join_faction_contract ?= yes
+								}
+								create_task_contract = {
+									task_contract_type = laamp_join_faction_contract
+									location = scope:recipient.location
+									task_contract_employer = scope:recipient
+									task_contract_tier = scope:recipient.task_contract_tier_value
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_usable_hook = scope:recipient
+					scope:recipient = { is_ai = yes }
+					#ADDED
+					NOT  = { scope:request_marriage = yes }
+				}
+				use_hook = scope:recipient
+				custom_tooltip = contact_list_request_interaction.tt.hook_auto_used
+			}
+		}
+		scope:recipient = {
+			add_prestige = {
+				value = scope:puppet_or_actor.prestige_level
+				min = 0.5
+				multiply = 100
+			}
+		}
+	}
+
+	can_send_despite_rejection = no
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 3
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+	ai_targets = { ai_recipients = contacts }
+	ai_targets = { ai_recipients = hooked_characters }
+	auto_accept = {
+		scope:actor = { has_usable_hook = scope:recipient }
+		scope:recipient = { is_ai = yes }
+		#ADDED - dont spend hook if asking for marriage
+		NOT = { scope:request_marriage = yes }
+	}
+	ai_accept = {
+		base = -35	#prev 0
+
+		modifier = {
+			add = -50
+			scope:recipient = {
+				NOR = {
+					is_contact_of = scope:actor
+					is_close_or_extended_family_of = scope:actor
+					is_consort_of = scope:actor
+				}
+			}
+			desc = contact_list_request_interaction.no_contact
+		}
+		opinion_modifier = { # Opinion Factor
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+
+		modifier = {
+			add = -50
+			scope:recipient = {
+				has_opinion_modifier = {
+					modifier = laamp_used_contact_opinion
+					target = scope:actor
+				}
+			}
+			desc = contact_list_request_interaction.repeated_request
+		}
+
+		ai_value_modifier = {
+			ai_compassion = 0.25
+			ai_greed = -0.5
+			min = -50
+			max = 50
+		}
+
+		modifier = {
+			add = 30
+			desc = contact_list_request_interaction.request_gold.contract
+			scope:request_contract ?= yes
+		}
+
+		modifier = {
+			add = 30
+			desc = contact_list_request_interaction.request_gold.poor_actor
+			scope:request_gold ?= yes
+			scope:actor = {
+				#gold < minor_gold_value
+				#CHANGED (added)
+				debt_level >= 0
+			}
+		}
+
+		modifier = {
+			add = -50
+			desc = contact_list_request_interaction.request_gold.poor_recipient
+			scope:request_gold ?= yes
+			scope:recipient = {
+				gold < major_gold_value
+			}
+		}
+
+		modifier = {
+			add = -10	#prev 25
+			desc = contact_list_request_interaction.request_gold.stewardship
+			OR = {
+				scope:request_provisions ?= yes
+				scope:request_gold ?= yes
+			}
+			scope:recipient = {
+				has_trait = education_stewardship
+			}
+		}
+
+		modifier = {
+			add = -10	#prev 25
+			desc = contact_list_request_interaction.request_gold.martial
+			OR = {
+				scope:request_maa ?= yes
+				scope:request_knights ?= yes
+			}
+			scope:recipient = {
+				has_trait = education_martial
+			}
+		}
+
+		modifier = {
+			add = 10
+			desc = contact_list_request_interaction.request.defensive_negotiations_perk
+			OR = {
+				scope:request_maa ?= yes
+				#scope:request_knights ?= yes
+			}
+			scope:actor = {
+				has_perk = defensive_negotiations_perk
+			}
+		}
+
+		modifier = {
+			add = 20
+			desc = contact_list_request_interaction.request.defensive_negotiations_perk
+			OR = {
+				#scope:request_maa ?= yes
+				scope:request_knights ?= yes
+			}
+			scope:actor = {
+				has_perk = defensive_negotiations_perk
+			}
+		}
+
+		modifier = {
+			add = -5	#prev 25
+			desc = contact_list_request_interaction.relevant_focus
+			scope:request_marriage ?= yes
+			scope:recipient = {
+				OR = {
+					has_focus = diplomacy_family_focus
+					has_focus = intrigue_temptation_focus
+					has_focus = martial_chivalry_focus
+				}
+			}
+		}
+
+		modifier = {
+			add = -10	#prev 25
+			desc = contact_list_request_interaction.relevant_focus
+			OR = {
+				scope:request_maa ?= yes
+				scope:request_knights ?= yes
+			}
+			scope:recipient = {
+				OR = {
+					has_focus = martial_strategy_focus
+					has_focus = martial_chivalry_focus
+					has_focus = martial_authority_focus
+				}
+			}
+		}
+
+		modifier = {
+			add = 15	#prev 25
+			desc = contact_list_request_interaction.request_knights.plenty
+			scope:request_knights ?= yes
+			scope:recipient = {
+				number_of_knights > 6
+			}
+		}
+
+		modifier = {
+			add = -25
+			desc = contact_list_request_interaction.request_knights.little
+			scope:request_knights ?= yes
+			scope:recipient = {
+				number_of_knights <= 6
+			}
+		}
+
+		#ADDED 
+		modifier = {
+			add = 20
+			desc = contact_list_request_interaction.request_maa.little
+			scope:request_maa ?= yes
+			scope:actor = {
+				number_of_maa_regiments = 0
+			}
+		}
+		
+		modifier = {
+			add = -25
+			desc = contact_list_request_interaction.powerful
+			scope:request_maa ?= yes
+			scope:actor = {
+				#max_military_strength >= 400
+				#max_military_strength < 800
+				#CHANGED (added) - for better compatibility with TGR + will make special soldiers less awful 
+				maa_regiments_count >= 4
+				maa_regiments_count < 8
+			}
+		}
+
+		modifier = {
+			add = -50
+			desc = contact_list_request_interaction.very_powerful
+			scope:request_maa ?= yes
+			#scope:actor.max_military_strength >= 800
+			#CHANGED (added) - for better compatibility with TGR + will make special soldiers less awful 
+			scope:actor.maa_regiments_count > 8
+		}
+
+		modifier = {
+			add = -30
+			desc = contact_list_request_interaction.stronger_than_me
+			scope:request_maa ?= yes
+			scope:actor.max_military_strength > scope:recipient.max_military_strength
+		}
+
+		modifier = {
+			add = -25
+			desc = contact_list_request_interaction.traveler
+			scope:request_provisions ?= yes
+			scope:recipient = {
+				has_trait = lifestyle_traveler
+			}
+		}
+
+		modifier = {
+			add = 20	#prev 25
+			desc = contact_list_request_interaction.adventurer
+			scope:recipient = {
+				has_trait = adventurer
+			}
+		}
+
+		modifier = {
+			add = 15	#prev 25
+			desc = contact_list_request_interaction.adventurer_follower
+			scope:recipient = {
+				has_trait = adventurer_follower
+			}
+		}
+
+		modifier = {
+			add = 20
+			desc = contact_list_request_interaction.flexible_truces_perk
+			scope:actor = {
+				has_perk = flexible_truces_perk
+			}
+		}
+
+		# Your level of prestige.
+		## Impotent
+		modifier = {
+			add = -25	#prev -10
+			desc = AI_OPINION_PRESTIGE_LEVEL_DISGRACED
+			scope:actor.prestige_level = 0
+		}
+		## Influential
+		### Would be zero, so it wouldn't appear.
+		## Persuasive
+		modifier = {
+			add = 5
+			desc = AI_OPINION_PRESTIGE_LEVEL_DISTINGUISHED
+			scope:actor.prestige_level = 2
+			scope:actor = {
+				NOT = {
+					has_perk = true_ruler_perk
+				}
+			}
+		}
+		## Controlling
+		modifier = {
+			add = 10
+			desc = AI_OPINION_PRESTIGE_LEVEL_ILLUSTRIOUS
+			scope:actor.prestige_level = 3
+			scope:actor = {
+				NOT = {
+					has_perk = true_ruler_perk
+				}
+			}
+		}
+		## Authoritative
+		modifier = {
+			add = 15	#prev 20
+			desc = AI_OPINION_PRESTIGE_LEVEL_EXALTED
+			scope:actor.prestige_level = 4
+			scope:actor = {
+				NOT = {
+					has_perk = true_ruler_perk
+				}
+			}
+		}
+		## Imperious
+		modifier = {
+			add = 25	#prev 30
+			desc = AI_OPINION_PRESTIGE_LEVEL_LEGENDARY
+			scope:actor.prestige_level = 5
+			scope:actor = {
+				NOT = {
+					has_perk = true_ruler_perk
+				}
+			}
+		}
+
+		## Persuasive
+		modifier = {
+			add = 6
+			desc = AI_OPINION_PRESTIGE_LEVEL_DISTINGUISHED
+			scope:actor.prestige_level = 2
+			scope:actor = { has_perk = true_ruler_perk }
+		}
+		## Controlling
+		modifier = {
+			add = 12
+			desc = AI_OPINION_PRESTIGE_LEVEL_ILLUSTRIOUS
+			scope:actor.prestige_level = 3
+			scope:actor = { has_perk = true_ruler_perk }
+		}
+		## Authoritative
+		modifier = {
+			add = 18	#prev 24
+			desc = AI_OPINION_PRESTIGE_LEVEL_EXALTED
+			scope:actor.prestige_level = 4
+			scope:actor = { has_perk = true_ruler_perk }
+		}
+		## Imperious
+		modifier = {
+			add = 24	#prev 36
+			desc = AI_OPINION_PRESTIGE_LEVEL_LEGENDARY
+			scope:actor.prestige_level = 5
+			scope:actor = { has_perk = true_ruler_perk }
+		}
+	}
+
+	ai_will_do = {
+		base = 50
+
+		# Set up the AI so that they actually know how to use the send_options.
+		## Troops, if they don't have gold.
+		modifier = {
+			add = 50
+			scope:recipient.gold < 50
+			scope:request_maa = yes
+		}
+		## Gold is always good.
+		modifier = {
+			add = 200		#prev 50
+			scope:recipient.gold >= 30
+			scope:request_gold = yes
+		}
+		## Feasts are especially attractive for some adventurers.
+		modifier = {
+			add = 25		#prev 50
+			scope:request_feast = yes
+			OR = {
+				prestige <= 500
+				has_trait = arrogant
+				has_trait = gluttonous
+				has_trait = gregarious
+				has_trait = drunkard
+			}
+		}
+		## Provisions are fine, but nothing special for the AI.
+		modifier = {
+			add = -1000		#prev 5
+			scope:request_provisions = yes
+			#scope:actor.domicile.provisions < scope:actor.domicile.max_provisions
+		}
+		## Don't go crazy with tournaments
+		modifier = {
+			factor = 0
+			scope:request_tournament = yes
+		}
+		modifier = {
+			factor = 0
+			NOR = {
+				scope:request_provisions = yes
+				scope:request_gold = yes
+				scope:request_maa = yes
+				scope:request_knights = yes
+				scope:request_marriage = yes
+				scope:request_contract = yes
+				scope:request_feast = yes
+				scope:request_tournament = yes
+			}
+		}
+	}
+}
+
+
+##################
+# Evict Adventurer
+# by Joe Parkin
+##################
+
+evict_adventurer_interaction = {
+	common_interaction = yes
+	category = interaction_category_diplomacy
+	cooldown_against_recipient = { years = 5 }
+	greeting = positive
+	icon = icon_evict_adventurer
+	desc = evict_adventurer_interaction_desc
+
+	popup_on_receive = yes
+	pause_on_receive = yes
+
+	interface_priority = 60
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_at_war = no
+			is_imprisoned = no
+			is_incapable = no
+		}
+	}
+
+	is_shown = {
+		scope:puppet_or_actor ?= { is_landed = yes }
+		has_ep3_dlc_trigger = yes
+		scope:recipient != scope:puppet_or_actor
+		scope:recipient = {
+			government_has_flag = government_is_landless_adventurer
+			is_landed = no
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:puppet_or_actor = {
+			is_at_war = no
+			NOR = {
+				is_spouse_of = scope:recipient
+				has_relation_friend = scope:recipient
+				has_relation_lover = scope:recipient
+			}
+			#ADDED
+			trigger_if = {
+				limit = { scope:is_puppet_action ?= yes }
+				prestige >= minor_prestige_value
+			}
+		}
+		scope:recipient = {
+			# Adventurer must be in the subrealm
+			domicile.domicile_location.county.holder ?= {
+				target_is_same_character_or_above = scope:puppet_or_actor
+			}
+		}
+		# AI should not against hired adventurers
+		trigger_if = {
+			limit = {
+				scope:actor = { is_ai = yes }
+			}
+			scope:puppet_or_actor = {
+				opinion = {
+					target = scope:recipient
+					value < 25
+				}
+			}
+			NOT = {
+				scope:recipient = {
+					any_character_active_contract = { task_contract_employer = scope:puppet_or_actor }
+				}
+			}
+		}
+		scope:recipient = {
+			NOT = { has_strong_hook = scope:puppet_or_actor }
+		}
+		# Story blockers.
+		## Hereward cannot be exiled by active participants in the Harrying of the North.
+		disable_interaction_for_hereward_trigger = yes
+		## Hasan cannot be exiled by anyone during his story.
+		disable_interaction_for_hasan_trigger = yes
+	}
+
+	on_send = {
+		scope:recipient = {
+			send_interface_toast = {
+				type = diplo_contract_scheme_invalidated_message
+				title = evict_adventurer_interaction.tt.contracts_invalidated.t
+				right_icon = scope:puppet_or_actor
+				custom_tooltip = {
+					text = evict_adventurer_interaction.tt.contracts_invalidated
+					every_character_task_contract = {
+						limit = {
+							task_contract_location.county.holder = {
+								target_is_same_character_or_above = scope:puppet_or_actor
+							}
+						}
+						invalidate_contract = yes
+					}
+					# We also need to invalidate your active contract, if you've got one, since you need to be travelling.
+					every_character_active_contract = { invalidate_contract = yes }
+				}
+			}
+		}
+	}
+	
+	#ADDED
+	cost = {
+		prestige = {
+			value = minor_prestige_value
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				value = 0
+			}
+		}
+	}
+
+	on_accept = {
+		scope:puppet_or_actor = { 
+			save_scope_as = expeller 
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				add_prestige = minor_prestige_loss
+			}
+		}
+		scope:recipient = {
+			save_scope_as = adventurer
+			add_opinion = {
+				target = scope:puppet_or_actor
+				modifier = demanded_eviction_opinion
+			}
+			custom_tooltip = evict_adventurer_contracts_tt
+			custom_description_no_bullet = {
+				text = evict_adventurer_consequences_tt
+				object = scope:puppet_or_actor
+				subject = scope:recipient
+			}
+			custom_tooltip = evict_adventurer_casus_belli_tt
+		}
+		scope:puppet_or_actor = {
+			show_as_tooltip = {
+				add_opinion = {
+					target = scope:recipient
+					modifier = eviction_ignored_opinion
+				}
+			}
+		}
+		scope:recipient = {
+			set_variable = {
+				name = adventurer_expeller
+				value = scope:puppet_or_actor
+				months = 4
+			}
+			trigger_event = {
+				id = ep3_interactions_events.0500
+				days = 1
+			}
+			trigger_event = {
+				id = ep3_interactions_events.0501
+				months = 3
+			}
+		}
+		#ADDED
+		hidden_effect = {
+			scope:recipient = {
+				if = {
+					limit = {
+						is_ai = yes 
+						#is_travelling = no
+						any_owned_story = { type = story_adventurer_ai }
+						scope:actor.military_power > { value = scope:recipient.military_power multiply = 1.25 }
+					}
+					random_owned_story = {
+						type = story_adventurer_ai
+						ep3_adventurer_ai_contract_find_next_kingdom_effect = yes
+					}
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		scope:recipient = {
+			start_war = {
+				cb = ep3_laamp_apprehend_adventurer_cb
+				target = scope:puppet_or_actor
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 12
+		duchy = 6
+		kingdom = 6
+		empire = 6
+		hegemony = 6
+	}
+	ai_targets = {
+		ai_recipients = sub_realm_domicile_owners
+		max = 10
+	}
+	ai_will_do = {
+		base = -25
+		opinion_modifier = {
+			who = scope:puppet_or_actor
+			opinion_target = scope:recipient
+			multiplier = -0.5
+		}
+		# Independent rulers or kings and over will happily exile claimants.
+		modifier = {
+			add = 250
+			OR = {
+				top_liege = this
+				highest_held_title_tier >= tier_kingdom
+			}
+			scope:recipient = {
+				any_claim = {
+					tier >= scope:puppet_or_actor.highest_held_title_tier
+					holder ?= scope:puppet_or_actor
+				}
+			}
+		}
+		modifier = {
+			add = 10
+			has_opinion_modifier = {
+				modifier = failed_task_contract_opinion
+				target = scope:recipient
+			}
+		}
+		modifier = {
+			add = 30
+			has_opinion_modifier = {
+				modifier = left_war_early
+				target = scope:recipient
+			}
+		}
+		modifier = {
+			add = 100
+			has_opinion_modifier = {
+				modifier = switched_sides_in_war
+				target = scope:recipient
+			}
+		}
+		modifier = {
+			add = 100
+			has_imprisonment_reason = scope:recipient
+		}
+		modifier = {
+			add = {
+				if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 100
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value <= -100	#prev 100
+							}
+						}
+					}
+					add = 200
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 80
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value <= -80	#prev 80
+							}
+						}
+					}
+					add = 150
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 60
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value <= -60	#prev 60
+							}
+						}
+					}
+					add = 100
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 40
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value <= -40	#prev 40
+							}
+						}
+					}
+					add = 75
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 20
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value <= -20	#prev >= 20
+							}
+						}
+					}
+					add = 50
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_opinion_modifier = {
+								modifier = gallowsbait_scum_opinion
+								target = scope:recipient
+								value >= 0
+							}
+							has_opinion_modifier = {
+								modifier = succeeded_criminal_contract_against_me_opinion
+								target = scope:recipient
+								value >= 0
+							}
+						}
+					}
+					add = 25
+				}
+			}
+			OR = {
+				has_opinion_modifier = {
+					modifier = gallowsbait_scum_opinion
+					target = scope:recipient
+				}
+				has_opinion_modifier = {
+					modifier = succeeded_criminal_contract_against_me_opinion
+					target = scope:recipient
+				}
+			}
+		}
+		# Factors must got at the bottom.
+		## Don't evict people we can't beat up.
+		modifier = {
+			factor = 0
+			scope:puppet_or_actor.current_military_strength < scope:recipient.max_military_strength		#prev military_strength_75_percent_value
+		}
+		## Don't evict anyone currently doing a job for us.
+		modifier = {
+			factor = 0
+			scope:recipient = {
+				any_character_task_contract = {
+					task_contract_employer ?= scope:puppet_or_actor
+				}
+			}
+			#ADDED - dont evict ppl outside your realm either
+			scope:recipient.location ?= {
+				exists = county
+				county.holder ?= { target_is_same_character_or_above = scope:recipient }
+			}
+		}
+		## We _only_ evict if we actually dislike someone.
+		first_valid = {
+			# People close to us are more willing to put up with our bullshit.
+			modifier = {
+				factor = 0
+				has_any_moderate_good_relationship_with_character_trigger = { CHARACTER = scope:recipient }
+				opinion = {
+					target = scope:recipient
+					value > -30
+				}
+			}
+			modifier = {
+				factor = 0
+				opinion = {
+					target = scope:recipient
+					value > 0
+				}
+			}
+		}
+	}
+}

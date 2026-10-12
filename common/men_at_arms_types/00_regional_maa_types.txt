@@ -4,23 +4,23 @@
 @maa_high_maintenance_cost = 5.0
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 4
-@provisions_cost_infantry_moderate = 10
-@provisions_cost_infantry_expensive = 18
-@provisions_cost_infantry_bankrupting = 24
+@provisions_cost_infantry_cheap = 6
+@provisions_cost_infantry_moderate = 14
+@provisions_cost_infantry_expensive = 24
+@provisions_cost_infantry_bankrupting = 30
 
-@provisions_cost_cavalry_cheap = 12
-@provisions_cost_cavalry_moderate = 26
-@provisions_cost_cavalry_expensive = 34
-@provisions_cost_cavalry_bankrupting = 48
-@provisions_cost_cavalry_elephants = 64
+@provisions_cost_cavalry_cheap = 16
+@provisions_cost_cavalry_moderate = 34
+@provisions_cost_cavalry_expensive = 46
+@provisions_cost_cavalry_bankrupting = 64
+@provisions_cost_cavalry_elephants = 180
 
-@provisions_cost_special_cheap = 10
-@provisions_cost_special_moderate = 18
-@provisions_cost_special_expensive = 28
-@provisions_cost_special_bankrupting = 36
+@provisions_cost_special_cheap = 12
+@provisions_cost_special_moderate = 24
+@provisions_cost_special_expensive = 36
+@provisions_cost_special_bankrupting = 48
 
-# My idea of rebalance: All costs x1.5
+# My idea of rebalance: All costs doubled
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -34,8 +34,8 @@
 camel_rider = {
 	type = camel_cavalry
 	
-	damage = 24		#prev 22
-	toughness = 16	#prev 15
+	damage = 22
+	toughness = 15
 	pursuit = 20
 	screen = 20
 	
@@ -64,24 +64,20 @@ camel_rider = {
 	high_maintenance_cost = { gold = camel_rider_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_cheap
 	
-	stack = 40
-	ai_quality = { 
-		value = culture_ai_weight_camels 
-		#ADDED
-		add = counter_synergy_ai_weight_camel_cavalry
-	}
+	stack = 100
+	ai_quality = { value = culture_ai_weight_camels }
 	icon = camel_riders
 }
 
 war_elephant = {
 	type = elephant_cavalry
 	
-	damage = 235		#prev 250
+	damage = 250
 	toughness = 50
 	pursuit = 0
 	screen = 0
 	
-	siege_value = 0.2	#prev 0.1
+	siege_value = 0.1
 	
 	terrain_bonus = {
 		jungle = { damage = 50 }
@@ -119,12 +115,8 @@ war_elephant = {
 		}
 	}
 	
-	stack = 10
-	#hired_stack_size = 10
-	ai_quality = { 
-		value = culture_ai_weight_elephants
-		#ADDED
-		add = counter_synergy_ai_weight_elephant_cavalry
-	}
+	stack = 25
+	hired_stack_size = 10
+	ai_quality = { value = culture_ai_weight_elephants }
 	icon = war_elephants
 }

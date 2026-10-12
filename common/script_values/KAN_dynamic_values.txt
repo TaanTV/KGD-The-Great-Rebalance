@@ -1,0 +1,44 @@
+﻿# Referenced by code. Amount of gold gained by the winning side per 1000 men who died in battle (hard casualties)
+# Root is the winner main participant
+# scope:enemy_battle_owner is the main enemy participant
+# scope:combat is the combat itself
+battle_winner_gold_gain = {
+	value = 0
+
+	if = { # Cultural tradition
+		limit = {
+			culture = {
+				has_cultural_parameter = gain_gold_from_battles
+			}
+		}
+		add = 10
+	}
+
+	if = { # Bonus for legacy
+		limit = {
+			dynasty ?= {
+				has_dynasty_perk = fp1_pillage_legacy_4
+			}
+		}
+		add = 50
+	}
+
+	if = { # Master of Spoils Camp Officer
+		limit = {
+			employs_court_position = master_of_spoils_camp_officer
+		}
+		add = {
+			value = court_position:master_of_spoils_camp_officer.aptitude:master_of_spoils_camp_officer
+			add = 1
+			multiply = 4		#prev 10
+		}
+
+		#ADDED - Fighting Peasants Rebellion
+		if = {
+			limit = {
+				scope:enemy_battle_owner = { has_variable = rebel_leader_peasants }
+			}
+			multiply = 0.25 # to test
+		}
+	}
+}

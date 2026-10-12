@@ -1,0 +1,3 @@
+﻿has_adventurer_nerfs_loaded_trigger = {
+	always = yes
+}

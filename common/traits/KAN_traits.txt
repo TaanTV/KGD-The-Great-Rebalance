@@ -1,0 +1,208 @@
+﻿# A note on usage: gallowsbait is for criminals who fall outside of the ruling class or their associates.
+## A courtier murders someone? Not gallowsbait.
+## A baron murders someone? Not gallowsbait.
+## A pool character mugs someone? That's gallowsbait.
+## An adventurer steals the silverware at dinner? That's gallowsbait.
+### It's for the low class, the under-class, and the outsider, *not* for anyone without a duchy to their name.
+gallowsbait = {
+	category = fame
+	
+	ai_honor = -20
+	ai_energy = 20
+	legitimacy_gain_mult = -0.25
+	legitimacy_loss_mult = 0.25
+
+	same_opinion = 65		#prev 50
+	#ADDED
+	general_opinion = -15
+	
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					NOT = { exists = this }
+				}
+				desc = trait_gallowsbait_desc
+			}
+			desc = trait_gallowsbait_character_desc
+		}
+	}
+
+	tracks = {
+		# Brigandry, highway robbery, etc.
+		bandit = {
+			20 = {
+				barons_and_minor_landholders_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#martial = 1
+			}
+			40 = {
+				barons_and_minor_landholders_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#ADDED
+				martial = 1
+			}
+			60 = {
+				barons_and_minor_landholders_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#martial = 1
+			}
+			80 = {
+				barons_and_minor_landholders_opinion = -5
+				general_opinion = -5			#prev -6
+				courtier_and_guest_opinion = 5
+				monthly_prestige_gain_per_dread_add = 0.01
+				#ADDED
+				martial = 1
+			}
+			100 = {
+				barons_and_minor_landholders_opinion = -10
+				general_opinion = -10
+				courtier_and_guest_opinion = 10
+				monthly_prestige_gain_per_dread_add = 0.005	#prev 0.01
+			}
+		}
+		# Con artistry, huckstering, etc.
+		trickster = {
+			20 = {
+				courtly_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#diplomacy = 1
+			}
+			40 = {
+				courtly_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#ADDED
+				diplomacy = 1
+			}
+			60 = {
+				courtly_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#diplomacy = 1
+			}
+			80 = {
+				courtly_opinion = -5
+				general_opinion = -6			#prev -5
+				courtier_and_guest_opinion = 5
+				#ADDED
+				diplomacy = 1
+			}
+			100 = {
+				courtly_opinion = -10
+				general_opinion = -10
+				courtier_and_guest_opinion = 10
+				#diplomacy_per_prestige_level = 1
+			}
+		}
+		# Petty theft, heists, etc.
+		thief = {
+			20 = {
+				parochial_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#intrigue = 1
+			}
+			40 = {
+				parochial_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#ADDED
+				intrigue = 1
+			}
+			60 = {
+				parochial_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#intrigue = 1
+				#owned_scheme_secrecy_add = 5
+			}
+			80 = {
+				parochial_opinion = -5
+				general_opinion = -6			#prev -5
+				courtier_and_guest_opinion = 5
+				owned_scheme_secrecy_add = 5
+				#ADDED
+				intrigue = 1
+			}
+			100 = {
+				parochial_opinion = -10
+				general_opinion = -10
+				courtier_and_guest_opinion = 10
+				owned_scheme_secrecy_add = 10
+			}
+		}
+		# Rustling, horse theft, straight-up poaching, etc.
+		poacher = {
+			20 = {
+				glory_hound_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#stewardship = 1
+				provisions_gain_mult = 0.05
+			}
+			40 = {
+				glory_hound_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				provisions_gain_mult = 0.05
+				#ADDED
+				stewardship = 1
+			}
+			60 = {
+				glory_hound_opinion = -5
+				general_opinion = -3			#prev -2
+				courtier_and_guest_opinion = 2
+				#stewardship = 1
+				provisions_gain_mult = 0.05
+			}
+			80 = {
+				glory_hound_opinion = -5
+				general_opinion = -6			#prev -5
+				courtier_and_guest_opinion = 5
+				#ADDED
+				stewardship = 1
+			}
+			100 = {
+				glory_hound_opinion = -10
+				general_opinion = -10
+				courtier_and_guest_opinion = 10
+			}
+		}
+		# Kidnapping, murder, etc.
+		marauder = {
+			20 = {
+				general_opinion = -5		#prev -4
+				courtier_and_guest_opinion = 4
+				#prowess = 1
+			}
+			40 = {
+				general_opinion = -5		#prev -4
+				courtier_and_guest_opinion = 4
+				#ADDED
+				prowess = 1
+			}
+			60 = {
+				general_opinion = -5		#prev -4
+				courtier_and_guest_opinion = 4
+				#prowess = 1
+			}
+			80 = {
+				general_opinion = -10
+				courtier_and_guest_opinion = 10
+				#ADDED
+				prowess = 1
+			}
+			100 = {
+				general_opinion = -20
+				courtier_and_guest_opinion = 20
+				#max_murder_schemes_add = 1
+			}
+		}
+	}
+}

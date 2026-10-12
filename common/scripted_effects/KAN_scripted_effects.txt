@@ -1,0 +1,183 @@
+﻿create_same_type_special_troop = {
+	# Has $MAA_TYPE$
+	#save_temporary_scope_value_as = { name = original_troop_stack_size value = maa_size }
+	save_temporary_scope_value_as = { name = original_troop_men_count value = maa_current_troops_count }
+	if = {
+		limit = { has_game_rule = kan_on_landed_army_keep_as_special_troops_inheritable }
+		scope:scoped_adventurer = {
+			spawn_army = {
+				name = event_troop_default_name
+				men_at_arms = { # optional, multiple can be specified. Need either levies or MAA
+				   type = $MAA_TYPE$
+				   #stacks = scope:original_troop_stack_size
+				   men = scope:original_troop_men_count
+				}
+				location = scope:scoped_adventurer.location
+				inheritable = yes
+			}
+		}
+	}
+	else = {
+		scope:scoped_adventurer = {
+			spawn_army = {
+				name = event_troop_default_name
+				men_at_arms = { # optional, multiple can be specified. Need either levies or MAA
+				   type = $MAA_TYPE$
+				   #stacks = scope:original_troop_stack_size
+				   men = scope:original_troop_men_count
+				}
+				location = scope:scoped_adventurer.location
+				inheritable = no
+			}
+		}
+	}
+}
+
+create_250_levies_per_unit_special_troop = {
+	#save_temporary_scope_value_as = { name = original_troop_stack_size value = maa_size }
+	save_temporary_scope_value_as = { 
+		name = levy_size_multiplier 
+		value = {
+			value = maa_size 
+			multiply = {
+				value = maa_current_troops_count
+				divide = { value = maa_max_troops_count min = 1 }
+			}
+		}
+	}
+	if = {
+		limit = { has_game_rule = kan_on_landed_army_keep_as_special_troops_inheritable }
+		scope:scoped_adventurer = {
+			spawn_army = {
+				name = event_troop_default_name
+				levies = {
+					value = 250
+					multiply = scope:levy_size_multiplier
+					round_to = 5
+				}
+				location = scope:scoped_adventurer.location
+				inheritable = yes 
+			}
+		}
+	}
+	else = {
+		scope:scoped_adventurer = {
+			spawn_army = {
+				name = event_troop_default_name
+				levies = {
+					value = 250
+					multiply = scope:levy_size_multiplier
+					round_to = 5
+				}
+				location = scope:scoped_adventurer.location
+				inheritable = no
+			}
+		}
+	}
+}
+
+# This is a separate effect for if you need to compatch it to smth. Should require less big of an override this way.
+# Yes, im pretty sure there's no better way to do this. You're welcome to try tho!
+convert_this_maa_into_special_troop = {
+	switch = {
+		trigger = is_maa_type
+		# Basic
+		light_footmen = { create_same_type_special_troop = { MAA_TYPE = light_footmen } }
+		bowmen = { create_same_type_special_troop = { MAA_TYPE = bowmen } }
+		light_horsemen = { create_same_type_special_troop = { MAA_TYPE = light_horsemen } }
+		pikemen_unit = { create_same_type_special_troop = { MAA_TYPE = pikemen_unit } }
+		armored_footmen = { create_same_type_special_troop = { MAA_TYPE = armored_footmen } }
+		crossbowmen = { create_same_type_special_troop = { MAA_TYPE = crossbowmen } }
+		armored_horsemen = { create_same_type_special_troop = { MAA_TYPE = armored_horsemen } }
+		# Cultural
+		huscarl = { create_same_type_special_troop = { MAA_TYPE = huscarl } }
+		landsknecht = { create_same_type_special_troop = { MAA_TYPE = landsknecht } }
+		longbowmen = { create_same_type_special_troop = { MAA_TYPE = longbowmen } }
+		goedendag = { create_same_type_special_troop = { MAA_TYPE = goedendag } }
+		gendarme = { create_same_type_special_troop = { MAA_TYPE = gendarme } }
+		chasseur = { create_same_type_special_troop = { MAA_TYPE = chasseur } }
+		picchieri = { create_same_type_special_troop = { MAA_TYPE = picchieri } }
+		praetorian = { create_same_type_special_troop = { MAA_TYPE = praetorian } }
+		caballero = { create_same_type_special_troop = { MAA_TYPE = caballero } }
+		monaspa = { create_same_type_special_troop = { MAA_TYPE = monaspa } }
+		cataphract = { create_same_type_special_troop = { MAA_TYPE = cataphract } }
+		hobelar = { create_same_type_special_troop = { MAA_TYPE = hobelar } }
+		schiltron = { create_same_type_special_troop = { MAA_TYPE = schiltron } }
+		metsanvartija = { create_same_type_special_troop = { MAA_TYPE = metsanvartija } }
+		horse_archers = { create_same_type_special_troop = { MAA_TYPE = horse_archers } }
+		ayyar = { create_same_type_special_troop = { MAA_TYPE = ayyar } }
+		mubarizun = { create_same_type_special_troop = { MAA_TYPE = mubarizun } }
+		mulaththamun = { create_same_type_special_troop = { MAA_TYPE = mulaththamun } }
+		archers_of_the_nile = { create_same_type_special_troop = { MAA_TYPE = archers_of_the_nile } }
+		paiks = { create_same_type_special_troop = { MAA_TYPE = paiks } }
+		druzhina = { create_same_type_special_troop = { MAA_TYPE = druzhina } }
+		hussar = { create_same_type_special_troop = { MAA_TYPE = hussar } }
+		horn_warrior = { create_same_type_special_troop = { MAA_TYPE = horn_warrior } }
+		bush_hunter = { create_same_type_special_troop = { MAA_TYPE = bush_hunter } }
+		shomer = { create_same_type_special_troop = { MAA_TYPE = shomer } }
+		garudas = { create_same_type_special_troop = { MAA_TYPE = garudas } }
+		khandayat = { create_same_type_special_troop = { MAA_TYPE = khandayat } }
+		mountaineer = { create_same_type_special_troop = { MAA_TYPE = mountaineer } }
+		sahel_horsemen = { create_same_type_special_troop = { MAA_TYPE = sahel_horsemen } }
+		guinea_warrior = { create_same_type_special_troop = { MAA_TYPE = guinea_warrior } }
+		sarawit = { create_same_type_special_troop = { MAA_TYPE = sarawit } }
+		abudrar = { create_same_type_special_troop = { MAA_TYPE = abudrar } }
+		zbrojnosh = { create_same_type_special_troop = { MAA_TYPE = zbrojnosh } }
+		palace_guards = { create_same_type_special_troop = { MAA_TYPE = palace_guards } }
+		shenbigong = { create_same_type_special_troop = { MAA_TYPE = shenbigong } }
+		guanch_vaulter = { create_same_type_special_troop = { MAA_TYPE = guanch_vaulter } }
+		asawira = { create_same_type_special_troop = { MAA_TYPE = asawira } }
+		tarkhan = { create_same_type_special_troop = { MAA_TYPE = tarkhan } }
+		zupin_warrior = { create_same_type_special_troop = { MAA_TYPE = zupin_warrior } }
+		tawashi = { create_same_type_special_troop = { MAA_TYPE = tawashi } }
+		camel_rider = { create_same_type_special_troop = { MAA_TYPE = camel_rider } }
+		war_elephant = { create_same_type_special_troop = { MAA_TYPE = war_elephant } }
+		vigmen = { create_same_type_special_troop = { MAA_TYPE = vigmen } }
+		bondi = { create_same_type_special_troop = { MAA_TYPE = bondi } }
+		varangian_veterans = { create_same_type_special_troop = { MAA_TYPE = varangian_veterans } }
+		ayrudzi = { create_same_type_special_troop = { MAA_TYPE = ayrudzi } }
+		conrois = { create_same_type_special_troop = { MAA_TYPE = conrois } }
+		akritai = { create_same_type_special_troop = { MAA_TYPE = akritai } }
+		ballistrai = { create_same_type_special_troop = { MAA_TYPE = ballistrai } }
+		skoutatoi = { create_same_type_special_troop = { MAA_TYPE = skoutatoi } }
+		varangian_guards = { create_same_type_special_troop = { MAA_TYPE = varangian_guards } }
+		handpicked_faithful = { create_same_type_special_troop = { MAA_TYPE = handpicked_faithful } }
+		torch_bearers = { create_same_type_special_troop = { MAA_TYPE = torch_bearers } }
+		kheshig = { create_same_type_special_troop = { MAA_TYPE = kheshig } }
+		steppe_raiders = { create_same_type_special_troop = { MAA_TYPE = steppe_raiders } }
+		heavy_horse_archers = { create_same_type_special_troop = { MAA_TYPE = heavy_horse_archers } }
+		nomad_lancers = { create_same_type_special_troop = { MAA_TYPE = nomad_lancers } }
+		mangudai = { create_same_type_special_troop = { MAA_TYPE = mangudai } }
+		cataphract_archers = { create_same_type_special_troop = { MAA_TYPE = cataphract_archers } }
+		emishi_horse_archers = { create_same_type_special_troop = { MAA_TYPE = emishi_horse_archers } }
+		japanese_horse_archers = { create_same_type_special_troop = { MAA_TYPE = japanese_horse_archers } }
+		warrior_monks = { create_same_type_special_troop = { MAA_TYPE = warrior_monks } }
+		fire_lancers = { create_same_type_special_troop = { MAA_TYPE = fire_lancers } }
+		gakgung_archers = { create_same_type_special_troop = { MAA_TYPE = gakgung_archers } }
+		ballista_elephant = { create_same_type_special_troop = { MAA_TYPE = ballista_elephant } }
+		pesilat_warriors = { create_same_type_special_troop = { MAA_TYPE = pesilat_warriors } }
+		samurai = { create_same_type_special_troop = { MAA_TYPE = samurai } }
+		zhanmadao_infantry = { create_same_type_special_troop = { MAA_TYPE = zhanmadao_infantry } }
+		tiefutu = { create_same_type_special_troop = { MAA_TYPE = tiefutu } }
+		burenjia = { create_same_type_special_troop = { MAA_TYPE = burenjia } }
+		rocket_carts = { create_same_type_special_troop = { MAA_TYPE = rocket_carts } }
+		black_armor_cavalry = { create_same_type_special_troop = { MAA_TYPE = black_armor_cavalry } }
+		teulu = { create_same_type_special_troop = { MAA_TYPE = black_armor_cavalry } }
+		fallback = { if = { limit = { NOT = { is_unit_type = siege_weapon } } create_250_levies_per_unit_special_troop = yes } }
+	}
+}
+convert_maa_to_special_troops = {
+	if = {
+		limit = {
+			NOT = { has_game_rule = kan_on_landed_army_keep_as_men_at_arms }
+		}
+		save_scope_as = scoped_adventurer
+		every_maa_regiment = {
+			if = {
+				limit = { NOT = { is_unit_type = siege_weapon } }
+				convert_this_maa_into_special_troop = yes
+				destroy_maa_regiment = yes
+			}
+		}
+	}
+}

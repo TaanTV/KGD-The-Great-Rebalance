@@ -1,0 +1,88 @@
+﻿kan_camp_building_restrictions = {
+	
+	categories = {
+		difficulty tweaks
+	}
+	
+	default = kan_camp_building_restrictions_default
+	#dlc = "The Northern Lords"
+	kan_camp_building_restrictions_default = { flag = GG_can_change_rule }
+	kan_camp_building_restrictions_wanderers_exemption = { flag = GG_can_change_rule }
+	kan_camp_building_restrictions_no_restrictions = { flag = GG_can_change_rule }
+}
+
+kan_camp_building_cost = {
+	
+	categories = {
+		difficulty tweaks
+	}
+	
+	kan_camp_building_cost_vanilla = { flag = GG_can_change_rule }
+	kan_camp_building_cost_low = { flag = GG_can_change_rule }
+	kan_camp_building_cost_lower = { flag = GG_can_change_rule }
+}
+
+kan_contract_payment = {
+	
+	categories = {
+		ai tweaks
+	}
+	
+	default = kan_contract_payment_thin_air
+	#dlc = "The Northern Lords"
+	kan_contract_payment_vanilla = { flag = GG_can_change_rule }
+	kan_contract_payment_thin_air = { flag = GG_can_change_rule }
+}
+
+kan_contract_payment_amount = {
+	
+	categories = {
+		difficulty tweaks
+	}
+	
+	default = kan_contract_payment_amount_default
+	#dlc = "The Northern Lords"
+	kan_contract_payment_amount_half = { flag = GG_can_change_rule }
+	kan_contract_payment_amount_default = { flag = GG_can_change_rule }
+	kan_contract_payment_amount_double = { flag = GG_can_change_rule }	# actually x1.5 not x2
+	kan_contract_payment_amount_vanilla = { flag = GG_can_change_rule }
+}
+
+kan_contract_payment_provisions_amount = {
+	
+	categories = {
+		difficulty tweaks
+	}
+	
+	default = kan_contract_payment_provisions_amount_default
+	#dlc = "The Northern Lords"
+	kan_contract_payment_provisions_amount_default = { flag = GG_can_change_rule }
+	kan_contract_payment_provisions_amount_vanilla = { flag = GG_can_change_rule }
+}
+
+kan_laamp_courtier_provision_maintaince = {
+	
+	categories = {
+		difficulty tweaks
+	}
+	
+	default = kan_laamp_courtier_provision_maintaince_disabled
+	#dlc = "The Northern Lords"
+	kan_laamp_courtier_provision_maintaince_disabled = { flag = GG_can_change_rule }
+	kan_laamp_courtier_provision_maintaince_enabled = { flag = GG_can_change_rule }
+	kan_laamp_courtier_provision_maintaince_halved = { flag = GG_can_change_rule }
+	kan_laamp_courtier_provision_maintaince_doubled = { flag = GG_can_change_rule }
+}
+
+kan_on_landed_army_keep = {
+	
+	categories = {
+		tweaks
+	}
+	
+	default = kan_on_landed_army_keep_as_men_at_arms
+	#dlc = "The Northern Lords"
+	kan_on_landed_army_keep_as_men_at_arms = { flag = GG_can_change_rule }
+	kan_on_landed_army_keep_as_special_troops = { flag = GG_can_change_rule }
+	kan_on_landed_army_keep_as_special_troops_inheritable = { flag = GG_can_change_rule }
+}

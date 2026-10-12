@@ -1,0 +1,33 @@
+﻿# Must be synced between files with the values located at "# Provisions Costs #".
+provisions_cost_infantry_cheap = 6
+provisions_cost_infantry_moderate = 14
+provisions_cost_infantry_expensive = 24
+provisions_cost_infantry_bankrupting = 30
+provisions_cost_infantry_accolade_bankrupting = 60
+
+provisions_cost_cavalry_cheap = 16
+provisions_cost_cavalry_moderate = 34
+provisions_cost_cavalry_expensive = 46
+provisions_cost_cavalry_bankrupting = 64
+provisions_cost_cavalry_accolade_bankrupting = 128
+provisions_cost_cavalry_elephants = 180
+provisions_cost_cavalry_accolade_elephants = 360
+# I have no idea how would u move with accolade elephants <:
+
+provisions_cost_special_cheap = 12
+provisions_cost_special_moderate = 24
+provisions_cost_special_expensive = 36
+provisions_cost_special_bankrupting = 48
+
+# My idea of rebalance: All costs doubled
+# Skirmishers use @provisions_cost_infantry_cheap unless very strong
+# Archers use @provisions_cost_infantry_moderate
+# Pikemen use @provisions_cost_infantry_expensive
+# Heavy Infantry uses @provisions_cost_infantry_bankrupting 
+
+# Light cavalry uses @provisions_cost_cavalry_moderate 
+# Heavy cavalry uses @provisions_cost_cavalry_expensive
+# Horse archers type uses @provisions_cost_cavalry_expensive
+# Horse archers specifically use @provisions_cost_cavalry_moderate 
+
+# Accolade troops are 1 tier more expensive.

@@ -1,0 +1,125 @@
+﻿
+yearly_global_pulse = {
+	on_actions = { 
+		KAN_laamp_courtier_provisions_pulse_pulse
+	}
+}
+# This is a bit jank but that way it doesnt desync too hard with time
+#I know, INSANE name :P
+KAN_laamp_courtier_provisions_pulse_pulse = {
+	trigger = { has_game_rule = kan_laamp_courtier_provision_maintaince_enabled }
+	on_actions = { 
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 1 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 2 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 3 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 4 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 5 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 6 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 7 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 8 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 9 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 10 }
+		KAN_laamp_courtier_provisions_pulse
+		delay = { months = 11 }
+		KAN_laamp_courtier_provisions_pulse
+	}
+}
+	
+
+KAN_laamp_courtier_provisions_pulse = {
+	trigger = { has_game_rule = kan_laamp_courtier_provision_maintaince_enabled }
+	effect = {
+		every_player = {
+			limit = { is_landless_adventurer = yes }
+			save_temporary_scope_as = player_scope
+			if = {
+				limit = { NOT = { exists = var:laamp_courtier_provisions_pulse_months_count } }
+				set_variable = {
+					name = laamp_courtier_provisions_pulse_months_count
+					value = 0
+				}
+			}
+			if = { 
+				limit = { NOT = { exists = var:laamp_courtier_provisions_pulse_provisions_count } }
+				set_variable = {
+					name = laamp_courtier_provisions_pulse_provisions_count
+					value = 0
+				}
+			}
+			
+			save_temporary_scope_value_as = {
+				name = provisions_value
+				value = laamp_courtier_provisions_loss
+			}
+			
+			save_temporary_scope_value_as = {
+				name = provisions_value_check
+				value = { value = scope:provisions_value multiply = -1 }
+			}
+			
+			if = {
+				limit = { domicile = { provisions >= scope:provisions_value_check } }
+				
+				domicile = { change_provisions = scope:provisions_value }
+				
+				change_variable = {
+					name = laamp_courtier_provisions_pulse_provisions_count
+					add = scope:provisions_value
+				}
+			}
+			
+			change_variable = {
+				name = laamp_courtier_provisions_pulse_months_count
+				add = 1
+			}
+			
+			if = {
+				limit = { var:laamp_courtier_provisions_pulse_months_count >= 12 }
+				
+				save_temporary_scope_value_as = {
+					name = provisions_lost_year_value
+					value = var:laamp_courtier_provisions_pulse_provisions_count
+				}
+					
+				send_interface_message = {
+					type = event_camp_follower_with_text
+					title = laamp_courtier_provisions_pulse_year_notification
+					desc = laamp_courtier_provisions_pulse_year_notification_desc
+					#tooltip = task_train_commanders_notification_tooltip
+
+					#left_icon = scope:commander
+					#right_icon = scope:active_councillor
+						
+					show_as_tooltip = { domicile = { change_provisions = scope:provisions_lost_year_value } }
+
+					#scope:commander = {
+					#	blademaster_lifestyle_rank_up_effect = yes
+					#}
+				}
+					
+				change_variable = {
+					name = laamp_courtier_provisions_pulse_months_count
+					multiply = 0
+				}
+				change_variable = {
+					name = laamp_courtier_provisions_pulse_provisions_count
+					multiply = 0
+				}
+			}
+		}
+	}
+	#on_actions = {
+	#	delay = { days = 30 }
+	#	KAN_laamp_courtier_provisions_pulse
+	#}
+}

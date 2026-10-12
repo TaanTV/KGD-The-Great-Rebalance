@@ -1,0 +1,187 @@
+﻿adventurers_scout_for_talent_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+		NOT = { has_perk = toe_the_line_perk }
+	}
+
+	is_valid = {
+		NOT = { has_perk = toe_the_line_perk }
+		has_government = landless_adventurer_government
+	}
+	
+	travel_modifier = {
+		travel_speed = -5
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_scout_for_talent_option.tt
+	}
+	
+	ai_will_do = {
+		value = 0		#prev 100
+		#ADDED
+		if = {
+			limit = { travel_plan_owner.court_positions_currently_available > 0 }
+			value = 10000
+		}
+	}
+}
+
+adventurers_make_local_deals_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+	}
+
+	is_valid = {
+		has_perk = fearful_troops_perk
+		has_government = landless_adventurer_government
+	}
+	
+	travel_modifier = {
+		travel_safety = -10		#prev -20
+		#ADDED
+		travel_speed = -5
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_make_local_deals_option.tt
+	}
+	
+	ai_will_do = {
+		value = 100
+	}
+}
+
+adventurers_search_for_secrets_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+	}
+
+	is_valid = {
+		has_perk = digging_for_dirt_perk
+		has_government = landless_adventurer_government
+	}
+	
+	travel_modifier = {
+		travel_safety = -10
+		travel_speed = -10		#prev 10
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_search_for_secrets_option.tt
+	}
+	
+	ai_will_do = {
+		value = 100
+	}
+}
+
+adventurers_encourage_relationships_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+	}
+
+	is_valid = {
+		has_perk = chains_of_loyalty_perk
+		any_courtier = {
+			is_adult = yes
+			count >= 3
+		}
+		has_government = landless_adventurer_government
+	}
+	
+	travel_modifier = {
+		#travel_speed = 5
+		#travel_safety = -5
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_encourage_relationships_option.tt
+	}
+	
+	ai_will_do = {
+		value = 100
+	}
+}
+
+adventurers_gather_inspiration_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+	}
+
+	is_valid = {
+		has_perk = popular_figurehead_perk
+		has_government = landless_adventurer_government
+	}
+	
+	travel_modifier = {
+		travel_speed = -5		#prev 5
+		travel_safety = -5
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_gather_inspiration_option.tt
+	}
+	
+	ai_will_do = {
+		value = 100
+	}
+}
+
+adventurers_proselytize_zealously_option = {
+	is_shown = {
+		OR = {
+			has_government = landless_adventurer_government
+			government_has_flag = government_is_theocracy
+			has_personal_tenet_flag = tenet_mendicant_preachers_proselytize_travel_option
+		}
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = adventurers_proselytize_zealously_option.tt.perk_or_tenet
+			OR = {
+				has_perk = zealous_proselytizer_perk
+				has_personal_tenet_flag = tenet_mendicant_preachers_proselytize_travel_option
+			}
+		}
+	}
+	
+	travel_modifier = {
+		travel_speed = -10		#prev 5
+		travel_safety = -10		#prev -5
+	}
+	
+	on_applied_effect = {
+		custom_tooltip = adventurers_proselytize_zealously_option.tt
+	}
+	
+	ai_will_do = {
+		value = 100
+	}
+}
+
+adventurers_forward_scouts_option = {
+	is_shown = {
+   		has_government = landless_adventurer_government
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = adventurers_forward_scouts_option.tt.has_right_parameter
+			domicile ?= { has_domicile_parameter = camp_unlocks_forward_scouts }
+		}
+	}
+	
+	travel_modifier = {
+		travel_safety = 15		#prev 20
+		travel_speed = -5
+	}
+	
+	on_applied_effect = {
+	}
+	
+	ai_will_do = {
+		value = 10000	#prev 100
+	}
+}

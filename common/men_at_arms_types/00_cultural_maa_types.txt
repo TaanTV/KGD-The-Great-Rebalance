@@ -5,23 +5,23 @@
 @cultural_maa_extra_ai_score = 80 # Equivalent to having 8 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 4
-@provisions_cost_infantry_moderate = 10
-@provisions_cost_infantry_expensive = 18
-@provisions_cost_infantry_bankrupting = 24
+@provisions_cost_infantry_cheap = 6
+@provisions_cost_infantry_moderate = 14
+@provisions_cost_infantry_expensive = 24
+@provisions_cost_infantry_bankrupting = 30
 
-@provisions_cost_cavalry_cheap = 12
-@provisions_cost_cavalry_moderate = 26
-@provisions_cost_cavalry_expensive = 34
-@provisions_cost_cavalry_bankrupting = 48
-@provisions_cost_cavalry_elephants = 64
+@provisions_cost_cavalry_cheap = 16
+@provisions_cost_cavalry_moderate = 34
+@provisions_cost_cavalry_expensive = 46
+@provisions_cost_cavalry_bankrupting = 64
+@provisions_cost_cavalry_elephants = 180
 
-@provisions_cost_special_cheap = 10
-@provisions_cost_special_moderate = 18
-@provisions_cost_special_expensive = 28
-@provisions_cost_special_bankrupting = 36
+@provisions_cost_special_cheap = 12
+@provisions_cost_special_moderate = 24
+@provisions_cost_special_expensive = 36
+@provisions_cost_special_bankrupting = 48
 
-# My idea of rebalance: All costs x1.5
+# My idea of rebalance: All costs doubled
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -35,7 +35,7 @@
 huscarl = {
 	type = heavy_infantry
 
-	damage = 36		#prev 40
+	damage = 40
 	toughness = 26
 	pursuit = 0
 	screen = 24
@@ -43,8 +43,6 @@ huscarl = {
 	terrain_bonus = {
 		taiga = { damage = 8 }
 		forest = { damage = 8 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -18 toughness = -8 }
 	}
 	
 	counters = {
@@ -70,12 +68,8 @@ huscarl = {
 	high_maintenance_cost = { gold = huscarls_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = danish_huskarls
 }
 
@@ -105,12 +99,8 @@ landsknecht = {
 	high_maintenance_cost = { gold = landsknecht_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_expensive
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_pikemen
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = pikemen
 }
 
@@ -121,7 +111,7 @@ longbowmen = {
 	}
 	
 	damage = 20
-	toughness = 10	#prev 8
+	toughness = 8
 	pursuit = 0
 	screen = 0
 	
@@ -139,19 +129,15 @@ longbowmen = {
 	high_maintenance_cost = { gold = longbowmen_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_archers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = bowmen
 }
 
 goedendag = {
 	type = skirmishers
 	
-	damage = 14	#prev 13
+	damage = 13
 	toughness = 18
 	pursuit = 0
 	screen = 16
@@ -166,20 +152,15 @@ goedendag = {
 	high_maintenance_cost = { gold = goedendag_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 	
-	# Skirmishers are a bit bigger
-	stack = 50
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = skirmishers
 }
 
 gendarme = {
 	type = heavy_cavalry
 	
-	damage = 120	#prev 125
+	damage = 125
 	toughness = 40
 	pursuit = 20
 	screen = 10
@@ -187,10 +168,10 @@ gendarme = {
 	terrain_bonus = {
 		plains = { damage = 30 }
 		drylands = { damage = 30 }
-		hills = { damage = -15 }				#prev -10
+		hills = { damage = -10 }
 		jungle = { damage = -25 }
-		mountains = { damage = -65 }			#prev -50
-		desert_mountains = { damage = -65 }		#prev -50
+		mountains = { damage = -50 }
+		desert_mountains = { damage = -50 }
 		wetlands = { damage = -75 }
 	}
 
@@ -209,20 +190,16 @@ gendarme = {
 	high_maintenance_cost = { gold = gendarme_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 20
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_cavalry
-	}
+	stack = 50
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = heavy_cavalry
 }
 
 chasseur = {
 	type = light_cavalry
 	
-	damage = 36		#prev 40
-	toughness = 16	#prev 15
+	damage = 40
+	toughness = 15
 	pursuit = 40
 	screen = 15
 	
@@ -250,12 +227,8 @@ chasseur = {
 	high_maintenance_cost = { gold = chasseur_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = light_cavalry
 }
 
@@ -285,12 +258,8 @@ picchieri = {
 	high_maintenance_cost = { gold = picchieri_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_expensive
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_pikemen
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = pikemen
 }
 
@@ -302,11 +271,6 @@ praetorian = {
 	pursuit = 0
 	screen = 20
 	
-	# ADDED to all heavy infantry
-	terrain_bonus = {
-		wetlands = { damage = -28 toughness = -12 }
-	}
-	
 	counters = {
 		pikemen = 1
 		peasant_militia = 2
@@ -317,22 +281,18 @@ praetorian = {
 	high_maintenance_cost = { gold = praetorian_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = heavy_infantry
 }
 
 caballero = {
 	type = light_cavalry
 	
-	damage = 24			#prev 22
+	damage = 22
 	toughness = 16
 	pursuit = 30
-	screen = 44			#prev 50
+	screen = 50
 	
 	terrain_bonus = {
 		hills = { damage = 15 toughness = 10 }
@@ -357,13 +317,8 @@ caballero = {
 	high_maintenance_cost = { gold = caballero_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		#value = @[cultural_maa_extra_ai_score + 20] 
-		value = @cultural_maa_extra_ai_score
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 20] }
 	icon = light_cavalry
 }
 
@@ -404,19 +359,15 @@ monaspa = {
 	high_maintenance_cost = { gold = monaspa_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 20
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_cavalry
-	}
+	stack = 50
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = monaspa
 }
 
 cataphract = {
 	type = heavy_cavalry
 	
-	damage = 120		#prev 125
+	damage = 125
 	toughness = 35
 	pursuit = 10
 	screen = 0
@@ -424,9 +375,9 @@ cataphract = {
 	terrain_bonus = {
 		plains = { damage = 30 toughness = 5 }
 		drylands = { damage = 30 }
-		hills = { damage = -15 }				#prev -10
-		mountains = { damage = -65 }			#prev -50
-		desert_mountains = { damage = -65 }		#prev -50
+		hills = { damage = -10 }
+		mountains = { damage = -50 }
+		desert_mountains = { damage = -50 }
 		wetlands = { damage = -80 toughness = -15 pursuit = -10 }
 	}
 
@@ -452,22 +403,18 @@ cataphract = {
 	high_maintenance_cost = { gold = cataphract_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 20
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_cavalry
-	}
+	stack = 50
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = cataphracts
 }
 
 hobelar = {
 	type = light_cavalry
 	
-	damage = 24			#prev 22
-	toughness = 16		#prev 15
-	pursuit = 44		#prev 50
-	screen = 32			#prev 30
+	damage = 22
+	toughness = 15
+	pursuit = 50
+	screen = 30
 	
 	terrain_bonus = {
 		forest = { damage = 15 }
@@ -491,12 +438,8 @@ hobelar = {
 	high_maintenance_cost = { gold = hobelar_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = light_cavalry
 }
 
@@ -525,19 +468,15 @@ schiltron = {
 	high_maintenance_cost = { gold = schiltron_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_expensive
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_pikemen
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = pikemen
 }
 
 metsanvartija = {
 	type = archers
 	
-	damage = 22	#prev 30
+	damage = 30
 	toughness = 14
 	pursuit = 10
 	screen = 10
@@ -565,12 +504,8 @@ metsanvartija = {
 	high_maintenance_cost = { gold = metsanvartija_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_archers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = bowmen
 }
 
@@ -583,7 +518,7 @@ horse_archers = {
 	screen = 30
 	
 	terrain_bonus = {
-		steppe = { damage = 36 }	#prev 45
+		steppe = { damage = 45 }
 		plains = { damage = 20 }
 		drylands = { damage = 20 }
 		jungle = { damage = -20 pursuit = -20 }
@@ -614,12 +549,10 @@ horse_archers = {
 	high_maintenance_cost = { gold = horse_archers_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 40
-	ai_quality = { 
+	stack = 100
+	ai_quality = {
 		value = @cultural_maa_extra_ai_score
-		#add = 60 #I mean... they're horse archers
-		#ADDED
-		add = counter_synergy_ai_weight_archer_cavalry
+		add = 60 #I mean... they're horse archers
 	}
 	icon = horse_archers
 }
@@ -631,11 +564,6 @@ ayyar = {
 	toughness = 22
 	pursuit = 12
 	screen = 0
-	
-	# ADDED to all heavy infantry
-	terrain_bonus = {
-		wetlands = { damage = -18 toughness = -6 pursuit = -12 }
-	}
 	
 	counters = {
 		pikemen = 1
@@ -654,33 +582,18 @@ ayyar = {
 	high_maintenance_cost = { gold = ayyar_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = ayyar
 }
 
 mubarizun = {
 	type = heavy_infantry
 	
-	damage = 38		#prev 45
-	toughness = 24	#prev 25
+	damage = 45
+	toughness = 25
 	pursuit = 0
 	screen = 0
-	
-	# ADDED to all heavy infantry
-	terrain_bonus = {
-		wetlands = { damage = -22 toughness = -10 }
-	}
-	
-	# ADDED to mubarizun specifically 
-	winter_bonus = {
-		normal_winter = { damage = -8 }
-		harsh_winter = { damage = -14 toughness = -2 }
-	}
 
 	counters = {
 		pikemen = 1
@@ -700,33 +613,29 @@ mubarizun = {
 	high_maintenance_cost = { gold = mubarizun_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		#value = @[cultural_maa_extra_ai_score - 20] 
-		value = @cultural_maa_extra_ai_score
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score - 20] }
 	icon = mubarizun
 }
 
 mulaththamun = { #Murabit Cavalry
 	type = light_cavalry
 	
-	damage = 24		#prev 22
-	toughness = 16	#prev 15
-	pursuit = 32	#prev 30
+	damage = 22
+	toughness = 15
+	pursuit = 30
 	screen = 40
 	
 	terrain_bonus = {
-		drylands = { damage = 20 toughness = 5 screen = 10 pursuit = 5 }	#prev damage = 10
-		desert = { damage = 20 toughness = 5 screen = 20 pursuit = 10 }		#prev damage = 10
-		plains = { damage = 20 toughness = 3 screen = 5 pursuit = 5 }		#prev damage = 10
+		drylands = { damage = 10 toughness = 5 screen = 10 pursuit = 5 }
+		desert = { damage = 10 toughness = 5 screen = 20 pursuit = 10 }
+		plains = { damage = 10 toughness = 3 screen = 5 pursuit = 5 }
 		oasis = { damage = 10 }
 		
 		mountains = { damage = -8 pursuit = -10 }
 		desert_mountains = { damage = -12 pursuit = -20 }
-		wetlands = { damage = -15 toughness = -10 pursuit = -20 screen = -20 }
+		wetlands = { damage = -15 toughness = -10 pursuit = -20 screen = -20
+		}
 	}
 
 	counters = {
@@ -747,27 +656,22 @@ mulaththamun = { #Murabit Cavalry
 	high_maintenance_cost = { gold = mulaththamun_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 20] 
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 20] }
 	icon = light_cavalry
 }
 
 archers_of_the_nile = { #Nile Archers
 	type = archers
 	
-	damage = 24	#prev 30
-	toughness = 12	#prev 14
-	pursuit = 0	#prev 10
-	screen = 20	#prev 10
+	damage = 30
+	toughness = 14
+	pursuit = 10
+	screen = 10
 	
 	terrain_bonus = {
-		# Removed persuit, 10 floodplains, 5 oasis
-		floodplains = { damage = 15 toughness = 15 screen = 10 }
-		oasis = { damage = 15  screen = 5 }
+		floodplains = { damage = 15 toughness = 15 pursuit = 10 screen = 10 }
+		oasis = { damage = 15 pursuit = 5 screen = 5 }
 		drylands = { damage = 10 toughness = 10 }
 		desert = { damage = -5 toughness = -5 }
 	}
@@ -785,23 +689,18 @@ archers_of_the_nile = { #Nile Archers
 	high_maintenance_cost = { gold = archers_of_the_nile_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = 40
-		add = counter_synergy_ai_weight_archers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = bowmen
 }
 
 paiks = { #Indian Footmen - carrying bows but also swords and spears.
 	type = archers
 	
-	damage = 22	#prev 28
+	damage = 28
 	toughness = 16
-	pursuit = 0	#prev 10
-	screen = 0	#prev 10
+	pursuit = 10
+	screen = 10
 	
 	terrain_bonus = {
 		jungle = { damage = 15 toughness = 15 pursuit = 10 screen = 10 }
@@ -810,9 +709,7 @@ paiks = { #Indian Footmen - carrying bows but also swords and spears.
 	}
 
 	counters = {
-		elephant_cavalry = 0.5	#prev: 1
-		#ADDED
-		skirmishers = 0.5
+		elephant_cavalry = 1
 	}
 
 	buy_cost = { gold = paiks_recruitment_cost }
@@ -820,13 +717,8 @@ paiks = { #Indian Footmen - carrying bows but also swords and spears.
 	high_maintenance_cost = { gold = paiks_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_expensive
 	
-	stack = 40
-	ai_quality = { 
-		#value = @[cultural_maa_extra_ai_score - 40]
-		value = @[cultural_maa_extra_ai_score - 10]
-		#ADDED
-		add = counter_synergy_ai_weight_archers 
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score - 40] }
 	icon = paiks
 }
 
@@ -837,11 +729,6 @@ druzhina = {
 	toughness = 30
 	pursuit = 0
 	screen = 30
-	
-	# ADDED to all heavy infantry
-	terrain_bonus = {
-		wetlands = { damage = -16 toughness = -6 }
-	}
 	
 	counters = {
 		pikemen = 1
@@ -860,21 +747,17 @@ druzhina = {
 	high_maintenance_cost = { gold = druzhina_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = heavy_infantry
 }
 
 hussar = {
 	type = light_cavalry
 	
-	damage = 26		#prev 25
-	toughness = 14	#prev 15
-	pursuit = 52	#prev 60
+	damage = 25
+	toughness = 15
+	pursuit = 60
 	screen = 20
 	
 	terrain_bonus = {
@@ -904,12 +787,8 @@ hussar = {
 	high_maintenance_cost = { gold = hussar_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 40
-	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 10] 
-		#ADDED
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 10] }
 	icon = light_cavalry
 }
 
@@ -917,9 +796,9 @@ horn_warrior = {
 	type = skirmishers
 	
 	damage = 12
-	toughness = 20	#prev 16
+	toughness = 16
 	pursuit = 0
-	screen = 30	#prev 20
+	screen = 20
 	
 	terrain_bonus = {
 		mountains = { damage = 10 toughness = 10 }
@@ -940,20 +819,15 @@ horn_warrior = {
 	high_maintenance_cost = { gold = horn_warrior_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 	
-	# Skirmishers are a bit bigger
-	stack = 50
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = skirmishers
 }
 
 bush_hunter = {
 	type = archers
 	
-	damage = 24	#prev 30
+	damage = 30
 	toughness = 12
 	pursuit = 5
 	screen = 0
@@ -977,12 +851,8 @@ bush_hunter = {
 	high_maintenance_cost = { gold = bush_hunter_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_archers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = bowmen
 }
 
@@ -990,9 +860,9 @@ shomer = {
 	type = skirmishers
 	
 	damage = 10
-	toughness = 26	#prev 24
+	toughness = 24
 	pursuit = 0
-	screen = 60	#prev 40
+	screen = 40
 	
 	counters = {
 		heavy_infantry = 1
@@ -1007,29 +877,22 @@ shomer = {
 	high_maintenance_cost = { gold = shomer_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 	
-	# Skirmishers are a bit bigger
-	stack = 50
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = skirmishers
 }
 
 garudas = {
 	type = heavy_infantry
 	
-	damage = 40		#prev 42
-	toughness = 20	#prev 22
-	pursuit = 20	#prev 24
+	damage = 42
+	toughness = 22
+	pursuit = 24
 	screen = 0
 	
 	terrain_bonus = {
 		jungle = { damage = 8 }
 		forest = { damage = 8 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -24 toughness = -6 pursuit = -24 }
 	}
 	
 	counters = {
@@ -1050,12 +913,8 @@ garudas = {
 		}
 	}
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = garudas
 }
 
@@ -1069,8 +928,6 @@ khandayat = {
 	
 	terrain_bonus = {
 		jungle = { damage = 12 toughness = 8 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -14 toughness = -4 }
 	}
 
 	counters = {
@@ -1091,12 +948,8 @@ khandayat = {
 	high_maintenance_cost = { gold = khandayat_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = khandayat
 }
 
@@ -1111,8 +964,6 @@ mountaineer = {
 	terrain_bonus = {
 		mountains = { damage = 12 toughness = 12 }
 		desert_mountains = { damage = 12 toughness = 12 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -28 toughness = -10 }
 	}
 	
 	counters = {
@@ -1137,22 +988,18 @@ mountaineer = {
 	high_maintenance_cost = { gold = mountaineer_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = mountaineer
 }
 
 sahel_horsemen = {
 	type = light_cavalry
 	
-	damage = 26		#prev 22
-	toughness = 16	#prev 15
-	pursuit = 34	#prev 30
-	screen = 32		#prev 30
+	damage = 22
+	toughness = 15
+	pursuit = 30
+	screen = 30
 	
 	terrain_bonus = {
 		drylands = { damage = 15 toughness = 3 }
@@ -1181,23 +1028,17 @@ sahel_horsemen = {
 	provision_cost = @provisions_cost_cavalry_cheap
 	# Kept cheap as it's a desert kind of MAA so it probably should eat less?
 	
-	stack = 40
-	ai_quality = { 
-		#value = @[cultural_maa_extra_ai_score + 30]
-		value = @cultural_maa_extra_ai_score
-		#ADDED
-		add = -30
-		add = counter_synergy_ai_weight_light_cavalry
-	}
+	stack = 100
+	ai_quality = { value = @[cultural_maa_extra_ai_score + 30] }
 	icon = light_cavalry
 }
 
 guinea_warrior = { #AKA Guinean uplander
 	type = skirmishers
 	
-	damage = 22		#prev 18
-	toughness = 16	#prev 14
-	pursuit = 12	#prev 0
+	damage = 18
+	toughness = 14
+	pursuit = 0
 	screen = 20
 	
 	terrain_bonus = {
@@ -1219,12 +1060,8 @@ guinea_warrior = { #AKA Guinean uplander
 	high_maintenance_cost = { gold = guinea_warrior_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = skirmishers
 }
 
@@ -1253,12 +1090,8 @@ sarawit = { #AKA Ethiopian mountaineer
 	high_maintenance_cost = { gold = sarawit_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = heavy_infantry
 }
 
@@ -1267,7 +1100,7 @@ abudrar = { #AKA Jabali - Berber mountaineer
 	
 	damage = 20
 	toughness = 16
-	pursuit = 26	#prev 20
+	pursuit = 20
 	screen = 10
 	
 	terrain_bonus = {
@@ -1279,7 +1112,7 @@ abudrar = { #AKA Jabali - Berber mountaineer
 	
 	counters = {
 		light_cavalry = 1
-		heavy_infantry = 0.5		#prev 1
+		heavy_infantry = 1
 	}
 
 	can_recruit = {
@@ -1292,14 +1125,8 @@ abudrar = { #AKA Jabali - Berber mountaineer
 	provision_cost = @provisions_cost_infantry_moderate
 	# Cost up from regular because they're quite strong for light infantry
 	
-	# Skirmishers
-	stack = 50
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = -20
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = skirmishers
 }
 
@@ -1315,9 +1142,7 @@ zbrojnosh = {
 		hills = { damage = 8 toughness = 5 }
 		mountains = { damage = 6 }
 		forest = { damage = 6 }
-		#wetlands = { damage = -10 pursuit = -10 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -22 toughness = -8 }
+		wetlands = { damage = -10 pursuit = -10 }
 	}
 
 	counters = {
@@ -1338,19 +1163,15 @@ zbrojnosh = {
 	high_maintenance_cost = { gold = zbrojnosh_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = heavy_infantry
 }
 
 palace_guards = {
 	type = heavy_infantry
 	
-	damage = 34		#prev 38
+	damage = 38
 	toughness = 24
 	pursuit = 0
 	screen = 20
@@ -1358,8 +1179,6 @@ palace_guards = {
 	terrain_bonus = {
 		jungle = { damage = 10 toughness = 6 }
 		hills = { damage = 8 toughness = 4 }
-		# ADDED to all heavy infantry
-		wetlands = { damage = -16 toughness = -6 }
 	}
 	
 	counters = {
@@ -1379,20 +1198,16 @@ palace_guards = {
 	high_maintenance_cost = { gold = palace_guards_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
 	
-	stack = 40
-	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
-		#ADDED
-		add = counter_synergy_ai_weight_heavy_infantry
-	}
+	stack = 100
+	ai_quality = { value = @cultural_maa_extra_ai_score }
 	icon = palace_guards
 }
 
 shenbigong = {
 	type = archers
 	
-	damage = 34	#prev 44
-	toughness = 14	#prev 18
+	damage = 44
+	toughness = 18
 	pursuit = 0
 	screen = 0
 	
@@ -1406,8 +1221,8 @@ shenbigong = {
 	}
 	
 	counters = {
-		heavy_infantry = 1		#prev 1.25
-		heavy_cavalry = 1		#prev 1.25
+		heavy_infantry = 1.25
+		heavy_cavalry = 1.25
 		pikemen = 1
 		peasant_militia = 2
 	}
@@ -1418,12 +1233,12 @@ shenbigong = {
 	provision_cost = @provisions_cost_infantry_expensive
 	# Big stats - big costs.
 	
-	stack = 40
-	ai_quality = { 
+	stack = 100
+	ai_quality = {
 		value = counter_synergy_ai_weight_crossbowmen
-		add = @cultural_maa_extra_ai_score 
-		#counter_synergy_ai_weight_crossbowmen already incluced counter_synergy_ai_weight_archers
+		add = @cultural_maa_extra_ai_score
 	}
+
 	icon = shenbigong
 }
 
@@ -1431,7 +1246,7 @@ guanch_vaulter = {
 	type = skirmishers
 	
 	damage = 10
-	toughness = 14	#prev 12
+	toughness = 12
 	pursuit = 15
 	screen = 20
 	siege_value = 0.1
@@ -1453,16 +1268,10 @@ guanch_vaulter = {
 	provision_cost = @provisions_cost_infantry_cheap
 	
 	
-	# Skirmishers are a bit bigger
-	stack = 50
-	ai_quality = { 
-		value = culture_ai_weight_skirmishers 
-		#ADDED
-		add = counter_synergy_ai_weight_skirmishers
-	}
+	stack = 100
+	ai_quality = { value = culture_ai_weight_skirmishers }
 	icon = skirmishers
 }
-
 
 teulu = {
 	type = light_cavalry
@@ -1505,9 +1314,9 @@ teulu = {
 	buy_cost = { gold = teulu_recruitment_cost }
 	low_maintenance_cost = { gold = teulu_low_maint_cost }
 	high_maintenance_cost = { gold = teulu_high_maint_cost }
-	provision_cost = @provisions_cost_infantry_cheap
+	provision_cost = @provisions_cost_cavalry_moderate
 	
-	stack = 40
+	stack = 100
 	ai_quality = { value = @cultural_maa_extra_ai_score }
 
 	illustration = {
