@@ -5,23 +5,23 @@
 @cultural_maa_extra_ai_score = 80 # Equivalent to having 8 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 6
-@provisions_cost_infantry_moderate = 14
-@provisions_cost_infantry_expensive = 24
-@provisions_cost_infantry_bankrupting = 30
+@provisions_cost_infantry_cheap = 4
+@provisions_cost_infantry_moderate = 10
+@provisions_cost_infantry_expensive = 18
+@provisions_cost_infantry_bankrupting = 24
 
-@provisions_cost_cavalry_cheap = 16
-@provisions_cost_cavalry_moderate = 34
-@provisions_cost_cavalry_expensive = 46
-@provisions_cost_cavalry_bankrupting = 64
-@provisions_cost_cavalry_elephants = 180
+@provisions_cost_cavalry_cheap = 12
+@provisions_cost_cavalry_moderate = 26
+@provisions_cost_cavalry_expensive = 34
+@provisions_cost_cavalry_bankrupting = 48
+@provisions_cost_cavalry_elephants = 64
 
-@provisions_cost_special_cheap = 12
-@provisions_cost_special_moderate = 24
-@provisions_cost_special_expensive = 36
-@provisions_cost_special_bankrupting = 48
+@provisions_cost_special_cheap = 10
+@provisions_cost_special_moderate = 18
+@provisions_cost_special_expensive = 28
+@provisions_cost_special_bankrupting = 36
 
-# My idea of rebalance: All costs doubled
+# My idea of rebalance: All costs x1.5
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -35,15 +35,19 @@
 nomadic_riders = {
 	type = nomadic_horde
 	
-	damage = 12
-	toughness = 12
-	pursuit = 10
-	screen = 15
+	damage = 14		#prev 12
+	toughness = 14	#prev 12
+	pursuit = 6		#prev 10
+	screen = 10		#prev 15
 	
 	terrain_bonus = {
 		steppe = { damage = 8 pursuit = 10 }
 		plains = { damage = 4 pursuit = 6 }
 		drylands = { damage = 4 pursuit = 6 }
+		#ADDED
+		forest = { damage = -2 pursuit = -2 }
+		taiga = { damage = -2 pursuit = -2 }
+		wetlands = { damage = -8 toughness = -4 pursuit = -6 screen = -10 }
 	}
 	
 	# No cost as this is the basic type of MAA given by converting your Herd
@@ -84,7 +88,7 @@ torch_bearers = {
 	buy_cost = { gold = torch_bearers_recruitment_cost }
 	low_maintenance_cost = { gold = torch_bearers_low_maint_cost }
 	high_maintenance_cost = { gold = torch_bearers_high_maint_cost }
-	provision_cost = @provisions_cost_special_moderate
+	provision_cost = @provisions_cost_special_cheap
 	
 	stack = 10
 	allowed_in_hired_troops = no
@@ -94,7 +98,7 @@ torch_bearers = {
 kheshig = {
 	type = archer_cavalry
 	
-	damage = 94
+	damage = 104		#prev 94
 	toughness = 60
 	pursuit = 24
 	screen = 36
@@ -124,10 +128,15 @@ kheshig = {
 	buy_cost = { gold = kheshig_recruitment_cost }
 	low_maintenance_cost = { gold = kheshig_veterans_low_maint_cost }
 	high_maintenance_cost = { gold = kheshig_veterans_high_maint_cost }
-	provision_cost = @provisions_cost_cavalry_expensive
+	provision_cost = @provisions_cost_cavalry_cheap
 
-	stack = 50
-	ai_quality = { value = 100 }
+	stack = 20
+	ai_quality = { 
+		value = @cultural_maa_extra_ai_score 
+		#ADDED
+		add = @cultural_maa_extra_ai_score 			#added twice coz they're very good
+		add = counter_synergy_ai_weight_archer_cavalry
+	}
 	icon = keshig
 }
 
@@ -135,7 +144,7 @@ steppe_raiders = {
 	type = light_cavalry
 	
 	damage = 22
-	toughness = 15
+	toughness = 16	#prev 15
 	pursuit = 30
 	screen = 30
 	
@@ -163,10 +172,11 @@ steppe_raiders = {
 	buy_cost = { gold = steppe_raiders_recruitment_cost }
 	low_maintenance_cost = { gold = steppe_raiders_low_maint_cost }
 	high_maintenance_cost = { gold = steppe_raiders_high_maint_cost }
-	provision_cost = @provisions_cost_cavalry_moderate
+	provision_cost = @provisions_cost_cavalry_cheap
 
 
-	stack = 100
+	#Maybe should be 50?
+	stack = 50
 	ai_quality = { 
 		value = culture_ai_weight_light_cavalry
 		add = counter_synergy_ai_weight_light_cavalry
@@ -205,6 +215,10 @@ heavy_horse_archers = {
 				has_domicile_parameter = unlock_maa_heavy_horse_archers
 			}
 		}
+		#ADDED - they're HEAVY, right? :P
+		NOT = {
+			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
+		}
 	}
 
 	counters = {
@@ -222,10 +236,11 @@ heavy_horse_archers = {
 	high_maintenance_cost = { gold = heavy_horse_archers_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 50
-	ai_quality = {
+	stack = 20
+	ai_quality = { 
 		value = @cultural_maa_extra_ai_score
-		add = 100 #I mean... they're horse archers
+		#ADDED
+		add = counter_synergy_ai_weight_archer_cavalry
 	}
 	icon = heavy_horse_archers
 }
@@ -233,7 +248,7 @@ heavy_horse_archers = {
 nomad_lancers = {
 	type = heavy_cavalry
 	
-	damage = 120
+	damage = 110	#prev 120
 	toughness = 30
 	pursuit = 20
 	screen = 0
@@ -270,10 +285,11 @@ nomad_lancers = {
 	high_maintenance_cost = { gold = nomad_lancers_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 50
-	ai_quality = {
+	stack = 20
+	ai_quality = { 
 		value = culture_ai_weight_heavy_cavalry
-		add = 100
+		#ADDED
+		add = counter_synergy_ai_weight_heavy_cavalry
 	}
 	icon = nomad_lancers
 }
@@ -309,11 +325,13 @@ mangudai = {
 	buy_cost = { gold = mangudai_recruitment_cost }
 	low_maintenance_cost = { gold = mangudai_low_maint_cost }
 	high_maintenance_cost = { gold = mangudai_high_maint_cost }
-	provision_cost = @provisions_cost_cavalry_moderate
+	provision_cost = @provisions_cost_cavalry_cheap
 	
-	stack = 100
-	ai_quality = {
+	stack = 40
+	ai_quality = { 
 		value = @cultural_maa_extra_ai_score
+		#ADDED
+		add = counter_synergy_ai_weight_archer_cavalry
 	}
 	icon = mangudai
 }
@@ -321,10 +339,10 @@ mangudai = {
 cataphract_archers = {
 	type = heavy_cavalry
 	
-	damage = 90
+	damage = 94			#prev 90
 	toughness = 52
-	pursuit = 20
-	screen = 10
+	pursuit = 24		#prev 20
+	screen = 20			#prev 10
 	
 	terrain_bonus = {
 		steppe = { damage = 40 }
@@ -366,10 +384,12 @@ cataphract_archers = {
 	high_maintenance_cost = { gold = cataphract_archers_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
 	
-	stack = 50
-	ai_quality = {
-		value = @cultural_maa_extra_ai_score
-		add = 200
+	stack = 20
+	ai_quality = { 
+		value = culture_ai_weight_heavy_cavalry
+		#ADDED
+		add = @cultural_maa_extra_ai_score
+		add = counter_synergy_ai_weight_heavy_cavalry
 	}
 	icon = cataphract_archers
 }
@@ -377,20 +397,22 @@ cataphract_archers = {
 maturkan_warriors = {
 	type = archers
 	
-	damage = 16
-	toughness = 15
+	damage = 18			#prev 16
+	toughness = 16		#prev 15
 	pursuit = 0
-	screen = 16
+	screen = 20			#prev 16
 	
 	terrain_bonus = {
-		taiga = { damage = 12 toughness = 6 }
-		forest = { damage = 10 toughness = 4 }
+		taiga = { damage = 18 toughness = 16 }		#prev 12 6
+		forest = { damage = 10 toughness = 8 }		#prev 10 4
 		hills = { damage = 6 toughness = 3 }
 		mountains = { damage = 6 toughness = 3 }
 	}
 
 	counters = {
 		skirmishers = 1
+		#ADDED
+		light_cavalry = 0.5
 	}
 	
 	winter_bonus = {
@@ -405,9 +427,9 @@ maturkan_warriors = {
 	buy_cost = { gold = maturkan_warriors_recruitment_cost }
 	low_maintenance_cost = { gold = maturkan_warriors_low_maint_cost }
 	high_maintenance_cost = { gold = maturkan_warriors_high_maint_cost }
-	provision_cost = @provisions_cost_infantry_moderate
+	provision_cost = @provisions_cost_infantry_cheap
 	
-	stack = 100
+	stack = 40
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score
 		add = counter_synergy_ai_weight_archers

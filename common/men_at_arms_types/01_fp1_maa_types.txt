@@ -5,23 +5,23 @@
 @cultural_maa_extra_ai_score = 60 # Equivalent to having 6 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 6
-@provisions_cost_infantry_moderate = 14
-@provisions_cost_infantry_expensive = 24
-@provisions_cost_infantry_bankrupting = 30
+@provisions_cost_infantry_cheap = 4
+@provisions_cost_infantry_moderate = 10
+@provisions_cost_infantry_expensive = 18
+@provisions_cost_infantry_bankrupting = 24
 
-@provisions_cost_cavalry_cheap = 16
-@provisions_cost_cavalry_moderate = 34
-@provisions_cost_cavalry_expensive = 46
-@provisions_cost_cavalry_bankrupting = 64
-@provisions_cost_cavalry_elephants = 180
+@provisions_cost_cavalry_cheap = 12
+@provisions_cost_cavalry_moderate = 26
+@provisions_cost_cavalry_expensive = 34
+@provisions_cost_cavalry_bankrupting = 48
+@provisions_cost_cavalry_elephants = 64
 
-@provisions_cost_special_cheap = 12
-@provisions_cost_special_moderate = 24
-@provisions_cost_special_expensive = 36
-@provisions_cost_special_bankrupting = 48
+@provisions_cost_special_cheap = 10
+@provisions_cost_special_moderate = 18
+@provisions_cost_special_expensive = 28
+@provisions_cost_special_bankrupting = 36
 
-# My idea of rebalance: All costs doubled
+# My idea of rebalance: All costs x1.5
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -64,17 +64,21 @@ vigmen = {
 	high_maintenance_cost = { gold = vigmen_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_moderate
 	
-	stack = 100
-	ai_quality = { value = culture_ai_weight_vigmen }
+	stack = 40
+	ai_quality = { 
+		value = culture_ai_weight_vigmen 
+		#ADDED
+		add = counter_synergy_ai_weight_archers
+	}
 	icon = vigmen
 }
 
 bondi = {
 	type = pikemen
 	
-	damage = 14
-	toughness = 18
-	pursuit = 12
+	damage = 18		#prev 14
+	toughness = 22	#prev 18
+	pursuit = 18	#prev 12
 	screen = 0
 	
 	can_recruit = {
@@ -105,8 +109,12 @@ bondi = {
 	provision_cost = @provisions_cost_infantry_moderate
 	# They kinda suck ngl
 	
-	stack = 100
-	ai_quality = { value = @cultural_maa_extra_ai_score }
+	stack = 40
+	ai_quality = { 
+		value = @cultural_maa_extra_ai_score 
+		#ADDED
+		add = counter_synergy_ai_weight_pikemen
+	}
 	icon = bondi
 }
 
@@ -119,6 +127,8 @@ varangian_veterans = {
 	screen = 0
 	
 	can_recruit = {
+		#ADDED - not for title armies
+		NOT = { exists = scope:title }
 		valid_for_maa_trigger = { PARAMETER = unlock_maa_varangian_veterans }
 		NOT = {
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
@@ -129,6 +139,8 @@ varangian_veterans = {
 		farmlands = { damage = 6 toughness = 4 }
 		plains = { damage = 6 toughness = 4 }
 		hills = { damage = 6 toughness = 4 }
+		# ADDED to all heavy infantry
+		wetlands = { damage = -28 toughness = -14 }
 	}
 	
 	counters = {
@@ -149,8 +161,13 @@ varangian_veterans = {
 
 	max_regiments = 1
 	
-	stack = 100
-	ai_quality = { value = @cultural_maa_extra_ai_score }
+	stack = 40
+	ai_quality = { 
+		value = @cultural_maa_extra_ai_score 
+		#ADDED - doubled the score since its only 1 max regiment
+		value = @cultural_maa_extra_ai_score 
+		add = counter_synergy_ai_weight_heavy_infantry
+	}
 	icon = varangian_guard
 }
 
@@ -179,8 +196,13 @@ jomsviking_pirates = {
 	high_maintenance_cost = { gold = jomsviking_pirates_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_expensive
 	# Those are NOT skirmishers.
+	# And they are still not skirmishers.
 	
-	stack = 100
-	ai_quality = { value = @cultural_maa_extra_ai_score }
+	stack = 40
+	ai_quality = { 
+		value = @cultural_maa_extra_ai_score 
+		#ADDED
+		add = counter_synergy_ai_weight_skirmishers
+	}
 	icon = jomsviking_pirates
 }

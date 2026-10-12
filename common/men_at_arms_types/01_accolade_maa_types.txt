@@ -5,27 +5,27 @@
 @cultural_maa_extra_ai_score = 60 # Equivalent to having 6 extra regiments beyond what the code scoring would indicate (see NEGATIVE_SCORE_PER_EXISTING_REGIMENT)
 
 # Must be synced between files with the values located at "# Provisions Costs #".
-@provisions_cost_infantry_cheap = 6
-@provisions_cost_infantry_moderate = 14
-@provisions_cost_infantry_expensive = 24
-@provisions_cost_infantry_bankrupting = 30
+@provisions_cost_infantry_cheap = 4
+@provisions_cost_infantry_moderate = 10
+@provisions_cost_infantry_expensive = 18
+@provisions_cost_infantry_bankrupting = 24
 @provisions_cost_infantry_accolade_bankrupting = 60
 
-@provisions_cost_cavalry_cheap = 16
-@provisions_cost_cavalry_moderate = 34
-@provisions_cost_cavalry_expensive = 46
-@provisions_cost_cavalry_bankrupting = 64
-@provisions_cost_cavalry_accolade_bankrupting = 128
-@provisions_cost_cavalry_elephants = 180
-@provisions_cost_cavalry_accolade_elephants = 360
+@provisions_cost_cavalry_cheap = 12
+@provisions_cost_cavalry_moderate = 26
+@provisions_cost_cavalry_expensive = 34
+@provisions_cost_cavalry_bankrupting = 48
+@provisions_cost_cavalry_accolade_bankrupting = 60
+@provisions_cost_cavalry_elephants = 64
+@provisions_cost_cavalry_accolade_elephants = 72
 # I have no idea how would u move with accolade elephants <:
 
-@provisions_cost_special_cheap = 12
-@provisions_cost_special_moderate = 24
-@provisions_cost_special_expensive = 36
-@provisions_cost_special_bankrupting = 48
+@provisions_cost_special_cheap = 10
+@provisions_cost_special_moderate = 18
+@provisions_cost_special_expensive = 28
+@provisions_cost_special_bankrupting = 36
 
-# My idea of rebalance: All costs doubled
+# My idea of rebalance: All costs x1.5
 # Skirmishers use @provisions_cost_infantry_cheap unless very strong
 # Archers use @provisions_cost_infantry_moderate
 # Pikemen use @provisions_cost_infantry_expensive
@@ -73,13 +73,14 @@ accolade_maa_archers = {
 	high_maintenance_cost = { gold = bowmen_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 
-
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_archers
 		add = 50
+		#ADDED
+		add = counter_synergy_ai_weight_archers
 	}
 
 	illustration = {
@@ -111,9 +112,9 @@ accolade_maa_skirmishers = {
 	max_regiments = 1
 	
 	damage = 20
-	toughness = 20
-	pursuit = 16
-	screen = 20
+	toughness = 24	#prev 20
+	pursuit = 20	#prev 16
+	screen = 30		#prev 20
 	
 	terrain_bonus = {
 		forest = { damage = 8 toughness = 12 }
@@ -133,11 +134,14 @@ accolade_maa_skirmishers = {
 
 
 	
-	stack = 100
+	# Skirmishers are a bit bigger
+	stack = 50
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_skirmishers
 		add = 50
+		#ADDED
+		add = counter_synergy_ai_weight_skirmishers
 	}
 
 	illustration = {
@@ -193,11 +197,13 @@ accolade_maa_pikes = {
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_pikemen
 		add = 50
+		#ADDED
+		add = counter_synergy_ai_weight_pikemen
 	}
 
 	illustration = {
@@ -228,7 +234,7 @@ accolade_maa_outriders = {
 
 	max_regiments = 1
 	
-	damage = 30
+	damage = 32		#prev 30
 	toughness = 20
 	pursuit = 40
 	screen = 40
@@ -258,11 +264,13 @@ accolade_maa_outriders = {
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_light_cavalry
 		add = 50
+		#ADDED
+		add = counter_synergy_ai_weight_light_cavalry
 	}
 
 	illustration = {
@@ -295,11 +303,16 @@ accolade_maa_vanguards = {
 	}
 
 	max_regiments = 1
-
+	
 	damage = 45
 	toughness = 35
 	pursuit = 0
 	screen = 0
+	
+	# ADDED to all heavy infantry
+	terrain_bonus = {
+		wetlands = { damage = -16 toughness = -6 }
+	}
 	
 	counters = {
 		pikemen = 2
@@ -313,11 +326,13 @@ accolade_maa_vanguards = {
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_infantry
 		add = 75
+		#ADDED
+		add = counter_synergy_ai_weight_heavy_infantry
 	}
 
 	illustration = {
@@ -382,11 +397,13 @@ accolade_maa_lancers = {
 
 
 	
-	stack = 50
+	stack = 20
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_cavalry
 		add = 100
+		#ADDED
+		add = counter_synergy_ai_weight_heavy_cavalry
 	}
 
 	illustration = {
@@ -430,8 +447,8 @@ accolade_maa_crossbowers = {
 	}
 
 	counters = {
-		heavy_infantry = 2
-		heavy_cavalry = 2
+		heavy_infantry = 1		#prev 2
+		heavy_cavalry = 1		#prev 2
 		archer_cavalry = 1
 	}
 
@@ -442,11 +459,13 @@ accolade_maa_crossbowers = {
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_archers
 		add = 100
+		#ADDED
+		add = counter_synergy_ai_weight_archers
 	}
 
 	illustration = {
@@ -509,11 +528,13 @@ accolade_maa_cameliers = {
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_camels
 		add = 75
+		#ADDED
+		add = counter_synergy_ai_weight_camel_cavalry
 	}
 	illustration = {
 		reference = camel_riders
@@ -533,7 +554,6 @@ accolade_maa_elephantiers = {
 		NOT = {
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
 		}
-			
 		NOT = { exists = scope:title }
 	}
 
@@ -569,13 +589,16 @@ accolade_maa_elephantiers = {
 	high_maintenance_cost = { gold = war_elephant_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_accolade_elephants
 	
+	max_sub_regiments = 4
 	
-	stack = 25
-	hired_stack_size = 10
+	stack = 10
+	hired_stack_size = 5 #prev 10
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_elephants
 		add = 100
+		#ADDED
+		add = counter_synergy_ai_weight_elephant_cavalry
 	}
 	illustration = {
 		reference = war_elephants
@@ -621,14 +644,14 @@ accolade_maa_horse_archers = {
 	low_maintenance_cost = { gold = horse_archers_low_maint_cost }
 	high_maintenance_cost = { gold = horse_archers_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_bankrupting
-	
-	max_sub_regiments = 5
-	
-	stack = 100
+
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score
 		add = 100
+		#ADDED
+		add = counter_synergy_ai_weight_archer_cavalry
 	}
 	illustration = {
 		reference = horse_archers
@@ -667,11 +690,11 @@ accolade_maa_handgunners = {
 	buy_cost = { gold = handgunner_recruitment_cost }
 	low_maintenance_cost = { gold = handgunner_low_maint_cost }
 	high_maintenance_cost = { gold = handgunner_high_maint_cost }
-	provision_cost = @provisions_cost_infantry_accolade_bankrupting
+	provision_cost = @provisions_cost_infantry_bankrupting
 
 
 	
-	stack = 100
+	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = counter_synergy_ai_weight_gunpowder
