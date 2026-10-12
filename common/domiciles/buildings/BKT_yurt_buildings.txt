@@ -1881,7 +1881,7 @@ herd_welfare_yurt_04 = {
 					herd >= { value = max_herd multiply = 0.8 }
 				}
 			}
-			add = 2 # add 2
+			add = 10 # add 2
 		}
 	}
 
@@ -1923,12 +1923,12 @@ herd_welfare_yurt_05 = {
 		value = nomadic_capital_exterior_building_4
 		if = {
 			limit = {
-				herd >= {
-					value = max_herd
-					multiply = 0.9
+				OR = {
+					herd >= 18000
+					herd >= { value = max_herd multiply = 0.8 }
 				}
 			}
-			add = 2
+			add = 2 # add 2
 		}
 	}
 
@@ -10012,7 +10012,7 @@ marriage_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
+		value = 1 # add nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
 		
 		
 	}
@@ -10046,7 +10046,7 @@ marriage_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_5
+		value = 1 # nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_5
 		
 		
 	}
@@ -10080,7 +10080,7 @@ marriage_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_6
+		value = 1 # nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_6
 		
 		
 	}
