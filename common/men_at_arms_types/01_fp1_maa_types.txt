@@ -109,9 +109,9 @@ bondi = {
 	provision_cost = @provisions_cost_infantry_moderate
 	# They kinda suck ngl
 	
-	stack = 40
+	stack = 40 # 40
 	ai_quality = { 
-		value = @cultural_maa_extra_ai_score 
+		value = 40 # add @cultural_maa_extra_ai_score 
 		#ADDED
 		add = counter_synergy_ai_weight_pikemen
 	}
