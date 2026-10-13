@@ -1587,7 +1587,7 @@ marriage_ai_accept_faith_hostility_modifier = {
 			#add = -50
 			#ADDED
 			add = {
-				value = -25		#lowered coz wtf
+				value = -15		#lowered coz wtf
 				if = {
 					limit = { scope:recipient.culture = { has_cultural_parameter = lower_marriage_acceptance_penalty_from_religious_tolerance } }
 					multiply = 0.5
@@ -1605,7 +1605,7 @@ marriage_ai_accept_faith_hostility_modifier = {
 			#add = -30
 			#ADDED
 			add = {
-				value = -20		#lowered coz wtf
+				value = -10		#lowered coz wtf
 				if = {
 					limit = { scope:recipient.culture = { has_cultural_parameter = lower_marriage_acceptance_penalty_from_religious_tolerance } }
 					multiply = 0.5
@@ -1615,26 +1615,19 @@ marriage_ai_accept_faith_hostility_modifier = {
 			scope:recipient.faith = scope:puppet_or_actor.faith
 			scope:puppet_or_actor.rite != scope:recipient.rite
 			scope:recipient.rite = {
-				"divergence(scope:puppet_or_actor.rite)" >= massive_rite_divergence_value
+				"divergence(scope:puppet_or_actor.rite)" >= major_rite_divergence_value		#prev massive_rite_divergence_value
 			}
 			desc = marriage_massive_divergence_reason
 		}
 		modifier = {
-			#add = -20
-			#ADDED
-			add = {
-				value = -15		#lowered coz wtf
-				if = {
-					limit = { scope:recipient.culture = { has_cultural_parameter = lower_marriage_acceptance_penalty_from_religious_tolerance } }
-					multiply = 0.5
-					round_to = 5
-				}
-			}
+			add = -5		#prev -20
 			scope:recipient.faith = scope:puppet_or_actor.faith
 			scope:puppet_or_actor.rite != scope:recipient.rite
 			scope:recipient.rite = {
-				"divergence(scope:puppet_or_actor.rite)" >= major_rite_divergence_value
+				"divergence(scope:puppet_or_actor.rite)" >= minor_rite_divergence_value			#prev major_rite_divergence_value
 			}
+			#ADDED - those guys ignore this entirely
+			scope:recipient.culture = { has_cultural_parameter = lower_marriage_acceptance_penalty_from_religious_tolerance }
 			desc = marriage_major_divergence_reason
 		}
 		modifier = {

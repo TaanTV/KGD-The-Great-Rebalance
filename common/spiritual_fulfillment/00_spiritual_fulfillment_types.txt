@@ -7,9 +7,10 @@
 			stress_gain_mult = 0.3			#prev 0.5
 			monthly_piety_gain_mult = -0.1
 			enemy_hostile_scheme_success_chance_add = -20
-			#ADDED
+			#ADDED - SP loss isnt higher coz you can only lose like 5 here anyway
 			rite_creation_piety_cost_mult = -0.20
 			faith_conversion_piety_cost_mult = -0.5
+			character_spiritual_fulfillment_loss_mult = -0.5
 		}
 		flags = {
 			dread_puppet_option
@@ -34,6 +35,7 @@
 			#ADDED
 			rite_creation_piety_cost_mult = -0.05
 			faith_conversion_piety_cost_mult = -0.3
+			character_spiritual_fulfillment_loss_mult = -0.5
 		}
 		flags = {
 			dread_puppet_option
@@ -52,6 +54,7 @@
 			stress_gain_mult = 0.05		#prev 0.1
 			#ADDED
 			faith_conversion_piety_cost_mult = -0.1
+			character_spiritual_fulfillment_loss_mult = -0.25
 		}
 		flags = {
 			dread_puppet_option
@@ -70,6 +73,8 @@
 		threshold = 30
 		modifier = {
 			stress_loss_mult = 0.05		#prev 0.1
+			#ADDED
+			character_spiritual_fulfillment_gain_mult = -0.25
 		}
 		flags = {
 			sp_befriend_chaplain
@@ -84,6 +89,8 @@
 		modifier = {
 			stress_loss_mult = 0.15		#prev 0.25
 			monthly_piety_gain_mult = 0.05
+			#ADDED
+			character_spiritual_fulfillment_gain_mult = -0.5
 		}
 		flags = {
 			sp_befriend_chaplain
@@ -104,6 +111,8 @@
 			stress_loss_mult = 0.25		#prev 0.5
 			monthly_piety_gain_mult = 0.1
 			enemy_hostile_scheme_success_chance_add = 20
+			#ADDED - isnt bigger coz there's only 5 more you can gain anyway
+			character_spiritual_fulfillment_gain_mult = -0.5
 		}
 		flags = {
 			sp_befriend_chaplain
@@ -133,6 +142,8 @@ default_fulfillment = {
 			stress_gain_mult = 0.25
 			#same_faith_opinion = -10
 			enemy_hostile_scheme_success_chance_add = -15
+			#ADDED
+			character_spiritual_fulfillment_loss_mult = -0.5
 		}
 		flags = {
 			default_sf_personal_tenet_change_no_stress
@@ -151,6 +162,8 @@ default_fulfillment = {
 			faith_conversion_piety_cost_mult = -0.25
 			stress_gain_mult = 0.1
 			#same_faith_opinion = -5
+			#ADDED
+			character_spiritual_fulfillment_loss_mult = -0.25
 		}
 		flags = {
 			default_sf_personal_tenet_change_no_stress
@@ -171,6 +184,8 @@ default_fulfillment = {
 			faith_conversion_piety_cost_mult = 0.25
 			stress_loss_mult = 0.1
 			#same_faith_opinion = 5
+			#ADDED
+			character_spiritual_fulfillment_gain_mult = -0.25
 		}
 		flags = {
 			sp_cheaper_pilgrimage
@@ -189,6 +204,7 @@ default_fulfillment = {
 			#same_faith_opinion = 10
 			#ADDED
 			enemy_hostile_scheme_success_chance_add = 15
+			character_spiritual_fulfillment_gain_mult = -0.5
 		}
 		flags = {
 			sp_cheaper_pilgrimage_major

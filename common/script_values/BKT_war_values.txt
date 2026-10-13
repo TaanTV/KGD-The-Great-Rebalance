@@ -231,10 +231,11 @@ recipient_strength_root_value = {
 }
 
 frankokratia_leader_protection_value = {
-	#Added at the end of every ai_score_mult in all CBs for now.
+	#Multiplied at the end of every ai_score_mult in all CBs for now.
 
 	#Fourth Crusade flavor:
 	#We protect the Frankokratia leader to avoid breaking the story cycle.
+	value = 1
 	if = {
 		limit = {
 			scope:defender = {
@@ -244,9 +245,7 @@ frankokratia_leader_protection_value = {
 				}
 			}
 		}
-		#multiply = 0
-		#ADDED - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
-		add = -1
+		multiply = 0
 	}
 	#ADDED - since this is in every casus belli, i'll use it to nudge AI empires to war against each-other instead of idk whoever else
 	else_if = {
@@ -255,9 +254,7 @@ frankokratia_leader_protection_value = {
 				scope:attacker.highest_held_title_tier >= tier_empire
 				scope:defender.highest_held_title_tier >= tier_empire
 			}
-			#multiply = 1.25
-			#NOTE - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
-			add = 0.25
+			multiply = 1.25
 		}
 		#ADDED - since this is in every casus belli, i'll use it to nudge AI to venture into the steppes a bit less 
 		if = {
@@ -275,19 +272,13 @@ frankokratia_leader_protection_value = {
 			    	}
 				}
 			}
-			#multiply = {
-			#	value = 0.8
-			#	if = {		#way less likely for vassals coz they're annoying
-			#		limit = { scope:attacker = { top_liege != this }
-			#		add = -0.3
-			#	}
-			#}	
-			#NOTE - since it's used as "add = frankokratia_leader_protection_value" instead of "multiply".... ig that will have to do
-			add = -0.2
-			if = {		#way less likely for vassals coz they're annoying
-				limit = { scope:attacker = { top_liege != this } }
-				add = -0.3
-			}
+			multiply = {
+				value = 0.8
+				if = {		#way less likely for vassals coz they're annoying
+					limit = { scope:attacker = { top_liege != this }
+					add = -0.3
+				}
+			}	
 		}
 	}
 }

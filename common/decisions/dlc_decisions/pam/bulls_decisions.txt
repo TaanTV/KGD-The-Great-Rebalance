@@ -444,7 +444,7 @@ pam_declare_rite_heresy_bull_decision = {
 	}
 
 	ai_will_do = {
-		base = 100
+		base = 30		#prev 100
 		modifier = {
 			add = -25
 			has_trait_submissive_trigger = yes
@@ -462,7 +462,22 @@ pam_declare_rite_heresy_bull_decision = {
 			has_trait = cynical
 		}
 		
-		#ADDED 
+		#ADDED - ported pluralistic thing over from the other declare heresy thingy, the rest below is added
+		modifier = {
+			add = -50
+			rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+		}
+		modifier = {
+			add = 15
+			rite = { rite_has_doctrine = doctrine_pluralism_fundamentalist }
+		}
+		modifier = {
+			faith.fervor < 50
+			add = {
+				value = 70	#this being more than 50 is intentional
+				subtract = faith.fervor
+			}
+		}
 		modifier = {
 			exists = puppeteer
 			scope:selected_item ?= puppeteer.rite

@@ -176,12 +176,28 @@ doctrine_pluralism_fundamentalist = {
 		}
 	}
 
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_pentarchy_trigger
+			NOT = { tenet:tenet_pentarchy = { is_in_list = selected_doctrines } }
+		}
+		custom_description = {
+			text = incompatible_tenet_alexandrian_catechism_trigger
+			NOT = { tenet:tenet_alexandrian_catechism = { is_in_list = selected_doctrines } }
+		}
+		custom_description = {
+			text = incompatible_tenet_adaptive_trigger
+			NOT = { tenet:tenet_adaptive = { is_in_list = selected_doctrines } }
+		}
+	}
+
 	parameters = {
 		pluralism_fundamentalist_proselytization_bonus
 		pluralism_fundamentalist_faction_join_chance
 		pluralism_fundamentalist_vulnerable_to_heresy
 		#pluralism_fundamentalist_revocation_tyranny_minimal
 		#ADDED
+		#pluralism_fundamentalist_much_more_expensive_to_modify_rite
 		pluralism_fundamentalist_revocation_tyranny_none
 		pluralism_fundamentalist_demand_conversion_always_criminal
 		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
@@ -189,7 +205,7 @@ doctrine_pluralism_fundamentalist = {
 
 	special_parameters = {
 		hostility_towards_us_mult = 2
-		heresy_threshold = -10		#prev -5
+		heresy_threshold = -15		#prev -5
 	}
 	character_modifier = {
 		minority_different_faith_opinion = -30	#prev -20
@@ -209,10 +225,17 @@ doctrine_pluralism_righteous = {
 			multiply = faith_unchanged_doctrine_cost_mult
 		}
 	}
+	can_pick = {
+		custom_description = {
+			text = incompatible_tenet_adaptive_trigger
+			NOT = { tenet:tenet_adaptive = { is_in_list = selected_doctrines } }
+		}
+	}
 
 	parameters = {
 		#pluralism_righteous_revocation_tyranny_reduced
 		#ADDED
+		#pluralism_righteous_more_expensive_to_modify_rite
 		pluralism_fundamentalist_revocation_tyranny_minimal
 	}
 
@@ -263,7 +286,7 @@ doctrine_pluralism_pluralistic = {
 
 	special_parameters = {
 		hostility_towards_us_mult = 0.5
-		heresy_threshold = 10		#prev 5
+		heresy_threshold = 15		#prev 5
 	}
 
 	#ADDED
@@ -275,7 +298,7 @@ doctrine_pluralism_pluralistic = {
 doctrine_theocracy_lay_clergy = {
 	doctrine_group_type = doctrine_theocracy
 	index = 1
-	divergence = 25		#prev 20
+	divergence = 30		#prev 20
 
 	icon = "doctrine_theocracy_lay_clergy"
 
@@ -788,6 +811,36 @@ doctrine_monasticism_encouraged = {
 				desc = doctrine_christianity_monasticism_default_desc
 			}
 			desc = doctrine_monasticism_encouraged_desc
+		}
+	}
+
+	historical_glossary = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_latin_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_christianity_monasticism_latin_historical_glossary
+			}
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = { pam_greek_as_liturgical_language_trigger = yes }
+				}
+				desc = doctrine_christianity_monasticism_greek_historical_glossary
+			}
+			triggered_desc = {
+				trigger = {
+					religion_tag = christianity_religion
+					main_rite = {
+						pam_latin_as_liturgical_language_trigger = no
+						pam_greek_as_liturgical_language_trigger = no
+					}
+				}
+				desc = doctrine_christianity_monasticism_default_historical_glossary
+			}
+			desc = doctrine_monasticism_general_historical_glossary
 		}
 	}
 

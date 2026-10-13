@@ -2,6 +2,7 @@
  request_council_powerful_vassal_interaction: "$request_council_interaction$"
  request_council_powerful_vassal_interaction_desc: "As a [powerful_vassal|E], you are entitled to a [council_i][council|E] position"
  request_council_powerful_vassal_interaction_desc_non_powerful: "Your [liege|E] holds very little power over their vassals, as such you can request a [council_i][council|e] position"
+ request_council_powerful_vassal_interaction_cooldown_tt: "#V You#! have recently left council"
  request_council.recipient.tt.duration: "[actor.GetShortUIName|U] cannot be fired for [SCOPE.ScriptValue('council_position_lite_locked_value')|0] years"
  bkt_request_council.refused.actor.tt: "[recipient.GetShortUIName] denied your council request"
  
@@ -29,7 +30,7 @@
  vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties: "You will syphon [control|E] or apply [county_corruption|E] to some of your [liege|E]'s [counties|E]"
  
  cant_attack_lower_tier_foreign_vassals: "Can not attack foreign [vassals|E] of lower [rank|E] than yours"
- you_have_troops_in_their_subrealm: "You have armies in their [realm|E]"
+ you_have_troops_in_their_subrealm: "Your [armies|E] are in their [realm|E]"
  
  none_subjugated_tribute_taxes: "$tributary_contract_starts_with_common$ [GetSubjectContractType( 'default_tributary_taxes' ).GetObligationName( 'tributary_tax_none' )]"
  high_subjugated_tribute_prestige: "$tributary_contract_starts_with_common$ [GetSubjectContractType( 'default_tributary_prestige' ).GetObligationName( 'prestige_transfer_high' )]"
@@ -39,3 +40,4 @@
  bkt_hof_or_challenger_of_recipient_tt: "You are [recipient.GetShortUINamePossessive] [head_of_faith|E] or [challenger_hof|E]"
  bkt_non_clergy_dread_or_hook_tt: "[actor.GetShortUIName|U] must either:\n$EFFECT_LIST_BULLET$Have a @weak_hook_icon![hook|E] on [recipient.GetShortUIName]\n$EFFECT_LIST_BULLET$Make [recipient.GetShortUIName] [terrified_i][cowed|E]\n$EFFECT_LIST_BULLET$Be [recipient.GetShortUINamePossessive] [head_of_faith|E] or [challenger_hof|E]"
  faith_has_no_head_hof_doctrine: "$doctrine_head_of_faith_name$: [GetDoctrineType('doctrine_no_head').GetBaseName]: $VALUE|=+0$"
+ potential_puppet_and_puppeteer_same_realm_tt: "[potential_puppeteer.GetShortUIName|U] and [potential_puppet.GetShortUIName] are in the same realm"

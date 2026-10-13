@@ -3,8 +3,8 @@
 		highest_held_title_tier > tier_barony
 		trigger_if = { # Throttle Counts
 			limit = {
-				highest_held_title_tier = tier_county
 				is_ai = yes
+				highest_held_title_tier = tier_county
 				#ADDED 
 				stress < 75
 			}

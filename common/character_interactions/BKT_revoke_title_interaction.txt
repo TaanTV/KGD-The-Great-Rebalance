@@ -274,8 +274,14 @@
 				is_nomad_title = yes
 				is_head_of_faith = yes
 				has_clerical_region = yes
-				pam_title_is_clerical_elector_trigger = yes
-				pam_title_is_antipope_office_trigger = yes
+			}
+			custom_description = {
+				text = "character_interactions_not_clerical_elector_title"
+				pam_title_is_clerical_elector_trigger = no
+			}
+			custom_description = {
+				text = "character_interactions_not_antipope_office_title"
+				pam_title_is_antipope_office_trigger = no
 			}
 		}
 	}
@@ -970,7 +976,7 @@
 
 		modifier = {
 			has_game_rule = hard_difficulty
-			scope:puppet_or_actor = { is_ai = no }
+			scope:actor = { is_ai = no }
 			add = -50
 			desc = game_rule_base_value
 		}
@@ -1576,6 +1582,11 @@
 		}
 		# Revoke from vassals of the wrong faith if you can do it without tyranny
 		modifier = {
+			scope:puppet_or_actor = {
+				NOT = {
+					title_revocation_is_tyrannical_trigger = { VASSAL = scope:recipient }
+				}
+			}
 			scope:puppet_or_actor.faith != scope:recipient.faith
 			#scope:recipient.primary_title.tier > tier_barony
 			OR = {
@@ -1583,13 +1594,6 @@
 				scope:puppet_or_actor.ai_zeal >= low_negative_ai_value
 				NOT = {
 					scope:puppet_or_actor.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
-				}
-				#ADDED - instead of the other religion check
-				faith = {
-					faith_hostility_level = {
-						target = scope:recipient.faith
-						value = faith_evil_level
-					}
 				}
 			}
 			OR = { # Chill a bit until you've dealth with the ones already in your prison
@@ -1610,12 +1614,13 @@
 		# Revoke from characters you dislike if you can do it without tyranny
 		modifier = {
 			scope:puppet_or_actor = {
+				NOT = {
+					title_revocation_is_tyrannical_trigger = { VASSAL = scope:recipient }
+				}
 				OR = {
 					has_relation_rival = scope:recipient
 					has_relation_nemesis = scope:recipient
 				}
-				#ADDED - actually check if its tyrannical or not?
-				title_revocation_is_tyrannical_trigger = { VASSAL = scope:recipient }
 			}
 			add = 100
 		}

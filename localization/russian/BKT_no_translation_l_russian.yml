@@ -3,3 +3,7 @@
  tradition_bkt_error_suppress_desc: "placeholder"
  war_dec_law_fix_decision_t: "Fix War Declaration Laws"
  war_dec_law_fix_decision_desc: "Click if your save is old and doesnt have War Declaration Law set up"
+ 
+ ELEVATED_HOF_TITLE_NAME: "[religious_head_title_scope.GetBaseNameNoTierNoTooltip]"
+ ELEVATED_HOF_TITLE_ADJ: "[religious_head_title_scope.GetAdjectiveNoTooltip]"
+ ELEVATED_HOF_TITLE_PRE: "[religious_head_title_scope.GetPrefixNoTooltip]"

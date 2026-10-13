@@ -813,10 +813,6 @@ governor_efficiency_presented = {
 	}
 }
 
-
-appointment_non_preferred_gender_penalty_value = 0.5	#prev 0.8
-appointment_opposite_gender_penalty_value = 0.8			#prev 1
-
 adventurer_siege_replenish_amount = {
 	value = 0
 	add = scope:barony.title_province.available_loot

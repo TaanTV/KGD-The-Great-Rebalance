@@ -66,7 +66,7 @@ BKT_recently_occupied_county_modifier = {
 					}
 					if = {
 						limit = { 
-							NOT = { has_schizo_balance_loaded_trigger = yes } 
+							#NOT = { has_schizo_balance_loaded_trigger = yes } 
 							fort_level < 1
 						}
 						save_scope_value_as = {

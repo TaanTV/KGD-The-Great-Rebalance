@@ -27,6 +27,7 @@ on_fired_from_council = {
 }
 
 BKT_fix_swapping_cooldown_on_fired = {
+	trigger = { scope:councillor = { is_alive = yes } }
 	effect = {
 		add_to_variable_list = {
 			name = very_recently_fired

@@ -16,7 +16,7 @@
 			}
 			save_scope_as = new_head
 			house = {
-				set_house_name = japanese_dynasty_name
+				set_house_name_from_dynasty = dynasty
 				save_scope_as = new_house
 			}
 			create_noble_family_effect = { GOVERNMENT_GIVER = this }
@@ -48,7 +48,7 @@
 				liege = { government_has_flag = government_is_feudal }
 				AND = {
 					liege = { government_has_flag = government_is_tribal }
-					ep3_is_clan_inclined_trigger = yes
+					ep3_is_clan_inclined_trigger = no
 				}
 			}
 		}
@@ -69,7 +69,7 @@
 			}
 			save_scope_as = new_head
 			house = {
-				set_house_name = japanese_dynasty_name
+				set_house_name_from_dynasty = dynasty
 				save_scope_as = new_house
 			}
 			create_noble_family_effect = { GOVERNMENT_GIVER = this }
@@ -179,7 +179,7 @@
 					}
 					save_scope_as = new_head
 					house = {
-						set_house_name = japanese_dynasty_name
+						set_house_name_from_dynasty = dynasty
 						save_scope_as = new_house
 					}
 					if = {

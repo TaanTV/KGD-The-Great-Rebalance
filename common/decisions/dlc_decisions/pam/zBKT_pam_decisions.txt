@@ -25,6 +25,231 @@
 #################
 
 
+pam_declare_rite_heresy_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/event_story/pam_the_christian_church_instability.dds"
+	}
+	decision_group_type = major
+
+	desc = pam_declare_rite_heresy_decision_desc
+	selection_tooltip = pam_declare_rite_heresy_decision_tooltip
+	confirm_text = pam_declare_rite_heresy_decision_confirm
+
+	sort_order = 108
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	is_shown = {
+		this = faith.religious_head
+		faith = { has_papacy_trigger = no } # The pope uses bulls
+		faith ?= {
+			any_faith_rite = {
+				pam_rite_can_be_declared_heresy_trigger = yes
+			}
+		}
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { has_trait = zealous }
+			custom_tooltip = {
+				text = pam_declare_rite_heresy_decision_valid_zealous_tt
+				faith = {
+					any_faith_rite = {
+						pam_rite_can_be_declared_heresy_trigger = yes
+					}
+				}
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = pam_declare_rite_heresy_decision_valid_tt
+				faith = {
+					any_faith_rite = {
+						pam_rite_can_be_declared_heresy_trigger = yes
+					}
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_adult = yes
+		is_imprisoned = no
+		custom_tooltip = {
+			text = pam_rite_heresy_select_tt
+			exists = scope:selected_item
+		}
+	}
+
+	cooldown = { years = 5 }
+
+	cost = {
+		piety = major_piety_value
+	}
+
+	effect = {
+		save_scope_as = bull_issuer
+		scope:selected_item = { save_scope_as = heresy_rite }
+		send_interface_toast = {
+			title = pam_declare_rite_heresy_effect_toast_tt
+			right_icon = scope:heresy_rite
+			pam_declare_rite_heresy_effect = yes
+		}
+		faith = {
+			every_faith_character = {
+				limit = {
+					is_ruler = yes
+					this != scope:bull_issuer
+				}
+				trigger_event = { id = pam_decision_events.0012 days = 1 }
+			}
+		}
+		if = {
+			limit = { exists = scope:heresy_rite }
+			hidden_effect = {
+				if = {
+					limit = {
+						scope:heresy_rite.faith.religious_head ?= {
+							NOT = { has_trait = heresiarch }
+						}
+					}
+					scope:heresy_rite.faith.religious_head = { add_trait = heresiarch }
+				}
+				else_if = {
+					limit = {
+						scope:heresy_rite.main_rite.head_of_rite ?= {
+							NOT = { has_trait = heresiarch }
+						}
+					}
+					scope:heresy_rite.main_rite.head_of_rite = { add_trait = heresiarch }
+				}
+				if = {
+					limit = {
+						scope:heresy_rite.faith = { has_doctrine = special_doctrine_ecumenical_christian }
+					}
+					scope:heresy_rite.faith = { remove_doctrine = special_doctrine_ecumenical_christian }
+				}
+				if = {
+					limit = {
+						scope:heresy_rite.faith = { has_doctrine = special_doctrine_ecumenical_miaphysite }
+					}
+					scope:heresy_rite.faith = { remove_doctrine = special_doctrine_ecumenical_miaphysite }
+				}
+			}
+		}
+	}
+
+	widget = {
+		gui = "decision_view_widget_select_rite"
+		controller = select_scope_object
+		show_from_start = yes
+		decision_to_second_step_button = "SELECT"
+
+		setup_items = {
+			scope:actor = {
+				faith = {
+					every_faith_rite = {
+						limit = {
+							pam_rite_can_be_declared_heresy_trigger = yes
+						}
+						add_to_list = item_list
+					}
+				}
+			}
+		}
+
+		default_item = {
+			scope:actor = {
+				faith = {
+					random_faith_rite = {
+						limit = {
+							pam_rite_can_be_declared_heresy_trigger = yes
+						}
+						save_scope_as = selected_item
+					}
+				}
+			}
+		}
+
+		is_item_valid = {
+			pam_rite_can_be_declared_heresy_trigger = yes
+		}
+
+		ai_select_item = {
+			scope:actor = {
+				faith = {
+					ordered_faith_rite = {
+						limit = {
+							pam_rite_can_be_declared_heresy_trigger = yes
+						}
+						order_by = "divergence(faith.main_rite)"
+						save_scope_as = selected_item
+					}
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		this = faith.religious_head
+		faith = {
+			any_faith_rite = {
+				pam_rite_can_be_declared_heresy_trigger = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = 30		#prev 20
+		modifier = {
+			add = 25
+			has_trait = zealous
+		}
+		modifier = {
+			add = 15
+			has_trait = theologian
+		}
+		modifier = {
+			add = -25
+			has_trait = cynical
+		}
+		modifier = {
+			add = -50
+			rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+		}
+		modifier = {
+			add = -1000		#prev -100
+			scope:selected_item = scope:actor.rite
+		}
+		
+		#ADDED 
+		modifier = {
+			add = 15
+			rite = { rite_has_doctrine = doctrine_pluralism_fundamentalist }
+		}
+		modifier = {
+			faith.fervor < 50
+			add = {
+				value = 70	#this being more than 50 is intentional
+				subtract = faith.fervor
+			}
+		}
+		modifier = {
+			exists = puppeteer
+			scope:selected_item ?= puppeteer.rite
+			factor = 0
+		}
+	}
+}
+
 # Head of Faith: formally take a stance on a tenet known to the faith or learned personally.
 pam_permit_tenet_decision = {
 

@@ -3,7 +3,8 @@
  usurp_caliph_title_decision_desc: "TODO"
  usurp_caliph_title_decision_tooltip: "#V You#! will become the Caliph"
  usurp_caliph_title_decision_confirm: "#V I#! am the Caliph" 
- 
+
+ elevate_head_of_faith_effect_tt: "[faith.scope.GetAdjective] [head_of_faith|E] [title|E] will be elevated to [kingdom|E] [tier|E]"
  
  
  pam_permit_tenet_decision_via_puppet: "$pam_permit_tenet_decision$ via a Puppet"

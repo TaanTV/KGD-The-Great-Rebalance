@@ -320,6 +320,12 @@ allows_declaring_war_against_target_trigger = {
 	
 	#ADDED - hehe no. 
 	underage_diarch_loyalty_restriction = yes
+	
+	#ADDED - the player should probably never see this so i aint bothering with custom tooltips
+	NAND = {
+		exists = scope:attacker_check.puppeteer
+		scope:attacker_check.puppeteer ?= scope:defender_check
+	}
 }
 
 #can_use_conquest_cbs_trigger

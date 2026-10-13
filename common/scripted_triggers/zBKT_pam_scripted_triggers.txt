@@ -1,0 +1,205 @@
+﻿can_send_make_external_ruler_puppet_trigger = {
+	#ADDED - show why u can or cant puppet them (the whole bloc before next custom_tooltip is added)
+	$ACTOR$ = { save_temporary_scope_as = potential_puppeteer }
+	$RECIPIENT$ = {
+		save_temporary_scope_as = potential_puppet
+		OR = {												#either...
+			custom_tooltip = {
+				text = same_realm_tt
+				top_liege = $ACTOR$.top_liege			#in same realm...
+			}
+			is_allied_to = $ACTOR$						#or an ally of actor...
+			is_consort_of = $ACTOR$						#or a spouse of actor...
+			is_close_family_of = $ACTOR$				#or a close family member of actor...
+			has_relation_lover = $ACTOR$				#or a lover of actor...
+			has_relation_friend = $ACTOR$				#or a friend of actor...
+			has_relation_guardian = $ACTOR$				#or a ward of actor...
+			is_tributary_of_suzerain_or_above = $ACTOR$ #or a tributary of actor (not the other way around)...
+			AND = {
+				$ACTOR$ = { government_has_flag = government_is_theocracy }
+				rite = $ACTOR$.rite						#or same rite as actor and actor is clergy...
+			}
+			custom_tooltip = {
+				text = bkt_hof_or_challenger_of_recipient_tt
+				religious_head_or_challenger ?= $ACTOR$	#or recognises actor as head of faith
+			}
+			#those 2 are covered by the top liege check im pretty sure
+			#is_vassal_or_below_of = $ACTOR$
+			#is_liege_or_above_of = $ACTOR$
+		}
+	}
+	custom_tooltip = {
+		text = make_external_ruler_puppet_tt
+		OR = {
+			$ACTOR$ = {
+				is_clergy = yes
+				is_vassal_of = $RECIPIENT$
+			}
+			AND = {
+				$ACTOR$ = {
+					has_trait = seducer
+				}
+				trigger_if = {
+					limit = {
+						$RECIPIENT$ = {
+							highest_held_title_tier >= tier_kingdom
+						}
+					}
+					$RECIPIENT$ = {
+						has_relation_soulmate = $ACTOR$
+					}
+				}
+				trigger_else = {
+					$RECIPIENT$ = {
+						has_relation_lover = $ACTOR$
+					}
+				}
+			}
+			AND = {
+				$ACTOR$ = {
+					has_trait = torturer
+				}
+				$RECIPIENT$ = {
+					is_imprisoned_by = $ACTOR$
+					is_in_prison_type = dungeon
+				}
+			}
+			AND = {
+				$ACTOR$ = {
+					has_trait = family_first
+				}
+				$RECIPIENT$ = {
+					is_close_family_of = $ACTOR$
+				}
+			}
+			$ACTOR$ = {
+				has_trait = schemer
+				trigger_if = {
+					limit = {
+						$RECIPIENT$ = {
+							highest_held_title_tier >= tier_kingdom
+						}
+					}
+					has_strong_hook = $RECIPIENT$
+				}
+				trigger_else = {
+					has_hook = $RECIPIENT$
+				}
+			}
+			$ACTOR$ = {
+				has_trait = diplomat
+				is_allied_to = $RECIPIENT$
+			}
+			AND = {
+				$ACTOR$ = {
+					has_trait = gallant
+				}
+				$RECIPIENT$ = {
+					is_spouse_of = $ACTOR$
+				}
+			}
+			AND = {
+				$ACTOR$ = {
+					is_diarch_of_target = $RECIPIENT$
+				}
+				$RECIPIENT$ = {
+					has_diarchy_parameter = diarchy_type_is_entrenched_regency
+				}
+			}
+			AND = {
+				exists = $RECIPIENT$.religious_head_or_challenger
+				$RECIPIENT$.religious_head_or_challenger = $ACTOR$
+			}
+			AND = {
+				exists = $RECIPIENT$.rite.head_of_rite
+				$RECIPIENT$.rite.head_of_rite = $ACTOR$
+			}
+		}
+	}
+	$ACTOR$ = {
+		trigger_if = {
+			limit = {
+				$RECIPIENT$ = {
+					#highest_held_title_tier >= tier_empire
+					#ADDED - actually use this for non-clergy too
+					OR = {
+						highest_held_title_tier >= tier_empire
+						AND = {
+							$ACTOR$ = { NOT = { government_has_flag = government_is_theocracy } }
+							highest_held_title_tier >= tier_kingdom
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				text = pam_empire_dread_or_strong_hook_tt
+				OR = {
+					has_strong_hook = $RECIPIENT$
+					$RECIPIENT$ = {
+						has_dread_level_towards = {
+							target = $ACTOR$
+							level >= 2
+						}
+					}
+					$RECIPIENT$.religious_head_or_challenger ?= $ACTOR$
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				$RECIPIENT$ = {
+					highest_held_title_tier >= tier_kingdom
+				}
+			}
+			custom_tooltip = {
+				text = piety_level_4_dread_or_strong_hook_tt
+				OR = {
+					piety_level >= 4
+					has_strong_hook = $RECIPIENT$
+					$RECIPIENT$ = {
+						has_dread_level_towards = {
+							target = $ACTOR$
+							level >= 2
+						}
+					}
+					$RECIPIENT$.religious_head_or_challenger ?= $ACTOR$
+				}
+			}
+		}
+		#ADDED - no piety variant for non-clergy
+		trigger_else_if = {
+			limit = {
+				$ACTOR$ = { NOT = { government_has_flag = government_is_theocracy } }
+			}
+			custom_tooltip = {
+				text = bkt_non_clergy_dread_or_hook_tt
+				OR = {
+					has_hook = $RECIPIENT$
+					$RECIPIENT$ = {
+						has_dread_level_towards = {
+							target = $ACTOR$
+							level >= 2
+						}
+					}
+					$RECIPIENT$.religious_head_or_challenger ?= $ACTOR$
+				}
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = piety_level_3_dread_or_hook_tt
+				OR = {
+					piety_level >= 3
+					has_hook = $RECIPIENT$
+					$RECIPIENT$ = {
+						has_dread_level_towards = {
+							target = $ACTOR$
+							level >= 2
+						}
+					}
+					$RECIPIENT$.religious_head_or_challenger ?= $ACTOR$
+				}
+			}
+		}
+	}
+}

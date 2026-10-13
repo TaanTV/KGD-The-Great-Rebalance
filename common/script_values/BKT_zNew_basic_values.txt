@@ -554,3 +554,12 @@ study_faith_ask_for_emissary_gold_value = {
 	value = 10
 	multiply = culture.culture_era_value
 }
+
+over_domain_limit_penalty_multiplier = {
+	value = domain_size
+	divide = {
+		value = domain_limit
+		min = 1
+	}
+	max = 1
+}

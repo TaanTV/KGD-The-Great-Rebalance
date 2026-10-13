@@ -901,7 +901,14 @@
 					}
 					#ADDED - do not trigger the event in dumb circumstances
 					if = {
-						limit = { NAND = { highest_held_title_tier = tier_barony baron_is_valid_to_start_tyranny_war_trigger = yes } }
+						limit = { 
+							NOT = { 
+								scope:recipient = { 
+									highest_held_title_tier = tier_barony 
+									baron_is_valid_to_start_tyranny_war_trigger = yes 
+								} 
+							}
+						}
 					trigger_event = char_interaction.0230
 					}
 				}

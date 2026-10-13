@@ -6,7 +6,7 @@ yearly_global_pulse = {
 		BKT_serious_empire_wars_maintenance
 		BKT_landless_renown_fix
 		delay = { days = 1 }
-		BKT_mercenary_castles_pulse
+		#BKT_mercenary_castles_pulse
 	}
 }
 

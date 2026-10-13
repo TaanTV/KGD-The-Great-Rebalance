@@ -1,4 +1,11 @@
 ﻿l_russian:
+ request_council_powerful_vassal_interaction: "$request_council_interaction$"
+ request_council_powerful_vassal_interaction_desc: "Как [powerful_vassal|E], вы имеете полное право занимать место в [council_i][Concept( 'council', 'совете' )|El]"
+ request_council_powerful_vassal_interaction_desc_non_powerful: "Ваш [liege|E] не имеет никакой власти над своими вассалами, а потому вы можете запросить место в [council_i][Concept( 'council', 'совете' )|El]"
+ request_council_powerful_vassal_interaction_cooldown_tt: "#V Вы#! недавно покинули совет"
+ request_council.recipient.tt.duration: "[actor.GetShortUIName|U] не может лишиться должности еще [SCOPE.ScriptValue('council_position_lite_locked_value')|0] лет"
+ bkt_request_council.refused.actor.tt: "[recipient.GetShortUIName] [Select_CString(recipient.IsFemale, 'отказала', 'отказал' )] вам в месте в совете"
+ 
  foster_legitimacy_diarch_interaction: "Поддержать Легитимность"
  foster_legitimacy_diarch_interaction_desc: "TODO"
  damage_legitimacy_diarch_interaction: "Подорвать Легитимность"
@@ -23,7 +30,7 @@
  vassal_syphon_treasury_interaction.tt.success.syphon_control_several_counties: "Вы увеличите [Concept('county_corruption', 'коррупцию')|E] или присвоите [Concept('control', 'контроль')|E] в некоторых [Concept('counties', 'графствах')|E] вашего [Concept('liege', 'сюзерена')|E]"
  
  cant_attack_lower_tier_foreign_vassals: "Невозможно атаковать чужого [Concept('vassal', 'вассала')|E] чей [rank|E] ниже вашего"
- you_have_troops_in_their_subrealm: "Ваши армии находятся на их [Concept('subrealm', 'землях')|E]"
+ you_have_troops_in_their_subrealm: "Ваши [armies|E] находятся на их [Concept('realm', 'землях')|E]"
  
  none_subjugated_tribute_taxes: "[Concept('tributary_contract', 'Договор о дани')|E] изначально имеет пункт «[GetSubjectContractType( 'default_tributary_taxes' ).GetObligationName( 'tributary_tax_none' )]»"
  high_subjugated_tribute_prestige: "[Concept('tributary_contract', 'Договор о дани')|E] изначально имеет пункт «[GetSubjectContractType( 'default_tributary_prestige' ).GetObligationName( 'prestige_transfer_high' )]»"
@@ -33,3 +40,4 @@
  bkt_hof_or_challenger_of_recipient_tt: "Вы — [Concept('head_of_faith', 'глава конфессии')|E] или [challenger_hof|E] персонажа [recipient.GetShortUIName]"
  bkt_non_clergy_dread_or_hook_tt: "[actor.GetShortUIName|U] должен выполнить одно из этих условий:\n$EFFECT_LIST_BULLET$Держать персонажа [recipient.GetShortUIName] @weak_hook_icon![Concept('hook', 'на крючке')|E]\n$EFFECT_LIST_BULLET$Привести персонажа [recipient.GetShortUIName] в [terrified_i][Concept('cowed', 'ужас')|E]\n$EFFECT_LIST_BULLET$Быть [Concept('head_of_faith', 'главой конфессии')|E] или [challenger_hof|E] персонажа [recipient.GetShortUIName]"
  faith_has_no_head_hof_doctrine: "$doctrine_head_of_faith_name$: [GetDoctrineType('doctrine_no_head').GetBaseName]: $VALUE|=+0$"
+ potential_puppet_and_puppeteer_same_realm_tt: "[potential_puppeteer.GetShortUIName|U] и [potential_puppet.GetShortUIName] в одной и той же державе"

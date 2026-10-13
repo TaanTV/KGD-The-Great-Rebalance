@@ -276,6 +276,7 @@ global_religion.0001 = {
 					update_feudal_governments_by_religion_effect = yes
 					capital_county = {
 						set_county_faith = prev.faith
+						set_county_rite = prev.rite
 					}
 				}
 			}
@@ -294,6 +295,7 @@ global_religion.0001 = {
 				update_feudal_governments_by_religion_effect = yes
 				capital_county = {
 					set_county_faith = root.faith
+					set_county_rite = root.rite
 				}
 			}
 		}
@@ -1006,9 +1008,9 @@ global_religion.1000 = {
 				}
 				if = {
 					limit = {
-						domicile_faith != scope:target_rite.faith
+						domicile_rite != scope:target_rite
 					}
-					set_domicile_faith = scope:target_rite.faith
+					set_domicile_rite = scope:target_rite
 				}
 			}
 			every_held_title = {
@@ -1017,7 +1019,6 @@ global_religion.1000 = {
 					is_landless_type_title = no
 					rite = root.rite
 				}
-				set_county_faith = scope:target_rite.faith
 				set_county_rite = scope:target_rite
 			}
 		}
@@ -1209,9 +1210,9 @@ global_religion.1000 = {
 					}
 					if = {
 						limit = {
-							domicile_faith != scope:target_rite.faith
+							domicile_rite != scope:target_rite
 						}
-						set_domicile_faith = scope:target_rite.faith
+						set_domicile_rite = scope:target_rite
 					}
 				}
 				every_held_title = {
@@ -1220,7 +1221,6 @@ global_religion.1000 = {
 						is_landless_type_title = no
 						faith = root.faith
 					}
-					set_county_faith = scope:target_rite.faith
 					set_county_rite = scope:target_rite
 				}
 			}

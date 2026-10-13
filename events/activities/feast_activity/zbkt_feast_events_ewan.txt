@@ -251,7 +251,7 @@ feast_events_ewan.0801 = {
 	}
 
 	weight_multiplier = {
-		base = 0.5	#preev 1
+		base = 0.75	#preev 1
 		
 		# Some characters have a little more fun.
 		## Gregarious.

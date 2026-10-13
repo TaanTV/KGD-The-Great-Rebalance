@@ -742,9 +742,9 @@ become_tributary_interaction = {
 		}
 
 		modifier = {  # Can't flee the conqueror this way
-			add = -1000
+			add = -50		#prev -1000
 			desc = NO_FRIVOLOUS_ACTIVITIES_REASON
-			scope:actor = { has_variable = conqueror }
+			scope:recipient = { has_variable = conqueror }
 		}
 		
 		#ADDED

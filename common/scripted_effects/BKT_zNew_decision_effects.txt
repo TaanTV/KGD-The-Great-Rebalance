@@ -1,0 +1,65 @@
+﻿#faith scope?
+elevate_head_of_faith_effect = {
+	if = {
+		limit = { 
+			exists = religious_head
+			religious_head_title.tier <= tier_duchy
+		}
+		hidden_effect = {
+			save_scope_as = faith_scope
+			religious_head = { save_scope_as = religious_head_scope }
+			religious_head_title = { save_scope_as = religious_head_title_scope }
+			create_dynamic_title = {
+				tier = kingdom
+				name = ELEVATED_HOF_TITLE_NAME
+				adj = ELEVATED_HOF_TITLE_ADJ
+				#pre = ELEVATED_HOF_TITLE_PRE
+			}
+			create_title_and_vassal_change = {
+				type = created
+				save_scope_as = change
+				add_claim_on_loss = no
+			}
+			
+			scope:new_title = { 
+				copy_title_history = scope:religious_head_title_scope
+				set_capital_county = scope:religious_head_title_scope.title_capital_county
+				set_color_from_title = scope:religious_head_title_scope
+				set_coa = scope:religious_head_title_scope
+			}
+			
+			scope:new_title = {
+				set_landless_title = yes
+				set_destroy_if_invalid_heir = yes
+				set_no_automatic_claims = yes
+				set_definitive_form = yes
+				set_always_follows_primary_heir = yes
+				change_title_holder = {
+					holder = scope:religious_head_scope
+					change = scope:change
+				}
+				#dunno what i would need this for.
+				set_variable = {
+					name = elevated_hof_parent_title
+					value = scope:religious_head_title_scope
+				}
+			}
+			
+			resolve_title_and_vassal_change = scope:change
+			
+			set_religious_head_title = scope:new_title
+			
+			scope:religious_head_scope = { destroy_title = scope:religious_head_title_scope }
+			
+			
+			#i would hope there's a better way to do it but alas...
+			every_religion_global = {
+				every_faith = {
+					limit = { religious_head_title ?= scope:religious_head_title_scope }
+					set_religious_head_title = scope:new_title
+				}
+			}
+		}
+		custom_tooltip = elevate_head_of_faith_effect_tt
+	}
+}

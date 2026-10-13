@@ -82,6 +82,13 @@ scripted_trigger natural_causes_death_reason_trigger = {
 		death_reason = death_old_age
 		death_reason = death_laughter
 		death_reason = death_heart_attack
+		death_reason = death_broken_bones
+		death_reason = death_drinking_passive
+		death_reason = death_cancer
+		death_reason = death_leper
+		death_reason = death_gout_ridden
+		death_reason = death_great_pox
+		death_reason = death_sickly
 		death_reason = death_giant
 		death_reason = death_spindly
 		death_reason = death_wheezing
@@ -527,6 +534,7 @@ scripted_effect mandala_events_1000_random_onlooker_effect = {
 	if = {
 		limit = {
 			NOT = { exists = scope:onlooker }
+			exists = root.capital_province # Landless Mandala rulers have no capital to draw a pool character from
 		}
 		random_pool_character = {
 			province = root.capital_province
@@ -545,6 +553,7 @@ scripted_effect mandala_events_1000_random_onlooker_effect = {
 	if = {
 		limit = {
 			NOT = { exists = scope:onlooker_2 }
+			exists = root.capital_province
 		}
 		random_pool_character = {
 			province = root.capital_province
@@ -1653,8 +1662,16 @@ tgp_east_asia_mandala_events.8510 = {
 				}
 			}
 		}
+		# Landless Mandala rulers have no capital
+		if = {
+			limit = { exists = root.capital_province }
+			root.capital_province = { save_scope_as = mandala_scene_province }
+		}
+		else = {
+			root.location = { save_scope_as = mandala_scene_province }
+		}
 		random_pool_character = {
-			province = root.capital_province
+			province = scope:mandala_scene_province
 			limit = {
 				is_available_healthy_adult = yes
 				trigger_if = {
@@ -1665,7 +1682,7 @@ tgp_east_asia_mandala_events.8510 = {
 			save_scope_as = arguer
 		}
 		random_pool_character = {
-			province = root.capital_province
+			province = scope:mandala_scene_province
 			limit = {
 				is_available_healthy_adult = yes
 				trigger_if = {
@@ -1681,7 +1698,7 @@ tgp_east_asia_mandala_events.8510 = {
 				NOT = { exists = scope:arguer }
 			}
 			create_character = {
-				location = root.capital_province
+				location = scope:mandala_scene_province
 				template = pool_repopulate_local_flavor
 				save_scope_as = arguer
 				after_creation = { save_scope_as = created_character }
@@ -1692,7 +1709,7 @@ tgp_east_asia_mandala_events.8510 = {
 				NOT = { exists = scope:arguer_2 }
 			}
 			create_character = {
-				location = root.capital_province
+				location = scope:mandala_scene_province
 				template = pool_repopulate_local_flavor
 				save_scope_as = arguer_2
 				after_creation = { save_scope_as = created_character }
@@ -2818,6 +2835,7 @@ tgp_east_asia_mandala_events.9000 = {
 		if = {
 			limit = { has_mandala_faith_trigger = no }
 			set_character_faith = scope:bystander.faith
+			set_character_rite = scope:bystander.rite
 		}
 		custom_description_no_bullet = { text = divine_happenstance_tt }
 		#The boons

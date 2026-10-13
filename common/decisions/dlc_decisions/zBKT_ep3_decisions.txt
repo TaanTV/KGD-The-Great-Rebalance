@@ -9,7 +9,7 @@ restore_backwater_counties_decision = {
 		county = 0
 		duchy = 120
 		kingdom = 120
-		empire = 120 #Unop Let the AI check this decision for empire-tier vassal governors
+		empire = 120
 		hegemony = 0
 	}
 
@@ -153,27 +153,33 @@ restore_backwater_counties_decision = {
 					has_county_modifier = backwater_county_modifier
 				}
 			}
-			# Event for the Governor if all counties are restored
-			trigger_event = {
-				id = ep3_decisions_event.3000
-				days = 1
-			}
-
-			# Once all the counties have been brought up to speed, we notify the emperor
-			liege = {
-				send_interface_message = {
-					type = event_generic_good_text
-					title = ep3_theme_not_backwater.t
-					desc = ep3_theme_not_backwater.desc
-					left_icon = root
+			if = {
+				limit = { is_independent_ruler = no }
+				# Event for the Governor if all counties are restored
+				trigger_event = {
+					id = ep3_decisions_event.3000
+					days = 1
 				}
-				# Trigger the event for the emperor to see if all the counties have been cleared
+
+				# Once all the counties have been brought up to speed, we notify the emperor
+				liege = {
+					send_interface_message = {
+						type = event_generic_good_text
+						title = ep3_theme_not_backwater.t
+						desc = ep3_theme_not_backwater.desc
+						left_icon = root
+					}
+					# Trigger the event for the emperor to see if all the counties have been cleared
+					trigger_event = ep3_decisions_event.3001
+				}
+			}
+			else = {
 				trigger_event = ep3_decisions_event.3001
 			}
 		}
 	}
 
-	ai_will_do = { #Unop Give the AI weights so governors actually take this decision
+	ai_will_do = {
 		base = 20
 		modifier = {
 			has_trait = ambitious
@@ -228,8 +234,6 @@ retake_eastern_provinces_decision = {
 
 	is_valid = {
 		#government_has_flag = government_is_administrative
-		#ADDED - come on
-		government_has_mechanic = administrative 
 		completely_controls_region = custom_theodosian_ere
 		custom_tooltip = {
 			text = eastern_kingdoms_held_or_vassals_tt
@@ -1172,7 +1176,7 @@ expunge_latin_dominion_decision = {
 		empire = 9
 		hegemony = 9
 	}
-	
+
 	ai_potential = {
 		is_available = yes
 		OR = {

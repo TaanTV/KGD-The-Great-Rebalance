@@ -74,8 +74,10 @@ forced_spouse_concubine_marriage_opinion = {
 forced_family_concubine_marriage_opinion = {
 	opinion = -30
 	decaying = yes
-	years = 15	#prev 10
+	years = 25	#prev 10
 	stacking = yes
 	#ADDED
 	imprisonment_reason = yes
+	execute_reason = yes
+	banish_reason = yes
 }

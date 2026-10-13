@@ -34,6 +34,7 @@ scandinavian_adventurer_fp1_modifier = {
 	maa_toughness_mult = 0.35
 	army_maintenance_mult = -1
 	mercenary_hire_cost_mult = 10
+	knight_limit = -500
 }
 
 fp1_bathing_health_modifier = {

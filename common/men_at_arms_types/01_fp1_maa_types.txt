@@ -113,6 +113,7 @@ bondi = {
 	ai_quality = { 
 		value = @cultural_maa_extra_ai_score 
 		#ADDED
+		add = -30
 		add = counter_synergy_ai_weight_pikemen
 	}
 	icon = bondi
@@ -164,8 +165,7 @@ varangian_veterans = {
 	stack = 40
 	ai_quality = { 
 		value = @cultural_maa_extra_ai_score 
-		#ADDED - doubled the score since its only 1 max regiment
-		value = @cultural_maa_extra_ai_score 
+		#ADDED
 		add = counter_synergy_ai_weight_heavy_infantry
 	}
 	icon = varangian_guard

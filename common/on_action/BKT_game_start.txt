@@ -38,6 +38,7 @@ BKT_error_supress_on_action = {
 						has_character_modifier = support_religious_art_bkt_county_modifier 
 						has_character_modifier = artifact_domain_limit_1_modifier 	#not sure if i even need to keep it or not
 						has_variable = currently_dying
+						has_variable = elevated_hof_parent_title
 					} 
 				}
 				set_variable = got_secret_faith_through_mental_break_event
@@ -339,15 +340,6 @@ BKT_on_start_misc = {
 					}
 					vassal_contract_set_obligation_level = { type = special_contract level = 2 }	#march
 					additional_flavor_check_effect = yes
-				}
-			}
-			title:c_bayeux.holder ?= {
-				if = {
-					limit = {
-						top_liege != this
-						government_has_flag = government_is_feudal
-					}
-					change_government = ecclesiastical_government
 				}
 			}
 		}

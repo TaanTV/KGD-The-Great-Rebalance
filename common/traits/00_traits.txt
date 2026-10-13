@@ -9181,7 +9181,6 @@ devoted = {
 	flag = can_not_marry
 	inheritance_blocker = secular
 
-	shown_in_ruler_designer = no
 	clergy = yes
 
 	ai_sociability = very_low_negative_ai_value
@@ -9290,7 +9289,7 @@ devoted = {
 				stress_gain_mult = -0.03	#prev -0.06
 				health = 0.05
 				learning_mult = 0.1
-				clergy_opinion = 10
+				clergy_opinion = 5			#prev 10
 				monthly_piety = 0.2
 			}
 			100 = {
@@ -9298,8 +9297,8 @@ devoted = {
 				character_spiritual_fulfillment_loss_mult = -0.15
 				stress_gain_mult = -0.05	#prev -0.1
 				health = 0.1
-				learning_mult = 0.1		#preev 0.15
-				clergy_opinion = 15
+				learning_mult = 0.1			#preev 0.15
+				clergy_opinion = 10			#prev 15
 				monthly_piety = 0.4
 			}
 		}

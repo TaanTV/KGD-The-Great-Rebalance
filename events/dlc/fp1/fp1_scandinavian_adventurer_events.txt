@@ -267,7 +267,7 @@ scripted_effect scandinavian_adventurer_start_war_effect = {
 			men_at_arms = {
 				type = light_footmen
 				stacks = {
-					value = 1.4		#prev 11
+					value = 1.4		#prev 1
 					multiply = scope:adventurer_target.holder.top_liege.primary_title.tier
 					#ADDED
 					floor = yes

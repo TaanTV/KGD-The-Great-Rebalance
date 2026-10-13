@@ -35,9 +35,9 @@ tenet_unrelenting_faith = {
 
 	character_modifier = {
 		prowess = 3					#prev 4
-		tolerance_advantage_mod = 2	#prev 4
+		tolerance_advantage_mod = 4
 		#levy_size = 0.1
-		different_faith_county_opinion_mult = 0.1
+		different_faith_county_opinion_mult = 0.25	#prev 0.1
 	}
 
 	parameters = {
@@ -70,6 +70,7 @@ tenet_unrelenting_faith = {
 			triggered_desc = {
 				trigger = {
 					has_pam_dlc_trigger = yes
+					religion = religion:christianity_religion
 					pam_greek_as_liturgical_language_trigger = no
 					pam_latin_as_liturgical_language_trigger = no
 				}
@@ -128,6 +129,36 @@ tenet_unrelenting_faith = {
 		}
 	}
 
+	historical_glossary = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_latin_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_latin_historical_glossary
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_greek_as_liturgical_language_trigger = yes
+				}
+				desc = tenet_unrelenting_faith_greek_historical_glossary
+			}
+			triggered_desc = {
+				trigger = {
+					has_pam_dlc_trigger = yes
+					rite_religion_tag = christianity_religion
+					pam_greek_as_liturgical_language_trigger = no
+					pam_latin_as_liturgical_language_trigger = no
+				}
+				desc = tenet_unrelenting_faith_default_historical_glossary
+			}
+		}
+	}
+
 	traits = {
 		# This is THE zealous tenet; only place in repo where zeal is doctrinally codified.
 		virtues = {
@@ -168,6 +199,10 @@ tenet_ancestor_worship = {
 		increased_dynasty_prestige_birth_mult = 0.5		#prev 1
 		increased_dynasty_prestige_marriage_mult = 0.5	#prev 1
 		increased_dynasty_prestige_long_reign_mult = 0.5
+	}
+
+	character_modifier = {
+		close_relative_opinion = 5
 	}
 
 	personal_tenet_modifier = {

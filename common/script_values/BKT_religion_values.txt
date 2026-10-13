@@ -161,12 +161,7 @@ great_holy_war_pledge_amount = {
 # scope:old_rite = the rite the character had before creating
 # scope:old_faith = the faith the character is converting from
 rite_creation_cost_mult = {
-	subtract = {
-		value = scope:old_faith.faith_conversion_fervor_mult
-		multiply = 0.5
-		desc = "faith_creation_cost_fervor_impact"
-		format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
-	}
+	#ADDED - this thingy
 	if = {
 		limit = { 
 			scope:old_rite ?= {
@@ -174,23 +169,12 @@ rite_creation_cost_mult = {
 				NOT = { rite_has_parameter = unreformed }
 			}
 		}
-		add = {
-			value = 1
-			desc = RITE_CREATION_VIEW_EDIT
-			format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
-		}
-		if = {
-			limit = { 
-				scope:old_faith ?= {
-					religious_head ?= scope:character
-					religious_head_title.tier >= tier_kingdom
-				}
-			}
-			add = {
-				value = 1
-				desc = pam_kingdom_of_heaven_decision_hof_tt
-				format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
-			}
-		}
+		add = modify_rite_cost_multiplier
+	}
+	subtract = {
+		value = scope:old_faith.faith_conversion_fervor_mult
+		multiply = 0.5
+		desc = "faith_creation_cost_fervor_impact"
+		format = "BREAKDOWN_FORMAT_PIETY_PERCENTAGE_POSITIVE_IS_BAD"
 	}
 }

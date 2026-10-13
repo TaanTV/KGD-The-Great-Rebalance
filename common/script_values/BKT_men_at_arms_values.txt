@@ -461,10 +461,13 @@ counter_synergy_ai_weight_skirmishers = {
 	if = {
 		limit = {
 			is_landed = yes
-			NOT = { has_game_rule = bkt_difficulty_higher }
+			NOR = { 
+				has_game_rule = bkt_difficulty_higher 
+				government_has_flag = government_is_nomadic
+			}
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = {
 					#	has_holding_type = tribal_holding
@@ -558,9 +561,10 @@ counter_synergy_ai_weight_archers = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -650,9 +654,10 @@ counter_synergy_ai_weight_pikemen = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -748,9 +753,10 @@ counter_synergy_ai_weight_heavy_infantry = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -852,9 +858,10 @@ counter_synergy_ai_weight_gunpowder = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -944,9 +951,10 @@ counter_synergy_ai_weight_light_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -1037,9 +1045,10 @@ counter_synergy_ai_weight_heavy_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -1185,9 +1194,10 @@ counter_synergy_ai_weight_camel_cavalry = {
 	if = {
 		limit = {
 			is_landed = yes
+			NOT = { government_has_flag = government_is_nomadic }
 			months_from_game_start > 0
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				OR = {
 					#title_province = { 
 					#	building_slots > 0 
@@ -1257,20 +1267,29 @@ counter_synergy_ai_weight_elephant_cavalry = {
 	value = 8000
 	#ADDED
 	if = {
+		limit = { government_has_flag = government_is_landless_adventurer }
+		if = {
+			limit = { any_maa_regiment = { is_maa_type = elephant_cavalry } }
+			add = -8000		# Keep one stack around 
+		}
+	}
+	else_if = {
 		limit = { highest_held_title_tier < tier_kingdom }
 		add = -10000		# Please hire anything else
 	}
 	else_if = {
 		limit = { highest_held_title_tier < tier_empire }
-		add = -8050		# Maybe consider hiring anything else?
+		add = -8050			# Maybe consider hiring anything else?
 	}
 	#ADDED - those get +60 in vanilla
 	if = {
 		limit = {
-			OR = {
-				culture = { has_cultural_pillar = heritage_dravidian }
-				culture = { has_cultural_pillar = heritage_indo_aryan }
-				culture = { has_cultural_pillar = heritage_burman }
+			culture = {
+				OR = {
+					has_cultural_pillar = heritage_dravidian
+					has_cultural_pillar = heritage_indo_aryan
+					has_cultural_pillar = heritage_burman 
+				}
 			}
 		}
 		add = -30
@@ -1278,7 +1297,7 @@ counter_synergy_ai_weight_elephant_cavalry = {
 	#ADDED - not with that traditon
 	if = {
 		limit = { culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban } }
-		add = -8000
+		add = -10000
 	}
 	#ADDED
 	if = {	#Hard block if there're already 2 different non-siege MAA types recruited (except this one)

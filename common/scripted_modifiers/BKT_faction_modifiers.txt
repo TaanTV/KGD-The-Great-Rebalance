@@ -413,7 +413,7 @@
 	modifier = {
 		add = -10000
 		years_from_game_start < 10
-		$FACTION_TARGET$.primary_title.tier = tier_empire
+		$FACTION_TARGET$.primary_title.tier >= tier_empire
 		trigger_if = {
 			limit = { exists = scope:actor }
 			NOT = { # Not used for already warring factions
@@ -827,16 +827,7 @@ claimant_faction_modifiers = {
 			}
 		}
 		NOT = { $FACTION_CLAIMANT$ = root }
-		OR = {
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
-				$FACTION_CLAIMANT$ = { is_male = yes }
-			}
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
-				$FACTION_CLAIMANT$ = { is_female = yes }
-			}
-		}
+		NOT = { rite = { rite_has_dominant_ruling_gender = $FACTION_CLAIMANT$ } }
 	}
 
 	# Gender concerns (target of wrong gender)
@@ -874,24 +865,9 @@ claimant_faction_modifiers = {
 				add = -40
 			}
 		}
-		OR = {
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
-				$FACTION_TARGET$ = { is_male = yes }
-				$FACTION_CLAIMANT$ = {
-					is_female = yes
-					faith = root.faith
-				}
-			}
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
-				$FACTION_TARGET$ = { is_female = yes }
-				$FACTION_CLAIMANT$ = {
-					is_male = yes
-					faith = root.faith
-				}
-			}
-		}
+		NOT = { rite = { rite_has_dominant_ruling_gender = $FACTION_TARGET$ } }
+		rite = { rite_has_dominant_ruling_gender = $FACTION_CLAIMANT$ }
+		$FACTION_CLAIMANT$.faith = root.faith
 	}
 
 	# Powerful vassals will be even more motivated to create claimant if unhappy with liege, if they like the claimant more than their liege
@@ -1776,19 +1752,12 @@ ceremonial_claimant_faction_modifiers = {
 				add = 125
 			}
 		}
+		exists = $FACTION_TARGET$
+		exists = $FACTION_CLAIMANT$
 		$FACTION_CLAIMANT$ ?= {
 			NOT = { this = root }
 		}
-		OR = {
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
-				$FACTION_CLAIMANT$ = { is_male = yes }
-			}
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
-				$FACTION_CLAIMANT$ = { is_female = yes }
-			}
-		}
+		NOT = { rite = { rite_has_dominant_ruling_gender = $FACTION_CLAIMANT$ } }
 	}
 
 	# Gender concerns (target of wrong gender)
@@ -1828,24 +1797,9 @@ ceremonial_claimant_faction_modifiers = {
 		}
 		exists = $FACTION_TARGET$
 		exists = $FACTION_CLAIMANT$
-		OR = {
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_female_dominated }
-				$FACTION_TARGET$ = { is_male = yes }
-				$FACTION_CLAIMANT$ = {
-					is_female = yes
-					faith = root.faith
-				}
-			}
-			AND = {
-				rite = { rite_has_doctrine = doctrine_gender_male_dominated }
-				$FACTION_TARGET$ = { is_female = yes }
-				$FACTION_CLAIMANT$ = {
-					is_male = yes
-					faith = root.faith
-				}
-			}
-		}
+		NOT = { rite = { rite_has_dominant_ruling_gender = $FACTION_TARGET$ } }
+		rite = { rite_has_dominant_ruling_gender = $FACTION_CLAIMANT$ }
+		$FACTION_CLAIMANT$.faith = root.faith
 	}
 
 	# Powerful vassals will be even more motivated to create claimant if more closely related

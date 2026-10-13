@@ -4,7 +4,7 @@
 		is_valid_auto_title_holder_non_clergy = yes
 		is_claimant = no
 		has_same_culture_as = scope:base
-		#ADDED
+		rite = scope:base.rite
 	}
 	
 	character_score = {

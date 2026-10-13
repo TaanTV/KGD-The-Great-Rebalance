@@ -13,10 +13,11 @@ on_faith_created = {
 	}
 }
 
+
 BKT_on_faith_created_judaic = {
 	trigger = {
 		scope:old_rite ?= {
-			has_doctrine = special_doctrine_prophecy_of_malachi
+			rite_has_doctrine = special_doctrine_prophecy_of_malachi
 		}
 		NOT = { has_doctrine = special_doctrine_prophecy_of_malachi }
 	}

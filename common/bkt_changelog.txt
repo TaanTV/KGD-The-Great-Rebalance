@@ -24,9 +24,7 @@ Initial name: Balance Killer 228 (thus BKT)
 	#ADDED 
 	id_override_priority = 228
 	
-#KAN:
-#make a request is no longer autoaccept and doesnt spend a hook if asking for marriage, reduced opinion penalty for doing so
-#minor fixes
+
 
 Potentially:
 #TODO: offer_vassalization_interaction ai_accept needs to be synced with smth (i think that can be ignored)
@@ -66,8 +64,36 @@ Very soon:
 #TODO: make non-de-jure vassals have bigger opinion penalty and smaller tax/levy penalty maybe?
 #TODO: make a decision to elevate your head of faith to kingdom-tier title (im sure that is possible and it would be very neato)
 
-####	0.13.3	###
+####	0.13.4	###
 -
+
+####	0.13.3	###
+Updated to 1.20.1
+- Made declaring war on your puppet clear the puppet relation
+- Made faith reformation always require at least one holy site under your control
+- Made Re-Establish the Theodosian Borders decision avaliable regardless of government
+- Made Improve Self court physicial task improvement chance higher at base, aptitude reduces it now and some traits also influence it
+- Made Northmen Army have no knights (they get raised in awkward places)
+- Made Forced My Relative to Serve as a Concubine opinion last longer and its now an execute/banish reason
+- Made low/high Spiritual Fulfillment give SP loss/gain malus so its a bit harder to get and stay at max in either direction
+- Made Seljuk story cycle end only when the seljuks control 85%+ of de-jure persian empire
+- Made the first seljuk become conqueror when gaining independence 
+- Added councillor opinion bonus to Velvet Kurultai Seats internal yurt (Main Yurt) 
+- Buffed stress loss modifier and shifted some bonuses of Recreation Chamber internal yurt (Family Yurt)
+- Buffed Improved Pastured internal yurt (Main Yurt) across the board
+- Nerfed clergy opinion bonuses of Monk trait xp track
+- Resctricted puppets declaring wars vs their puppeteer
+- Increased Fundamentalist and Pluralist attitudes impact on divergence threshold a bit more
+- Increased divergence of Lay Clergy a bit
+- Increased faith hostility advantage and different faith county opinion from Unrelenting Faith tenet
+- Made AI acceptance for Call House Member to War interaction even lower at base, increased bonus from being allied
+- Made AI marriage acceptance malus from rite divergence way less brutal
+- Made AI try to improve their court physician if they're not good at the job
+- Made AI waste less money on needlessly using Treat Epidemic court physician task
+- Made AI maybe even more better at building yurts
+- Fixed MAA AI weights being affected by domain buildings for nomads
+- Fixed Swear Fealty intraction ai acceeptance malus for them being a conqueror not working, reduced it to -50
+- Updated localization files
 
 ####	0.13.2	###
 - Moved child-specific penalties from childhood traits to dedicated modifiers
@@ -78,7 +104,7 @@ Very soon:
 - Made revoking theocratic titles reduce faith's fervor
 - Made church authority affect vassal limit, tweaked its opinion impact, restricted raising it while a libety action is discontent
 - Made Odo of Bayeux an ecclesiastic ruler in 1066
-- Made A Lesser Son/Daughter of %TITLE$ event sibling targeting respect realms gender succession laws
+- Made A Lesser Son/Daughter of %TITLE% event sibling targeting respect realms gender succession laws
 - Made travelling through Pyramids of Giza or Mausoleum at Halicarnassus make characters learn of relevant funerary traditions
 - Added a county fertility boosting modifier to most hungarian counties
 - Reduced siege replenishment (by a lot), reduced Scrape the Barrel MAA reinforcement by 60% 
@@ -111,9 +137,9 @@ Very soon:
 - Fixed Divine Marriage personal tenet effect not applying
 - Fixed forbiding tenets reducing fervor instead of increasing it
 - Fixed Restore Carthage decision inverted mashriqi culture check
-- Fixed ecclesiastic rulers not upgrading their main domicile building (did i???)
 
 ####	0.13.1.3###
+- Increased spiritual fulfillment gain/loss from event options and other stress impacts back a bit
 - Fixed some MAA changes not applying
 
 ####	0.13.1.2###

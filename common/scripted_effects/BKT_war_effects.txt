@@ -507,6 +507,26 @@ on_declared_war = {
 		}
 		#ADDED - war stuff
 		war_declaration_law_effect = yes
+		
+		#ADDED - lose puppet
+		if = {
+			limit = { scope:defender.puppeteer ?= scope:attacker }
+			scope:defender = { save_temporary_scope_as = recipient }
+			
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = fire_puppet_interaction_notification
+				left_icon = scope:attacker
+				right_icon = scope:defender
+				custom_tooltip = fire_puppet_interaction_effect_tt
+				hidden_effect = {
+					scope:defender = {
+						clear_puppet_status = yes
+						remove_puppet_modifiers_effect = yes
+					}
+				}
+			}
+		}
 	}
 
 	# If we're a clan this interaction affects unity

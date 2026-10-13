@@ -1993,7 +1993,7 @@ petition_liege.0101 = {
 			}
 			# EP3
 			modifier = { # Family Rating
-				government_has_mechanic = administrative
+				government_allows = noble_families
 				scope:petition_vassal.house = {
 					is_powerful_family = yes
 					is_dominant_family = no
@@ -2001,7 +2001,7 @@ petition_liege.0101 = {
 				add = 25
 			}
 			modifier = { # Family Rating
-				government_has_mechanic = administrative
+				government_allows = noble_families
 				scope:petition_vassal.house = { is_dominant_family = yes }
 				add = 50
 			}
@@ -2010,7 +2010,7 @@ petition_liege.0101 = {
 				add = -40
 			}
 			modifier = { # Influence Level
-				government_has_mechanic = administrative
+				government_has_flag = government_has_influence
 				scope:petition_vassal.influence_level > 0
 				add = {
 					value = scope:petition_vassal.influence_level
@@ -3127,7 +3127,7 @@ petition_liege.0121 = {
 			petition_liege_cost_negative_modifier = yes # less likely if expensive or likes second party
 			# EP3
 			modifier = { # Family Rating
-				government_has_mechanic = administrative
+				government_allows = noble_families
 				scope:petition_vassal.house = {
 					is_powerful_family = yes
 					is_dominant_family = no
@@ -3135,12 +3135,12 @@ petition_liege.0121 = {
 				add = 25
 			}
 			modifier = { # Family Rating
-				government_has_mechanic = administrative
+				government_allows = noble_families
 				scope:petition_vassal.house = { is_dominant_family = yes }
 				add = 50
 			}
 			modifier = { # Influence Level
-				government_has_mechanic = administrative
+				government_has_flag = government_has_influence
 				scope:petition_vassal.influence_level > 0
 				add = {
 					value = scope:petition_vassal.influence_level
