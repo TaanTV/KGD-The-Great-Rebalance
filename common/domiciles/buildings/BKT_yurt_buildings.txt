@@ -425,7 +425,7 @@ raid_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -608,7 +608,7 @@ herd_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6		#prev nomadic_capital_extremely_important_building
+		value = nomadic_capital_interior_building_8		#prev nomadic_capital_extremely_important_building
 	}
 
 	asset = {
@@ -791,7 +791,7 @@ kurultai_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -1743,15 +1743,10 @@ herd_welfare_yurt_01 = {
 		#ADDED
 		if = {
 			limit = { 
-				free_external_domicile_building_slots <= 3 
-			}
-			value = nomadic_capital_extremely_important_building
-		}
-		else_if = {
-			limit = {
-				NOR = {
-					has_game_rule = hard_difficulty
-					has_game_rule = very_hard_difficulty
+				free_external_domicile_building_slots <= 4
+				OR = {
+					free_external_domicile_building_slots <= 3 
+					owner.highest_held_title_tier >= tier_kingdom
 				}
 			}
 			value = nomadic_capital_extremely_important_building
@@ -1765,6 +1760,7 @@ herd_welfare_yurt_01 = {
 		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_herdWelfareYurt"
 	}
 }
+
 
 herd_welfare_yurt_02 = {
 	construction_time = @yurt_external_construction_time_tier_2
@@ -1791,10 +1787,10 @@ herd_welfare_yurt_02 = {
 			limit = {
 				herd >= {
 					value = max_herd
-					multiply = 0.9
+					multiply = 0.8
 				}
 			}
-			add = 2
+			value = nomadic_capital_extremely_important_building
 		}
 	}
 
@@ -1832,10 +1828,10 @@ herd_welfare_yurt_03 = {
 			limit = {
 				herd >= {
 					value = max_herd
-					multiply = 0.9
+					multiply = 0.8
 				}
 			}
-			add = 2
+			add = nomadic_capital_extremely_important_building
 		}
 		
 	}
@@ -1884,10 +1880,10 @@ herd_welfare_yurt_04 = {
 			limit = {
 				herd >= {
 					value = max_herd
-					multiply = 0.9
+					multiply = 0.8
 				}
 			}
-			add = 2
+			add = nomadic_capital_extremely_important_building
 		}
 	}
 
@@ -1931,10 +1927,10 @@ herd_welfare_yurt_05 = {
 			limit = {
 				herd >= {
 					value = max_herd
-					multiply = 0.9
+					multiply = 0.8
 				}
 			}
-			add = 2
+			add = nomadic_capital_extremely_important_building
 		}
 	}
 
@@ -1982,10 +1978,10 @@ herd_welfare_yurt_06 = {
 			limit = {
 				herd >= {
 					value = max_herd
-					multiply = 0.9
+					multiply = 0.8
 				}
 			}
-			add = 2
+			add = nomadic_capital_extremely_important_building
 		}
 	}
 
@@ -2123,8 +2119,10 @@ herd_capacity_yurt_04 = {
 		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_4
 		#ADDED
 		if = {
-			limit = { herd > 30000 }
-			value = nomadic_capital_literally_invaluable_building
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 30000 }
+			}
+			value = nomadic_capital_omega_invaluable_building
 		}
 		
 	}
@@ -2163,8 +2161,10 @@ herd_capacity_yurt_05 = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_5
 		#ADDED
 		if = {
-			limit = { herd > 30000 }
-			value = nomadic_capital_literally_invaluable_building
+			limit = {
+				herd > { value = max_herd multiply = 0.8 max = 30000 }
+			}
+			value = nomadic_capital_omega_invaluable_building
 		}
 		
 	}
@@ -2203,7 +2203,9 @@ herd_capacity_yurt_06 = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_6
 		#ADDED
 		if = {
-			limit = { herd > 30000 }
+			limit = {
+				herd > { value = max_herd multiply = 0.8 max = 30000 }
+			}
 			value = nomadic_capital_literally_invaluable_building
 		}
 	}
@@ -3880,7 +3882,7 @@ herd_wealth_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
+		value = nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_4
 		
 		
 	}
@@ -3911,7 +3913,7 @@ herd_wealth_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_5
+		value = nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_5
 		
 		
 	}
@@ -3942,7 +3944,7 @@ herd_wealth_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_5	#prev nomadic_capital_interior_building_6
+		value = nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_6
 		
 		
 	}
@@ -3975,6 +3977,13 @@ herder_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_literally_invaluable_building
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 10000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 	}
 
 	asset = {
@@ -4005,6 +4014,13 @@ herder_yurt_02 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 10000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 	}
 
 	asset = {
@@ -4036,7 +4052,13 @@ herder_yurt_03 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
-		
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 20000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 		
 	}
 
@@ -4068,6 +4090,13 @@ herder_yurt_04 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_3
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 20000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 		
 		
 	}
@@ -4099,6 +4128,13 @@ herder_yurt_05 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_4
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 30000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 		
 		
 	}
@@ -4130,6 +4166,13 @@ herder_yurt_06 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_5
+		#ADDED
+		if = {
+			limit = { 
+				herd > { value = max_herd multiply = 0.8 max = 30000 }
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 		
 		
 	}
@@ -4171,7 +4214,7 @@ character_warfare_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_exterior_building_1
 	}
 
 	asset = {
@@ -6509,7 +6552,7 @@ raiding_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
+		value = nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -6946,7 +6989,24 @@ court_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_1
+		value = nomadic_capital_exterior_building_1
+		#ADDED
+		if = {
+			limit = { 
+				free_external_domicile_building_slots <= 2
+			}
+			value = nomadic_capital_extremely_important_building
+		} 
+		else_if = {
+			limit = {
+				owner.highest_held_title_tier >= tier_kingdom
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
+			}
+			value = nomadic_capital_literally_invaluable_building
+		}
 	}
 
 	asset = {
@@ -8232,7 +8292,7 @@ agent_dread_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
+		value = nomadic_capital_very_important_building		#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -8862,14 +8922,7 @@ family_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building		#prev nomadic_capital_exterior_building_1
-		#ADDED
-		if = {
-			limit = { 
-				free_external_domicile_building_slots <= 2
-			}
-			value = nomadic_capital_extremely_important_building
-		}
+		value = nomadic_capital_extremely_important_building		#prev nomadic_capital_exterior_building_1
 	}
 
 	asset = {
@@ -10779,7 +10832,7 @@ mystical_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_2
+		value = 1		#prev nomadic_capital_exterior_building_2
 		
 		
 	}
@@ -12450,10 +12503,14 @@ trade_yurt_01 = {
 	can_construct = {
 		custom_tooltip = {
 			text = trade_yurt_unlock_req
+			#ADDED - this thing is w important for AI to have any money whatsoever.
+			OR = {
+				is_ai = yes
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
 					government_has_flag = government_is_in_steppe
 				}
+			}
 			}
 		}	
 	}
@@ -12479,7 +12536,18 @@ trade_yurt_01 = {
 	}
  
 	ai_value = {
-		value = nomadic_capital_exterior_building_1
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_1
+		#ADDED 
+		if = {
+			limit = {
+				owner.highest_held_title_tier >= tier_kingdom
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
+			}
+			value = nomadic_capital_exterior_building_1
+		}
 	}
 
 	asset = {
@@ -12501,7 +12569,7 @@ trade_yurt_02 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_in_steppe
+					#government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12528,7 +12596,7 @@ trade_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_2
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_2
 		
 		
 	}
@@ -12552,7 +12620,7 @@ trade_yurt_03 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_in_steppe
+					#government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12579,7 +12647,7 @@ trade_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_exterior_building_2	#prev nomadic_capital_exterior_building_3
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_3
 		
 		
 	}
@@ -12603,7 +12671,7 @@ trade_yurt_04 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_in_steppe
+					#government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12659,7 +12727,7 @@ trade_yurt_05 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_in_steppe
+					#government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -12711,7 +12779,7 @@ trade_yurt_06 = {
 			text = trade_yurt_unlock_req
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
-					government_has_flag = government_is_in_steppe
+					#government_has_flag = government_is_in_steppe
 				}
 			}
 		}	
@@ -13216,7 +13284,7 @@ merchant_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1
 	}
 
 	asset = {
@@ -13248,7 +13316,7 @@ merchant_yurt_02 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_2
 		
 		
 	}
@@ -13282,7 +13350,7 @@ merchant_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_3
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_3
 		
 		
 	}
