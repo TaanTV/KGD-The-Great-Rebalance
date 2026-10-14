@@ -19,7 +19,7 @@
 @yurt_internal_construction_time_tier_3 = 90
 @yurt_internal_construction_time_tier_4 = 120
 @yurt_internal_construction_time_tier_5 = 200
-@yurt_internal_construction_time_tier_6 = 320а
+@yurt_internal_construction_time_tier_6 = 320
 
 
 yurt_main_01 = {
@@ -1741,19 +1741,17 @@ character_warfare_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 100 # prev nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
-        if = {
-            limit = {
-                owner = {
-                    primary_domicile = {
-                        NOT = {
-                            has_domicile_building_or_higher = herd_welfare_yurt_01
-                        }
-                    }
-                }
-            }
-            value = 0
-        }
+		value = 10 # prev nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
+		if = {
+			limit = {
+				owner = {
+					primary_domicile = {
+						has_domicile_building_or_higher = herd_welfare_yurt_01
+					}
+				}
+			}
+			value = nomadic_capital_extremely_important_building
+		}
 	}
 
 	asset = {
