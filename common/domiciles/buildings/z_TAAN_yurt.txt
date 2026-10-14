@@ -1742,16 +1742,6 @@ character_warfare_yurt_01 = {
 
 	ai_value = {
 		value = 10 # prev nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
-		if = {
-			limit = {
-				owner = {
-					primary_domicile = {
-						has_domicile_building_or_higher = herd_welfare_yurt_01
-					}
-				}
-			}
-			value = nomadic_capital_extremely_important_building
-		}
 	}
 
 	asset = {
@@ -1852,19 +1842,6 @@ family_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building		#prev nomadic_capital_exterior_building_1
-    #ADDED
-	    if = {
-    	    limit = {
-        	    owner = {
-            	    primary_domicile = {
-                	    NOT = {
-                    	    has_domicile_building_or_higher = herd_welfare_yurt_01
-                    	}
-                	}
-	            }
-	        }
-	        value = 1
-	    }
 		#ADDED
 		if = {
 			limit = { 
@@ -1938,19 +1915,6 @@ court_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_1
-	# ADDED
-        if = {
-            limit = {
-                owner = {
-                    primary_domicile = {
-                        NOT = {
-                            has_domicile_building_or_higher = herd_welfare_yurt_01
-                        }
-                    }
-                }
-            }
-            value = 0
-        }
 	}
 
 	asset = {
