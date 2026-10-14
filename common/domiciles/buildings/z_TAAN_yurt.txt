@@ -1741,7 +1741,7 @@ character_warfare_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 10 # prev nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
+		value = 5 # prev nomadic_capital_extremely_important_building	#prev nomadic_capital_exterior_building_1
 	}
 
 	asset = {
