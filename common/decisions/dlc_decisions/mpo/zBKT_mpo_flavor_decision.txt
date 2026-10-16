@@ -1,0 +1,242 @@
+﻿
+### Summon Wealthy Visitors: Paiza ###
+mpo_call_for_merchants_decision = {
+    picture = {
+        reference = "gfx/interface/illustrations/decisions/fp3_decision_tax_collector.dds"
+    }
+    decision_group_type = nomad_major
+    sort_order = 80
+
+    is_shown = {
+        has_character_flag = established_paiza_system
+        government_has_flag = government_is_nomadic
+		has_mpo_dlc_trigger = yes
+    }
+
+    is_valid = {
+        custom_tooltip = {
+			text = mpo_call_for_merchants_decision_is_gurkhan
+			exists = situation:the_great_steppe
+			this = situation:the_great_steppe.situation_top_herd
+		}
+        OR = {
+			has_realm_law = nomadic_authority_4
+			has_realm_law = nomadic_authority_5
+		}
+        trigger_if = {
+            limit = {
+                is_ai = no
+            }
+            domicile ?= {
+                has_domicile_building_or_higher = trade_yurt_04
+            }
+        }
+        trigger_else = {
+            always = yes
+        }
+        gold >= 800
+    }
+
+    is_valid_showing_failures_only = {
+        custom_tooltip = {
+            text = mpo_call_for_merchants_decision.robbed_merchants
+            NOT = {
+                has_character_modifier = mpo_paiza_robbed_merchants
+            }
+        }
+    }
+
+    cost = {
+        prestige = {
+            value = major_prestige_value
+        }
+    }
+
+    cooldown = { years = 4 }
+
+    effect = {
+        trigger_event = mpo_decisions_events.2139
+        custom_tooltip = mpo_call_for_merchants_decision.merchant_will_arrive
+        custom_tooltip = mpo_call_for_merchants_decision.gold_needed
+        custom_tooltip = mpo_call_for_merchants_decision.buildings
+    }
+	
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0		#prev 100
+		kingdom = 60	#prev 100
+		empire = 60		#prev 100
+		hegemony = 60	#prev 100
+	}
+
+    ai_will_do = {
+        base = 0
+        modifier = {
+            add = 8
+            domicile ?= {
+                has_domicile_building_or_higher = merchant_yurt_01
+            }
+        }
+        modifier = {
+            add = 8
+            domicile ?= {
+                has_domicile_building_or_higher = herd_trade_yurt_01
+            }
+        }
+        modifier = {
+            add = 8
+            domicile ?= {
+                has_domicile_building_or_higher = fertility_trade_yurt_01
+            }
+        }       
+        modifier = {
+            add = 8
+            domicile ?= {
+                has_domicile_building_or_higher = knight_trade_yurt_01
+            }
+        }
+        modifier = {
+            add = 20
+            gold >= 2400
+        }
+		#ADDED - +10 per each 1000 of gold on hands
+        modifier = {
+            add = { 
+				value = gold
+				multiply = 0.001
+				round_to = 1
+				add = -2		#i dont want to remove modifier that's just above this one so i just account for it here
+				multiply = 10
+			}
+            gold >= 3000
+        }
+    }
+
+    ai_potential = {
+        #is_at_war = no
+        #ai_greed >= medium_positive_ai_value
+		#ADDED - either not at war or has a lot of money and isnt losing any (while at war)
+		OR = {
+			is_at_war = no
+			AND = {
+				monthly_character_balance > 10
+				gold >= 4000
+			}
+		}
+    }
+}
+
+### Summon Wealthy Visitors: Local Offers ###
+mpo_call_for_merchants_small_decision = {
+    picture = {
+        reference = "gfx/interface/illustrations/decisions/fp3_decision_tax_collector.dds"
+    }
+    decision_group_type = nomad_minor
+    sort_order = 80
+
+    is_shown = {
+        government_has_flag = government_is_nomadic
+        NOT = {
+            has_character_flag = established_paiza_system
+        }   
+        has_mpo_dlc_trigger = yes
+    }
+
+    is_valid = {
+        domicile ?= {
+            has_domicile_building_or_higher = trade_yurt_01
+        }
+        gold >= 400
+    }
+
+    is_valid_showing_failures_only = {
+        custom_tooltip = {
+            text = mpo_call_for_merchants_decision.robbed_merchants
+            NOT = {
+                has_character_modifier = mpo_paiza_robbed_merchants
+            }
+        }
+        
+    }
+
+    cost = {
+        prestige = {
+            value = major_prestige_value
+        }
+    }
+
+    cooldown = { years = 8 }
+
+    effect = {
+        trigger_event = mpo_decisions_events.2139
+        custom_tooltip = mpo_call_for_merchants_decision.merchant_will_arrive_smol
+        custom_tooltip = mpo_call_for_merchants_decision.gold_needed_smol
+        custom_tooltip = mpo_call_for_merchants_decision.buildings
+    }
+	
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0		#prev 100
+		kingdom = 60	#prev 100
+		empire = 60		#prev 100
+		hegemony = 60	#prev 100
+	}
+
+    ai_will_do = {
+        base = 10	#prev 0
+        modifier = {
+            add = 4
+            domicile ?= {
+                has_domicile_building_or_higher = merchant_yurt_01
+            }
+        }
+        modifier = {
+            add = 4
+            domicile ?= {
+                has_domicile_building_or_higher = herd_trade_yurt_01
+            }
+        }
+        modifier = {
+            add = 4
+            domicile ?= {
+                has_domicile_building_or_higher = fertility_trade_yurt_01
+            }
+        }       
+        modifier = {
+            add = 4
+            domicile ?= {
+                has_domicile_building_or_higher = knight_trade_yurt_01
+            }
+        }
+        modifier = {
+            add = 20
+            gold >= 1200
+        }
+		#ADDED - +20 per each 1000 of gold on hands
+        modifier = {
+            add = { 
+				value = gold
+				multiply = 0.001
+				round_to = 1
+				add = -1		#i dont want to remove modifier that's just above this one so i just account for it here
+				multiply = 20
+			}
+            gold >= 2000
+        }
+    }
+
+    ai_potential = {
+        #is_at_war = no
+        #ai_greed >= medium_positive_ai_value
+		#ADDED - either not at war or has a lot of money and isnt losing any (while at war)
+		OR = {
+			is_at_war = no
+			AND = {
+				monthly_character_balance > 3
+				gold >= 2000
+			}
+		}
+    }
+}
