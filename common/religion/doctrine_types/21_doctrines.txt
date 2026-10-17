@@ -197,7 +197,7 @@ doctrine_pluralism_fundamentalist = {
 		pluralism_fundamentalist_vulnerable_to_heresy
 		#pluralism_fundamentalist_revocation_tyranny_minimal
 		#ADDED
-		#pluralism_fundamentalist_much_more_expensive_to_modify_rite
+		pluralism_fundamentalist_much_more_expensive_to_modify_rite
 		pluralism_fundamentalist_revocation_tyranny_none
 		pluralism_fundamentalist_demand_conversion_always_criminal
 		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
@@ -235,7 +235,7 @@ doctrine_pluralism_righteous = {
 	parameters = {
 		#pluralism_righteous_revocation_tyranny_reduced
 		#ADDED
-		#pluralism_righteous_more_expensive_to_modify_rite
+		pluralism_righteous_more_expensive_to_modify_rite
 		pluralism_fundamentalist_revocation_tyranny_minimal
 	}
 
@@ -354,6 +354,68 @@ doctrine_clerical_function_recruitment = {
 			limit = { rite_has_doctrine = doctrine_clerical_function_recruitment }
 			multiply = faith_unchanged_doctrine_cost_mult
 		}
+	}
+}
+
+doctrine_clerical_gender_male_only = {
+	doctrine_group_type = doctrine_clerical_gender
+	index = 0
+	divergence = 0
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_gender_male_only }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_clerical_gender_female_only }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		clergy_must_be_male
+	}
+}
+
+doctrine_clerical_gender_female_only = {
+	doctrine_group_type = doctrine_clerical_gender
+	index = 2
+	divergence = 30		#prev 20
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_gender_female_only }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+		else_if = {
+			limit = { rite_has_doctrine = doctrine_clerical_gender_male_only }
+			multiply = faith_changed_doctrine_cost_mult_two_step
+		}
+	}
+
+	parameters = {
+		clergy_must_be_female
+	}
+}
+
+doctrine_clerical_gender_either = {
+	doctrine_group_type = doctrine_clerical_gender
+	index = 1
+	divergence = 15		#prev 10
+
+	piety_cost = {
+		value = faith_doctrine_cost_low
+		if = {
+			limit = { rite_has_doctrine = doctrine_clerical_gender_either }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	parameters = {
+		clergy_can_be_either_gender
 	}
 }
 

@@ -400,15 +400,22 @@ demand_payment_interaction = {
 		scope:puppet_or_actor = {
 			has_usable_hook = scope:recipient
 			#ADDED
-			has_strong_hook = scope:recipient
+			custom_tooltip = {
+				text = same_realm_tt
+				trigger_if = {
+					limit = { government_has_flag = government_is_landless_adventurer }
+					primary_title.title_capital_county.holder.top_liege ?= scope:recipient.top_liege
+				}
+				trigger_else = {
+					top_liege ?= scope:recipient.top_liege
+				}
+			}
 		}
 	}
 
 	is_highlighted = {
 		scope:puppet_or_actor = {
 			has_usable_hook = scope:recipient
-			#ADDED
-			has_strong_hook = scope:recipient
 		}
 	}
 

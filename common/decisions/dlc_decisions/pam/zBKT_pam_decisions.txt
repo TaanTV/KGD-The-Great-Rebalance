@@ -24,6 +24,156 @@
 # pam_cause_great_schism_decision
 #################
 
+# Levy the Tithes
+pam_levy_the_tithes_decision = {
+	picture = {
+		trigger = { culture = { has_graphical_east_asia_culture_group_trigger = yes } }
+		reference = "gfx/interface/illustrations/decisions/tgp_scholars.dds"
+	}
+	decision_group_type = religious
+	picture = {
+		trigger = { culture = { has_graphical_mena_culture_group_trigger = yes } }
+		reference = "gfx/interface/illustrations/decisions/fp3_decision_tax_collector.dds"
+	}
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_spend_money.dds"
+	}
+
+	sort_order = 110
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 60
+		kingdom = 60
+		empire = 60
+		hegemony = 60
+	}
+
+	is_shown = {
+		#ADDED - OR and religion check
+		OR = {
+		any_character_situation = { # You are part of the Christian Situation
+			situation_type = the_christian_church
+		}
+		faith.religion != religion:christianity_religion	
+		}
+		has_pam_dlc_trigger = yes
+		is_clergy = no
+		is_ruler = yes
+		#ADDED - dont show this to ones where it would be weird
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_mandala
+			rite = { rite_has_parameter = unreformed }
+			AND = {
+				rite = { rite_has_parameter = lay_clergy }
+				NOT = { any_vassal = { government_has_flag = government_is_theocracy } }
+			}
+		}
+	}
+
+	is_valid = {
+		#ADDED
+		trigger_if = {
+			limit = { faith.religion = religion:christianity_religion }
+		custom_tooltip = {
+			text = pam_christian_church_instability_tt
+			top_participant_group:the_christian_church ?= {
+				has_participant_group_parameter = the_christian_church_levy_the_tithes_decision
+			}
+		}
+		}
+		any_vassal = {
+			custom_tooltip = {
+				text = pam_levy_the_tithes_decision_theocracy_tt
+				government_has_flag = government_is_theocracy
+			}
+		}
+	}
+
+	cooldown = { years = 10 }
+
+	cost = {
+		piety = {
+			value = massive_piety_value		#prev major_piety_value
+			if = {
+				limit = {
+					NAND = {
+						is_ai = no			#minor premature optimisation and let AI breathe a bit
+						any_vassal = { government_has_flag = government_is_theocracy faith = prev.faith }
+					}
+				}
+				value = medium_piety_value
+			}
+			multiply = spiritual_fulfillment_tithe_legate_cost_mult
+		}
+	}
+
+	effect = {
+		show_as_tooltip = {
+			pam_levy_the_tithes_decision_effects = yes
+		}
+		if = {
+			limit = {
+				NOT = { any_vassal = { government_has_flag = government_is_theocracy } }
+			}
+			custom_tooltip = pam_levy_the_tithes_decision_effects_no_vassals_tt
+		}
+		trigger_event = pam_decision_events.0008
+	}
+
+	ai_potential = {
+		ai_greed > low_negative_ai_value	#prev medium_positive_ai_value
+		#ADDED - this and an OR
+		trigger_if = {
+			limit = { NAND = { rite = { rite_has_parameter = lay_clergy } faith = { has_doctrine_parameter = lay_clergy } } }
+			ai_zeal < low_positive_ai_value
+		}
+		OR = {
+			is_in_debt = yes
+			spiritual_fulfillment < spiritual_fulfillment_minus_1
+			AND = {			#since they probably cant have same faith vassals.... right?
+				rite = { rite_has_parameter = lay_clergy }
+				faith = { has_doctrine_parameter = lay_clergy }		
+			}
+			AND = {
+				ai_greed > medium_positive_ai_value
+				ai_zeal < very_low_negative_ai_value
+			}
+		}
+		NOR = {
+			has_trait = content
+			has_trait = craven
+		}
+	}
+
+	ai_will_do = {
+		base = 10
+
+		modifier = {
+			add = 25
+			has_trait = greedy
+		}
+		
+		#ADDED
+		modifier = {	#dooming
+			spiritual_fulfillment < spiritual_fulfillment_minus_2
+			add = 15
+		}
+		modifier = {	#extorting other-faith clergy is pretty cool
+			rite = { rite_has_parameter = lay_clergy }
+			faith = { has_doctrine_parameter = lay_clergy }
+			ai_zeal > low_positive_ai_value
+			add = 10
+		}
+		modifier = {	#sry need money
+			is_in_debt = yes
+			add = 40
+		}
+	}
+}
+
 
 pam_declare_rite_heresy_decision = {
 	picture = {

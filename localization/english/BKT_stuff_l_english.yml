@@ -139,9 +139,11 @@
  lose_puppet_rivalry_effect_notification: "Rivalry with a [puppet|E]"
  county_looted_title: "[county.GetNameNoTier] Looted"
  county_looted_tt: "You got [gold_i]#V [TopScope.GetValue('loot_gathered')|V0]#! from occupying [county.GetNameNoTier]'s other undefended holdings"
- pluralism_fundamentalist_much_more_expensive_to_modify_rite: "TODO"
- pluralism_righteous_more_expensive_to_modify_rite: "TODO"
-
+ pluralism_fundamentalist_much_more_expensive_to_modify_rite: "Modifying a [rite|E] costs #V a lot#! more [game_concept_piety_i] [piety|E]"
+ pluralism_righteous_more_expensive_to_modify_rite: "Modifying a [rite|E] costs more [game_concept_piety_i] [piety|E]"
+ #I_CAN_DEMAND_PAYMENT_FOR_HOOKS: "You can [demand_payment|E] for [hooks|E]"
+ bkt_golden_obligations_perk_effect: "$I_CAN_DEMAND_PAYMENT_FOR_HOOKS$ from characters in the same [realm|E]"
+ fervor_loss_ruler_tithes_levied: "[tither.GetTitledFirstName] used $pam_levy_the_tithes_decision$ decision"
 
 
  bkt_culture_head_small_soldiers_desc: "You do not have #V 200#! [skirmishers|E] and #V 200#! [archers|E]"

@@ -256,7 +256,7 @@ frankokratia_leader_protection_value = {
 			}
 			multiply = 1.25
 		}
-		#ADDED - since this is in every casus belli, i'll use it to nudge AI to venture into the steppes a bit less 
+		#ADDED - and nudge AI to venture into the steppes a bit less 
 		if = {
 			limit = {
 				scope:attacker = {
@@ -275,7 +275,7 @@ frankokratia_leader_protection_value = {
 			multiply = {
 				value = 0.8
 				if = {		#way less likely for vassals coz they're annoying
-					limit = { scope:attacker = { top_liege != this }
+					limit = { scope:attacker = { top_liege != this } }
 					add = -0.3
 				}
 			}	

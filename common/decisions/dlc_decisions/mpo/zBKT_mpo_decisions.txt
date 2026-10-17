@@ -3080,7 +3080,7 @@ settle_people_decision = {
 			current_year < 950
 			trigger_if = {
 				limit = { top_liege = this }
-				domicile.herd < 2500
+				domicile.herd < 2000
 			}
 		}
 	}
@@ -3206,7 +3206,7 @@ settle_people_decision = {
 			OR = {
 				current_year > 960
 				NOT = { exists = domicile }
-				domicile.herd > 3000
+				domicile.herd > 2500
 			}
 		}
 
@@ -3738,7 +3738,7 @@ step_away_from_the_steppe_decision = {
 			current_year < 950
 			trigger_if = {
 				limit = { top_liege = this }
-				domicile.herd > 3000
+				domicile.herd > 2000
 			}
 		}
 	}

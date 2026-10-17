@@ -455,6 +455,8 @@
 	}
 	modifier = {
 		add = 500
+		#ADDED
+		exists = scope:faction
 		trigger_if = {
 			limit = {
 				exists = scope:actor

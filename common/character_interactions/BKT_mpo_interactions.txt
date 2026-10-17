@@ -1193,8 +1193,8 @@ mpo_vassal_to_tributary_interaction = {
 	#ADDED
 	ai_frequency_by_tier = {
 		barony = 0
-		county = 48
-		duchy = 24
+		county = 60
+		duchy = 36
 		kingdom = 24
 		empire = 120
 		hegemony = 0
@@ -1204,8 +1204,9 @@ mpo_vassal_to_tributary_interaction = {
 	pause_on_receive = yes
 
 	is_available = {
-		is_ai = no
+		#is_ai = no
 		government_has_flag = government_is_nomadic
+		top_liege != this
 	}
 
 	is_shown = {
@@ -1273,6 +1274,21 @@ mpo_vassal_to_tributary_interaction = {
 		scope:actor = {
 			#Letter response, they get a bit pissed
 			trigger_event = mpo_interactions_events.0011
+			#ADDED
+			show_as_tooltip = {
+				reverse_add_opinion = {
+					target = scope:recipient
+					modifier = annoyed_opinion
+					opinion = -40
+				}
+			}
+			hidden_effect = {		#stack one more time
+				reverse_add_opinion = {
+					target = scope:recipient
+					modifier = annoyed_opinion
+					opinion = -25
+				}
+			}
 		}
 	}
 
@@ -1327,13 +1343,78 @@ mpo_vassal_to_tributary_interaction = {
 		# Are they Nomadic
 		modifier = {
 			add = 25
-			desc = RECIPIENT_IS_NOMADIC_RERASON
+			desc = IS_NOMADIC_RERRECIPIENT_IS_NOMADIC_RERASONASON
 			scope:recipient = { government_has_flag = government_is_nomadic }
 		}
 	}
 
 	ai_will_do = {
-		base = 5					#prev 0
+		base = 0
+		#ADDED - some modifiers
+		modifier = {
+			ai_greed > 0
+			add = { value = ai_greed multiply = 0.5 }
+		}
+		modifier = {
+			scope:recipient = { NOT = { government_has_flag = government_is_nomadic } }
+			add = 25
+		}
+		modifier = {
+			has_trait = arrogant
+			add = 45
+		}
+		modifier = {
+			has_trait = ambitious
+			add = 25		#also gives lots of greed so its lower
+		}
+		modifier = {
+			has_trait = disloyal
+			add = 25
+		}
+		modifier = {
+			has_trait = impatient
+			add = 10
+		}
+		modifier = {
+			has_trait = humble
+			add = -50
+		}
+		modifier = {
+			has_trait = deceitful
+			add = -10		#would rather scheme as a vassal
+		}
+		modifier = {
+			has_trait = trusting
+			add = -15
+		}
+		modifier = {
+			has_trait = loyal
+			add = -25
+		}
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:actor
+			multiplier = 0.20
+		}
+		modifier = {
+			factor = 5
+			scope:recipient = { government_has_flag = government_is_nomadic }
+			exists = domicile
+			exists = scope:recipient.domicile
+			domicile.herd >= scope:recipient.domicile.herd
+		}
+		modifier = {
+			scope:hook ?= yes
+			factor = 10
+		}
+		modifier = {
+			factor = 0.25
+			scope:high_obligations = yes
+		}
+		modifier = {
+			factor = 0.25
+			is_obedient_to = scope:recipient
+		}
 	}
 
 	ai_targets = {

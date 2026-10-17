@@ -177,6 +177,8 @@ BKT_on_start_misc = {
 			limit = { 
 				game_start_date = 867.1.1 
 			}
+			#Help chalcedonians out a bit
+			faith:christian_faith ?= { change_fervor = { value = 50 desc = bkt_rule_prefix } } 
 			if = {
 				limit = {
 					exists = character:70019
@@ -283,20 +285,6 @@ BKT_on_start_misc = {
 					}
 					break_subject_contract_and_establish_tributary_effect = { SUZERAIN = title:k_moravia.holder TRIBUTARY = this } 
 					clear_saved_scope = low_obligations
-				}
-			}
-			#he should be a supporter, the game literally describes him as one
-			if = {
-				limit = {
-					has_game_rule = struggle_persia_toggle_on
-					exists = title:k_khorasan.holder
-					title:k_khorasan.holder = {
-						dynasty:811 ?= dynasty
-						NOT = { has_trait = fp3_struggle_supporter }
-					}
-				}
-				title:k_khorasan.holder = { 
-					add_trait = fp3_struggle_supporter
 				}
 			}
 		}

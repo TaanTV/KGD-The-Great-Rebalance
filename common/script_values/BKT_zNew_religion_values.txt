@@ -27,8 +27,7 @@ modify_rite_cost_multiplier = {
 	if = {
 		limit = { 
 			scope:old_rite ?= {
-				#rite_has_parameter = pluralism_fundamentalist_much_more_expensive_to_modify_rite
-				always = no
+				rite_has_parameter = pluralism_fundamentalist_much_more_expensive_to_modify_rite
 			}
 		}
 		add = {
@@ -40,8 +39,7 @@ modify_rite_cost_multiplier = {
 	else_if = {
 		limit = { 
 			scope:old_rite ?= {
-				#rite_has_parameter = pluralism_righteous_more_expensive_to_modify_rite
-				always = no
+				rite_has_parameter = pluralism_righteous_more_expensive_to_modify_rite
 			}
 		}
 		add = {

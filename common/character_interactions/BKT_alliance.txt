@@ -2460,6 +2460,10 @@ join_war_interaction = {
 		trigger_else_if = {
 			limit = { actor_recipient_both_players_special_treatment_trigger = yes }
 		}
+		#ADDED - bypass all that jazz if they're your puppet
+		trigger_else_if = {
+			limit = { scope:recipient.puppeteer ?= scope:actor }
+		}
 		# if the target is neither a vassal-or-below, nor a liege-or-above, the recipient must either be an ally or defending against a qualifying holy war - unless the character is an adventurer in which case other rules apply
 		trigger_else_if = {
 			limit = {

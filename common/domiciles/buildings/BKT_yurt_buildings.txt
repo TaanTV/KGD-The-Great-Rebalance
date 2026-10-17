@@ -452,6 +452,8 @@ raid_main_yurt_02 = {
 		max_loot_mult = 0.1
 		#movement_speed_land_raiding = 0.05
 		herd_capacity_add = 400
+		#ADDED
+		uncontrolled_province_advantage = 1
 	}
 
 	ai_value = {
@@ -482,6 +484,8 @@ raid_main_yurt_03 = {
 		max_loot_mult = 0.1
 		#movement_speed_land_raiding = 0.05
 		herd_capacity_add = 600
+		#ADDED
+		uncontrolled_province_advantage = 1
 	}
 
 	ai_value = {
@@ -544,6 +548,8 @@ raid_main_yurt_05 = {
 		max_loot_mult = 0.1
 		#movement_speed_land_raiding = 0.05
 		herd_capacity_add = 1000
+		#ADDED
+		uncontrolled_province_advantage = 1
 	}
 
 	ai_value = {
@@ -575,6 +581,8 @@ raid_main_yurt_06 = {
 		max_loot_mult = 0.1
 		#movement_speed_land_raiding = 0.05
 		herd_capacity_add = 1200
+		#ADDED
+		uncontrolled_province_advantage = 2
 	}
 
 	ai_value = {
@@ -5540,7 +5548,7 @@ mass_warfare_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_2
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_interior_building_2
 		
 		
 	}
@@ -5587,7 +5595,7 @@ mass_warfare_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = nomadic_capital_interior_building_2		#prev nomadic_capital_interior_building_3
 		
 		
 	}
@@ -5630,7 +5638,7 @@ mass_warfare_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_4
 		
 		
 	}
@@ -12647,7 +12655,7 @@ trade_yurt_03 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_3
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_exterior_building_3
 		
 		
 	}
@@ -13695,7 +13703,7 @@ herd_trade_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
+		value = 0	#prev nomadic_capital_interior_building_1	#NOTE: makes AI do stupid nonsense in the summon wealthy visitors events
 	}
 
 	asset = {

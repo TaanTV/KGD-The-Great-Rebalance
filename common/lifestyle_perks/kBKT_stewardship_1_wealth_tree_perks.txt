@@ -116,9 +116,11 @@ golden_obligations_perk= {
 	parent = golden_aplomb_perk
 	
 	effect = {
-		custom_description_no_bullet = {
-			text = golden_obligations_perk_effect
-		}
+		#custom_description_no_bullet = {
+		#	text = golden_obligations_perk_effect
+		#}
+		#ADDED
+		custom_tooltip = bkt_golden_obligations_perk_effect
 	}
 	
 }

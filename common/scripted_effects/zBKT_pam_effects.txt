@@ -1,0 +1,163 @@
+﻿#create_appropriate_relic_artifact_effect
+#create_artifact_pedestal_bible_effect
+#create_artifact_pedestal_thurible_effect
+#create_artifact_pedestal_situla_effect
+#create_artifact_pedestal_crozier_effect
+#create_christian_religious_artifact_effect
+#pam_miles_christi_white_peace_effect
+#pam_miles_christi_fulfillment_from_combat_effect
+#pam_miles_christi_holy_weapon_victory_effect
+#pam_miles_christi_holy_weapon_gain_victory_effect
+#pam_miles_christi_holy_weapon_blessing_effect
+#pam_tenet_scholasticism_university_bonus_effect
+#pam_tenet_scholasticism_yearly_effect
+#pam_tenet_scholasticism_studium_effect
+#pam_harmonious_society_five_bonds_effect
+#pam_harmonious_society_apply_five_bonds_effect
+#pam_tenet_purgatory_sin_penalty_effect
+#pam_tenet_apostolic_succession_episcopate_effect
+#pam_tenet_divine_liturgy_choirs_effect
+#pam_tenet_divine_liturgy_officiant_effect
+#pam_pentarchy_circuit_entourage_effect
+#pam_pentarchy_pilgrim_circuit_effect
+#add_scholar_trait_or_xp_effect
+#pam_remove_forbidden_personal_tenet_secret_if_invalid_effect
+#pam_faith_cleanup_forbidden_personal_tenet_secrets_effect
+#pam_faith_grant_forbidden_personal_tenet_secrets_effect
+#on_personal_tenet_gain_secret_gain_effect
+#pam_ai_personal_tenet_pulse_effect
+#conversion_tenet_acts_of_the_apostles_legitimacy_effect
+#ora_et_labora_gardener_gain_effect
+#hedonistic_reveler_gain_effect
+#hedonistic_obesity_modifier_sync_effect
+#hedonistic_feast_gout_risk_effect
+#pam_tenet_mountain_worship_rough_terrain_expert_gain_effect
+#pam_tenet_mountain_worship_hike_spiritual_fulfillment_effect
+#asceticism_inappetetic_gain_effect
+#literalism_scholar_gain_effect
+#scholasticism_scholar_gain_effect
+#pam_levy_the_tithes_decision_effects
+#unrelenting_faith_blademaster_gain_effect
+#pam_kingdom_of_heaven_declaration_effect
+#pam_create_theocratic_dynasty_extra_effects
+#pam_the_christian_church_clergy_embezzled_treasury_catalyst_effect
+#pam_the_christian_church_non_christian_kingdom_in_europe_catalyst_effect
+#pam_the_christian_church_county_converted_to_faith_catalyst_effect
+#pam_the_christian_church_county_conversion_catalysts_effect
+#pam_the_christian_church_excommunication_war_catalyst_effect
+#pam_the_christian_church_humiliation_war_catalyst_effect
+#pam_the_christian_church_clergy_has_child_catalyst_effect
+#pam_determine_ghw_target_character_from_kingdom_effect
+#pam_use_bull_selected_ghw_target_effect
+#pam_start_bull_great_holy_war_effect
+#pam_bull_notify_faith_rulers_effect
+#pam_declare_rite_heresy_effect
+#pam_secure_pilgrim_routes_effect
+#request_white_peace_interaction_effect
+#pam_enforce_requested_white_peace_effect
+#request_victory_interaction_effect
+#request_enforce_succession_interaction_effect
+#pam_enforce_title_succession_effect
+#pam_increase_papabile_score_effect
+#pam_on_conversion_effect
+#pam_cardinal_vacancy_on_death_effect
+#pam_evangelize_personal_tenet_effect
+#pam_evangelize_personal_tenet_decline_effect
+
+pam_levy_the_tithes_decision_effects = {
+	every_vassal = {
+		limit = {
+			OR = {
+				government_has_flag = government_is_theocracy
+				government_has_flag = government_is_ecclesiastical
+			}
+		}
+		custom = every_theocratic_vassal_tt
+		#ADDED - send a notification at least
+		send_interface_message = {
+			type = send_interface_message_bad
+			title = pam_levy_the_tithes_decision
+			left_icon = this
+			right_icon = prev
+		pay_short_term_gold = {
+			target = root
+			gold = minor_gold_value
+		}
+			#ADDED - they should be at least mildly annoyed, no?
+			add_opinion = {
+				target = prev
+				modifier = annoyed_opinion
+				opinion = -30
+			}
+		}
+		if = { 
+			limit = { faith = prev.faith }
+			save_scope_value_as = {
+				name = same_faith_vassals_affected
+				value = 1
+			}
+		}
+	}
+	if = {
+		limit = { 
+			exists = cp:councillor_court_chaplain 
+			exists = scope:same_faith_vassals_affected
+		}
+		cp:councillor_court_chaplain = {
+			progress_towards_rival_effect = {
+				CHARACTER = root
+				REASON = rival_levied_tithes
+				OPINION = default_rival_opinion
+			}
+		}
+	}
+	#ADDED - zealots also dont like u for that
+	if = {
+		limit = { exists = scope:same_faith_vassals_affected }
+		every_vassal = {
+			vassal_stance = zealot
+			limit = {
+				NOR = {
+					government_has_flag = government_is_theocracy
+					government_has_flag = government_is_ecclesiastical
+				}
+			}
+			custom = every_zealot_vassal
+			add_opinion = {
+				target = prev
+				modifier = annoyed_opinion
+				opinion = -25
+			}
+		}
+		save_scope_as = tither
+		faith ?= {
+			change_fervor = {
+				value = {
+					value = trivial_fervor_loss
+					if = {
+						limit = { prev.highest_held_title_tier >= tier_kingdom }
+						value = slight_fervor_loss
+					}
+				}
+				desc = fervor_loss_ruler_tithes_levied
+			}
+		}
+	}
+	else = {
+		every_vassal = {
+			vassal_stance = zealot
+			limit = {
+				NOR = {
+					government_has_flag = government_is_theocracy
+					government_has_flag = government_is_ecclesiastical
+				}
+			}
+			custom = every_zealot_vassal
+			add_opinion = {
+				target = prev
+				modifier = suspicion_opinion
+				opinion = -10
+			}
+		}
+	}
+}

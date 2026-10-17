@@ -2,7 +2,7 @@ Initial name: Balance Killer 228 (thus BKT)
 
 #led_by_owner_extra_advantage_add
 # "trait_compatibility(scope:actor)"
-#Requires you to save root_scope in the immediate of your event
+#Requires you to save root_scope in the immediate of your event (i dont think it does?)
 #every_glory_hound_vassal:0 "Every $glory_hound_vassal$ ([THIS.ScriptValue('number_of_glory_hound_vassals')|V0])"
 #every_courtly_vassal:0 "Every $courtly_vassal$ ([THIS.ScriptValue('number_of_courtly_vassals')|V0])"
 #every_parochial_vassal:0 "Every $parochial_vassal$ ([THIS.ScriptValue('number_of_parochial_vassals')|V0])"
@@ -64,8 +64,34 @@ Very soon:
 #TODO: make non-de-jure vassals have bigger opinion penalty and smaller tax/levy penalty maybe?
 #TODO: make a decision to elevate your head of faith to kingdom-tier title (im sure that is possible and it would be very neato)
 
-####	0.13.4	###
+####	0.13.4.1###
 -
+
+####	0.13.4.1###
+- Resctired Reaffirm Doctrine interaction for characters of unreformed faiths
+- Made Reaffirm Doctrine interaction avaliable to main rite head if faith has no head of faith doctrine
+- Made Fundamentalist and Righteous attitudes increase cost of modifying a rite
+- Made weak nomad culling target nomads with less than 1000 herd instead of less than 150
+- Made AI use both Summon Wealthy Visitors decisions more
+- Made AI use Pledge Tribute more often and fixed it not using it at all
+- Made AI maybe slightly even more better-er at building yurts 
+- Fixed some minor errors
+- Updated localization files
+
+####	0.13.4	###
+- Pressing claims of non-rulers (or empire-tier claims for counts) makes the claimant a puppet of the attacker
+
+- Made it possible to join your puppet's wars even if you're not allied
+- Made Golden Obligations work only vs same-realm characters, reverted strong hook requirement
+- Made Chalcedonian Chritianity start with max fervor 
+- Made non-christian Heads of Faith have slightly different appointment succession scoring than christian clerical region one
+- Made Levy the Tithes decision usable by non-christians, it now lowers opinion of affected vassals
+- Made Levy the Tithes decision cost more, reduce zealot-stance vassals opinion and reduce fervor if it affects same-faith theocrats
+- Doubled piety cost of Influence Head of Faith Candidacy interaction
+- Increased divergence of Clerical Gender doctrines
+- Made AI use Reaffirm Doctrine interaction a lot more, fixed some nonsense in "%RECIPIENT% dislikes this doctrine" acceptance factor
+- Made AI use Levy the Tithes a bit more if it doesnt affect its faith, a lot more if its in debt or has appropriate personality
+- Made AI maybe even more better-er at building yurts (and rewrote the weighting there)
 
 ####	0.13.3	###
 Updated to 1.20.1

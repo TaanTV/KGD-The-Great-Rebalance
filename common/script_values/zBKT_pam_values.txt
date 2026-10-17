@@ -3,3 +3,111 @@
 pam_same_faith_rite_knowledge_requirement = 0.5			#prev 0.4
 pam_same_religion_rite_knowledge_requirement = 0.7		#prev 0.5
 pam_other_religion_rite_knowledge_requirement = 0.9		#prev 0.6
+
+
+pam_increase_theocratic_heir_candidacy_piety_cost_mult_value = {
+	value = 1
+	if = {
+		limit = {
+			top_participant_group:the_christian_church ?= {
+				has_participant_group_parameter = the_christian_church_cheaper_clerical_appointment
+			}
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_cheaper_candidacy_1 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_mult_1
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_cheaper_candidacy_2 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_mult_2
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_cheaper_candidacy_3 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_mult_3
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_chapter_1 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_1
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_chapter_2 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_2
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_chapter_3 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_3
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_benefice_1 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_1
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_benefice_2 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_2
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_benefice_3 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_3
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_cartulary_1 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_1
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_cartulary_2 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_2
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_cartulary_3 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_3
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_audience_1 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_1
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_audience_2 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_2
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = estate_candidacy_audience_3 }
+		}
+		multiply = ecclesiastical_domicile_cheaper_candidacy_minor_mult_3
+	}
+	#ADDED
+	if = {
+		limit = { NOT = { government_has_flag = government_is_theocracy } }
+		multiply = 2
+	}
+}

@@ -125,6 +125,7 @@ BKT_mercenary_castles_pulse = {
 random_yearly_playable_pulse = {
 	on_actions = {
 		BKT_councillor_stance_opinions_maintenance
+		BKT_weak_nomad_culling_2_0
 		currencies_loss_pulse
 	}
 }
@@ -364,6 +365,7 @@ five_year_playable_pulse = {
 		BKT_ai_bastard_legitimization_pulse
 		BKT_herder_vassals_fix_pulse
 		BKT_additional_difficulty_buildings_cheat
+		BKT_reaffirm_doctrine_pulse
 		delay = { days = { 60 130 } }
 		BKT_settled_nomads_culture_diverge_hybridize
 	}
@@ -601,7 +603,7 @@ BKT_herder_vassals_fix_pulse = {
 
 BKT_additional_difficulty_buildings_cheat = {
 	trigger = {
-		#always = no	#lets see how AI does without it for now
+		always = no	#lets see how AI does without it for now
 		is_landed = yes
 		NOR = {
 			government_has_flag = government_is_tribal
@@ -800,4 +802,236 @@ BKT_settled_nomads_culture_diverge_hybridize = {
 	#	1 = culture_emergence_events.0001 # Create a hybrid culture with your capital culture
 	#	1 = culture_emergence_events.0002 # Create a divergent culture
 	#}
+}
+
+#There's no ai_target for HORs at all so i guess we do it via script!
+BKT_reaffirm_doctrine_pulse = {
+	trigger = {
+		OR = {
+			faith.religious_head ?= this
+			AND = {
+				faith.main_rite.head_of_rite ?= this
+				faith = { has_doctrine_parameter = no_head_of_faith }
+				trigger_if = {
+					limit = { has_puppet_type = theological_agent_puppet }
+					OR = {
+						is_playable_character = no		#no idea how those would get there...
+						exists = puppet:theological_agent_puppet
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		save_scope_as = actor
+		#debug_log = "five_year_playable triggered for this HOF"
+		#debug_log_scopes = yes
+		
+		faith = {
+			random_faith_rite = {
+				limit = { 
+					is_inactive_rite = no
+					exists = head_of_rite
+					head_of_rite != scope:actor
+					save_temporary_scope_as = rite_scope
+					"scope:actor.rite.divergence(scope:rite_scope)" > 20
+					scope:actor = {
+						is_character_interaction_valid = {
+							recipient = prev.head_of_rite
+							interaction = pam_reaffirm_doctrine_interaction
+						}
+					}
+				}
+				weight = {
+					base = 1
+					modifier = {
+						add = { value = "scope:actor.rite.divergence(this)" add = -20 }
+					}
+				}
+				head_of_rite = { save_scope_as = recipient }
+			}
+		}
+		if = {
+			limit = { exists = scope:recipient }
+			random = {		#this is basically the interaction's AI WILL DO
+				chance = 25
+				modifier = {	#secular HORs care a bit less
+					faith = { has_doctrine_parameter = no_head_of_faith }
+					is_clergy = no
+					add = -25
+				}
+				modifier = {
+					scope:actor = {
+						has_usable_hook = scope:recipient
+					}
+					scope:recipient = {
+						NOT = { is_imprisoned_by = scope:actor }
+					}
+					add = 50
+				}
+				modifier = {
+					scope:actor = {
+						has_usable_hook = scope:recipient
+						has_strong_hook = scope:recipient
+					}
+					scope:recipient = {
+						NOT = { is_imprisoned_by = scope:actor }
+					}
+					add = 100
+				}
+				modifier = {
+					add = 50
+					scope:actor = {
+						has_trait = zealous
+					}
+				}
+				modifier = {
+					add = -50
+					scope:actor = {
+						has_trait = cynical
+					}
+				}
+				modifier = { # More likely to happen during Instability
+					add = 15
+					scope:actor.religion = religion:christianity_religion
+					situation:the_christian_church ?= {
+						has_situation_top_phase_parameter = the_christian_church_easier_sway_to_rite
+					}
+				}
+				modifier = { # More likely if the government is religious
+					add = 50
+					scope:actor = {
+						government_is_religious_trigger = yes
+					}
+				}
+				modifier = { # Heresiarchs are able to spread their rites easily
+					add = 1000
+					scope:actor = {
+						OR = {
+							has_trait = heresiarch
+							has_trait = herald
+						}
+					}
+				}
+				modifier = { # target rite has high divergence
+					add = "scope:actor.rite.divergence(scope:recipient.rite)"
+				}
+				#ADDED - fervor is dying! and the next two too
+				modifier = {
+					faith.fervor < 50
+					add = { value = 50 subtract = fervor multiply = 2 }
+				}
+				modifier = {
+					faith.fervor > 50
+					factor = 0.5
+				}
+				modifier = { # Not worth leaning on rites that have barely drifted from ours
+					factor = 0.5
+					"scope:actor.rite.divergence(scope:recipient.rite)" < 30
+				}
+				
+				run_interaction = {
+					interaction = pam_reaffirm_doctrine_interaction
+					actor = scope:actor
+					recipient = scope:recipient
+					send_threshold = decline
+				}
+			}
+		}
+	}
+}
+
+#An adjusted copy of #Very weak landed nomads are culled part of yearly on actions
+BKT_weak_nomad_culling_2_0 = {
+	trigger = {
+		years_from_game_start > 3
+		government_has_flag = government_is_nomadic
+		domicile ?= {
+			herd < 1000
+			has_ongoing_domicile_construction = no						#if they're building its fine, let them build
+			NOT = { has_domicile_building_or_higher = yurt_main_04 }	#we dont touch those at all
+		}
+		is_at_war = no
+		is_landed = yes
+		top_liege = this						#vassals make it weird
+		capital_county.title_province = {
+			has_holding_type = nomad_holding
+		}
+		any_held_title = {
+			exists = title_domicile
+			NOT = { exists = var:player_domicile_title }
+			title_held_years > 5				#give some grace period to new nomads
+	 	}
+		is_imprisoned = no
+		is_migrating = no
+		highest_held_title_tier <= tier_duchy	#dont kill kings plz
+		is_ai = yes
+		NOR = {
+			exists = involved_activity
+			any_close_or_extended_family_member = {
+				is_ai = no
+			}
+			#liege ?= {
+			#	is_ai = no
+			#}
+			any_ally = {
+				is_ai = no
+			}
+			any_vassal = {
+				is_ai = no
+			}
+			any_tributary = {
+				is_ai = no
+			}
+			any_player = {
+				root = {
+					is_of_major_or_minor_interest_trigger = { CHARACTER = prev }
+				}
+			}
+		}
+	}
+	effect = {
+		#Cull if weak or has been slightly weak for multiple years
+		if = {
+			limit = {
+				OR = {
+					domicile ?= {
+						herd <= 500
+					}
+					has_character_flag = weakish_nomad_2
+				}
+			}
+			capital_county ?= { save_temporary_scope_as = capital }
+			debug_log = "weak nomad CULLED"
+			debug_log_scopes = yes
+			#Grant any vassals independence or transfer to liege
+			every_vassal = {
+				limit = {
+					highest_held_title_tier >= tier_county
+				}
+				save_scope_as = nomad_vassal
+				create_title_and_vassal_change = {
+					type = independency
+					save_scope_as = change
+					add_claim_on_loss = no
+				}
+				change_liege_or_become_independent = {
+					CHANGE = scope:change
+					VASSAL = scope:nomad_vassal
+				}
+				resolve_title_and_vassal_change = scope:change
+			}
+			#Give all titles to herders
+			give_domain_to_herders = yes
+			#Make LAAMP or wanderer
+			clean_up_ai_nomad_effect = yes
+		}
+		#Set flag if first year and only slightly weak
+		else = {
+			add_character_flag = {
+				flag = weakish_nomad_2
+				months = 30
+			}
+		}
+	}
 }

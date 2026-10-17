@@ -14,7 +14,7 @@
 			limit = {
 				government_has_flag = government_is_nomadic
 			}
-			multiply = 100	#prev 10
+			multiply = 1000	#prev 10
 		}
 		if = {
 			limit = {

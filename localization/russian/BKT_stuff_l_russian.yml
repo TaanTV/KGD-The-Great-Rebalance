@@ -138,9 +138,11 @@
  lose_puppet_rivalry_effect_notification: "Соперники с [Concept('puppet', 'марионеткой')|E]"
  county_looted_title: "[county.GetName] Разорено"
  county_looted_tt: "Вы получаете [gold_i] (#V [TopScope.GetValue('loot_gathered')|V0]#!) за захват остальных незащищенных владений графства [county.GetNameNoTier]"
- pluralism_fundamentalist_much_more_expensive_to_modify_rite: "TODO"
- pluralism_righteous_more_expensive_to_modify_rite: "TODO"
- 
+ pluralism_fundamentalist_much_more_expensive_to_modify_rite: "Изменение [Concept('rite', 'обряда')|E] стоит #V намного#! больше [game_concept_piety_i] [Concept('piety', 'благочестия')|E]"
+ pluralism_righteous_more_expensive_to_modify_rite: "Изменение [Concept('rite', 'обряда')|E] стоит больше [game_concept_piety_i] [Concept('piety', 'благочестия')|E]"
+ #I_CAN_DEMAND_PAYMENT_FOR_HOOKS: "Вы можете [demand_payment|El] за [hooks|El]"
+ bkt_golden_obligations_perk_effect: "$I_CAN_DEMAND_PAYMENT_FOR_HOOKS$ от персонажей, находящихся с вами в одной [Concept('realm', 'державе')|E]"
+ fervor_loss_ruler_tithes_levied: "[tither.GetTitledFirstName] [Select_CString(tither.IsFemale, 'использовала', 'использовал')] решение $pam_levy_the_tithes_decision$"
  
 
  bkt_culture_head_small_soldiers_desc: "У вас нет #V 200#! [Concept( 'skirmishers', 'застрельщиков' )|E] и #V 200#! [Concept( 'archers', 'лучников' )|E]"

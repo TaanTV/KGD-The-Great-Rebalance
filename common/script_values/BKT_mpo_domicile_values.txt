@@ -25,7 +25,7 @@ nomadic_capital_omega_invaluable_building = {
 #Switched all short_term_gold for just gold just because
 
 nomadic_capital_main_building_1 = {
-	value = 8
+	value = 1000	#prev 8
 }
 
 nomadic_capital_main_building_2 = {
@@ -38,7 +38,7 @@ nomadic_capital_main_building_2 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_2
 		}
-		add = 5000	#prev 4
+		add = 10000	#prev 4
 	}
 	if = {
 		limit = {
@@ -66,7 +66,7 @@ nomadic_capital_main_building_3 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_3
 		}
-		add = 5000	#prev 4
+		add = 10000	#prev 4
 	}
 	if = {
 		limit = {
@@ -94,7 +94,7 @@ nomadic_capital_main_building_4 = {
 			}
 			herd >= yurt_main_building_herd_cost_tier_4
 		}
-		add = 5000	#prev 4
+		add = 10000	#prev 4
 	}
 	if = {
 		limit = {

@@ -1,0 +1,3471 @@
+﻿#designate_theocratic_heir
+#filial_piety_request_child_gold
+#increase_theocratic_heir_candidacy
+#influence_clerical_candidacy_interaction
+#support_clerical_candidacy_interaction
+#harm_clerical_candidacy_interaction
+#request_realm_priest_replacement_interaction
+#sway_ruler_to_my_rite_interaction
+#appoint_cardinal_interaction
+#request_court_chaplain_cardinalate_interaction
+#give_cardinal_order_interaction
+#request_legitimacy_interaction
+#strengthen_claim_interaction
+#ecclesiastic_grant_claim_interaction
+#buy_ecclesiastical_title_interaction
+#create_new_ecclesiastical_title_interaction
+#expand_ecclesiastical_title_interaction
+#split_ecclesiastical_title_interaction
+#merge_new_ecclesiastical_title_interaction
+#petition_antipope_indulgences_interaction
+#petition_antipope_gold_interaction
+#grant_pope_blessing_interaction
+#sell_claim_interaction
+#request_white_peace_interaction
+#request_victory_interaction
+#request_ecclesiastical_treasury_interaction
+#request_enforce_succession_interaction
+#increase_papabile_score_interaction
+#seek_communion_interaction
+#pam_destroy_monastic_order_interaction
+
+
+# AI ONLY
+support_clerical_candidacy_interaction = {
+	icon = support_candidacy
+	common_interaction = yes
+	hidden = yes
+
+	desc = support_clerical_candidacy_interaction_desc
+
+	target_type = title
+	target_source = actor
+	target_filter = domain_clerical_regions
+
+	can_be_picked_title = {
+		# Only the capital see, so the search stays one title wide
+		scope:actor.capital_county.clerical_region_title ?= scope:target
+		trigger_if = {
+			limit = { exists = scope:target.current_heir }
+			scope:target.current_heir = {
+				NOR = {
+					this = scope:actor
+					puppeteer ?= scope:actor
+					has_relation_friend = scope:actor
+					has_relation_lover = scope:actor
+					#ADDED - a bit more generous trigger here just so AI doesnt waste as much piety
+					is_close_or_extended_family_of = scope:actor
+				}
+			}
+		}
+		trigger_if = {
+			limit = { exists = scope:secondary_recipient }
+			is_clerical_appointment_valid_trigger = {
+				TITLE = scope:target
+				CANDIDATE = scope:secondary_recipient
+				TOP_LIEGE = scope:actor
+			}
+		}
+		scope:secondary_recipient = {
+			custom_tooltip = {
+				text = is_candidate_for_title_tt
+				scope:target = {
+					holder != scope:secondary_recipient
+				}
+				"appointment_candidate_accumulated_score(scope:target)" > 0
+			}
+		}
+	}
+
+	is_available = {
+		can_influence_clerical_appointment_trigger = yes
+		has_pam_dlc_trigger = yes
+		piety >= massive_piety_value		#prev major_piety_value
+	}
+
+	is_shown = {
+		scope:secondary_recipient ?= {
+			# Without this a Head of Rite backing themselves would send the interaction to themselves
+			this != faith.main_rite.head_of_rite
+			is_clerical_appointment_valid_base_trigger = {
+				CANDIDATE = scope:secondary_recipient
+				TOP_LIEGE = scope:actor
+			}
+			NOR = {
+				scope:actor.religious_head_or_challenger ?= this
+				scope:secondary_recipient.religious_head_or_challenger ?= this
+			}
+		}
+	}
+
+	redirect = {
+		scope:recipient = { save_scope_as = secondary_recipient }
+		scope:actor.faith.main_rite.head_of_rite ?= { save_scope_as = recipient }
+	}
+
+	populate_recipient_list = {
+		scope:actor = {
+			if = {
+				limit = {
+					is_clerical_appointment_valid_base_trigger = {
+						CANDIDATE = this
+						TOP_LIEGE = scope:actor
+					}
+				}
+				add_to_list = characters
+			}
+			if = {
+				limit = {
+					puppet:theological_agent_puppet ?= {
+						is_clerical_appointment_valid_base_trigger = {
+							CANDIDATE = this
+							TOP_LIEGE = scope:actor
+						}
+					}
+				}
+				puppet:theological_agent_puppet = { add_to_list = characters }
+			}
+			if = {
+				limit = {
+					puppet:external_theological_agent_puppet ?= {
+						is_clerical_appointment_valid_base_trigger = {
+							CANDIDATE = this
+							TOP_LIEGE = scope:actor
+						}
+					}
+				}
+				puppet:external_theological_agent_puppet = { add_to_list = characters }
+			}
+			every_relation = {
+				type = friend
+				limit = {
+					is_clerical_appointment_valid_base_trigger = {
+						CANDIDATE = this
+						TOP_LIEGE = scope:actor
+					}
+				}
+				add_to_list = characters
+			}
+			every_relation = {
+				type = lover
+				limit = {
+					is_clerical_appointment_valid_base_trigger = {
+						CANDIDATE = this
+						TOP_LIEGE = scope:actor
+					}
+				}
+				add_to_list = characters
+			}
+			#ADDED - try to promote family members too
+			every_close_family_member = {
+				limit = {
+					is_clergy = yes
+					is_clerical_appointment_valid_base_trigger = {
+						CANDIDATE = this
+						TOP_LIEGE = scope:actor
+					}
+				}
+				add_to_list = characters
+			}
+		}
+	}
+
+	auto_accept = yes
+
+	send_option = {
+		flag = as_much_as_needed_candidacy_option
+		localization = as_much_as_needed_candidacy_option_desc
+	}
+	send_option = {
+		flag = major_candidacy_option
+		localization = major_candidacy_option_desc
+	}
+	send_option = {
+		flag = medium_candidacy_option
+		localization = medium_candidacy_option_desc
+	}
+
+	cost = {
+		piety = {
+			value = {
+				add = 0
+				switch = {
+					trigger = yes
+					scope:as_much_as_needed_candidacy_option = {
+						add = {
+							value = pam_clerical_candidacy_outbid_piety_cost_value
+							desc = BASE
+						}
+					}
+					scope:major_candidacy_option = {
+						add = {
+							value = pam_clerical_candidacy_major_piety_cost_value
+							desc = BASE
+						}
+					}
+					scope:medium_candidacy_option = {
+						add = {
+							value = pam_clerical_candidacy_medium_piety_cost_value
+							desc = BASE
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		switch = {
+			trigger = yes
+			scope:as_much_as_needed_candidacy_option = {
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = clerical_appointment_score_max_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+						multiply = scope:actor.pam_theocratic_candidacy_situation_multiplier_value
+					}
+				}
+			}
+			scope:major_candidacy_option = {
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = appointment_score_major_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+						multiply = scope:actor.pam_theocratic_candidacy_situation_multiplier_value
+					}
+				}
+			}
+			scope:medium_candidacy_option = {
+				save_scope_value_as = {
+					name = support_candidate_score
+					value = {
+						value = appointment_score_medium_value
+						multiply = scope:actor.appointment_score_interaction_multiplier_modifiers_value
+						multiply = scope:actor.pam_theocratic_candidacy_situation_multiplier_value
+					}
+				}
+			}
+		}
+
+		scope:target = {
+			change_appointment_investment = {
+				target = scope:secondary_recipient
+				investor = scope:actor
+				value = scope:support_candidate_score
+			}
+		}
+
+		scope:secondary_recipient ?= {
+			if = {
+				limit = {
+					this != scope:actor
+					is_ai = no
+				}
+				hidden_effect = {
+					send_interface_message = {
+						type = msg_candidacy_improved
+						title = supported_candidacy_toast
+						left_icon = scope:actor
+						right_icon = scope:target
+						show_as_tooltip = {
+							scope:target = {
+								change_appointment_investment = {
+									target = scope:secondary_recipient
+									investor = scope:actor
+									value = scope:support_candidate_score
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		# Christian Situation Catalysts
+		if = {
+			limit = {
+				scope:actor = {
+					NOR = {
+						government_has_flag = government_is_ecclesiastical
+						this = faith.main_rite.head_of_rite
+					}
+				}
+				situation:the_christian_church ?= {
+					situation_top_has_catalyst = catalyst_secular_influenced_clerical_candidacy
+				}
+			}
+			situation:the_christian_church = {
+				trigger_situation_catalyst = catalyst_secular_influenced_clerical_candidacy
+			}
+		}
+		if = {
+			limit = {
+				scope:actor ?= scope:secondary_recipient
+				scope:actor = {
+					government_has_flag = government_is_ecclesiastical
+				}
+				situation:the_christian_church ?= {
+					situation_top_has_catalyst = catalyst_clergy_influenced_own_candidacy
+				}
+			}
+			situation:the_christian_church = {
+				trigger_situation_catalyst = catalyst_clergy_influenced_own_candidacy
+			}
+		}
+	}
+
+	ai_targets = {
+		ai_recipients = self
+	}
+	ai_targets = {
+		ai_recipients = puppets
+	}
+	ai_targets = {
+		ai_recipients = scripted_relations
+		max = 20
+	}
+
+	# A crown returns to its capital see readily; a count has one see and rarely the piety to contest it
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 240
+		duchy = 60
+		kingdom = 12
+		empire = 12
+		hegemony = 12
+	}
+
+	# Score the piety tiers explicitly so the AI does not fall back on send_option declaration order
+	ai_will_do = {
+		base = 0
+
+		modifier = {
+			scope:medium_candidacy_option = yes
+			piety >= pam_clerical_candidacy_medium_piety_cost_value
+			add = 100
+		}
+		modifier = {
+			scope:major_candidacy_option = yes
+			piety >= pam_clerical_candidacy_major_piety_cost_value
+			add = 200
+		}
+		modifier = {
+			scope:as_much_as_needed_candidacy_option = yes
+			piety >= pam_clerical_candidacy_outbid_piety_cost_value
+			add = 300
+		}
+
+		modifier = {
+			exists = scope:secondary_recipient
+			has_relation_rival = scope:secondary_recipient
+			factor = 0
+		}
+		
+		#ADDED - those 2
+		modifier = {
+			piety <= monumental_piety_value
+			factor = 0.25
+		}
+		modifier = {
+			exists = scope:secondary_recipient
+			"opinion(scope:secondary_recipient)" < 0
+			factor = 0
+		}
+	}
+}
+
+
+# HoF only, on HoRs
+# Replace a doctrine of other rite in your faith by your rite's in same group
+pam_reaffirm_doctrine_interaction = {
+	category = interaction_category_religion
+	icon = reaffirm_doctrine
+	interface_priority = 40
+	common_interaction = yes
+
+	use_diplomatic_range = yes
+	ai_maybe = yes
+	ai_min_reply_days = 1
+	ai_max_reply_days = 5
+	popup_on_receive = yes
+	can_send_despite_rejection = yes
+	greeting = positive
+	notification_text = pam_reaffirm_doctrine_interaction_notification
+	desc = pam_reaffirm_doctrine_interaction_desc
+
+	is_available = {
+		#ADDED - this OR and th other check in it
+		OR = {
+		faith.religious_head ?= this
+		AND = {
+			faith.main_rite.head_of_rite ?= this
+			faith = { has_doctrine_parameter = no_head_of_faith }
+		}
+		}
+		#ADDED
+		NOT = { faith = { has_doctrine_parameter = unreformed } }
+	}
+	
+	#ADDED - requires puppet if not lay clergy
+	is_valid = {
+		scope:puppet_or_actor = { 
+			trigger_if = {
+				limit = { has_puppet_type = theological_agent_puppet }
+				custom_tooltip = {
+					text = manage_holy_sites_realm_priest_puppet_tt
+					# puppet: errors on non-playable characters, so we only check playable ones and tooltips never run it
+					trigger_if = {
+						limit = { is_playable_character = yes }
+						exists = puppet:theological_agent_puppet
+					}
+					trigger_else = {
+						always = no
+					}
+				}
+			}
+			#ADDED
+			trigger_if = { 
+				limit = { scope:is_puppet_action ?= yes }
+				piety >= medium_piety_value
+			}
+		}
+	}
+	
+	#ADDED
+	is_valid_showing_failures_only = {
+		scope:puppet_or_actor = { is_available_adult = yes }
+	}
+	
+	#Use hook
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {	#prev actor
+				has_usable_hook = scope:recipient
+			}
+			scope:recipient = {
+				NOT = { is_imprisoned_by = scope:puppet_or_actor }	#prev actor
+			}
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+		starts_enabled = { always = yes }
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook ?= yes
+			scope:actor = { has_strong_hook = scope:recipient }
+		}
+	}
+
+	ai_accept = {
+		base = -100
+
+		modifier = {
+			add = {
+				value = scope:puppet_or_actor.piety_level						#prev actor
+				subtract = scope:recipient.piety_level
+				multiply = 15
+				min = 0
+			}
+			scope:puppet_or_actor.piety_level > scope:recipient.piety_level		#prev actor
+			desc = spiritual_counsel_ai_priest_pious
+		}
+		modifier = { # Heralds are more convincing
+			add = 75
+			scope:puppet_or_actor ?= {
+				has_trait = herald
+			}
+			desc = I_HAVE_HERALD_TRAIT
+		}
+		modifier = {
+			add = -75
+			scope:recipient = {
+				has_trait = herald
+			}
+			desc = I_HAVE_HERALD_TRAIT
+		}
+		modifier = { # Heresiarchs are more convincing
+			add = 30
+			scope:puppet_or_actor ?= {
+				has_trait = heresiarch
+			}
+			desc = I_HAVE_HERESIARCH_TRAIT
+		}
+		modifier = {
+			add = -100
+			scope:recipient = {
+				has_trait = heresiarch
+			}
+			desc = ASK_FOR_CONVERSION_RECIPIENT_IS_HERESIARCH
+		}
+		opinion_modifier = {
+			who = scope:recipient
+			opinion_target = scope:puppet_or_actor
+			multiplier = 0.5
+			desc = AI_OPINION_REASON
+		}
+		modifier = {
+			add = 20
+			scope:recipient = {
+				is_close_family_of = scope:puppet_or_actor
+			}
+			desc = CLOSE_FAMILY_REASON
+		}
+
+		modifier = {
+			add = 10
+			scope:recipient = {
+				NOT = { is_close_family_of = scope:puppet_or_actor }
+				is_extended_family_of = scope:puppet_or_actor
+			}
+			desc = EXTENDED_FAMILY_REASON
+		}
+		modifier = {
+			scope:recipient = {
+				has_relation_lover = scope:puppet_or_actor
+			}
+			add = {
+				value = 25
+			}
+			desc = WE_ARE_LOVERS
+		}
+		modifier = {
+			scope:recipient = {
+				has_relation_friend = scope:puppet_or_actor
+			}
+			add = {
+				value = 25
+			}
+			desc = WE_ARE_FRIENDS
+		}
+		modifier = {
+			add = -40
+			scope:recipient = {
+				has_trait = zealous
+			}
+			desc = INTERACTION_ZEALOUS
+		}
+		modifier = {
+			add = {
+				value = scope:puppet_or_actor.learning
+				subtract = scope:recipient.learning
+			}
+			desc = ASK_FOR_CONVERSION_RECIPIENT_LEARNING
+		}
+		modifier = {
+			add = intimidated_halved_reason_value
+			scope:puppet_or_actor ?= {
+				is_landless_adventurer = no
+			}
+			scope:recipient = {
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 1
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+		modifier = {
+			add = cowed_halved_reason_value
+			scope:puppet_or_actor ?= {
+				is_landless_adventurer = no
+			}
+			scope:recipient = {
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 2
+				}
+			}
+			desc = COWED_REASON
+		}
+		modifier = { # Title tier difference
+			add = {
+				value = scope:puppet_or_actor.highest_held_title_tier
+				subtract = scope:recipient.highest_held_title_tier
+				multiply = 20
+			}
+			scope:puppet_or_actor ?= {
+				OR = {
+					highest_held_title_tier > scope:recipient.highest_held_title_tier
+					highest_held_title_tier < scope:recipient.highest_held_title_tier
+				}
+			}
+			scope:recipient = {
+				trigger_if = { # If clerical region holder, works against any ruler
+					limit = {
+						scope:puppet_or_actor ?= {
+							any_held_title = { has_clerical_region = yes }
+						}
+					}
+					is_ruler = yes
+				}
+				trigger_else = { # If secular holder, only works against vassals
+					limit = {
+						scope:puppet_or_actor ?= {
+							NOT = {
+								any_held_title = { has_clerical_region = yes }
+							}
+						}
+					}
+					is_vassal_of = scope:puppet_or_actor
+				}
+			}
+			desc = RELATIVE_TITLE_TIER_REASON
+		}
+		modifier = { # More likely if the recipient's capital is already of our rite
+			add = 15
+			scope:recipient = {
+				is_ruler = yes
+				capital_county.rite = scope:puppet_or_actor.rite
+			}
+			desc = THEY_HAVE_CAPITAL_WITH_SAME_RITE_REASON
+		}
+		modifier = { # We don't share the same realm (secular players only)
+			add = -20
+			scope:puppet_or_actor ?= {
+				is_ai = no
+				any_held_title = { has_clerical_region = no }
+				this.top_liege != scope:recipient.top_liege
+			}
+			desc = not_same_realm_value_tt
+		}
+		modifier = { # More likely for secular rulers to accept during instability
+			add = 10
+			situation:the_christian_church ?= {
+				OR = {
+					situation_participant_group:christian_regular_main_power_rulers = {
+						participant_group_has_character = scope:recipient
+						has_participant_group_parameter = the_christian_church_easier_sway_to_rite
+					}
+					situation_participant_group:christian_regular_secondary_powers_rulers = {
+						participant_group_has_character = scope:recipient
+						has_participant_group_parameter = the_christian_church_easier_sway_to_rite
+					}
+				}
+			}
+			desc = CHRISTIAN_CHURCH_PHASE_REASON
+		}
+		modifier = {
+			add = -1000
+			switch = {
+				trigger = yes
+				scope:doctrine_bastardry_all = {
+					scope:recipient = { has_trait = bastard }
+				}
+				scope:doctrine_homosexuality_crime = {
+					scope:recipient = {
+						OR = {
+							is_attracted_to_gender_of = this
+							is_sodomite_trigger = yes
+						}
+					}
+				}
+				scope:doctrine_homosexuality_shunned = {
+					scope:recipient = {
+						OR = {
+							is_attracted_to_gender_of = this
+							is_sodomite_trigger = yes
+						}
+						NOT = { rite = { rite_has_doctrine = doctrine_homosexuality_crime } }
+					}
+				}
+				scope:doctrine_deviancy_crime = {
+					scope:recipient = { is_deviant_trigger = yes }
+				}
+				scope:doctrine_deviancy_shunned = {
+					scope:recipient = {
+						is_deviant_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_deviancy_crime } }
+					}
+				}
+				scope:doctrine_adultery_men_shunned = {
+					scope:recipient = {
+						is_female = no
+						is_adulterer_or_fornicator_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_adultery_men_crime } }
+					}
+				}
+				scope:doctrine_adultery_men_crime = {
+					scope:recipient = {
+						is_female = no
+						is_adulterer_or_fornicator_trigger = yes
+					}
+				}
+				scope:doctrine_adultery_women_shunned = {
+					scope:recipient = {
+						is_female = yes
+						is_adulterer_or_fornicator_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_adultery_women_crime } }
+					}
+				}
+				scope:doctrine_adultery_women_crime = {
+					scope:recipient = {
+						is_female = yes
+						is_adulterer_or_fornicator_trigger = yes
+					}
+				}
+				scope:doctrine_witchcraft_crime = {
+					scope:recipient = { is_witch_trigger = yes }
+				}
+				scope:doctrine_witchcraft_shunned = {
+					scope:recipient = {
+						is_witch_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_witchcraft_crime } }
+					}
+				}
+
+				scope:doctrine_kinslaying_any_dynasty_member_crime = {
+					scope:recipient = { pam_reaffirm_doctrine_kinslayer_decline_trigger = yes }
+				}
+				scope:doctrine_kinslaying_extended_family_crime = {
+					scope:recipient = { pam_reaffirm_doctrine_kinslayer_decline_trigger = yes }
+				}
+				scope:doctrine_kinslaying_close_kin_crime = {
+					scope:recipient = { pam_reaffirm_doctrine_kinslayer_decline_trigger = yes }
+				}
+				scope:doctrine_kinslaying_shunned = {
+					scope:recipient = {
+						rite = { rite_has_doctrine = doctrine_kinslaying_accepted }
+						OR = {
+							has_trait = kinslayer
+							any_secret = {
+								type = secret_murder
+								secret_target = { save_temporary_scope_as = target }
+								scope:recipient = {
+									murdering_character_is_kinslaying_in_rite_trigger = {
+										CHARACTER = scope:target
+										RITE = scope:actor.rite
+									}
+								}
+							}
+						}
+					}
+				}
+
+				scope:doctrine_gender_male_dominated = {
+					scope:recipient = { is_female = yes government_is_religious_trigger = no }	#ADDED government_is_religious_trigger check
+				}
+				#ADDED
+				scope:doctrine_gender_equal = {
+					scope:recipient = { OR = { has_trait = zealous has_trait = arrogant } government_is_religious_trigger = no }
+				}
+				scope:doctrine_gender_female_dominated = {
+					scope:recipient = { is_female = no government_is_religious_trigger = no }	#ADDED government_is_religious_trigger check
+				}
+
+				scope:doctrine_consanguinity_dynastic = {
+					scope:recipient = { pam_reaffirm_doctrine_consanguinity_decline_trigger = yes }
+				}
+				scope:doctrine_consanguinity_restricted = {
+					scope:recipient = { pam_reaffirm_doctrine_consanguinity_decline_trigger = yes }
+				}
+				scope:doctrine_consanguinity_cousins = {
+					scope:recipient = { pam_reaffirm_doctrine_consanguinity_decline_trigger = yes }
+				}
+				scope:doctrine_consanguinity_aunt_nephew_and_uncle_niece = {
+					scope:recipient = { pam_reaffirm_doctrine_consanguinity_decline_trigger = yes }
+				}
+
+				scope:doctrine_clerical_gender_male_only = {
+					scope:recipient = { is_female = yes is_clergy = yes }		#ADDED clergy check
+				}
+				#ADDED
+				scope:doctrine_clerical_gender_either = {
+					scope:recipient = { OR = { has_trait = zealous has_trait = arrogant } is_clergy = yes }
+				}
+				scope:doctrine_clerical_gender_female_only = {
+					scope:recipient = { is_female = no is_clergy = yes }		#ADDED clergy check
+				}
+				scope:doctrine_clerical_marriage_disallowed = {
+					scope:recipient = { is_married = yes is_clergy = yes NOR = { has_trait = chaste has_trait = celibate has_trait = devoted } }		#ADDED clergy check
+				}
+				scope:doctrine_pilgrimage_forbidden = {
+					scope:recipient = { has_trait = pilgrim }
+				}
+				fallback = { always = no }
+			}
+			desc = pam_reaffirm_doctrine_recipient_undesired_reason
+		}
+		modifier = {
+			add = 100
+			switch = {
+				trigger = yes
+				scope:doctrine_homosexuality_accepted = {
+					scope:recipient = {
+						OR = {
+							is_attracted_to_gender_of = this
+							is_sodomite_trigger = yes
+						}
+					}
+				}
+				scope:doctrine_homosexuality_shunned = {
+					scope:recipient = {
+						OR = {
+							is_attracted_to_gender_of = this
+							is_sodomite_trigger = yes
+						}
+						rite = { rite_has_doctrine = doctrine_homosexuality_crime }
+					}
+				}
+				scope:doctrine_deviancy_virtuous = {
+					scope:recipient = { is_deviant_trigger = yes }
+				}
+				scope:doctrine_deviancy_accepted = {
+					scope:recipient = {
+						is_deviant_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_deviancy_virtuous } }
+					}
+				}
+				scope:doctrine_deviancy_shunned = {
+					scope:recipient = {
+						is_deviant_trigger = yes
+						rite = { rite_has_doctrine = doctrine_deviancy_crime }
+					}
+				}
+				scope:doctrine_adultery_men_shunned = {
+					scope:recipient = {
+						is_female = no
+						is_adulterer_or_fornicator_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_adultery_men_accepted } }
+					}
+				}
+				scope:doctrine_adultery_men_accepted = {
+					scope:recipient = {
+						is_female = no
+						is_adulterer_or_fornicator_trigger = yes
+					}
+				}
+				scope:doctrine_adultery_women_shunned = {
+					scope:recipient = {
+						is_female = yes
+						is_adulterer_or_fornicator_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_adultery_women_accepted } }
+					}
+				}
+				scope:doctrine_adultery_women_accepted = {
+					scope:recipient = {
+						is_female = yes
+						is_adulterer_or_fornicator_trigger = yes
+					}
+				}
+				scope:doctrine_witchcraft_virtuous = {
+					scope:recipient = { is_witch_trigger = yes }
+				}
+				scope:doctrine_witchcraft_accepted = {
+					scope:recipient = {
+						is_witch_trigger = yes
+						NOT = { rite = { rite_has_doctrine = doctrine_witchcraft_virtuous } }
+					}
+				}
+				scope:doctrine_witchcraft_shunned = {
+					scope:recipient = {
+						is_witch_trigger = yes
+						rite = { rite_has_doctrine = doctrine_witchcraft_crime }
+					}
+				}
+
+				scope:doctrine_kinslaying_shunned = {
+					scope:recipient = { pam_reaffirm_doctrine_kinslayer_accept_trigger = yes }
+				}
+				scope:doctrine_kinslaying_accepted = {
+					scope:recipient = { pam_reaffirm_doctrine_kinslayer_accept_trigger = yes }
+				}
+
+				scope:doctrine_gender_male_dominated = {
+					scope:recipient = { is_female = no government_is_religious_trigger = no }	#ADDED government_is_religious_trigger check
+				}
+				scope:doctrine_gender_female_dominated = {
+					scope:recipient = { is_female = yes government_is_religious_trigger = no }	#ADDED government_is_religious_trigger check
+				}
+
+				scope:doctrine_consanguinity_dynastic = {
+					scope:recipient = {
+						pam_reaffirm_doctrine_consanguinity_decline_trigger = no
+						pam_reaffirm_doctrine_consanguinity_accept_trigger = yes
+					}
+				}
+				scope:doctrine_consanguinity_restricted = {
+					scope:recipient = {
+						pam_reaffirm_doctrine_consanguinity_decline_trigger = no
+						pam_reaffirm_doctrine_consanguinity_accept_trigger = yes
+					}
+				}
+				scope:doctrine_consanguinity_cousins = {
+					scope:recipient = {
+						pam_reaffirm_doctrine_consanguinity_decline_trigger = no
+						pam_reaffirm_doctrine_consanguinity_accept_trigger = yes
+					}
+				}
+				scope:doctrine_consanguinity_aunt_nephew_and_uncle_niece = {
+					scope:recipient = {
+						pam_reaffirm_doctrine_consanguinity_decline_trigger = no
+						pam_reaffirm_doctrine_consanguinity_accept_trigger = yes
+					}
+				}
+				scope:doctrine_consanguinity_unrestricted = {
+					scope:recipient = {
+						pam_reaffirm_doctrine_consanguinity_decline_trigger = no
+						pam_reaffirm_doctrine_consanguinity_accept_trigger = yes
+					}
+				}
+
+				scope:doctrine_clerical_gender_male_only = {
+					scope:recipient = { is_female = no is_clergy = yes }
+				}
+				scope:doctrine_clerical_gender_female_only = {
+					scope:recipient = { is_female = yes is_clergy = yes }
+				}
+				scope:doctrine_clerical_marriage_allowed = {
+					scope:recipient = { any_relation = { type = lover } }
+				}
+				fallback = { always = no }
+			}
+			desc = pam_reaffirm_doctrine_recipient_desire_reason
+		}
+	}
+
+	is_shown = {
+		scope:recipient = {
+			is_adult = yes
+			faith ?= scope:puppet_or_actor.faith	#prev actor
+			rite != scope:puppet_or_actor.rite	#prev actor
+			rite.head_of_rite ?= this
+		}
+		any_doctrine = {
+			scope:puppet_or_actor.rite ?= {	#prev actor
+				rite_has_doctrine = prev
+			}
+			scope:recipient.rite ?= {
+				NOT = { rite_has_doctrine = prev }
+			}
+			pam_doctrine_can_be_reaffirm = yes
+		}
+	}
+
+	cooldown_against_recipient = { years = 5 }
+
+	cost = {
+		piety = {
+			value = medium_piety_value
+			#ADDED
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				value = 0
+			}
+		}
+	}
+
+	can_send = {
+		trigger_if = {
+			limit = {
+				scope:actor = { is_ai = no }
+			}
+			custom_tooltip = {
+				text = pam_reaffirm_doctrine_one_doctrine_tt
+				pam_reaffirm_doctrine_send_option_selected_trigger = yes
+			}
+		}
+	}
+
+	on_send = {
+		if = {
+			limit = { scope:actor = { is_ai = yes } }
+			random_list = {
+				#ADDED - changed some numbers so the big deals are dealt with first
+				10 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monogamy
+							}
+						}
+					}
+					doctrine:doctrine_monogamy = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_polygamy
+							}
+						}
+					}
+					doctrine:doctrine_polygamy = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_concubines
+							}
+						}
+					}
+					doctrine:doctrine_concubines = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_divorce_disallowed
+							}
+						}
+					}
+					doctrine:doctrine_divorce_disallowed = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_divorce_approval
+							}
+						}
+					}
+					doctrine:doctrine_divorce_approval = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_divorce_allowed
+							}
+						}
+					}
+					doctrine:doctrine_divorce_allowed = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_bastardry_none
+							}
+						}
+					}
+					doctrine:doctrine_bastardry_none = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_bastardry_legitimization
+							}
+						}
+					}
+					doctrine:doctrine_bastardry_legitimization = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_bastardry_all
+							}
+						}
+					}
+					doctrine:doctrine_bastardry_all = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_homosexuality_crime
+							}
+						}
+					}
+					doctrine:doctrine_homosexuality_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_homosexuality_shunned
+							}
+						}
+					}
+					doctrine:doctrine_homosexuality_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_homosexuality_accepted
+							}
+						}
+					}
+					doctrine:doctrine_homosexuality_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_deviancy_crime
+							}
+						}
+					}
+					doctrine:doctrine_deviancy_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_deviancy_shunned
+							}
+						}
+					}
+					doctrine:doctrine_deviancy_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_deviancy_accepted
+							}
+						}
+					}
+					doctrine:doctrine_deviancy_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_deviancy_virtuous
+							}
+						}
+					}
+					doctrine:doctrine_deviancy_virtuous = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_men_crime
+							}
+						}
+					}
+					doctrine:doctrine_adultery_men_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_men_shunned
+							}
+						}
+					}
+					doctrine:doctrine_adultery_men_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_men_accepted
+							}
+						}
+					}
+					doctrine:doctrine_adultery_men_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_women_crime
+							}
+						}
+					}
+					doctrine:doctrine_adultery_women_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_women_shunned
+							}
+						}
+					}
+					doctrine:doctrine_adultery_women_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_adultery_women_accepted
+							}
+						}
+					}
+					doctrine:doctrine_adultery_women_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_kinslaying_any_dynasty_member_crime
+							}
+						}
+					}
+					doctrine:doctrine_kinslaying_any_dynasty_member_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_kinslaying_extended_family_crime
+							}
+						}
+					}
+					doctrine:doctrine_kinslaying_extended_family_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_kinslaying_close_kin_crime
+							}
+						}
+					}
+					doctrine:doctrine_kinslaying_close_kin_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_kinslaying_shunned
+							}
+						}
+					}
+					doctrine:doctrine_kinslaying_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_kinslaying_accepted
+							}
+						}
+					}
+					doctrine:doctrine_kinslaying_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_witchcraft_crime
+							}
+						}
+					}
+					doctrine:doctrine_witchcraft_crime = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_witchcraft_shunned
+							}
+						}
+					}
+					doctrine:doctrine_witchcraft_shunned = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_witchcraft_accepted
+							}
+						}
+					}
+					doctrine:doctrine_witchcraft_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_witchcraft_virtuous
+							}
+						}
+					}
+					doctrine:doctrine_witchcraft_virtuous = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				20 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_gender_male_dominated
+							}
+						}
+					}
+					doctrine:doctrine_gender_male_dominated = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				10 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_gender_equal
+							}
+						}
+					}
+					doctrine:doctrine_gender_equal = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				20 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_gender_female_dominated
+							}
+						}
+					}
+					doctrine:doctrine_gender_female_dominated = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_consanguinity_dynastic
+							}
+						}
+					}
+					doctrine:doctrine_consanguinity_dynastic = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_consanguinity_restricted
+							}
+						}
+					}
+					doctrine:doctrine_consanguinity_restricted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_consanguinity_cousins
+							}
+						}
+					}
+					doctrine:doctrine_consanguinity_cousins = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_consanguinity_aunt_nephew_and_uncle_niece
+							}
+						}
+					}
+					doctrine:doctrine_consanguinity_aunt_nephew_and_uncle_niece = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_consanguinity_unrestricted
+							}
+						}
+					}
+					doctrine:doctrine_consanguinity_unrestricted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pluralism_fundamentalist
+							}
+						}
+					}
+					doctrine:doctrine_pluralism_fundamentalist = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pluralism_righteous
+							}
+						}
+					}
+					doctrine:doctrine_pluralism_righteous = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pluralism_pluralistic
+							}
+						}
+					}
+					doctrine:doctrine_pluralism_pluralistic = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				100 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_theocracy_temporal
+							}
+						}
+					}
+					doctrine:doctrine_theocracy_temporal = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				100 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_theocracy_lay_clergy
+							}
+						}
+					}
+					doctrine:doctrine_theocracy_lay_clergy = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				100 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_no_head
+							}
+						}
+					}
+					doctrine:doctrine_no_head = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				100 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_spiritual_head
+							}
+						}
+					}
+					doctrine:doctrine_spiritual_head = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				100 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_temporal_head
+							}
+						}
+					}
+					doctrine:doctrine_temporal_head = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_function_taxation
+							}
+						}
+					}
+					doctrine:doctrine_clerical_function_taxation = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_function_alms_and_pacification
+							}
+						}
+					}
+					doctrine:doctrine_clerical_function_alms_and_pacification = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_function_recruitment
+							}
+						}
+					}
+					doctrine:doctrine_clerical_function_recruitment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				20 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_gender_male_only
+							}
+						}
+					}
+					doctrine:doctrine_clerical_gender_male_only = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				20 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_gender_either
+							}
+						}
+					}
+					doctrine:doctrine_clerical_gender_either = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				20 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_gender_female_only
+							}
+						}
+					}
+					doctrine:doctrine_clerical_gender_female_only = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_marriage_allowed
+							}
+						}
+					}
+					doctrine:doctrine_clerical_marriage_allowed = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_marriage_disallowed
+							}
+						}
+					}
+					doctrine:doctrine_clerical_marriage_disallowed = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_succession_temporal_appointment
+							}
+						}
+					}
+					doctrine:doctrine_clerical_succession_temporal_appointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_succession_spiritual_appointment
+							}
+						}
+					}
+					doctrine:doctrine_clerical_succession_spiritual_appointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_succession_temporal_fixed_appointment
+							}
+						}
+					}
+					doctrine:doctrine_clerical_succession_temporal_fixed_appointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_succession_spiritual_fixed_appointment
+							}
+						}
+					}
+					doctrine:doctrine_clerical_succession_spiritual_fixed_appointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_clerical_succession_conditional
+							}
+						}
+					}
+					doctrine:doctrine_clerical_succession_conditional = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pilgrimage_forbidden
+							}
+						}
+					}
+					doctrine:doctrine_pilgrimage_forbidden = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pilgrimage_encouraged
+							}
+						}
+					}
+					doctrine:doctrine_pilgrimage_encouraged = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pilgrimage_local_rites
+							}
+						}
+					}
+					doctrine:doctrine_pilgrimage_local_rites = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pilgrimage_mandatory
+							}
+						}
+					}
+					doctrine:doctrine_pilgrimage_mandatory = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_pilgrimage_mandatory_hajj
+							}
+						}
+					}
+					doctrine:doctrine_pilgrimage_mandatory_hajj = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_funeral_stoic
+							}
+						}
+					}
+					doctrine:doctrine_funeral_stoic = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_funeral_bewailment
+							}
+						}
+					}
+					doctrine:doctrine_funeral_bewailment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_funeral_cremation
+							}
+						}
+					}
+					doctrine:doctrine_funeral_cremation = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_funeral_sky_burial
+							}
+						}
+					}
+					doctrine:doctrine_funeral_sky_burial = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_funeral_mummification
+							}
+						}
+					}
+					doctrine:doctrine_funeral_mummification = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_family_rites
+							}
+						}
+					}
+					doctrine:doctrine_family_rites = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_no_anointment
+							}
+						}
+					}
+					doctrine:doctrine_no_anointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_anointment_permitted
+							}
+						}
+					}
+					doctrine:doctrine_anointment_permitted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_imperial_anointment
+							}
+						}
+					}
+					doctrine:doctrine_imperial_anointment = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1000 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monotheist
+							}
+						}
+					}
+					doctrine:doctrine_monotheist = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1000 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_polytheist
+							}
+						}
+					}
+					doctrine:doctrine_polytheist = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monasticism_encouraged
+							}
+						}
+					}
+					doctrine:doctrine_monasticism_encouraged = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monasticism_accepted
+							}
+						}
+					}
+					doctrine:doctrine_monasticism_accepted = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monasticism_absent
+							}
+						}
+					}
+					doctrine:doctrine_monasticism_absent = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_monasticism_forbidden
+							}
+						}
+					}
+					doctrine:doctrine_monasticism_forbidden = { save_scope_as = pam_reaffirm_doctrine }
+				}
+
+				5 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_sacraments_central
+							}
+						}
+					}
+					doctrine:doctrine_sacraments_central = { save_scope_as = pam_reaffirm_doctrine }
+				}
+				1 = {
+					trigger = {
+						scope:actor.rite = {
+							has_different_doctrine_with_rite_trigger = {
+								RITE = scope:recipient.rite
+								DOCTRINE = doctrine_sacraments_absent
+							}
+						}
+					}
+					doctrine:doctrine_sacraments_absent = { save_scope_as = pam_reaffirm_doctrine }
+				}
+			}
+			#ADDED
+			if = {
+				limit = { NOT = { is_set = scope:hook } }
+				if = {
+					limit = { 
+						scope:actor = { has_usable_hook = scope:recipient } 
+						scope:recipient = { NOT = { is_imprisoned_by = scope:actor } }
+					}
+					save_scope_value_as = {
+						name = hook
+						value = yes
+					}
+				}
+				else = {
+					save_scope_value_as = {
+						name = hook
+						value = no
+					}
+				}
+			}
+		}
+		else = {
+			# Set the tenet based on selected send_options
+			switch = {
+				trigger = yes
+				scope:doctrine_monogamy = { doctrine:doctrine_monogamy = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_polygamy = { doctrine:doctrine_polygamy = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_concubines = { doctrine:doctrine_concubines = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_divorce_disallowed = { doctrine:doctrine_divorce_disallowed = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_divorce_approval = { doctrine:doctrine_divorce_approval = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_divorce_allowed = { doctrine:doctrine_divorce_allowed = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_bastardry_none = { doctrine:doctrine_bastardry_none = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_bastardry_legitimization = { doctrine:doctrine_bastardry_legitimization = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_bastardry_all = { doctrine:doctrine_bastardry_all = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_homosexuality_crime = { doctrine:doctrine_homosexuality_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_homosexuality_shunned = { doctrine:doctrine_homosexuality_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_homosexuality_accepted = { doctrine:doctrine_homosexuality_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_deviancy_crime = { doctrine:doctrine_deviancy_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_deviancy_shunned = { doctrine:doctrine_deviancy_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_deviancy_accepted = { doctrine:doctrine_deviancy_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_deviancy_virtuous = { doctrine:doctrine_deviancy_virtuous = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_adultery_men_crime = { doctrine:doctrine_adultery_men_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_adultery_men_shunned = { doctrine:doctrine_adultery_men_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_adultery_men_accepted = { doctrine:doctrine_adultery_men_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_adultery_women_crime = { doctrine:doctrine_adultery_women_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_adultery_women_shunned = { doctrine:doctrine_adultery_women_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_adultery_women_accepted = { doctrine:doctrine_adultery_women_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_kinslaying_any_dynasty_member_crime = { doctrine:doctrine_kinslaying_any_dynasty_member_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_kinslaying_extended_family_crime = { doctrine:doctrine_kinslaying_extended_family_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_kinslaying_close_kin_crime = { doctrine:doctrine_kinslaying_close_kin_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_kinslaying_shunned = { doctrine:doctrine_kinslaying_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_kinslaying_accepted = { doctrine:doctrine_kinslaying_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_witchcraft_crime = { doctrine:doctrine_witchcraft_crime = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_witchcraft_shunned = { doctrine:doctrine_witchcraft_shunned = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_witchcraft_accepted = { doctrine:doctrine_witchcraft_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_witchcraft_virtuous = { doctrine:doctrine_witchcraft_virtuous = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_gender_male_dominated = { doctrine:doctrine_gender_male_dominated = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_gender_equal = { doctrine:doctrine_gender_equal = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_gender_female_dominated = { doctrine:doctrine_gender_female_dominated = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_consanguinity_dynastic = { doctrine:doctrine_consanguinity_dynastic = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_consanguinity_restricted = { doctrine:doctrine_consanguinity_restricted = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_consanguinity_cousins = { doctrine:doctrine_consanguinity_cousins = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_consanguinity_aunt_nephew_and_uncle_niece = { doctrine:doctrine_consanguinity_aunt_nephew_and_uncle_niece = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_consanguinity_unrestricted = { doctrine:doctrine_consanguinity_unrestricted = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_pluralism_fundamentalist = { doctrine:doctrine_pluralism_fundamentalist = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pluralism_righteous = { doctrine:doctrine_pluralism_righteous = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pluralism_pluralistic = { doctrine:doctrine_pluralism_pluralistic = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_theocracy_temporal = { doctrine:doctrine_theocracy_temporal = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_theocracy_lay_clergy = { doctrine:doctrine_theocracy_lay_clergy = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_no_head = { doctrine:doctrine_no_head = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_spiritual_head = { doctrine:doctrine_spiritual_head = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_temporal_head = { doctrine:doctrine_temporal_head = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_clerical_function_taxation = { doctrine:doctrine_clerical_function_taxation = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_function_alms_and_pacification = { doctrine:doctrine_clerical_function_alms_and_pacification = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_function_recruitment = { doctrine:doctrine_clerical_function_recruitment = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_clerical_gender_male_only = { doctrine:doctrine_clerical_gender_male_only = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_gender_either = { doctrine:doctrine_clerical_gender_either = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_gender_female_only = { doctrine:doctrine_clerical_gender_female_only = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_clerical_marriage_allowed = { doctrine:doctrine_clerical_marriage_allowed = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_marriage_disallowed = { doctrine:doctrine_clerical_marriage_disallowed = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_clerical_succession_temporal_appointment = { doctrine:doctrine_clerical_succession_temporal_appointment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_succession_spiritual_appointment = { doctrine:doctrine_clerical_succession_spiritual_appointment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_succession_temporal_fixed_appointment = { doctrine:doctrine_clerical_succession_temporal_fixed_appointment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_succession_spiritual_fixed_appointment = { doctrine:doctrine_clerical_succession_spiritual_fixed_appointment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_clerical_succession_conditional = { doctrine:doctrine_clerical_succession_conditional = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_pilgrimage_forbidden = { doctrine:doctrine_pilgrimage_forbidden = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pilgrimage_encouraged = { doctrine:doctrine_pilgrimage_encouraged = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pilgrimage_local_rites = { doctrine:doctrine_pilgrimage_local_rites = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pilgrimage_mandatory = { doctrine:doctrine_pilgrimage_mandatory = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_pilgrimage_mandatory_hajj = { doctrine:doctrine_pilgrimage_mandatory_hajj = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_funeral_stoic = { doctrine:doctrine_funeral_stoic = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_funeral_bewailment = { doctrine:doctrine_funeral_bewailment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_funeral_cremation = { doctrine:doctrine_funeral_cremation = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_funeral_sky_burial = { doctrine:doctrine_funeral_sky_burial = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_funeral_mummification = { doctrine:doctrine_funeral_mummification = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_family_rites = { doctrine:doctrine_family_rites = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_no_anointment = { doctrine:doctrine_no_anointment = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_anointment_permitted = { doctrine:doctrine_anointment_permitted = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_imperial_anointment = { doctrine:doctrine_imperial_anointment = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_monotheist = { doctrine:doctrine_monotheist = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_polytheist = { doctrine:doctrine_polytheist = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_monasticism_encouraged = { doctrine:doctrine_monasticism_encouraged = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_monasticism_accepted = { doctrine:doctrine_monasticism_accepted = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_monasticism_absent = { doctrine:doctrine_monasticism_absent = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_monasticism_forbidden = { doctrine:doctrine_monasticism_forbidden = { save_scope_as = pam_reaffirm_doctrine } }
+
+				scope:doctrine_sacraments_central = { doctrine:doctrine_sacraments_central = { save_scope_as = pam_reaffirm_doctrine } }
+				scope:doctrine_sacraments_absent = { doctrine:doctrine_sacraments_absent = { save_scope_as = pam_reaffirm_doctrine } }
+			}
+		}
+	}
+
+	on_accept = {
+		# Needed for character interaction interface to show a proper tooltip when send options are not selected
+		if = {
+			limit = {
+				NOT = { exists = scope:pam_reaffirm_doctrine }
+			}
+			scope:recipient = {
+				custom_tooltip = pam_reaffirm_doctrine_interaction_tooltip
+			}
+		}
+		else = {
+			scope:puppet_or_actor = {					#prev actor
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = pam_reaffirm_doctrine_interaction_toast
+					left_icon = scope:puppet_or_actor	#prev actor
+					right_icon = scope:recipient
+
+					scope:recipient = {
+						rite = {
+							change_rite_doctrine = scope:pam_reaffirm_doctrine
+						}
+					}
+					if = {
+						limit = {
+							scope:hook ?= yes
+							has_usable_hook = scope:recipient
+						}
+						use_hook = scope:recipient
+					}
+					scope:puppet_or_actor = {				#prev actor
+						add_opinion = {
+							target = scope:recipient
+							modifier = pleased_opinion
+							opinion = 30
+						}
+					}
+					change_spiritual_fulfillment = miniscule_spiritual_fulfillment_value
+					#ADDED 
+					if = {
+						limit = { scope:is_puppet_action ?= yes }
+						add_piety = medium_piety_loss
+					}
+				}
+			}
+		}
+		#ADDED
+		hidden_effect = {
+			if = {
+				limit = { is_ai = yes }
+				debug_log = "reaffirm_doctrine used by AI"
+				debug_log_scopes = yes
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				NOT = { exists = scope:pam_reaffirm_doctrine }
+			}
+			scope:puppet_or_actor = {					#prev actor
+				change_spiritual_fulfillment = miniscule_spiritual_fulfillment_loss
+			}
+		}
+		else = {
+			scope:puppet_or_actor = {					#prev actor
+				send_interface_toast = {
+					type = event_toast_effect_bad
+					title = pam_reaffirm_doctrine_interaction_toast_declined
+					left_icon = scope:puppet_or_actor	#prev actor
+					right_icon = scope:recipient
+
+					add_opinion = {
+						modifier = refusal_opinion
+						target = scope:recipient
+						opinion = -50		#prev -15
+					}
+					#ADDED 
+					if = {
+						limit = { scope:is_puppet_action ?= yes }
+						add_piety = medium_piety_loss
+					}
+				}
+			}
+		}
+		#ADDED
+		hidden_effect = {
+			debug_log = "reaffirm_doctrine used by AI"
+			debug_log_scopes = yes
+		}
+	}
+
+	ai_targets = {
+		ai_recipients = subordinates
+	}
+
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0			#prev 300
+		kingdom = 0			#prev 300
+		empire = 0			#prev 300
+		hegemony = 0		#prev 300
+	}
+
+	ai_will_do = {
+		base = 25
+		modifier = {
+			scope:hook ?= yes
+			add = 50
+		}
+		modifier = {
+			add = 50
+			scope:actor = {
+				has_trait = zealous
+			}
+		}
+		modifier = {
+			add = -50
+			scope:actor = {
+				has_trait = cynical
+			}
+		}
+		modifier = { # More likely to happen during Instability
+			add = 15
+			scope:actor.religion = religion:christianity_religion
+			situation:the_christian_church ?= {
+				has_situation_top_phase_parameter = the_christian_church_easier_sway_to_rite
+			}
+		}
+		modifier = { # More likely if the government is religious
+			add = 50
+			scope:actor = {
+				government_is_religious_trigger = yes
+			}
+		}
+		modifier = { # Heresiarchs are able to spread their rites easily
+			add = 1000
+			scope:actor = {
+				OR = {
+					has_trait = heresiarch
+					has_trait = herald
+				}
+			}
+		}
+		modifier = { # target rite has high divergence
+			add = "scope:actor.rite.divergence(scope:recipient.rite)"
+		}
+		#ADDED - fervor is dying! and the next two too
+		modifier = {
+			faith.fervor < 50
+			add = { value = 50 subtract = fervor multiply = 2 }
+		}
+		modifier = {
+			faith.fervor > 50
+			factor = 0.5
+		}
+		modifier = { # Not worth leaning on rites that have barely drifted from ours
+			factor = 0.5
+			"scope:actor.rite.divergence(scope:recipient.rite)" < 30
+		}
+		
+		modifier = { # Not worth leaning on rites that have barely drifted from ours
+			factor = 0
+			"scope:actor.rite.divergence(scope:recipient.rite)" < 20	#prev massive_rite_divergence_value
+		}
+	}
+
+	# doctrine options start
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monogamy
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monogamy }
+			}
+			flag = doctrine_monogamy
+			localization = doctrine_monogamy_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_polygamy
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_polygamy }
+			}
+			flag = doctrine_polygamy
+			localization = doctrine_polygamy_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_concubines
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_concubines }
+			}
+			flag = doctrine_concubines
+			localization = doctrine_concubines_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_divorce_disallowed
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_divorce_disallowed }
+			}
+			flag = doctrine_divorce_disallowed
+			localization = doctrine_divorce_disallowed_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_divorce_approval
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_divorce_approval }
+			}
+			flag = doctrine_divorce_approval
+			localization = doctrine_divorce_approval_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_divorce_allowed
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_divorce_allowed }
+			}
+			flag = doctrine_divorce_allowed
+			localization = doctrine_divorce_allowed_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_bastardry_none
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_bastardry_none }
+			}
+			flag = doctrine_bastardry_none
+			localization = doctrine_bastardry_none_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_bastardry_legitimization
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_bastardry_legitimization }
+			}
+			flag = doctrine_bastardry_legitimization
+			localization = doctrine_bastardry_legitimization_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_bastardry_all
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_bastardry_all }
+			}
+			flag = doctrine_bastardry_all
+			localization = doctrine_bastardry_all_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_homosexuality_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_homosexuality_crime }
+			}
+			flag = doctrine_homosexuality_crime
+			localization = doctrine_homosexuality_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_homosexuality_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_homosexuality_shunned }
+			}
+			flag = doctrine_homosexuality_shunned
+			localization = doctrine_homosexuality_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_homosexuality_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_homosexuality_accepted }
+			}
+			flag = doctrine_homosexuality_accepted
+			localization = doctrine_homosexuality_accepted_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_deviancy_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_deviancy_crime }
+			}
+			flag = doctrine_deviancy_crime
+			localization = doctrine_deviancy_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_deviancy_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_deviancy_shunned }
+			}
+			flag = doctrine_deviancy_shunned
+			localization = doctrine_deviancy_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_deviancy_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_deviancy_accepted }
+			}
+			flag = doctrine_deviancy_accepted
+			localization = doctrine_deviancy_accepted_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_deviancy_virtuous
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_deviancy_virtuous }
+			}
+			flag = doctrine_deviancy_virtuous
+			localization = doctrine_deviancy_virtuous_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_men_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_men_crime }
+			}
+			flag = doctrine_adultery_men_crime
+			localization = doctrine_adultery_men_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_men_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_men_shunned }
+			}
+			flag = doctrine_adultery_men_shunned
+			localization = doctrine_adultery_men_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_men_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_men_accepted }
+			}
+			flag = doctrine_adultery_men_accepted
+			localization = doctrine_adultery_men_accepted_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_women_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_women_crime }
+			}
+			flag = doctrine_adultery_women_crime
+			localization = doctrine_adultery_women_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_women_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_women_shunned }
+			}
+			flag = doctrine_adultery_women_shunned
+			localization = doctrine_adultery_women_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_adultery_women_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_adultery_women_accepted }
+			}
+			flag = doctrine_adultery_women_accepted
+			localization = doctrine_adultery_women_accepted_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_kinslaying_any_dynasty_member_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_kinslaying_any_dynasty_member_crime }
+			}
+			flag = doctrine_kinslaying_any_dynasty_member_crime
+			localization = doctrine_kinslaying_any_dynasty_member_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_kinslaying_extended_family_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_kinslaying_extended_family_crime }
+			}
+			flag = doctrine_kinslaying_extended_family_crime
+			localization = doctrine_kinslaying_extended_family_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_kinslaying_close_kin_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_kinslaying_close_kin_crime }
+			}
+			flag = doctrine_kinslaying_close_kin_crime
+			localization = doctrine_kinslaying_close_kin_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_kinslaying_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_kinslaying_shunned }
+			}
+			flag = doctrine_kinslaying_shunned
+			localization = doctrine_kinslaying_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_kinslaying_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_kinslaying_accepted }
+			}
+			flag = doctrine_kinslaying_accepted
+			localization = doctrine_kinslaying_accepted_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_witchcraft_crime
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_witchcraft_crime }
+			}
+			flag = doctrine_witchcraft_crime
+			localization = doctrine_witchcraft_crime_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_witchcraft_shunned
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_witchcraft_shunned }
+			}
+			flag = doctrine_witchcraft_shunned
+			localization = doctrine_witchcraft_shunned_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_witchcraft_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_witchcraft_accepted }
+			}
+			flag = doctrine_witchcraft_accepted
+			localization = doctrine_witchcraft_accepted_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_witchcraft_virtuous
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_witchcraft_virtuous }
+			}
+			flag = doctrine_witchcraft_virtuous
+			localization = doctrine_witchcraft_virtuous_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_gender_male_dominated
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_gender_male_dominated }
+			}
+			flag = doctrine_gender_male_dominated
+			localization = doctrine_gender_male_dominated_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_gender_equal
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_gender_equal }
+			}
+			flag = doctrine_gender_equal
+			localization = doctrine_gender_equal_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_gender_female_dominated
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_gender_female_dominated }
+			}
+			flag = doctrine_gender_female_dominated
+			localization = doctrine_gender_female_dominated_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_consanguinity_dynastic
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_consanguinity_dynastic }
+			}
+			flag = doctrine_consanguinity_dynastic
+			localization = doctrine_consanguinity_dynastic_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_consanguinity_restricted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_consanguinity_restricted }
+			}
+			flag = doctrine_consanguinity_restricted
+			localization = doctrine_consanguinity_restricted_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_consanguinity_cousins
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_consanguinity_cousins }
+			}
+			flag = doctrine_consanguinity_cousins
+			localization = doctrine_consanguinity_cousins_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_consanguinity_aunt_nephew_and_uncle_niece
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_consanguinity_aunt_nephew_and_uncle_niece }
+			}
+			flag = doctrine_consanguinity_aunt_nephew_and_uncle_niece
+			localization = doctrine_consanguinity_aunt_nephew_and_uncle_niece_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_consanguinity_unrestricted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_consanguinity_unrestricted }
+			}
+			flag = doctrine_consanguinity_unrestricted
+			localization = doctrine_consanguinity_unrestricted_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pluralism_fundamentalist
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pluralism_fundamentalist }
+			}
+			flag = doctrine_pluralism_fundamentalist
+			localization = doctrine_pluralism_fundamentalist_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pluralism_righteous
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pluralism_righteous }
+			}
+			flag = doctrine_pluralism_righteous
+			localization = doctrine_pluralism_righteous_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pluralism_pluralistic
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pluralism_pluralistic }
+			}
+			flag = doctrine_pluralism_pluralistic
+			localization = doctrine_pluralism_pluralistic_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_theocracy_temporal
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_theocracy_temporal }
+			}
+			flag = doctrine_theocracy_temporal
+			localization = doctrine_theocracy_temporal_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_theocracy_lay_clergy
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_theocracy_lay_clergy }
+			}
+			flag = doctrine_theocracy_lay_clergy
+			localization = doctrine_theocracy_lay_clergy_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_no_head
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_no_head }
+			}
+			flag = doctrine_no_head
+			localization = doctrine_no_head_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_spiritual_head
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_spiritual_head }
+			}
+			flag = doctrine_spiritual_head
+			localization = doctrine_spiritual_head_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_temporal_head
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_temporal_head }
+			}
+			flag = doctrine_temporal_head
+			localization = doctrine_temporal_head_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_function_taxation
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_function_taxation }
+			}
+			flag = doctrine_clerical_function_taxation
+			localization = doctrine_clerical_function_taxation_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_function_alms_and_pacification
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_function_alms_and_pacification }
+			}
+			flag = doctrine_clerical_function_alms_and_pacification
+			localization = doctrine_clerical_function_alms_and_pacification_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_function_recruitment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_function_recruitment }
+			}
+			flag = doctrine_clerical_function_recruitment
+			localization = doctrine_clerical_function_recruitment_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_gender_male_only
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_gender_male_only }
+			}
+			flag = doctrine_clerical_gender_male_only
+			localization = doctrine_clerical_gender_male_only_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_gender_either
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_gender_either }
+			}
+			flag = doctrine_clerical_gender_either
+			localization = doctrine_clerical_gender_either_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_gender_female_only
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_gender_female_only }
+			}
+			flag = doctrine_clerical_gender_female_only
+			localization = doctrine_clerical_gender_female_only_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_marriage_allowed
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_marriage_allowed }
+			}
+			flag = doctrine_clerical_marriage_allowed
+			localization = doctrine_clerical_marriage_allowed_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_marriage_disallowed
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_marriage_disallowed }
+			}
+			flag = doctrine_clerical_marriage_disallowed
+			localization = doctrine_clerical_marriage_disallowed_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_succession_temporal_appointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_succession_temporal_appointment }
+			}
+			flag = doctrine_clerical_succession_temporal_appointment
+			localization = doctrine_clerical_succession_temporal_appointment_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_succession_spiritual_appointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_succession_spiritual_appointment }
+			}
+			flag = doctrine_clerical_succession_spiritual_appointment
+			localization = doctrine_clerical_succession_spiritual_appointment_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_succession_temporal_fixed_appointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_succession_temporal_fixed_appointment }
+			}
+			flag = doctrine_clerical_succession_temporal_fixed_appointment
+			localization = doctrine_clerical_succession_temporal_fixed_appointment_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_succession_spiritual_fixed_appointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_succession_spiritual_fixed_appointment }
+			}
+			flag = doctrine_clerical_succession_spiritual_fixed_appointment
+			localization = doctrine_clerical_succession_spiritual_fixed_appointment_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_clerical_succession_conditional
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_clerical_succession_conditional }
+			}
+			flag = doctrine_clerical_succession_conditional
+			localization = doctrine_clerical_succession_conditional_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pilgrimage_forbidden
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pilgrimage_forbidden }
+			}
+			flag = doctrine_pilgrimage_forbidden
+			localization = doctrine_pilgrimage_forbidden_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pilgrimage_encouraged
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pilgrimage_encouraged }
+			}
+			flag = doctrine_pilgrimage_encouraged
+			localization = doctrine_pilgrimage_encouraged_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pilgrimage_local_rites
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pilgrimage_local_rites }
+			}
+			flag = doctrine_pilgrimage_local_rites
+			localization = doctrine_pilgrimage_local_rites_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pilgrimage_mandatory
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pilgrimage_mandatory }
+			}
+			flag = doctrine_pilgrimage_mandatory
+			localization = doctrine_pilgrimage_mandatory_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_pilgrimage_mandatory_hajj
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_pilgrimage_mandatory_hajj }
+			}
+			flag = doctrine_pilgrimage_mandatory_hajj
+			localization = doctrine_pilgrimage_mandatory_hajj_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_funeral_stoic
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_funeral_stoic }
+			}
+			flag = doctrine_funeral_stoic
+			localization = doctrine_funeral_stoic_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_funeral_bewailment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_funeral_bewailment }
+			}
+			flag = doctrine_funeral_bewailment
+			localization = doctrine_funeral_bewailment_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_funeral_cremation
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_funeral_cremation }
+			}
+			flag = doctrine_funeral_cremation
+			localization = doctrine_funeral_cremation_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_funeral_sky_burial
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_funeral_sky_burial }
+			}
+			flag = doctrine_funeral_sky_burial
+			localization = doctrine_funeral_sky_burial_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_funeral_mummification
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_funeral_mummification }
+			}
+			flag = doctrine_funeral_mummification
+			localization = doctrine_funeral_mummification_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_family_rites
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_family_rites }
+			}
+			flag = doctrine_family_rites
+			localization = doctrine_family_rites_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_no_anointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_no_anointment }
+			}
+			flag = doctrine_no_anointment
+			localization = doctrine_no_anointment_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_anointment_permitted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_anointment_permitted }
+			}
+			flag = doctrine_anointment_permitted
+			localization = doctrine_anointment_permitted_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_imperial_anointment
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_imperial_anointment }
+			}
+			flag = doctrine_imperial_anointment
+			localization = doctrine_imperial_anointment_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monotheist
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monotheist }
+			}
+			flag = doctrine_monotheist
+			localization = doctrine_monotheist_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_polytheist
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_polytheist }
+			}
+			flag = doctrine_polytheist
+			localization = doctrine_polytheist_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monasticism_encouraged
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monasticism_encouraged }
+			}
+			flag = doctrine_monasticism_encouraged
+			localization = doctrine_monasticism_encouraged_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monasticism_accepted
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monasticism_accepted }
+			}
+			flag = doctrine_monasticism_accepted
+			localization = doctrine_monasticism_accepted_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monasticism_absent
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monasticism_absent }
+			}
+			flag = doctrine_monasticism_absent
+			localization = doctrine_monasticism_absent_descriptive_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_monasticism_forbidden
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_monasticism_forbidden }
+			}
+			flag = doctrine_monasticism_forbidden
+			localization = doctrine_monasticism_forbidden_descriptive_name
+		}
+
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_sacraments_central
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_sacraments_central }
+			}
+			flag = doctrine_sacraments_central
+			localization = doctrine_sacraments_central_name
+		}
+		send_option = {
+			is_shown = {
+				scope:actor.rite = {
+					has_different_doctrine_with_rite_trigger = {
+						RITE = scope:recipient.rite
+						DOCTRINE = doctrine_sacraments_absent
+					}
+				}
+			}
+			is_valid = {
+				pam_reaffirm_doctrine_send_option_valid_trigger = { DOCTRINE = doctrine_sacraments_absent }
+			}
+			flag = doctrine_sacraments_absent
+			localization = doctrine_sacraments_absent_name
+		}
+	# doctrine options end
+}

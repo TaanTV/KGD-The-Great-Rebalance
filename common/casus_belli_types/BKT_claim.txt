@@ -396,6 +396,22 @@
 			order_by = tier
 			save_scope_as = target
 		}
+		
+		#ADDED - check if the claimant is not an attacker and has sufficiently low title tier
+		if = {
+			limit = {
+				scope:claimant != scope:attacker
+				scope:claimant.highest_held_title_tier <= tier_county		#dukes aree too cool for that
+				OR = {
+					scope:claimant.highest_held_title_tier <= tier_barony	#tbh barons might as well have no titles
+					scope:target.tier >= tier_empire
+				}
+			}
+			save_scope_value_as = {
+				name = claimant_becomes_puppet
+				value = 1
+			}
+		}
 
 		scope:attacker = {
 			if = {
@@ -591,6 +607,50 @@
 		  			type = favor_hook
 		 		}
 			}
+			#ADDED
+			scope:attacker = {
+				if = {
+					limit = { 
+						exists = scope:claimant_becomes_puppet 
+						NOT = { scope:claimant.puppeteer ?= scope:attacker }
+						has_pam_dlc_trigger = yes
+						OR = {
+							is_ai = no						#players can choose to set new puppet aside
+							scope:target.tier >= tier_duchy	#AI on the other hand... shouldnt get too irrelevant of a puppet out of this
+						}
+					}
+					scope:claimant = { save_scope_as = recipient }
+					if = {
+						limit = {
+							can_have_theological_agent_puppet_trigger = yes
+							scope:recipient = {
+								is_clergy = yes
+							}
+						}
+						scope:claimant = { 
+							hidden_effect = { clear_puppet_status = yes }
+						}
+						save_scope_as = actor
+						trigger_event = pam_interactions_events.0120
+						pam_generic_set_puppet_interaction_side_effects = yes
+						scope:recipient = {
+							custom_tooltip = set_external_clerical_puppet_tt
+						}
+					}
+					else = {
+						scope:claimant = { 
+							hidden_effect = { clear_puppet_status = yes }
+						}
+						save_scope_as = actor
+						trigger_event = pam_interactions_events.0121
+						pam_generic_set_puppet_interaction_side_effects = yes
+						scope:recipient = {
+							custom_tooltip = set_external_ruler_puppet_tt
+						}
+					}
+				}
+			}
+				
 		}
 
 		# Attacker gets Prestige Experience, Defender loses Prestige, all other participants gain Prestige based on their war contribution.

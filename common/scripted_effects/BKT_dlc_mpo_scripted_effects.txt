@@ -44,31 +44,40 @@ adopt_nomadic_ways_decision_event_effect = {
 #ADDED - swapped some numbers around
 add_random_yurt_external_building_effect = {
 	random_list = {
-		10 = {
+		100 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = herd_welfare_yurt_01 }
 			}
 			add_domicile_building = herd_welfare_yurt_01
 		}
-		100 = {
+		10 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = character_warfare_yurt_01 }
 			}
 			add_domicile_building = character_warfare_yurt_01
 		}
-		100000 = {
+		1000000 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = mass_warfare_yurt_01 }
 			}
 			add_domicile_building = mass_warfare_yurt_01
 		}
-		1000 = {
+		1 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = court_yurt_01 }
 			}
+			#ADDED
+			modifier = {
+				owner.highest_held_title_tier >= tier_kingdom
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
+				add = 9999
+			}
 			add_domicile_building = court_yurt_01
 		}
-		1 = {
+		100 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = family_yurt_01 }
 			}
@@ -80,6 +89,21 @@ add_random_yurt_external_building_effect = {
 			}
 			add_domicile_building = mystical_yurt_01
 		}
+		#ADDED - where.
+		10000 = {
+			trigger = {
+				NOT = { has_domicile_building_or_higher = trade_yurt_01 }
+			}
+			modifier = {
+				owner.highest_held_title_tier >= tier_kingdom
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
+				add = -1000
+			}
+			add_domicile_building = trade_yurt_01
+		}
 	}
 }
 
@@ -88,7 +112,7 @@ add_random_yurt_external_building_effect = {
 #inside domicile scope
 upgrade_random_yurt_external_building_effect = {
 	random_list = {
-		1 = {
+		10 = {
 			trigger = {
 				has_domicile_building_or_higher = herd_welfare_yurt_01
 				NOT = {
@@ -101,7 +125,7 @@ upgrade_random_yurt_external_building_effect = {
 				herd_welfare_yurt_02 = { add_domicile_building = herd_welfare_yurt_03 }
 			}
 		}
-		10 = {
+		1 = {
 			trigger = {
 				has_domicile_building_or_higher = character_warfare_yurt_01
 				NOT = {
@@ -140,7 +164,7 @@ upgrade_random_yurt_external_building_effect = {
 				court_yurt_02 = { add_domicile_building = court_yurt_03 }
 			}
 		}
-		1 = {
+		10 = {
 			trigger = {
 				has_domicile_building_or_higher = family_yurt_01
 				NOT = {
@@ -164,6 +188,20 @@ upgrade_random_yurt_external_building_effect = {
 				trigger = has_domicile_building
 				mystical_yurt_01 = { add_domicile_building = mystical_yurt_02 }
 				mystical_yurt_02 = { add_domicile_building = mystical_yurt_03 }
+			}
+		}
+		#ADDED - where. No need for a modifier here coz its either present or not, i dont think any yurts start with all external buildings
+		100 = {
+			trigger = {
+				has_domicile_building_or_higher = trade_yurt_01
+				NOT = {
+					has_domicile_building_or_higher = trade_yurt_03
+				}
+			}
+			switch = {
+				trigger = has_domicile_building
+				trade_yurt_01 = { add_domicile_building = trade_yurt_02 }
+				trade_yurt_02 = { add_domicile_building = trade_yurt_03 }
 			}
 		}
 	}

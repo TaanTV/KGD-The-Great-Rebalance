@@ -1033,7 +1033,15 @@ counter_synergy_ai_weight_heavy_cavalry = {
 		}
 		add = -150	# Maybe consider hiring anything else?
 	}
-	#ADDED 
+	else_if = {
+		limit = { 
+			OR = { 
+				government_has_flag = government_is_tribal
+				government_has_flag = government_is_nomadic
+			}
+		}
+		add = 125
+	}
 	else_if = {
 		limit = { 
 			is_landed = yes
@@ -1269,7 +1277,7 @@ counter_synergy_ai_weight_elephant_cavalry = {
 	if = {
 		limit = { government_has_flag = government_is_landless_adventurer }
 		if = {
-			limit = { any_maa_regiment = { is_maa_type = elephant_cavalry } }
+			limit = { any_maa_regiment = { is_unit_type = elephant_cavalry } }
 			add = -8000		# Keep one stack around 
 		}
 	}
