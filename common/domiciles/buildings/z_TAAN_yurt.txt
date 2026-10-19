@@ -415,7 +415,7 @@ char_trade_yurt_01 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.03 # prev 0.01
 	}
 
 	ai_value = {
@@ -451,7 +451,7 @@ char_trade_yurt_02 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.02	#prev 0.01
+		monthly_income_from_herd_mult = 0.03 # prev 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -460,8 +460,6 @@ char_trade_yurt_02 = {
 			limit = { herd > 15000 }
 			value = 100000
 		}
-		
-		
 	}
 
 	asset = {
@@ -490,7 +488,7 @@ char_trade_yurt_03 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.01
+		monthly_income_from_herd_mult = 0.03 # prev 0.01
 	}
 
 	ai_value = {
@@ -527,7 +525,7 @@ char_trade_yurt_04 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.02	#prev 0.01
+		monthly_income_from_herd_mult = 0.03 # prev 0.02	#prev 0.01
 	}
 
 	ai_value = {
@@ -536,6 +534,76 @@ char_trade_yurt_04 = {
 			limit = { herd > 15000 }
 			value = 100000
 		}		
+	}
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_single_nomad.dds"
+		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
+		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
+	}
+}
+
+char_trade_yurt_05 = {
+	construction_time = @yurt_internal_construction_time_tier_5
+	allowed_domicile_types = { yurt }
+	slot_type = internal
+	previous_building = char_trade_yurt_04
+
+	cost = {
+		herd = yurt_internal_building_herd_cost_tier_5
+		prestige = yurt_internal_building_prestige_cost_tier_5
+		gold = yurt_internal_building_gold_cost_tier_5
+	}
+
+	parameters = {
+		nomad_yurt_paiza_char_gain_lvl_2 = yes
+		nomad_yurt_paiza_char_gain_arrival_lvl_1 = yes
+	}
+
+	character_modifier = {
+		monthly_income_from_herd_mult = 0.04 # prev 0.02	#prev 0.01
+	}
+
+	ai_value = {
+		value = nomadic_capital_interior_building_5
+		
+		
+	}
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_single_nomad.dds"
+		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
+		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
+	}
+}
+
+char_trade_yurt_06 = {
+	construction_time = @yurt_internal_construction_time_tier_6
+	allowed_domicile_types = { yurt }
+	slot_type = internal
+	previous_building = char_trade_yurt_05
+
+	cost = {
+		herd = yurt_internal_building_herd_cost_tier_6
+		prestige = yurt_internal_building_prestige_cost_tier_6
+		gold = yurt_internal_building_gold_cost_tier_6
+	}
+
+	parameters = {
+		nomad_yurt_paiza_char_gain_lvl_3 = yes
+		nomad_yurt_paiza_char_gain_arrival_lvl_2 = yes
+	}
+
+	character_modifier = {
+		monthly_income_from_herd_mult = 0.04 # prev 0.02	#prev 0.01
+	}
+
+	ai_value = {
+		value = nomadic_capital_interior_building_6
+		
+		
 	}
 
 	asset = {
@@ -2327,13 +2395,13 @@ mass_warfare_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
+		value = nomadic_capital_interior_building_2	# add
 		if = {
 			limit = {
-				monthly_character_balance >= 20
+				monthly_income >= 20
 			}
-			value = nomadic_capital_omega_invaluable_building
-		}			
+			value = 1000000
+		}
 	}
 
 	asset = {
@@ -2374,13 +2442,13 @@ mass_warfare_yurt_05 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_4
+		value = nomadic_capital_interior_building_2	# add
 		if = {
 			limit = {
-				monthly_character_balance >= 20
+				monthly_income >= 20
 			}
-			value = nomadic_capital_omega_invaluable_building
-		}	
+			value = 1000000
+		}
 	}
 
 	asset = {
@@ -2429,13 +2497,13 @@ mass_warfare_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_5
+		value = nomadic_capital_interior_building_2	# add
 		if = {
 			limit = {
-				monthly_character_balance >= 15
+				monthly_income >= 20
 			}
-			value = nomadic_capital_omega_invaluable_building
-		}	
+			value = 1000000
+		}
 	}
 
 	asset = {
