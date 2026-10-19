@@ -2562,11 +2562,23 @@ ransom_interaction = {
 		modifier = {
 			factor = 0
 			scope:puppet_or_actor = { 
-				has_variable_list = claimant_won_against_those
-				any_in_list = {
-					variable = claimant_won_against_those
-					this = scope:secondary_recipient
+				age > 7
+				OR = {
+					has_trait = craven 
+					has_trait = paranoid 
+					has_trait = sadistic
+					NOR = {
+						has_trait = compassionate
+						has_trait = forgiving
+						has_trait = trusting
+						has_trait = eccentric
+					}
 				}
+			}
+			scope:secondary_recipient = {
+				has_claim_on = scope:puppet_or_actor.primary_title
+				time_in_prison = { years < 20 }
+				"reverse_opinion(scope:puppet_or_actor)" < -10
 			}
 		}
 	}
@@ -3369,25 +3381,31 @@ pay_ransom_interaction = {
 				value = -50
 				if = {
 					limit = {
-						scope:recipient = {
-							NOR = {
-								has_trait = compassionate
-								has_trait = forgiving
-								has_trait = generous
-							}
-						}
+						scope:recipient = { OR = { has_trait = paranoid  has_trait = sadistic } }
 					}
 					add = -50
 				}
 			}
-			scope:recipient = { 
-				has_variable_list = claimant_won_against_those
-				any_in_list = {
-					variable = claimant_won_against_those
-					this = scope:secondary_recipient
+			scope:recipient = {
+				age > 7
+				OR = {
+					has_trait = craven 
+					has_trait = paranoid 
+					has_trait = sadistic
+					NOR = {
+						has_trait = compassionate
+						has_trait = forgiving
+						has_trait = trusting
+						has_trait = eccentric
+					}
 				}
 			}
-			desc = I_AM_THE_REAL_TIER_SECONDARY_RECIPIENT
+			scope:secondary_recipient = {
+				has_claim_on = scope:puppet_or_actor.primary_title
+				time_in_prison = { years < 20 }
+				"reverse_opinion(scope:puppet_or_actor)" < -10
+			}
+			desc = CLAIMANT_TO_MY_TITLES
 		}
 	}
 
@@ -4303,25 +4321,31 @@ ransom_me_interaction = {
 				value = -50
 				if = {
 					limit = {
-						scope:recipient = {
-							NOR = {
-								has_trait = compassionate
-								has_trait = forgiving
-								has_trait = generous
-							}
-						}
+						scope:recipient = { OR = { has_trait = paranoid  has_trait = sadistic } }
 					}
 					add = -50
 				}
 			}
 			scope:recipient = {
-				has_variable_list = claimant_won_against_those
-				any_in_list = {
-					variable = claimant_won_against_those
-					this = scope:puppet_or_actor
+				age > 7
+				OR = {
+					has_trait = craven 
+					has_trait = paranoid 
+					has_trait = sadistic
+					NOR = {
+						has_trait = compassionate
+						has_trait = forgiving
+						has_trait = trusting
+						has_trait = eccentric
+					}
 				}
 			}
-			desc = I_AM_THE_REAL_TIER_ACTOR
+			scope:puppet_or_actor = {
+				has_claim_on = scope:recipient.primary_title
+				time_in_prison = { years < 20 }
+				"reverse_opinion(scope:recipient)" < -10
+			}
+			desc = CLAIMANT_TO_MY_TITLES
 		}
 	}
 

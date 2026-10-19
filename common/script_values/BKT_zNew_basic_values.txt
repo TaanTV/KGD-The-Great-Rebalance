@@ -555,11 +555,58 @@ study_faith_ask_for_emissary_gold_value = {
 	multiply = culture.culture_era_value
 }
 
-over_domain_limit_penalty_multiplier = {
-	value = domain_size
-	divide = {
-		value = domain_limit
-		min = 1
+
+total_eldery_trait_levels_except_clouded_eyes = {
+	value = 0
+	if = {
+		limit = { has_trait = infirm }
+		add = {
+			value = "has_trait_xp(infirm)"
+			divide = 25
+			floor = yes
+			add = 1
+		}
 	}
-	max = 1
+	if = {
+		limit = { has_trait = withering_mind }
+		add = {
+			value = "has_trait_xp(withering_mind)"
+			divide = 25
+			floor = yes
+			add = 1
+		}
+	}
+	if = {
+		limit = { has_trait = faltering_heart }
+		add = {
+			value = "has_trait_xp(faltering_heart)"
+			divide = 25
+			floor = yes
+			add = 1
+		}
+	}
+	if = {
+		limit = { has_trait = fragile_bones }
+		add = {
+			value = "has_trait_xp(fragile_bones)"
+			divide = 25
+			floor = yes
+			add = 1
+		}
+	}
 }
+
+total_eldery_trait_levels = {
+	add = total_eldery_trait_levels_except_clouded_eyes
+	if = {
+		limit = { has_trait = clouded_eyes }
+		add = {
+			value = "has_trait_xp(clouded_eyes)"
+			divide = 25
+			floor = yes
+			add = 1
+		}
+	}
+}
+
+total_eldery_trait_levels_except_clouted_eyes = { value = total_eldery_trait_levels_except_clouded_eyes }

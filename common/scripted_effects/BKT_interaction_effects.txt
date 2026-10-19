@@ -1288,6 +1288,21 @@ start_tributary_interaction_effect = {
 		}
 	}
 	setup_tributary_truces_effect = { SUZERAIN = $SUZERAIN$ TRIBUTARY = $TRIBUTARY$ }
+	#ADDED
+	hidden_effect = {
+		$TRIBUTARY$ = {
+			set_variable = {
+				name = tributary_modify_contract_cooldown
+				value = yes
+				years = tributary_modify_contract_cooldown_value
+			}
+			set_variable = {
+				name = subject_recently_adjusted_mandala_subject_contract
+				value = scope:recipient
+				years = mandala_vassal_obligation_cooldown_years
+			}
+		}
+	}
 }
 
 offer_fealty_interaction_effect = {

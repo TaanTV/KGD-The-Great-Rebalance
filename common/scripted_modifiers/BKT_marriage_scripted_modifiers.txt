@@ -96,6 +96,25 @@
 					}
 				}
 			}
+			#ADDED - mirrored the other side too
+			if = {
+				limit = {
+					scope:recipient = {
+						any_ally = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+							count >= 2
+						}
+					}
+				}
+				scope:recipient = {
+					every_ally = {
+						limit = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+						}
+						multiply = 0.5
+					}
+				}
+			}
 			if = {
 				limit = {
 					scope:puppet_or_actor = {
@@ -221,6 +240,25 @@
 					}
 				}
 			}
+			#ADDED - mirrored the other side too
+			if = {
+				limit = {
+					scope:recipient = {
+						any_ally = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+							count >= 2
+						}
+					}
+				}
+				scope:recipient = {
+					every_ally = {
+						limit = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+						}
+						multiply = 0.5
+					}
+				}
+			}
 			if = {
 				limit = {
 					scope:puppet_or_actor = {
@@ -250,7 +288,7 @@
 	}
 	modifier = {
 		add = {
-			value = -100
+			value = -60		#prev -100
 			if = {
 				limit = {
 					scope:puppet_or_actor = {
@@ -258,7 +296,7 @@
 					}
 					has_game_rule = hard_difficulty
 				}
-				add = -150	#prev -200
+				add = -40	#prev -200
 			}
 			else_if = {
 				limit = {
@@ -267,8 +305,29 @@
 					}
 					has_game_rule = very_hard_difficulty
 				}
-				add = -400
+				add = -140	#prev -400
 			}
+			#ADDED - the more alliances they have the more they dont want to have even more of them, especially ones they dont want.
+			if = {
+				limit = {
+					scope:recipient = {
+						any_ally = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+							count >= 2
+						}
+					}
+				}
+				scope:recipient = {
+					every_ally = {
+						limit = {
+							this_is_real_ally_of_target = { TARGET = scope:recipient }
+						}
+						multiply = 1.5
+					}
+				}
+			}
+			#ADDED 
+			round_to = 5
 		}
 		scope:recipient = {
 			NOT = { is_allied_to = scope:puppet_or_actor }

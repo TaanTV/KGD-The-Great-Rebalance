@@ -6,7 +6,7 @@ rolehard_difficulty_player = {
 }
 
 rolehard_difficulty_ai = {
-	vassal_opinion = 15			#prev 20
+	vassal_opinion = 10			#prev 15
 	legitimacy_gain_mult = 0.2
 	travel_danger = -10
 	
@@ -21,7 +21,7 @@ roleplay_difficulty_player = {
 }
 
 roleplay_difficulty_ai = {
-	vassal_opinion = 15			#prev 20
+	vassal_opinion = 10			#prev 15
 	legitimacy_gain_mult = 0.2
 	travel_danger = -10
 	
@@ -48,7 +48,8 @@ bkt_difficulty_higher_player = {
 }
 
 bkt_difficulty_higher_ai = {
-#	vassal_opinion = 20
+	vassal_opinion = 10		#prev 20
+	accolade_glory_gain_mult = 0.1
 	men_at_arms_recruitment_cost = -0.8 
 	title_creation_cost_mult = -0.65
 	short_reign_duration_mult = -0.5

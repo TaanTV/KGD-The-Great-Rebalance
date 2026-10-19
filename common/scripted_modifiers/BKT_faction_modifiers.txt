@@ -959,6 +959,22 @@ claimant_faction_modifiers = {
 			}
 		}
 	}
+	modifier = {
+		desc = "FACTION_REASON_CLAIMANT_ELDERLY_TRAITS"
+		add = {
+			value = $FACTION_CLAIMANT$.total_eldery_trait_levels_except_clouded_eyes
+			multiply = -10
+		}
+		has_game_rule = default_elderly_health
+		$FACTION_CLAIMANT$ = { 
+			this != root
+			has_trait_with_flag = age_related_ailment 
+			any_character_trait = {
+				has_trait_flag = age_related_ailment
+				NOT = { this = trait:clouded_eyes }		#since it gets removed if it hits max 
+			}
+		}
+	}
 
 	# Infirmity of claimant
 	modifier = {
@@ -966,15 +982,20 @@ claimant_faction_modifiers = {
 		add = -50
 		NOT = { $FACTION_CLAIMANT$ = root }
 		$FACTION_CLAIMANT$ = { has_trait = infirm }
+		#ADDED - this is now covered by a generic variant, but if those are turned off....
+		has_game_rule = infirm_only_elderly_health
 	}
 
 	# Claimant has low Legitimacy
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_LOW_LEGITIMACY"
 		add = -100
-		$FACTION_CLAIMANT$ = {
+		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
-			legitimacy_level = 0
+			#legitimacy_level = 0
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = massively_increased_factions
+			this != root
 		}
 	}
 
@@ -982,9 +1003,12 @@ claimant_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_LOW_LEGITIMACY"
 		add = -50
-		$FACTION_CLAIMANT$ = {
+		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
 			legitimacy_level = 1
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = very_increased_factions
+			this != root
 		}
 	}
 
@@ -992,9 +1016,12 @@ claimant_faction_modifiers = {
 	modifier = {
 		desc = "FACTION_REASON_CLAIMANT_LOW_LEGITIMACY"
 		add = -25
-		$FACTION_CLAIMANT$ = {
+		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
 			legitimacy_level = 2
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = increased_factions
+			this != root
 		}
 	}
 
@@ -1145,6 +1172,23 @@ claimant_faction_modifiers = {
 		}
 		$FACTION_TARGET$ = { is_adult = no }
 	}
+	
+	#ADDED
+	modifier = {
+		desc = "FACTION_REASON_LIEGE_ELDERLY_TRAITS"
+		add = {
+			value = $FACTION_TARGET$.total_eldery_trait_levels_except_clouded_eyes
+			multiply = 10
+		}
+		has_game_rule = default_elderly_health
+		$FACTION_TARGET$ ?= { 
+			has_trait_with_flag = age_related_ailment 
+			any_character_trait = {
+				has_trait_flag = age_related_ailment
+				NOT = { this = trait:clouded_eyes }		#since it gets removed if it hits max 
+			}
+		}
+	}
 
 	# Cultural reasons
 	modifier = {
@@ -1287,7 +1331,23 @@ claimant_faction_modifiers = {
 	# When creating a Faction, primarily care about Claims on Titles de jure above my primary title
 	modifier = {
 		desc = "FACTION_REASON_TITLE_DEJURE_ABOVE"
-		add = -100
+		#add = -100
+		#ADDED - way less if things would happen
+		add = {
+			value = -100
+			if = {
+				limit = {
+					$FACTION_TITLE$ = $FACTION_TARGET$.primary_title
+					$FACTION_TARGET$ = { 
+						is_rightful_liege_of = root
+						NOT = {
+							any_held_county = { target_is_de_jure_liege_or_above = $FACTION_TITLE$ }
+						}
+					}
+				}
+				value = -20
+			}
+		}
 		root.primary_title = { is_noble_family_title = no }
 		NOT = {
 			$FACTION_TITLE$ = { is_de_jure_liege_or_above_target = root.primary_title }
@@ -1438,7 +1498,7 @@ claimant_faction_modifiers = {
 				}
 				else_if = {
 					limit = { has_legitimacy_flag = massively_increased_factions }
-					add = 20
+					add = 35	#prev 20
 				}
 			}
 		}
@@ -1463,7 +1523,7 @@ claimant_faction_modifiers = {
 				}
 				else_if = {
 					limit = { has_legitimacy_flag = extra_reduced_factions }
-					add = -20
+					add = -35	#prev -20
 				}
 			}
 		}
@@ -1618,6 +1678,8 @@ claimant_faction_modifiers = {
 		}
 	}
 
+	#ADDED - smaller reduction if a claimant faction exists and you dont actively hate the claimant below.
+	first_valid = {
 	# If another Claimant Faction already exists, prefer to side with it
 	modifier = {
 		desc = "FACTION_REASON_SIDE_WITH_EXISTING"
@@ -1636,7 +1698,7 @@ claimant_faction_modifiers = {
 			}
 			joined_faction = { save_temporary_scope_as = joined_faction_temp }
 		}
-		$FACTION_TARGET$ = {
+		$FACTION_TARGET$ ?= {
 			any_targeting_faction = {
 		  		faction_type = claimant_faction
 
@@ -1708,6 +1770,42 @@ claimant_faction_modifiers = {
 				}
 	  		}
 	  	}
+	}
+	#ADDED - smaller reduction if a claimant faction exists and you dont actively hate the claimant below.
+	modifier = {
+		desc = "FACTION_REASON_SIDE_WITH_EXISTING"
+		add = -50
+		trigger_if = {
+			limit = {
+				exists = joined_faction
+			}
+			joined_faction = { save_temporary_scope_as = joined_faction_temp }
+		}
+		$FACTION_TARGET$ ?= {
+			any_targeting_faction = {
+		  		faction_type = claimant_faction
+
+				# Exists another claimant faction
+				trigger_if = {
+					limit = {
+						exists = scope:joined_faction_temp
+					}
+					this != scope:joined_faction_temp
+				}
+		  		# No player in that faction
+			  	NOT = {
+		  			any_faction_member = { is_ai = no }
+		  		}
+		  		# Faction claimant is NOT hated 
+				special_character = {
+					NOR = {
+						has_relation_rival = root
+						reverse_opinion = { target = root value < -25 }
+					}
+				}
+	  		}
+	  	}
+	}
 	}
 
 	# EP3 Dynasty Legacy Perk Malus
@@ -1944,6 +2042,23 @@ ceremonial_claimant_faction_modifiers = {
 			}
 		}
 	}
+	#ADDED
+	modifier = {
+		desc = "FACTION_REASON_CLAIMANT_ELDERLY_TRAITS"
+		add = {
+			value = $FACTION_CLAIMANT$.total_eldery_trait_levels_except_clouded_eyes
+			multiply = -10
+		}
+		has_game_rule = default_elderly_health
+		$FACTION_CLAIMANT$ ?= { 
+			this != root
+			has_trait_with_flag = age_related_ailment 
+			any_character_trait = {
+				has_trait_flag = age_related_ailment
+				NOT = { this = trait:clouded_eyes }		#since it gets removed if it hits max 
+			}
+		}
+	}
 
 	# Infirmity of claimant
 	modifier = {
@@ -1952,6 +2067,8 @@ ceremonial_claimant_faction_modifiers = {
 		$FACTION_CLAIMANT$ ?= {
 			NOT = { this = root }
 			has_trait = infirm
+			#ADDED - this is now covered by a generic variant, but if those are turned off....
+			has_game_rule = infirm_only_elderly_health
 		}
 	}
 
@@ -1961,7 +2078,10 @@ ceremonial_claimant_faction_modifiers = {
 		add = -100
 		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
-			legitimacy_level = 0
+			#legitimacy_level = 0
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = massively_increased_factions
+			this != root
 		}
 	}
 
@@ -1972,6 +2092,9 @@ ceremonial_claimant_faction_modifiers = {
 		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
 			legitimacy_level = 1
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = very_increased_factions
+			this != root
 		}
 	}
 
@@ -1982,6 +2105,9 @@ ceremonial_claimant_faction_modifiers = {
 		$FACTION_CLAIMANT$ ?= {
 			has_legitimacy = yes
 			legitimacy_level = 2
+			#ADDED - this is not you + check flags instead
+			has_legitimacy_flag = increased_factions
+			this != root
 		}
 	}
 
@@ -2164,6 +2290,23 @@ ceremonial_claimant_faction_modifiers = {
 			}
 		}
 		$FACTION_TARGET$ ?= { is_adult = no }
+	}
+	
+	#ADDED
+	modifier = {
+		desc = "FACTION_REASON_LIEGE_ELDERLY_TRAITS"
+		add = {
+			value = $FACTION_TARGET$.total_eldery_trait_levels_except_clouded_eyes
+			multiply = 10
+		}
+		has_game_rule = default_elderly_health
+		$FACTION_TARGET$ ?= { 
+			has_trait_with_flag = age_related_ailment 
+			any_character_trait = {
+				has_trait_flag = age_related_ailment
+				NOT = { this = trait:clouded_eyes }		#since it gets removed if it hits max 
+			}
+		}
 	}
 
 	# Cultural reasons
@@ -2378,36 +2521,7 @@ ceremonial_claimant_faction_modifiers = {
 		$FACTION_TARGET$.primary_title.title_held_years < 30
 	}
 
-	# All else being equal, the AI might support a claimant over their current liege just to get better feudal obligations.
-	modifier = {
-		desc = "FACTION_REASON_BETTER_CROWN_AUTHORITY"
-		add = 10
-		$FACTION_TARGET$ ?= { has_realm_law = crown_authority_1 }
-		$FACTION_CLAIMANT$ ?= { has_realm_law = crown_authority_0 }
-	}
-	modifier = {
-		desc = "FACTION_REASON_BETTER_CROWN_AUTHORITY"
-		add = 15
-		$FACTION_TARGET$ ?= { has_realm_law = crown_authority_2 }
-		$FACTION_CLAIMANT$ ?= {
-			OR = {
-				has_realm_law = crown_authority_0
-				has_realm_law = crown_authority_1
-			}
-		}
-	}
-	modifier = {
-		desc = "FACTION_REASON_BETTER_CROWN_AUTHORITY"
-		add = 15
-		$FACTION_TARGET$ ?= { has_realm_law = crown_authority_3 }
-		$FACTION_CLAIMANT$ ?= {
-			OR = {
-				has_realm_law = crown_authority_0
-				has_realm_law = crown_authority_1
-				has_realm_law = crown_authority_2
-			}
-		}
-	}
+	#Removed coz it makes no sense for ceremonials
 
 	# More likely to create a claimant faction against a Ruler below their CGLevel
 	modifier = {
@@ -2638,6 +2752,8 @@ ceremonial_claimant_faction_modifiers = {
 		}
 	}
 
+	#ADDED - smaller reduction if a claimant faction exists and you dont actively hate the claimant below.
+	first_valid = {
 	# If another Claimant Faction already exists, prefer to side with it
 	modifier = {
 		desc = "FACTION_REASON_SIDE_WITH_EXISTING"
@@ -2656,9 +2772,9 @@ ceremonial_claimant_faction_modifiers = {
 			}
 			joined_faction = { save_temporary_scope_as = joined_faction_temp }
 		}
-		$FACTION_TARGET$ ?= {
+		$FACTION_TARGET$.liege ?= {		#prev $FACTION_TARGET$, added liege promote
 			any_targeting_faction = {
-		  		faction_type = claimant_faction
+		  		faction_type = ceremonial_claimant_faction		#prev claimant_faction
 
 				# Exists another claimant faction
 				trigger_if = {
@@ -2728,6 +2844,42 @@ ceremonial_claimant_faction_modifiers = {
 				}
 	  		}
 	  	}
+	}
+	#ADDED - smaller reduction if a claimant faction exists and you dont actively hate the claimant below.
+	modifier = {
+		desc = "FACTION_REASON_SIDE_WITH_EXISTING"
+		add = -50
+		trigger_if = {
+			limit = {
+				exists = joined_faction
+			}
+			joined_faction = { save_temporary_scope_as = joined_faction_temp }
+		}
+		$FACTION_TARGET$.liege ?= {
+			any_targeting_faction = {
+		  		faction_type = ceremonial_claimant_faction
+
+				# Exists another claimant faction
+				trigger_if = {
+					limit = {
+						exists = scope:joined_faction_temp
+					}
+					this != scope:joined_faction_temp
+				}
+		  		# No player in that faction
+			  	NOT = {
+		  			any_faction_member = { is_ai = no }
+		  		}
+		  		# Faction claimant is NOT hated 
+				special_character = {
+					NOR = {
+						has_relation_rival = root
+						reverse_opinion = { target = root value < -25 }
+					}
+				}
+	  		}
+	  	}
+	}
 	}
 
 	# EP3 Dynasty Legacy Perk Malus

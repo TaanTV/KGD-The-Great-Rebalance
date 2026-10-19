@@ -41,6 +41,8 @@ global_religion.0001 = {
 						faith.religion = religion:islam_religion
 						faith = { NOT = { has_doctrine_parameter = unreformed } }
 					}
+					#ADDED - prefer reformed variant of your faith if it was reformed
+					NOT = { faith = { has_variable = has_been_reformed } }
 				}
 				random_neighboring_top_liege_realm_owner = {
 					limit = {
@@ -180,6 +182,8 @@ global_religion.0001 = {
 					faith:orthodox = {
 						exists = religious_head
 					}
+					#ADDED - prefer reformed variant of your faith if it was reformed
+					NOT = { faith = { has_variable = has_been_reformed } }
 				}
 				faith:orthodox = {
 					religious_head = {
@@ -196,11 +200,81 @@ global_religion.0001 = {
 					faith:catholic = {
 						exists = religious_head
 					}
+					#ADDED - prefer reformed variant of your faith if it was reformed
+					NOT = { faith = { has_variable = has_been_reformed } }
 				}
 				faith:catholic = {
 					religious_head = {
 						save_scope_as = actor #for the effect to work properly
 					}
+				}
+			}
+			#ADDED - prefer reformed variant of your faith if it was reformed
+			5 = {
+				trigger = {
+					faith = { 
+						has_variable = has_been_reformed 
+						save_temporary_scope_as = temp_faith_scope
+						religion = {
+							any_faith = { 
+								this != scope:temp_faith_scope
+								NOT = { has_doctrine_parameter = unreformed }
+								any_faith_rite = { num_rite_character_followers > 0 exists = head_of_rite }
+							}
+						}
+					}
+				}
+				rite = { save_scope_as = rite_scope }
+				faith.religion = {
+					every_faith = {
+						limit = {
+							this != scope:rite_scope.faith
+							NOT = { has_doctrine_parameter = unreformed }
+						}
+						every_faith_rite = {
+							limit = { num_rite_character_followers > 0 exists = head_of_rite }
+							add_to_list = list_of_rites_to_convert_to
+						}
+					}
+				}
+				random_in_list = {
+					list = list_of_rites_to_convert_to
+					weight = {
+						base = 1
+						modifier = {		#prefer ones most similar to what we have
+							add = {
+								value = 100
+								subtract = "divergence(scope:rite_scope)"
+								min = 0
+							}
+						}
+						modifier = {		#prefer mainline rites a bit
+							this = faith.main_rite
+							factor = 1.2
+						}
+					}
+					if = {
+						limit = { 
+							faith.religious_head.rite ?= this
+						}
+						faith.religious_head.rite = { save_scope_as = actor }
+					}
+					else = {
+						if = {
+							limit = { 
+								NOT = { rite_has_parameter = lay_clergy }
+								head_of_rite.cp:councillor_court_chaplain ?= { rite = prev }
+							}
+							head_of_rite.cp:councillor_court_chaplain = { save_scope_as = actor }
+						}
+						else = {
+							head_of_rite = { save_scope_as = actor }
+						}
+					}
+					debug_log = "omg someone converted to reformed version of their faith"
+					scope:actor.rite = { save_temporary_scope_as = new_rite_scope }
+					debug_log_scopes = yes
+					debug_log_date = yes
 				}
 			}
 			100 = {
@@ -245,6 +319,7 @@ global_religion.0001 = {
 				#ADDED
 				modifier = {
 					add = 25
+					NOT = { faith = { has_variable = has_been_reformed } }
 				}
 			}
 		}

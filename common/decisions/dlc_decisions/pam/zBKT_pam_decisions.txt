@@ -1316,3 +1316,493 @@ pam_prohibit_tenet_decision = {
 		}
 	}
 }
+
+
+### Consecrate a New Kingdom ###
+#Found kingdom, but an interaction on the HoF that has reduced land/prestige level reqs
+consecrate_kingdom_decision = {
+    picture = {
+        trigger = {
+            culture = { has_graphical_east_asia_culture_group_trigger = yes }
+        }
+        reference = "gfx/interface/illustrations/activity_splash_screens/tour_arrival_asia_welcome.dds"
+    }
+    picture = {
+        trigger = {
+            culture = { has_graphical_india_culture_group_trigger = yes }
+        }
+        reference = "gfx/interface/illustrations/event_scenes/ep2_feast_indian.dds"
+    }
+    picture = {
+        reference = "gfx/interface/illustrations/decisions/pam_decision_kingdom_of_heaven.dds"
+    }
+    decision_group_type = major
+    ai_check_interval_by_tier = {
+        barony = 0
+        county = 0
+        duchy = 60
+        kingdom = 0
+        empire = 0
+        hegemony = 0
+    }
+    desc = {
+    	first_valid = {
+    		triggered_desc = {
+    			trigger = {
+    				NOT = { exists = faith.religious_head }
+        			rite.head_of_rite ?= root
+    			}
+    			desc = consecrate_kingdom_decision_desc_self
+    		}
+    		desc = consecrate_kingdom_decision_desc
+    	}
+    }
+    sort_order = 75
+
+    #Titles outside your realm that you can choose to add
+    widget = {
+		gui = "decision_view_widget_option_list_generic"
+		controller = decision_option_list_controller
+		decision_to_second_step_button = "CHOOSE_ADDITIONAL_DUCHIES_DECISION_NEXT_STEP_BUTTON"
+
+		item = { # Newly-exclaved duchies
+			value = newly_exclaved_duchies
+			is_valid = {
+            	custom_tooltip = {
+					text = consecrate_kingdom_exclave_duchies_available_tt
+            		any_sub_realm_county = {
+        				kingdom = {
+        					any_direct_de_jure_vassal_title = {
+                	   			pam_custom_kingdom_can_claim_duchy_exclave_trigger = { NEW_KING = root }
+                	   		}
+        				}
+                	}
+                }
+			}
+			current_description = newly_exclaved_duchies_decision
+			localization = newly_exclaved_duchies_decision
+			ai_chance = {
+				value = 100
+			}
+		} 
+		item = { # Only Sub-Realm Duchies
+			value = only_sub_realm_duchies
+			is_valid = {
+				always = yes
+			}
+			current_description = only_sub_realm_duchies_decision
+			localization = only_sub_realm_duchies_decision
+			ai_chance = {
+				value = 0
+			}
+		}
+	}
+
+    is_shown = {
+        highest_held_title_tier = tier_duchy
+        OR = {
+        	has_legitimacy = yes
+        	government_has_flag = government_is_theocracy
+        }
+        is_landed_or_landless_administrative = yes
+        is_confederation_member = no
+        OR = {
+           	exists = rite.head_of_rite
+            exists = faith.religious_head
+        }
+        NOT = {
+            has_game_rule = off_custom_kingdoms
+        }
+        
+    }
+    is_valid = {
+        trigger_if = {
+        	limit = {
+        		has_legitimacy = yes
+        	}
+        	legitimacy_level >= 3
+        }
+        #OR = {
+            is_independent_ruler = yes
+        #    custom_tooltip = {
+        #        text = liege_is_two_tiers_higher_or_more_tt
+        #        liege ?= {
+        #            highest_held_title_tier >= tier_empire
+        #        }
+        #    }   
+        #}
+        trigger_if = {
+            limit = {
+                government_has_flag = government_is_nomadic
+            }
+            OR = {
+                has_realm_law = nomadic_authority_5
+                has_realm_law = nomadic_authority_4
+                has_realm_law = nomadic_authority_3
+            }
+        }
+        #If not doing on yourself
+        trigger_if = {
+    		limit = {
+    			NOR = {
+        			faith.religious_head ?= root
+        			AND = {
+        				NOT = {
+        					exists = faith.religious_head
+        				}
+        				rite.head_of_rite ?= root
+        			}
+        		}
+    		}
+    		custom_tooltip = {
+    			text = court_chaplain_puppet_tt
+    			exists = root.cp:councillor_court_chaplain
+    			root.puppet:theological_agent_puppet ?= root.cp:councillor_court_chaplain
+    		}
+    		OR = {
+    			trigger_if = {
+    				limit = {
+    					exists = faith.religious_head
+    				}
+    				faith.religious_head = { save_temporary_scope_as = faith_authority }
+    				has_hook = faith.religious_head
+    			}
+    			trigger_else = {
+    				rite.head_of_rite = { save_temporary_scope_as = faith_authority }
+    				has_strong_hook = rite.head_of_rite
+    			}
+    			trigger_if = {
+    				limit = {
+    					exists = faith.religious_head
+    				}
+    				custom_tooltip = {
+    					text = puppeting_faith_authority_tt
+    					OR = {
+    						root.puppet:theological_agent_puppet ?= this
+							root.puppet:external_theological_agent_puppet ?= this
+						}
+    				}
+    			}
+    			trigger_else = {
+    				custom_tooltip = {
+    					text = puppeting_faith_authority_tt
+    					OR = {
+    						root.puppet:theological_agent_puppet ?= this
+							root.puppet:external_theological_agent_puppet ?= this
+						}
+    				}
+    			}
+    			AND = {
+    				trigger_if = {
+    					limit = {
+    						exists = faith.religious_head
+    						faith.religious_head = {
+    							is_ai = yes
+    						}
+    					}
+    					faith.religious_head = {
+    						opinion = {
+    							target = root
+    							value >= 0
+    						}
+    					}
+    				}
+    				trigger_if = {
+    					limit = {
+    						NOT = { exists = faith.religious_head }
+    						rite.head_of_rite = {
+    							is_ai = yes
+    						}
+    					}
+    					rite.head_of_rite = {
+    						opinion = {
+    							target = root
+    							value >= 0
+    						}
+    					}
+    				}
+    				#You gotta have a reason man
+    				OR = {
+    					custom_tooltip = {
+    						text = realm_contains_holy_site_tt
+    						any_sub_realm_county = {
+    							any_county_province = {
+									barony = {
+										is_holy_site_of = root.faith
+									}
+								}
+    						}
+    					}
+    					custom_tooltip = {
+    						text = neighbors_hostile_faith_tt
+    						any_sub_realm_county = {
+    							any_neighboring_county = {
+    								holder.top_liege ?= {
+    									NOT = {
+    										faith = root.faith
+    									}
+    									faith = {
+    										faith_hostility_level = {
+												target = root.faith
+												value >= faith_hostile_level
+											}
+    									}
+    								}
+    							}
+    						}
+    					}
+    					trigger_if = {
+    						limit = {
+    							exists = faith.religious_head
+    						}
+							custom_tooltip = {
+    							text = house_is_faith_head_or_cardinal_tt
+    							exists = root.house
+    							OR = {
+    								faith.religious_head.house ?= root.house
+    								faith = {
+    									any_faith_subordinate = {
+    										exists = clerical_elector_title
+    										house = root.house
+    									}
+    								}
+    							}
+    						}
+    					}
+    					trigger_else = {
+							custom_tooltip = {
+    							text = house_is_faith_head_or_cardinal_tt
+    							exists = root.house
+    							OR = {
+    								rite.head_of_rite.house ?= root.house
+    								faith = {
+    									any_faith_subordinate = {
+    										exists = clerical_elector_title
+    										house = root.house
+    									}
+    								}
+    							}
+    						}
+    					}
+    					custom_tooltip = {
+    						text = is_holy_order_patron_tt
+    						any_patroned_holy_order = {
+    							leader.faith ?= root.faith
+    						}
+    					}
+    					piety_level >= 4
+    				}
+    			}
+    		}
+    	}
+    	trigger_else = {
+        	piety_level >= 3
+    	}
+        trigger_if = {
+    		limit = {
+    			any_held_title = {
+    				tier = tier_duchy
+    				is_landless_type_title = yes
+    			}
+    		}
+    		custom_tooltip = {
+    			text = any_landed_duchy_title_tt
+    			any_held_title = {
+    				tier = tier_duchy
+    				is_landless_type_title = no
+    			}
+    		}
+    	}
+        #No HoF? Then we are using HoR and it must be someone ecclesiastical
+      	OR = {
+        	custom_tooltip = {
+        	    text = head_of_faith_tt
+        	    exists = faith.religious_head
+        	}
+        	custom_tooltip = {
+        	    text = head_of_rite_can_consecrate_kingdom_tt
+        	    rite.head_of_rite = {
+        	        government_has_flag = government_is_theocracy
+        	        highest_held_title_tier >= tier_duchy
+        	    }
+        	}
+        }
+    }
+    is_valid_showing_failures_only = {
+		NOT = {
+			has_character_modifier = promised_pilgrimage_to_clergy_modifier
+		}
+        is_available_adult = yes
+        is_at_war = no
+        trigger_if = {
+            limit = {
+                exists = faith.religious_head
+            }
+        }
+        trigger_else = {
+        	trigger_if = {
+        		limit = {
+        			is_independent_ruler = no
+        		}
+        		custom_tooltip = {
+					text = head_of_rite_is_not_lieges_head_of_rite_tt
+					exists = liege.rite.head_of_rite
+					rite.head_of_rite ?= liege.rite.head_of_rite
+				}
+        	}
+        }
+    }
+    cost = {
+        gold = {
+            value = 150
+            multiply = ecclesiastical_domicile_consecration_cost_mult
+            if = {
+                limit = {
+                    OR = {
+                        government_has_flag = government_is_nomadic
+                        has_treasury = yes
+                    }
+                }
+                multiply = 0
+            }
+        }
+        treasury = {
+            value = 150
+            multiply = ecclesiastical_domicile_consecration_cost_mult
+            if = {
+                limit = {
+                    has_treasury = no
+                }
+                multiply = 0
+            }
+        }
+        piety = {
+            value = 750
+        	if = {
+        		limit = {
+        			government_has_flag = government_is_theocracy
+        		}
+        		add = 250
+        	}
+        	if = {
+        		limit = {
+        			OR = {
+        				faith.religious_head ?= root
+        				AND = {
+        					rite.head_of_rite ?= root
+        					NOT = {
+        						exists = faith.religious_head
+        					}
+        				}
+        			}
+        		}
+        		add = 250
+        	}
+        	multiply = ecclesiastical_domicile_consecration_cost_mult
+        }
+    }
+    effect = {
+        save_scope_as = recipient
+        save_scope_as = king_aspirant
+        if = {
+            limit = {
+                exists = faith.religious_head
+            }
+            faith.religious_head = {
+                save_scope_as = religious_authority
+                save_scope_as = puppet_or_actor
+            }
+        }
+        else = {
+            rite.head_of_rite = {
+                save_scope_as = religious_authority
+                save_scope_as = puppet_or_actor
+            }
+        }
+        #Give player pope chance to approve/disapprove
+        if = {
+        	limit = {
+        		scope:religious_authority = {
+        			NOT = {
+        				this = root
+        			}
+        			is_ai = no
+        		}
+        	}
+        	custom_tooltip = consecrate_kingdom_player_warning_tt
+        	save_scope_as = king_aspirant
+        	scope:religious_authority = {
+        		trigger_event = {
+        			id = pam_decision_events.0030
+        			days = 1
+        		}
+        	}
+        	show_as_tooltip = {
+        		consecrate_kingdom_effect = yes
+        	}
+        }
+        #Go straight to effect
+        else = {
+        	consecrate_kingdom_effect = yes
+        }
+        if = {
+        	limit = {
+        		scope:religious_authority = root
+        	}
+        	stress_impact = {
+        		humble = major_stress_impact_gain
+        		content = major_stress_impact_gain
+        		just = major_stress_impact_gain
+        	}
+        }
+        if = {
+        	limit = {
+        		is_independent_ruler = no
+        	}
+        	liege = {
+        		add_opinion = {
+					target = root
+					modifier = circumvented_my_authority_opinion
+					opinion = -20
+				}
+        	}
+        }
+    }
+    ai_potential = {
+		#ADDED
+		top_liege = this
+        NOR = {
+        	has_trait = greatest_of_khans
+        	has_trait = conqueror
+        	has_trait = ambitious
+        	has_trait = cynical
+        	has_trait = just
+        }
+    }
+    ai_will_do = {
+        base = 50
+        modifier = {
+        	government_has_flag = government_is_theocracy
+        	factor = 0.5
+        }
+        modifier = {
+        	OR = {
+        		faith.religious_head ?= root
+        		AND = {
+        			rite.head_of_rite ?= root
+        			NOT = {
+        				exists = faith.religious_head
+        			}
+        		}
+        	}
+        	OR = {
+        		has_trait = humble
+        		has_trait = content
+        		has_trait = just
+        		ai_honor > 0
+        		ai_greed < 0
+        	}
+        	factor = 0
+        }
+    }
+}

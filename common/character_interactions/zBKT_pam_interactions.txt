@@ -410,7 +410,11 @@ pam_reaffirm_doctrine_interaction = {
 	
 	#ADDED - requires puppet if not lay clergy
 	is_valid = {
-		scope:puppet_or_actor = { 
+		scope:puppet_or_actor = {
+			trigger_if = {
+				limit = { government_has_mechanic = administrative }
+				is_independent_ruler = yes
+			}
 			trigger_if = {
 				limit = { has_puppet_type = theological_agent_puppet }
 				custom_tooltip = {
@@ -471,6 +475,14 @@ pam_reaffirm_doctrine_interaction = {
 
 	ai_accept = {
 		base = -100
+
+		#ADDE - help AI out a bit
+		modifier = {
+			scope:actor = { is_ai = yes }
+			scope:recipient = { is_ai = yes }
+			add = 30
+			desc = spiritual_counsel_ai_priest_pious
+		}
 
 		modifier = {
 			add = {
@@ -937,6 +949,13 @@ pam_reaffirm_doctrine_interaction = {
 	}
 
 	is_shown = {
+		#ADDED - check this
+		scope:puppet_or_actor = {
+			OR = {
+				government_is_religious_trigger = yes
+				highest_held_title_tier >= tier_kingdom
+			}
+		}
 		scope:recipient = {
 			is_adult = yes
 			faith ?= scope:puppet_or_actor.faith	#prev actor
@@ -2094,7 +2113,7 @@ pam_reaffirm_doctrine_interaction = {
 		hidden_effect = {
 			if = {
 				limit = { is_ai = yes }
-				debug_log = "reaffirm_doctrine used by AI"
+				debug_log = "reaffirm_doctrine accepted by AI"
 				debug_log_scopes = yes
 			}
 		}
@@ -2132,7 +2151,7 @@ pam_reaffirm_doctrine_interaction = {
 		}
 		#ADDED
 		hidden_effect = {
-			debug_log = "reaffirm_doctrine used by AI"
+			debug_log = "reaffirm_doctrine declined by AI"
 			debug_log_scopes = yes
 		}
 	}

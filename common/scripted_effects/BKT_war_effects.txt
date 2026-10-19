@@ -564,34 +564,6 @@ on_claimant_faction_war_win_common = {
 	$CLAIMANT$ = {
 		save_scope_as = the_claimant
 	}
-	
-	#ADDED - some fun stuff
-	if = {
-		limit = { 
-			exists = scope:war
-			$ATTACKER$.joined_faction.special_title ?= $DEFENDER$.primary_title
-			$DEFENDER$ = { is_imprisoned = no }
-		}
-		$DEFENDER$ = { 
-			save_scope_as = will_be_imprisoned 
-		}
-		if = {
-			limit = { 
-				$DEFENDER$.primary_heir ?= {
-					is_courtier_of = $DEFENDER$
-					dynasty ?= $DEFENDER$.dynasty
-					is_imprisoned = no 
-				}
-			}
-			$DEFENDER$.primary_heir = { save_scope_as = heir_to_be_imprisoned }
-		}
-	}
-	#Unop ck3-tiger Set faction_targeted_title from faction special_title
-	$ATTACKER$.joined_faction ?= {
-		special_title = {
-			save_scope_as = faction_targeted_title
-		}
-	}
 
 	# If the claimant is the prisoner of the defender, free the claimant (it doesn't make much sense to leave the new king in the old king's dungeon)
 	scope:the_claimant = {
@@ -712,6 +684,44 @@ on_claimant_faction_war_win_common = {
 					is_noble_family_title = no
 				}
 				add_to_list = faction_titles
+			}
+		}
+		#ADDED - take everything except the bits target holds elsewhere and the titles above said bits
+		else_if = {
+			limit = {
+				primary_title = { 
+					is_in_list = faction_titles 
+					tier > tier_county
+				}
+				OR = {
+					government_has_flag = government_is_feudal
+					government_has_flag = government_is_clan
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_japan_feudal
+				}
+			}
+			primary_title = { save_temporary_scope_as = primary_title_scope }
+			every_held_title = {
+				title_tier > barony
+				limit = {
+					is_noble_family_title = no
+				}
+				add_to_list = faction_titles
+			}
+			every_held_county = {
+				limit = { NOT = { target_is_de_jure_liege_or_above = scope:primary_title_scope } }
+				every_this_title_or_de_jure_above = {
+					remove_from_list = faction_titles
+				}
+			}
+			if = {	
+				limit = { any_held_title = { count = all OR = { tier = tier_barony is_in_list = faction_titles } } }
+				primary_title = { save_scope_as = lost_primary_title }
+				save_scope_as = title_loser
+				scope:the_claimant = {
+					save_scope_as = new_holder #save the new title holder here, so that it is passed down to the setup event to trigger the correct follow up event
+				}
 			}
 		}
 	}
@@ -897,34 +907,6 @@ on_claimant_faction_war_win_common = {
 			}
 			change_current_court_grandeur = massive_court_grandeur_gain # Gain a bonus to Grandeur for winning a claim faction
 		}
-		
-		#ADDED
-		if = {
-			limit = { exists = scope:will_be_imprisoned }
-			imprison = {
-				target = scope:will_be_imprisoned
-				type = dungeon
-			}
-			add_to_variable_list = {
-				name = claimant_won_against_those
-				target = scope:will_be_imprisoned
-				years = 30
-			}
-			if = {
-				limit = { 
-					exists = scope:heir_to_be_imprisoned
-				}
-				imprison = {
-					target = scope:heir_to_be_imprisoned
-					type = dungeon
-				}
-				add_to_variable_list = {
-					name = claimant_won_against_those
-					target = scope:heir_to_be_imprisoned
-					years = 30
-				}
-			}
-		}
 	}
 
 	# Byzantine flavor
@@ -953,6 +935,13 @@ on_claimant_faction_war_win_common = {
 		}
 	}
 
+	#ADDED
+	if = {
+		limit = { exists = scope:lost_primary_title }
+		scope:target_holder = {
+			trigger_event = { id = ep3_laamps.0002 }
+		}
+	}
 }
 
 pay_short_term_gold_reparations_effect = {

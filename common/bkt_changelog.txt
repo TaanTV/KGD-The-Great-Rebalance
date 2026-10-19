@@ -45,15 +45,18 @@ Not soon:
 #TODO: add opinion malus with attacker to every (independent?..) neighbour of defender when war is declared
 #TODO: make legitimazing bastards and cutting/restoring inheritance a WAY bigger deal
 #TODO: make some events (or just actions with notifications - preferable) so that barons with low opinion shit on you and barons with high one mabe help you a bit
+#TODO: make non-de-jure vassals have bigger opinion penalty and smaller tax/levy penalty maybe?
+#TODO: do a thingy with confederation unification like with NATO titles in KCU (on destroyed de-jure reverts back, eats de-jure on formation like custom kingdoms)
+
 
 Soon:
 #TODO: copy paste 10_ach_oath_decisions.txt and equalise the playing field (and nerf the peace oath)
-#TODO: do a thingy with confederation unification like with NATO titles in KCU (on destroyed de-jure reverts back, eats de-jure on formation like custom kingdoms)
 #TODO: make reforming into feudal only reform YOU and maybe some vassals who accept or smth idk 
 #TODO: make older (or younger for ultimo?) son/daughter become rival and gtfo if they dont inherit and are not too much of a pussy
 #TODO: add some chance to become rivals (grudge?) on raid, effect: progress_towards_rival_effect, reason: rival_raided_me, file: BKT_army_on_actions.txt
 #TODO: restrict theocratic/ecclesiastic war declarations if their rite/they personaly dont have certain tenets
 #TODO: BKT_on_character_faith_change might need to be reconsidered
+#TODO: scale innovaton progress gain % or whatever down with culture head rank? would require to come up with some counterplay tho.
 
 Very soon:
 #TODO: maybe make chars lose opinion of you if you marry them to a lowborn/shit renown spouse? and possibly try to kill her? or get -210312030210% fertility penalty???
@@ -61,15 +64,33 @@ Very soon:
 #TODO: an event when defeating northmen army instead of the effect being fixed, maybe?
 #TODO: an event when u win a war for a claimant for title of same tier as yours (they can become a tributary, an ally or idk whatever)
 #TODO: idk make calling on admin troops more expensive with lower legitimacy or just modify influence gain in legitimacy itself
-#TODO: make non-de-jure vassals have bigger opinion penalty and smaller tax/levy penalty maybe?
-#TODO: make a decision to elevate your head of faith to kingdom-tier title (im sure that is possible and it would be very neato)
+#TODO: make a decision to elevate your head of faith to kingdom-tier title (the effect is already done btw)
+
+####	0.13.5	###
+- Made claimant faction targeting primary title have claimant take most of target's titles
+- Added monthly legitimacy malus to most eldery traits
+- Added monthly piety bonus to Theocratic government (consistency with Ecclesiastical)
+- Reduced vassal opinion bonuses for AI from Roleplay/Rolehard and Additional Difficulty gamerules
+- Reduced both of State Ransoming tradition effects (again)
+- Increased divergence of Divorce doctrines
+- Restricted Consecrate a New Kingdom decision for non-independent rulers
+- Restricted Reaffirm Doctrine interaction for secular rulers of low rank and administative vassals
+- Restricted changing tributary contracts right after becoming a tributary
+- Made AI create new claimant factions if some already exist less, even if they dont love the claimant in those
+- Made AI more likely to create/join claimant factions vs liege's with eldery traits (and less likely to support claimants with them)
+- Made AI more reluctant to ransom claimants to its primary title it dislikes
+- Made AI less reluctant to marry with alliance at base but more reluctant if it already has a lot of allies
+- Made AI less reluctant to marry the player with alliances on hard/very hard difficulties
+- Made AI of unreformed faith prefer converting to reformed version of their faith if it exists
+- Made AI theocracies declare less wars if their rite isnt a warring kind
+- Fixed AI being reluctant to join/stay in claimant factions where the claimant has low legitimacy if they are the claimant
+- Fixed claimant validity checking defender for having Palace Politics tradition instead of the attacker 
+- Fixed some Offer/Demand courtier AI acceptance/send chance weirdness
+- Fixed some ceremonial claimant BS
 
 ####	0.13.4.1###
--
-
-####	0.13.4.1###
-- Resctired Reaffirm Doctrine interaction for characters of unreformed faiths
-- Made Reaffirm Doctrine interaction avaliable to main rite head if faith has no head of faith doctrine
+- Restricted Reaffirm Doctrine interaction for characters of unreformed faiths
+- Made Reaffirm Doctrine interaction avaliable to main rite rite head if faith has no head of faith doctrine
 - Made Fundamentalist and Righteous attitudes increase cost of modifying a rite
 - Made weak nomad culling target nomads with less than 1000 herd instead of less than 150
 - Made AI use both Summon Wealthy Visitors decisions more
@@ -143,7 +164,7 @@ Updated to 1.20.1
 - Reduced chance to learn doctrines/tenets by travelling massively (AGAIN)
 - Reduced clergy opinion but added learning lifestyle xp bonus to Religious Scholar trait
 - Restricted choosing tenets to only ones active in the faith in Ecumenical Council
-- Resctired default raid intent if you have access to raiding only through Sacred Destruction personal tenet
+- Restricted default raid intent if you have access to raiding only through Sacred Destruction personal tenet
 - Restricted conversion penalties from applying to very young children 
 - Study Rite scheme changes:
 - - Restricted asking for emmisaries from non-rulers

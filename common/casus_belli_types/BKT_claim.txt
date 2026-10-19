@@ -155,7 +155,7 @@
 		#Under Byzantine law, a ruler must be unblemished
 		trigger_if = {
 			limit = {
-				scope:defender.culture = { has_cultural_parameter = physical_disfigurement_blocks_inheritance }
+				scope:attacker.culture = { has_cultural_parameter = physical_disfigurement_blocks_inheritance }	#prev scope:defender
 			}
 			scope:claimant = {
 				custom_description = {
@@ -168,7 +168,7 @@
 		#Under Byzantine law, a ruler must be able to produce children.
 		trigger_if = {
 			limit = {
-				scope:defender.culture = { has_cultural_parameter = physical_disfigurement_blocks_inheritance }
+				scope:attacker.culture = { has_cultural_parameter = physical_disfigurement_blocks_inheritance }	#prev scope:defender
 			}
 			scope:claimant = {
 				custom_description = {

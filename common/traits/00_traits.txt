@@ -6161,6 +6161,8 @@ infirm = {
 	health = -0.25
 	fertility = -0.1
 	ai_energy = -10
+	#ADDED
+	monthly_legitimacy_add = -0.05
 
 	flag = infirm_random_xp_gain
 	flag = age_related_ailment
@@ -6198,6 +6200,8 @@ infirm = {
 				dread_loss_mult = 0.25
 				attraction_opinion = -5
 				ai_energy = -10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			50 = {
 				diplomacy = -2
@@ -6210,6 +6214,8 @@ infirm = {
 				dread_loss_mult = 0.25
 				attraction_opinion = -5
 				ai_energy = -10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			75 = {
 				diplomacy = -2
@@ -6222,6 +6228,8 @@ infirm = {
 				dread_loss_mult = 0.25
 				attraction_opinion = -5
 				ai_energy = -10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			100 = {
 				diplomacy = -2
@@ -6234,6 +6242,8 @@ infirm = {
 				dread_loss_mult = 0.25
 				attraction_opinion = -5
 				ai_energy = -10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 		}
 	}
@@ -6244,6 +6254,8 @@ withering_mind = {
 	monthly_lifestyle_xp_gain_mult = -0.25
 	stress_gain_mult = 0.2
 	ai_rationality = -25
+	#ADDED
+	monthly_legitimacy_add = -0.05
 
 	flag = withering_mind_random_xp_gain
 	flag = incapable_on_max_level
@@ -6277,6 +6289,8 @@ withering_mind = {
 				monthly_lifestyle_xp_gain_mult = -0.25
 				stress_gain_mult = 0.2
 				ai_rationality = -25
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			50 = {
 				diplomacy_mult = -0.25
@@ -6287,6 +6301,8 @@ withering_mind = {
 				monthly_lifestyle_xp_gain_mult = -0.25
 				stress_gain_mult = 0.2
 				ai_rationality = -25
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			75 = {
 				diplomacy_mult = -0.25
@@ -6297,6 +6313,8 @@ withering_mind = {
 				monthly_lifestyle_xp_gain_mult = -0.5
 				stress_gain_mult = 0.2
 				ai_rationality = -25
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			100 = {
 				diplomacy_mult = -0.25
@@ -6307,6 +6325,8 @@ withering_mind = {
 				monthly_lifestyle_xp_gain_mult = -0.5
 				stress_gain_mult = 0.2
 				ai_rationality = -25
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 		}
 	}
@@ -6324,7 +6344,7 @@ clouded_eyes = {
 	category = health
 	flag = lowers_health
 
-	ruler_designer_cost = -20
+	ruler_designer_cost = -10	#prev -20
 
 	desc = {
 		first_valid = {
@@ -6380,6 +6400,8 @@ faltering_heart = {
 	character_travel_safety = -2
 	stress_gain_mult = 0.15		#prev 0.2
 	stress_loss_mult = -0.1		#prev -0.2
+	#ADDED
+	monthly_legitimacy_add = -0.05
 
 	flag = faltering_heart_random_xp_gain
 	flag = age_related_ailment
@@ -6411,6 +6433,8 @@ faltering_heart = {
 				character_travel_safety = -2
 				stress_gain_mult = 0.15		#prev 0.2
 				stress_loss_mult = -0.1		#prev -0.2
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			50 = {
 				health = -0.1
@@ -6418,6 +6442,8 @@ faltering_heart = {
 				character_travel_safety = -2
 				stress_gain_mult = 0.15		#prev 0.2
 				stress_loss_mult = -0.15	#prev -0.2
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			75 = {
 				health = -0.1
@@ -6425,6 +6451,8 @@ faltering_heart = {
 				character_travel_safety = -2
 				stress_gain_mult = 0.15		#prev 0.2
 				stress_loss_mult = -0.15	#prev -0.2
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			100 = {
 				health = -100
@@ -6439,6 +6467,8 @@ fragile_bones = {
 	advantage = -2				#prev -3
 	life_expectancy = -2		#prev -3
 	enemy_hostile_scheme_success_chance_max_add = 5
+	#ADDED
+	monthly_legitimacy_add = -0.05
 
 	flag = fragile_bones_random_xp_gain
 	flag = age_related_ailment
@@ -6470,6 +6500,8 @@ fragile_bones = {
 				advantage = -2			#prev -3
 				life_expectancy = -2	#prev -3
 				enemy_hostile_scheme_success_chance_max_add = 5		#prev 10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			50 = {
 				character_travel_speed_mult = -0.1
@@ -6477,6 +6509,8 @@ fragile_bones = {
 				advantage = -3
 				life_expectancy = -3
 				enemy_hostile_scheme_success_chance_max_add = 10
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			75 = {
 				character_travel_speed_mult = -0.1
@@ -6484,6 +6518,8 @@ fragile_bones = {
 				advantage = -3			#prev -5
 				life_expectancy = -3	#prev -5
 				enemy_hostile_scheme_success_chance_max_add = 15
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 			100 = {
 				character_travel_speed_mult = -0.1
@@ -6491,6 +6527,8 @@ fragile_bones = {
 				advantage = -10
 				life_expectancy = -10
 				enemy_hostile_scheme_success_chance_max_add = 15
+				#ADDED
+				monthly_legitimacy_add = -0.05
 			}
 		}
 	}

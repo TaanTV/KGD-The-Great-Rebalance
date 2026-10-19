@@ -36,6 +36,11 @@ theocracy_government = {
 
 	vassal_contract_group = theocracy_vassal
 
+	#ADDED - why isnt this here
+	character_modifier = {
+		monthly_piety = 0.25
+	}
+
 	# Use flags instead of has_government for moddability if possible (i.e., wherever not visible to the player).
 	flags = {
 		government_is_theocracy
