@@ -348,6 +348,21 @@ can_be_commander_now_trigger = {
 	trigger_if = {
 		limit = { $ARMY_OWNER$ = { is_ai = yes } }
 		is_ai = yes
+		#ADDED - dont lead if you're ought to die to that
+		trigger_if = {
+			limit = {
+				OR = {
+					this = $ARMY_OWNER$
+					is_close_family_of = $ARMY_OWNER$
+				}
+				NOT = { exists = commanding_army }		#dont invalidate commanders that are already leading
+			}
+			prowess >= 8
+			OR = {
+				prowess >= 12
+				has_perk = stalwart_leader_perk
+			}
+		}
 	}
 	custom_description = {
 		text = ALREADY_IN_ACTIVITY

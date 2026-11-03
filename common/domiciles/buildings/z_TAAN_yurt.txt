@@ -232,12 +232,15 @@ trade_yurt_01 = {
 	can_construct = {
 		custom_tooltip = {
 			text = trade_yurt_unlock_req
+			#ADDED - this thing is w important for AI to have any money whatsoever.
+			OR = {
+				is_ai = yes
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
 					government_has_flag = government_is_in_steppe
 				}
 			}
-        	is_ai = yes
+			}
 		}	
 	}
 

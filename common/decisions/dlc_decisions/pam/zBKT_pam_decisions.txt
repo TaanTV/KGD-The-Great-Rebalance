@@ -1069,7 +1069,7 @@ pam_prohibit_tenet_decision = {
 					is_ruler = yes
 					this != scope:pam_tenet_stance_issuer
 				}
-				trigger_event = { id = pam_decision_events.0013 days = 1 }
+				trigger_event = { id = pam_decision_events.0011 days = 1 }
 			}
 			#ADDED - faith-wide cooldown
 			hidden_effect = {

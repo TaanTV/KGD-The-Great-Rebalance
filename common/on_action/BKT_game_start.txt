@@ -287,6 +287,10 @@ BKT_on_start_misc = {
 					clear_saved_scope = low_obligations
 				}
 			}
+			#fix god damn bavaria fix not working
+			character:90107 ?= {
+				add_realm_law_skip_effects = confederate_partition_succession_law
+			}
 		}
 		else_if = {
 			limit = {

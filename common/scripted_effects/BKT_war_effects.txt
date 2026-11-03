@@ -722,6 +722,26 @@ on_claimant_faction_war_win_common = {
 				scope:the_claimant = {
 					save_scope_as = new_holder #save the new title holder here, so that it is passed down to the setup event to trigger the correct follow up event
 				}
+				if = {
+					limit = { 
+						faith.religious_head = this 
+						scope:claimant.faith != faith
+					}
+					faith.religious_head_title = { 
+						remove_from_list = faction_titles 
+					}
+					destroy_title = faith.religious_head_title
+				}
+			}
+			else_if = {
+				limit = { 
+					faith.religious_head = this 
+					scope:claimant.faith != faith
+				}
+				faith.religious_head_title = { 
+					remove_from_list = faction_titles 
+				}
+				destroy_title = faith.religious_head_title
 			}
 		}
 	}

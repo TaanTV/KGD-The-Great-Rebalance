@@ -66,6 +66,11 @@ Very soon:
 #TODO: idk make calling on admin troops more expensive with lower legitimacy or just modify influence gain in legitimacy itself
 #TODO: make a decision to elevate your head of faith to kingdom-tier title (the effect is already done btw)
 
+####	0.13.5.1###
+- Made AI not lead its armies if its prowess is way too low
+- Fixed 867 east francia succession being broken
+- Fixed some weirdness with claimant factions and head of faith titles
+
 ####	0.13.5	###
 - Made claimant faction targeting primary title have claimant take most of target's titles
 - Added monthly legitimacy malus to most eldery traits
