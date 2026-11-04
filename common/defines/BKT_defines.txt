@@ -209,7 +209,7 @@ NCharacterOpinion = {
 }
 
 NCombat = {
-	UNRAISED_LEVY_REGIMENTS_SPEED = 14.0	#prev 40.0			# How many distance units do unraised regiments travel per day when gathering
+	UNRAISED_LEVY_REGIMENTS_SPEED = 80 # 14.0	#prev 40.0			# How many distance units do unraised regiments travel per day when gathering
 	
 	BASE_RATIO_CASUALTIES_CONVERSION = 0.2	#prev 0.3			# How many of the soft casualties should be converted to hard casualties during the main phas
 	
