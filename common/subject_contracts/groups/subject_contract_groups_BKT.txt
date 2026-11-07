@@ -7,7 +7,7 @@
 	
 	contracts = {
 		default_tributary_taxes
-		#default_tributary_levies
+		default_tributary_levies
 		default_tributary_prestige
 		suzerain_war_participation_guarantee
 		tributary_war_participation_obligation

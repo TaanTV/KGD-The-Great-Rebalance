@@ -296,12 +296,15 @@ trade_yurt_02 = {
 	can_construct = {
 		custom_tooltip = {
 			text = trade_yurt_unlock_req
+			#ADDED - this thing is w important for AI to have any money whatsoever.
+			OR = {
+				is_ai = yes
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
 					government_has_flag = government_is_in_steppe
 				}
 			}
-        	is_ai = yes
+			}
 		}	
 	}
 
@@ -354,12 +357,15 @@ trade_yurt_03 = {
 	can_construct = {
 		custom_tooltip = {
 			text = trade_yurt_unlock_req
+			#ADDED - this thing is w important for AI to have any money whatsoever.
+			OR = {
+				is_ai = yes
 			any_neighboring_top_liege_realm_owner = {
 				NOT = {
 					government_has_flag = government_is_in_steppe
 				}
 			}
-        	is_ai = yes
+			}
 		}	
 	}
 
@@ -654,185 +660,6 @@ merchant_yurt_01 = {
 	}
 }
 
-trade_yurt_04 = {
-	construction_time = @yurt_external_construction_time_tier_4
-	allowed_domicile_types = { yurt }
-	previous_building = trade_yurt_03
-	internal_slots = 3
-
-	can_construct = {
-		custom_tooltip = {
-			text = trade_yurt_unlock_req
-			any_neighboring_top_liege_realm_owner = {
-				NOT = {
-					government_has_flag = government_is_in_steppe
-				}
-			}
-        	is_ai = yes
-		}	
-	}
-
-	cost = {
-		herd = yurt_external_building_herd_cost_tier_4
-		prestige = yurt_external_building_prestige_cost_tier_4
-		gold = {
-			add = yurt_external_building_gold_cost_tier_4
-			multiply = 1.5	#prev 2
-		}
-	}
-
-	character_modifier = {
-		domicile_monthly_gold_add = 0.3
-		#monthly_income_from_herd_mult = 0.02
-		#ADDED
-		domicile_monthly_gold_mult = 0.03
-	}
-
-	province_modifier = {
-		defender_holding_advantage = 1
-	}
-
-	parameters = {
-		nomad_yurt_unlock_establish_smol_paiza = yes
-		nomad_yurt_unlock_establish_paiza = yes
-	}
-
-	ai_value = {
-		value = 7 # add nomadic_capital_exterior_building_4
-		# ADDED
-#		if = {
-#			limit = {
-#				NOT = { prestige >= 230 }
-#			}
-#			value = 0
-#		}
-		else_if = {
-			limit = {
-				gold >= 2000
-			}
-			value = 1000000
-		}
-		else_if = {
-			limit = {
-				monthly_character_balance < 3
-			}
-			value = 500
-		}
-	}
-
-	asset = {
-		icon = "gfx/interface/icons/domicile_building/domicile_trade_yurt.dds"
-		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
-		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
-		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
-	}
-}
-
-trade_yurt_05 = {
-	construction_time = @yurt_external_construction_time_tier_5
-	allowed_domicile_types = { yurt }
-	previous_building = trade_yurt_04
-	internal_slots = 4
-
-	can_construct = {
-		custom_tooltip = {
-			text = trade_yurt_unlock_req
-			any_neighboring_top_liege_realm_owner = {
-				NOT = {
-					government_has_flag = government_is_in_steppe
-				}
-			}
-        	is_ai = yes
-		}	
-	}
-
-	cost = {
-		herd = yurt_external_building_herd_cost_tier_5
-		prestige = yurt_external_building_prestige_cost_tier_5
-		gold = {
-			add = yurt_external_building_gold_cost_tier_5
-			multiply = 1.5	#prev 2
-		}
-	}
-
-	character_modifier = {
-		domicile_monthly_gold_add = 0.3
-		#monthly_income_from_herd_mult = 0.03
-		#ADDED
-		domicile_monthly_gold_mult = 0.04
-	}
- 
-	parameters = {
-		nomad_yurt_unlock_establish_smol_paiza = yes
-		nomad_yurt_unlock_establish_paiza = yes
-	}
-
-	ai_value = {
-		value = nomadic_capital_exterior_building_5
-	}
-
-	asset = {
-		icon = "gfx/interface/icons/domicile_building/domicile_trade_yurt.dds"
-		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
-		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
-		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
-	}
-}
-
-trade_yurt_06 = {
-	construction_time = @yurt_external_construction_time_tier_6
-	allowed_domicile_types = { yurt }
-	previous_building = trade_yurt_05
-	internal_slots = 5
-
-	can_construct = {
-		custom_tooltip = {
-			text = trade_yurt_unlock_req
-			any_neighboring_top_liege_realm_owner = {
-				NOT = {
-					government_has_flag = government_is_in_steppe
-				}
-			}
-        	is_ai = yes
-		}	
-	}
-
-	cost = {
-		herd = yurt_external_building_herd_cost_tier_6
-		prestige = yurt_external_building_prestige_cost_tier_6
-		gold = {
-			add = yurt_external_building_gold_cost_tier_6
-			multiply = 1.5	#prev 2
-		}
-	}
- 
-	character_modifier = {
-		domicile_monthly_gold_add = 0.5
-		#monthly_income_from_herd_mult = 0.03
-		#ADDED
-		domicile_monthly_gold_mult = 0.04
-	}
-
-	province_modifier = {
-		defender_holding_advantage = 1
-	}
-
-	parameters = {
-		nomad_yurt_unlock_establish_smol_paiza = yes
-		nomad_yurt_unlock_establish_paiza = yes
-	}
-
-	ai_value = {
-		value = nomadic_capital_exterior_building_6
-	}
-
-	asset = {
-		icon = "gfx/interface/icons/domicile_building/domicile_trade_yurt.dds"
-		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
-		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
-		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
-	}
-}
 
 merchant_yurt_02 = {
 	construction_time = @yurt_internal_construction_time_tier_2
@@ -2963,6 +2790,65 @@ innovation_yurt_01 = {
 
 	asset = {
 		icon = "gfx/interface/icons/domicile_building/domicile_culture.dds"
+		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
+		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
+	}
+}
+
+
+trade_yurt_04 = {
+	construction_time = @yurt_external_construction_time_tier_4
+	allowed_domicile_types = { yurt }
+	previous_building = trade_yurt_03
+	internal_slots = 3
+
+	can_construct = {
+		custom_tooltip = {
+			text = trade_yurt_unlock_req
+			any_neighboring_top_liege_realm_owner = {
+				NOT = {
+					#government_has_flag = government_is_in_steppe
+				}
+			}
+		}	
+	}
+
+	cost = {
+		herd = yurt_external_building_herd_cost_tier_4
+		prestige = yurt_external_building_prestige_cost_tier_4
+		gold = {
+			add = yurt_external_building_gold_cost_tier_4
+			multiply = 1.5	#prev 2
+		}
+	}
+
+	character_modifier = {
+		domicile_monthly_gold_add = 0.3
+		#monthly_income_from_herd_mult = 0.02
+		#ADDED
+		domicile_monthly_gold_mult = 0.03
+	}
+
+	province_modifier = {
+		defender_holding_advantage = 1
+	}
+
+	parameters = {
+		nomad_yurt_unlock_establish_smol_paiza = yes
+		nomad_yurt_unlock_establish_paiza = yes
+	}
+
+	ai_value = {
+		value = nomadic_capital_interior_building_4
+		if = {
+			limit = { herd > 15000 }
+			value = 100000
+		}		
+	}
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_trade_yurt.dds"
 		texture = "gfx/interface/window_domiciles/trade_yurt.dds"
 		intersectionmask_texture = "gfx/interface/window_domiciles/trade_yurt_mask.png"
 		soundeffect = "event:/DLC/CE2/UI/camp_buildings/ce2_ui_domicile_buildings_tradeYurt"
