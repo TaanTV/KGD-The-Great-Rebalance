@@ -1917,6 +1917,24 @@ horse_archer_attribute = {
 			}
 			## Era.
 			### No specific era preference.
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 

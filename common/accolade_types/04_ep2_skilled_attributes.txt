@@ -66,7 +66,7 @@ politicker_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
+		value = accolade_must_have_base_value # change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -228,7 +228,7 @@ tactician_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
+		value = accolade_must_have_base_value # change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -788,93 +788,9 @@ contender_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
+		value = 0 # change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
-		scope:owner ?= {
-			# Skills.
-			add = {
-				value = prowess
-				multiply = 10
-			}
-			# Culture.
-			## Bellicose ethos.
-			if = {
-				limit = {
-					culture ?= {
-						OR = {
-							has_cultural_pillar = ethos_bellicose
-							has_cultural_pillar = ethos_stoic
-						}
-					}
-				}
-				add = 200
-			}
-			## Era.
-			add = accolade_weighted_up_in_earlier_eras_value
-			# AI values.
-			add = {
-				value = ai_boldness
-				multiply = 1
-			}
-			add = {
-				value = ai_vengefulness
-				multiply = 0.5
-			}
-			add = {
-				value = ai_compassion
-				multiply = -0.5
-			}
-			# Traits.
-			## Additives.
-			### +++ Brave.
-			if = {
-				limit = { has_trait = brave }
-				add = @accolade_trait_additive_plus_3_value
-			}
-			### ++ Wrathful.
-			if = {
-				limit = { has_trait = wrathful }
-				add = @accolade_trait_additive_plus_2_value
-			}
-			### ++ Vengeful.
-			if = {
-				limit = { has_trait = vengeful }
-				add = @accolade_trait_additive_plus_2_value
-			}
-			### + Callous.
-			if = {
-				limit = { has_trait = callous }
-				add = @accolade_trait_additive_plus_1_value
-			}
-			### + Sadistic.
-			if = {
-				limit = { has_trait = sadistic }
-				add = @accolade_trait_additive_plus_1_value
-			}
-			### -- Forgiving.
-			if = {
-				limit = { has_trait = forgiving }
-				add = @accolade_trait_additive_minus_2_value
-			}
-			### --- Craven.
-			if = {
-				limit = { has_trait = craven }
-				add = @accolade_trait_additive_minus_3_value
-			}
-			## Factor 0s.
-			### Compassionate.
-			if = {
-				limit = { has_trait = compassionate }
-				multiply = 0
-			}
-		}
-		# Finally, weight for opinion.
-		if = {
-			limit = {
-				exists = liege
-			}
-			multiply = accolade_opinion_multiplier_value
-		}
+		
 	}
 
 	ranks = {
