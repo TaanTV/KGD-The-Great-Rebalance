@@ -39,83 +39,10 @@ huntsmaster_attribute = {
 	
 	weight = {
 		# Should be a pretty common pick if you've bothered to unlock the legacy
-		value = accolade_fascinating_base_value
+		value = 0 # change accolade_fascinating_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		# culture
-		if = {
-			limit = {
-				culture = {
-					OR = {
-						has_cultural_tradition = tradition_bush_hunting
-						has_cultural_tradition = tradition_hunters
-						has_cultural_tradition = tradition_sacred_hunts
-					}
-				}
-			}
-			add = 200
-		}
-		# traits
-		if = {
-			limit = {
-				hunt_lifestyle_track_greater_equal_trigger = { TRACK = hunter GREATER_EQUAL = 100 }
-			}
-			add = 200
-		}
-		# Finally, weight for opinion.
-		if = {
-			limit = {
-				exists = liege
-			}
-			multiply = accolade_opinion_multiplier_value
-		}
-		scope:owner ?= {
-			# Culture
-			if = {
-				limit = {
-					culture = {
-						OR = {
-							has_cultural_tradition = tradition_forest_fighters
-							has_cultural_tradition = tradition_jungle_warriors
-							has_cultural_tradition = tradition_land_of_the_bow
-						}
-					}
-				}
-				add = 200
-			}
-			if = {
-				limit = {
-					culture = {
-						OR = {
-							has_cultural_tradition = tradition_bush_hunting
-							has_cultural_tradition = tradition_hunters
-							has_cultural_tradition = tradition_sacred_hunts
-						}
-					}
-				}
-				add = 400
-			}
-			# liege's interest in hunting
-			if = {
-				limit = {
-					OR = {
-						hunt_lifestyle_track_greater_equal_trigger = { TRACK = hunter GREATER_EQUAL = 20 }
-						has_trait = brave
-						has_trait = diligent
-					}
-				}
-				add = 200
-			}
-			## Factor 0s.
-			if = {
-				limit = {
-					OR = {
-						has_trait = craven
-						has_trait = lazy
-					}
-				}
-				multiply = 0
-			}
-		}
+		
 	}
 	ranks = {
 		# Rank 1
