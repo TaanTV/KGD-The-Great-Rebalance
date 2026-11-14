@@ -243,8 +243,163 @@ idealist_attribute = {
 		idealist_attribute_acceptable_trigger = yes
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = glory_legacy_3
+							has_dynasty_perk = ep1_culture_legacy_3
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = guile_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = fp1_pillage_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_pillar = ethos_egalitarian
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pacifism
+							rite_has_tenet = tenet_dharmic_pacifism
+							rite_has_tenet = tenet_natural_primitivism
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				rite = {
+					OR = {
+						rite_has_tenet = tenet_pacifism
+						rite_has_tenet = tenet_dharmic_pacifism
+						rite_has_tenet = tenet_natural_primitivism
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_charitable
+							has_cultural_tradition = tradition_loyal_soldiers
+							has_cultural_tradition = tradition_chivalry
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_charitable
+						has_cultural_tradition = tradition_loyal_soldiers
+						has_cultural_tradition = tradition_chivalry
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				OR = {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_ruling_caste
+							has_cultural_tradition = tradition_eye_for_an_eye
+						}
+					}
+					rite = {
+						rite_has_tenet = tenet_pursuit_of_power
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = compassionate
+						has_trait = trusting
+						has_trait = loyal
+						has_trait = forgiving
+					}
+				}
+			}
+			add = 50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = sadistic
+						has_trait = callous
+						has_trait = vengeful
+						has_trait = paranoid
+						has_trait = greedy
+						dread > 20
+						tyranny > 20
+						culture = {
+							has_cultural_tradition = tradition_eye_for_an_eye
+						}
+						rite = {
+							rite_has_tenet = tenet_pursuit_of_power
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -305,8 +460,140 @@ charmer_attribute = {
 		charmer_attribute_acceptable_trigger = yes
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = glory_legacy_3
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_welcoming
+							has_cultural_pillar = ethos_courtly
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_tradition = tradition_wedding_ceremonies
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_hedonistic
+							rite_has_tenet = tenet_carnal_exaltation
+							rite_has_tenet = tenet_polyamory
+							rite_has_tenet = tenet_natural_primitivism
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_tradition = tradition_chivalry
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_tradition = tradition_monogamous
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				rite = {
+					OR = {
+						rite_has_tenet = tenet_hedonistic
+						rite_has_tenet = tenet_carnal_exaltation
+						rite_has_tenet = tenet_polyamory
+						rite_has_tenet = tenet_natural_primitivism
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_tradition = tradition_wedding_ceremonies
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_tradition = tradition_chivalry
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = lustful
+						has_trait = seducer
+						has_trait = gregarious
+						has_trait = adulterer
+						has_trait = fornicator
+					}
+				}
+			}
+			add = 50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = chaste
+						AND = {
+							has_trait = zealous
+							faith = { trait_is_sin = lustful }
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -375,8 +662,183 @@ thug_attribute = {
 		thug_attribute_acceptable_trigger = yes
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = warfare_legacy_3
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = glory_legacy_3
+							has_dynasty_perk = law_legacy_3
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						NOT = {
+							has_innovation = innovation_development_02
+						}
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_noblesse_oblige
+					}
+				}
+			}
+			add = -25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_battlefield_looters
+							has_cultural_pillar = ethos_bellicose
+							has_cultural_tradition = tradition_ruling_caste
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_pacifism
+							has_cultural_pillar = ethos_egalitarian
+							has_cultural_tradition = tradition_chivalry
+						}
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				OR = {
+					scope:owner ?= {
+						culture = {
+							OR = {
+								has_cultural_tradition = tradition_forbearing
+								has_cultural_tradition = tradition_legalistic
+								has_cultural_tradition = tradition_equitable
+							}
+						}
+					}
+					scope:owner ?= {
+						rite = {
+							rite_has_tenet = tenet_legalism
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_tradition = tradition_quarrelsome
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_forbearing
+						has_cultural_tradition = tradition_equitable
+						has_cultural_tradition = tradition_pacifism
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_tradition = tradition_quarrelsome
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = reaver
+						has_trait = sadistic
+						has_trait = callous
+						has_trait = impatient
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				has_trait = compassionate
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = sadistic
+					has_trait = callous
+					has_trait = vengeful
+				}
+			}
+			add = 50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = just
+						has_trait = compassionate
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -435,8 +897,123 @@ disciplinarian_attribute = {
 	}
 	weight = {
 		#ADDED - coz AI loves levies.
-		value = 0 # change accolade_standard_base_value	#prev accolade_uninteresting_base_value
-		
+		value = accolade_standard_base_value	#prev accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = warfare_legacy_3
+							has_dynasty_perk = law_legacy_3
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						NOT = {
+							has_innovation = innovation_bannus
+						}
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_men_at_arms
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_royal_armory
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_hard_working
+							has_cultural_tradition = tradition_staunch_traditionalists
+							has_cultural_tradition = tradition_formation_fighting
+							has_cultural_tradition = tradition_strength_in_numbers
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						rite_has_tenet = tenet_natural_primitivism
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				rite = {
+					rite_has_tenet = tenet_natural_primitivism
+				}
+			}
+			add = -25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = temperate
+						has_trait = diligent
+						has_trait = stubborn
+						has_trait = callous
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = chaste
+					has_trait = just
+				}
+			}
+			add = 25
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					has_trait = lifestyle_reveler
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -501,8 +1078,207 @@ fanatic_attribute = {
 		fanatic_attribute_acceptable_trigger = yes
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = erudition_legacy_3
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = ep1_culture_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_warrior_monks
+							has_cultural_tradition = tradition_faith_bound
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_xenophilic
+							has_cultural_tradition = tradition_religion_blending
+							has_cultural_tradition = tradition_steppe_tolerance
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_pillar = ethos_spiritual
+							has_cultural_tradition = tradition_by_the_sword
+							has_cultural_tradition = tradition_zealous_people
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						rite_has_doctrine = doctrine_pluralism_fundamentalist
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pursuit_of_power
+							rite_has_tenet = tenet_unrelenting_faith
+							rite_has_tenet = tenet_struggle_submission
+							rite_has_tenet = tenet_warmonger
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pacifism
+							rite_has_tenet = tenet_dharmic_pacifism	
+						}
+					}
+				}
+			}
+			add = -75
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_xenophilic
+						has_cultural_tradition = tradition_religion_blending
+						has_cultural_tradition = tradition_steppe_tolerance
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_pillar = ethos_spiritual
+						has_cultural_tradition = tradition_by_the_sword
+						has_cultural_tradition = tradition_zealous_people
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = compassionate
+						has_trait = forgiving
+					}
+				}
+			}
+			add = -75
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = lifestyle_mystic
+						has_trait = faith_warrior
+					}
+				}
+			}
+			add = 75
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = holy_warrior
+						has_trait = zealous
+						has_trait = crusader_king
+						has_trait = order_member
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = lifestyle_mystic
+					has_trait = faith_warrior
+					has_trait = devoted
+					has_trait = order_member
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = compassionate
+					has_trait = forgiving
+				}
+			}
+			add = -50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = cynical
+						rite = {
+							rite_has_doctrine = doctrine_pluralism_pluralistic
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
