@@ -228,11 +228,30 @@ archer_attribute = {
 	portrait_pose = "hunting_shortbow_aim_arrow_default"
 	accolade_categories = { men_at_arms army_bonus militant leader subtle ranged_fighter }
 
+
 	squire_perfect_fit = {
-		archer_attribute_trigger = yes
+		OR = {
+			archer_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = archers
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		archer_attribute_acceptable_trigger = yes
+		OR = {
+			archer_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = archers
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -330,6 +349,24 @@ archer_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -390,10 +427,28 @@ skirmisher_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant champion subtle ranged_fighter infantry }
 
 	squire_perfect_fit = {
-		skirmisher_attribute_trigger = yes
+		OR = {
+			skirmisher_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = skirmishers
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		skirmisher_attribute_acceptable_trigger = yes
+		OR = {
+			skirmisher_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = skirmishers
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -492,6 +547,24 @@ skirmisher_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -561,11 +634,30 @@ pike_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant leader defensive forceful infantry }
 
 	squire_perfect_fit = {
-		pike_attribute_trigger = yes
+		OR = {
+			pike_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = pikemen
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		pike_attribute_acceptable_trigger = yes
+		OR = {
+			pike_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = pikemen
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -658,6 +750,24 @@ pike_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -717,10 +827,28 @@ outrider_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant equestrian subtle champion aggressive cavalry light_fighter }
 
 	squire_perfect_fit = {
-		outrider_attribute_trigger = yes
+		OR = {
+			outrider_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = light_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		outrider_attribute_acceptable_trigger = yes
+		OR = {
+			outrider_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = light_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -822,6 +950,24 @@ outrider_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -887,11 +1033,30 @@ vanguard_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant forceful aggressive defensive infantry heavy_fighter }
 
 	squire_perfect_fit = {
-		vanguard_attribute_trigger = yes
+		OR = {
+			vanguard_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = heavy_infantry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		vanguard_attribute_acceptable_trigger = yes
+		OR = {
+			vanguard_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = heavy_infantry
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -993,6 +1158,24 @@ vanguard_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -1052,10 +1235,28 @@ lancer_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant forceful aggressive equestrian cavalry heavy_fighter }
 
 	squire_perfect_fit = {
-		lancer_attribute_trigger = yes
+		OR = {
+			lancer_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = heavy_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		lancer_attribute_acceptable_trigger = yes
+		OR = {
+			lancer_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = heavy_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1168,6 +1369,24 @@ lancer_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -1224,10 +1443,30 @@ crossbowmen_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant defensive leader subtle ranged_fighter }
 
 	squire_perfect_fit = {
-		crossbowmen_attribute_trigger = yes
+		OR = {
+			crossbowmen_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				OR = {
+					"number_maa_regiments_of_type(crossbowmen)" >= 1
+					"number_maa_regiments_of_type(shenbigong)" >= 1
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		crossbowmen_attribute_acceptable_trigger = yes
+		OR = {
+			crossbowmen_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				OR = {
+					"number_maa_regiments_of_type(crossbowmen)" >= 1
+					"number_maa_regiments_of_type(shenbigong)" >= 1
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1325,6 +1564,26 @@ crossbowmen_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					OR = {
+						"number_maa_regiments_of_type(crossbowmen)" >= 1
+						"number_maa_regiments_of_type(shenbigong)" >= 1
+						"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					OR = {
+						"number_maa_regiments_of_type(crossbowmen)" >= 2
+						"number_maa_regiments_of_type(shenbigong)" >= 2
+						"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -1392,7 +1651,7 @@ besieger_attribute = {
 	}
 
 	weight = {
-		value = accolade_uninteresting_base_value
+		value = accolade_must_have_base_value # change accolade_uninteresting_base_value
 		scope:owner ?= {
 			# Should only be interested at all if they have a unit of the type
 			if = {
@@ -1515,12 +1774,32 @@ camelry_attribute = {
 	portrait_pose = "throne_room_two_handed_passive_1"
 	accolade_categories = { men_at_arms army_bonus militant aggressive defensive cavalry light_fighter }
 
+
 	squire_perfect_fit = {
-		camelry_attribute_trigger = yes
+		OR = {
+			camelry_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = camel_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		camelry_attribute_acceptable_trigger = yes
+		OR = {
+			camelry_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = camel_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -1608,6 +1887,24 @@ camelry_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -1676,10 +1973,28 @@ elephantry_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant forceful leader aggressive defensive cavalry heavy_fighter }
 
 	squire_perfect_fit = {
-		elephantry_attribute_trigger = yes
+		OR = {
+			elephantry_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = elephant_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		elephantry_attribute_acceptable_trigger = yes
+		OR = {
+			elephantry_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = elephant_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1770,6 +2085,24 @@ elephantry_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value >= 2
+					}
+				}
+				add = 2000
+			}
 		}
 	}
 
@@ -1823,11 +2156,32 @@ horse_archer_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant subtle equestrian aggressive defensive cavalry ranged_fighter light_fighter }
 
 	squire_perfect_fit = {
-		horse_archer_attribute_trigger = yes
+		OR = {
+			horse_archer_attribute_trigger = yes   # обычные условия (черты/опыт/разблокировка)
+			
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = archer_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		horse_archer_attribute_acceptable_trigger = yes
+		OR = {
+			horse_archer_attribute_acceptable_trigger = yes
+			
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = archer_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -2000,10 +2354,28 @@ gunpowder_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant leader subtle ranged_fighter }
 
 	squire_perfect_fit = {
-		gunpowder_attribute_trigger = yes
+		OR = {
+			gunpowder_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		gunpowder_attribute_acceptable_trigger = yes
+		OR = {
+			gunpowder_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -2102,6 +2474,24 @@ gunpowder_attribute = {
 					}
 				}
 				multiply = 0
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value >= 1
+					}
+				}
+				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value >= 2
+					}
+				}
+				add = 2000
 			}
 		}
 	}

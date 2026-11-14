@@ -66,7 +66,7 @@ politicker_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_must_have_base_value # change accolade_standard_base_value
+		value = 1000 # change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -228,7 +228,7 @@ tactician_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_must_have_base_value # change accolade_standard_base_value
+		value = 1000 # change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
