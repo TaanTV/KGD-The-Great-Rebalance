@@ -30,11 +30,22 @@ huntsmaster_attribute = {
 	portrait_pose = "hunting_falcon"
 	accolade_categories = { eminent rare_traits prowess ranged_fighter activities hunting educator logistics subtle courtly leader equestrian }
 
+	#founding and successor requirements
 	squire_perfect_fit = {
-		huntsmaster_attribute_trigger = yes
+		idealist_attribute_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		huntsmaster_attribute_acceptable_trigger = yes
+		idealist_attribute_acceptable_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes
+			}
+		}
 	}
 	
 	weight = {
@@ -96,15 +107,27 @@ blademaster_attribute = {
 	accolade_categories = { eminent rare_traits prowess infantry educator army_bonus knights_bonus tournaments activities militant champion aggressive }
 
 	squire_perfect_fit = {
-		blademaster_attribute_trigger = yes
-	}
-	squire_acceptable_fit = {
-		blademaster_attribute_acceptable_trigger = yes
+		OR = {
+			AND = {
+				NOR = {
+					liege ?= {
+						is_ai = yes
+					}
+				}
+				blademaster_attribute_trigger = yes
+			}
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				prowess >= 10
+			}
+		}
 	}
 	
 	weight = {
 		# Should be a pretty common pick if you've bothered to unlock the legacy
-		value = accolade_fascinating_base_value
+		value = 500 # change accolade_fascinating_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		# culture
 		if = {

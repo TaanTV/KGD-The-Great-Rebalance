@@ -78,7 +78,7 @@ accolade_maa_archers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_archers
-		add = 50
+		add = 200 # change 50
 		#ADDED
 		add = counter_synergy_ai_weight_archers
 	}
@@ -268,7 +268,7 @@ accolade_maa_outriders = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_light_cavalry
-		add = 50
+		add = 200 # chaner 50 
 		#ADDED
 		add = counter_synergy_ai_weight_light_cavalry
 	}
@@ -330,7 +330,7 @@ accolade_maa_vanguards = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_infantry
-		add = 75
+		add = 1000 # change 75
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_infantry
 	}
@@ -401,7 +401,7 @@ accolade_maa_lancers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_cavalry
-		add = 100
+		add = 1000 # change 100
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_cavalry
 	}
@@ -596,7 +596,7 @@ accolade_maa_elephantiers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_elephants
-		add = 100
+		add = 1000 # change 100
 		#ADDED
 		add = counter_synergy_ai_weight_elephant_cavalry
 	}
@@ -649,7 +649,7 @@ accolade_maa_horse_archers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score
-		add = 100
+		add = 200 # change 100
 		#ADDED
 		add = counter_synergy_ai_weight_archer_cavalry
 	}

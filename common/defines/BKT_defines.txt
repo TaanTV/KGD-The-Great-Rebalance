@@ -565,3 +565,41 @@ NVassalStance = {
 NActivity = {
 	MAX_PHASE_YEARS_PASSIVE = 2	 #prev 10	# Maximum amount of years allowed in passive phase state until the phase gets invalidated
 }
+
+NAccolade = {
+	SUCCESSION_GLORY_LOSS_SMALL = 0.15		# how much glory is lost, in percent, upon accolade succession
+	SUCCESSION_GLORY_LOSS_LARGE = 0.30		# how much glory is lost, in percent, upon accolade succession if the successor only fulfils the requirement of one attribute
+
+	ACCOLADE_BADGE_COLORS = {
+		"badge_color1.dds"
+		"badge_color2.dds"
+		"badge_color3.dds"
+		"badge_color4.dds"
+		"badge_color5.dds"
+		"badge_color6.dds"
+		"badge_color7.dds"
+		"badge_color8.dds"
+		"badge_color9.dds"
+	}
+
+	ACCOLADE_GLORY_LEVELS = {
+		100
+		300
+		600
+		1000
+		1500
+		2100
+	}
+
+	ACCOLADE_SQUIRE_LEVELS = {
+		20
+		40
+		60
+		80
+	}
+
+	ACCOLADE_MAX_TYPES = 2 # maximum number of accolade attributes (types) an acclaimed knight can have
+
+	STARTING_GLORY = 100	# how much glory does each created accolade start out with? 100 is default to unlock rank 1
+	POTENTIAL_ACCLAIMED_KNIGHT_UPDATE_TIME = 0.5 # Time between potential acclaimed knights window updates, in seconds
+}

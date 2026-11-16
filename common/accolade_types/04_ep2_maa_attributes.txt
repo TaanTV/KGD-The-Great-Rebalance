@@ -1,4 +1,4 @@
-﻿##################################################
+##################################################
 # INDEX
 #
 # Archer			-	archer_attribute
@@ -367,6 +367,15 @@ archer_attribute = {
 				}
 				add = 2000
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value = 0
+					}
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -565,6 +574,15 @@ skirmisher_attribute = {
 				}
 				add = 2000
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value = 0
+					}
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -633,7 +651,15 @@ pike_attribute = {
 	portrait_pose = "relaxed_spear"
 	accolade_categories = { men_at_arms army_bonus militant leader defensive forceful infantry }
 
+
 	squire_perfect_fit = {
+		#AI-кочевники: атрибут недоступен вообще
+		NOR = {
+			liege ?= {
+				is_ai = yes
+				government_has_flag = government_is_nomadic
+			}
+		}
 		OR = {
 			pike_attribute_trigger = yes
 			liege ?= {
@@ -646,6 +672,13 @@ pike_attribute = {
 		}
 	}
 	squire_acceptable_fit = {
+		#AI-кочевники: атрибут недоступен вообще
+		NOR = {
+			liege ?= {
+				is_ai = yes
+				government_has_flag = government_is_nomadic
+			}
+		}
 		OR = {
 			pike_attribute_acceptable_trigger = yes
 			liege ?= {
@@ -657,7 +690,6 @@ pike_attribute = {
 			}
 		}
 	}
-
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -767,6 +799,15 @@ pike_attribute = {
 					}
 				}
 				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value = 0
+					}
+				}
+				multiply = 0
 			}
 		}
 	}
@@ -967,6 +1008,15 @@ outrider_attribute = {
 					}
 				}
 				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value = 0
+					}
+				}
+				multiply = 0
 			}
 		}
 	}
@@ -1176,6 +1226,15 @@ vanguard_attribute = {
 				}
 				add = 2000
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value = 0
+					}
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -1376,7 +1435,7 @@ lancer_attribute = {
 						value >= 1
 					}
 				}
-				add = 2000
+				add = 4000
 			}
 			if = {
 				limit = {
@@ -1385,7 +1444,19 @@ lancer_attribute = {
 						value >= 2
 					}
 				}
-				add = 2000
+				add = 4000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value = 0
+					}
+					NOR = {
+						culture = culture:greek
+					}
+				}
+				multiply = 0
 			}
 		}
 	}
@@ -1584,6 +1655,14 @@ crossbowmen_attribute = {
 				}
 				add = 2000
 			}
+			if = {
+				limit = {
+					"number_maa_regiments_of_type(crossbowmen)" = 0
+					"number_maa_regiments_of_type(shenbigong)" = 0
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" = 0
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -1644,10 +1723,28 @@ besieger_attribute = {
 	accolade_categories = { men_at_arms army_bonus militant aggressive subtle leader ranged_fighter siege }
 
 	squire_perfect_fit = {
-		besieger_attribute_trigger = yes
+		OR = {
+			camelry_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = siege_weapon
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		besieger_attribute_acceptable_trigger = yes
+		OR = {
+			camelry_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = siege_weapon
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1724,6 +1821,15 @@ besieger_attribute = {
 				}
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = siege_weapon
+						value >= 1
+					}
+				}
+				add = 2000
 			}
 		}
 	}
@@ -1904,6 +2010,15 @@ camelry_attribute = {
 					}
 				}
 				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value = 0
+					}
+				}
+				multiply = 0
 			}
 		}
 	}
@@ -2103,6 +2218,15 @@ elephantry_attribute = {
 				}
 				add = 2000
 			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value = 0
+					}
+				}
+				multiply = 0
+			}
 		}
 	}
 
@@ -2288,6 +2412,15 @@ horse_archer_attribute = {
 					}
 				}
 				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value = 0
+					}
+				}
+				multiply = 0
 			}
 		}
 	}
@@ -2492,6 +2625,15 @@ gunpowder_attribute = {
 					}
 				}
 				add = 2000
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value = 0
+					}
+				}
+				multiply = 0
 			}
 		}
 	}

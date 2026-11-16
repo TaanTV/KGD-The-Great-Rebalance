@@ -494,84 +494,7 @@ manipulator_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
-		# Scope over to the liege to see if they even want this accolade.
-		scope:owner ?= {
-			# Skills.
-			add = {
-				value = intrigue
-				multiply = 10
-			}
-			# Culture.
-			## Courtly ethos.
-			if = {
-				limit = {
-					culture ?= {
-						OR = {
-							has_cultural_pillar = ethos_courtly
-							has_cultural_pillar = ethos_communal
-						}
-					}
-				}
-				add = 200
-			}
-			## Era.
-			add = accolade_weighted_up_in_later_eras_value
-			# AI values.
-			add = {
-				value = ai_vengefulness
-				multiply = 0.75
-			}
-			add = {
-				value = ai_honor
-				multiply = -1
-			}
-			# Traits.
-			## Additives.
-			### +++ Deceitful.
-			if = {
-				limit = { has_trait = deceitful }
-				add = @accolade_trait_additive_plus_3_value
-			}
-			### +++ Paranoid
-			if = {
-				limit = { has_trait = paranoid }
-				add = @accolade_trait_additive_plus_3_value
-			}
-			### ++ Intrigue Education.
-			if = {
-				limit = { has_trait = education_intrigue }
-				add = @accolade_trait_additive_plus_2_value
-			}
-			### + Arbitrary.
-			if = {
-				limit = { has_trait = arbitrary }
-				add = @accolade_trait_additive_plus_1_value
-			}
-			### + Sadistic
-			if = {
-				limit = { has_trait = sadistic }
-				add = @accolade_trait_additive_plus_1_value
-			}
-			### - Just.
-			if = {
-				limit = { has_trait = just }
-				add = @accolade_trait_additive_minus_1_value
-			}
-			## Factor 0s.
-			### Honest.
-			if = {
-				limit = { has_trait = honest }
-				multiply = 0
-			}
-		}
-		# Finally, weight for opinion.
-		if = {
-			limit = {
-				exists = liege
-			}
-			multiply = accolade_opinion_multiplier_value
-		}
+		value = 1000 # add accolade_standard_base_value
 	}
 
 	ranks = {
@@ -583,6 +506,7 @@ manipulator_attribute = {
 			}
 			liege_modifier = {
 				intrigue_scheme_phase_duration = @intrigue_scheme_phase_duration_bonus_tier_1_value
+				dread_baseline_add = @dread_base_bonus_tier_1_value
 			}
 		}
 		# Rank 2
@@ -595,6 +519,7 @@ manipulator_attribute = {
 				intrigue_scheme_phase_duration = @intrigue_scheme_phase_duration_bonus_tier_2_value
 				knight_effectiveness_per_dread = @knight_effectiveness_per_dread_tier_2_value
 				intrigue = 1
+				dread_baseline_add = @dread_base_bonus_tier_2_value
 			}
 		}
 		# Rank 3
@@ -630,7 +555,7 @@ mentor_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
+		value = change accolade_standard_base_value
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -780,10 +705,20 @@ contender_attribute = {
 	accolade_categories = { skilled skill champion forceful warlike prowess }
 
 	squire_perfect_fit = {
-		contender_attribute_trigger = yes
+		thug_attribute_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		contender_attribute_acceptable_trigger = yes
+		thug_attribute_acceptable_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes
+			}
+		}
 	}
 	
 	weight = {
