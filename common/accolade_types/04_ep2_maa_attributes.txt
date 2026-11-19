@@ -228,11 +228,30 @@ archer_attribute = {
 	portrait_pose = "hunting_shortbow_aim_arrow_default"
 	accolade_categories = { men_at_arms army_bonus militant leader subtle ranged_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		archer_attribute_trigger = yes
+		OR = {
+			archer_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = archers
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		archer_attribute_acceptable_trigger = yes
+		OR = {
+			archer_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = archers
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -330,6 +349,34 @@ archer_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archers
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don't take this accolade if you don't have any archers; there's no point in a hodgepodge setup.
+			}
 		}
 	}
 
@@ -389,11 +436,30 @@ skirmisher_attribute = {
 	portrait_pose = "throne_room_one_handed_passive_3"
 	accolade_categories = { men_at_arms army_bonus militant champion subtle ranged_fighter infantry }
 
+# ADDED 
 	squire_perfect_fit = {
-		skirmisher_attribute_trigger = yes
+		OR = {
+			skirmisher_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = skirmishers
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		skirmisher_attribute_acceptable_trigger = yes
+		OR = {
+			skirmisher_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = skirmishers
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -492,6 +558,34 @@ skirmisher_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = skirmishers
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -560,12 +654,46 @@ pike_attribute = {
 	portrait_pose = "relaxed_spear"
 	accolade_categories = { men_at_arms army_bonus militant leader defensive forceful infantry }
 
+# ADDED
 	squire_perfect_fit = {
-		pike_attribute_trigger = yes
+		# Oh god, Nomad, stop picking him already.
+		NOR = {
+			liege ?= {
+				is_ai = yes
+				government_has_flag = government_is_nomadic
+			}
+		}
+		OR = {
+			pike_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = pikemen
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		pike_attribute_acceptable_trigger = yes
+		#AI-кочевники: атрибут недоступен вообще
+		NOR = {
+			liege ?= {
+				is_ai = yes
+				government_has_flag = government_is_nomadic
+			}
+		}
+		OR = {
+			pike_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = pikemen
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -658,6 +786,34 @@ pike_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED 
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = pikemen
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -716,12 +872,32 @@ outrider_attribute = {
 	portrait_pose = "jockey_walk"
 	accolade_categories = { men_at_arms army_bonus militant equestrian subtle champion aggressive cavalry light_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		outrider_attribute_trigger = yes
+		OR = {
+			outrider_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { Start hiring accolades for the war already.
+					type = light_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		outrider_attribute_acceptable_trigger = yes
+		OR = {
+			outrider_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { Start hiring accolades for the war already.
+					type = light_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
+
 
 	weight = {
 		value = accolade_uninteresting_base_value
@@ -822,6 +998,34 @@ outrider_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = light_cavalry
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -886,11 +1090,30 @@ vanguard_attribute = {
 	portrait_pose = "marshal_shield"
 	accolade_categories = { men_at_arms army_bonus militant forceful aggressive defensive infantry heavy_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		vanguard_attribute_trigger = yes
+		OR = {
+			vanguard_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = heavy_infantry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		vanguard_attribute_acceptable_trigger = yes
+		OR = {
+			vanguard_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = heavy_infantry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -993,6 +1216,34 @@ vanguard_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_infantry
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1051,11 +1302,30 @@ lancer_attribute = {
 	portrait_pose = "horse_surveying"
 	accolade_categories = { men_at_arms army_bonus militant forceful aggressive equestrian cavalry heavy_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		lancer_attribute_trigger = yes
+		OR = {
+			lancer_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = heavy_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		lancer_attribute_acceptable_trigger = yes
+		OR = {
+			lancer_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = heavy_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1168,6 +1438,37 @@ lancer_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = heavy_cavalry
+						value = 0
+					}
+					NOR = {
+						culture = culture:greek              # The Greeks are renowned for their cavalry. Lift the ban for the Greeks.
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1223,13 +1524,33 @@ crossbowmen_attribute = {
 	portrait_pose = "crossbow"
 	accolade_categories = { men_at_arms army_bonus militant defensive leader subtle ranged_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		crossbowmen_attribute_trigger = yes
+		OR = {
+			crossbowmen_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes                              # Start hiring accolades for the war already.
+				OR = {
+					"number_maa_regiments_of_type(crossbowmen)" >= 1
+					"number_maa_regiments_of_type(shenbigong)" >= 1
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		crossbowmen_attribute_acceptable_trigger = yes
+		OR = {
+			crossbowmen_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes                              # Start hiring accolades for the war already.
+				OR = {
+					"number_maa_regiments_of_type(crossbowmen)" >= 1
+					"number_maa_regiments_of_type(shenbigong)" >= 1
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+				}
+			}
+		}
 	}
-
 	weight = {
 		value = accolade_uninteresting_base_value
 		scope:owner ?= {
@@ -1325,6 +1646,35 @@ crossbowmen_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					OR = {
+						"number_maa_regiments_of_type(crossbowmen)" >= 1
+						"number_maa_regiments_of_type(shenbigong)" >= 1
+						"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 1
+					}
+				}
+				add = accolade_uninteresting_base_value
+			}
+			if = {
+				limit = {
+					OR = {
+						"number_maa_regiments_of_type(crossbowmen)" >= 2
+						"number_maa_regiments_of_type(shenbigong)" >= 2
+						"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 2
+					}
+				}
+				add = accolade_uninteresting_base_value
+			}
+			if = {
+				limit = {
+					"number_maa_regiments_of_type(crossbowmen)" = 0
+					"number_maa_regiments_of_type(shenbigong)" = 0
+					"number_maa_regiments_of_type(accolade_maa_crossbowers)" = 0
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1384,11 +1734,30 @@ besieger_attribute = {
 	portrait_pose = "thinking"
 	accolade_categories = { men_at_arms army_bonus militant aggressive subtle leader ranged_fighter siege }
 
+# ADDED 
 	squire_perfect_fit = {
-		besieger_attribute_trigger = yes
+		OR = {
+			besieger_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = siege_weapon
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		besieger_attribute_acceptable_trigger = yes
+		OR = {
+			besieger_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {
+					type = siege_weapon
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1466,6 +1835,25 @@ besieger_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED 
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = siege_weapon
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = siege_weapon
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1515,11 +1903,30 @@ camelry_attribute = {
 	portrait_pose = "throne_room_two_handed_passive_1"
 	accolade_categories = { men_at_arms army_bonus militant aggressive defensive cavalry light_fighter }
 
+# ADDED 
 	squire_perfect_fit = {
-		camelry_attribute_trigger = yes
+		OR = {
+			camelry_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = camel_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		camelry_attribute_acceptable_trigger = yes
+		OR = {
+			camelry_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = camel_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1608,6 +2015,34 @@ camelry_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = camel_cavalry
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1675,11 +2110,30 @@ elephantry_attribute = {
 	portrait_pose = "hunting_shortbow_rest_arrow_default"
 	accolade_categories = { men_at_arms army_bonus militant forceful leader aggressive defensive cavalry heavy_fighter }
 
+# ADDED 
 	squire_perfect_fit = {
-		elephantry_attribute_trigger = yes
+		OR = {
+			elephantry_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {  # Start hiring accolades for the war already.
+					type = elephant_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		elephantry_attribute_acceptable_trigger = yes
+		OR = {
+			elephantry_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = {  # Start hiring accolades for the war already.
+					type = elephant_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1770,6 +2224,34 @@ elephantry_attribute = {
 				# Finally, weight for opinion.
 				multiply = accolade_opinion_multiplier_value
 			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = elephant_cavalry
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1822,11 +2304,30 @@ horse_archer_attribute = {
 	portrait_pose = "horse_archer_aggressive"
 	accolade_categories = { men_at_arms army_bonus militant subtle equestrian aggressive defensive cavalry ranged_fighter light_fighter }
 
+# ADDED
 	squire_perfect_fit = {
-		horse_archer_attribute_trigger = yes
+		OR = {
+			horse_archer_attribute_trigger = yes 
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = archer_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		horse_archer_attribute_acceptable_trigger = yes
+		OR = {
+			horse_archer_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = archer_cavalry
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -1917,6 +2418,34 @@ horse_archer_attribute = {
 			}
 			## Era.
 			### No specific era preference.
+# ADDED 
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = archer_cavalry
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
+			}
 		}
 	}
 
@@ -1981,11 +2510,30 @@ gunpowder_attribute = {
 	portrait_pose = "hunting_horn"
 	accolade_categories = { men_at_arms army_bonus militant leader subtle ranged_fighter }
 
+# ADDED 
 	squire_perfect_fit = {
-		gunpowder_attribute_trigger = yes
+		OR = {
+			gunpowder_attribute_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		gunpowder_attribute_acceptable_trigger = yes
+		OR = {
+			gunpowder_attribute_acceptable_trigger = yes
+			liege ?= {
+				is_ai = yes
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
+					type = gunpowder
+					value >= 1
+				}
+			}
+		}
 	}
 
 	weight = {
@@ -2084,6 +2632,34 @@ gunpowder_attribute = {
 					}
 				}
 				multiply = 0
+			}
+# ADDED
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value >= 1
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value >= 2
+					}
+				}
+				add = accolade_must_have_base_value
+			}
+			if = {
+				limit = {
+					number_maa_regiments_of_base_type = {
+						type = gunpowder
+						value = 0
+					}
+				}
+				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
 			}
 		}
 	}

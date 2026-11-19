@@ -470,7 +470,7 @@ charmer_attribute = {
 		}
 	}
 		weight = {
-		value = 0 # change accolade_uninteresting_base_value # Stop wasting computing resources on things he doesn't know how to use.
+		value = accolade_uninteresting_base_value # change accolade_uninteresting_base_value # Stop wasting computing resources on things he doesn't know how to use.
 		
 	}
 
@@ -775,7 +775,123 @@ disciplinarian_attribute = {
 	}
 	weight = {
 		#ADDED - coz AI loves levies.
-		value = 0 # change accolade_standard_base_value	#prev accolade_uninteresting_base_value # We’re wasting the computer’s processing power for absolutely nothing. Accolade is genuinely useless.
+		value = accolade_standard_base_value	#prev accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = warfare_legacy_3
+							has_dynasty_perk = law_legacy_3
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						NOT = {
+							has_innovation = innovation_bannus
+						}
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_men_at_arms
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_royal_armory
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_hard_working
+							has_cultural_tradition = tradition_staunch_traditionalists
+							has_cultural_tradition = tradition_formation_fighting
+							has_cultural_tradition = tradition_strength_in_numbers
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						rite_has_tenet = tenet_natural_primitivism
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				rite = {
+					rite_has_tenet = tenet_natural_primitivism
+				}
+			}
+			add = -25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = temperate
+						has_trait = diligent
+						has_trait = stubborn
+						has_trait = callous
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = chaste
+					has_trait = just
+				}
+			}
+			add = 25
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					has_trait = lifestyle_reveler
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -819,75 +935,6 @@ disciplinarian_attribute = {
 			}
 			knight_army_modifier = {
 				hostile_county_attrition = -0.4		#prev -0.8
-			}
-		}
-	}
-}
-
-fanatic_attribute = {
-	adjective = accolade_fanatical
-	noun = accolade_fanatic
-	icon = "gfx/interface/icons/knight_badge/icons/accolade_trait_ethical_blue.dds"
-	portrait_pose = "wedding_priest"
-	#grouping accolades
-	accolade_categories = { common personality righteous learning army_bonus disliked militant ethical forceful aggressive }
-
-	#founding and successor requirements
-	squire_perfect_fit = {
-		fanatic_attribute_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes # Too useless for most AI.
-			}
-		}
-	}
-	squire_acceptable_fit = {
-		fanatic_attribute_acceptable_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes # Too useless for most AI.
-			}
-		}
-	}
-	weight = {
-		value = 0 # change accolade_uninteresting_base_value # We’re wasting the computer’s processing power for absolutely nothing. Accolade is genuinely useless.
-		
-	}
-
-	#accolade ranks from Glory XP
-	ranks = {
-		# glory_requirement =  { modifiers and unlocks }
-		1 = {
-			#ADDED
-			knight_modifier = {
-				monthly_prestige = 0.25
-			} # rank 1
-			liege_modifier = {
-				zealot_opinion = 3	#prev 10
-			}
-		}
-		2 = {
-			#ADDED
-			knight_modifier = {
-				monthly_prestige = 0.5
-			} # Rank 2
-			liege_modifier = {
-				zealot_opinion = 6	#prev 15
-			}
-			accolade_parameters = {
-				acclaimed_knight_piety_from_battle
-			}
-		}
-		3 = {
-			#ADDED
-			knight_modifier = {
-				monthly_prestige = 0.75
-			} # Rank 3
-			liege_modifier = {
-				zealot_opinion = 10	#prev 25
-			}
-			accolade_parameters = {
-				acclaimed_knight_piety_from_battle_high
 			}
 		}
 	}

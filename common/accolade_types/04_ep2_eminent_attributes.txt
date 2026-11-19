@@ -49,7 +49,7 @@ huntsmaster_attribute = {
 	
 	weight = {
 		# Should be a pretty common pick if you've bothered to unlock the legacy
-		value = 0 # accolade_fascinating_base_value #Let’s be honest: no one in their right mind would take this in its current form. We’re just wasting computing resources.
+		value = accolade_uninteresting_base_value # accolade_fascinating_base_value #Let’s be honest: no one in their right mind would take this in its current form. We’re just wasting computing resources.
 	}
 	ranks = {
 		# Rank 1
