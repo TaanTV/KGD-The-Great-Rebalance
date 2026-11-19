@@ -39,8 +39,8 @@
 @intrigue_scheme_phase_duration_bonus_tier_2_value = -10
 @intrigue_scheme_phase_duration_bonus_tier_3_value = -15
 
-@knight_effectiveness_per_dread_tier_2_value = 0.003
-@knight_effectiveness_per_dread_tier_3_value = 0.005
+@knight_effectiveness_per_dread_tier_2_value = 0.001	#prev 0.003
+@knight_effectiveness_per_dread_tier_3_value = 0.003	#prev 0.005
 
 @piety_per_knight_add_bonus_tier_1_value = 0.1
 @piety_per_knight_add_bonus_tier_2_value = 0.2
@@ -66,7 +66,7 @@ politicker_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = 1000 # change accolade_standard_base_value
+		value = accolade_must_have_base_value # change accolade_standard_base_value ### A very strong accolade, one of the most versatile.
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -228,7 +228,7 @@ tactician_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = 1000 # change accolade_standard_base_value
+		value = accolade_must_have_base_value # change accolade_standard_base_value ### A very strong accolade, one of the most versatile.
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -367,7 +367,7 @@ reeve_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_standard_base_value
+		value = accolade_uninteresting_base_value # change accolade_standard_base_value # It’s not working; could you please check it?
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -457,7 +457,7 @@ reeve_attribute = {
 				parochial_opinion = 6	#prev 15
 				stewardship = 1
 			}
-			accolade_parameters = { accolade_development_growth_on_tournament_completion_low }
+			accolade_parameters = { accolade_prosperity_growth_on_tournament_completion_low }
 		}
 		# Rank 3
 		3 = {
@@ -470,7 +470,7 @@ reeve_attribute = {
 				stewardship = 2
 			}
 			accolade_parameters = {
-				accolade_development_growth_on_tournament_completion_high
+				accolade_prosperity_growth_on_tournament_completion_high
 				accolade_increase_control_bonus
 			}
 		}
@@ -494,7 +494,84 @@ manipulator_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = 1000 # add accolade_standard_base_value
+		value = accolade_must_have_base_value # change accolade_standard_base_value ### A very strong accolade, one of the most versatile.
+		# Scope over to the liege to see if they even want this accolade.
+		scope:owner ?= {
+			# Skills.
+			add = {
+				value = intrigue
+				multiply = 10
+			}
+			# Culture.
+			## Courtly ethos.
+			if = {
+				limit = {
+					culture ?= {
+						OR = {
+							has_cultural_pillar = ethos_courtly
+							has_cultural_pillar = ethos_communal
+						}
+					}
+				}
+				add = 200
+			}
+			## Era.
+			add = accolade_weighted_up_in_later_eras_value
+			# AI values.
+			add = {
+				value = ai_vengefulness
+				multiply = 0.75
+			}
+			add = {
+				value = ai_honor
+				multiply = -1
+			}
+			# Traits.
+			## Additives.
+			### +++ Deceitful.
+			if = {
+				limit = { has_trait = deceitful }
+				add = @accolade_trait_additive_plus_3_value
+			}
+			### +++ Paranoid
+			if = {
+				limit = { has_trait = paranoid }
+				add = @accolade_trait_additive_plus_3_value
+			}
+			### ++ Intrigue Education.
+			if = {
+				limit = { has_trait = education_intrigue }
+				add = @accolade_trait_additive_plus_2_value
+			}
+			### + Arbitrary.
+			if = {
+				limit = { has_trait = arbitrary }
+				add = @accolade_trait_additive_plus_1_value
+			}
+			### + Sadistic
+			if = {
+				limit = { has_trait = sadistic }
+				add = @accolade_trait_additive_plus_1_value
+			}
+			### - Just.
+			if = {
+				limit = { has_trait = just }
+				add = @accolade_trait_additive_minus_1_value
+			}
+			## Factor 0s.
+			### Honest.
+			if = {
+				limit = { has_trait = honest }
+				multiply = 0
+			}
+		}
+		# Finally, weight for opinion.
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
 	}
 
 	ranks = {
@@ -506,7 +583,7 @@ manipulator_attribute = {
 			}
 			liege_modifier = {
 				intrigue_scheme_phase_duration = @intrigue_scheme_phase_duration_bonus_tier_1_value
-				dread_baseline_add = @dread_base_bonus_tier_1_value
+				dread_baseline_add = @dread_base_bonus_tier_1_value # A modifier was created by Paradox but not applied; this has been fixed. It will provide a small amount of help to the AI.
 			}
 		}
 		# Rank 2
@@ -519,7 +596,7 @@ manipulator_attribute = {
 				intrigue_scheme_phase_duration = @intrigue_scheme_phase_duration_bonus_tier_2_value
 				knight_effectiveness_per_dread = @knight_effectiveness_per_dread_tier_2_value
 				intrigue = 1
-				dread_baseline_add = @dread_base_bonus_tier_2_value
+				dread_baseline_add = @dread_base_bonus_tier_2_value # A modifier was created by Paradox but not applied; this has been fixed. It will provide a small amount of help to the AI.
 			}
 		}
 		# Rank 3
@@ -555,7 +632,7 @@ mentor_attribute = {
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = change accolade_standard_base_value
+		value = accolade_standard_base_value # Too situational; some AI units cannot make use of train commanders.
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -705,27 +782,111 @@ contender_attribute = {
 	accolade_categories = { skilled skill champion forceful warlike prowess }
 
 	squire_perfect_fit = {
-		thug_attribute_trigger = yes
+		contender_attribute_trigger = yes # Block ! An AI that is too dependent on specific situations doesn't understand how to build up proficiency.
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes 
 			}
 		}
 	}
 	squire_acceptable_fit = {
-		thug_attribute_acceptable_trigger = yes
+		contender_attribute_acceptable_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes #  Block ! An AI that is too dependent on specific situations doesn't understand how to build up proficiency.
 			}
 		}
 	}
 	
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = 0 # change accolade_standard_base_value
+		value = accolade_uninteresting_base_value # change accolade_standard_base_value # An AI that is too dependent on specific situations doesn't understand how to build up proficiency.
 		# Scope over to the liege to see if they even want this accolade.
-		
+		scope:owner ?= {
+			# Skills.
+			add = {
+				value = prowess
+				multiply = 10
+			}
+			# Culture.
+			## Bellicose ethos.
+			if = {
+				limit = {
+					culture ?= {
+						OR = {
+							has_cultural_pillar = ethos_bellicose
+							has_cultural_pillar = ethos_stoic
+						}
+					}
+				}
+				add = 200
+			}
+			## Era.
+			add = accolade_weighted_up_in_earlier_eras_value
+			# AI values.
+			add = {
+				value = ai_boldness
+				multiply = 1
+			}
+			add = {
+				value = ai_vengefulness
+				multiply = 0.5
+			}
+			add = {
+				value = ai_compassion
+				multiply = -0.5
+			}
+			# Traits.
+			## Additives.
+			### +++ Brave.
+			if = {
+				limit = { has_trait = brave }
+				add = @accolade_trait_additive_plus_3_value
+			}
+			### ++ Wrathful.
+			if = {
+				limit = { has_trait = wrathful }
+				add = @accolade_trait_additive_plus_2_value
+			}
+			### ++ Vengeful.
+			if = {
+				limit = { has_trait = vengeful }
+				add = @accolade_trait_additive_plus_2_value
+			}
+			### + Callous.
+			if = {
+				limit = { has_trait = callous }
+				add = @accolade_trait_additive_plus_1_value
+			}
+			### + Sadistic.
+			if = {
+				limit = { has_trait = sadistic }
+				add = @accolade_trait_additive_plus_1_value
+			}
+			### -- Forgiving.
+			if = {
+				limit = { has_trait = forgiving }
+				add = @accolade_trait_additive_minus_2_value
+			}
+			### --- Craven.
+			if = {
+				limit = { has_trait = craven }
+				add = @accolade_trait_additive_minus_3_value
+			}
+			## Factor 0s.
+			### Compassionate.
+			if = {
+				limit = { has_trait = compassionate }
+				multiply = 0
+			}
+		}
+		# Finally, weight for opinion.
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
 	}
 
 	ranks = {

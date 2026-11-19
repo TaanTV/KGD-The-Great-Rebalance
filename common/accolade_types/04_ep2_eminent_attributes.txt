@@ -30,30 +30,26 @@ huntsmaster_attribute = {
 	portrait_pose = "hunting_falcon"
 	accolade_categories = { eminent rare_traits prowess ranged_fighter activities hunting educator logistics subtle courtly leader equestrian }
 
-	#founding and successor requirements
 	squire_perfect_fit = {
-		idealist_attribute_trigger = yes
+		huntsmaster_attribute_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes                                # change block accolads
 			}
 		}
 	}
 	squire_acceptable_fit = {
-		idealist_attribute_acceptable_trigger = yes
+		huntsmaster_attribute_acceptable_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes                                # change block accolads
 			}
 		}
 	}
 	
 	weight = {
 		# Should be a pretty common pick if you've bothered to unlock the legacy
-		value = 0 # change accolade_fascinating_base_value
-		# Scope over to the liege to see if they even want this accolade.
-		# culture
-		
+		value = 0 # accolade_fascinating_base_value #Let’s be honest: no one in their right mind would take this in its current form. We’re just wasting computing resources.
 	}
 	ranks = {
 		# Rank 1
@@ -108,26 +104,30 @@ blademaster_attribute = {
 
 	squire_perfect_fit = {
 		OR = {
-			AND = {
-				NOR = {
-					liege ?= {
-						is_ai = yes
-					}
-				}
-				blademaster_attribute_trigger = yes
-			}
+			blademaster_attribute_trigger = yes
 			AND = {
 				liege ?= {
 					is_ai = yes
 				}
-				prowess >= 10
+				prowess >= 10                                                           # The AI ​​has never picked this in my games, so let’s give it a chance.
+			}
+		}
+	}
+	squire_acceptable_fit = {
+		OR = {
+			blademaster_attribute_acceptable_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				prowess >= 10                                                           # The AI ​​has never picked this in my games, so let’s give it a chance. 
 			}
 		}
 	}
 	
 	weight = {
 		# Should be a pretty common pick if you've bothered to unlock the legacy
-		value = 500 # change accolade_fascinating_base_value
+		value = accolade_fascinating_base_value # 400
 		# Scope over to the liege to see if they even want this accolade.
 		# culture
 		if = {
@@ -559,6 +559,7 @@ house_knight_attribute = {
 						has_trait = kinslayer_2
 						has_trait = kinslayer_3
 						has_trait = disinherited
+						has_trait = adopted_no_inheritance
 					}
 				}
 				add = -200

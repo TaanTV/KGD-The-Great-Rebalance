@@ -238,23 +238,168 @@ idealist_attribute = {
 	#founding and successor requirements
 	squire_perfect_fit = {
 		idealist_attribute_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
 	}
 	squire_acceptable_fit = {
 		idealist_attribute_acceptable_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = glory_legacy_3
+							has_dynasty_perk = ep1_culture_legacy_3
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = guile_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = fp1_pillage_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_pillar = ethos_egalitarian
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pacifism
+							rite_has_tenet = tenet_dharmic_pacifism
+							rite_has_tenet = tenet_natural_primitivism
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				rite = {
+					OR = {
+						rite_has_tenet = tenet_pacifism
+						rite_has_tenet = tenet_dharmic_pacifism
+						rite_has_tenet = tenet_natural_primitivism
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_charitable
+							has_cultural_tradition = tradition_loyal_soldiers
+							has_cultural_tradition = tradition_chivalry
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_charitable
+						has_cultural_tradition = tradition_loyal_soldiers
+						has_cultural_tradition = tradition_chivalry
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				OR = {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_ruling_caste
+							has_cultural_tradition = tradition_eye_for_an_eye
+						}
+					}
+					rite = {
+						rite_has_tenet = tenet_pursuit_of_power
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = compassionate
+						has_trait = trusting
+						has_trait = loyal
+						has_trait = forgiving
+					}
+				}
+			}
+			add = 50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = sadistic
+						has_trait = callous
+						has_trait = vengeful
+						has_trait = paranoid
+						has_trait = greedy
+						dread > 20
+						tyranny > 20
+						culture = {
+							has_cultural_tradition = tradition_eye_for_an_eye
+						}
+						rite = {
+							rite_has_tenet = tenet_pursuit_of_power
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -309,23 +454,23 @@ charmer_attribute = {
 
 	#founding and successor requirements
 	squire_perfect_fit = {
-		idealist_attribute_trigger = yes
+		charmer_attribute_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes  # The AI ​​doesn't know how to use this accolade.
 			}
 		}
 	}
 	squire_acceptable_fit = {
-		idealist_attribute_acceptable_trigger = yes
+		charmer_attribute_acceptable_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes  # The AI ​​doesn't know how to use this accolade.
 			}
 		}
 	}
-	weight = {
-		value = 0 # change accolade_uninteresting_base_value
+		weight = {
+		value = 0 # change accolade_uninteresting_base_value # Stop wasting computing resources on things he doesn't know how to use.
 		
 	}
 
@@ -389,24 +534,189 @@ thug_attribute = {
 
 	#founding and successor requirements
 	squire_perfect_fit = {
-		scoundrel_attribute_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
+		thug_attribute_trigger = yes
 	}
 	squire_acceptable_fit = {
-		scoundrel_attribute_acceptable_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
+		thug_attribute_acceptable_trigger = yes
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
-		
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = warfare_legacy_3
+							has_dynasty_perk = fp1_pillage_legacy_3
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = glory_legacy_3
+							has_dynasty_perk = law_legacy_3
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						NOT = {
+							has_innovation = innovation_prosperity_02
+						}
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_innovation = innovation_noblesse_oblige
+					}
+				}
+			}
+			add = -25
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_battlefield_looters
+							has_cultural_pillar = ethos_bellicose
+							has_cultural_tradition = tradition_ruling_caste
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_pacifism
+							has_cultural_pillar = ethos_egalitarian
+							has_cultural_tradition = tradition_chivalry
+						}
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				OR = {
+					scope:owner ?= {
+						culture = {
+							OR = {
+								has_cultural_tradition = tradition_forbearing
+								has_cultural_tradition = tradition_legalistic
+								has_cultural_tradition = tradition_equitable
+							}
+						}
+					}
+					scope:owner ?= {
+						rite = {
+							rite_has_tenet = tenet_legalism
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						has_cultural_tradition = tradition_quarrelsome
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_forbearing
+						has_cultural_tradition = tradition_equitable
+						has_cultural_tradition = tradition_pacifism
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_tradition = tradition_quarrelsome
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = reaver
+						has_trait = sadistic
+						has_trait = callous
+						has_trait = impatient
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				has_trait = compassionate
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = sadistic
+					has_trait = callous
+					has_trait = vengeful
+				}
+			}
+			add = 50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = just
+						has_trait = compassionate
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -465,8 +775,7 @@ disciplinarian_attribute = {
 	}
 	weight = {
 		#ADDED - coz AI loves levies.
-		value = 0 # change accolade_standard_base_value	#prev accolade_uninteresting_base_value
-		
+		value = 0 # change accolade_standard_base_value	#prev accolade_uninteresting_base_value # We’re wasting the computer’s processing power for absolutely nothing. Accolade is genuinely useless.
 	}
 
 	#accolade ranks from Glory XP
@@ -525,23 +834,23 @@ fanatic_attribute = {
 
 	#founding and successor requirements
 	squire_perfect_fit = {
-		idealist_attribute_trigger = yes
+		fanatic_attribute_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes # Too useless for most AI.
 			}
 		}
 	}
 	squire_acceptable_fit = {
-		idealist_attribute_acceptable_trigger = yes
+		fanatic_attribute_acceptable_trigger = yes
 		NOR = {
 			liege ?= {
-				is_ai = yes
+				is_ai = yes # Too useless for most AI.
 			}
 		}
 	}
 	weight = {
-		value = 0 # change accolade_uninteresting_base_value
+		value = 0 # change accolade_uninteresting_base_value # We’re wasting the computer’s processing power for absolutely nothing. Accolade is genuinely useless.
 		
 	}
 
@@ -592,47 +901,161 @@ valiant_attribute = {
 	#grouping accolades
 	accolade_categories = { common personality righteous prowess army_bonus army_penalty militant forceful aggressive militant champion }
 
-
+	#founding and successor requirements
 	squire_perfect_fit = {
-		OR = {
-			# Игрок: обычные условия (триггер)
-			AND = {
-				NOR = {
-					liege ?= {
-						is_ai = yes
-					}
-				}
-				valiant_attribute_trigger = yes
-			}
-			# ИИ: только если доблесть >= 5
-			AND = {
-				liege ?= {
-					is_ai = yes
-				}
-				prowess >= 5
-			}
-		}
+		valiant_attribute_trigger = yes
 	}
 	squire_acceptable_fit = {
-		OR = {
-			AND = {
-				NOR = {
-					liege ?= {
-						is_ai = yes
-					}
-				}
-				valiant_attribute_acceptable_trigger = yes
-			}
-			AND = {
-				liege ?= {
-					is_ai = yes
-				}
-				prowess >= 5
-			}
-		}
+		valiant_attribute_acceptable_trigger = yes
 	}
 	weight = {
 		value = accolade_must_have_base_value	#prev accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						OR = {
+							has_dynasty_perk = warfare_legacy_3
+							has_dynasty_perk = fp1_adventure_legacy_3
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_pillar = ethos_bellicose
+							has_cultural_pillar = ethos_stoic
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_pillar = ethos_bellicose
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_formation_fighting
+							has_cultural_tradition = tradition_stalwart_defenders
+							has_cultural_tradition = tradition_modest
+							has_cultural_tradition = tradition_forbearing
+						}
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_talent_acquisition
+							has_cultural_tradition = tradition_only_the_strong
+							has_cultural_tradition = tradition_stand_and_fight
+							has_cultural_tradition = tradition_warrior_culture
+							has_cultural_tradition = tradition_fp1_performative_honour
+							has_cultural_tradition = tradition_fp1_the_right_to_prove
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_talent_acquisition
+						has_cultural_tradition = tradition_only_the_strong
+						has_cultural_tradition = tradition_stand_and_fight
+						has_cultural_tradition = tradition_warrior_culture
+						has_cultural_tradition = tradition_fp1_performative_honour
+						has_cultural_tradition = tradition_fp1_the_right_to_prove
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_formation_fighting
+						has_cultural_tradition = tradition_stalwart_defenders
+						has_cultural_tradition = tradition_modest
+						has_cultural_tradition = tradition_forbearing
+						has_cultural_tradition = tradition_byzantine_succession
+						has_cultural_tradition = tradition_ep3_palace_politics
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					has_trait = craven
+				}
+			}
+			add = -75
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = brave
+						has_trait = reckless
+						has_trait = ambitious
+						has_trait = aggressive_attacker
+						has_trait = reckless
+					}
+				}
+			}
+			add = 75
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = aggressive_attacker
+					has_trait = zealous
+					has_trait = wrathful
+				}
+			}
+			add = 75
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = lazy
+					has_trait = patient
+					has_trait = deceitful
+				}
+			}
+			add = -75
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
 	}
 
 	#accolade ranks from Glory XP
@@ -875,23 +1298,12 @@ scoundrel_attribute = {
 	portrait_pose = "hunting_knife_start"
     #grouping accolades
     accolade_categories = { common personality amoral martial intrigue army_bonus subtle unscrupulous }
-
-	#founding and successor requirements
-	squire_perfect_fit = {
-		idealist_attribute_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
-	}
+    #founding and successor requirements
+    squire_perfect_fit = {
+    	scoundrel_attribute_trigger = yes
+    }
 	squire_acceptable_fit = {
-		idealist_attribute_acceptable_trigger = yes
-		NOR = {
-			liege ?= {
-				is_ai = yes
-			}
-		}
+		scoundrel_attribute_acceptable_trigger = yes
 	}
     weight = {
         value = accolade_uninteresting_base_value
