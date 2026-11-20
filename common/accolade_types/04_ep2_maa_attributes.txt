@@ -878,7 +878,7 @@ outrider_attribute = {
 			outrider_attribute_trigger = yes
 			liege ?= {
 				is_ai = yes
-				number_maa_regiments_of_base_type = { Start hiring accolades for the war already.
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
 					type = light_cavalry
 					value >= 1
 				}
@@ -890,7 +890,7 @@ outrider_attribute = {
 			outrider_attribute_acceptable_trigger = yes
 			liege ?= {
 				is_ai = yes
-				number_maa_regiments_of_base_type = { Start hiring accolades for the war already.
+				number_maa_regiments_of_base_type = { # Start hiring accolades for the war already.
 					type = light_cavalry
 					value >= 1
 				}
@@ -1464,7 +1464,7 @@ lancer_attribute = {
 						value = 0
 					}
 					NOR = {
-						culture = culture:greek              # The Greeks are renowned for their cavalry. Lift the ban for the Greeks.
+						culture = culture:greek              # The Greeks are renowned for their cavalry. Lift the ban for the Greeks. For now, this note is for the knight, not the owner; for the owner, it seems a more complex "scope" will be required.
 					}
 				}
 				multiply = accolade_uninteresting_base_value # Don’t create a hodgepodge of different troop types.
@@ -1665,7 +1665,7 @@ crossbowmen_attribute = {
 						"number_maa_regiments_of_type(accolade_maa_crossbowers)" >= 2
 					}
 				}
-				add = accolade_uninteresting_base_value
+				add = accolade_must_have_base_value
 			}
 			if = {
 				limit = {

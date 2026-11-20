@@ -58,10 +58,26 @@ politicker_attribute = {
 	accolade_categories = { skilled skill social personality diplomacy vassal_manager courtly subtle }
 
 	squire_perfect_fit = {
-		politicker_attribute_trigger = yes
+		OR = {
+			politicker_attribute_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				diplomacy >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		politicker_attribute_acceptable_trigger = yes
+		OR = {
+			politicker_attribute_acceptable_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				diplomacy >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
 	
 	weight = {
@@ -218,17 +234,33 @@ tactician_attribute = {
 	icon = "gfx/interface/icons/knight_badge/icons/accolade_trait_militant_blue.dds"
 	portrait_pose = "marshal"
 	accolade_categories = { skilled skill warlike leader subtle martial }
-
+# ADDED
 	squire_perfect_fit = {
-		tactician_attribute_trigger = yes
+		OR = {
+			tactician_attribute_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				martial >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
 	squire_acceptable_fit = {
-		tactician_attribute_acceptable_trigger = yes
+		OR = {
+			tactician_attribute_acceptable_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				martial >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
-	
+
 	weight = {
 		# These are less interesting, so we weight them down for the AI.
-		value = accolade_must_have_base_value # change accolade_standard_base_value ### A very strong accolade, one of the most versatile.
+		value = accolade_omega_must_have_base_value # change accolade_standard_base_value ### A very strong accolade, one of the most versatile.
 		# Scope over to the liege to see if they even want this accolade.
 		scope:owner ?= {
 			# Skills.
@@ -485,11 +517,29 @@ manipulator_attribute = {
 	portrait_pose = "spymaster"
 	accolade_categories = { skilled skill subtle courtly aggressive amoral intrigue }
 
+	# ADDED
 	squire_perfect_fit = {
-		manipulator_attribute_trigger = yes
+		OR = {
+			manipulator_attribute_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				intrigue >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
+
 	squire_acceptable_fit = {
-		manipulator_attribute_acceptable_trigger = yes
+		OR = {
+			manipulator_attribute_acceptable_trigger = yes
+			AND = {
+				liege ?= {
+					is_ai = yes
+				}
+				intrigue >= 8 # It’s been included for the sake of variety; the accolade is otherwise too rare.
+			}
+		}
 	}
 	
 	weight = {
