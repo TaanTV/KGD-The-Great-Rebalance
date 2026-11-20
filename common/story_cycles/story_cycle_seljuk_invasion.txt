@@ -20,7 +20,7 @@
 		# Breakup of the empire should not happen until at least one succession has passed
 		random_list = { # Weighted chance to end the story
 			10 = {
-				trigger = { var:succession_counter < 2 }
+				#trigger = { var:succession_counter < 2 }
 				modifier = {
 					add = 10
 					var:succession_counter > 1
@@ -42,8 +42,14 @@
 					}
 					make_story_owner = story_owner.primary_heir
 					change_variable = {
-						name = seljuk_invasion_nomad_strength_score
-						add = -5
+						name = succession_counter
+						add = 1
+					}
+					story_owner = {
+						set_variable = {
+							name = seljuk_invasion_nomad_strength_score
+							value = 5	#prev -5
+						}
 					}
 				}
 				else = {
@@ -76,8 +82,28 @@
 			}
 			effect = {
 				story_owner = {
-					seljuk_war_target_evaluation_and_declaration_effect = yes
 					save_scope_as = owner
+					seljuk_war_target_evaluation_and_declaration_effect = yes
+					every_character_war = {
+						limit = { using_cb = fp3_seljuk_invasion_cb }
+						save_scope_as = war
+					}
+					random = {
+						chance = {
+							value = var:seljuk_invasion_nomad_strength_score
+							multiply = 8
+						}
+						change_variable = {
+							name = seljuk_invasion_nomad_strength_score
+							add = -1
+							min = 0
+						}
+						save_scope_value_as = {
+							name = victim_strength_modifier
+							value = 1
+						}
+						create_seljuk_army_effect = yes
+					}
 				}
 			}
 		}
@@ -127,11 +153,11 @@
 					#set some flags so seljuk scripts take over most conqueror ones.
 					add_character_flag = {
 						flag = conqueror_pacing_flag
-						years = 20
+						years = 35
 					}
 					add_character_flag = {
 						flag = conqueror_anti_pacing_flag
-						years = 25
+						years = 40
 					}
 				}
 			}
@@ -141,6 +167,19 @@
 	# Create the empire and close the story
 	effect_group = {
 		days = { 30 60 }
+		
+		#ADDED - in case it was already created
+		triggered_effect = {
+			trigger = {
+				story_owner = {
+					is_ai = yes
+					has_title = title:e_persia
+				}
+			}
+			effect = {
+				end_story = yes
+			}
+		}
 
 		trigger = {
 			story_owner = {
@@ -148,7 +187,7 @@
 				OR = {
 					any_county_in_region = {
 						region = world_persian_empire
-						percent >= 0.85			#prev 0.51
+						percent >= 0.75			#prev 0.51
 						holder.top_liege = scope:temp_seljuk
 					}
 					#any_held_title = {
@@ -203,17 +242,30 @@
 				end_story = yes
 			}
 		}
-		
-		#ADDED - in case it was already created
+	}
+
+	#ADDED - reinforce seljuks 
+	effect_group = {
+		years = { 1 10 }
+
+		trigger = {
+			story_owner = {
+				has_variable = seljuk_invasion_nomad_strength_score
+				var:seljuk_invasion_nomad_strength_score < 10
+			}
+		}
+
 		triggered_effect = {
 			trigger = {
-				story_owner = {
-					is_ai = yes
-					has_title = title:e_persia
-				}
+				always = yes
 			}
 			effect = {
-				end_story = yes
+				story_owner = {
+					change_variable = {
+						name = seljuk_invasion_nomad_strength_score
+						add = 1
+					}
+				}
 			}
 		}
 	}

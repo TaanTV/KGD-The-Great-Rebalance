@@ -45,15 +45,18 @@ fp3_innovation_mural_sextant = {
 
 	character_modifier = {
 		monthly_learning_lifestyle_xp_gain_mult = 0.05
-		character_capital_county_monthly_development_growth_add = 0.02	#prev 0.2
+		character_capital_county_monthly_prosperity_growth_add = 0.02	#prev 0.2
 		character_capital_monthly_county_fertility_growth_add = 0.1		#prev 0.2
 	}
 	
-	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 		if = {
-			limit = { NOT = { has_cultural_era_or_later = culture_era_early_medieval } }
+			limit = {
+				NOT = {
+					has_cultural_era_or_later = culture_era_early_medieval
+				}
+			}
 			multiply = 0.001
 		}
 	}
@@ -70,17 +73,21 @@ fp3_innovation_fritware = {
 	 	has_innovation = fp3_innovation_fritware
 	 }
 
-	character_modifier = {
-		domain_tax_mult = 0.05
+	county_modifier = {
+		artisan_tax_mult = 0.05
+		trade_good_ceramics_production_mult = 0.25
 	}
 
 	custom = fp3_innovation_fritware_tooltip
 	
-	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 		if = {
-			limit = { NOT = { has_cultural_era_or_later = culture_era_late_medieval } }
+			limit = {
+				NOT = {
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+			}
 			multiply = 0.001
 		}
 	}

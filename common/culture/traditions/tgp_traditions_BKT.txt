@@ -8,13 +8,13 @@
 	}
 
 	is_shown = {
-		culture_head = {
+		culture_head ?= {
 			top_liege = { has_character_flag = shogun_flag }
 			has_government = japan_feudal_government
 		}
 	}
 	can_pick = {
-		culture_head = {
+		culture_head ?= {
 			top_liege = { has_character_flag = shogun_flag }
 			has_government = japan_feudal_government
 		}
@@ -85,13 +85,19 @@ tradition_tgp_rice_cultivators = {
 
 	parameters = {
 		rice_cultivators_next_level_paddy_fields = yes
-		rice_cultivators_can_construct_paddy_fields_in_hills_and_jungle = yes
+		rice_cultivators_rice_district_bonuses = yes
+	}
+
+	character_modifier = {
+		trade_category_cereals_xp_gain_mult = 0.15
+		trade_good_rice_sell_price_mult = 0.03
 	}
 
 	county_modifier = {
-		terraced_hills_development_growth_factor = 0.3
+		terraced_hills_prosperity_growth_factor = 0.3
 		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
 		terraced_hills_levy_size = 0.1
+		trade_good_rice_production_mult = 0.2
 	}
 
 	cost = {
@@ -339,18 +345,33 @@ tradition_maritime_way_of_life = {
 				}
 			}
 		}
+		# Shouldn't be combined with the following traditions:
+		custom_tooltip = {
+			text = cannot_have_tradition_seafaring
+			NOT = { culture_tradition:tradition_seafaring = { is_in_list = traits } }
+		}
+		custom_tooltip = {
+			text = cannot_have_tradition_fp1_coastal_warriors
+			NOT = { culture_tradition:tradition_fp1_coastal_warriors = { is_in_list = traits } }
+		}
 	}
 
 	parameters = {
 		can_travel_along_rivers = yes
 		coastal_tribe_bonuses = yes #Maa bonuses for coastal tribal
 		unlock_maa_pesilat = yes
+		maritime_way_of_life_port_maa_maintenance = yes
 	}
 	character_modifier = {
 		embarkation_cost_mult = -0.45		#prev -0.85
 		naval_movement_speed_mult = 0.25
 		coastal_sea_travel_danger = low_sea_danger_reduction	#prev medium_sea_danger_reduction
 		sea_travel_danger = low_sea_danger_reduction			#prev medium_sea_danger_reduction
+		trade_route_length_add = 2
+		trade_good_fish_buy_price_mult = -0.01
+	}
+	county_modifier = {
+		trade_good_fish_production_mult = 0.1
 	}
 
 	cost = {
@@ -476,16 +497,9 @@ tradition_tgp_hydraulic_builders = {
 	}
 
 	parameters = {
-		sacred_pool_additional_bonuses = yes
-		may_build_sacred_pools_ahead_of_time = yes
-		unlocks_waterworks_buildings = yes
-		waterworks_additional_bonuses = yes
-	}
-	county_modifier = {
-		wetlands_development_growth_factor = 0.4		#prev 0.25
-		wetlands_construction_gold_cost = -0.1
-		terraced_hills_development_growth_factor = 0.1
-		terraced_hills_construction_gold_cost = -0.05	#prev -0.1
+		hydraulic_builders_sacred_pool = yes
+		hydraulic_builders_monsoon_bonuses = yes
+		hydraulic_builders_religious_building_slot = yes
 	}
 
 	cost = {
@@ -558,12 +572,13 @@ tradition_nudists = {
 		lustful_trait_less_common = yes
 	}
 	county_modifier = {
-		#jungle_development_growth_factor = 0.2
+		#jungle_prosperity_growth_factor = 0.2
 		#jungle_supply_limit_mult = 1
 		#jungle_provisions_use_mult = -0.75
 		#jungle_barter_goods_mult = 0.15
+		trade_category_clothes_production_mult = -0.5
 		#ADDED
-		county_opinion_add = 5
+		popular_opinion_add = 5
 	}
 
 	character_modifier = {
@@ -610,7 +625,7 @@ tradition_nudists = {
 						NOT = {
 							any_ruler = {
 								count >= 3
-								culture = prev
+								culture_filter = root
 								primary_title.tier >= tier_county
 								OR = {
 									has_completed_inspiration = yes
@@ -694,6 +709,7 @@ tradition_tgp_mountain_island = {
 
 	parameters = {
 		prestige_gain_on_building_complete_in_mountains_forest = yes
+		mountain_herding_castle_skirmisher_control = yes
 	}
 	character_modifier = {
 		coastal_sea_travel_danger = low_sea_danger_reduction	#prev medium_sea_danger_reduction
@@ -702,14 +718,8 @@ tradition_tgp_mountain_island = {
 		forest_travel_danger = forest_medium_danger_reduction
 	}
 	county_modifier = {
-		hills_development_growth_factor = 0.25				#prev 0.05
-		mountains_development_growth_factor = 0.4			#prev 0.2
-	}
-	province_modifier = {
-		mountains_construction_gold_cost = -0.1
-		mountains_holding_construction_gold_cost = -0.1
-		forest_construction_gold_cost = -0.1
-		forest_holding_construction_gold_cost = -0.1
+		hills_prosperity_growth_factor = 0.25				#prev 0.05
+		mountains_prosperity_growth_factor = 0.4			#prev 0.2
 	}
 
 	cost = {
@@ -837,18 +847,21 @@ tradition_intensive_farming = {
 		martial_education_worse_outcomes = yes
 		hard_working_traits_more_valued = yes
 		rice_cultivators_next_level_paddy_fields = yes
+		rice_cultivators_rice_district_bonuses = yes
+		agrarian_villages_building_slot = yes
 	}
 	character_modifier = {
 		men_at_arms_recruitment_cost = 0.25
 		levy_maintenance = 0.10				#prev 0.025
+		trade_category_cereals_xp_gain_mult = 0.1
+		trade_category_cereals_buy_price_mult = -0.01
 	}
 	county_modifier = {
-		farmlands_development_growth_factor = 0.3
-		farmlands_tax_mult = 0.1			#prev 0.05
-		farmlands_levy_size = 0.1
-		terraced_hills_development_growth_factor = 0.3
+		agricultural_tax_mult = 0.15
+		terraced_hills_prosperity_growth_factor = 0.3
 		terraced_hills_tax_mult = 0.05
 		terraced_hills_levy_size = 0.1
+		trade_category_cereals_production_mult = 0.1
 	}
 
 	cost = {

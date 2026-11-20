@@ -37,7 +37,7 @@ tenet_unrelenting_faith = {
 		prowess = 3					#prev 4
 		tolerance_advantage_mod = 4
 		#levy_size = 0.1
-		different_faith_county_opinion_mult = 0.25	#prev 0.1
+		different_faith_popular_opinion_mult = 0.25	#prev 0.1
 	}
 
 	parameters = {
@@ -191,8 +191,10 @@ tenet_ancestor_worship = {
 	parameters = {
 		pilgrimage_decision_active
 		sanctify_artifacts_ancestral
+		tenet_ancestor_worship_burial_site_popular_opinion
 		tenet_ancestor_worship_renown_on_death
 		tenet_ancestor_worship_seek_ancestral_guidance
+		ritual_incense
 	}
 
 	special_parameters = {
@@ -203,12 +205,15 @@ tenet_ancestor_worship = {
 
 	character_modifier = {
 		close_relative_opinion = 5
+		trade_good_incense_sell_price_mult = 0.0075
 	}
 
 	personal_tenet_modifier = {
 		monthly_dynasty_prestige = 0.05		#prev 0.1
 		stress_loss_mult = 0.15
 		stress_gain_mult = -0.1				#prev -0.15
+		trade_category_incense_xp_gain_mult = 0.2
+		trade_good_incense_sell_price_mult = 0.015
 	}
 
 	traits = {
@@ -274,6 +279,16 @@ tenet_islamic_syncretism = {
 		tenet_islamic_syncretism_study_rite_bonus
 	}
 
+	character_modifier = {
+		trade_competitiveness_add = 2
+		trade_expertise_growth_mult = 0.05
+		trade_good_spices_sell_price_mult = 0.0075
+	}
+
+	personal_tenet_modifier = {
+		trade_capacity_mult = 0.05
+	}
+
 	parameters = {
 		can_use_islamic_artifacts
 		islamic_syncretic_actor
@@ -300,6 +315,75 @@ tenet_islamic_syncretism = {
 		sins = { 
 			greedy = { weight = 10 scale = 1 }
 			arbitrary = { weight = 10 scale = 1 }
+		}
+	}
+}
+
+
+# Takamin
+tenet_takamin = {
+	icon = tenet_bear
+
+	historical_glossary = {
+		first_valid = {
+			desc = tenet_takamin_iyomante_historical_glossary
+		}
+	}
+
+	requires_dlc_flag = all_under_heaven
+
+	is_shown = {
+		has_tgp_dlc_trigger = yes
+	}
+	can_pick = {
+		has_doctrine = pagan_hostility_doctrine
+	}
+
+	piety_cost = {
+		value = faith_tenet_cost_high
+
+		# Multiplier for keeping same tenet
+		if = {
+			limit = { rite_has_tenet = tenet_takamin }
+			multiply = faith_unchanged_doctrine_cost_mult
+		}
+	}
+
+	character_modifier = {
+		taiga_travel_danger = taiga_low_danger_reduction	#prev taiga_high_danger_reduction
+		trade_good_furs_sell_price_mult = 0.01
+	}
+
+	personal_tenet_modifier = {
+		lifestyle_hunter_xp_gain_mult = 0.25
+		trade_category_clothes_xp_gain_mult = 0.2
+		trade_category_meat_xp_gain_mult = 0.2
+		trade_good_fish_sell_price_mult = 0.02
+	}
+
+	personal_tenet_parameters = {
+		tenet_takamin_hunter_trait
+	}
+
+	county_modifier = {
+		trade_good_furs_production_mult = 0.2
+	}
+	
+	parameters = {
+		frequent_bear_sightings
+		efficient_hunt_cornering
+		allows_bear_sacrifice
+		chance_to_gain_prowess_during_bear_hunts
+	}
+	
+	traits = {
+		# Ainu bear/hunter warrior cult (kamuy iyomante).
+		virtues = {
+			lifestyle_hunter = { weight = 25 scale = 2 }
+			brave = { weight = 10 scale = 1 }
+		}
+		sins = {
+			craven = { weight = 15 scale = 1 }
 		}
 	}
 }

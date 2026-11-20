@@ -1,38 +1,4 @@
-﻿#PRESTIGE
-# Multiplied all by 2 because PUNISHMENT.
-# Commented out because AI seems to struggle :<
-#miniscule_prestige_loss = {
-#	value = 0
-#	subtract = miniscule_prestige_value
-#	multiply = 2
-#}
-#minor_prestige_loss = {
-#	value = 0
-#	subtract = minor_prestige_value
-#	multiply = 2
-#}
-#medium_prestige_loss = {
-#	value = 0
-#	subtract = medium_prestige_value
-#	multiply = 2
-#}
-#major_prestige_loss = {
-#	value = 0
-#	subtract = major_prestige_value
-#	multiply = 2
-#}
-#massive_prestige_loss = {
-#	value = 0
-#	subtract = massive_prestige_value
-#	multiply = 2
-#}
-#monumental_prestige_loss = {
-#	value = 0
-#	subtract = monumental_prestige_value
-#	multiply = 2
-#}
-
-
+﻿
 knight_prestige_gain_on_wound = {
 	value = minor_prestige_gain
 	if = {
@@ -155,35 +121,6 @@ knight_prestige_gain_on_kill_inverse = {
 	}
 }
 
-##PIETY
-## Multiplied all by 2 because PUNISHMENT.
-#miniscule_piety_loss = {
-#	value = 0
-#	subtract = miniscule_piety_value
-#	multiply = 2
-#}
-#minor_piety_loss = {
-#	value = 0
-#	subtract = minor_piety_value
-#	multiply = 2
-#}
-#medium_piety_loss = {
-#	value = 0
-#	subtract = medium_piety_value
-#	multiply = 2
-#}
-#major_piety_loss = {
-#	value = 0
-#	subtract = major_piety_value
-#	multiply = 2
-#}
-#massive_piety_loss = {
-#	value = 0
-#	subtract = massive_piety_value
-#	multiply = 2
-#}
-
-
 #FAME
 # Multiplied all by 2 because PUNISHMENT.
 miniscule_fame_loss = {
@@ -257,7 +194,7 @@ send_gift_opinion = {
 				scope:puppet_or_actor.diplomacy > 0
 			}
 			add = {
-				value = scope:actor.diplomacy
+				value = scope:puppet_or_actor.diplomacy
 				multiply = 2	#prev 3
 			}
 		}
@@ -300,9 +237,9 @@ send_gift_opinion = {
 	}
 	if = {
 		limit = {
-			scope:actor = {
+			scope:puppet_or_actor = {
 				any_sub_realm_barony = {
-					county.holder = scope:actor
+					county.holder = scope:puppet_or_actor
 					title_province = { 
 						has_building_or_higher = dragon_kiln_01
 					}
@@ -315,7 +252,7 @@ send_gift_opinion = {
 		limit = {
 			scope:puppet_or_actor = { has_perk = thoughtful_perk }
 		}
-		multiply = 1.5		#prev 2
+		multiply = 1.25
 	}
 	if = {
 		limit = {
@@ -323,7 +260,7 @@ send_gift_opinion = {
 				has_personal_tenet_flag = tenet_simony_personal_gifts
 			}
 		}
-		multiply = 1.25		#prev 2
+		multiply = 1.25
 	}
 	#ADDED - change the end result slightly based on this 
 	if = {
@@ -353,6 +290,16 @@ gift_artifact_opinion = {
 			add = 25	#prev 50
 		}
 		else = { add = 40 }	#prev 100
+		# Menagerie Creatures are special
+		if = {
+			limit = {
+				OR = {
+					artifact_type = creature
+					has_variable = was_creature_artifact
+				}
+			}
+			add = 20	#prev 25
+		}
 		if = { # AI Greed
 			limit = { scope:recipient.ai_greed > 0 }
 			multiply = { # Up to *2
@@ -408,11 +355,25 @@ gift_artifact_opinion = {
 						can_benefit_from_artifact = scope:target
 					}
 				}
+				# Creature artifacts always nice because they become Court Artifacts upon gifting
+				scope:target = {
+					NOR = {
+						artifact_type = creature
+						has_variable = was_creature_artifact
+					}
+				}
 			}
 			divide = 10 # 1/10 for useless artifacts
 		}
 		else_if = {
 			limit = {
+				# Creature artifacts always nice because they become Court Artifacts upon gifting
+				scope:target = {
+					NOR = {
+						artifact_type = creature
+						has_variable = was_creature_artifact
+					}
+				}
 				scope:recipient = {
 					OR = {
 						NOT = { can_equip_artifact = scope:target }
@@ -439,6 +400,7 @@ divorce_cost = {
 					is_spouse_of = scope:actor
 					NOT = { exists = scope:secondary_recipient }
 					OR = {
+						scope:actor = { has_divorce_reason = scope:recipient }
 						reverse_has_opinion_modifier = {
 							modifier = unfaithful_spouse_exposed_opinion
 							target = scope:actor
@@ -452,6 +414,7 @@ divorce_cost = {
 				scope:secondary_recipient ?= {
 					is_spouse_of = scope:actor
 					OR = {
+						scope:actor = { has_divorce_reason = scope:secondary_recipient }
 						reverse_has_opinion_modifier = {
 							modifier = unfaithful_spouse_exposed_opinion
 							target = scope:actor
@@ -473,9 +436,6 @@ divorce_cost = {
 	}
 }
 
-
-
-#death_chance_starts_health = 2.75	#prev 3
 
 #This is from 00_invasion_values.txt but im not going to create the file for this one line
 almohad_appearance_base_chance = 5	#prev 1

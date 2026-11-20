@@ -426,8 +426,6 @@ ai_chance_to_become_conqueror_effect = {
 			}
 			else = {
 				trigger_event = conqueror.0001
-				#ADDED
-				remove_character_modifier = true_heresiarch_modifier
 			}
 		}
 	}
@@ -570,8 +568,6 @@ ai_chance_to_become_mandala_godking_effect = {
 				}
 			}
 			create_story = story_mandala
-			#ADDED
-			remove_character_modifier = true_heresiarch_modifier
 		}
 	}
 }

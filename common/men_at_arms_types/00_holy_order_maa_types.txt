@@ -40,6 +40,8 @@ order_serjeants = { # for all Christian knightly orders
 	pursuit = 0
 	screen = 0
 
+	control_value = 4
+
 	buy_cost = { gold = heavy_infantry_recruitment_cost }
 	low_maintenance_cost = { gold = heavy_infantry_low_maint_cost }
 	high_maintenance_cost = { gold = heavy_infantry_high_maint_cost }
@@ -56,7 +58,6 @@ order_serjeants = { # for all Christian knightly orders
 	}
 
 	can_recruit = {
-		#serjeants are more of a western christian thing
 		rite = {
 			rite_has_doctrine = special_doctrine_is_western_christian_faith
 		}
@@ -96,6 +97,8 @@ order_knights = {
 	pursuit = 20
 	screen = 0
 
+	control_value = 8
+
 	terrain_bonus = {
 		plains = { damage = 30 }
 		drylands = { damage = 30 }
@@ -111,7 +114,6 @@ order_knights = {
 	}
 
 	can_recruit = {
-		#Knights are more of a western christian thing
 		rite = {
 			rite_has_doctrine = special_doctrine_is_western_christian_faith
 		}

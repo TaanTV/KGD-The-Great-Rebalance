@@ -107,7 +107,7 @@ scripted_effect faction_demand_independence_rejected_effect = {
 		scope:faction = {
 			every_faction_member = {
 				save_scope_as = char_temp
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:char_temp
 					TARGET = root
 					VALUE = medium_unity_loss
@@ -592,6 +592,21 @@ faction_demand.0101 = {
 
 		scope:faction = {
 			destroy_faction = yes
+		}
+		
+		#ADDED
+		hidden_effect = {
+			switch = {
+				trigger = has_realm_law_in_group
+				crown_authority = { set_variable = { name = crown_authority_cooldown years = 10 } }
+				tribal_authority = { set_variable = { name = tribal_authority_cooldown years = 10 } }
+				#yes i know those 3 are the same.
+				imperial_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 10 } }
+				celestial_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 10 } }
+				meritocratic_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 10 } }
+				japanese_bureaucracy = { set_variable = { name = imperial_bureaucracy_cooldown years = 10 } }
+				church_authority = { set_variable = { name = church_authority_cooldown years = 10 } }
+			}
 		}
 
 		# MERITOCRATIC EMPIRE CEREMONIAL MONARCH/REGENCY CREATION
@@ -1190,7 +1205,7 @@ faction_demand.1001 = {
 				faith.religion != scope:peasant_leader.faith.religion
 			}
 			
-			modifier = { # Byzantium should try to avoid becoming Catholic
+			modifier = { # Byzantium should try to avoid becoming Latin-rite
 				factor = 0
 				primary_title = title:e_byzantium
 				primary_title.state_rite.faith.religion = scope:peasant_leader.faith.religion
@@ -3255,7 +3270,7 @@ faction_demand.0227 = {
 						title_tier = county
 						limit = {
 							is_landless_type_title = no
-							county_control < 75
+							county_control < county_control_baseline
 						}
 						add = 10
 					}

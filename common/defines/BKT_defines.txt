@@ -1,4 +1,4 @@
-
+﻿
 NCharacter = {
 	#MALE_RANDOM_AGE_BASE = 16
 	MALE_RANDOM_AGE_SPAN = 16		#prev 20
@@ -55,7 +55,8 @@ NCharacter = {
 	#	"HEALTH_EXCELLENT"
 	#}
 	
-	MARRIAGE_TIER_DIFF_PRESTIGE_MULT = 250		#prev 100
+	MARRIAGE_TIER_DIFF_PRESTIGE_MULT = 250			#prev 100
+	MERCHANT_MARRIAGE_TIER_DIFF_PRESTIGE_MULT = 100	#prev 50	# Replaces MARRIAGE_TIER_DIFF_PRESTIGE_MULT when the character gaining the prestige is a Merchant
 	
 	MAA_STARTING_EXPENSE_MIN = 0.35					#prev 0.2 # Rulers at game start will start out spending this much (or a bit more, as it'll overshoot) on men at arms
 	MAA_STARTING_EXPENSE_MAX = 0.6					#prev 0.35 # Rulers will never start out spending more than this on men at arms. For poor rulers this can mean they end up under MAA_STARTING_EXPENSE_MIN if one more MaA would put them above the max
@@ -258,6 +259,7 @@ NArmy = {
 	COUNTY_MOVEMENT_ATTRITION_PERCENTAGE = 0.1	#prev 0.05
 	MINIMUM_COUNTY_MOVEMENT_ATTRITION = 50		#prev 100
 	
+	MAA_PRESTIGE_BUY_COST_MULT = 3			#prev 2			# If using prestige as gold for MaA, multiply buy cost by this
 	MAA_PRESTIGE_LOW_COST_MULT = 0.4		#prev 0.7		# If using prestige as gold for MaA, multiply basic maintenance cost by this
 	MAA_PRESTIGE_HIGH_COST_MULT = 0.5		#prev 0.7		# If using prestige as gold for MaA, multiply raised/reinforce cost by this				# If using prestige as gold for MaA, multiply raised/reinforce cost by this
 	#MAA_TREASURY_BUY_COST_MULT = 2							# If using treasury as gold for MaA, multiply buy cost by this
@@ -322,11 +324,11 @@ NReligion = {
 		-60		#prev -30
 	}
 
-	HOSTILITY_COUNTY_OPINION_EFFECTS = {	# The opinion effects of each hostility level on counties. Modified by fervor of the county's faith divided by 100
+	HOSTILITY_POPULAR_OPINION_EFFECTS = {	# The opinion effects of each hostility level on counties. Modified by fervor of the county's faith divided by 100
 		0
-		-15
-		-30
-		-45
+		-10
+		-30		#prev -20
+		-45		#prev -30
 	}
 	# Maybe up the ones above too?
 	PREFERRED_GENDER_CHANCE = 9				#prev 3 # When deciding if clergy characters should be male or female a 3 here means that the preferred gender will be three times as likely
@@ -367,11 +369,14 @@ NSiege = {
 
 NCounty = {
 	# What penalty to give when at zero culture acceptance. Scales down to 0 at 100% acceptance. So -10 would be -10 at 0%, -5 at 50%, 0 at 100%
-	COUNTY_OPINION_ZERO_ACCEPTANCE = -25	#prev -15
+	POPULAR_OPINION_ZERO_ACCEPTANCE = -25	#prev -15
+	#COUNTY_CONTROL_DEFAULT_BASELINE = 35       # Baseline before any modifiers; control trends toward this
+	DEFAULT_COUNTY_CONTROL = 40					#prev 25 	# Should probably be the same as the default baseline.
+	COUNTY_CONTROL_BASE_MONTHLY_CHANGE = 0.2	#prev 0.1   # Absolute base convergence rate per month
 }
 
 NProvince = {
-	SUPPLY_PER_DEVELOPMENT = 100	#prev 150
+	SUPPLY_PER_PROSPERITY = 100		#prev 150
 	RAZE_HOLDING_COOLDOWN_YEARS = 3	#prev 5 	# Sets the cooldown perid in years for nomads razing holdings that they completely control
 	MAX_BUILDINGS = 8				#prev 7 	# Maximum number of building slots that a province can have
 }
@@ -388,6 +393,8 @@ NDynasty = {
 	
 	#Those are just doubled
 	MARRIAGE_PRESTIGE = { -200	0	200	400	600	800	1000	1200	1400	1600 1800 }
+	#Those are x1.5 coz holy this is so much
+	MERCHANT_MARRIAGE_PRESTIGE = { 150	300	450	600	750	900	1050	1200 1350	1400 1600 }	# Replaces MARRIAGE_PRESTIGE when the character gaining the prestige is a Merchant. Must have at least as many entries as LEVELS_PRESTIGE, plus one
 	#Those are x1.5-ed 
 	BIRTH_PRESTIGE = { 0	150	300	450	600	750	900	1050	1200 1350	1500 }
 	
@@ -414,10 +421,6 @@ NHouseRelation = {
 
 NDomain = {
 	#STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE = 101		#prev 6		 # domain limit += floor( <stewardship skill> / STEWARDSHIP_SKILL_FOR_DOMAIN_LIMIT_INCREASE )
-
-	LEVIES_AT_MAX_COUNTY_DEVELOPMENT = 0.75	#prev 0.5		# How many % levies bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100	
-	TAX_AT_MAX_COUNTY_DEVELOPMENT = 0.75	#prev 0.5		# How much % tax bonus do you get at 100 county development? Interpolated between this value and 0% when between 0 and 100
-	
 	#THIS DOES NOT WORK!
 	#HOLDING_GRACE_PERIOD = 180				#prev 365		# How many days do newly gained holdings not count towards the domain size for the purposes of penalties (but also not produce any levies)
 }
@@ -428,7 +431,7 @@ NPathFinding = {
 }
 
 NCulture = {
-	MINIMUM_INNOVATIONS_TO_NEXT_ERA = 9	#perv 8	#bkt prev 0.7			#prev 0.5	# Percentage of innovations to be able to go to the next era
+	MINIMUM_INNOVATIONS_TO_NEXT_ERA = 11	#prev 10	#bkt prev 0.7	# Percentage of innovations to be able to go to the next era
 	
 	# base + from spread + from fascination
 	#INNOVATION_PROGRESS_CHANCE_BASE = 5
@@ -458,7 +461,7 @@ NCulture = {
 	# If the random roll succeeds, the innovation will progress by:
 	# base + from development + from eras ahead
 	#INNOVATION_PROGRESS_GAIN_BASE = 0.3
-	#INNOVATION_PROGRESS_GAIN_PER_AVERAGE_DEVELOPMENT_LEVEL = 0.02
+	#INNOVATION_PROGRESS_GAIN_PER_AVERAGE_PROSPERITY_LEVEL = 0.02
 	INNOVATION_PROGRESS_GAIN_PER_ERA_AHEAD = 0.5		#prev 0.2
 	INNOVATION_PROGRESS_DIVIDE_FACTOR_IF_ERA_BEHIND = 4	#prev 5			# the overall progress is divided by this number to achieve a way slower progress for future innovations. 10 would divide the total progress by 10, and this is further divided by the number of eras the culture is behind - so the progress may end up being divided by 30 at most. Set to 0 to disable this behavior.
 	#INNOVATION_PROGRESS_MIN_MULTIPLIER_IF_ERA_BEHIND = 0.01			# the division from the define above may not go lower than this. Ranges between 0 and 1.
@@ -486,8 +489,8 @@ NMercenary = {
 	NUM_KNIGHTS = { 4 6 8 }			#prev 2 3 4									# The number of knights for levels of mercenary bands
 	MAA_REGIMENT_SIZES = { 3 3 4 }	#prev 3 3 3		# The base sizes of MAA regiments for levels of mercenary bands, in number of sub-regiments
 	
-	LEVY_COST_PER_100_SOLDIERS = 9.0	#prev 12.0		# The cost of the levy regiment part of mercenary companies, per 100 soldiers for better precision
-	MAA_COST_RATIO = 0.35				#prev 0.5		# The cost of the MAA regiments of mercenary companies as a fraction of what those regiments cost when buying them
+	#LEVY_COST_PER_100_SOLDIERS = 12.0	#bkt prev 9.0				# The cost of the levy regiment part of mercenary companies, per 100 soldiers for better precision
+	MAA_COST_RATIO = 1.1				#bkt prev 0.35	#prev 0.5	# The cost of the MAA regiments of mercenary companies as a fraction of what those regiments cost when buying them
 	
 }
 
@@ -505,7 +508,7 @@ NHolyOrder = {
 	NUM_HOLDINGS_PER_MAA_REGIMENT = 6	#prev 3
 
 	#LEVY_COST_PER_100_SOLDIERS = 5.0		# The piety cost of the levy regiment part of holy orders, per 100 soldiers for better precision
-	MAA_COST_RATIO = 0.35		#prev 0.2	# The piety cost of the MAA regiments of holy orders as a fraction of what those regiments cost when buying them
+	MAA_COST_RATIO = 1.1	#bkt prev 0.35	#prev 0.2	# The piety cost of the MAA regiments of holy orders as a fraction of what those regiments cost when buying them
 	#REALM_SIZE_MULT = 0.05					# The cost will increase by this many percent multiplied by the square root of the hirer's realm size (# of counties)
 	PATRON_HIRE_COST_MULT = 0.25			# The patron pays only a fraction for hiring a holy order. Set to 0 to make it free.
 	PATRON_STEAL_COST_MULT = 1.5			# But if someone's already hired it, they do have to pay still
@@ -515,9 +518,9 @@ NRaid = {
 	RAID_LOOT_PER_SOLDIER = 0.15		#prev 0.1		# How much loot can a single soldier carry? Minimum increment is 0.001
 	MIN_SOLDIERS_TO_RAID = 150			#prev 200		# How small can a raid army be and still be able to loot?
 	MONTHLY_ATTRITION = 0.02			#BKT prev 0.015	#prev 0.01	# How much attrition do you take while looting a province? 0.01 = 1% per month
-	#MONTHS_OF_RAID_LOOT = 12							# How many months of holding income (with owner effects discounted) does raiding provide?
+	#MONTHS_OF_RAID_LOOT = 10							# How many months of holding income (with owner effects discounted) does raiding provide?
 	
-	#LESS_MONTHS_OF_RAID_LOOT = 6 		# This is subtracted from MONTHS_OF_RAID_LOOT if you have the goverment 'barter = yes'
+	#LESS_MONTHS_OF_RAID_LOOT = 4 		# This is subtracted from MONTHS_OF_RAID_LOOT if you have the goverment 'barter = yes'
 	
 	# Progress cannot be lower than 1/day (except when interrupted by combat)
 	BASE_PROGRESS = 10		#BKT prev 5		#prev 20	# How much base raid action progress do you get per day?
@@ -558,14 +561,34 @@ NDiarchy = {
 	#DESIGNATE_DIARCH_INTERVAL_DAYS = 3650 # Length of the cooldown after designating a diarch
 }
 
-NVassalStance = {
-	PREFERRED_HEIR_LEGITIMACY_EXPECTATION_YEARS = 15	#prev 10 # How many years the preferred heir status lasts
-}
-
 NActivity = {
 	MAX_PHASE_YEARS_PASSIVE = 2	 #prev 10	# Maximum amount of years allowed in passive phase state until the phase gets invalidated
 }
 
+NVassalStance = {
+	PREFERRED_HEIR_LEGITIMACY_EXPECTATION_YEARS = 15	#prev 10 # How many years the preferred heir status lasts
+}
+
+NAdministrative = {
+	# Governor Efficiency is the sum of the skill bonuses, the non de jure penalty and governor_efficiency_add, multiplied by (1 + governor_efficiency_mult) and then clamped
+	GOVERNOR_EFFICIENCY_PER_DIPLOMACY = 0.015	#prev 0.017
+	GOVERNOR_EFFICIENCY_PER_MARTIAL = 0.015		#prev 0.017
+	GOVERNOR_EFFICIENCY_PER_STEWARDSHIP = 0.015	#prev 0.017
+	GOVERNOR_EFFICIENCY_PER_INTRIGUE = 0.015	#prev 0.017
+	GOVERNOR_EFFICIENCY_PER_LEARNING = 0.015	#prev 0.017
+	#GOVERNOR_EFFICIENCY_NON_DE_JURE = -0.2	# Added for governors whose realm has a county outside the de jure primary title of their top liege
+	GOVERNOR_EFFICIENCY_MIN = 0.67	#prev 0.5
+	GOVERNOR_EFFICIENCY_MAX = 1.33	#prev 1.5
+}
+
+NTrade = {
+	# Buy Price = (Base Price + any buy_price_add modifiers) * Prosperity Mult * mult modifiers * BUY_PRICE_SCALAR
+	# Sell Price = (Base Price + any sell_price_add modifiers) * Prosperity Mult * mult modifiers * SELL_PRICE_SCALAR
+	BUY_PRICE_SCALAR = 1.0	#prev 0.95 # Scales the overall buy price of trade goods in a market; must be >= 0.0
+	#SELL_PRICE_SCALAR = 1.0 # Scales the overall sell price of trade goods in a market; must be >= 0.0
+}
+
+######### The AI ​​has an issue with accolades: when there are three types, it spreads them out too thinly.
 NAccolade = {
 	SUCCESSION_GLORY_LOSS_SMALL = 0.15		# how much glory is lost, in percent, upon accolade succession
 	SUCCESSION_GLORY_LOSS_LARGE = 0.30		# how much glory is lost, in percent, upon accolade succession if the successor only fulfils the requirement of one attribute
@@ -598,7 +621,7 @@ NAccolade = {
 		80
 	}
 
-	ACCOLADE_MAX_TYPES = 2 # maximum number of accolade attributes (types) an acclaimed knight can have
+	ACCOLADE_MAX_TYPES = 2 # change 3 # maximum number of accolade attributes (types) an acclaimed knight can have
 
 	STARTING_GLORY = 100	# how much glory does each created accolade start out with? 100 is default to unlock rank 1
 	POTENTIAL_ACCLAIMED_KNIGHT_UPDATE_TIME = 0.5 # Time between potential acclaimed knights window updates, in seconds

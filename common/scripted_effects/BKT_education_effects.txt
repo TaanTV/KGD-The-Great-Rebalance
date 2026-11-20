@@ -125,6 +125,15 @@
 				add = 5
 			}
 
+			modifier = {
+				has_focus = education_stewardship
+				OR = {
+					culture = { has_cultural_parameter = better_stewardship_education }
+					faith = { has_doctrine_parameter = better_stewardship_education }
+				}
+				add = 10
+			}
+
 			change_variable = {
 				name = education_$SKILL$_variable
 				add = 2

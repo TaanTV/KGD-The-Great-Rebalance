@@ -155,7 +155,7 @@ bkt_misc_events.0010 = {
 			}
 			any_county_province = {
 				has_holding = no
-				has_ongoing_construction = no 
+				#has_ongoing_construction = no 
 				barony = { barony_cannot_construct_holding = no }
 			}
 			OR = {
@@ -189,7 +189,7 @@ bkt_misc_events.0010 = {
 			random_county_province = {
 				limit = { 
 					has_holding = no 
-					has_ongoing_construction = no 
+					#has_ongoing_construction = no 
 					barony = { barony_cannot_construct_holding = no }
 				}
 				save_scope_as = province_to_construct_at

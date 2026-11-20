@@ -111,3 +111,18 @@ pam_increase_theocratic_heir_candidacy_piety_cost_mult_value = {
 		multiply = 2
 	}
 }
+
+spiritual_fulfillment_pilgrimage_discount = 0.15		#prev 0.25
+spiritual_fulfillment_pilgrimage_discount_major = 0.3	#prev 0.5
+
+spiritual_fulfillment_pilgrimage_cost_mult = {
+	value = 1
+	if = {
+		limit = { has_fulfillment_parameter = sp_cheaper_pilgrimage_major }
+		subtract = spiritual_fulfillment_pilgrimage_discount_major
+	}
+	else_if = {
+		limit = { has_fulfillment_parameter = sp_cheaper_pilgrimage }
+		subtract = spiritual_fulfillment_pilgrimage_discount
+	}
+}

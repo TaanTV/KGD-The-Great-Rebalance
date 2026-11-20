@@ -105,10 +105,10 @@ doctrine_gender_male_dominated = {
 	}
 
 	can_pick = {
-		NAND = {
-			exists = religious_head
-			religious_head.culture = { has_cultural_parameter = female_only_inheritance }
-		}
+		#NAND = {
+		#	exists = religious_head
+		#	religious_head.culture = { has_cultural_parameter = female_only_inheritance }
+		#}
 	}
 }
 
@@ -150,10 +150,10 @@ doctrine_gender_female_dominated = {
 	}
 
 	can_pick = {
-		NAND = {
-			exists = religious_head
-			religious_head.culture = { has_cultural_parameter = male_only_inheritance }
-		}
+		#NAND = {
+		#	exists = religious_head
+		#	religious_head.culture = { has_cultural_parameter = male_only_inheritance }
+		#}
 	}
 }
 
@@ -204,7 +204,7 @@ doctrine_pluralism_fundamentalist = {
 	}
 
 	special_parameters = {
-		hostility_towards_us_mult = 2
+		hostility_towards_us_mult = 1.5
 		heresy_threshold = -15		#prev -5
 	}
 	character_modifier = {
@@ -339,13 +339,16 @@ doctrine_clerical_function_recruitment = {
 	divergence = 2.5
 
 	clergy_modifier = {
-		domain_tax_same_faith_mult_even_if_baron = -0.03
 		levy_reinforcement_rate_same_faith_even_if_baron = 0.15	#prev 0.3
-		prowess = 3			#prev 4
+		prowess = 2			#prev 4
+		military_district_district_build_gold_cost = -0.25
+		walls_district_district_build_gold_cost = -0.25
 	}
 
 	parameters = {
 		clergy_can_fight
+		clerical_function_temple_holding_maa_maintenance
+		clerical_function_temple_district_votive_maa_toughness
 	}
 
 	piety_cost = {
@@ -745,6 +748,7 @@ doctrine_no_anointment = {
 
 	parameters = {
 		no_anointment = yes
+		no_anointment_coronation_cost_discount = yes
 		coronation_artifact = yes
 	}
 }
@@ -795,6 +799,7 @@ doctrine_imperial_anointment = {
 
 	parameters = {
 		imperial_anointment = yes
+		imperial_anointment_piety_bonus = yes
 		coronation_artifact = yes
 	}
 
@@ -806,11 +811,6 @@ doctrine_imperial_anointment = {
 				doctrine:doctrine_temporal_head = { is_in_list = selected_doctrines }
 			}
 		}
-	}
-	
-	#ADDED - HOF likes that u bow to them :P
-	character_modifier = {
-		religious_head_opinion = 5
 	}
 }
 
@@ -959,7 +959,7 @@ doctrine_monasticism_encouraged = {
 	}
 
 	clergy_modifier = {
-		county_opinion_add_even_if_baron = 5
+		popular_opinion_add_even_if_baron = 5
 	}
 
 	traits = {
@@ -1009,7 +1009,7 @@ doctrine_monasticism_accepted = {
 	}
 
 	clergy_modifier = {
-		county_opinion_add_even_if_baron = 3
+		popular_opinion_add_even_if_baron = 3
 	}
 
 	traits = {

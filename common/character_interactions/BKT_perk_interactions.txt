@@ -201,6 +201,8 @@ claim_throne_interaction = {
 					}
 				}
 			}
+			#Guelphs & Ghibellines
+			gg_hostile_scheme_catalyst_warning_effect = yes
 		}
 		if = {
 			limit = {
@@ -218,7 +220,7 @@ claim_throne_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_loss
@@ -370,6 +372,7 @@ demand_payment_interaction = {
 					}
 				}
 			}
+			NOT = { government_has_flag = government_is_merchant }
 		}
 		scope:recipient = {
 			is_ai = yes
@@ -439,7 +442,7 @@ demand_payment_interaction = {
 						target = scope:puppet_or_actor
 						gold = golden_obligation_value_check_current_situation
 					}
-					# ADDED. People probably dont like this shit.
+					#ADDED. People probably dont like this shit.
 					if = {
 						limit = {
 							NOT = { has_relation_grudge = scope:actor }
@@ -479,7 +482,7 @@ demand_payment_interaction = {
 
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_loss
@@ -525,8 +528,6 @@ demand_payment_interaction = {
 				OR = {
 					has_relation_friend = scope:recipient
 					has_relation_lover = scope:recipient
-					has_relation_best_friend = scope:recipient
-					has_relation_soulmate = scope:recipient
 				}
 			}
 		}
@@ -571,7 +572,11 @@ buy_claim_interaction = {
 					}
 				}
 			}
-			NOT = { target_is_liege_or_above = scope:recipient }
+			NOR = {
+				government_has_flag = government_is_merchant
+				government_has_flag = government_is_republic
+				target_is_liege_or_above = scope:recipient
+			}
 		}
 		NOT = {
 			scope:puppet_or_actor ?= scope:recipient
@@ -679,6 +684,15 @@ buy_claim_interaction = {
 			}
 			custom_description = {
 				text = buy_claim_no_landless_adventurer_title
+				always = no
+			}
+		}
+		trigger_if = { # Can't buy claims on merchant titles
+			limit = {
+				scope:target ?= { has_variable = merchant_creation_reason }
+			}
+			custom_description = {
+				text = buy_claim_no_merchant_title
 				always = no
 			}
 		}
@@ -865,7 +879,7 @@ buy_claim_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_loss

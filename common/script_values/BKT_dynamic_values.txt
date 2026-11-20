@@ -85,6 +85,33 @@ battle_winner_prestige_gain = {
 		}
 		multiply = 1.5
 	}
+
+	if = { # Chiefly Armsmen
+		limit = {
+			any_directly_owned_province = { has_building_or_higher = chiefly_armsmen_1 }
+		}
+		multiply = {
+			value = 1
+			add = {
+				value = 0
+				every_directly_owned_province = {
+					limit = { has_building_or_higher = chiefly_armsmen_1 }
+					if = {
+						limit = { has_building_or_higher = chiefly_armsmen_5 }
+						add = 0.04
+					}
+					else_if = {
+						limit = { has_building_or_higher = chiefly_armsmen_3 }
+						add = 0.03
+					}
+					else = {
+						add = 0.02
+					}
+				}
+				max = 0.15
+			}
+		}
+	}
 	
 	
 	#ADDED - if you're not at war, halve it
@@ -184,9 +211,9 @@ battle_winner_piety_gain = {
 
 #dislikes_maa_value = -9
 #compensate_conflict_maa_bonus = 9
-likes_maa_value = 3						#prev 1
-stationed_maa_bonus = 10				#prev 3
-non_stationed_maa_bonus = -9			#prev -3
+#likes_maa_value = 3						#prev 1
+#stationed_maa_bonus = 10				#prev 3
+#non_stationed_maa_bonus = -9			#prev -3
 #really_likes_maa_value = 2
 #stacking_bonus_value = 4
-anti_synergy_penalty_value = -19		#prev -9
+#anti_synergy_penalty_value = -19		#prev -9

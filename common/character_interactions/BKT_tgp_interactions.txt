@@ -39,6 +39,8 @@ celestial_give_treasury_interaction = {
 		}
 	}
 
+	cooldown_against_recipient = { years = 5 }
+
 	is_highlighted = { # Highlight the interaction if they have a very small treasury
 		scope:recipient = {
 			treasury < 50
@@ -254,10 +256,7 @@ celestial_give_treasury_interaction = {
 		# Don't support bad relations
 		modifier = {
 			factor = 0
-			OR = {
-				has_relation_rival = scope:recipient
-				has_relation_nemesis = scope:recipient
-			}
+			has_relation_rival = scope:recipient
 		}
 
 		# Don't support characters who doesn't need it

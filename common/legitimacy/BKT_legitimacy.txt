@@ -21,7 +21,8 @@ count_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.25
 			monthly_dynasty_prestige = -0.05	#prev -0.1
-			county_opinion_add = -10
+			popular_opinion_add = -10
+			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.25
 		}
@@ -56,7 +57,7 @@ count_legitimacy = {
 		threshold = legitimacy_level_4 # 350-1400
 		modifier = {
 			short_reign_duration_mult = -0.5
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			#ADDED
 			monthly_legitimacy_add = -0.75
 			liege_opinion = 5
@@ -75,7 +76,7 @@ count_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = -0.75
 			monthly_dynasty_prestige = 0.05		#prev 0.25
-			county_opinion_add = 20
+			popular_opinion_add = 10
 			#ADDED
 			monthly_legitimacy_add = -1.25
 			liege_opinion = 10
@@ -95,7 +96,7 @@ count_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = -1
 			monthly_dynasty_prestige = 0.1		#prev 0.5
-			county_opinion_add = 30
+			popular_opinion_add = 15
 			#ADDED
 			monthly_legitimacy_add = -2.0
 			liege_opinion = 20
@@ -130,7 +131,8 @@ duke_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.5
 			monthly_dynasty_prestige = -0.1
-			county_opinion_add = -10
+			popular_opinion_add = -10
+			control_baseline_add = -10
 			#ADDED
 			monthly_legitimacy_add = 0.5
 		}
@@ -152,7 +154,8 @@ duke_legitimacy = {
 		threshold = legitimacy_level_2 # 50-200
 		modifier = {
 			short_reign_duration_mult = 0.1
-			county_opinion_add = -5
+			popular_opinion_add = -5
+			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.25
 		}
@@ -197,7 +200,7 @@ duke_legitimacy = {
 		threshold = legitimacy_level_5 # 700-2800
 		modifier = {
 			short_reign_duration_mult = -0.65
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			#ADDED
 			monthly_legitimacy_add = -1.5
 		}
@@ -217,7 +220,7 @@ duke_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = -1
 			monthly_dynasty_prestige = 0.25
-			county_opinion_add = 20
+			popular_opinion_add = 10
 			#ADDED
 			monthly_legitimacy_add = -2.5
 		}
@@ -252,7 +255,8 @@ king_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.75
 			monthly_dynasty_prestige = -0.2
-			county_opinion_add = -20
+			popular_opinion_add = -20
+			control_baseline_add = -15
 			#ADDED
 			monthly_legitimacy_add = 1.5		#prev 1
 		}
@@ -276,7 +280,8 @@ king_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.5
 			monthly_dynasty_prestige = -0.1
-			county_opinion_add = -10
+			popular_opinion_add = -10
+			control_baseline_add = -10
 			#ADDED
 			monthly_legitimacy_add = 0.75		#prev 0.5
 		}
@@ -294,6 +299,7 @@ king_legitimacy = {
 		threshold = legitimacy_level_3 # 150-600
 		modifier = {
 			short_reign_duration_mult = 0.25
+			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.35		#prev 0.25
 		}
@@ -335,7 +341,7 @@ king_legitimacy = {
 		threshold = legitimacy_level_6 # 1200-4800
 		modifier = {
 			short_reign_duration_mult = -0.5
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			monthly_dynasty_prestige = 0.25
 			#ADDED
 			monthly_legitimacy_add = -3
@@ -371,7 +377,8 @@ emperor_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 1
 			monthly_dynasty_prestige = -0.3
-			county_opinion_add = -30
+			popular_opinion_add = -30
+			control_baseline_add = -20
 			#ADDED
 			monthly_legitimacy_add = 2			#prev 1.5
 		}
@@ -394,7 +401,8 @@ emperor_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.65
 			monthly_dynasty_prestige = -0.2
-			county_opinion_add = -20
+			popular_opinion_add = -20
+			control_baseline_add = -10
 			#ADDED
 			monthly_legitimacy_add = 1.25		#prev 1
 		}
@@ -417,7 +425,8 @@ emperor_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.35
 			monthly_dynasty_prestige = -0.1
-			county_opinion_add = -10
+			popular_opinion_add = -10
+			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.75		#prev 0.5
 		}
@@ -458,7 +467,7 @@ emperor_legitimacy = {
 		threshold = legitimacy_level_6 # 1200-4800
 		modifier = {
 			short_reign_duration_mult = -0.25
-			county_opinion_add = 10
+			popular_opinion_add = 10
 			#ADDED
 			monthly_legitimacy_add = -3
 		}
@@ -481,7 +490,7 @@ hegemon_legitimacy = {
 			has_tgp_dlc_trigger = yes
 			has_title = title:h_china
 		}
-		NOR = { 
+		NOR = {
 			government_has_flag = government_is_nomadic
 			government_has_flag = government_is_mandala
 		}
@@ -500,7 +509,7 @@ hegemon_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 1.25
 			monthly_dynasty_prestige = -0.4
-			county_opinion_add = -40
+			popular_opinion_add = -40
 			#ADDED
 			monthly_legitimacy_add = 3.0
 		}
@@ -523,7 +532,7 @@ hegemon_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.75
 			monthly_dynasty_prestige = -0.3
-			county_opinion_add = -30
+			popular_opinion_add = -30
 			#ADDED
 			monthly_legitimacy_add = 2.0
 		}
@@ -546,7 +555,7 @@ hegemon_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.5
 			monthly_dynasty_prestige = -0.2
-			county_opinion_add = -20
+			popular_opinion_add = -20
 			#ADDED
 			monthly_legitimacy_add = 1.0
 		}
@@ -586,7 +595,7 @@ hegemon_legitimacy = {
 		threshold = legitimacy_level_6 # 1200-4800
 		modifier = {
 			short_reign_duration_mult = -0.25
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			#ADDED
 			monthly_legitimacy_add = -3.25
 		}
@@ -612,7 +621,7 @@ mandate_legitimacy = {
 	}
 
 	# must be equal to the dynastic_cycle_legitimacy_expectation script value and not dependent on vassal scopes
-	ai_expected_level = dynastic_cycle_legitimacy_expectation 
+	ai_expected_level = dynastic_cycle_legitimacy_expectation
 
 	below_expectations_opinion = default_legitimacy_opinion_penalty
 
@@ -639,7 +648,7 @@ mandate_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 1.25
 			monthly_dynasty_prestige = -0.4
-			county_opinion_add = -40
+			popular_opinion_add = -40
 			#ADDED
 			monthly_legitimacy_add = 1.00
 		}
@@ -658,7 +667,7 @@ mandate_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.75
 			monthly_dynasty_prestige = -0.3
-			county_opinion_add = -30
+			popular_opinion_add = -30
 			#ADDED
 			monthly_legitimacy_add = 0.75
 		}
@@ -677,7 +686,7 @@ mandate_legitimacy = {
 		modifier = {
 			short_reign_duration_mult = 0.5
 			monthly_dynasty_prestige = -0.2
-			county_opinion_add = -20
+			popular_opinion_add = -20
 			#ADDED
 			monthly_legitimacy_add = 0.5
 		}
@@ -716,7 +725,7 @@ mandate_legitimacy = {
 		threshold = legitimacy_level_6 # 1200-4800
 		modifier = {
 			short_reign_duration_mult = -0.25
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			#ADDED
 			monthly_legitimacy_add = -0.5
 		}
@@ -732,7 +741,7 @@ mandate_legitimacy = {
 		threshold = legitimacy_level_7 # 1650-6600
 		modifier = {
 			tributary_opinion = 20
-			county_opinion_add = 20
+			popular_opinion_add = 10
 			monthly_dynasty_prestige = 0.15
 			#ADDED
 			monthly_legitimacy_add = -1
@@ -749,7 +758,7 @@ mandate_legitimacy = {
 		threshold = legitimacy_level_8
 		modifier = {
 			tributary_opinion = 30
-			county_opinion_add = 25
+			popular_opinion_add = 15
 			monthly_dynasty_prestige = 0.25
 			#ADDED
 			monthly_legitimacy_add = -2
@@ -782,7 +791,7 @@ nomadic_legitimacy = {
 		threshold = legitimacy_level_1
 		modifier = {
 			short_reign_duration_mult = 0.75
-			county_opinion_add = -10
+			popular_opinion_add = -10
 			herd_gain_mult = -0.05
 			dread_baseline_add = -30
 			#ADDED
@@ -805,7 +814,7 @@ nomadic_legitimacy = {
 		threshold = legitimacy_level_2 # 50-200
 		modifier = {
 			short_reign_duration_mult = 0.5
-			county_opinion_add = -5
+			popular_opinion_add = -5
 			dread_baseline_add = -15
 			#ADDED
 			monthly_legitimacy_add = 0.5
@@ -865,7 +874,7 @@ nomadic_legitimacy = {
 		threshold = legitimacy_level_6 # 1200-4800
 		modifier = {
 			tributary_opinion = 15
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			monthly_dynasty_prestige = 0.25
 			herd_gain_mult = 0.30
 			#ADDED
@@ -901,7 +910,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_1
 		modifier = {
 			short_reign_duration_mult = 0.75
-			county_opinion_add = -10
+			popular_opinion_add = -10
 			monthly_piety_gain_mult = -0.05
 			#ADDED
 			monthly_legitimacy_add = 1
@@ -920,7 +929,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_2 # 200-800
 		modifier = {
 			short_reign_duration_mult = 0.5
-			county_opinion_add = -5
+			popular_opinion_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.5
 		}
@@ -980,7 +989,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_6 # 1240-4960
 		modifier = {
 			tributary_opinion = 15
-			county_opinion_add = 10
+			popular_opinion_add = 5
 			monthly_piety_gain_mult = 0.2
 			monthly_dynasty_prestige = 0.15
 			#ADDED
@@ -999,7 +1008,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_7 # 1650-6600
 		modifier = {
 			tributary_opinion = 20
-			county_opinion_add = 20
+			popular_opinion_add = 10
 			monthly_piety_gain_mult = 0.3
 			monthly_dynasty_prestige = 0.15
 			#ADDED
@@ -1021,7 +1030,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_8 # 2200-8800
 		modifier = {
 			tributary_opinion = 30
-			county_opinion_add = 25
+			popular_opinion_add = 15
 			monthly_piety_gain_mult = 0.35
 			monthly_dynasty_prestige = 0.25
 			faith_conversion_piety_cost_mult = -0.15
@@ -1045,7 +1054,7 @@ mandala_legitimacy = {
 		threshold = mandala_legitimacy_level_9 # 3000-12000
 		modifier = {
 			tributary_opinion = 35
-			county_opinion_add = 35
+			popular_opinion_add = 20
 			monthly_piety_gain_mult = 0.4
 			monthly_dynasty_prestige = 0.3
 			faith_conversion_piety_cost_mult = -0.3

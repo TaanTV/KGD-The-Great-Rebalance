@@ -13,7 +13,7 @@
 
 	# Will summon between 75% and 175% of total county levy strength, depending on how much they hate you (most commonly will be 95-110% though, scores between -20 and -35 are the most common)
 	multiply = {
-		value = county_opinion
+		value = popular_opinion
 		multiply = -0.01
 		add = 0.5
 	}
@@ -31,4 +31,20 @@
 		value = building_max_garrison
 		multiply = 1.2
 	}
+}
+
+
+faction_county_garrison_suppression = {
+	value = 0
+	holder = {
+		every_maa_regiment = {
+			limit = {
+				exists = regiment_station
+				regiment_station.county = root
+			}
+			add = maa_current_troops_count
+		}
+	}
+	divide = 40		#prev 100
+	max = 15
 }

@@ -494,7 +494,7 @@ request_council_powerful_vassal_interaction = {
 			}
 			who = scope:recipient
 			opinion_target = scope:target.councillor
-			multiplier = -0.75
+			multiplier = -0.5
 			desc = AI_OPINION_REASON
 		}
 		ai_value_modifier = {

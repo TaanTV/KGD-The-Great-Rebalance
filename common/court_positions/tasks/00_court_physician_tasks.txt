@@ -39,9 +39,7 @@ physician_treat_epidemic = {
 	}
 
 	is_shown = {
-		#is_landed_or_landless_administrative_or_theocratic = yes
-		#ADDED
-		is_landed = yes
+		is_landed = yes # epidemic_resistance has no effect on landless rulers
 	}
 
 	employee_modifier = {
@@ -196,16 +194,6 @@ physician_guard_family = {
 
 	ai_will_do = {
 		value = 30
-		#ADDED
-		if = {
-			limit = { 
-				scope:employee = { 
-					has_court_position = court_physician_court_position
-					"aptitude(court_physician_court_position)" < 3 #less than "good"
-				}
-			}
-			value = 0
-		}
 		if = {
 			limit = {
 				has_treasury = no
@@ -248,73 +236,80 @@ physician_improve_self = {
 	}
 
 	on_monthly = {
+		# Aptitude is expensive, so only work it out on the max possible chance. Outer chance x inner multiply must be 100
+		# See "Chance gates" in _court_position_tasks.info
 		random = {
-			chance = {
-				value = 5				#prev 3
-				add = {
-					value = "aptitude(court_physician_court_position)"
-					multiply = -1		#prev 0.5
-				}
-				#ADDED - traits!
-				if = {
-					limit = {	#diligent work HARD and cover all the penalties
-						has_trait = diligent
+			chance = 5
+			random = {
+				chance = {
+					value = 5				#prev 3
+					add = {
+						value = "aptitude(court_physician_court_position)"
+						multiply = -1		#prev 0.5
 					}
-					add = 1
-				}
-				else_if = {
-					limit = {	 #lazy and arrogant ones dont improve much
-						OR = {
-							has_trait = lazy
-							has_trait = arrogant
+					#ADDED - traits!
+					if = {
+						limit = {	#diligent work HARD and cover all the penalties
+							has_trait = diligent
 						}
+						add = 1
 					}
-					add = -2
-				}
-				else_if = {
-					limit = {	#fickle and deceitful dont improve much
-						OR = {
-							has_trait = fickle
-							has_trait = deceitful
-						}
-					}
-					add = -1
-				}
-				if = {
-					limit = { is_ruler = yes }
-					multiply = 0.5
-				}
-				if = {
-					limit = { OR = { has_trait = blind has_trait = maimed } }
-					multiply = 0.3
-				}
-				if = {
-					limit = { has_trait = infirm }
-					max = 1
-					multiply = 0.1
-				}
-			}
-			if = {
-				limit = {
-					NOT = { has_trait = lifestyle_physician }
-				}
-				add_trait = lifestyle_physician
-			}
-			else = {
-				random_list = {
-					30 = {
-						add_learning_skill = 1
-					}
-					70 = {
-						trigger = {
-							has_trait_xp = {
-								trait = lifestyle_physician
-								value <= 100
+					else_if = {
+						limit = {	 #lazy and arrogant ones dont improve much
+							OR = {
+								has_trait = lazy
+								has_trait = arrogant
 							}
 						}
-						add_trait_xp = {
-							trait = lifestyle_physician
-							value = 3
+						add = -2
+					}
+					else_if = {
+						limit = {	#fickle and deceitful dont improve much
+							OR = {
+								has_trait = fickle
+								has_trait = deceitful
+							}
+						}
+						add = -1
+					}
+					if = {
+						limit = { is_ruler = yes }
+						multiply = 0.5
+					}
+					if = {
+						limit = { OR = { has_trait = blind has_trait = maimed } }
+						multiply = 0.3
+					}
+					if = {
+						limit = { has_trait = infirm }
+						max = 1
+						multiply = 0.1
+					}
+					round = yes
+					multiply = 20
+				}
+				if = {
+					limit = {
+						NOT = { has_trait = lifestyle_physician }
+					}
+					add_trait = lifestyle_physician
+				}
+				else = {
+					random_list = {
+						30 = {
+							add_learning_skill = 1
+						}
+						70 = {
+							trigger = {
+								has_trait_xp = {
+									trait = lifestyle_physician
+									value <= 100
+								}
+							}
+							add_trait_xp = {
+								trait = lifestyle_physician
+								value = 3
+							}
 						}
 					}
 				}
@@ -339,7 +334,7 @@ physician_improve_self = {
 					} 
 				}
 			}
-			value = 1000
+			value = 100000
 		}
 		else_if = {
 			limit = { 

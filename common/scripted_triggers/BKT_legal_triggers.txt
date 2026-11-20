@@ -67,15 +67,6 @@ can_change_single_heir_dynasty_house_succession_law_trigger = {
 	trigger_else = {
 		can_change_succession_laws_realm_flag_trigger = yes
 	}
-	custom_description = {
-		text = "no_powerful_vassal_with_negative_opinion"
-		NOT = {
-			any_vassal = {
-				is_powerful_vassal = yes
-				opposes_succession_law_change_trigger = yes
-			}
-		}
-	}
 }
 
 
@@ -87,15 +78,6 @@ can_change_partition_succession_law_trigger = {
 			has_realm_law_flag = can_change_succession_laws
 			#ADDED
 			culture ?= { has_innovation = innovation_primogeniture }
-		}
-	}
-	custom_description = {
-		text = "no_powerful_vassal_with_negative_opinion"
-		NOT = {
-			any_vassal = {
-				is_powerful_vassal = yes
-				opposes_succession_law_change_trigger = yes
-			}
 		}
 	}
 }

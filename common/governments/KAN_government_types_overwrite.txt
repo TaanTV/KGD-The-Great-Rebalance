@@ -1,7 +1,6 @@
 ﻿landless_adventurer_government = {
 	government_rules = {
 		court_generate_spouses = no
-		council = no
 		create_cadet_branches = yes
 		rulers_should_have_dynasty = yes
 		landless_playable = yes
@@ -57,6 +56,8 @@
 	flags = {
 		cannot_be_vassal_or_liege
 		government_is_landless_adventurer
+		government_uses_landless_lifestyle_perks
+		government_uses_landless_or_trader_lifestyle_perks
 		government_has_camp
 		has_unique_government_perks
 	}

@@ -7,11 +7,11 @@
 
 oath_of_reconquest_county = {
 	icon = martial_positive
-	county_opinion_add = 20						#prev 10
-	monthly_county_control_growth_add = 0.25	#prev 0.2
-	#development_growth = 0.1
+	popular_opinion_add = 10						#prev 5
+	monthly_control_change_when_below_baseline_add = 0.25	#prev 0.2
+	#prosperity_growth = 0.1
 	#ADDED
-	development_decline_factor = -0.25
+	prosperity_decline_factor = -0.25
 }
 
 oath_of_conquest = {
@@ -24,25 +24,25 @@ oath_of_conquest = {
 
 oath_of_conquest_county = {
 	icon = martial_positive
-	county_opinion_add = 25
-	monthly_county_control_growth_add = 0.5
-	development_growth = 0.15			#prev 0.25
+	popular_opinion_add = 10	#prev 25
+	monthly_control_change_when_below_baseline_add = 0.5
+	prosperity_growth = 0.15			#prev 0.25
 }
 
 oath_university_county = {
 	icon = learning_positive
 	stacking = yes
-	development_growth_factor = 0.05
-	development_growth = 0.01			#prev 0.025
+	prosperity_growth_factor = 0.05
+	prosperity_growth = 0.01			#prev 0.025
 }
 
 oath_of_peace = {
 	icon = stewardship_positive
 	#domain_limit = 1
-	monthly_county_control_growth_add = 0.1
-	county_opinion_add = 10
+	monthly_control_change_when_below_baseline_add = 0.1
+	popular_opinion_add = 5
 	#ADDED
-	tax_mult = 0.2
+	all_tax_mult = 0.1
 	parochial_opinion = 10
 }
 
@@ -145,9 +145,9 @@ oath_mend_the_fracture = {
 
 oath_mend_the_fracture_county = {
 	icon = economy_positive
-	county_opinion_add = 10
-	development_growth_factor = 0.1
-	development_growth = 0.03		#prev 0.1
+	popular_opinion_add = 5
+	prosperity_growth_factor = 0.1
+	prosperity_growth = 0.05		#prev 0.1
 }
 
 oath_provide_for_the_warriors = {
@@ -160,8 +160,8 @@ oath_provide_for_the_warriors = {
 
 oath_provide_for_the_warriors_province = {
 	icon = martial_positive
-	stationed_maa_damage_mult = 0.05	#prev 0.1
-	stationed_maa_toughness_mult = 0.05
+	stationed_maa_damage_mult = 0.025
+	stationed_maa_toughness_mult = 0.025
 }
 
 oath_provide_for_the_faithful = {
@@ -175,7 +175,7 @@ oath_provide_for_the_faithful = {
 
 oath_provide_for_the_faithful_province = {
 	icon = piety_positive
-	tax_mult = 0.05
+	urban_tax_mult = 0.05
 }
 
 oath_provide_for_the_poor = {
@@ -183,15 +183,15 @@ oath_provide_for_the_poor = {
 	stewardship = 1
 	monthly_income_mult = -0.03		#prev -0.05
 	#ADDED
-	county_opinion_add = 10
+	popular_opinion_add = 5
 	minority_opinion = 10
 	barons_and_minor_landholders_opinion = 15
 }
 
 oath_provide_for_the_poor_province = {
 	icon = stewardship_mixed
-	development_growth_factor = 0.05
-	#tax_mult = -0.05
+	prosperity_growth_factor = 0.05
+	#urban_tax_mult = -0.05
 }
 
 oath_repent = {

@@ -37,6 +37,31 @@
 		trigger_else = {
 			always = yes
 		}
+		#ADDED
+		trigger_if = {
+			limit = { is_ai = yes }
+			#ADDED - except when they're like 12 or smth
+			age >= 16
+			#ADDED - unless they're making a crown/regalia and dont have one!
+			save_temporary_scope_as = root_scope
+			NAND = {
+				coronation_has_proper_artifact_trigger = no
+				any_sponsored_inspiration = {
+					exists = this
+					has_variable = artifact_smith_type
+					OR = {
+						AND = {
+							var:artifact_smith_type = flag:smith_type_crown
+							scope:root_scope = { coronation_proper_artifact_crown_trigger = yes }
+						}
+						AND = {
+							var:artifact_smith_type = flag:smith_type_regalia
+							scope:root_scope = { coronation_proper_artifact_regalia_trigger = yes }
+						}
+					}
+				}
+			}
+		}
 	}
 
 	can_start_showing_failures_only = {
@@ -54,15 +79,7 @@
 				coronation_anointment_authority_available_trigger = yes
 				NOT = { scope:coronation_anointment_authority ?= this }
 			}
-			custom_tooltip = {
-				text = activity_coronation_not_approved_anointment
-				scope:coronation_anointment_authority = {
-					is_target_in_variable_list = {
-						name = supported_anointments
-						target = root
-					}
-				}
-			}
+			coronation_anointment_approved_trigger = yes
 			scope:coronation_anointment_authority ?= {
 				custom_tooltip = {
 					text = activity_coronation_hof_no_anointment_situation
@@ -94,6 +111,26 @@
 				}
 			}
 			NOT = { has_trait = excommunicated }
+		}
+
+		trigger_if = {
+			limit = {
+				is_ai = yes
+				highest_held_title_tier >= tier_empire
+				OR = {
+					has_realm_law = crowned_king
+					AND = {
+						rite = { rite_has_doctrine = doctrine_imperial_anointment }
+						coronation_anointment_authority_available_trigger = yes
+					}
+				}
+			}
+			coronation_anointment_authority_available_trigger = yes
+			coronation_anointment_approved_trigger = yes
+			scope:coronation_anointment_authority ?= {
+				is_available_allow_travelling = yes
+				NOT = { pam_the_christian_church_no_anointment_trigger = { RULER = root } }
+			}
 		}
 	}
 
@@ -541,12 +578,6 @@
 					trigger_if = {
 						limit = {
 							highest_held_title_tier >= tier_empire
-							faith = {
-								has_doctrine = doctrine_spiritual_head
-								exists = religious_head
-							}
-						}
-						NOT = {
 							rite = {
 								rite_has_doctrine = doctrine_imperial_anointment
 							}
@@ -668,6 +699,13 @@
 						}
 						add = -90
 					}
+					if = {
+						limit = {
+							coronation_anointment_authority_available_trigger = yes
+							coronation_anointment_approved_trigger = no
+						}
+						multiply = 0
+					}
 				}
 			}
 		}
@@ -784,7 +822,7 @@
 										value = coronation_medium_ceremony_value
 										add = coronation_medium_ceremony_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -861,7 +899,7 @@
 										value = coronation_medium_ceremony_treasury_value
 										add = coronation_medium_ceremony_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1005,7 +1043,7 @@
 										value = coronation_large_ceremony_value
 										add = coronation_large_ceremony_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1083,7 +1121,7 @@
 										value = coronation_large_ceremony_treasury_value
 										add = coronation_large_ceremony_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1194,7 +1232,7 @@
 						trigger_if = {
 							limit = {
 								exists = scope:special_option
-								pam_vows_of_poverty_premium_activity_option_valid_trigger = no
+								pam_vows_of_poverty_premium_activity_option_valid_trigger = yes
 							}
 							NOT = { scope:special_option = flag:coronation_type_anointment }
 						}
@@ -1291,7 +1329,7 @@
 										value = coronation_medium_feast_value
 										add = coronation_medium_feast_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1368,7 +1406,7 @@
 										value = coronation_medium_feast_treasury_value
 										add = coronation_medium_feast_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1514,7 +1552,7 @@
 										value = coronation_large_feast_value
 										add = coronation_large_feast_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1591,7 +1629,7 @@
 										value = coronation_large_feast_treasury_value
 										add = coronation_large_feast_realm_size_cost
 										multiply = activity_cost_scale_by_era
-										multiply = -0.5		#prev 0.5
+										multiply = -0.5
 										desc = coronation_discount_reg
 									}
 								}
@@ -1713,6 +1751,13 @@
 
 		triggered_desc = {
 			trigger = {
+				has_building_or_higher = royal_chapel_1
+			}
+			desc = activity_coronation_royal_chapel_province
+		}
+
+		triggered_desc = {
+			trigger = {
 				has_province_modifier = coronation_ancient_tradition_modifier
 			}
 			desc = activity_coronation_ancient_tradition_province
@@ -1757,33 +1802,6 @@
 			}
 			divide = 100	#prev 20
 		}
-		#ADDED - unless they're making a crown/regalia and dont have one!
-		if = {
-			limit = {
-				save_temporary_scope_as = root_scope
-				NOT = { coronation_has_proper_artifact_trigger = yes }
-				any_sponsored_inspiration = {
-					exists = this
-					has_variable = artifact_smith_type
-					OR = {
-						AND = {
-							var:artifact_smith_type = flag:smith_type_crown
-							scope:root_scope = { coronation_proper_artifact_crown_trigger = yes }
-						}
-						AND = {
-							var:artifact_smith_type = flag:smith_type_regalia
-							scope:root_scope = { coronation_proper_artifact_regalia_trigger = yes }
-						}
-					}
-				}
-			}
-			multiply = 0
-		}
-		#ADDED - except when they're like 12 or smth
-		if = {
-			limit = { age < 16 }
-			multiply = 0
-		}
 	}
 
 	ai_will_select_province = {
@@ -1797,6 +1815,12 @@
 		if = {
 			limit = {
 				barony = { is_holy_site_of = scope:host.faith }
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				has_building_or_higher = royal_chapel_1
 			}
 			add = 20
 		}
@@ -2431,6 +2455,10 @@
 		is_adult = yes
 		in_diplomatic_range = scope:host
 		is_pool_guest = no
+		NOR = {
+			government_has_flag = government_is_merchant
+			is_at_war_with = scope:host
+		}
 	}
 
 	guest_join_chance = {
@@ -2557,6 +2585,15 @@
 			if = {
 				limit = {
 					activity_location.barony = { is_holy_site_of = scope:host.faith }
+				}
+				change_variable = {
+					name = activity_special_type_progression
+					add = 5
+				}
+			}
+			if = {
+				limit = {
+					activity_location = { has_building_or_higher = royal_chapel_1 }
 				}
 				change_variable = {
 					name = activity_special_type_progression
@@ -3140,9 +3177,42 @@
 						}
 					}
 				}
+				#Guelphs & Ghibellines
+				if = {
+					limit = {
+						has_title = title:e_hre
+						is_ghibelline_trigger = yes
+						faith = { religious_head_title ?= title:k_papal_state }
+						scope:activity = {
+							has_activity_option = {
+								category = special_type
+								option = coronation_type_anointment
+							}
+						}
+					}
+					scope:activity.var:officiator = { save_scope_as = gg_coronator }
+					if = {
+						limit = {
+							scope:gg_coronator = { pam_is_antipope_trigger = yes }
+						}
+						gg_untargeted_catalyst_effect = { CATALYST = catalyst_gg_emperor_crowned_by_antipope }
+					}
+					else_if = {
+						limit = {
+							faith.religious_head ?= scope:gg_coronator
+						}
+						gg_reconciliation_catalyst_effect = {
+							ACTOR = scope:gg_coronator
+							RECIPIENT = root
+							CATALYST = catalyst_gg_emperor_crowned_by_pope
+							ONCE_A_YEAR = no
+						}
+					}
+				}
 			}
 			remove_variable = coronation_primary_title
 			remove_variable = hide_make_primary_title
+			remove_variable = coronation_discount
 			random_knight = {
 				limit = {
 					can_unlock_accolade_attribute_trigger = {
@@ -3205,7 +3275,7 @@
 						}
 						if = {
 							limit = {
-								var:coronation_tradition_location >= 15
+								var:coronation_tradition_location >= 12	#prev 15
 								NOT = { has_province_modifier = coronation_ancient_tradition_modifier }
 							}
 							add_province_modifier = coronation_ancient_tradition_modifier
@@ -3213,8 +3283,8 @@
 						}
 						else_if = {
 							limit = {
-								var:coronation_tradition_location >= 10
-								var:coronation_tradition_location < 15
+								var:coronation_tradition_location >= 7	#prev 10
+								var:coronation_tradition_location < 12	#prev 15
 								NOT = { has_province_modifier = coronation_long_tradition_modifier }
 							}
 							add_province_modifier = coronation_long_tradition_modifier
@@ -3222,8 +3292,8 @@
 						}
 						else_if = {
 							limit = {
-								var:coronation_tradition_location >= 5
-								var:coronation_tradition_location < 10
+								var:coronation_tradition_location >= 3	#prev 5
+								var:coronation_tradition_location < 7	#prev 10
 								NOT = { has_province_modifier = coronation_tradition_modifier }
 							}
 							add_province_modifier = coronation_tradition_modifier
@@ -3232,7 +3302,7 @@
 					else = {
 						set_variable = {
 							name = coronation_tradition_location
-							value = 3		#prev 1
+							value = 1
 						}
 					}
 				}
@@ -3436,19 +3506,7 @@
 				}
 			}
 
-			scripted_animation = {
-				triggered_animation = {
-					trigger = {
-						scope:character.location = { is_sea_province = yes }
-					}
-					animation = { idle }
-				}
-				triggered_animation = {
-					trigger = { scope:character = { has_trait = impatient } }
-					animation = { jockey_gallop }
-				}
-				animation = jockey_walk
-			}
+			scripted_animation = horse_camel_activity_travel_animation
 		}
 
 		# Find a family member/spouse/heir
@@ -4463,11 +4521,7 @@
 				}
 			}
 			scope:host.location = {
-				terrain = farmlands
-				OR = {
-					terrain = terraced_hills
-					has_building_or_higher = paddy_fields_01
-				}
+				has_rice_fields_district = yes
 			}
 		}
 		texture = "gfx/interface/illustrations/event_scenes/tgp_rice_fields.dds"

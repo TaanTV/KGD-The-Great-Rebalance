@@ -9,184 +9,6 @@ feast_activity_cost_discount_medium = {
 #	value = 0.9
 #}
 
-standard_activity_base_cost = {
-	value = 25		#prev 30
-
-	if = { #Unop: There are inconsistency in calls with this, sometimes logs throw errors stating root is an activity where it should be a character, also sometimes called from interaction where root does not exists
-		limit = { # Root is a character
-			exists = root.primary_title
-		}
-		multiply = {
-			value = root.primary_title.tier
-			subtract = 1
-			min = 1
-			#ADDED
-			#multiply = 0.75		# Scale less aggresively with tier
-		}
-		if = {
-			limit = {
-				root = {
-					government_has_flag = government_is_tribal
-				}
-			}
-			multiply = 0.5
-		}
-		if = {
-			limit = {
-				root.primary_title.tier > tier_duchy
-			}
-			#add = 50
-			#ADDED - Wtf? not like that.
-			add = { value = root.primary_title.tier add = -3 multiply = 10 }
-		}
-		if = {
-			limit = {
-				is_ai = yes
-				has_game_rule = hard_difficulty
-			}
-			multiply = 0.5
-		}
-		else_if = {
-			limit = {
-				is_ai = yes
-				has_game_rule = very_hard_difficulty
-			}
-			multiply = 0.25
-		}
-	}
-	else_if = { # Root is an activity
-		limit = {
-			exists = root.activity_host
-		}
-		multiply = {
-			value = root.activity_host.primary_title.tier
-			subtract = 1
-			min = 1
-			#ADDED
-			#multiply = 0.75		# Scale less aggresively with tier
-		}
-		if = {
-			limit = {
-				root.activity_host = {
-					government_has_flag = government_is_tribal
-				}
-			}
-			multiply = 0.5
-		}
-		if = {
-			limit = {
-				root.activity_host.primary_title.tier > tier_duchy
-			}
-			#add = 50
-			#ADDED - Wtf? not like that.
-			add = { value = root.activity_host.primary_title.tier add = -3 multiply = 10 }
-		}
-		if = {
-			limit = {
-				root.activity_host = { is_ai = yes }
-				has_game_rule = hard_difficulty
-			}
-			multiply = 0.5
-		}
-		else_if = {
-			limit = {
-				root.activity_host = { is_ai = yes }
-				has_game_rule = very_hard_difficulty
-			}
-			multiply = 0.25
-		}
-	}
-	else_if = {
-		limit = {
-			exists = scope:actor
-		}
-		multiply = {
-			value = scope:actor.primary_title.tier
-			subtract = 1
-			min = 1
-			#ADDED
-			#multiply = 0.75		# Scale less aggresively with tier
-		}
-		if = {
-			limit = {
-				scope:actor = {
-					government_has_flag = government_is_tribal
-				}
-			}
-			multiply = 0.5
-		}
-		if = {
-			limit = {
-				scope:actor.primary_title.tier > tier_duchy
-			}
-			#add = 50
-			#ADDED - Wtf? not like that.
-			add = { value = scope:actor.primary_title.tier add = -3 multiply = 10 }
-		}
-		if = {
-			limit = {
-				scope:actor = { is_ai = yes }
-				has_game_rule = hard_difficulty
-			}
-			multiply = 0.5
-		}
-		else_if = {
-			limit = {
-				scope:actor = { is_ai = yes }
-				has_game_rule = very_hard_difficulty
-			}
-			multiply = 0.25
-		}
-	}
-	
-	#ADDED
-	min = 10
-}
-
-
-#ADDED - just to keep track of it easier
-pre_unop_standard_activity_base_cost = {
-	value = 25		#prev 30
-
-	multiply = {
-		value = primary_title.tier #Unop ck3-tiger
-		subtract = 1
-		min = 1
-		#ADDED
-		#multiply = 0.75		# Scale less aggresively with tier
-	}
-	if = {
-		limit = {
-			government_has_flag = government_is_tribal #Unop ck3-tiger
-		}
-		multiply = 0.5
-	}
-	if = {
-		limit = {
-			primary_title.tier > tier_duchy #Unop ck3-tiger
-		}
-		#add = 50
-		#ADDED - Wtf? not like that.
-		add = { value = primary_title.tier add = -3 multiply = 10 }
-	}
-	if = {
-		limit = {
-			is_ai = yes
-			has_game_rule = hard_difficulty
-		}
-		multiply = 0.5
-	}
-	else_if = {
-		limit = {
-			is_ai = yes
-			has_game_rule = very_hard_difficulty
-		}
-		multiply = 0.25
-	}
-	
-	#ADDED
-	min = 10
-}
 
 law_legacy_cost_reduction_mult = 0.15	#prev 0.3
 
@@ -200,7 +22,7 @@ standard_playdate_cooldown_time = 730	#prev 1095 #This is 3 years?
 ######################
 standard_witch_ritual_cooldown_time = 3650	#prev 1825	#10 years coz my god is it broken
 
-# Activity Cost Scaling Multipliers 
+# Activity Cost Scaling Multipliers
 # use as multiply = activity_cost_scale_by_XXX
 activity_cost_scale_by_era = {
 	value = 0
@@ -213,47 +35,25 @@ activity_cost_scale_by_era = {
 				limit = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
-				add = 2		#prev 3
-				# What? 
+				add = 1.25
 			}
 			else_if = {
 				limit = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
-				add = 1.5
+				add = 1
 			}
 			else_if = {
 				limit = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
-				add = 1
-			}
-			else = {
 				add = 0.75
 			}
-		}
-	}
-	else_if = { #Unop: To handle cases where 'root' is an activity
-		limit = { exists = activity_host }
-		if = {
-			limit = { exists = activity_host.culture }
-			activity_host.culture = {
-				if = {
-					limit = { has_cultural_era_or_later = culture_era_late_medieval }
-					add = 2		#prev 3
-				}
-				else_if = {
-					limit = { has_cultural_era_or_later = culture_era_high_medieval }
-					add = 1.5
-				}
-				else_if = {
-					limit = { has_cultural_era_or_later = culture_era_early_medieval }
-					add = 1
-				}
-				else = {
-					add = 0.75
-				}
+			else = {
+				add = 0.5
 			}
+			#ADDED - i dont want to fuck with all the numbers above that much so here you go
+			add = 0.25
 		}
 	}
 }
@@ -339,6 +139,16 @@ funeral_end_piety_gain = {
 		limit = {
 			scope:activity = {
 				activity_location = {
+					has_building_or_higher = royal_mausoleum_1
+				}
+			}
+		}
+		add = 50
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
 					scope:host.rite = { rite_has_parameter = sky_burials_active }
 					is_mountainous_trigger = yes
 				}
@@ -356,6 +166,16 @@ funeral_end_piety_gain = {
 			}
 		}
 		add = 50
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					pam_province_has_monastic_lease_trigger = yes
+				}
+			}
+		}
+		add = 100
 	}
 	multiply = funeral_end_piety_multiplier
 }
@@ -444,6 +264,16 @@ funeral_end_legitimacy_gain = {
 		limit = {
 			scope:activity = {
 				activity_location = {
+					has_building_or_higher = royal_mausoleum_1
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
 					scope:host.rite = { rite_has_parameter = sky_burials_active }
 					is_mountainous_trigger = yes
 				}
@@ -461,6 +291,16 @@ funeral_end_legitimacy_gain = {
 			}
 		}
 		add = 10
+	}
+	if = {
+		limit = {
+			scope:activity = {
+				activity_location = {
+					pam_province_has_monastic_lease_trigger = yes
+				}
+			}
+		}
+		add = 20
 	}
 }
 

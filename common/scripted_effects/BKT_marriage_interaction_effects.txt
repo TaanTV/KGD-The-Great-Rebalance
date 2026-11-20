@@ -274,6 +274,83 @@
 			}
 		}
 	}
+
+	# Merchant intermarriage
+	if = {
+		limit = {
+			scope:secondary_actor.house.house_head ?= {
+				government_has_flag = government_uses_company_sentiment
+				government_has_flag = government_is_merchant
+				exists = domicile
+			}
+			scope:secondary_recipient.house.house_head ?= {
+				government_has_flag = government_uses_company_sentiment
+				government_has_flag = government_is_merchant
+				exists = domicile
+			}
+		}
+		scope:secondary_actor.house ?= {
+			add_unity_value = {
+				value = gdp_merchant_unity_intermarriage_value
+				character = scope:secondary_actor
+				desc = gdp_merchant_unity_intermarriage_desc
+			}
+		}
+		scope:secondary_recipient.house ?= {
+			add_unity_value = {
+				value = gdp_merchant_unity_intermarriage_value
+				character = scope:secondary_recipient
+				desc = gdp_merchant_unity_intermarriage_desc
+			}
+		}
+	}
+	# Merchant noble marriage
+	else_if = {
+		limit = {
+			scope:secondary_actor.house.house_head ?= {
+				government_has_flag = government_uses_company_sentiment
+				government_has_flag = government_is_merchant
+				exists = domicile
+			}
+			scope:secondary_recipient.house.house_head ?= {
+				is_landed = yes
+				NOR = {
+					government_has_flag = government_is_republic
+					government_has_flag = government_is_herder
+				}
+			}
+		}
+		scope:secondary_actor.house ?= {
+			add_unity_value = {
+				value = gdp_merchant_unity_noble_marriage_value
+				character = scope:secondary_actor
+				desc = gdp_merchant_unity_noble_marriage_desc
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			scope:secondary_recipient.house.house_head ?= {
+				government_has_flag = government_uses_company_sentiment
+				government_has_flag = government_is_merchant
+				exists = domicile
+			}
+			scope:secondary_actor.house.house_head ?= {
+				is_landed = yes
+				NOR = {
+					government_has_flag = government_is_republic
+					government_has_flag = government_is_herder
+				}
+			}
+		}
+		scope:secondary_recipient.house ?= {
+			add_unity_value = {
+				value = gdp_merchant_unity_noble_marriage_value
+				character = scope:secondary_recipient
+				desc = gdp_merchant_unity_noble_marriage_desc
+			}
+		}
+	}
 	# A Grand Wedding was promised
 	if = {
 		limit = {

@@ -20,7 +20,7 @@ court_grandeur_above_expected_level_4 = {
 	#monthly_dynasty_prestige = 0.15
 	courtier_and_guest_opinion = 4
 	
-	county_opinion_add = 3					#prev 5
+	popular_opinion_add = 3					#prev 5
 }
 court_grandeur_above_expected_level_5 = {
 	monthly_prestige = 0.05

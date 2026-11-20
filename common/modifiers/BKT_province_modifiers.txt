@@ -1,32 +1,52 @@
 ﻿coastal_land_province_modifier = {
 	supply_limit_mult = 0.25
+	trade_good_fish_buy_price_mult = -0.005
+	trade_good_fish_sell_price_mult = -0.005
 	#ADDED
 	epidemic_resistance = 5
 }
 
 coastal_land_county_capital_province_modifier = {
-	#development_growth_factor = 0.2 #Added to counter Plagues hitting coastal provinces more
+	#prosperity_growth_factor = 0.1 #Added to counter Plagues hitting coastal provinces more
+	province_size_baseline_add = 10
 	# Added epidemic_resistance above to metigate it instead
 }
 
-#
+riverside_land_province_modifier = {
+	supply_limit_mult = 0.25
+	trade_good_fish_buy_price_mult = -0.005
+	trade_good_fish_sell_price_mult = -0.005
+	#ADDED
+	epidemic_resistance = 5
+}
+
+lakeside_land_province_modifier = {
+	supply_limit_mult = 0.25
+	trade_good_fish_buy_price_mult = -0.005
+	trade_good_fish_sell_price_mult = -0.005
+	#ADDED
+	epidemic_resistance = 5
+}
+
+
 independent_realm_capital_province_modifier = {
 	levy_size = 0.1		#prev 0.2
+	province_size_baseline_add = 30
 }
 
 # Duke or greater
 high_tier_vassal_capital_province_modifier = {
 	levy_size = 0.05	#prev 0.1
+	province_size_baseline_add = 30
 }
 
 # Not applied for barons or characters with Bartering enabled governments
 capital_province_modifier = {
-	monthly_income = 0.8		#prev 1
+	monthly_civic_tax = 1
 	stationed_maa_damage_mult = normal_maa_damage_tier_1
 	stationed_maa_toughness_mult = normal_maa_toughness_tier_1
 	#ADDED
-	monthly_county_control_growth_add = 0.1
-	county_opinion_add = 10
+	popular_opinion_add = 5
 }
 
 nomad_capital_province_modifier = {
@@ -34,41 +54,45 @@ nomad_capital_province_modifier = {
 	stationed_maa_toughness_mult = normal_maa_toughness_tier_1
 	stationed_siege_weapon_siege_value_mult = low_maa_siege_value_tier_1
 	#ADDED
-	monthly_county_control_growth_add = 0.1
-	county_opinion_add = 10
+	popular_opinion_add = 5
 }
 
 capital_duchy_province_modifier = {
 	levy_size = 0.1
 	stationed_maa_damage_mult = 0.05			#prev low_maa_damage_tier_1
 	stationed_maa_toughness_mult = 0.05			#prev low_maa_toughness_tier_1
-	#ADDED
-	monthly_county_control_growth_add = 0.03	#0.1
+	province_size_baseline_add = 20
 }
 
 #county_capital_province_modifier = {
 #	fort_level = 1
 #	county_fertility_growth_add = 2
+#	province_size_baseline_add = 30
 #}
 
 # Referenced in code; blocks raiding & bartering  when present on a province
 recently_looted_modifier = {
 	icon = martial_negative
 	build_speed = 0.35					#prev 0.5
-	development_growth_factor = -0.1
-	tax_mult = -0.35					#prev -0.5
+	prosperity_growth_factor = -0.1
 	county_fertility_growth_mult = -0.2
 	#ADDED
+	district_build_speed = 0.35
+	holding_build_speed = 0.35
+	all_tax_mult = -0.25
 	levy_size = -0.15
 	supply_limit_mult = -0.35
 }
 
 # Referenced in code; blocks raiding & bartering when present on a province
 recently_bartered_modifier = {
-	icon = goods_positive
-	build_speed = -0.05			#prev -0.1
-	#development_growth = 0.3
-	tax_mult = 0.1
+	icon = barter_positive
+	build_speed =  -0.1
+	#prosperity_growth = 0.15
+	commerce_tax_mult = 0.1
+	tribal_tax_mult = 0.1
 	#ADDED
-	development_growth_factor = 0.1
+	district_build_speed = -0.1
+	holding_build_speed = -0.1
+	prosperity_growth_factor = 0.1
 }

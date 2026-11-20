@@ -16,7 +16,8 @@ court_tutor_improve_others = {
 	}
 
 	employee_modifier = {
-		general_opinion = 5
+		vassal_opinion = 5
+		courtier_and_guest_opinion = 5
 	}
 
 	on_start = {
@@ -25,6 +26,9 @@ court_tutor_improve_others = {
 
 	on_monthly = {
 		liege_or_court_owner = { save_scope_as = notification_character }
+		#ADDED where's the optimisation mr paradox
+		random = {
+			chance = 15
 		random = {
 			chance = {
 				value = 1
@@ -32,6 +36,8 @@ court_tutor_improve_others = {
 					value = "aptitude(court_tutor_court_position)"
 					multiply = 3		#prev 4
 				}
+				#ADDED - for the optimisation to work
+				multiply = 8
 			}
 			# Find target
 			random_list = {
@@ -375,6 +381,7 @@ court_tutor_improve_others = {
 					}
 				}
 			}
+		}
 		}
 	}
 

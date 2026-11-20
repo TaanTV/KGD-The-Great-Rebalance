@@ -16,42 +16,42 @@
 #######
 
 # Base
-@poor_tax_base = 0.125		#0.25
-@normal_tax_base = 0.2		#BKT 0.175	#0.35		#0.9.19 - changed for cleaner numbers.
-@good_tax_base = 0.25		#0.5
-@excellent_tax_base = 0.325	#BKT 0.35	#0.7
+@poor_tax_base = 0.1
+@normal_tax_base = 0.2
+@good_tax_base = 0.4
+@excellent_tax_base = 0.6
 
-@copper_mine_tax_base = 1		#2
-@silver_mine_tax_base = 1.5		#3
-@special_mine_tax_base = 2		#5
+@copper_mine_tax_base = 1
+@silver_mine_tax_base = 2
+@special_mine_tax_base = 3
 
 # We have four 'tax classes', each one has a better scale than the others.
-@poor_tax_scale_addition_per_tier = 0.075		#0.15
-@normal_tax_scale_addition_per_tier = 0.1		#0.2
-@good_tax_scale_addition_per_tier = 0.15		#0.3
-@excellent_tax_scale_addition_per_tier = 0.225	#0.45
+@poor_tax_scale_addition_per_tier = 0.1
+@normal_tax_scale_addition_per_tier = 0.2
+@good_tax_scale_addition_per_tier = 0.3
+@excellent_tax_scale_addition_per_tier = 0.4
 
-@copper_mine_tax_scale_addition_per_tier = 0.75	#1.5
-@silver_mine_tax_scale_addition_per_tier = 1	#2
-@special_mine_tax_scale_addition_per_tier = 1.5	#3
+@copper_mine_tax_scale_addition_per_tier = 0.25
+@silver_mine_tax_scale_addition_per_tier = 0.5
+@special_mine_tax_scale_addition_per_tier = 1
 
 ########
 # Levy #
 ########
 
 # Base
-@poor_levy_base = 50
-@small_levy_base = 75
-@normal_levy_base = 100		
-@good_levy_base = 125
-@excellent_levy_base = 145						#150 - cleaner final number
+@poor_levy_base = 40
+@small_levy_base = 55
+@normal_levy_base = 75
+@good_levy_base = 90
+@excellent_levy_base = 105
 
 # Scaling Increase
-@poor_levy_scale_addition_per_tier = 10			#25
-@small_levy_scale_addition_per_tier = 25		#50
-@normal_levy_scale_addition_per_tier = 35		#75
-@good_levy_scale_addition_per_tier = 50			#100
-@excellent_levy_scale_addition_per_tier = 65	#125
+@poor_levy_scale_addition_per_tier = 15
+@small_levy_scale_addition_per_tier = 35
+@normal_levy_scale_addition_per_tier = 50
+@good_levy_scale_addition_per_tier = 70
+@excellent_levy_scale_addition_per_tier = 90
 
 ################
 # Supply Limit #
@@ -76,38 +76,38 @@
 ###################
 
 # Base
-@normal_maa_maintenance_base = -0.008
-@good_maa_maintenance_base = -0.016
+@normal_maa_maintenance_base = -0.01
+@good_maa_maintenance_base = -0.02
 
 # Scaling Increase
-@normal_maa_maintenance_addition_per_tier = -0.004	#prev -0.008
-@good_maa_maintenance_addition_per_tier = -0.008	#prev -0.016
+@normal_maa_maintenance_addition_per_tier = -0.02
+@good_maa_maintenance_addition_per_tier = -0.04
 
 ###########################
-# Development Growth Flat #
+# Prosperity Growth Flat #
 ###########################
 
 # Base
-@low_development_growth_base = 0	#prev 0.01
-@normal_development_growth_base = 0	#prev 0.02
-@good_development_growth_base = 0	#prev 0.04
+@low_prosperity_growth_base = 0.01
+@normal_prosperity_growth_base = 0.02
+@good_prosperity_growth_base = 0.04
 
 # Scaling Increase
-@low_development_growth_addition_per_tier = 0		#prev 0.01
-@normal_development_growth_addition_per_tier = 0	#prev 0.02
-@good_development_growth_addition_per_tier = 0		#prev 0.04
+@low_prosperity_growth_addition_per_tier = 0.01
+@normal_prosperity_growth_addition_per_tier = 0.02
+@good_prosperity_growth_addition_per_tier = 0.04
 
 ########################
-# Development Growth % #
+# Prosperity Growth % #
 ########################
 
 # Base
-@normal_development_growth_factor_base = 0.04
-@good_development_growth_factor_base = 0.06
+@normal_prosperity_growth_factor_base = 0.04
+@good_prosperity_growth_factor_base = 0.06
 
 # Scaling Increase
-@normal_development_growth_factor_addition_per_tier = 0.02	#prev 0.04
-@good_development_growth_factor_addition_per_tier = 0.03	#prev 0.06
+@normal_prosperity_growth_factor_addition_per_tier = 0.04
+@good_prosperity_growth_factor_addition_per_tier = 0.06
 
 ############
 # Tax Mult #
@@ -115,23 +115,23 @@
 
 # Base
 @low_tax_mult_base = 0.02
-@normal_tax_mult_base = 0.03	#prev 0.04
-@good_tax_mult_base = 0.04		#prev 0.06
+@normal_tax_mult_base = 0.04
+@good_tax_mult_base = 0.06
 
 # Scaling Increase
 @low_tax_mult_addition_per_tier = 0.02
-@normal_tax_mult_addition_per_tier = 0.03	#prev 0.04
-@good_tax_mult_addition_per_tier = 0.04		#prev 0.06
+@normal_tax_mult_addition_per_tier = 0.04
+@good_tax_mult_addition_per_tier = 0.06
 
-###############
-# MaA Bonuses #
-###############
 
-# Base Damage Mult
-@low_damage_mult_base = 0.075		#prev 0.10
-@normal_damage_mult_base = 0.1		#prev 0.15
-@high_damage_mult_base = 0.15		#prev 0.20
-@very_high_damage_mult_base = 0.25	#prev 0.30
+###################
+# New MAA bonuses #
+###################
+# Base Damage Mult 
+@low_damage_mult_base = 0.025
+@normal_damage_mult_base = 0.05
+@high_damage_mult_base = 0.1
+@very_high_damage_mult_base = 0.15
 
 # Scaling Increase Damage Mult
 @low_damage_mult_addition_per_tier = 0.025
@@ -141,10 +141,10 @@
 
 
 # Base Toughness Mult
-@low_toughness_mult_base = 0.075		#prev 0.10
-@normal_toughness_mult_base = 0.1		#prev 0.15
-@high_toughness_mult_base = 0.15		#prev 0.20
-@very_high_toughness_mult_base = 0.25	#prev 0.30
+@low_toughness_mult_base = 0.025
+@normal_toughness_mult_base = 0.05
+@high_toughness_mult_base = 0.10
+@very_high_toughness_mult_base = 0.15
 
 # Scaling Increase Toughness Mult
 @low_toughness_mult_addition_per_tier = 0.025
@@ -152,12 +152,46 @@
 @high_toughness_mult_addition_per_tier = 0.10
 @very_high_toughness_mult_addition_per_tier = 0.15
 
+# Support bonuses for the economic office extras, at four damage to three toughness.
+@duchy_support_damage_mult_base = 0.02
+@duchy_support_damage_mult_addition_per_tier = 0.02
+@duchy_support_toughness_mult_base = 0.015
+@duchy_support_toughness_mult_addition_per_tier = 0.015
+###############
+# MaA Bonuses #
+###############
+
+# Base Damage Mult - old
+#@low_damage_mult_base = 0.10
+#@normal_damage_mult_base = 0.15
+#@high_damage_mult_base = 0.20
+#@very_high_damage_mult_base = 0.30
+
+# Scaling Increase Damage Mult - old
+#@low_damage_mult_addition_per_tier = 0.025
+#@normal_damage_mult_addition_per_tier = 0.05
+#@high_damage_mult_addition_per_tier = 0.10
+#@very_high_damage_mult_addition_per_tier = 0.15
+
+
+# Base Toughness Mult - old
+#@low_toughness_mult_base = 0.0.
+#@normal_toughness_mult_base = 0.15
+#@high_toughness_mult_base = 0.20
+#@very_high_toughness_mult_base = 0.30
+
+# Scaling Increase Toughness Mult - old
+#@low_toughness_mult_addition_per_tier = 0.025
+#@normal_toughness_mult_addition_per_tier = 0.05
+#@high_toughness_mult_addition_per_tier = 0.10
+#@very_high_toughness_mult_addition_per_tier = 0.15
+
 
 # Base Screen Mult
-@low_screen_mult_base = 0.075		#prev 0.10
-@normal_screen_mult_base = 0.1		#prev 0.15
-@high_screen_mult_base = 0.15		#prev 0.20
-@very_high_screen_mult_base = 0.25	#prev 0.30
+@low_screen_mult_base = 0.10
+@normal_screen_mult_base = 0.15
+@high_screen_mult_base = 0.20
+@very_high_screen_mult_base = 0.30
 
 # Scaling Increase Toughness Mult
 @low_screen_mult_addition_per_tier = 0.025
@@ -167,10 +201,10 @@
 
 
 # Base Pursuit Mult
-@low_pursuit_mult_base = 0.075		#prev 0.10
-@normal_pursuit_mult_base = 0.1		#prev 0.15
-@high_pursuit_mult_base = 0.15		#prev 0.20
-@very_high_pursuit_mult_base = 0.25	#prev 0.30
+@low_pursuit_mult_base = 0.10
+@normal_pursuit_mult_base = 0.15
+@high_pursuit_mult_base = 0.20
+@very_high_pursuit_mult_base = 0.30
 
 # Scaling Increase Pursuit Mult
 @low_pursuit_mult_addition_per_tier = 0.025
@@ -197,10 +231,12 @@
 
 # Base Movement Speed Value
 @normal_movement_speed_base = 0.01
+@good_movement_speed_base = 0.02
 @high_movement_speed_base = 0.02
 
 # Scaling Increase Movement Speed
 @normal_movement_speed_addition_per_tier = 0.01
+@good_movement_speed_addition_per_tier = 0.015
 @high_movement_speed_addition_per_tier = 0.02
 
 ########################
@@ -212,8 +248,8 @@
 @high_knight_effectiveness_mult_base = 0.02
 
 # Scaling Increase Knight Effectiveness
-@normal_knight_effectiveness_mult_addition_per_tier = 0.005		#prev 0.01
-@high_knight_effectiveness_mult_addition_per_tier = 0.01		#prev 0.02
+@normal_knight_effectiveness_mult_addition_per_tier = 0.01
+@high_knight_effectiveness_mult_addition_per_tier = 0.02
 
 ######################
 # Levy Reinforcement #
@@ -224,20 +260,22 @@
 @high_levy_reinforcement_rate_base = 0.05		#prev 0.2
 
 # Scaling Increase Levy Reinforcement
-@normal_levy_reinforcement_rate_addition_per_tier = 0.01	#prev 0.05
-@high_levy_reinforcement_rate_addition_per_tier = 0.025		#prev 0.1
+@normal_levy_reinforcement_rate_addition_per_tier = 0.05
+@high_levy_reinforcement_rate_addition_per_tier = 0.1
 
 ############
 # Garrison #
 ############
 
 # Base
+@poor_max_garrison_base = 50							#75
 @normal_max_garrison_base = 100							#150
 @good_max_garrison_base = 150							#250
 
 # Scaling Increase
-@normal_max_garrison_scale_addition_per_tier = 50		#150
-@good_max_garrison_scale_addition_per_tier = 75			#250
+@poor_max_garrison_scale_addition_per_tier = 50			#75
+@normal_max_garrison_scale_addition_per_tier = 100		#150
+@good_max_garrison_scale_addition_per_tier = 150			#250
 
 
 ##########################
@@ -245,10 +283,10 @@
 ##########################
 
 # Reinforcement rate: by default it takes 2,8 years to completly refill a garrison 
-@base_garrison_reinforcement_factor = 0.02					#prev 0.03
+@base_garrison_reinforcement_factor = 0.03
 
 # Scaling increase: at level 8, it takes a bit less than 1 year to completly refill a garrison
-@garrison_reinforcement_factor_addition_per_tier = 0.005	#prev 0.01
+@garrison_reinforcement_factor_addition_per_tier = 0.01
 
 
 # Tier values
@@ -293,22 +331,23 @@
 # Building Cost #
 #################
 
-@cheap_cost_base = 100
-@normal_cost_base = 150
-@expensive_cost_base = 200
-@main_cost_base = 600		#prev 400
-@tribal_cost_base = 75
+@cheap_cost_base = 30
+@normal_cost_base = 60
+@expensive_cost_base = 90
+@main_cost_base = 100
+@main_cost_new_holding = 200
+@tribal_cost_base = 15
 
 @building_cost_scaling_modifier_cheap = 0.1
 @building_cost_scaling_modifier_normal = 0.1
 @building_cost_scaling_modifier_expensive = 0.1
 
 # We have four 'building cost classes', each one has a better scale than the others.
-@cheap_cost_scale_addition_per_tier = 50
-@normal_cost_scale_addition_per_tier = 100
-@expensive_cost_scale_addition_per_tier = 150
-@main_cost_scale_addition_per_tier = 200		#prev 150
-@tribal_cost_scale_addition_per_tier = 25
+@cheap_cost_scale_addition_per_tier = 15
+@normal_cost_scale_addition_per_tier = 30
+@expensive_cost_scale_addition_per_tier = 45
+@main_cost_scale_addition_per_tier = 50
+@tribal_cost_scale_addition_per_tier = 5
 
 #####################
 # Construction Time #
@@ -503,6 +542,15 @@ building_disable_inefficient_value_add = 5
 @excellent_levy_tier_7 = @[excellent_levy_tier_6 + excellent_levy_scale_addition_per_tier]
 @excellent_levy_tier_8 = @[excellent_levy_tier_7 + excellent_levy_scale_addition_per_tier]
 
+@poor_max_garrison_tier_1 = @[poor_max_garrison_base]
+@poor_max_garrison_tier_2 = @[poor_max_garrison_tier_1 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_3 = @[poor_max_garrison_tier_2 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_4 = @[poor_max_garrison_tier_3 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_5 = @[poor_max_garrison_tier_4 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_6 = @[poor_max_garrison_tier_5 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_7 = @[poor_max_garrison_tier_6 + poor_max_garrison_scale_addition_per_tier]
+@poor_max_garrison_tier_8 = @[poor_max_garrison_tier_7 + poor_max_garrison_scale_addition_per_tier]
+
 @normal_max_garrison_tier_1 = @[normal_max_garrison_base]
 @normal_max_garrison_tier_2 = @[normal_max_garrison_tier_1 + normal_max_garrison_scale_addition_per_tier]
 @normal_max_garrison_tier_3 = @[normal_max_garrison_tier_2 + normal_max_garrison_scale_addition_per_tier]
@@ -583,6 +631,7 @@ building_disable_inefficient_value_add = 5
 @poor_advantage_tier_6 = @[poor_advantage_tier_5 + poor_advantage_tier_1]
 @poor_advantage_tier_7 = @[poor_advantage_tier_6 + poor_advantage_tier_1]
 @poor_advantage_tier_8 = @[poor_advantage_tier_7 + poor_advantage_tier_1]
+
 @normal_advantage_tier_1 = @[normal_advantage_base]
 @normal_advantage_tier_2 = @[normal_advantage_tier_1 + normal_advantage_scale_addition_per_tier]
 @normal_advantage_tier_3 = @[normal_advantage_tier_2 + normal_advantage_scale_addition_per_tier]
@@ -601,33 +650,36 @@ building_disable_inefficient_value_add = 5
 @good_advantage_tier_7 = @[good_advantage_tier_6 + good_advantage_scale_addition_per_tier]
 @good_advantage_tier_8 = @[good_advantage_tier_7 + good_advantage_scale_addition_per_tier]
 
-#some changes here that i wont mark coz ehuhhh
 @cheap_cost_tier_1 = @[cheap_cost_base] #values progress quadratically with for from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@cheap_cost_tier_2 = @[cheap_cost_tier_1 + cheap_cost_scale_addition_per_tier*0.5]
-@cheap_cost_tier_3 = @[cheap_cost_tier_2 + 2*2*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap*1.75 + 0]
-@cheap_cost_tier_4 = @[cheap_cost_tier_3 + 10*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]	#3x3x0.1 is awkward
-@cheap_cost_tier_5 = @[cheap_cost_tier_4 + 4*4*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_6 = @[cheap_cost_tier_5 + 5*5*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_7 = @[cheap_cost_tier_6 + 6*6*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
-@cheap_cost_tier_8 = @[cheap_cost_tier_7 + 7*7*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_2 = @[cheap_cost_tier_1 + cheap_cost_scale_addition_per_tier]
+@cheap_cost_tier_3 = @[cheap_cost_tier_2 + 3*3*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_4 = @[cheap_cost_tier_3 + 4*4*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_5 = @[cheap_cost_tier_4 + 5*5*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_6 = @[cheap_cost_tier_5 + 6*6*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_7 = @[cheap_cost_tier_6 + 7*7*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
+@cheap_cost_tier_8 = @[cheap_cost_tier_7 + 8*8*cheap_cost_scale_addition_per_tier*building_cost_scaling_modifier_cheap + 0]
 
 @normal_cost_tier_1 = @[normal_cost_base] #values progress quadratically with for from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@normal_cost_tier_2 = @[normal_cost_tier_1 + normal_cost_scale_addition_per_tier*0.5]
-@normal_cost_tier_3 = @[normal_cost_tier_2 + 2*2*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal*1.75 + 0]
-@normal_cost_tier_4 = @[normal_cost_tier_3 + 10*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]	#3x3x0.1 is awkward
-@normal_cost_tier_5 = @[normal_cost_tier_4 + 4*4*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_6 = @[normal_cost_tier_5 + 5*5*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_7 = @[normal_cost_tier_6 + 6*6*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
-@normal_cost_tier_8 = @[normal_cost_tier_7 + 7*7*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_2 = @[normal_cost_tier_1 + normal_cost_scale_addition_per_tier]
+@normal_cost_tier_3 = @[normal_cost_tier_2 + 3*3*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_4 = @[normal_cost_tier_3 + 4*4*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_5 = @[normal_cost_tier_4 + 5*5*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_6 = @[normal_cost_tier_5 + 6*6*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_7 = @[normal_cost_tier_6 + 7*7*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_8 = @[normal_cost_tier_7 + 8*8*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_9 = @[normal_cost_tier_8 + 9*9*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
+@normal_cost_tier_10 = @[normal_cost_tier_9 + 10*10*normal_cost_scale_addition_per_tier*building_cost_scaling_modifier_normal + 0]
 
 @expensive_cost_tier_1 = @[expensive_cost_base] #values progress quadratically for tiers from T3 onwards. The addition at the end is to have nice, round numbers displayed
-@expensive_cost_tier_2 = @[expensive_cost_tier_1 + expensive_cost_scale_addition_per_tier*0.5]
-@expensive_cost_tier_3 = @[expensive_cost_tier_2 + 2*2*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive*1.75 + 0]
-@expensive_cost_tier_4 = @[expensive_cost_tier_3 + 10*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]	#3x3x0.1 is awkward
-@expensive_cost_tier_5 = @[expensive_cost_tier_4 + 4*4*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_6 = @[expensive_cost_tier_5 + 5*5*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_7 = @[expensive_cost_tier_6 + 6*6*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
-@expensive_cost_tier_8 = @[expensive_cost_tier_7 + 7*7*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_2 = @[expensive_cost_tier_1 + expensive_cost_scale_addition_per_tier]
+@expensive_cost_tier_3 = @[expensive_cost_tier_2 + 3*3*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_4 = @[expensive_cost_tier_3 + 4*4*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_5 = @[expensive_cost_tier_4 + 5*5*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_6 = @[expensive_cost_tier_5 + 6*6*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_7 = @[expensive_cost_tier_6 + 7*7*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_8 = @[expensive_cost_tier_7 + 8*8*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_9 = @[expensive_cost_tier_8 + 9*9*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
+@expensive_cost_tier_10 = @[expensive_cost_tier_9 + 10*10*expensive_cost_scale_addition_per_tier*building_cost_scaling_modifier_expensive + 0]
 
 @main_cost_tier_1 = @[main_cost_base]
 @main_cost_tier_2 = @[main_cost_tier_1 + main_cost_scale_addition_per_tier]
@@ -645,59 +697,59 @@ building_disable_inefficient_value_add = 5
 @normal_maa_maintenance_tier_8 = @[normal_maa_maintenance_tier_7 + normal_maa_maintenance_addition_per_tier]
 
 @good_maa_maintenance_tier_1 = @[good_maa_maintenance_base]
-@good_maa_maintenance_tier_2 = @[good_maa_maintenance_tier_1 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_3 = @[good_maa_maintenance_tier_2 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_4 = @[good_maa_maintenance_tier_3 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_5 = @[good_maa_maintenance_tier_4 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_6 = @[good_maa_maintenance_tier_5 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_7 = @[good_maa_maintenance_tier_6 + normal_maa_maintenance_addition_per_tier]
-@good_maa_maintenance_tier_8 = @[good_maa_maintenance_tier_7 + normal_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_2 = @[good_maa_maintenance_tier_1 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_3 = @[good_maa_maintenance_tier_2 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_4 = @[good_maa_maintenance_tier_3 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_5 = @[good_maa_maintenance_tier_4 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_6 = @[good_maa_maintenance_tier_5 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_7 = @[good_maa_maintenance_tier_6 + good_maa_maintenance_addition_per_tier]
+@good_maa_maintenance_tier_8 = @[good_maa_maintenance_tier_7 + good_maa_maintenance_addition_per_tier]
 
-@low_development_growth_tier_1 = @[low_development_growth_base]
-@low_development_growth_tier_2 = @[low_development_growth_tier_1 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_3 = @[low_development_growth_tier_2 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_4 = @[low_development_growth_tier_3 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_5 = @[low_development_growth_tier_4 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_6 = @[low_development_growth_tier_5 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_7 = @[low_development_growth_tier_6 + low_development_growth_addition_per_tier]
-@low_development_growth_tier_8 = @[low_development_growth_tier_7 + low_development_growth_addition_per_tier]
-@normal_development_growth_tier_1 = @[normal_development_growth_base]
-@normal_development_growth_tier_2 = @[normal_development_growth_tier_1 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_3 = @[normal_development_growth_tier_2 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_4 = @[normal_development_growth_tier_3 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_5 = @[normal_development_growth_tier_4 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_6 = @[normal_development_growth_tier_5 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_7 = @[normal_development_growth_tier_6 + normal_development_growth_addition_per_tier]
-@normal_development_growth_tier_8 = @[normal_development_growth_tier_7 + normal_development_growth_addition_per_tier]
+@low_prosperity_growth_tier_1 = @[low_prosperity_growth_base]
+@low_prosperity_growth_tier_2 = @[low_prosperity_growth_tier_1 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_3 = @[low_prosperity_growth_tier_2 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_4 = @[low_prosperity_growth_tier_3 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_5 = @[low_prosperity_growth_tier_4 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_6 = @[low_prosperity_growth_tier_5 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_7 = @[low_prosperity_growth_tier_6 + low_prosperity_growth_addition_per_tier]
+@low_prosperity_growth_tier_8 = @[low_prosperity_growth_tier_7 + low_prosperity_growth_addition_per_tier]
 
-@good_development_growth_tier_1 = @[good_development_growth_base]
-@good_development_growth_tier_2 = @[good_development_growth_tier_1 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_3 = @[good_development_growth_tier_2 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_4 = @[good_development_growth_tier_3 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_5 = @[good_development_growth_tier_4 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_6 = @[good_development_growth_tier_5 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_7 = @[good_development_growth_tier_6 + normal_development_growth_addition_per_tier]
-@good_development_growth_tier_8 = @[good_development_growth_tier_7 + normal_development_growth_addition_per_tier]
+@normal_prosperity_growth_tier_1 = @[normal_prosperity_growth_base]
+@normal_prosperity_growth_tier_2 = @[normal_prosperity_growth_tier_1 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_3 = @[normal_prosperity_growth_tier_2 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_4 = @[normal_prosperity_growth_tier_3 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_5 = @[normal_prosperity_growth_tier_4 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_6 = @[normal_prosperity_growth_tier_5 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_7 = @[normal_prosperity_growth_tier_6 + normal_prosperity_growth_addition_per_tier]
+@normal_prosperity_growth_tier_8 = @[normal_prosperity_growth_tier_7 + normal_prosperity_growth_addition_per_tier]
 
-@normal_development_growth_factor_tier_1 = @[normal_development_growth_factor_base]
-@normal_development_growth_factor_tier_2 = @[normal_development_growth_factor_tier_1 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_3 = @[normal_development_growth_factor_tier_2 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_4 = @[normal_development_growth_factor_tier_3 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_5 = @[normal_development_growth_factor_tier_4 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_6 = @[normal_development_growth_factor_tier_5 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_7 = @[normal_development_growth_factor_tier_6 + normal_development_growth_factor_addition_per_tier]
-@normal_development_growth_factor_tier_8 = @[normal_development_growth_factor_tier_7 + normal_development_growth_factor_addition_per_tier]
+@good_prosperity_growth_tier_1 = @[good_prosperity_growth_base]
+@good_prosperity_growth_tier_2 = @[good_prosperity_growth_tier_1 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_3 = @[good_prosperity_growth_tier_2 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_4 = @[good_prosperity_growth_tier_3 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_5 = @[good_prosperity_growth_tier_4 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_6 = @[good_prosperity_growth_tier_5 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_7 = @[good_prosperity_growth_tier_6 + normal_prosperity_growth_addition_per_tier]
+@good_prosperity_growth_tier_8 = @[good_prosperity_growth_tier_7 + normal_prosperity_growth_addition_per_tier]
 
-@good_development_growth_factor_tier_1 = @[good_development_growth_factor_base]
-@good_development_growth_factor_tier_2 = @[good_development_growth_factor_tier_1 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_3 = @[good_development_growth_factor_tier_2 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_4 = @[good_development_growth_factor_tier_3 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_5 = @[good_development_growth_factor_tier_4 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_6 = @[good_development_growth_factor_tier_5 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_7 = @[good_development_growth_factor_tier_6 + normal_development_growth_factor_addition_per_tier]
-@good_development_growth_factor_tier_8 = @[good_development_growth_factor_tier_7 + normal_development_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_1 = @[normal_prosperity_growth_factor_base]
+@normal_prosperity_growth_factor_tier_2 = @[normal_prosperity_growth_factor_tier_1 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_3 = @[normal_prosperity_growth_factor_tier_2 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_4 = @[normal_prosperity_growth_factor_tier_3 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_5 = @[normal_prosperity_growth_factor_tier_4 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_6 = @[normal_prosperity_growth_factor_tier_5 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_7 = @[normal_prosperity_growth_factor_tier_6 + normal_prosperity_growth_factor_addition_per_tier]
+@normal_prosperity_growth_factor_tier_8 = @[normal_prosperity_growth_factor_tier_7 + normal_prosperity_growth_factor_addition_per_tier]
 
-### ADDED - changed
+@good_prosperity_growth_factor_tier_1 = @[good_prosperity_growth_factor_base]
+@good_prosperity_growth_factor_tier_2 = @[good_prosperity_growth_factor_tier_1 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_3 = @[good_prosperity_growth_factor_tier_2 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_4 = @[good_prosperity_growth_factor_tier_3 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_5 = @[good_prosperity_growth_factor_tier_4 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_6 = @[good_prosperity_growth_factor_tier_5 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_7 = @[good_prosperity_growth_factor_tier_6 + normal_prosperity_growth_factor_addition_per_tier]
+@good_prosperity_growth_factor_tier_8 = @[good_prosperity_growth_factor_tier_7 + normal_prosperity_growth_factor_addition_per_tier]
+
 @low_tax_mult_tier_1 = @[low_tax_mult_base]
 @low_tax_mult_tier_2 = @[low_tax_mult_tier_1 + low_tax_mult_addition_per_tier]
 @low_tax_mult_tier_3 = @[low_tax_mult_tier_2 + low_tax_mult_addition_per_tier]
@@ -706,7 +758,6 @@ building_disable_inefficient_value_add = 5
 @low_tax_mult_tier_6 = @[low_tax_mult_tier_5 + low_tax_mult_addition_per_tier]
 @low_tax_mult_tier_7 = @[low_tax_mult_tier_6 + low_tax_mult_addition_per_tier]
 @low_tax_mult_tier_8 = @[low_tax_mult_tier_7 + low_tax_mult_addition_per_tier]
-###
 
 @normal_tax_mult_tier_1 = @[normal_tax_mult_base]
 @normal_tax_mult_tier_2 = @[normal_tax_mult_tier_1 + normal_tax_mult_addition_per_tier]
@@ -731,6 +782,23 @@ building_disable_inefficient_value_add = 5
 @tribal_cost_tier_3 = @[tribal_cost_tier_2 + tribal_cost_scale_addition_per_tier]
 @tribal_cost_tier_4 = @[tribal_cost_tier_3 + tribal_cost_scale_addition_per_tier]
 
+# Duchy Support Mult
+@duchy_support_maa_damage_tier_1 = @[duchy_support_damage_mult_base]
+@duchy_support_maa_damage_tier_2 = @[duchy_support_maa_damage_tier_1 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_3 = @[duchy_support_maa_damage_tier_2 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_4 = @[duchy_support_maa_damage_tier_3 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_5 = @[duchy_support_maa_damage_tier_4 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_6 = @[duchy_support_maa_damage_tier_5 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_7 = @[duchy_support_maa_damage_tier_6 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_damage_tier_8 = @[duchy_support_maa_damage_tier_7 + duchy_support_damage_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_1 = @[duchy_support_toughness_mult_base]
+@duchy_support_maa_toughness_tier_2 = @[duchy_support_maa_toughness_tier_1 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_3 = @[duchy_support_maa_toughness_tier_2 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_4 = @[duchy_support_maa_toughness_tier_3 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_5 = @[duchy_support_maa_toughness_tier_4 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_6 = @[duchy_support_maa_toughness_tier_5 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_7 = @[duchy_support_maa_toughness_tier_6 + duchy_support_toughness_mult_addition_per_tier]
+@duchy_support_maa_toughness_tier_8 = @[duchy_support_maa_toughness_tier_7 + duchy_support_toughness_mult_addition_per_tier]
 # Low Damage Mult
 @low_maa_damage_tier_1 = @[low_damage_mult_base]
 @low_maa_damage_tier_2 = @[low_maa_damage_tier_1 + low_damage_mult_addition_per_tier]
@@ -941,6 +1009,16 @@ building_disable_inefficient_value_add = 5
 @normal_movement_speed_tier_7 = @[normal_movement_speed_tier_6 + normal_movement_speed_addition_per_tier]
 @normal_movement_speed_tier_8 = @[normal_movement_speed_tier_7 + normal_movement_speed_addition_per_tier]
 
+# Good Movement Speed
+@good_movement_speed_tier_1 = @[good_movement_speed_base]
+@good_movement_speed_tier_2 = @[good_movement_speed_tier_1 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_3 = @[good_movement_speed_tier_2 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_4 = @[good_movement_speed_tier_3 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_5 = @[good_movement_speed_tier_4 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_6 = @[good_movement_speed_tier_5 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_7 = @[good_movement_speed_tier_6 + good_movement_speed_addition_per_tier]
+@good_movement_speed_tier_8 = @[good_movement_speed_tier_7 + good_movement_speed_addition_per_tier]
+
 # High Movement Speed
 @high_movement_speed_tier_1 = @[high_movement_speed_base]
 @high_movement_speed_tier_2 = @[high_movement_speed_tier_1 + high_movement_speed_addition_per_tier]
@@ -1075,6 +1153,24 @@ very_high_maa_toughness_tier_6 = @very_high_maa_toughness_tier_6
 very_high_maa_toughness_tier_7 = @very_high_maa_toughness_tier_7
 very_high_maa_toughness_tier_8 = @very_high_maa_toughness_tier_8
 
+
+#Special Weapon Smith Needs
+@toledo_bladesmiths_maa_bonus = 0.025 #Used by unique smith building in Toledo
+@damascus_steel_maa_bonus = 0.025 #Used by Damascus steel innovation
+@toledo_bladesmiths_maa_damage = @[normal_maa_damage_tier_1 + toledo_bladesmiths_maa_bonus]
+@toledo_bladesmiths_maa_toughness = @[normal_maa_toughness_tier_1 + toledo_bladesmiths_maa_bonus]
+@damascus_steel_maa_damage = @[normal_maa_damage_tier_1 + damascus_steel_maa_bonus]
+@damascus_steel_maa_toughness = @[normal_maa_toughness_tier_1 + damascus_steel_maa_bonus]
+#If you have both they can stack, yes we thought about that.
+@toledo_bladesmiths_damascus_steel_maa_damage = @[toledo_bladesmiths_maa_damage + damascus_steel_maa_bonus]
+@toledo_bladesmiths_damascus_steel_maa_toughness = @[toledo_bladesmiths_maa_toughness + damascus_steel_maa_bonus]
+toledo_bladesmiths_maa_damage = @toledo_bladesmiths_maa_damage
+toledo_bladesmiths_maa_toughness = @toledo_bladesmiths_maa_toughness
+damascus_steel_maa_damage = @damascus_steel_maa_damage
+damascus_steel_maa_toughness = @damascus_steel_maa_toughness
+toledo_bladesmiths_damascus_steel_maa_damage = @toledo_bladesmiths_damascus_steel_maa_damage
+toledo_bladesmiths_damascus_steel_maa_toughness = @toledo_bladesmiths_damascus_steel_maa_toughness
+
 # Low Pursuit Mult
 low_maa_pursuit_tier_1 = @low_maa_pursuit_tier_1
 low_maa_pursuit_tier_2 = @low_maa_pursuit_tier_2
@@ -1195,6 +1291,240 @@ very_high_maa_siege_value_tier_6 = @very_high_maa_siege_value_tier_6
 very_high_maa_siege_value_tier_7 = @very_high_maa_siege_value_tier_7
 very_high_maa_siege_value_tier_8 = @very_high_maa_siege_value_tier_8
 
+####################
+# Duchy MaA Values #
+####################
+
+# Half the province bands, for stationed bonuses that apply across the whole duchy.
+
+# Duchy Low Damage Mult
+duchy_low_maa_damage_tier_1 = @[low_maa_damage_tier_1 / 2]
+duchy_low_maa_damage_tier_2 = @[low_maa_damage_tier_2 / 2]
+duchy_low_maa_damage_tier_3 = @[low_maa_damage_tier_3 / 2]
+duchy_low_maa_damage_tier_4 = @[low_maa_damage_tier_4 / 2]
+duchy_low_maa_damage_tier_5 = @[low_maa_damage_tier_5 / 2]
+duchy_low_maa_damage_tier_6 = @[low_maa_damage_tier_6 / 2]
+duchy_low_maa_damage_tier_7 = @[low_maa_damage_tier_7 / 2]
+duchy_low_maa_damage_tier_8 = @[low_maa_damage_tier_8 / 2]
+
+# Duchy Normal Damage Mult
+duchy_normal_maa_damage_tier_1 = @[normal_maa_damage_tier_1 / 2]
+duchy_normal_maa_damage_tier_2 = @[normal_maa_damage_tier_2 / 2]
+duchy_normal_maa_damage_tier_3 = @[normal_maa_damage_tier_3 / 2]
+duchy_normal_maa_damage_tier_4 = @[normal_maa_damage_tier_4 / 2]
+duchy_normal_maa_damage_tier_5 = @[normal_maa_damage_tier_5 / 2]
+duchy_normal_maa_damage_tier_6 = @[normal_maa_damage_tier_6 / 2]
+duchy_normal_maa_damage_tier_7 = @[normal_maa_damage_tier_7 / 2]
+duchy_normal_maa_damage_tier_8 = @[normal_maa_damage_tier_8 / 2]
+
+# Duchy High Damage Mult
+duchy_high_maa_damage_tier_1 = @[high_maa_damage_tier_1 / 2]
+duchy_high_maa_damage_tier_2 = @[high_maa_damage_tier_2 / 2]
+duchy_high_maa_damage_tier_3 = @[high_maa_damage_tier_3 / 2]
+duchy_high_maa_damage_tier_4 = @[high_maa_damage_tier_4 / 2]
+duchy_high_maa_damage_tier_5 = @[high_maa_damage_tier_5 / 2]
+duchy_high_maa_damage_tier_6 = @[high_maa_damage_tier_6 / 2]
+duchy_high_maa_damage_tier_7 = @[high_maa_damage_tier_7 / 2]
+duchy_high_maa_damage_tier_8 = @[high_maa_damage_tier_8 / 2]
+
+# Duchy Very High Damage Mult
+duchy_very_high_maa_damage_tier_1 = @[very_high_maa_damage_tier_1 / 2]
+duchy_very_high_maa_damage_tier_2 = @[very_high_maa_damage_tier_2 / 2]
+duchy_very_high_maa_damage_tier_3 = @[very_high_maa_damage_tier_3 / 2]
+duchy_very_high_maa_damage_tier_4 = @[very_high_maa_damage_tier_4 / 2]
+duchy_very_high_maa_damage_tier_5 = @[very_high_maa_damage_tier_5 / 2]
+duchy_very_high_maa_damage_tier_6 = @[very_high_maa_damage_tier_6 / 2]
+duchy_very_high_maa_damage_tier_7 = @[very_high_maa_damage_tier_7 / 2]
+duchy_very_high_maa_damage_tier_8 = @[very_high_maa_damage_tier_8 / 2]
+
+# Duchy Low Toughness Mult
+duchy_low_maa_toughness_tier_1 = @[low_maa_toughness_tier_1 / 2]
+duchy_low_maa_toughness_tier_2 = @[low_maa_toughness_tier_2 / 2]
+duchy_low_maa_toughness_tier_3 = @[low_maa_toughness_tier_3 / 2]
+duchy_low_maa_toughness_tier_4 = @[low_maa_toughness_tier_4 / 2]
+duchy_low_maa_toughness_tier_5 = @[low_maa_toughness_tier_5 / 2]
+duchy_low_maa_toughness_tier_6 = @[low_maa_toughness_tier_6 / 2]
+duchy_low_maa_toughness_tier_7 = @[low_maa_toughness_tier_7 / 2]
+duchy_low_maa_toughness_tier_8 = @[low_maa_toughness_tier_8 / 2]
+
+# Duchy Normal Toughness Mult
+duchy_normal_maa_toughness_tier_1 = @[normal_maa_toughness_tier_1 / 2]
+duchy_normal_maa_toughness_tier_2 = @[normal_maa_toughness_tier_2 / 2]
+duchy_normal_maa_toughness_tier_3 = @[normal_maa_toughness_tier_3 / 2]
+duchy_normal_maa_toughness_tier_4 = @[normal_maa_toughness_tier_4 / 2]
+duchy_normal_maa_toughness_tier_5 = @[normal_maa_toughness_tier_5 / 2]
+duchy_normal_maa_toughness_tier_6 = @[normal_maa_toughness_tier_6 / 2]
+duchy_normal_maa_toughness_tier_7 = @[normal_maa_toughness_tier_7 / 2]
+duchy_normal_maa_toughness_tier_8 = @[normal_maa_toughness_tier_8 / 2]
+
+# Duchy High Toughness Mult
+duchy_high_maa_toughness_tier_1 = @[high_maa_toughness_tier_1 / 2]
+duchy_high_maa_toughness_tier_2 = @[high_maa_toughness_tier_2 / 2]
+duchy_high_maa_toughness_tier_3 = @[high_maa_toughness_tier_3 / 2]
+duchy_high_maa_toughness_tier_4 = @[high_maa_toughness_tier_4 / 2]
+duchy_high_maa_toughness_tier_5 = @[high_maa_toughness_tier_5 / 2]
+duchy_high_maa_toughness_tier_6 = @[high_maa_toughness_tier_6 / 2]
+duchy_high_maa_toughness_tier_7 = @[high_maa_toughness_tier_7 / 2]
+duchy_high_maa_toughness_tier_8 = @[high_maa_toughness_tier_8 / 2]
+
+# Duchy Very High Toughness Mult
+duchy_very_high_maa_toughness_tier_1 = @[very_high_maa_toughness_tier_1 / 2]
+duchy_very_high_maa_toughness_tier_2 = @[very_high_maa_toughness_tier_2 / 2]
+duchy_very_high_maa_toughness_tier_3 = @[very_high_maa_toughness_tier_3 / 2]
+duchy_very_high_maa_toughness_tier_4 = @[very_high_maa_toughness_tier_4 / 2]
+duchy_very_high_maa_toughness_tier_5 = @[very_high_maa_toughness_tier_5 / 2]
+duchy_very_high_maa_toughness_tier_6 = @[very_high_maa_toughness_tier_6 / 2]
+duchy_very_high_maa_toughness_tier_7 = @[very_high_maa_toughness_tier_7 / 2]
+duchy_very_high_maa_toughness_tier_8 = @[very_high_maa_toughness_tier_8 / 2]
+
+# Duchy Low Screen Mult
+duchy_low_maa_screen_tier_1 = @[low_maa_screen_tier_1 / 2]
+duchy_low_maa_screen_tier_2 = @[low_maa_screen_tier_2 / 2]
+duchy_low_maa_screen_tier_3 = @[low_maa_screen_tier_3 / 2]
+duchy_low_maa_screen_tier_4 = @[low_maa_screen_tier_4 / 2]
+duchy_low_maa_screen_tier_5 = @[low_maa_screen_tier_5 / 2]
+duchy_low_maa_screen_tier_6 = @[low_maa_screen_tier_6 / 2]
+duchy_low_maa_screen_tier_7 = @[low_maa_screen_tier_7 / 2]
+duchy_low_maa_screen_tier_8 = @[low_maa_screen_tier_8 / 2]
+
+# Duchy Normal Screen Mult
+duchy_normal_maa_screen_tier_1 = @[normal_maa_screen_tier_1 / 2]
+duchy_normal_maa_screen_tier_2 = @[normal_maa_screen_tier_2 / 2]
+duchy_normal_maa_screen_tier_3 = @[normal_maa_screen_tier_3 / 2]
+duchy_normal_maa_screen_tier_4 = @[normal_maa_screen_tier_4 / 2]
+duchy_normal_maa_screen_tier_5 = @[normal_maa_screen_tier_5 / 2]
+duchy_normal_maa_screen_tier_6 = @[normal_maa_screen_tier_6 / 2]
+duchy_normal_maa_screen_tier_7 = @[normal_maa_screen_tier_7 / 2]
+duchy_normal_maa_screen_tier_8 = @[normal_maa_screen_tier_8 / 2]
+
+# Duchy High Screen Mult
+duchy_high_maa_screen_tier_1 = @[high_maa_screen_tier_1 / 2]
+duchy_high_maa_screen_tier_2 = @[high_maa_screen_tier_2 / 2]
+duchy_high_maa_screen_tier_3 = @[high_maa_screen_tier_3 / 2]
+duchy_high_maa_screen_tier_4 = @[high_maa_screen_tier_4 / 2]
+duchy_high_maa_screen_tier_5 = @[high_maa_screen_tier_5 / 2]
+duchy_high_maa_screen_tier_6 = @[high_maa_screen_tier_6 / 2]
+duchy_high_maa_screen_tier_7 = @[high_maa_screen_tier_7 / 2]
+duchy_high_maa_screen_tier_8 = @[high_maa_screen_tier_8 / 2]
+
+# Duchy Very High Screen Mult
+duchy_very_high_maa_screen_tier_1 = @[very_high_maa_screen_tier_1 / 2]
+duchy_very_high_maa_screen_tier_2 = @[very_high_maa_screen_tier_2 / 2]
+duchy_very_high_maa_screen_tier_3 = @[very_high_maa_screen_tier_3 / 2]
+duchy_very_high_maa_screen_tier_4 = @[very_high_maa_screen_tier_4 / 2]
+duchy_very_high_maa_screen_tier_5 = @[very_high_maa_screen_tier_5 / 2]
+duchy_very_high_maa_screen_tier_6 = @[very_high_maa_screen_tier_6 / 2]
+duchy_very_high_maa_screen_tier_7 = @[very_high_maa_screen_tier_7 / 2]
+duchy_very_high_maa_screen_tier_8 = @[very_high_maa_screen_tier_8 / 2]
+
+# Duchy Low Pursuit Mult
+duchy_low_maa_pursuit_tier_1 = @[low_maa_pursuit_tier_1 / 2]
+duchy_low_maa_pursuit_tier_2 = @[low_maa_pursuit_tier_2 / 2]
+duchy_low_maa_pursuit_tier_3 = @[low_maa_pursuit_tier_3 / 2]
+duchy_low_maa_pursuit_tier_4 = @[low_maa_pursuit_tier_4 / 2]
+duchy_low_maa_pursuit_tier_5 = @[low_maa_pursuit_tier_5 / 2]
+duchy_low_maa_pursuit_tier_6 = @[low_maa_pursuit_tier_6 / 2]
+duchy_low_maa_pursuit_tier_7 = @[low_maa_pursuit_tier_7 / 2]
+duchy_low_maa_pursuit_tier_8 = @[low_maa_pursuit_tier_8 / 2]
+
+# Duchy Normal Pursuit Mult
+duchy_normal_maa_pursuit_tier_1 = @[normal_maa_pursuit_tier_1 / 2]
+duchy_normal_maa_pursuit_tier_2 = @[normal_maa_pursuit_tier_2 / 2]
+duchy_normal_maa_pursuit_tier_3 = @[normal_maa_pursuit_tier_3 / 2]
+duchy_normal_maa_pursuit_tier_4 = @[normal_maa_pursuit_tier_4 / 2]
+duchy_normal_maa_pursuit_tier_5 = @[normal_maa_pursuit_tier_5 / 2]
+duchy_normal_maa_pursuit_tier_6 = @[normal_maa_pursuit_tier_6 / 2]
+duchy_normal_maa_pursuit_tier_7 = @[normal_maa_pursuit_tier_7 / 2]
+duchy_normal_maa_pursuit_tier_8 = @[normal_maa_pursuit_tier_8 / 2]
+
+# Duchy High Pursuit Mult
+duchy_high_maa_pursuit_tier_1 = @[high_maa_pursuit_tier_1 / 2]
+duchy_high_maa_pursuit_tier_2 = @[high_maa_pursuit_tier_2 / 2]
+duchy_high_maa_pursuit_tier_3 = @[high_maa_pursuit_tier_3 / 2]
+duchy_high_maa_pursuit_tier_4 = @[high_maa_pursuit_tier_4 / 2]
+duchy_high_maa_pursuit_tier_5 = @[high_maa_pursuit_tier_5 / 2]
+duchy_high_maa_pursuit_tier_6 = @[high_maa_pursuit_tier_6 / 2]
+duchy_high_maa_pursuit_tier_7 = @[high_maa_pursuit_tier_7 / 2]
+duchy_high_maa_pursuit_tier_8 = @[high_maa_pursuit_tier_8 / 2]
+
+# Duchy Very High Pursuit Mult
+duchy_very_high_maa_pursuit_tier_1 = @[very_high_maa_pursuit_tier_1 / 2]
+duchy_very_high_maa_pursuit_tier_2 = @[very_high_maa_pursuit_tier_2 / 2]
+duchy_very_high_maa_pursuit_tier_3 = @[very_high_maa_pursuit_tier_3 / 2]
+duchy_very_high_maa_pursuit_tier_4 = @[very_high_maa_pursuit_tier_4 / 2]
+duchy_very_high_maa_pursuit_tier_5 = @[very_high_maa_pursuit_tier_5 / 2]
+duchy_very_high_maa_pursuit_tier_6 = @[very_high_maa_pursuit_tier_6 / 2]
+duchy_very_high_maa_pursuit_tier_7 = @[very_high_maa_pursuit_tier_7 / 2]
+duchy_very_high_maa_pursuit_tier_8 = @[very_high_maa_pursuit_tier_8 / 2]
+
+# Duchy Low Siege Value Mult
+duchy_low_maa_siege_value_tier_1 = @[low_maa_siege_value_tier_1 / 2]
+duchy_low_maa_siege_value_tier_2 = @[low_maa_siege_value_tier_2 / 2]
+duchy_low_maa_siege_value_tier_3 = @[low_maa_siege_value_tier_3 / 2]
+duchy_low_maa_siege_value_tier_4 = @[low_maa_siege_value_tier_4 / 2]
+duchy_low_maa_siege_value_tier_5 = @[low_maa_siege_value_tier_5 / 2]
+duchy_low_maa_siege_value_tier_6 = @[low_maa_siege_value_tier_6 / 2]
+duchy_low_maa_siege_value_tier_7 = @[low_maa_siege_value_tier_7 / 2]
+duchy_low_maa_siege_value_tier_8 = @[low_maa_siege_value_tier_8 / 2]
+
+# Duchy Normal Siege Value Mult
+duchy_normal_maa_siege_value_tier_1 = @[normal_maa_siege_value_tier_1 / 2]
+duchy_normal_maa_siege_value_tier_2 = @[normal_maa_siege_value_tier_2 / 2]
+duchy_normal_maa_siege_value_tier_3 = @[normal_maa_siege_value_tier_3 / 2]
+duchy_normal_maa_siege_value_tier_4 = @[normal_maa_siege_value_tier_4 / 2]
+duchy_normal_maa_siege_value_tier_5 = @[normal_maa_siege_value_tier_5 / 2]
+duchy_normal_maa_siege_value_tier_6 = @[normal_maa_siege_value_tier_6 / 2]
+duchy_normal_maa_siege_value_tier_7 = @[normal_maa_siege_value_tier_7 / 2]
+duchy_normal_maa_siege_value_tier_8 = @[normal_maa_siege_value_tier_8 / 2]
+
+# Duchy High Siege Value Mult
+duchy_high_maa_siege_value_tier_1 = @[high_maa_siege_value_tier_1 / 2]
+duchy_high_maa_siege_value_tier_2 = @[high_maa_siege_value_tier_2 / 2]
+duchy_high_maa_siege_value_tier_3 = @[high_maa_siege_value_tier_3 / 2]
+duchy_high_maa_siege_value_tier_4 = @[high_maa_siege_value_tier_4 / 2]
+duchy_high_maa_siege_value_tier_5 = @[high_maa_siege_value_tier_5 / 2]
+duchy_high_maa_siege_value_tier_6 = @[high_maa_siege_value_tier_6 / 2]
+duchy_high_maa_siege_value_tier_7 = @[high_maa_siege_value_tier_7 / 2]
+duchy_high_maa_siege_value_tier_8 = @[high_maa_siege_value_tier_8 / 2]
+
+# Duchy Very High Siege Value Mult
+duchy_very_high_maa_siege_value_tier_1 = @[very_high_maa_siege_value_tier_1 / 2]
+duchy_very_high_maa_siege_value_tier_2 = @[very_high_maa_siege_value_tier_2 / 2]
+duchy_very_high_maa_siege_value_tier_3 = @[very_high_maa_siege_value_tier_3 / 2]
+duchy_very_high_maa_siege_value_tier_4 = @[very_high_maa_siege_value_tier_4 / 2]
+duchy_very_high_maa_siege_value_tier_5 = @[very_high_maa_siege_value_tier_5 / 2]
+duchy_very_high_maa_siege_value_tier_6 = @[very_high_maa_siege_value_tier_6 / 2]
+duchy_very_high_maa_siege_value_tier_7 = @[very_high_maa_siege_value_tier_7 / 2]
+duchy_very_high_maa_siege_value_tier_8 = @[very_high_maa_siege_value_tier_8 / 2]
+
+# Support bonuses on the economic office extras.
+
+# Duchy Support Damage Mult
+duchy_support_maa_damage_tier_1 = @duchy_support_maa_damage_tier_1
+duchy_support_maa_damage_tier_2 = @duchy_support_maa_damage_tier_2
+duchy_support_maa_damage_tier_3 = @duchy_support_maa_damage_tier_3
+duchy_support_maa_damage_tier_4 = @duchy_support_maa_damage_tier_4
+duchy_support_maa_damage_tier_5 = @duchy_support_maa_damage_tier_5
+duchy_support_maa_damage_tier_6 = @duchy_support_maa_damage_tier_6
+duchy_support_maa_damage_tier_7 = @duchy_support_maa_damage_tier_7
+duchy_support_maa_damage_tier_8 = @duchy_support_maa_damage_tier_8
+
+# Duchy Support Toughness Mult
+duchy_support_maa_toughness_tier_1 = @duchy_support_maa_toughness_tier_1
+duchy_support_maa_toughness_tier_2 = @duchy_support_maa_toughness_tier_2
+duchy_support_maa_toughness_tier_3 = @duchy_support_maa_toughness_tier_3
+duchy_support_maa_toughness_tier_4 = @duchy_support_maa_toughness_tier_4
+duchy_support_maa_toughness_tier_5 = @duchy_support_maa_toughness_tier_5
+duchy_support_maa_toughness_tier_6 = @duchy_support_maa_toughness_tier_6
+duchy_support_maa_toughness_tier_7 = @duchy_support_maa_toughness_tier_7
+duchy_support_maa_toughness_tier_8 = @duchy_support_maa_toughness_tier_8
+
+##########################
+# Duchy Office Buildings #
+##########################
+
+minting_court_civic_tax_per_metal_need = 0.05
+
 ##################
 # Movement Speed #
 ##################
@@ -1208,6 +1538,16 @@ normal_movement_speed_tier_5 = @normal_movement_speed_tier_5
 normal_movement_speed_tier_6 = @normal_movement_speed_tier_6
 normal_movement_speed_tier_7 = @normal_movement_speed_tier_7
 normal_movement_speed_tier_8 = @normal_movement_speed_tier_8
+
+# Good Movement Speed
+good_movement_speed_tier_1 = @good_movement_speed_tier_1
+good_movement_speed_tier_2 = @good_movement_speed_tier_2
+good_movement_speed_tier_3 = @good_movement_speed_tier_3
+good_movement_speed_tier_4 = @good_movement_speed_tier_4
+good_movement_speed_tier_5 = @good_movement_speed_tier_5
+good_movement_speed_tier_6 = @good_movement_speed_tier_6
+good_movement_speed_tier_7 = @good_movement_speed_tier_7
+good_movement_speed_tier_8 = @good_movement_speed_tier_8
 
 # High Movement Speed
 high_movement_speed_tier_1 = @high_movement_speed_tier_1
@@ -1290,6 +1630,8 @@ normal_building_tier_5_cost = @[normal_cost_tier_5]
 normal_building_tier_6_cost = @[normal_cost_tier_6]
 normal_building_tier_7_cost = @[normal_cost_tier_7]
 normal_building_tier_8_cost = @[normal_cost_tier_8]
+normal_building_tier_9_cost = @[normal_cost_tier_9]
+normal_building_tier_10_cost = @[normal_cost_tier_10]
 
 # Expensive Buildings
 expensive_building_tier_1_cost = @[expensive_cost_tier_1]
@@ -1300,9 +1642,11 @@ expensive_building_tier_5_cost = @[expensive_cost_tier_5]
 expensive_building_tier_6_cost = @[expensive_cost_tier_6]
 expensive_building_tier_7_cost = @[expensive_cost_tier_7]
 expensive_building_tier_8_cost = @[expensive_cost_tier_8]
+expensive_building_tier_9_cost = @[expensive_cost_tier_9]
+expensive_building_tier_10_cost = @[expensive_cost_tier_10]
 
 # Main Buildings (Castle, Temple, City)
-main_building_tier_1_cost = @[main_cost_tier_1]
+main_building_tier_1_cost = @[main_cost_new_holding]
 main_building_tier_2_cost = @[main_cost_tier_2]
 main_building_tier_3_cost = @[main_cost_tier_3]
 main_building_tier_4_cost = @[main_cost_tier_4]
@@ -1347,6 +1691,16 @@ good_building_tax_tier_6 = @[good_tax_tier_6]
 good_building_tax_tier_7 = @[good_tax_tier_7]
 good_building_tax_tier_8 = @[good_tax_tier_8]
 
+# Good Tax, halved
+good_building_tax_halved_tier_1 = @[good_tax_tier_1 * 0.5]
+good_building_tax_halved_tier_2 = @[good_tax_tier_2 * 0.5]
+good_building_tax_halved_tier_3 = @[good_tax_tier_3 * 0.5]
+good_building_tax_halved_tier_4 = @[good_tax_tier_4 * 0.5]
+good_building_tax_halved_tier_5 = @[good_tax_tier_5 * 0.5]
+good_building_tax_halved_tier_6 = @[good_tax_tier_6 * 0.5]
+good_building_tax_halved_tier_7 = @[good_tax_tier_7 * 0.5]
+good_building_tax_halved_tier_8 = @[good_tax_tier_8 * 0.5]
+
 # Excellent Tax
 excellent_building_tax_tier_1 = @[excellent_tax_tier_1]
 excellent_building_tax_tier_2 = @[excellent_tax_tier_2]
@@ -1356,6 +1710,86 @@ excellent_building_tax_tier_5 = @[excellent_tax_tier_5]
 excellent_building_tax_tier_6 = @[excellent_tax_tier_6]
 excellent_building_tax_tier_7 = @[excellent_tax_tier_7]
 excellent_building_tax_tier_8 = @[excellent_tax_tier_8]
+
+# Poor Artisan Tax
+poor_artisan_building_tax_tier_1 = @[poor_tax_tier_1 * 0.75]
+poor_artisan_building_tax_tier_2 = @[poor_tax_tier_2 * 0.75]
+poor_artisan_building_tax_tier_3 = @[poor_tax_tier_3 * 0.75]
+poor_artisan_building_tax_tier_4 = @[poor_tax_tier_4 * 0.75]
+poor_artisan_building_tax_tier_5 = @[poor_tax_tier_5 * 0.75]
+poor_artisan_building_tax_tier_6 = @[poor_tax_tier_6 * 0.75]
+poor_artisan_building_tax_tier_7 = @[poor_tax_tier_7 * 0.75]
+poor_artisan_building_tax_tier_8 = @[poor_tax_tier_8 * 0.75]
+
+# Normal Artisan Tax
+normal_artisan_building_tax_tier_1 = @[normal_tax_tier_1 * 0.75]
+normal_artisan_building_tax_tier_2 = @[normal_tax_tier_2 * 0.75]
+normal_artisan_building_tax_tier_3 = @[normal_tax_tier_3 * 0.75]
+normal_artisan_building_tax_tier_4 = @[normal_tax_tier_4 * 0.75]
+normal_artisan_building_tax_tier_5 = @[normal_tax_tier_5 * 0.75]
+normal_artisan_building_tax_tier_6 = @[normal_tax_tier_6 * 0.75]
+normal_artisan_building_tax_tier_7 = @[normal_tax_tier_7 * 0.75]
+normal_artisan_building_tax_tier_8 = @[normal_tax_tier_8 * 0.75]
+
+# Good Artisan Tax
+good_artisan_building_tax_tier_1 = @[good_tax_tier_1 * 0.75]
+good_artisan_building_tax_tier_2 = @[good_tax_tier_2 * 0.75]
+good_artisan_building_tax_tier_3 = @[good_tax_tier_3 * 0.75]
+good_artisan_building_tax_tier_4 = @[good_tax_tier_4 * 0.75]
+good_artisan_building_tax_tier_5 = @[good_tax_tier_5 * 0.75]
+good_artisan_building_tax_tier_6 = @[good_tax_tier_6 * 0.75]
+good_artisan_building_tax_tier_7 = @[good_tax_tier_7 * 0.75]
+good_artisan_building_tax_tier_8 = @[good_tax_tier_8 * 0.75]
+
+# Excellent Artisan Tax
+excellent_artisan_building_tax_tier_1 = @[excellent_tax_tier_1 * 0.75]
+excellent_artisan_building_tax_tier_2 = @[excellent_tax_tier_2 * 0.75]
+excellent_artisan_building_tax_tier_3 = @[excellent_tax_tier_3 * 0.75]
+excellent_artisan_building_tax_tier_4 = @[excellent_tax_tier_4 * 0.75]
+excellent_artisan_building_tax_tier_5 = @[excellent_tax_tier_5 * 0.75]
+excellent_artisan_building_tax_tier_6 = @[excellent_tax_tier_6 * 0.75]
+excellent_artisan_building_tax_tier_7 = @[excellent_tax_tier_7 * 0.75]
+excellent_artisan_building_tax_tier_8 = @[excellent_tax_tier_8 * 0.75]
+
+# Poor Market Tax
+poor_market_building_tax_tier_1 = @[poor_tax_tier_1 * 0.5]
+poor_market_building_tax_tier_2 = @[poor_tax_tier_2 * 0.5]
+poor_market_building_tax_tier_3 = @[poor_tax_tier_3 * 0.5]
+poor_market_building_tax_tier_4 = @[poor_tax_tier_4 * 0.5]
+poor_market_building_tax_tier_5 = @[poor_tax_tier_5 * 0.5]
+poor_market_building_tax_tier_6 = @[poor_tax_tier_6 * 0.5]
+poor_market_building_tax_tier_7 = @[poor_tax_tier_7 * 0.5]
+poor_market_building_tax_tier_8 = @[poor_tax_tier_8 * 0.5]
+
+# Normal Market Tax
+normal_market_building_tax_tier_1 = @[normal_tax_tier_1 * 0.5]
+normal_market_building_tax_tier_2 = @[normal_tax_tier_2 * 0.5]
+normal_market_building_tax_tier_3 = @[normal_tax_tier_3 * 0.5]
+normal_market_building_tax_tier_4 = @[normal_tax_tier_4 * 0.5]
+normal_market_building_tax_tier_5 = @[normal_tax_tier_5 * 0.5]
+normal_market_building_tax_tier_6 = @[normal_tax_tier_6 * 0.5]
+normal_market_building_tax_tier_7 = @[normal_tax_tier_7 * 0.5]
+normal_market_building_tax_tier_8 = @[normal_tax_tier_8 * 0.5]
+
+# Good Market Tax
+good_market_building_tax_tier_1 = @[good_tax_tier_1 * 0.5]
+good_market_building_tax_tier_2 = @[good_tax_tier_2 * 0.5]
+good_market_building_tax_tier_3 = @[good_tax_tier_3 * 0.5]
+good_market_building_tax_tier_4 = @[good_tax_tier_4 * 0.5]
+good_market_building_tax_tier_5 = @[good_tax_tier_5 * 0.5]
+good_market_building_tax_tier_6 = @[good_tax_tier_6 * 0.5]
+good_market_building_tax_tier_7 = @[good_tax_tier_7 * 0.5]
+good_market_building_tax_tier_8 = @[good_tax_tier_8 * 0.5]
+
+# Excellent Market Tax
+excellent_market_building_tax_tier_1 = @[excellent_tax_tier_1 * 0.5]
+excellent_market_building_tax_tier_2 = @[excellent_tax_tier_2 * 0.5]
+excellent_market_building_tax_tier_3 = @[excellent_tax_tier_3 * 0.5]
+excellent_market_building_tax_tier_4 = @[excellent_tax_tier_4 * 0.5]
+excellent_market_building_tax_tier_5 = @[excellent_tax_tier_5 * 0.5]
+excellent_market_building_tax_tier_6 = @[excellent_tax_tier_6 * 0.5]
+excellent_market_building_tax_tier_7 = @[excellent_tax_tier_7 * 0.5]
+excellent_market_building_tax_tier_8 = @[excellent_tax_tier_8 * 0.5]
 
 # Poor Tax, negative
 poor_building_tax_negative_tier_1 = @[poor_tax_tier_1 * -0.5]
@@ -1376,6 +1810,7 @@ poor_building_tax_halved_tier_5 = @[poor_tax_tier_5 * 0.5]
 poor_building_tax_halved_tier_6 = @[poor_tax_tier_6 * 0.5]
 poor_building_tax_halved_tier_7 = @[poor_tax_tier_7 * 0.5]
 poor_building_tax_halved_tier_8 = @[poor_tax_tier_8 * 0.5]
+
 # Cultural Tradition Extra - Poor Tax
 poor_building_extra_tax_tier_1 = @[poor_tax_tier_1 / 4]
 poor_building_extra_tax_tier_2 = @[poor_tax_tier_2 / 4]
@@ -1395,6 +1830,16 @@ super_poor_building_tax_tier_5 = @[poor_tax_tier_5 / 2]
 super_poor_building_tax_tier_6 = @[poor_tax_tier_6 / 2]
 super_poor_building_tax_tier_7 = @[poor_tax_tier_7 / 2]
 super_poor_building_tax_tier_8 = @[poor_tax_tier_8 / 2]
+
+# Super Poor Tax, halved again for faiths that ask their religious buildings to want less
+super_poor_building_tax_halved_tier_1 = @[poor_tax_tier_1 / 4]
+super_poor_building_tax_halved_tier_2 = @[poor_tax_tier_2 / 4]
+super_poor_building_tax_halved_tier_3 = @[poor_tax_tier_3 / 4]
+super_poor_building_tax_halved_tier_4 = @[poor_tax_tier_4 / 4]
+super_poor_building_tax_halved_tier_5 = @[poor_tax_tier_5 / 4]
+super_poor_building_tax_halved_tier_6 = @[poor_tax_tier_6 / 4]
+super_poor_building_tax_halved_tier_7 = @[poor_tax_tier_7 / 4]
+super_poor_building_tax_halved_tier_8 = @[poor_tax_tier_8 / 4]
 
 # Special Mine Tax, for unique buildings and such
 special_mine_building_tax_tier_1 = @[special_mine_tax_tier_1]
@@ -1469,51 +1914,51 @@ good_building_maa_maintenance_tier_6 = @[good_maa_maintenance_tier_6]
 good_building_maa_maintenance_tier_7 = @[good_maa_maintenance_tier_7]
 good_building_maa_maintenance_tier_8 = @[good_maa_maintenance_tier_8]
 
-low_building_development_growth_tier_1 = @[low_development_growth_tier_1]
-low_building_development_growth_tier_2 = @[low_development_growth_tier_2]
-low_building_development_growth_tier_3 = @[low_development_growth_tier_3]
-low_building_development_growth_tier_4 = @[low_development_growth_tier_4]
-low_building_development_growth_tier_5 = @[low_development_growth_tier_5]
-low_building_development_growth_tier_6 = @[low_development_growth_tier_6]
-low_building_development_growth_tier_7 = @[low_development_growth_tier_7]
-low_building_development_growth_tier_8 = @[low_development_growth_tier_8]
-normal_building_development_growth_tier_1 = @[normal_development_growth_tier_1]
-normal_building_development_growth_tier_2 = @[normal_development_growth_tier_2]
-normal_building_development_growth_tier_3 = @[normal_development_growth_tier_3]
-normal_building_development_growth_tier_4 = @[normal_development_growth_tier_4]
-normal_building_development_growth_tier_5 = @[normal_development_growth_tier_5]
-normal_building_development_growth_tier_6 = @[normal_development_growth_tier_6]
-normal_building_development_growth_tier_7 = @[normal_development_growth_tier_7]
-normal_building_development_growth_tier_8 = @[normal_development_growth_tier_8]
+low_building_prosperity_growth_tier_1 = @[low_prosperity_growth_tier_1]
+low_building_prosperity_growth_tier_2 = @[low_prosperity_growth_tier_2]
+low_building_prosperity_growth_tier_3 = @[low_prosperity_growth_tier_3]
+low_building_prosperity_growth_tier_4 = @[low_prosperity_growth_tier_4]
+low_building_prosperity_growth_tier_5 = @[low_prosperity_growth_tier_5]
+low_building_prosperity_growth_tier_6 = @[low_prosperity_growth_tier_6]
+low_building_prosperity_growth_tier_7 = @[low_prosperity_growth_tier_7]
+low_building_prosperity_growth_tier_8 = @[low_prosperity_growth_tier_8]
 
-good_building_development_growth_tier_1 = @[good_development_growth_tier_1]
-good_building_development_growth_tier_2 = @[good_development_growth_tier_2]
-good_building_development_growth_tier_3 = @[good_development_growth_tier_3]
-good_building_development_growth_tier_4 = @[good_development_growth_tier_4]
-good_building_development_growth_tier_5 = @[good_development_growth_tier_5]
-good_building_development_growth_tier_6 = @[good_development_growth_tier_6]
-good_building_development_growth_tier_7 = @[good_development_growth_tier_7]
-good_building_development_growth_tier_8 = @[good_development_growth_tier_8]
+normal_building_prosperity_growth_tier_1 = @[normal_prosperity_growth_tier_1]
+normal_building_prosperity_growth_tier_2 = @[normal_prosperity_growth_tier_2]
+normal_building_prosperity_growth_tier_3 = @[normal_prosperity_growth_tier_3]
+normal_building_prosperity_growth_tier_4 = @[normal_prosperity_growth_tier_4]
+normal_building_prosperity_growth_tier_5 = @[normal_prosperity_growth_tier_5]
+normal_building_prosperity_growth_tier_6 = @[normal_prosperity_growth_tier_6]
+normal_building_prosperity_growth_tier_7 = @[normal_prosperity_growth_tier_7]
+normal_building_prosperity_growth_tier_8 = @[normal_prosperity_growth_tier_8]
 
-normal_building_development_growth_factor_tier_1 = @[normal_development_growth_factor_tier_1]
-normal_building_development_growth_factor_tier_2 = @[normal_development_growth_factor_tier_2]
-normal_building_development_growth_factor_tier_3 = @[normal_development_growth_factor_tier_3]
-normal_building_development_growth_factor_tier_4 = @[normal_development_growth_factor_tier_4]
-normal_building_development_growth_factor_tier_5 = @[normal_development_growth_factor_tier_5]
-normal_building_development_growth_factor_tier_6 = @[normal_development_growth_factor_tier_6]
-normal_building_development_growth_factor_tier_7 = @[normal_development_growth_factor_tier_7]
-normal_building_development_growth_factor_tier_8 = @[normal_development_growth_factor_tier_8]
+good_building_prosperity_growth_tier_1 = @[good_prosperity_growth_tier_1]
+good_building_prosperity_growth_tier_2 = @[good_prosperity_growth_tier_2]
+good_building_prosperity_growth_tier_3 = @[good_prosperity_growth_tier_3]
+good_building_prosperity_growth_tier_4 = @[good_prosperity_growth_tier_4]
+good_building_prosperity_growth_tier_5 = @[good_prosperity_growth_tier_5]
+good_building_prosperity_growth_tier_6 = @[good_prosperity_growth_tier_6]
+good_building_prosperity_growth_tier_7 = @[good_prosperity_growth_tier_7]
+good_building_prosperity_growth_tier_8 = @[good_prosperity_growth_tier_8]
 
-good_building_development_growth_factor_tier_1 = @[good_development_growth_factor_tier_1]
-good_building_development_growth_factor_tier_2 = @[good_development_growth_factor_tier_2]
-good_building_development_growth_factor_tier_3 = @[good_development_growth_factor_tier_3]
-good_building_development_growth_factor_tier_4 = @[good_development_growth_factor_tier_4]
-good_building_development_growth_factor_tier_5 = @[good_development_growth_factor_tier_5]
-good_building_development_growth_factor_tier_6 = @[good_development_growth_factor_tier_6]
-good_building_development_growth_factor_tier_7 = @[good_development_growth_factor_tier_7]
-good_building_development_growth_factor_tier_8 = @[good_development_growth_factor_tier_8]
+normal_building_prosperity_growth_factor_tier_1 = @[normal_prosperity_growth_factor_tier_1]
+normal_building_prosperity_growth_factor_tier_2 = @[normal_prosperity_growth_factor_tier_2]
+normal_building_prosperity_growth_factor_tier_3 = @[normal_prosperity_growth_factor_tier_3]
+normal_building_prosperity_growth_factor_tier_4 = @[normal_prosperity_growth_factor_tier_4]
+normal_building_prosperity_growth_factor_tier_5 = @[normal_prosperity_growth_factor_tier_5]
+normal_building_prosperity_growth_factor_tier_6 = @[normal_prosperity_growth_factor_tier_6]
+normal_building_prosperity_growth_factor_tier_7 = @[normal_prosperity_growth_factor_tier_7]
+normal_building_prosperity_growth_factor_tier_8 = @[normal_prosperity_growth_factor_tier_8]
 
-###ADDED - CHANGED
+good_building_prosperity_growth_factor_tier_1 = @[good_prosperity_growth_factor_tier_1]
+good_building_prosperity_growth_factor_tier_2 = @[good_prosperity_growth_factor_tier_2]
+good_building_prosperity_growth_factor_tier_3 = @[good_prosperity_growth_factor_tier_3]
+good_building_prosperity_growth_factor_tier_4 = @[good_prosperity_growth_factor_tier_4]
+good_building_prosperity_growth_factor_tier_5 = @[good_prosperity_growth_factor_tier_5]
+good_building_prosperity_growth_factor_tier_6 = @[good_prosperity_growth_factor_tier_6]
+good_building_prosperity_growth_factor_tier_7 = @[good_prosperity_growth_factor_tier_7]
+good_building_prosperity_growth_factor_tier_8 = @[good_prosperity_growth_factor_tier_8]
+
 low_building_tax_mult_tier_1 = @[low_tax_mult_tier_1]
 low_building_tax_mult_tier_2 = @[low_tax_mult_tier_2]
 low_building_tax_mult_tier_3 = @[low_tax_mult_tier_3]
@@ -1522,7 +1967,16 @@ low_building_tax_mult_tier_5 = @[low_tax_mult_tier_5]
 low_building_tax_mult_tier_6 = @[low_tax_mult_tier_6]
 low_building_tax_mult_tier_7 = @[low_tax_mult_tier_7]
 low_building_tax_mult_tier_8 = @[low_tax_mult_tier_8]
-###
+
+low_building_tax_mult_halved_tier_1 = @[low_tax_mult_tier_1 * 0.5]
+low_building_tax_mult_halved_tier_2 = @[low_tax_mult_tier_2 * 0.5]
+low_building_tax_mult_halved_tier_3 = @[low_tax_mult_tier_3 * 0.5]
+low_building_tax_mult_halved_tier_4 = @[low_tax_mult_tier_4 * 0.5]
+low_building_tax_mult_halved_tier_5 = @[low_tax_mult_tier_5 * 0.5]
+low_building_tax_mult_halved_tier_6 = @[low_tax_mult_tier_6 * 0.5]
+low_building_tax_mult_halved_tier_7 = @[low_tax_mult_tier_7 * 0.5]
+low_building_tax_mult_halved_tier_8 = @[low_tax_mult_tier_8 * 0.5]
+
 
 normal_building_tax_mult_tier_1 = @[normal_tax_mult_tier_1]
 normal_building_tax_mult_tier_2 = @[normal_tax_mult_tier_2]
@@ -1541,6 +1995,110 @@ good_building_tax_mult_tier_5 = @[good_tax_mult_tier_5]
 good_building_tax_mult_tier_6 = @[good_tax_mult_tier_6]
 good_building_tax_mult_tier_7 = @[good_tax_mult_tier_7]
 good_building_tax_mult_tier_8 = @[good_tax_mult_tier_8]
+
+#############################
+# Regular District Overrides #
+#############################
+
+bureaucratic_primary_province_size_baseline_tier_1 = 50
+bureaucratic_primary_province_size_baseline_tier_2 = 70
+bureaucratic_primary_province_size_baseline_tier_3 = 80
+bureaucratic_primary_province_size_baseline_tier_4 = 100
+bureaucratic_primary_vassal_tax_tier_1 = 0.025
+bureaucratic_primary_vassal_tax_tier_2 = 0.05
+bureaucratic_primary_vassal_tax_tier_3 = 0.1
+bureaucratic_primary_vassal_tax_tier_4 = 0.15
+bureaucratic_primary_influence_mult_per_paper_need = 0.01
+bureaucratic_governor_xp_gain_tier_1 = 0.05
+bureaucratic_governor_xp_gain_tier_2 = 0.10
+bureaucratic_governor_xp_gain_tier_3 = 0.15
+bureaucratic_governor_xp_gain_tier_4 = 0.20
+bureaucratic_governor_xp_gain_tier_5 = 0.25
+bureaucratic_tax_mult_tier_1 = 0.025
+bureaucratic_tax_mult_tier_2 = 0.05
+bureaucratic_tax_mult_tier_3 = 0.075
+bureaucratic_tax_mult_tier_4 = 0.10
+bureaucratic_tax_mult_tier_5 = 0.125
+bureaucratic_census_levy_size_tier_1 = 0.025
+bureaucratic_census_levy_size_tier_2 = 0.05
+bureaucratic_census_levy_size_tier_3 = 0.075
+bureaucratic_census_levy_size_tier_4 = 0.10
+bureaucratic_census_levy_size_tier_5 = 0.125
+bureaucratic_college_vassal_tax_tier_1 = 0.025
+bureaucratic_college_vassal_tax_tier_2 = 0.05
+bureaucratic_college_vassal_tax_tier_3 = 0.075
+bureaucratic_college_vassal_tax_tier_4 = 0.10
+bureaucratic_college_vassal_tax_tier_5 = 0.125
+bureaucratic_college_influence_per_luxury_need = 0.01
+bureaucratic_printing_influence_tier_1 = 0.01
+bureaucratic_printing_influence_tier_2 = 0.02
+bureaucratic_printing_influence_tier_3 = 0.03
+bureaucratic_printing_influence_tier_4 = 0.04
+bureaucratic_printing_influence_tier_5 = 0.05
+bureaucratic_printing_fascination_tier_1 = 0.01
+bureaucratic_printing_fascination_tier_2 = 0.02
+bureaucratic_printing_fascination_tier_3 = 0.03
+bureaucratic_printing_fascination_tier_4 = 0.04
+bureaucratic_printing_fascination_tier_5 = 0.05
+bureaucratic_palace_size_per_need = 5
+bureaucratic_tax_collector_aptitude_tier_1 = 4
+bureaucratic_tax_collector_aptitude_tier_2 = 8
+bureaucratic_tax_collector_aptitude_tier_3 = 12
+bureaucratic_tax_collector_aptitude_tier_4 = 16
+bureaucratic_tax_collector_aptitude_tier_5 = 20
+bureaucratic_governor_efficiency_tier_1 = 2
+bureaucratic_governor_efficiency_tier_2 = 4
+bureaucratic_governor_efficiency_tier_3 = 6
+bureaucratic_governor_efficiency_tier_4 = 8
+bureaucratic_governor_efficiency_tier_5 = 10
+capital_magistracy_prestige_per_court_position_tier_1 = 0.01
+capital_magistracy_prestige_per_court_position_tier_2 = 0.02
+capital_magistracy_prestige_per_court_position_tier_3 = 0.03
+capital_magistracy_prestige_per_court_position_tier_4 = 0.04
+capital_magistracy_prestige_per_court_position_tier_5 = 0.05
+capital_magistracy_domicile_influence_tier_1 = 0.02
+capital_magistracy_domicile_influence_tier_2 = 0.04
+capital_magistracy_domicile_influence_tier_3 = 0.06
+capital_magistracy_domicile_influence_tier_4 = 0.08
+capital_magistracy_domicile_influence_tier_5 = 0.1
+capital_magistracy_domicile_influence_per_luxury_need = 0.01
+capital_magistracy_province_size_baseline_tier_1 = 5
+capital_magistracy_province_size_baseline_tier_2 = 10
+capital_magistracy_province_size_baseline_tier_3 = 15
+capital_magistracy_province_size_baseline_tier_4 = 20
+capital_magistracy_province_size_baseline_tier_5 = 25
+capital_magistracy_eparch_aptitude_tier_1 = 2
+capital_magistracy_eparch_aptitude_tier_2 = 4
+capital_magistracy_eparch_aptitude_tier_3 = 8
+capital_magistracy_eparch_aptitude_tier_4 = 12
+capital_magistracy_eparch_aptitude_tier_5 = 16
+
+# Household district: court position aptitude from the Palace Library and the Inner Court
+household_aptitude_tier_1 = 2
+household_aptitude_tier_2 = 4
+household_aptitude_tier_3 = 6
+household_aptitude_tier_4 = 8
+household_aptitude_tier_5 = 10
+
+# Household district: artifact quality from the Court Workshops (the estate workshops give 5 and 10)
+court_workshops_artifact_quality_tier_1 = 2
+court_workshops_artifact_quality_tier_2 = 4
+court_workshops_artifact_quality_tier_3 = 6
+court_workshops_artifact_quality_tier_4 = 8
+court_workshops_artifact_quality_tier_5 = 10
+
+# Household district: spymaster find secrets progress from the Inner Court, as a percentage of the base total
+household_inner_court_find_secrets_tier_1 = 0.05
+household_inner_court_find_secrets_tier_2 = 0.075
+household_inner_court_find_secrets_tier_3 = 0.1
+household_inner_court_find_secrets_tier_4 = 0.125
+household_inner_court_find_secrets_tier_5 = 0.15
+
+# Household district: sell price modifiers, double the regular district buildings
+household_price_mult = 0.01
+
+# Household district: Court Workshops monthly artisan tax per need fill, a quarter above a normal tax building
+household_workshop_artisan_tax_per_need = 0.125
 
 ###############
 # Levy Values #
@@ -1654,6 +2212,16 @@ excellent_building_supply_limit_tier_8 = @[excellent_supply_limit_tier_8]
 # Garrison Values #
 ###################
 
+# Poor garrison
+poor_building_max_garrison_tier_1 = @[poor_max_garrison_tier_1]
+poor_building_max_garrison_tier_2 = @[poor_max_garrison_tier_2]
+poor_building_max_garrison_tier_3 = @[poor_max_garrison_tier_3]
+poor_building_max_garrison_tier_4 = @[poor_max_garrison_tier_4]
+poor_building_max_garrison_tier_5 = @[poor_max_garrison_tier_5]
+poor_building_max_garrison_tier_6 = @[poor_max_garrison_tier_6]
+poor_building_max_garrison_tier_7 = @[poor_max_garrison_tier_7]
+poor_building_max_garrison_tier_8 = @[poor_max_garrison_tier_8]
+
 # Normal garrison
 normal_building_max_garrison_tier_1 = @[normal_max_garrison_tier_1]
 normal_building_max_garrison_tier_2 = @[normal_max_garrison_tier_2]
@@ -1755,6 +2323,7 @@ poor_building_advantage_tier_5 = @[poor_advantage_tier_5]
 poor_building_advantage_tier_6 = @[poor_advantage_tier_6]
 poor_building_advantage_tier_7 = @[poor_advantage_tier_7]
 poor_building_advantage_tier_8 = @[poor_advantage_tier_8]
+
 # Normal advantage
 normal_building_advantage_tier_1 = @[normal_advantage_tier_1]
 normal_building_advantage_tier_2 = @[normal_advantage_tier_2]
@@ -1785,6 +2354,7 @@ standard_construction_time = @[standard_construction_time_base]
 slow_construction_time = @[slow_construction_time_base]
 very_slow_construction_time = @[very_slow_construction_time_base]
 
+
 #################################
 # Garrison Reinforcement Values #
 #################################
@@ -1798,23 +2368,253 @@ building_garrison_reinforcement_factor_tier_6 = @[garrison_reinforcement_factor_
 building_garrison_reinforcement_factor_tier_7 = @[garrison_reinforcement_factor_tier_7]
 building_garrison_reinforcement_factor_tier_8 = @[garrison_reinforcement_factor_tier_8]
 
-### NEW STUFF ###
+####################################
+# Rebuilding Great Building Values #
+####################################
 
-castle_building_tax_tier_1 = @[poor_tax_tier_2 * 3]
-castle_building_tax_tier_2 = @[poor_tax_tier_4 * 2.5 - 0.025]		#I hate this.	prev [poor_tax_tier_4 * 2.5 + 0.025]
-castle_building_tax_tier_3 = @[poor_tax_tier_6 * 2.5 - 0.100]
-castle_building_tax_tier_4 = @[poor_tax_tier_8 * 2.5 - 0.125]		#And this.
+standard_rebuild_value = 500
+ai_rebuild_value = 100
 
-temple_building_tax_tier_1 = @[poor_tax_tier_3 * 3 - 0.025]			#And all
-temple_building_tax_tier_2 = @[poor_tax_tier_5 * 3 - 0.125]			#Of those
-temple_building_tax_tier_3 = @[poor_tax_tier_7 * 3 - 0.175]			#A lot.
-temple_building_tax_tier_4 = @[good_tax_tier_6 * 2.25 - 0.25]
+######################################
+# Building Popular Opinion Values    #
+######################################
 
-city_building_tax_tier_1 = @[good_tax_tier_2 * 3]
-city_building_tax_tier_2 = @[good_tax_tier_4 * 2.5  -0.10]
-city_building_tax_tier_3 = @[good_tax_tier_6 * 2.5 - 0.35]			#This is fine
-city_building_tax_tier_4 = @[good_tax_tier_8 * 2.5 - 0.50]			#This too
+building_tiny_popular_opinion_value = 2
+building_miniscule_popular_opinion_value = 4
+building_minor_popular_opinion_value = 6
+building_moderate_popular_opinion_value = 8
+building_medium_popular_opinion_value = 10
+building_considerable_popular_opinion_value = 15
+building_major_popular_opinion_value = 20
+building_extreme_popular_opinion_value = 25
+building_massive_popular_opinion_value = 30
 
-# Unused because that makes tribes more interesting
-tribe_building_tax_tier_1 = @[poor_tax_tier_1 + 0.025 ]
-tribe_building_tax_tier_2 = @[poor_tax_tier_3 + 0.025 ]
+building_tiny_popular_opinion_gain = building_tiny_popular_opinion_value
+building_miniscule_popular_opinion_gain = building_miniscule_popular_opinion_value
+building_minor_popular_opinion_gain = building_minor_popular_opinion_value
+building_moderate_popular_opinion_gain = building_moderate_popular_opinion_value
+building_medium_popular_opinion_gain = building_medium_popular_opinion_value
+building_considerable_popular_opinion_gain = building_considerable_popular_opinion_value
+building_major_popular_opinion_gain = building_major_popular_opinion_value
+building_extreme_popular_opinion_gain = building_extreme_popular_opinion_value
+building_massive_popular_opinion_gain = building_massive_popular_opinion_value
+
+building_tiny_popular_opinion_loss = -2
+building_miniscule_popular_opinion_loss = -4
+building_minor_popular_opinion_loss = -6
+building_moderate_popular_opinion_loss = -8
+building_medium_popular_opinion_loss = -10
+building_considerable_popular_opinion_loss = -15
+building_major_popular_opinion_loss = -20
+building_extreme_popular_opinion_loss = -25
+building_massive_popular_opinion_loss = -30
+
+######################################################
+# Building Monthly Control Change Below Baseline     #
+######################################################
+
+building_tiny_monthly_control_below_baseline_value = 0.02
+building_negligible_monthly_control_below_baseline_value = 0.025
+building_miniscule_monthly_control_below_baseline_value = 0.05
+building_slight_monthly_control_below_baseline_value = 0.075
+building_modest_monthly_control_below_baseline_value = 0.08
+building_minor_monthly_control_below_baseline_value = 0.1
+building_moderate_monthly_control_below_baseline_value = 0.125
+building_notable_monthly_control_below_baseline_value = 0.15
+building_considerable_monthly_control_below_baseline_value = 0.2
+building_medium_monthly_control_below_baseline_value = 0.25
+building_significant_monthly_control_below_baseline_value = 0.3
+building_substantial_monthly_control_below_baseline_value = 0.4
+building_major_monthly_control_below_baseline_value = 0.5
+building_monumental_monthly_control_below_baseline_value = 1
+
+building_tiny_monthly_control_below_baseline_gain = building_tiny_monthly_control_below_baseline_value
+building_negligible_monthly_control_below_baseline_gain = building_negligible_monthly_control_below_baseline_value
+building_miniscule_monthly_control_below_baseline_gain = building_miniscule_monthly_control_below_baseline_value
+building_slight_monthly_control_below_baseline_gain = building_slight_monthly_control_below_baseline_value
+building_modest_monthly_control_below_baseline_gain = building_modest_monthly_control_below_baseline_value
+building_minor_monthly_control_below_baseline_gain = building_minor_monthly_control_below_baseline_value
+building_moderate_monthly_control_below_baseline_gain = building_moderate_monthly_control_below_baseline_value
+building_notable_monthly_control_below_baseline_gain = building_notable_monthly_control_below_baseline_value
+building_considerable_monthly_control_below_baseline_gain = building_considerable_monthly_control_below_baseline_value
+building_medium_monthly_control_below_baseline_gain = building_medium_monthly_control_below_baseline_value
+building_significant_monthly_control_below_baseline_gain = building_significant_monthly_control_below_baseline_value
+building_substantial_monthly_control_below_baseline_gain = building_substantial_monthly_control_below_baseline_value
+building_major_monthly_control_below_baseline_gain = building_major_monthly_control_below_baseline_value
+building_monumental_monthly_control_below_baseline_gain = building_monumental_monthly_control_below_baseline_value
+
+
+##########################################
+# AI Building Urgency Values             #
+##########################################
+
+ai_building_urgency_reference_grant = 5
+
+##########################################
+# AI Building Priority Tiers             #
+##########################################
+
+# Tier 1 is built first, tier 13 last. Inside a tier, lower building levels are built first.
+# A tier's last level sits one tier step above the next tier's first level, which matches BUILDING_MIN_SCORE_COMPARED_TO_BEST = 0.8.
+# Levels inside a tier are one level step apart. It is above 1.25 so that the 0.8 cutoff drops the next level despite score truncation.
+# The _top values are the factor of a tier's first level. Level spans: tiers 4 and 6 have levels 2-10, tier 5 2-5, tiers 7, 9 and 12 2-4, tiers 8, 11 and 13 1-5, the rest 1.
+@ai_building_tier_step = 1.25
+@ai_building_level_step = 1.3
+@ai_building_level_step_2 = @[ai_building_level_step * ai_building_level_step]
+@ai_building_level_step_3 = @[ai_building_level_step_2 * ai_building_level_step]
+@ai_building_level_step_4 = @[ai_building_level_step_3 * ai_building_level_step]
+@ai_building_level_step_8 = @[ai_building_level_step_4 * ai_building_level_step_4]
+@ai_building_tier_13_top = 1
+@ai_building_tier_12_top = @[ai_building_tier_13_top * ai_building_tier_step * ai_building_level_step_2]
+@ai_building_tier_11_top = @[ai_building_tier_12_top * ai_building_tier_step * ai_building_level_step_4]
+@ai_building_tier_10_top = @[ai_building_tier_11_top * ai_building_tier_step]
+@ai_building_tier_9_top = @[ai_building_tier_10_top * ai_building_tier_step * ai_building_level_step_2]
+@ai_building_tier_8_top = @[ai_building_tier_9_top * ai_building_tier_step * ai_building_level_step_4]
+@ai_building_tier_7_top = @[ai_building_tier_8_top * ai_building_tier_step * ai_building_level_step_2]
+@ai_building_tier_6_top = @[ai_building_tier_7_top * ai_building_tier_step * ai_building_level_step_8]
+@ai_building_tier_5_top = @[ai_building_tier_6_top * ai_building_tier_step * ai_building_level_step_3]
+@ai_building_tier_4_top = @[ai_building_tier_5_top * ai_building_tier_step * ai_building_level_step_8]
+@ai_building_tier_3_top = @[ai_building_tier_4_top * ai_building_tier_step]
+@ai_building_tier_2_top = @[ai_building_tier_3_top * ai_building_tier_step]
+@ai_building_tier_1_top = @[ai_building_tier_2_top * ai_building_tier_step]
+# Virtual tiers below tier 13, one tier step apart, so deferred tier 13 work keeps dropping by whole tiers.
+@ai_building_tier_14_top = @[ai_building_tier_13_top / ai_building_level_step_4 / ai_building_tier_step]
+@ai_building_tier_15_top = @[ai_building_tier_14_top / ai_building_tier_step]
+@ai_building_tier_16_top = @[ai_building_tier_15_top / ai_building_tier_step]
+@ai_building_tier_17_top = @[ai_building_tier_16_top / ai_building_tier_step]
+@ai_building_tier_18_top = @[ai_building_tier_17_top / ai_building_tier_step]
+@ai_building_tier_19_top = @[ai_building_tier_18_top / ai_building_tier_step]
+@ai_building_tier_20_top = @[ai_building_tier_19_top / ai_building_tier_step]
+@ai_building_tier_21_top = @[ai_building_tier_20_top / ai_building_tier_step]
+@ai_building_tier_22_top = @[ai_building_tier_21_top / ai_building_tier_step]
+@ai_building_defer_margin = 0.977
+
+ai_building_tier_step = @ai_building_tier_step
+ai_building_level_step = @ai_building_level_step
+ai_building_tier_1_factor = @ai_building_tier_1_top
+ai_building_tier_2_factor = @ai_building_tier_2_top
+ai_building_tier_3_factor = @ai_building_tier_3_top
+ai_building_tier_4_factor = @[ai_building_tier_4_top * ai_building_level_step]
+ai_building_tier_5_factor = @[ai_building_tier_5_top * ai_building_level_step]
+ai_building_tier_6_factor = @[ai_building_tier_6_top * ai_building_level_step]
+ai_building_tier_7_factor = @[ai_building_tier_7_top * ai_building_level_step]
+ai_building_tier_8_factor = @ai_building_tier_8_top
+ai_building_tier_9_factor = @[ai_building_tier_9_top * ai_building_level_step]
+ai_building_tier_10_factor = @ai_building_tier_10_top
+ai_building_tier_11_factor = @ai_building_tier_11_top
+ai_building_tier_12_factor = @[ai_building_tier_12_top * ai_building_level_step]
+ai_building_tier_13_factor = @ai_building_tier_13_top
+
+@ai_building_level_2_factor = @[1 / ai_building_level_step]
+@ai_building_level_3_factor = @[ai_building_level_2_factor / ai_building_level_step]
+@ai_building_level_4_factor = @[ai_building_level_3_factor / ai_building_level_step]
+@ai_building_level_5_factor = @[ai_building_level_4_factor / ai_building_level_step]
+@ai_building_level_6_factor = @[ai_building_level_5_factor / ai_building_level_step]
+@ai_building_level_7_factor = @[ai_building_level_6_factor / ai_building_level_step]
+@ai_building_level_8_factor = @[ai_building_level_7_factor / ai_building_level_step]
+@ai_building_level_9_factor = @[ai_building_level_8_factor / ai_building_level_step]
+@ai_building_level_10_factor = @[ai_building_level_9_factor / ai_building_level_step]
+ai_building_level_1_factor = 1
+ai_building_level_2_factor = @ai_building_level_2_factor
+ai_building_level_3_factor = @ai_building_level_3_factor
+ai_building_level_4_factor = @ai_building_level_4_factor
+ai_building_level_5_factor = @ai_building_level_5_factor
+ai_building_level_6_factor = @ai_building_level_6_factor
+ai_building_level_7_factor = @ai_building_level_7_factor
+ai_building_level_8_factor = @ai_building_level_8_factor
+ai_building_level_9_factor = @ai_building_level_9_factor
+ai_building_level_10_factor = @ai_building_level_10_factor
+
+# Each local defer moves a tier just below the tier three steps down
+# When two or all three conditions hold, defer_2 and defer_3 apply as well
+ai_building_tier_2_defer_1_factor = @[ai_building_tier_5_top / ai_building_tier_2_top * ai_building_defer_margin]
+ai_building_tier_3_defer_1_factor = @[ai_building_tier_6_top / ai_building_tier_3_top * ai_building_defer_margin]
+ai_building_tier_3_defer_2_factor = @[ai_building_tier_9_top / ai_building_tier_6_top * ai_building_defer_margin]
+ai_building_tier_4_defer_1_factor = @[ai_building_tier_7_top / ai_building_tier_4_top * ai_building_defer_margin]
+ai_building_tier_4_defer_2_factor = @[ai_building_tier_10_top / ai_building_tier_7_top * ai_building_defer_margin]
+ai_building_tier_4_defer_3_factor = @[ai_building_tier_13_top / ai_building_tier_10_top * ai_building_defer_margin]
+ai_building_tier_5_defer_1_factor = @[ai_building_tier_8_top / ai_building_tier_5_top * ai_building_defer_margin]
+ai_building_tier_5_defer_2_factor = @[ai_building_tier_11_top / ai_building_tier_8_top * ai_building_defer_margin]
+ai_building_tier_5_defer_3_factor = @[ai_building_tier_14_top / ai_building_tier_11_top * ai_building_defer_margin]
+ai_building_tier_6_defer_1_factor = @[ai_building_tier_9_top / ai_building_tier_6_top * ai_building_defer_margin]
+ai_building_tier_6_defer_2_factor = @[ai_building_tier_12_top / ai_building_tier_9_top * ai_building_defer_margin]
+ai_building_tier_6_defer_3_factor = @[ai_building_tier_15_top / ai_building_tier_12_top * ai_building_defer_margin]
+ai_building_tier_7_defer_1_factor = @[ai_building_tier_10_top / ai_building_tier_7_top * ai_building_defer_margin]
+ai_building_tier_7_defer_2_factor = @[ai_building_tier_13_top / ai_building_tier_10_top * ai_building_defer_margin]
+ai_building_tier_7_defer_3_factor = @[ai_building_tier_16_top / ai_building_tier_13_top * ai_building_defer_margin]
+ai_building_tier_8_defer_1_factor = @[ai_building_tier_11_top / ai_building_tier_8_top * ai_building_defer_margin]
+ai_building_tier_8_defer_2_factor = @[ai_building_tier_14_top / ai_building_tier_11_top * ai_building_defer_margin]
+ai_building_tier_8_defer_3_factor = @[ai_building_tier_17_top / ai_building_tier_14_top * ai_building_defer_margin]
+ai_building_tier_9_defer_1_factor = @[ai_building_tier_12_top / ai_building_tier_9_top * ai_building_defer_margin]
+ai_building_tier_9_defer_2_factor = @[ai_building_tier_15_top / ai_building_tier_12_top * ai_building_defer_margin]
+ai_building_tier_9_defer_3_factor = @[ai_building_tier_18_top / ai_building_tier_15_top * ai_building_defer_margin]
+ai_building_tier_10_defer_1_factor = @[ai_building_tier_13_top / ai_building_tier_10_top * ai_building_defer_margin]
+ai_building_tier_10_defer_2_factor = @[ai_building_tier_16_top / ai_building_tier_13_top * ai_building_defer_margin]
+ai_building_tier_10_defer_3_factor = @[ai_building_tier_19_top / ai_building_tier_16_top * ai_building_defer_margin]
+ai_building_tier_11_defer_1_factor = @[ai_building_tier_14_top / ai_building_tier_11_top * ai_building_defer_margin]
+ai_building_tier_11_defer_2_factor = @[ai_building_tier_17_top / ai_building_tier_14_top * ai_building_defer_margin]
+ai_building_tier_11_defer_3_factor = @[ai_building_tier_20_top / ai_building_tier_17_top * ai_building_defer_margin]
+ai_building_tier_12_defer_1_factor = @[ai_building_tier_15_top / ai_building_tier_12_top * ai_building_defer_margin]
+ai_building_tier_12_defer_2_factor = @[ai_building_tier_18_top / ai_building_tier_15_top * ai_building_defer_margin]
+ai_building_tier_12_defer_3_factor = @[ai_building_tier_21_top / ai_building_tier_18_top * ai_building_defer_margin]
+ai_building_tier_13_defer_1_factor = @[ai_building_tier_16_top / ai_building_tier_13_top * ai_building_defer_margin]
+ai_building_tier_13_defer_2_factor = @[ai_building_tier_19_top / ai_building_tier_16_top * ai_building_defer_margin]
+ai_building_tier_13_defer_3_factor = @[ai_building_tier_22_top / ai_building_tier_19_top * ai_building_defer_margin]
+
+# Scope: province
+ai_building_local_defer_count = {
+	value = 0
+	if = {
+		limit = { resource_district ?= { free_building_slots > 0 } }
+		add = 1
+	}
+	if = {
+		limit = { free_building_slots > 0 }
+		add = 1
+	}
+	if = {
+		limit = { free_district_slots > 0 }
+		add = 1
+	}
+}
+
+ai_building_local_defer_factor = 0.5
+ai_building_capital_factor = 1.1
+ai_building_absolute_priority = @[ai_building_tier_1_top * 100]
+
+##########################################
+# AI Building In-Tier Priorities         #
+##########################################
+
+# On a base of about 10, strong (+3) wins the pick outright against an equal rival, since 10/13 is below 0.8
+ai_building_priority_strong = 3
+ai_building_priority_medium = 2
+ai_building_priority_soft = 1
+# Below the 0.8 cutoff against an equal rival, but never zero.
+ai_building_identity_mismatch_factor = 0.75
+# Keeps a new military district below the 0.8 cutoff against the rural districts while the duchy has no rural economy.
+ai_military_unsecured_economy_factor = 0.6
+
+# Scope: province, expects scope:holder
+ai_maa_regiment_count_value = {
+	value = 0
+	scope:holder = {
+		every_maa_regiment = { add = 1 }
+	}
+}
+
+# Scope: province, expects scope:holder
+# Domain provinces whose county has a military district; each can host one stationed regiment.
+ai_military_station_slots_value = {
+	value = 0
+	scope:holder = {
+		every_directly_owned_province = {
+			limit = {
+				county = {
+					any_county_province = { province_has_district = military_district }
+				}
+			}
+			add = 1
+		}
+	}
+}

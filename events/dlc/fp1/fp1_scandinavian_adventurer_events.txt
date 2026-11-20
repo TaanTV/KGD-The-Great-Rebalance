@@ -11,6 +11,15 @@ scripted_trigger valid_scandinavian_adventurer = {
 	is_alive = yes
 	is_ruler = no
 	any_heir_title = { count = 0 }
+	#ADDED - stop it.
+	NOR = {
+		has_variable = fp1_scandinavian_adventurers_cooldown
+		has_any_court_position = yes
+		is_councillor = yes
+		is_concubine = yes
+		primary_spouse ?= { is_ruler = yes }
+		host ?= { OR = { government_has_flag = government_is_merchant government_has_flag = government_is_landless_adventurer } }
+	}
 }
 
 scripted_trigger significant_north_germanic_presence_trigger = {
@@ -53,6 +62,13 @@ scripted_trigger scattered_north_germanic_presence_trigger = {
 }
 
 scripted_trigger valid_adventurer_target_trigger = {
+	#ADDED
+	title_province = { 
+		NOR = {
+			has_holding_type = nomad_holding
+			has_holding_type = herder_holding
+		}
+	}
 	holder = {
 		NOR = {
 			#Filter out North Germanics & Normans.
@@ -62,6 +78,8 @@ scripted_trigger valid_adventurer_target_trigger = {
 			dynasty ?= {
 					has_dynasty_modifier = settled_norse_dynasty_modifier
 				}
+			#ADDED
+			government_has_flag = government_is_in_steppe
 			#Plus any places already being attacked.
 			top_liege = {
 				any_character_war = { using_cb = fp1_scandi_adventurer_conquest }
@@ -177,11 +195,11 @@ scripted_effect scandinavian_adventurer_start_war_effect = {
 			random_county_in_region = {
 				region = world_europe_north
 				limit = { valid_scandinavian_county_for_embark_trigger = yes }
-				# Weight up according to development, so armies tend to spawn in places where more randos would congregate.
+				# Weight up according to prosperity, so armies tend to spawn in places where more randos would congregate.
 				weight = {
 					modifier = {
 						add = {
-							value = development_level
+							value = prosperity_level
 							multiply = 10
 						}
 					}
@@ -210,15 +228,24 @@ scripted_effect scandinavian_adventurer_start_war_effect = {
 				add = {
 					#Base of 400.
 					add = scope:adventurer_target.holder.top_liege.max_military_strength
+					#Multiply that by the realm size of the target's top_liege.
+					#multiply = 1.5
 					#Account for allies, adding more without just nullifying them.
 					scope:adventurer_target.holder.top_liege = {
-						every_ally = { add = this.max_military_strength }
+						#every_ally = { add = this.max_military_strength }
+						#ADDED
+						add = { 
+							every_ally = { 
+								limit = { this_is_real_ally_of_target = { TARGET = scope:adventurer_target.holder.top_liege } }
+								add = this.current_military_strength 
+							} 
+							multiply = 0.8 
+						}
 					}
-					#ADDED - MOVED so allies wont screw you over that much
-					#Multiply that by the realm size of the target's top_liege.
-					multiply = 1.5
+					#ADDD 
+					multiply = 0.6
 					#Cut it off so things don't get too ridiculous.
-					max = 4000		#prev 8000
+					max = 3500		#prev 8000
 					#Make sure all adventurers have a moderately respectable force.
 					min = 500		#prev 1000
 				}
@@ -235,12 +262,19 @@ scripted_effect scandinavian_adventurer_start_war_effect = {
 					add = scope:adventurer_target.holder.top_liege.max_military_strength
 					#Account for allies, adding more without just nullifying them.
 					scope:adventurer_target.holder.top_liege = {
-						every_ally = { add = this.max_military_strength }
+						#every_ally = { add = this.max_military_strength }
+						#ADDED
+						add = { 
+							every_ally = { 
+								limit = { this_is_real_ally_of_target = { TARGET = scope:adventurer_target.holder.top_liege } }
+								add = this.current_military_strength 
+							} 
+							multiply = 0.8 
+						}
 					}
-					#moved this here so allies wont screw you over as much
 					multiply = 0.6
 					#Cut it off so things don't get too ridiculous.
-					max = 4000
+					max = 3500	#prev 4000
 					#Make sure all adventurers have a moderately respectable force.
 					min = 500
 				}

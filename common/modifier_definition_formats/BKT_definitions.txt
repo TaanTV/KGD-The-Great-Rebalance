@@ -81,3 +81,7 @@ drylands_fertility_growth_add = {
 	decimals = 2		#prev 1
 	dlc_feature = khans_of_the_steppe
 }
+
+wanua_government_vassal_opinion = {
+	decimals = 0
+}

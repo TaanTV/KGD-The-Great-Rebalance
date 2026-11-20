@@ -9,6 +9,8 @@
 	character_modifier = {
 		#counter_efficiency = 0.25
 		trait_track_wit_xp_gain_mult = 0.1
+		trait_track_aggressive_attacker_xp_gain_mult = commander_trait_perk_xp_gain_mult
+		trait_track_unyielding_defender_xp_gain_mult = commander_trait_perk_xp_gain_mult
 		#ADDED
 		enemy_hard_casualty_modifier = 0.1
 		army_damage_mult = 0.05
@@ -49,14 +51,17 @@ hit_and_run_perk = {
 	parent = organized_retreat_perk
 	
 	character_modifier = {
-		retreat_losses = -0.25
-		pikemen_toughness_mult = 0.3
-		archers_damage_mult = 0.3
-		heavy_infantry_toughness_mult = 0.15
-		heavy_infantry_damage_mult = 0.15
-		skirmishers_damage_mult = 0.2
+		retreat_losses = -0.2
+		pikemen_toughness_mult = 0.2
+		archers_damage_mult = 0.2
+		heavy_infantry_toughness_mult = 0.1
+		heavy_infantry_damage_mult = 0.1
+		skirmishers_damage_mult = 0.1
 		skirmishers_toughness_mult = 0.1
 		trait_track_bow_xp_gain_mult = 0.1
+		trait_track_horse_xp_gain_mult = 0.1
+		trait_track_cautious_leader_xp_gain_mult = commander_trait_perk_xp_gain_mult
+		trait_track_reckless_xp_gain_mult = commander_trait_perk_xp_gain_mult
 	}
 	
 	government_character_modifier = {

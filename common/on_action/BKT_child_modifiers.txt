@@ -2,11 +2,11 @@
 # tested after age has increased
 on_birthday = {
 	on_actions = {
-		on_child_birthday
+		bkt_on_child_birthday_traits
 	}
 }
 
-on_child_birthday = {
+bkt_on_child_birthday_traits = {
 	trigger = {
 		is_adult = no
 	}
@@ -31,17 +31,130 @@ on_child_birthday = {
 			}
 		}
 	}
+	on_actions = {
+		delay = { days = { 30 150 } }
+		bkt_on_child_birthday_tenets
+		delay = { days = { 180 330 } }
+		bkt_on_child_birthday_tenets
+	}
 }
 
 #sorry im lazy just re-do the stuff above.
 on_birth_child = {
 	on_actions = {
-		on_child_birthday
+		bkt_on_child_birthday_traits
 	}
 }
 
 on_character_created = {
 	on_actions = {
-		on_child_birthday
+		bkt_on_child_birthday_traits
+	}
+}
+
+#im sorry but i will shove it into this file i aint creating a new one for this one on_action
+bkt_on_child_birthday_tenets = {
+	trigger = { age > 4 is_playable_character = yes }
+	effect = {
+		#keep in mind this happens like 20 times total
+		random = {
+			chance = {
+				add = 2
+				add = learning
+				max = 10		#sorry 40 learning babies, not this time
+			}
+			
+			save_scope_as = child_scope
+			if = {
+				limit = {
+					any_relation = {
+						type = guardian
+						is_available = yes
+					}		
+				}
+				random_relation = {
+					type = guardian
+					save_scope_as = guardian
+				}
+			}
+			else_if = {
+				limit = {
+					exists = court_owner.court_position:court_tutor_court_position
+				}
+				court_owner.court_position:court_tutor_court_position ?= {
+					save_scope_as = guardian
+				}
+			}
+			else_if = {
+				limit = {
+					exists = court_owner.court_position:court_guru_court_position
+				}
+				court_owner.court_position:court_guru_court_position ?= {
+					save_scope_as = guardian
+				}
+			}
+			else_if = {
+				limit = { exists = host }
+				random = {
+					chance = 50
+					host = { 
+						save_scope_as = guardian
+					}
+				}
+			}
+			
+			if = {
+				limit = {
+					exists = scope:guardian
+					scope:guardian ?= {
+						any_character_tenet = {
+							knowledge_filter = known
+							NOR = {
+								scope:child_scope = { knows_tenet = prev }
+								scope:guardian.rite ?= {
+									has_tenet_status = {
+										tenet = prev
+										status = prohibited
+									}
+								}
+								AND = {
+									tenet_has_virtue = lustful
+									scope:child_scope.age < 13
+								}
+							}
+						}
+					}
+				}
+				scope:guardian = {
+					random_character_tenet = {
+						knowledge_filter = known
+						limit = {
+							NOR = {
+								scope:child_scope = { knows_tenet = prev }
+								scope:guardian.rite ?= {
+									has_tenet_status = {
+										tenet = prev
+										status = prohibited
+									}
+								}
+								AND = {
+									tenet_has_virtue = lustful
+									scope:child_scope.age < 13
+								}
+							}
+						}
+						save_scope_as = passive_learn_tenet
+					}
+					save_scope_as = passive_learn_source
+				}
+				add_known_tenet = scope:passive_learn_tenet
+				send_interface_message = {
+					type = msg_passive_learned_tenet
+					desc = msg_passive_learned_tenet_desc
+					left_icon = scope:passive_learn_source
+					right_icon = scope:passive_learn_tenet
+				}
+			}
+		}
 	}
 }

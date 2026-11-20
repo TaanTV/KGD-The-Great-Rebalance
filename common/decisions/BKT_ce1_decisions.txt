@@ -155,7 +155,20 @@ isolate_capital_decision = {
 	}
 
 	ai_potential = {
+		is_landed = yes
+		highest_held_title_tier >= tier_county
 		NOT = { has_character_flag = ai_capital_isolation_cooldown }
+		# Mirrors the is_ai branch of is_shown
+		#ADDED changed redid this whole logic so AI is a bit more proactive in handling plagues
+		capital_county ?= {
+			OR = {
+				has_county_modifier = isolate_capital_decision_modifier
+				has_province_with_epidemic = { intensity = any }
+				any_title_to_title_neighboring_and_across_water_county = {
+					has_province_with_epidemic = { intensity = any }
+				}	
+			}
+		}
 	}
 
 	ai_will_do = {

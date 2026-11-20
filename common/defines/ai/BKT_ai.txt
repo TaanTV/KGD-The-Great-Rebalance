@@ -240,6 +240,34 @@
 	#
 	RAID_COOLDOWN_DAYS = 1095			#prev 1825
 	
+	### Brief: ARMY_SIZE_COMPARED_TO_SUPPLY ( int32 )
+	# How much larger than the supply are we willing to make a stack?
+	# "Supply" here refers to the same number as
+	# MIN_SUPPLY_COMPARED_TO_AVERAGE_SUPPLY_FACTOR does
+	#
+	ARMY_SIZE_COMPARED_TO_SUPPLY = 6	#prev 10
+
+	### Brief: RESUPPLY_COOLDOWN_DAYS ( int32 )
+	# If supplying is interrupted due to insufficient supply, wait for
+	# this long before trying to resupply again.
+	#
+	RESUPPLY_COOLDOWN_DAYS = 180		#prev 250
+
+	### Brief: CLOSE_TO_VICTORY_WAR_SCORE ( int )
+	# When the AI has this much war score or more, it considers itself
+	# close to victory, and will prioritize ongoing objectives that can
+	# finish the war.
+	#
+	CLOSE_TO_VICTORY_WAR_SCORE = 70		#prev 80
+
+	### Brief: CLOSE_TO_VICTORY_REMAINING_OCCUPATION_WAR_SCORE ( int )
+	# When the AI fulfills CLOSE_TO_VICTORY_WAR_SCORE and it it can
+	# gain this value or more war score from sieges, it will prioritize
+	# sieges. This will cause CLOSE_TO_VICTORY_REMAINING_OCCUPATION_MULTIPLIER
+	# to apply to the TARGET_WILL_BREAK_ONGOING_SIEGE penalty.
+	#
+	CLOSE_TO_VICTORY_REMAINING_OCCUPATION_WAR_SCORE = 50	#prev 20
+	
 	### Brief: DISEMBARK_POWER_PENALTY ( FixedPoint )
 	# Multiplier to apply to a embarked unit's power projection onto
 	# a province.

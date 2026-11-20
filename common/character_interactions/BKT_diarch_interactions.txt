@@ -63,19 +63,19 @@ diarch_coup_liege_interaction = {
 		OR = {
 			is_designated_diarch = yes
 			AND = {
-				is_diarch_of_target = liege
 				exists = liege
+				is_diarch_of_target = liege
 			}
 		}
-	}
-
-	is_shown = {
 		liege ?= {
 			OR = {
 				NOT = { government_allows = deny_powerful_vassal }
 				government_has_flag = government_has_powerful_families
 			}
 		}
+	}
+
+	is_shown = {
 		# secondary_recipient is always saved whenever you use it on anyone who isn't yourself or your liege, so we use this fact to validate it after the redirect, otherwise it will show up on every other ruler in the game
 		trigger_if = {
 			limit = {
@@ -209,7 +209,7 @@ diarch_coup_liege_interaction = {
 		if = {
 			limit = { exists = scope:secondary_recipient }
 			scope:actor = {
-				# Scope:secondary_recipient joins your conspiracy
+				# Scope:secondary_recipient joins your conspiracy.
 				custom_tooltip = diarch_coup_liege_interaction.tt.secondary_recipient.joins_conspiracy
 				## Send a notification just for a bit of extra feedback.
 				send_interface_toast = {
@@ -845,7 +845,7 @@ swing_scales_currency_interaction = {
 		is_shown = {
 			# Filter out for the liege in vizierates - they can mulct the vizier, so we don't give them the chance to spend that gold back.
 			interaction_actor_is_liege_with_vizierate_trigger = no
-			NOT = { religious_head_or_challenger ?= scope:recipient }
+			NOT = { scope:actor.religious_head_or_challenger ?= scope:recipient }
 		}
 		is_valid = {
 			diarch_swing_scales_valid_shared_hof_trigger = yes
@@ -1205,28 +1205,19 @@ diarch_swing_scales_currency_interaction = {
 	interface_priority = 20
 
 	is_available = {
-		trigger_if = {
-			limit = { is_ai = yes }
-			# Double check due to some irritating errors.
-			is_diarch = yes
-			# Loyal diarchs don't engage in skullduggery.
-			diarch_loyalty < diarch_loyalty_visibly_loyal_threshold
-			liege ?= { has_active_diarchy = yes }
+		is_ai = yes
+		is_playable_character = no
+		# Double check due to some irritating errors.
+		is_diarch = yes
+		liege ?= { has_active_diarchy = yes }
+		# Loyal diarchs don't engage in skullduggery.
+		diarch_loyalty < diarch_loyalty_visibly_loyal_threshold
 		#ADDED - max swing requirement, dont waste your resources! 
 		liege = { diarchy_swing <= 90 }
-		}
-		is_playable_character = no
-		is_ai = yes 
 	}
 
 	is_shown = {
 		scope:recipient = scope:actor.liege
-		# This is for landless diarchs only, and we pre-filter them, so we don't really care about this block.
-		## But filter out players anyway for that _seamless_ debug play experience.
-		scope:actor = { 
-			is_ai = yes 
-			is_playable_character = no
-		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -1374,7 +1365,7 @@ diarch_swing_scales_currency_interaction = {
 	}
 	# HoF
 	send_option = {
-		is_shown = { NOT = { religious_head_or_challenger ?= scope:recipient } }
+		is_shown = { NOT = { scope:actor.religious_head_or_challenger ?= scope:recipient } }
 		is_valid = { diarch_swing_scales_valid_shared_hof_trigger = yes }
 		# Top of the prio order for enablement.
 		starts_enabled = { diarch_swing_scales_valid_shared_hof_trigger = yes }
@@ -1534,6 +1525,14 @@ liege_dismiss_entrenched_regency_interaction = {
 		scope:actor = {
 			# If you're not in a diarchy, we don't care.
 			diarch ?= scope:recipient
+			#ADDED - dont dismiss diarchs if you're their loyal puppet
+			OR = {
+				NAND = { 
+					puppeteer ?= scope:recipient 
+					"opinion(scope:recipient)" > 0
+				}
+				is_ai = no
+			}
 		}
 	}
 
@@ -2371,6 +2370,7 @@ declare_me_regent_interaction = {
 
 	is_available = {
 		is_designated_diarch = no
+		#ADDED
 		trigger_if = {
 			limit = { is_ai = yes }
 			#ADDED
@@ -2486,7 +2486,7 @@ declare_me_regent_interaction = {
 			scope:recipient = {
 				set_variable = {
 					name = declare_me_regent_ai_cooldown
-					years = 1
+					years = 3
 				}
 				set_variable = {
 					name = declare_me_regent_soft_ai_cooldown
@@ -2708,7 +2708,7 @@ declare_me_regent_interaction = {
 			desc = declare_me_regent_interaction.tt.actor_is.extended_family
 			is_extended_family_of = scope:actor
 			# Make sure this isn't cancelled out by the incumbent sharing the relation.
-			diarchy_successor = {
+			diarchy_successor ?= {
 				NOT = {
 					is_extended_family_of = scope:recipient
 				}

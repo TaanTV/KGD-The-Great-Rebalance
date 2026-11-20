@@ -86,22 +86,20 @@ co_monarchy = {
 	liege_modifier = {
 		name = from_co_monarch_diplomacy_vassal_opinion
 
-		#vassal_opinion = 1
+		vassal_opinion = 1
 		#scale = {
 		#	add = diplomacy
 		#	max = 40
 		#}
 		#ADDED
-		#domain_limit = 1
-		domain_tax_mult = 0.01
 		scale = {
-			add = stewardship
-			multiply = 2
 			add = diplomacy
-			multiply = 0.5
-			ceiling = yes
+			add = diplomacy		#Dip matters more.
+			add = stewardship
+			add = intrigue
+			divide = 2		#Not quite average, also a bit better than entrenched regents
+			floor = yes
 			min = 5
-			max = 25
 		}
 	}
 

@@ -6,7 +6,7 @@ holy_order_barony_value_calculation = {
 	add = {
 		value = scope:request_target.medium_gold_value
 		multiply = {
-			value = county.development_level
+			value = county.prosperity_level
 			multiply = 0.05		#prev 0.1
 		}
 	}

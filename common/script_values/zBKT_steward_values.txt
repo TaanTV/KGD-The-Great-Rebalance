@@ -4,7 +4,7 @@ steward_collect_taxes_scale_base = {
 	add = stewardship
 	divide = 2
 	#ADDED - not worth it.
-	multiply = 1.5
+	#multiply = 1.5
 }
 
 steward_collect_taxes_perk_bonus_scale = {

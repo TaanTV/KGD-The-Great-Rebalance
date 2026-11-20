@@ -1,10 +1,20 @@
 ﻿benevolent_intent_perk = {
 	lifestyle = diplomacy_lifestyle
 	tree = majesty
-	
+
 	position = { 0 0 }
 	icon = node_diplomacy
-	
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = benevolent_intent_perk_merchant_name
+			}
+			desc = benevolent_intent_perk_name
+		}
+	}
+
 	auto_selection_weight = {
 		value = 11
 		if = {
@@ -38,7 +48,7 @@
 		flag = government_is_mandala
 		tributary_opinion = 10
 	}
-	
+
 	effect = {
 		if = {
 			limit = {
@@ -48,11 +58,18 @@
 				text = adventurer_benevolent_intent_perk_effect
 			}
 		}
+		if = {
+			limit = {
+				government_has_flag = government_is_merchant
+			}
+			custom_description_no_bullet = {
+				text = merchant_benevolent_intent_perk_effect
+			}
+		}
 	}
-	
+
 	character_modifier = {
-		sway_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value	#prev medium_scheme_phase_duration_bonus_value
-		# Wtf do u mean "medium", sway has 1 phase! Pdx PLEASE.
+		sway_scheme_phase_duration_add = medium_scheme_phase_duration_bonus_value
 	}
 }
 
@@ -60,20 +77,34 @@
 inspiring_rule_perk = {
 	lifestyle = diplomacy_lifestyle
 	tree = majesty
-	
+
 	position = { 0 1 }
 	icon = node_diplomacy
-	
+
 	parent = benevolent_intent_perk
-	
+
 	name = {
 		first_valid = {
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = inspiring_rule_perk_merchant_name
+			}
 			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = inspiring_rule_perk_adventurer_name
 			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_republic }
+				desc = inspiring_rule_perk_republic_name
+			}
 			desc = inspiring_rule_perk_name
 		}
+	}
+
+	government_character_modifier = {
+		flag = government_uses_landless_lifestyle_perks
+		invert_check = yes
+		urban_tax_mult = lifestyle_perk_urban_tax_mult
 	}
 
 	effect = {
@@ -85,15 +116,23 @@ inspiring_rule_perk = {
 				text = adventurer_inspiring_rule_perk_effect
 			}
 		}
+		if = {
+			limit = {
+				government_has_flag = government_is_merchant
+			}
+			custom_description_no_bullet = {
+				text = merchant_inspiring_rule_perk_effect
+			}
+		}
 	}
-	
+
 	government_character_modifier = {
 		flag = has_unique_government_perks
 		invert_check = yes
 		monthly_prestige_gain_per_happy_powerful_vassal_mult = 0.04
 		councillor_opinion = 5		#prev 10
 	}
-	
+
 	government_character_modifier = {
 		flag = government_is_nomadic
 		blood_brother_renown_mult = 0.02 # Counts as one more living member
@@ -102,19 +141,29 @@ inspiring_rule_perk = {
 	government_character_modifier = {
 		flag = government_is_japan_feudal
 		monthly_prestige_gain_per_court_position_mult = 0.01
-		councillor_opinion = 5		#prev 
+		councillor_opinion = 5		#prev
 	}
 
 	government_character_modifier = {
 		flag = government_is_japan_administrative
 		monthly_prestige_gain_per_court_position_mult = 0.01
-		councillor_opinion = 5		#prev 
+		councillor_opinion = 5		#prev
+	}
+
+	government_character_modifier = {
+		flag = government_is_merchant
+		monthly_prestige_gain_per_court_position_add = 0.05
 	}
 
 	government_character_modifier = {
 		flag = government_is_mandala
 		monthly_piety_gain_per_court_position_mult = 0.01
-		councillor_opinion = 5		#prev 
+		councillor_opinion = 5		#prev
+	}
+
+	government_character_modifier = {
+		flag = government_is_republic
+		character_capital_popular_opinion_add = 10
 	}
 }
 
@@ -122,15 +171,19 @@ inspiring_rule_perk = {
 true_ruler_perk = {
 	lifestyle = diplomacy_lifestyle
 	tree = majesty
-	
+
 	position = { 1 2 }
 	icon = node_diplomacy
-	
+
 	parent = inspiring_rule_perk
 	parent = praetorian_guard_perk
-	
+
 	name = {
 		first_valid = {
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = true_ruler_perk_merchant_name
+			}
 			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = true_ruler_perk_adventurer_name
@@ -138,11 +191,12 @@ true_ruler_perk = {
 			desc = true_ruler_perk_name
 		}
 	}
-	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
-		invert_check = yes
+		flag = government_uses_legitimacy
 		monthly_prestige_gain_per_legitimacy_level_add = 0.15
+	}
+	government_character_modifier = {
+		flag = government_uses_royal_court
 		court_grandeur_baseline_add = 15
 	}
 	government_character_modifier = {
@@ -157,6 +211,25 @@ true_ruler_perk = {
 			}
 			custom_tooltip = {
 				text = adventurer_true_ruler_perk_effect
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_merchant
+			}
+			custom_description_no_bullet = {
+				text = true_ruler_perk_merchant_effect
+			}
+			hidden_effect = {
+				update_public_credit_perk_effect = yes
+			}
+		}
+		else_if = {
+			limit = {
+				government_has_flag = government_is_republic
+			}
+			custom_description_no_bullet = {
+				text = republic_true_ruler_perk_effect
 			}
 		}
 		else = {
@@ -189,37 +262,53 @@ true_ruler_perk = {
 writing_history_perk = {
 	lifestyle = diplomacy_lifestyle
 	tree = majesty
-	
+
 	position = { 1 3 }
 	icon = node_diplomacy
-	
+
 	parent = true_ruler_perk
-	
+
 	name = {
 		first_valid = {
 			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = writing_history_perk_adventurer_name
 			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = writing_history_perk_merchant_name
+			}
 			desc = writing_history_perk_name
 		}
 	}
-	
+
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
-		invert_check = yes
+		flag = government_uses_legitimacy
 		legitimacy_gain_mult = 0.05
 		owned_legend_spread_mult = 0.25
+	}
+
+	government_character_modifier = {
+		flag = government_is_republic
+		trade_competitiveness_add = 5
+	}
+
+	government_character_modifier = {
+		flag = government_is_merchant
+		monthly_prestige = 0.25
 	}
 
 	character_modifier = {
 		#stress_loss_per_prestige_level = 0.1		#Nope.
 	}
-	
+
 	effect = {
 		if = {
 			limit = {
-				NOT = { government_has_flag = government_is_landless_adventurer }
+				NOR = {
+					government_has_flag = government_is_landless_adventurer
+					government_has_flag = government_is_merchant
+				}
 			}
 			custom_description_no_bullet = {
 				text = writing_history_perk_effect
@@ -228,7 +317,7 @@ writing_history_perk = {
 		if = {
 			limit = {
 				government_has_flag = government_is_landless_adventurer
-			}	
+			}
 			custom_tooltip = {
 				text = adventurer_writing_history_perk_effect
 			}

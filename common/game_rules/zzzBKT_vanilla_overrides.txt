@@ -1,36 +1,4 @@
-﻿### Shamelessly stolen from the amazing MND mod. ###
-#difficulty = {
-#	
-#	categories = {
-#		difficulty ai
-#	}
-#	
-#	default = roleplay_difficulty
-#
-#	very_easy_difficulty = {
-#		apply_modifier = player:very_easy_difficulty
-#	}
-#	
-#	easy_difficulty = {
-#		apply_modifier = player:easy_difficulty
-#	}
-#	
-#	normal_difficulty = {
-#
-#	}
-#
-#	roleplay_difficulty = {
-#		apply_modifier = player:roleplay_difficulty_player
-#		apply_modifier = ai:roleplay_difficulty_ai
-#	}
-#	
-#	rolehard_difficulty = {
-#		apply_modifier = player:rolehard_difficulty_player
-#		apply_modifier = ai:rolehard_difficulty_ai
-#	}
-#}
-
-random_harm_target = {
+﻿random_harm_target = {
 		
 	categories = {
 		difficulty health

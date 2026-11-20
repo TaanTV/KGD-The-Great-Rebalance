@@ -28,18 +28,27 @@
 	
 	faith_character_modifier = {
 		doctrine = doctrine_theocracy_lay_clergy
-		zealot_opinion = 10
+		zealot_opinion = 5
 	}
 	faith_character_modifier = {
 		doctrine = doctrine_theocracy_temporal
-		clergy_opinion = 10
-		#ADDED - 10 opinion with religious head is a bit much
-		religious_head_opinion = -5	
+		clergy_opinion = 5
 	}
 
 	government_character_modifier = {
 		flag = government_has_merit
 		monthly_merit = 0.5
+	}
+
+	government_character_modifier = {
+		flag = government_uses_landless_lifestyle_perks
+		invert_check = yes
+		religious_tax_mult = lifestyle_perk_religious_tax_mult
+	}
+
+	government_character_modifier = {
+		flag = government_is_theocracy
+		character_spiritual_fulfillment_gain_mult = 0.15
 	}
 	effect = {
 		if = {
@@ -68,6 +77,10 @@ prophet_perk = {
 				desc = prophet_perk_adventurer_name
 			}
 			triggered_desc = {
+				trigger = { government_has_flag = government_has_merchant_company }
+				desc = prophet_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { government_has_flag = government_has_merit }
 				desc = grand_preceptor_court_position #Grand Preceptor
 			}
@@ -84,7 +97,7 @@ prophet_perk = {
 	government_character_modifier = {
 		flag = government_has_merit
 		invert_check = yes
-		monthly_piety_gain_per_knight_mult = 0.02
+		monthly_piety_gain_per_knight_mult = 0.01
 	}
 
 	government_character_modifier = {
@@ -100,9 +113,33 @@ prophet_perk = {
 		if = {
 			limit = {
 				government_allows = state_faith
+				NOT = { government_has_flag = government_is_merchant }
 			}
 			custom_description_no_bullet = {
 				text = cheaper_change_state_faith_cost_effect
+			}
+		}
+
+
+		if = {
+			limit = {
+				government_has_flag = government_has_merchant_company
+			}
+			custom_description_no_bullet = {
+				text = prophet_perk_merchant_effect
+			}
+		}
+
+		if = {
+			limit = {
+				has_pam_dlc_trigger = yes
+				NOR = {
+					faith.religious_head ?= this
+					has_trait = herald
+				}
+			}
+			custom_description_no_bullet = {
+				text = prophet_perk_living_word_effect
 			}
 		}
 
@@ -136,7 +173,14 @@ church_and_state_perk = {
 				desc = church_and_state_perk_adventurer_name
 			}
 			triggered_desc = {
-				trigger = { government_has_flag = government_uses_domicile_but_not_adventurer }
+				trigger = { government_has_flag = government_is_merchant }
+				desc = personal_piety
+			}
+			triggered_desc = {
+				trigger = {
+					government_has_flag = government_uses_domicile_but_not_adventurer
+					NOT = { government_has_flag = government_is_ecclesiastical }
+				}
 				desc = personal_piety
 			}
 			desc = church_and_state_perk_name
@@ -149,19 +193,37 @@ church_and_state_perk = {
 	}
 	faith_character_modifier = {
 		doctrine = doctrine_theocracy_temporal
-		realm_priest_opinion = 25		#prev 50
-		#ADDED
-		#theocracy_government_tax_contribution_add = 0.05
+		realm_priest_opinion = 25
 	}
 
 	government_character_modifier = {
 		flag = government_is_nomadic
-		zealot_opinion = 25			#prev 50
-		same_faith_opinion = 5		#prev 15
+		zealot_opinion = 25
+		same_faith_opinion = 5
 	}
 	government_character_modifier = {
 		flag = government_uses_domicile_but_not_adventurer
 		domicile_monthly_piety_mult = 0.05
+	}
+	government_character_modifier = {
+		flag = government_is_merchant
+		domicile_monthly_piety_mult = 1
+	}
+	government_character_modifier = {
+		flag = government_uses_landless_lifestyle_perks
+		invert_check = yes
+		temple_district_district_build_gold_cost = lifestyle_perk_district_build_cost_discount
+		religious_community_district_district_build_gold_cost = lifestyle_perk_district_build_cost_discount
+	}
+	government_character_modifier = {
+		flag = government_is_mandala
+		mandala_district_district_build_gold_cost = lifestyle_perk_district_build_cost_discount
+	}
+
+	#Ecclesiastical rulers never have a realm priest of their own, so the temporal branch above is dead for them
+	government_character_modifier = {
+		flag = government_is_ecclesiastical
+		liege_opinion = 15		#prev 25
 	}
 	
 	effect = {
@@ -204,10 +266,27 @@ defender_of_the_faith_perk = {
 	faith_character_modifier = {
 		doctrine = doctrine_pluralism_pluralistic
 		diplomacy_per_piety_level = 1
-		monthly_piety_gain_mult = 0.2
+		monthly_piety_gain_mult = 0.1
+	}
+
+	government_character_modifier = {
+		flag = government_is_theocracy
+		garrison_size = 0.2
+		additional_fort_level = 1
 	}
 	
 	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_has_merchant_company
+			}
+			custom_description_no_bullet = {
+				text = defender_of_the_faith_perk_merchant_effect
+			}
+			hidden_effect = {
+				update_merchant_defender_of_the_faith_effect = yes
+			}
+		}
 		if = {
 			limit = {
 				government_has_flag = government_is_landless_adventurer

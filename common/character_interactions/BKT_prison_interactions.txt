@@ -384,16 +384,12 @@
 		}
 		scope:puppet_or_actor = {
 			if = {
-				limit = {
-					has_title = title:e_minister_of_justice
-				}
+				limit = { has_title = title:e_minister_of_justice }
 				if = {
 					limit = {
 						NOR = {
 							has_imprisonment_reason = scope:recipient
-							scope:recipient.liege = {
-								has_imprisonment_reason = scope:recipient
-							}
+							scope:recipient.liege = { has_imprisonment_reason = scope:recipient }
 							scope:hook = yes
 						}
 						any_character_situation = {
@@ -413,18 +409,14 @@
 					}
 				}
 				if = {
-					limit = {
-						government_allows = merit
-					}
+					limit = { government_allows = merit }
 					change_merit = {
 						value = minor_merit_gain
 						multiply = scope:recipient.highest_held_title_tier
 					}
 				}
 				if = {
-					limit = {
-						government_has_flag = government_has_influence
-					}
+					limit = { government_has_flag = government_has_influence }
 					change_influence = {
 						value = minor_influence_gain
 						multiply = scope:recipient.highest_held_title_tier
@@ -437,6 +429,23 @@
 					}
 				}
 			}
+			#Guelphs & Ghibellines
+			if = {
+				limit = {
+					scope:recipient = {
+						NOR = {
+							is_guelph_leader_trigger = yes
+							is_ghibelline_leader_trigger = yes
+						}
+					}
+				}
+				gg_triggered_catalyst_effect = {
+					ACTOR = scope:actor
+					RECIPIENT = scope:recipient
+					CATALYST = catalyst_attempt_imprison_opposite_party
+				}
+			}
+			gg_involvement_catalyst_effect = yes
 		}
 		if = {
 			limit = { scope:hook = yes }
@@ -463,9 +472,7 @@
 		scope:puppet_or_actor = {
 			trigger_event = char_interaction.0231
 			if = {
-				limit = {
-					has_imprisonment_reason = scope:recipient
-				}
+				limit = { has_imprisonment_reason = scope:recipient }
 				stress_and_fulfillment_impact = {
 					compassionate = minor_stress_impact_gain
 					forgiving = minor_stress_impact_gain
@@ -477,7 +484,7 @@
 					compassionate = medium_stress_impact_gain
 				}
 				if = {
-					limit = { exists = scope:retaliating_faction}
+					limit = { exists = scope:retaliating_faction }
 					scope:retaliating_faction = {
 						imprisonment_retribution_start_faction_war_if_valid = yes
 					}
@@ -497,7 +504,7 @@
 				NOT = { scope:puppet_or_actor = { has_imprisonment_reason = scope:recipient } }
 				scope:recipient = { is_landed_or_landless_administrative_or_theocratic = yes }
 			}
-			add_clan_unity_interaction_effect = {
+			add_house_unity_interaction_effect = {
 				CHARACTER = scope:puppet_or_actor
 				TARGET = scope:recipient
 				VALUE = major_unity_loss
@@ -510,7 +517,7 @@
 				NOT = { scope:puppet_or_actor = { has_imprisonment_reason = scope:recipient } }
 				scope:recipient = { is_landed_or_landless_administrative_or_theocratic = no }
 			}
-			add_clan_unity_interaction_effect = {
+			add_house_unity_interaction_effect = {
 				CHARACTER = scope:puppet_or_actor
 				TARGET = scope:recipient
 				VALUE = medium_unity_loss
@@ -519,7 +526,7 @@
 			}
 		}
 		else = { # If you have a valid reason, you lose only a tiny bit of unity (criminal or not, they are still family)
-			add_clan_unity_interaction_effect = {
+			add_house_unity_interaction_effect = {
 				CHARACTER = scope:puppet_or_actor
 				TARGET = scope:recipient
 				VALUE = minor_unity_loss
@@ -673,7 +680,12 @@
 					else_if = {
 						limit = {
 							is_ruler = yes
-							scope:puppet_or_actor = { has_legitimacy_flag = vassals_refuse_imprisonment_with_no_war }
+							scope:puppet_or_actor = { 
+								OR = {
+									has_legitimacy_flag = vassals_refuse_imprisonment_with_no_war 
+									has_realm_law_flag = republic_vassal_refusal_allowed
+								}
+							}
 						}
 						scope:puppet_or_actor = {
 							add_prestige = medium_prestige_loss
@@ -884,9 +896,7 @@
 						}
 					}
 				}
-			}
 
-			scope:puppet_or_actor = {
 				if = {
 					limit = {
 						scope:recipient = {
@@ -919,6 +929,14 @@
 					}
 					remove_character_flag = flag_hostile_actions_disabled_delay
 				}
+
+				#Guelphs & Ghibellines
+				gg_triggered_catalyst_effect = {
+					ACTOR = scope:actor
+					RECIPIENT = scope:recipient
+					CATALYST = catalyst_attempt_imprison_opposite_party
+				}
+				gg_involvement_catalyst_effect = yes
 			}
 
 			# If we're a clan this interaction affects unity
@@ -929,7 +947,7 @@
 					}
 					scope:recipient = { is_landed_or_landless_administrative_or_theocratic  = yes }
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:puppet_or_actor
 					TARGET = scope:recipient
 					VALUE = major_unity_loss
@@ -944,7 +962,7 @@
 					}
 					scope:recipient = { is_landed_or_landless_administrative_or_theocratic  = no }
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:puppet_or_actor
 					TARGET = scope:recipient
 					VALUE = medium_unity_loss
@@ -953,7 +971,7 @@
 				}
 			}
 			else = { # If you have a valid reason, you lose only a tiny bit of unity (criminal or not, they are still family)
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:puppet_or_actor
 					TARGET = scope:recipient
 					VALUE = miniscule_unity_loss
@@ -1110,6 +1128,7 @@
 			add = 50
 			scope:puppet_or_actor = {
 				has_perk = prison_feudal_complex_perk
+				NOT = { government_has_flag = government_is_merchant }
 			}
 			desc = AI_PRISON_FEUDAL_COMPLEX_PERK
 		}
@@ -1367,6 +1386,15 @@
 			scope:recipient = { has_character_modifier = ach_intent_imprisonment_modifier }
 			desc = ach_host_intent_imprison_reason
 		}
+		#GG modifier
+		modifier = {
+			add = -50
+			OR = {
+				gg_first_and_second_are_opposite_sides_trigger = { FIRST = scope:actor SECOND = scope:recipient }
+				scope:recipient = { is_gg_undecided_trigger = yes }
+			}
+			desc = RECIPIENT_IS_NOT_YOUR_GG
+		}
 		
 		#ADDED
 		modifier = {
@@ -1438,6 +1466,15 @@
 		empire = 10
 		hegemony = 10
 	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 108
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
 
 	ai_will_do = {
 		base = -100
@@ -1497,7 +1534,10 @@
 						intrigue > scope:recipient.intrigue
 						intrigue >= 12
 					}
-					has_perk = prison_feudal_complex_perk
+					AND = {
+						has_perk = prison_feudal_complex_perk
+						NOT = { government_has_flag = government_is_merchant }
+					}
 					scope:recipient = {
 						has_dread_level_towards = {
 							target = scope:puppet_or_actor
@@ -1551,9 +1591,7 @@
 				OR = {
 					has_secret_relation_lover = scope:recipient
 					has_relation_lover = scope:recipient
-					has_relation_soulmate = scope:recipient
 					has_relation_friend = scope:recipient
-					has_relation_best_friend = scope:recipient
 					opinion = {
 						target = scope:recipient
 						value > very_high_positive_opinion
@@ -1566,9 +1604,8 @@
 		modifier = { # Don't imprison your own children... unless they're your rival/nemesis
 			scope:recipient = {
 				is_child_of = scope:puppet_or_actor
-				NOR = {
+				NOT = {
 					has_relation_rival = scope:puppet_or_actor
-					has_relation_nemesis = scope:puppet_or_actor
 				}
 			}
 			add = -1000
@@ -1579,7 +1616,6 @@
 				is_spouse_of = scope:puppet_or_actor
 				NOR = {
 					has_relation_rival = scope:puppet_or_actor
-					has_relation_nemesis = scope:puppet_or_actor
 					exposed_cheating_on_spouse_trigger = { SPOUSE = scope:puppet_or_actor }
 				}
 			}
@@ -1598,7 +1634,6 @@
 					}
 					is_a_faction_member = yes
 					has_relation_rival = scope:puppet_or_actor
-					has_relation_nemesis = scope:puppet_or_actor
 					exposed_cheating_on_spouse_trigger = { SPOUSE = scope:puppet_or_actor }
 					scope:puppet_or_actor = { # Scheme Agents should be imprisoned indiscriminately
 						any_targeting_scheme = {
@@ -1826,14 +1861,13 @@
 			}
 		}
 
-		# TGP Be more careful with blocs generally
-		house_bloc_tyranny_war_modifiers = yes
 
 		evaluate_action_decreasing_house_unity = {
 			VALUE = 100
 		}
+		# TGP Be more careful with blocs generally
+		house_bloc_tyranny_war_modifiers = yes
 
-		#ADDED - moved down because it's a factor.
 		modifier = { # Avoid triggering Tyranny wars mid-grand activity
 			factor = 0
 			scope:puppet_or_actor = {
@@ -1855,6 +1889,13 @@
 				}
 			}
 			scope:recipient = { government_has_flag = government_is_landless_adventurer }
+		}
+
+		modifier = {
+			scope:actor = {
+				gg_hre_causes_additional_tyranny_trigger = { TARGET = scope:recipient }
+			}
+			factor = 0
 		}
 		
 		#ADDED Don't take a title off anyone when refusing would raise half the realm against us. A prisoner, baron and lawful revocations are exempt, because they don't cause civil wars
@@ -2172,7 +2213,7 @@ ransom_interaction = {
 		flag = influence_send_option
 		localization = DEMAND_INFLUENCE_AI_ACCEPTANCE
 	}
-	
+
 	# MPO Herd
 	send_option = {
 		is_shown = { # Actor must have a government that uses Herd
@@ -2289,8 +2330,6 @@ ransom_interaction = {
 					has_relation_lover = scope:secondary_recipient
 					has_relation_friend = scope:secondary_recipient
 					has_secret_relation_lover = scope:secondary_recipient
-					has_relation_soulmate = scope:secondary_recipient
-					has_relation_best_friend = scope:secondary_recipient
 					is_parent_of = scope:secondary_recipient
 				}
 			}
@@ -2300,6 +2339,29 @@ ransom_interaction = {
 			add = 100
 			scope:recipient = scope:secondary_recipient
 			desc = "WANTS_FREEDOM_REASON"
+		}
+		#ADDED - where. 
+		modifier = {
+			add = {
+				value = -50
+				if = {
+					limit = {
+						scope:recipient = {
+							ai_vengefulness > 0
+						}
+					}
+					subtract = ai_vengefulness
+				}
+				if = {
+					limit = { scope:recipient != scope:secondary_recipient }
+					multiply = 0.2
+				}
+			}
+			trigger = {
+				scope:favor = yes
+				#scope:recipient = scope:secondary_recipient
+			}
+			desc = "GAIN_HOOK_NEGATIVE_REASON"
 		}
 		modifier = { # Acceptance boon for lovers, friends, etc
 			add = 25
@@ -2328,18 +2390,6 @@ ransom_interaction = {
 					has_relation_best_friend = scope:secondary_recipient
 					is_parent_of = scope:secondary_recipient
 				}
-				NOR = {
-					is_spouse_of = scope:secondary_recipient
-					AND = {
-						NOT = {
-							is_parent_of = scope:secondary_recipient
-						}
-						is_close_or_extended_family_of = scope:secondary_recipient
-					}
-					has_relation_lover = scope:secondary_recipient
-					has_relation_friend = scope:secondary_recipient
-					has_secret_relation_lover = scope:secondary_recipient
-				}
 			}
 			desc = "DEAR_TO_ME_REASON"
 		}
@@ -2367,12 +2417,10 @@ ransom_interaction = {
 					is_spouse_of = scope:secondary_recipient
 					is_close_or_extended_family_of = scope:secondary_recipient
 					has_relation_lover = scope:secondary_recipient
-					has_relation_soulmate = scope:secondary_recipient
 					has_secret_relation_lover = scope:secondary_recipient
 				}
-				NOR = {
+				NOT = {
 					has_relation_rival = scope:secondary_recipient
-					has_relation_nemesis = scope:secondary_recipient
 				}
 			}
 			scope:recipient.dynasty = scope:secondary_recipient.dynasty
@@ -2634,22 +2682,18 @@ pay_ransom_interaction = {
 			is_imprisoned_by = scope:recipient
 			OR = {
 				liege ?= scope:puppet_or_actor # You can ransom anyone you have in your court
-				is_close_family_of = scope:puppet_or_actor # And anyone who is your close family
-				dynasty ?= { # And anyone from your Dynasty
-					this ?= scope:puppet_or_actor.dynasty
-				}
-				any_spouse = { # And anyone married to one of your close kin or dynasty members
+				is_close_or_extended_family_of = scope:puppet_or_actor # And anyone who is your close or extended family
+				dynasty ?= { scope:puppet_or_actor.dynasty ?= this } # And anyone from your Dynasty
+				any_spouse = { # And anyone married to one of your close or extended kin or dynasty members
 					OR = {
-						is_close_family_of = scope:puppet_or_actor
-						dynasty ?= {
-							this ?= scope:puppet_or_actor.dynasty
-						}
+						is_close_or_extended_family_of = scope:puppet_or_actor
+						dynasty ?= { scope:puppet_or_actor.dynasty ?= this }
 					}
 				}
 				#ADDED - let me pay for those too otherwise its annoying
 				betrothed ?= { # And anyone married to one of your close kin or dynasty members
 					OR = {
-						is_close_family_of = scope:puppet_or_actor
+						is_close_or_extended_family_of = scope:puppet_or_actor
 						dynasty ?= {
 							this ?= scope:puppet_or_actor.dynasty
 						}
@@ -2717,22 +2761,25 @@ pay_ransom_interaction = {
 					custom_tooltip = has_person_haggler_decrease_ransom_cost
 				}
 				# Stress impacts
-				if = {
+				if = { # Stress impact for 'relevant' ransoms; in other words, everyone but random courtiers
 					limit = {
-						scope:prisoner = { # Stress impact for random courtiers
-							NOR = {
+						scope:prisoner = {
+							OR = {
 								is_vassal_of = scope:puppet_or_actor
 								is_consort_of = scope:puppet_or_actor
 								is_close_family_of = scope:puppet_or_actor
-								dynasty ?= {
-									this ?= scope:puppet_or_actor.dynasty
-								}
+								dynasty ?= { scope:puppet_or_actor.dynasty ?= this }
 								any_spouse = {
 									OR = {
 										is_close_family_of = scope:puppet_or_actor
-										dynasty ?= {
-											this ?= scope:puppet_or_actor.dynasty
-										}
+										dynasty ?= { scope:puppet_or_actor.dynasty ?= this }
+									}
+								}
+								#ADDED
+								betrothed ?= {
+									OR = {
+										is_close_family_of = scope:puppet_or_actor
+										dynasty ?= { scope:puppet_or_actor.dynasty ?= this }
 									}
 								}
 								has_relation_lover = scope:puppet_or_actor
@@ -2745,29 +2792,7 @@ pay_ransom_interaction = {
 						generous = medium_stress_impact_loss
 					}
 				}
-				else_if = { # Stress impact for 'relevant' ransoms; in other words, everyone but random courtiers
-					limit = {
-						scope:prisoner = {
-							OR = {
-								is_vassal_of = scope:puppet_or_actor
-								is_consort_of = scope:puppet_or_actor
-								is_close_family_of = scope:puppet_or_actor
-								dynasty ?= {
-									this ?= scope:puppet_or_actor.dynasty
-								}
-								any_spouse = {
-									OR = {
-										is_close_family_of = scope:puppet_or_actor
-										dynasty ?= {
-											this ?= scope:puppet_or_actor.dynasty
-										}
-									}
-								}
-								has_relation_lover = scope:puppet_or_actor
-								has_relation_friend = scope:puppet_or_actor
-							}
-						}
-					}
+				else = { # Stress impact for random courtiers
 					stress_and_fulfillment_impact = {
 						compassionate = medium_stress_impact_loss
 						generous = minor_stress_impact_loss
@@ -2803,7 +2828,7 @@ pay_ransom_interaction = {
 				if = { # Family should be free!
 					limit = {
 						scope:prisoner = {
-							is_close_family_of = scope:payer
+							is_close_or_extended_family_of = scope:payer
 						}
 					}
 					stress_and_fulfillment_impact = {
@@ -2944,7 +2969,7 @@ pay_ransom_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:prisoner
 			VALUE = medium_unity_gain
@@ -3233,7 +3258,7 @@ pay_ransom_interaction = {
 			}
 			desc = "RIVAL_TO_ME_REASON"
 		}
-		modifier = { # Say no to rivals
+		modifier = { # Say no to nemeses
 			add = -300
 			scope:recipient = {
 				has_relation_nemesis = scope:secondary_recipient
@@ -3264,14 +3289,7 @@ pay_ransom_interaction = {
 		}
 		modifier = { # At war
 			add = -300
-			scope:recipient = {
-				is_at_war = yes
-				any_primary_war_enemy = {
-					scope:secondary_recipient = {
-						liege ?= prev
-					}
-				}
-			}
+			scope:secondary_recipient = { character_is_prisoner_of_war = yes }
 			desc = "IS_POW_REASON"
 		}
 		modifier = { # At war
@@ -3401,9 +3419,9 @@ pay_ransom_interaction = {
 				}
 			}
 			scope:secondary_recipient = {
-				has_claim_on = scope:puppet_or_actor.primary_title
+				has_claim_on = scope:recipient.primary_title
 				time_in_prison = { years < 20 }
-				"reverse_opinion(scope:puppet_or_actor)" < -10
+				"reverse_opinion(scope:recipient)" < -10
 			}
 			desc = CLAIMANT_TO_MY_TITLES
 		}
@@ -3440,6 +3458,15 @@ pay_ransom_interaction = {
 		kingdom = 6
 		empire = 6
 		hegemony = 6
+	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 18
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
 	}
 
 	ai_target_quick_trigger = {
@@ -4068,7 +4095,6 @@ ransom_me_interaction = {
 				government_has_flag = government_has_herd
 				exists = domicile
 			}
-
 			scope:puppet_or_actor = { domicile.herd >= ransom_herd_value }
 		}
 		flag = herd_send_option
@@ -4371,10 +4397,6 @@ ransom_me_interaction = {
 
 	ai_targets = {
 		ai_recipients = self
-	}
-
-	ai_potential = {
-		always = yes
 	}
 
 	ai_will_do = {

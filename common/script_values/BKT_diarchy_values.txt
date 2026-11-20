@@ -664,10 +664,9 @@ swing_scales_piety_cost_value = {
 	## Pure route.
 	if = {
 		limit = {
-			OR = {
-				always = scope:swing_piety
-				# And if we're in the important_action...
-				NOT = { exists = scope:swing_piety }
+			trigger_if = {
+				limit = { exists = scope:swing_piety }
+				scope:swing_piety = yes
 			}
 		}
 		value = 0
@@ -687,7 +686,7 @@ swing_scales_piety_cost_value = {
 	}
 	## Hybrid HoF route.
 	else_if = {
-		limit = { always = scope:swing_hof }
+		limit = { scope:swing_hof ?= yes }
 		value = 0
 		# Gate by liege tier.
 		## Count.
@@ -762,10 +761,9 @@ swing_scales_cash_cost_value = {
 	## Pure route.
 	if = {
 		limit = {
-			OR = {
-				always = scope:swing_gold
-				# And if we're in the important action...
-				NOT = { exists = scope:swing_gold }
+			trigger_if = {
+				limit = { exists = scope:swing_gold }
+				scope:swing_gold = yes
 			}
 		}
 		value = 0

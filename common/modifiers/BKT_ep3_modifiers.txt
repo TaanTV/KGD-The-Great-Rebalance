@@ -1,8 +1,8 @@
 ﻿
-ep3_eparch_development_modifier = {
-	icon = county_modifier_development_positive
+ep3_eparch_prosperity_modifier = {
+	icon = county_modifier_prosperity_positive
 	
-	development_growth = 0.02	#prev 0.1
+	prosperity_growth = 0.02	#prev 0.1
 	
 	scale = {
 		value = eparch_aptitude_modifier_scaling_value
@@ -21,7 +21,7 @@ admin_eunuch_liege_5_modifier = {
 	vassal_opinion = -10
 	intrigue = -2
 	#ADDED
-	tax_mult = 0.05
+	all_tax_mult = 0.05
 }
 
 admin_eunuch_liege_6_modifier = {
@@ -32,7 +32,7 @@ admin_eunuch_liege_6_modifier = {
 	vassal_opinion = -15
 	intrigue = -3
 	#ADDED
-	tax_mult = 0.05
+	all_tax_mult = 0.05
 }
 
 admin_eunuch_liege_7_modifier = {
@@ -43,7 +43,7 @@ admin_eunuch_liege_7_modifier = {
 	vassal_opinion = -20
 	intrigue = -4
 	#ADDED
-	tax_mult = 0.05
+	all_tax_mult = 0.05
 }
 
 admin_eunuch_liege_8_modifier = {
@@ -54,5 +54,5 @@ admin_eunuch_liege_8_modifier = {
 	vassal_opinion = -25
 	intrigue = -5
 	#ADDED
-	tax_mult = 0.1
+	all_tax_mult = 0.1
 }

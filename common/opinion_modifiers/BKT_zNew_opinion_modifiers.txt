@@ -17,3 +17,11 @@ same_stance_in_council = {
 	years = 2
 	#stacking = yes
 }
+
+declared_war_on_close_family = {
+	opinion = -20
+	years = 15
+	decaying = yes
+	stacking = yes
+	imprisonment_reason = yes
+}

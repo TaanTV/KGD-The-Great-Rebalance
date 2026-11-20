@@ -124,7 +124,7 @@ activity_funeral = {
 
 	is_single_location = yes
 
-	province_filter = realm
+	province_filter = domicile_realm
 	ai_province_filter = capital
 
 	max_route_deviation_mult = 2.0
@@ -169,6 +169,12 @@ activity_funeral = {
 				}
 			}
 			desc = activity_funeral_holy_site
+		}
+		triggered_desc = {
+			trigger = {
+				has_building_or_higher = royal_mausoleum_1
+			}
+			desc = activity_funeral_royal_mausoleum
 		}
 		# Things your religion values
 		triggered_desc = {
@@ -224,6 +230,12 @@ activity_funeral = {
 				barony = {
 					is_holy_site_of = scope:host.faith
 				}
+			}
+			add = 50
+		}
+		if = { # Royal Mausoleum
+			limit = {
+				has_building_or_higher = royal_mausoleum_1
 			}
 			add = 50
 		}
@@ -566,6 +578,7 @@ activity_funeral = {
 			4 = activity_invite_rule_guests
 			1 = activity_invite_spouses
 			1 = activity_invite_rule_landless_adventurers_restricted_range
+			1 = activity_invite_rule_merchants_restricted_range
 		}
 	}
 
@@ -649,7 +662,7 @@ activity_funeral = {
 					add = {
 						value = funeral_activity_cost
 						multiply = activity_cost_scale_by_era
-						multiply = funeral_activity_cost_increase_max
+						multiply = funeral_activity_cost_increase_max  # + 50%
 						desc = funeral_cost_increase_great_temple
 					}
 				}
@@ -719,21 +732,18 @@ activity_funeral = {
 				value = funeral_activity_cost
 				multiply = activity_cost_scale_by_era
 			}
-			add = { # Ceremony 
-				value = 0 # Bad Option Cost
-				add = 15	#prev 10 # Normal Option Cost
-				add = 50	#prev 35 # Good Option Cost
-				# Scale the sum of the options by era and tier
+			add = { # Ceremony - mid-range (Normal) option cost
+				value = 10			#prev 7
 				add = {
-					value = 65	#prev 45
+					value = 10		#prev 7
 					multiply = activity_cost_scale_by_tier
+					subtract = 10	#prev 7
 				}
 				add = {
-					value = 65	#prev 45
+					value = 10		#prev 7
 					multiply = activity_cost_scale_by_era
+					subtract = 10	#prev 7
 				}
-				# Divide by 3 (num of levels for this option) so we get the average option cost
-				divide = 3
 			}
 			save_temporary_value_as = pre_discount_funeral_cost_ui
 			if = {
@@ -862,11 +872,7 @@ activity_funeral = {
 		trigger = {
 			scope:host.location != scope:activity.activity_location
 			scope:host.location = {
-				terrain = farmlands
-				OR = {
-					terrain = terraced_hills
-					has_building_or_higher = paddy_fields_01
-				}
+				has_rice_fields_district = yes
 			}
 		}
 		texture = "gfx/interface/illustrations/event_scenes/tgp_rice_fields.dds"
@@ -1225,13 +1231,7 @@ activity_funeral = {
 				}
 			}
 
-			scripted_animation = {
-				triggered_animation = {
-					trigger = { scope:character = { has_trait = impatient } }
-					animation = { jockey_gallop }
-				}
-				animation = jockey_walk
-			}
+			scripted_animation = horse_camel_activity_travel_animation
 		}
 		
 		guest = {
@@ -1365,19 +1365,19 @@ activity_funeral = {
 							value = 0
 							desc = funeral_ceremony_normal
 							add = {
-								value = 15		#prev 10
+								value = 10		#prev 7
 								desc = funeral_ceremony_normal
 							}
 							add = {
-								value = 15		#prev 10
+								value = 10		#prev 7
 								multiply = activity_cost_scale_by_tier
-								subtract = 15	#prev 10
+								subtract = 10	#prev 7
 								desc = activity_cost_scale_by_tier_desc
 							}
 							add = {
-								value = 15		#prev 10
+								value = 10		#prev 7
 								multiply = activity_cost_scale_by_era
-								subtract = 15	#prev 10
+								subtract = 10	#prev 7
 								desc = activity_cost_scale_by_era_desc
 							}
 							if = {
@@ -1387,16 +1387,16 @@ activity_funeral = {
 									}
 								}
 								subtract = {
-									value = 15				#prev 10
+									value = 10				#prev 7
 									add = {
-										value = 15			#prev 10
+										value = 10			#prev 7
 										multiply = activity_cost_scale_by_tier
-										subtract = 15		#prev 10
+										subtract = 10		#prev 7
 									}
 									add = {
-										value = 15			#prev 10
+										value = 10			#prev 7
 										multiply = activity_cost_scale_by_era
-										subtract = 15		#prev 10
+										subtract = 10		#prev 7
 									}
 									multiply = law_legacy_cost_reduction_mult
 									desc = law_legacy_1_name
@@ -1439,19 +1439,19 @@ activity_funeral = {
 							value = 0
 							desc = funeral_ceremony_good
 							add = {
-								value = 50		#prev 35
+								value = 35		#prev 23
 								desc = funeral_ceremony_good
 							}
 							add = {
-								value = 50		#prev 35
+								value = 35		#prev 23
 								multiply = activity_cost_scale_by_tier
-								subtract = 50	#prev 35
+								subtract = 35	#prev 23
 								desc = activity_cost_scale_by_tier_desc
 							}
 							add = {
-								value = 50		#prev 35
+								value = 35		#prev 23
 								multiply = activity_cost_scale_by_era
-								subtract = 50	#prev 35
+								subtract = 35	#prev 23
 								desc = activity_cost_scale_by_era_desc
 							}
 							if = {
@@ -1461,16 +1461,16 @@ activity_funeral = {
 									}
 								}
 								subtract = {
-									value = 50			#prev 35
+									value = 35			#prev 23
 									add = {
-										value = 50		#prev 35
+										value = 35		#prev 23
 										multiply = activity_cost_scale_by_tier
-										subtract = 50	#prev 35
+										subtract = 35	#prev 23
 									}
 									add = {
-										value = 50		#prev 35
+										value = 35		#prev 23
 										multiply = activity_cost_scale_by_era
-										subtract = 50	#prev 35
+										subtract = 35	#prev 23
 									}
 									multiply = law_legacy_cost_reduction_mult
 									desc = law_legacy_1_name

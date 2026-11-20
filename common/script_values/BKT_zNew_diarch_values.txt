@@ -3,8 +3,8 @@ bkt_swing_scales_cash_cost_value = {
 	if = {
 		limit = {
 			OR = {
-				always = scope:swing_gold
-				always = scope:swing_hof
+				scope:swing_gold ?= yes
+				scope:swing_hof ?= yes
 			}
 		}
 		# Diarch version.
@@ -41,7 +41,7 @@ bkt_swing_scales_cash_cost_value = {
 
 bkt_swing_scales_influence_cost_value = {
 	if = {
-		limit = { always = scope:swing_influence }
+		limit = { scope:swing_influence ?= yes}
 		#value = scope:actor.swing_scales_influence_cost_value
 		#ADDED - ported from the other interaction
 		# Diarch version.
@@ -78,7 +78,7 @@ bkt_swing_scales_influence_cost_value = {
 	
 bkt_swing_scales_prestige_cost_value = {
 	if = {
-		limit = { always = scope:swing_prestige }
+		limit = { scope:swing_prestige ?= yes }
 		#value = scope:actor.swing_scales_prestige_cost_value
 		#ADDED - ported from the other interaction
 		# Diarch version.
@@ -117,8 +117,8 @@ bkt_swing_scales_piety_cost_value = {
 	if = {
 		limit = {
 			OR = {
-				always = scope:swing_piety
-				always = scope:swing_hof
+				scope:swing_piety ?= yes
+				scope:swing_hof ?= yes
 			}
 		}
 		#value = scope:actor.swing_scales_piety_cost_value

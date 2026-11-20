@@ -283,6 +283,16 @@ support_clerical_candidacy_interaction = {
 			}
 		}
 
+		if = {
+			limit = {
+				scope:actor = {
+					is_guelph_or_ghibelline_trigger = yes
+					NOT = { government_has_flag = government_is_ecclesiastical }
+				}
+			}
+			gg_untargeted_catalyst_effect = { CATALYST = catalyst_gg_lay_investiture }
+		}
+
 		# Christian Situation Catalysts
 		if = {
 			limit = {
@@ -476,7 +486,7 @@ pam_reaffirm_doctrine_interaction = {
 	ai_accept = {
 		base = -100
 
-		#ADDE - help AI out a bit
+		#ADDED - help AI out a bit
 		modifier = {
 			scope:actor = { is_ai = yes }
 			scope:recipient = { is_ai = yes }
@@ -2112,7 +2122,7 @@ pam_reaffirm_doctrine_interaction = {
 		#ADDED
 		hidden_effect = {
 			if = {
-				limit = { is_ai = yes }
+				limit = { scope:actor = { is_ai = yes } }
 				debug_log = "reaffirm_doctrine accepted by AI"
 				debug_log_scopes = yes
 			}
@@ -2151,8 +2161,11 @@ pam_reaffirm_doctrine_interaction = {
 		}
 		#ADDED
 		hidden_effect = {
-			debug_log = "reaffirm_doctrine declined by AI"
-			debug_log_scopes = yes
+			if = {
+				limit = { scope:actor = { is_ai = yes } }
+				debug_log = "reaffirm_doctrine declined by AI"
+				debug_log_scopes = yes
+			}
 		}
 	}
 

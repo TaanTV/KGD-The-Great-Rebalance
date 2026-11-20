@@ -9,5 +9,3 @@ marshal_organize_levies_maintenance_skill_base = {
 	#ADDED
 	multiply = 0.5
 }
-
-marshal_increase_control_base = 0.3		#prev 0.2

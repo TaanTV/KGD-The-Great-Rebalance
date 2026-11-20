@@ -6,16 +6,14 @@
 on_army_enter_province = {
 	#ADDED THIS IS AN OVERWRITE OF THE EFFECT
 	effect = {
-		#ADDED - now with an IF so it's a bit less cheesy. Scuffed tabulation for better autocomparing
-		if = {
-			limit = {
-				scope:army.army_owner = { is_at_war = yes }
-			}
+		save_scope_as = army_owner
 		# Commander trait leveling
 		scope:army.army_commander ?= {
 			if = {
 				limit = {
 					has_trait = logistician
+					#ADDED - no. Moved to general XP gain.
+					always = no
 				}
 				add_trait_xp = {
 					trait = logistician
@@ -29,8 +27,10 @@ on_army_enter_province = {
 				}
 			}
 			if = {
-				limit = {
-					has_trait = organizer
+				limit = { 
+					has_trait = organizer 
+					#ADDED - no. Moved to general XP gain.
+					always = no
 				}
 				add_trait_xp = {
 					trait = organizer
@@ -44,6 +44,133 @@ on_army_enter_province = {
 				}
 			}
 		}
+		# Army movement damages Trade
+		if = {
+			limit = {
+				# Prevent same army owner affecting many markets in quick succession
+				NOT = { exists = var:army_movement_trade_market_cooldown }
+				scope:army ?= {
+					# Prevent same army affecting many markets in quick succession
+					NOT = { exists = var:army_movement_trade_market_cooldown }
+					# Ensure tiny armies are not messing up trade
+					army_size > 250
+					location = {
+						barony ?= {
+							# Prevent same market being affected too often
+							NOT = { exists = trade_market.var:army_movement_trade_market_cooldown }
+							# Ignore occupied land
+							barony_controller != scope:army_owner
+						}
+						# Prevent damaging own or allied markets directly (overlapping is fine)
+						county.holder ?= {
+							save_temporary_scope_as = county_holder
+							OR = {
+								root = { is_causing_raid_hostility_towards = scope:county_holder }
+								is_at_war_with = root
+							}
+						}
+					}
+				}
+			}
+			random = {
+				chance = 1
+				modifier = {
+					add = {
+						value = scope:army.army_size
+						multiply = 0.005
+						max = 10
+					}
+				}
+				modifier = {
+					factor = 0.5
+					scope:army.location.barony.trade_market = { has_trade_market_modifier = gdp_market_army_movement_capacity_modifier }
+				}
+				scope:army = {
+					location = {
+						save_scope_as = army_province
+						barony.trade_market = {
+							save_scope_as = trade_market
+							random_list = {
+								1 = {
+									trigger = {
+										any_trade_good_with_surplus = {}
+									}
+									random_trade_good_with_surplus = { save_scope_as = trade_good }
+								}
+								1 = {}
+							}
+							if = { # Increase price of a locally traded good
+								limit = { exists = scope:trade_good }
+								add_trade_good_price_modifier = {
+									type = buy_add
+									trade_good_type = scope:trade_good
+									value = 0.01
+									years = 5
+								}
+								every_character_in_market = {
+									limit = { government_allows = profit_trade_routes }
+									send_interface_message = {
+										type = msg_army_affects_trade
+										title = msg_army_movement_affects_trade_title
+										left_icon = root
+										right_icon = scope:army.location.barony
+										desc = msg_army_movement_affects_trade_desc
+										show_as_tooltip = {
+											scope:trade_market = {
+												add_trade_good_price_modifier = {
+													type = buy_add
+													trade_good_type = scope:trade_good
+													value = 0.01
+													years = 5
+												}
+											}
+										}
+									}
+								}
+							}
+							else = { # Disrupt local prices across the market
+								add_trade_market_modifier = {
+									modifier = gdp_market_army_movement_capacity_modifier
+									years = 5
+								}
+								every_character_in_market = {
+									limit = { government_allows = profit_trade_routes }
+									send_interface_message = {
+										type = msg_army_affects_trade
+										title = msg_army_movement_affects_trade_title
+										left_icon = root
+										right_icon = scope:army.location.barony
+										desc = msg_army_movement_affects_trade_desc
+										show_as_tooltip = {
+											scope:trade_market = {
+												add_trade_market_modifier = {
+													modifier = gdp_market_army_movement_capacity_modifier
+													years = 5
+												}
+											}
+										}
+									}
+								}
+							}
+							# Prevent same trade market being affected too often
+							set_variable = {
+								name = army_movement_trade_market_cooldown
+								months = 6
+							}
+						}
+						# Prevent same army affecting trade markets too often
+						set_variable = {
+							name = army_movement_trade_market_cooldown
+							months = 6
+						}
+					}
+				}
+				# Prevent same army owner affecting trade markets too often
+				set_variable = {
+					name = army_movement_trade_market_cooldown
+					months = 6
+				}
+			}
 		}
 	}
 }
@@ -110,11 +237,20 @@ on_raid_action_completion = {
 				type = msg_raid_completed
 				left_icon = scope:county.holder
 				right_icon = scope:barony
+				desc = msg_raid_completed_desc
+				show_as_tooltip = {
+					scope:barony.trade_market = {
+						add_trade_market_modifier = {
+							modifier = gdp_market_recently_raided_capacity_modifier
+							years = 5
+						}
+					}
+				}
 			}
 			if = {
 				limit = { 
 					scope:county = {
-						any_county_province = { has_special_building = yes }
+						any_county_province = { has_special_district = yes }
 					}
 					NOT = { has_character_flag = raider_legend }
 					has_dlc_feature = legends
@@ -149,7 +285,7 @@ on_raid_action_completion = {
 						}
 						modifier = {
 							scope:barony.holder != scope:county.holder
-							factor = 0.75
+							factor = 0.5
 						}
 					change_house_relation_effect = {
 						HOUSE = scope:county.holder.house
@@ -163,31 +299,39 @@ on_raid_action_completion = {
 				}
 			}
 		}
-		scope:barony.title_province = {
-			add_province_modifier = {
-				modifier = recently_looted_modifier
-				years = 5
+		scope:barony = {
+			title_province = {
+				add_province_modifier = {
+					modifier = recently_looted_modifier
+					years = 5
+				}
+			}
+			trade_market = {
+				add_trade_market_modifier = {
+					modifier = gdp_market_recently_raided_capacity_modifier
+					years = 5
+				}
 			}
 			county = {
 				if = {
 					limit = {
 						holder = {
-							NOT = { has_perk = enduring_hardships_perk }
+							NOT = { has_perk = a_mans_home_perk }
 						}
 					}
 					change_county_control = raid_county_control_loss_value
 					random_list = {
 						25 = {
-							change_development_progress_with_overflow = -6	#prev -2
+							change_prosperity_progress_with_overflow = -6	#prev -2
 						}
 						25 = {
-							change_development_progress_with_overflow = -9	#prev -3
+							change_prosperity_progress_with_overflow = -9	#prev -3
 						}
 						25 = {
-							change_development_progress_with_overflow = -12	#prev -4
+							change_prosperity_progress_with_overflow = -12	#prev -4
 						}
 						25 = {
-							change_development_progress_with_overflow = -15	#prev -5
+							change_prosperity_progress_with_overflow = -15	#prev -5
 						}
 					}
 				}
@@ -201,10 +345,22 @@ on_raid_action_completion = {
 		}
 		every_in_list = {
 			list = raid_targets
+			limit = {
+				NOT = { this = scope:raider }
+			}
 			send_interface_message = {
 				type = msg_raid_lost
 				left_icon = scope:raider
 				right_icon = scope:barony
+				desc = msg_raid_lost_desc
+				show_as_tooltip = {
+					scope:barony.trade_market = {
+						add_trade_market_modifier = {
+							modifier = gdp_market_recently_raided_capacity_modifier
+							years = 5
+						}
+					}
+				}
 			}
 		}
 

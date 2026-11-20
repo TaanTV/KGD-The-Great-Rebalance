@@ -16,7 +16,8 @@
 	
 	parameters = {
 		unlock_maa_archers_of_the_nile = yes
-		hunting_archery_building_bonuses = yes
+		perk_tactician_archers = yes
+		village_hunter_riverside = yes
 	}
 	county_modifier = {
 		floodplains_levy_size = 0.1
@@ -130,6 +131,8 @@ tradition_hussar = { #Konni Raids
 	
 	parameters = {
 		unlock_maa_hussar = yes
+		perk_tactician_light_cavalry = yes
+		training_grounds_cavalry_horse_need = yes
 	}
 	character_modifier = {
 		skirmishers_screen_mult = 0.2
@@ -210,6 +213,7 @@ tradition_mobile_guards = {
 	
 	parameters = {
 		unlock_maa_shomer = yes
+		perk_tactician_skirmishers = yes
 	}
 	character_modifier = {
 		maa_toughness_mult = 0.1
@@ -337,25 +341,25 @@ tradition_forest_wardens = {
 	
 	parameters = {
 		unlock_maa_metsanvartija = yes
-		logging_camps_building_bonuses = yes
+		perk_tactician_archers = yes
 		can_recruit_forest_specialist = yes
 		forest_fighter_trait_more_common = yes
 		forest_hunt_success_chance = yes
-		#watermills_forestries_unlock = yes
+		forest_villages_building_slot = yes
+		village_hunter_forest_taiga = yes
 	}
 	character_modifier = {
 		forest_travel_danger = forest_high_danger_reduction
 		taiga_travel_danger = taiga_high_danger_reduction
+		trade_category_carpentry_supplies_xp_gain_mult = 0.15
+		trade_good_wood_buy_price_mult = -0.015
 	}
 	county_modifier = {
-		forest_development_growth_factor = 0.15
-		taiga_development_growth_factor = 0.2		#prev 0.15
+		forest_prosperity_growth_factor = 0.15
+		taiga_prosperity_growth_factor = 0.2		#prev 0.15
 	}
 	province_modifier = {
-		forest_construction_gold_cost = -0.1
-		taiga_construction_gold_cost = -0.1
-		forest_holding_construction_gold_cost = -0.1
-		taiga_holding_construction_gold_cost = -0.1
+		woodland_tax_mult = 0.1
 	}
 
 	cost = {
@@ -458,20 +462,19 @@ tradition_amharic_highlanders = { #Ethiopian Unique Tradition, replaces hill dwe
 	parameters = {
 		unlock_sarawit_innovation = yes
 		can_castrate_prisoners = yes
-		hill_farms_building_bonuses = yes
+		hills_villages_building_slot = yes
+		hills_villages_defender_bonuses = yes
+		terrace_gardens_hills = yes
 	}
 	county_modifier = {
-		hills_development_growth_factor = 0.25			#prev 0.2
-	}
-	province_modifier = {
-		hills_construction_gold_cost = -0.1
-		hills_holding_construction_gold_cost = -0.1
+		hills_prosperity_growth_factor = 0.25			#prev 0.2
 	}
 	character_modifier = {
 		hills_advantage = 5
 		hills_travel_danger = hills_high_danger_reduction
 		mountains_travel_danger = mountains_low_danger_reduction
 		desert_mountains_travel_danger = desert_mountains_low_danger_reduction
+		trade_good_millet_buy_price_mult = -0.015
 	}
 
 	cost = {

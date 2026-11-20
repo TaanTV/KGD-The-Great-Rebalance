@@ -11,5 +11,6 @@ travel_bull_fighter_modifier = {
 
 travel_stealing_food_modifier = {
 	icon = county_modifier_opinion_negative
-	county_opinion_add = -10	#prev -25
+	popular_opinion_add = -10	#prev -25
+	#control_baseline_add = -5
 }

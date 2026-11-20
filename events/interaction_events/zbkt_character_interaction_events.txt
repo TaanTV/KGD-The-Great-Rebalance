@@ -93,7 +93,22 @@ char_interaction.0250 = {
 				NOT = { government_has_mechanic = administrative }
 			}
 			scope:puppet_or_actor = { 
-				add_tyranny = 20 
+				add_tyranny = {
+					value = 20
+					#HRE should not revoke titles from North Italians
+					if = {
+						limit = {
+							gg_hre_causes_additional_tyranny_trigger = { TARGET = scope:recipient }
+						}
+						multiply = 2
+					}
+				}
+				if = {
+					limit = {
+						gg_hre_causes_additional_tyranny_trigger = { TARGET = scope:recipient }
+					}
+					gg_untargeted_catalyst_effect = { CATALYST = catalyst_gg_imperial_overreach }
+				}
 				add_to_variable_list = {
 					name = had_their_contract_tyranically_changed_list
 					target = scope:recipient

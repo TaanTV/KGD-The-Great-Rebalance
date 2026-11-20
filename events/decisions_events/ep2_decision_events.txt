@@ -32,10 +32,12 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 			duel = {
 				skill = prowess
 				value = decent_skill_rating
-				10 = { #Get trait
+				5 = { #Get trait		#prev 10
 					desc = ep2_decision_events.0001.a.crit_success
 					trigger = {
 						root.prowess >= 16
+						#ADDED
+						NOT = { has_trait = strong }
 					}
 					compare_modifier = {
 						value = scope:duel_value
@@ -45,8 +47,14 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 						send_interface_toast = {
 							title = ep2_decision_events.0001.a.crit_success
 							left_icon = root
-							add_trait = strong
+							#add_trait = strong
 							add_prowess_skill = 1
+							#ADDED - remove weak i guses
+							if = {
+								limit = { has_trait = weak }
+								remove_trait = weak
+							}
+							else = { add_trait = strong }
 						}
 					}
 				}
@@ -62,13 +70,10 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 							value = 16
 							subtract = root.prowess
 							multiply = 3			#at 0 prowess you get +48 weight to the option
-							min = {
-								value = scope:duel_value
-								multiply = -3.5
-								add = 5
-							}
 						}
 					}
+					min = 5
+					max = 85
 					root = {
 						send_interface_toast = {
 							title = ep2_decision_events.0001.a.success
@@ -96,6 +101,8 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 							}
 						}
 					}
+					min = 5
+					max = 85
 					root = {
 						send_interface_toast = {
 							title = ep2_decision_events.0001.a.failure
@@ -112,9 +119,8 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 					compare_modifier = {
 						value = scope:duel_value
 						multiplier = -3.5
-						#ADDED - you can always get wounded
-						min = -20
 					}
+					min = 5
 					root = {
 						send_interface_toast = {
 							title = ep2_decision_events.0001.a.crit_failure
@@ -137,6 +143,7 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 							value = scope:duel_value
 							multiplier = 3.5
 						}
+						min = 1
 						prev = { add_prowess_skill = 1 }
 					}
 					85 = { #regular PtV modifier	#prev 75

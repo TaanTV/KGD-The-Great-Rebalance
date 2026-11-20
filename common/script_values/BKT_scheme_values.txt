@@ -46,8 +46,50 @@ secrecy_base_value = {
 				}
 			}
 		}
+		scope:target = { save_temporary_scope_as = councillor_liege }
 		add = {
 			value = scope:target.cp:councillor_spymaster.spymaster_disrupt_schemes_total_modifier
+			multiply = -1
+			desc = secrecy.scheme_owner.spymaster.disrupt_schemes
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				scheme_target_character.host ?= scope:owner
+				scheme_target_title.holder ?= scope:owner
+			}
+		}
+		add = {
+			value = 20
+			desc = secrecy.own_court
+		}
+	}
+	else_if = {
+		limit = {
+			# Scheme has to exist already.
+			exists = this
+			#ADDED - prevent startup errors
+			exists = scope:owner
+			# We gotta be facing a character.
+			is_scheme_target_type = title
+			# Do they have a spymaster...
+			scheme_target_title.holder.cp:councillor_spymaster ?= {
+				# ... who is performing the appropriate task...
+				is_performing_council_task = task_disrupt_schemes
+				NOR = {
+					# ... who _isn't_ the scheme owner...
+					this = scope:owner
+					# ... or an agent in the scheme.
+					save_temporary_scope_as = char_temp
+					root = {
+						any_scheme_agent_character = { this = scope:char_temp }
+					}
+				}
+			}
+		}
+		add = {
+			value = scope:target.holder.cp:councillor_spymaster.spymaster_disrupt_schemes_total_modifier
 			multiply = -1
 			desc = secrecy.scheme_owner.spymaster.disrupt_schemes
 		}
@@ -85,3 +127,62 @@ agent_scheme_contributor_max = 45	#prev 50
 # Agent contribution setup values.
 # How much can any one of an agent's skills contribute to their score?
 agent_max_skill_value = 20			#prev 25
+
+
+ai_will_do_redouble_guards_value = {
+	if = {
+		limit = {
+			# We don't care about dpeloyed countermeasures here: guard against murders even if there's a seduction already happening.
+			any_targeting_scheme = {
+				is_scheme_exposed = yes
+				var:apply_countermeasures ?= flag:calculating
+			}
+		}
+		add = countermeasure_ai_will_do_prio2		#prev countermeasure_ai_will_do_prio4
+	}
+	else = { add = countermeasure_ai_will_do_prio0 }
+}
+ai_will_do_withdraw_from_view_value = {
+	if = {
+		limit = {
+			any_targeting_scheme = {
+				is_scheme_exposed = yes
+				OR = {
+					var:apply_countermeasures ?= flag:calculating
+					var:apply_countermeasures ?= flag:opportunistic
+				}
+				#ADDED - nothing else is worth secluding over it imo
+				OR = {
+					scheme_type = murder
+					scheme_type = abduct
+				}
+			}
+			#OR = {
+			#	has_trait = humble
+			#	has_trait = shy
+			#	has_trait = eccentric
+			#}
+			NOR = {
+				has_trait = arrogant
+				has_trait = gregarious
+				has_trait = stubborn
+				has_trait = trusting
+			}
+		}
+		#ADDED - this IF and moved original thing into an ELSE
+		if = {
+			limit = {
+				OR = {
+					has_trait = humble
+					has_trait = shy
+					has_trait = eccentric
+				}
+			}
+			add = countermeasure_ai_will_do_prio4
+		}
+		else = {
+		add = countermeasure_ai_will_do_prio3		#prev countermeasure_ai_will_do_prio1
+		}
+	}
+	else = { add = countermeasure_ai_will_do_prio0 }
+}

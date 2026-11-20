@@ -122,22 +122,22 @@ BKT_on_siege_completion = {
 		scope:barony = {
 			title_province = {
 				every_army_in_location = {
-					add_supply = { value = scope:barony.county.development_level divide = 20 ceiling = yes multiply = 5 min = 5 }
+					add_supply = { value = prev.province_size_level multiply = 0.5 ceiling = yes multiply = 5 min = 5 }
 				}	
 			}
-			scope:barony.county = { change_development_progress_with_overflow = { value = development_level multiply = -10 } }
+			county = { change_prosperity_progress_with_overflow = { value = prosperity_level multiply = -5 } }
 		}
-		if = {
-			limit = { 
-				scope:county.holder = {
-					this = scope:county.county_controller
-					NOT = { has_perk = enduring_hardships_perk }
-				}
-			}
-			scope:county = {
-				change_county_control = -5
-			}
-		}
+		#if = {
+		#	limit = { 
+		#		scope:county.holder = {
+		#			this = scope:county.county_controller
+		#			NOT = { has_perk = a_mans_home_perk }
+		#		}
+		#	}
+		#	scope:county = {
+		#		change_county_control = -5
+		#	}
+		#}
 	}
 }
 
@@ -164,7 +164,7 @@ BKT_on_siege_looting = {
 			#	#}
 			#	remove_province_modifier = somewhat_recently_looted_modifier
 			#	scope:barony.county = {
-			#		change_development_progress_with_overflow = { 
+			#		change_prosperity_progress_with_overflow = { 
 			#			integer_range = { min = 1 max = 10 }
 			#			multiply = -10
 			#		}
@@ -181,7 +181,7 @@ BKT_on_siege_looting = {
 			#	}
 			#}
 			every_army_in_location = {
-				add_supply = 10
+				add_supply = { value = prev.province_size_level multiply = 0.5 ceiling = yes multiply = 5 min = 5 }
 			}
 			if = {
 				limit = { has_province_modifier = recently_looted_no_holding_modifier }
@@ -316,7 +316,7 @@ BKT_occupied_opinions = {
 on_raid_action_completion = {
 	on_actions = {
 		BKT_on_raid_action_completion
-		delay = { days = 1 }
+		#delay = { days = 1 }
 		BKT_recently_raided_county_modifier
 	}
 }
@@ -396,6 +396,7 @@ BKT_recently_raided_county_modifier = {
 						OR = {
 							has_holding = no
 							has_province_modifier = recently_looted_modifier
+							this = scope:barony.title_province
 						}
 					}
 				}
@@ -410,7 +411,7 @@ BKT_recently_raided_county_modifier = {
 				else_if = {
 					limit = { any_county_province = { has_holding_type = tribal_holding } }
 					if = {
-						limit = { development_level > 7 }
+						limit = { prosperity_level > 7 }
 						add_county_modifier = {
 							modifier = recently_raided_county_modifier
 							years = 3		#prev 5

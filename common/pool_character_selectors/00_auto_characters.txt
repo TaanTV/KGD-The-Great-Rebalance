@@ -5,6 +5,8 @@
 		is_claimant = no
 		has_same_culture_as = scope:base
 		rite = scope:base.rite
+		#ADDED
+		is_acclaimed = no
 	}
 	
 	character_score = {

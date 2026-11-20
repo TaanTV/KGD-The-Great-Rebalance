@@ -65,7 +65,7 @@
 	}
 
 	can_county_create = {
-		county_opinion < 0
+		popular_opinion < 0
 
 		# Can only join factions against our top liege (not direct liege)
 		scope:target = holder.top_liege
@@ -112,10 +112,10 @@
 					NOT = { government_has_flag = government_is_nomadic }
 				}
 			}
-			value = county_opinion
+			value = popular_opinion
 			multiplier = -2
 			
-			desc = "FACTION_REASON_COUNTY_OPINION"
+			desc = "FACTION_REASON_POPULAR_OPINION"
 		}
 		
 		compare_modifier = { # Nomads get it at roughly -35 county opinion
@@ -124,10 +124,10 @@
 					government_has_flag = government_is_nomadic
 				}
 			}
-			value = county_opinion
+			value = popular_opinion
 			multiplier = -1
 			
-			desc = "FACTION_REASON_COUNTY_OPINION"
+			desc = "FACTION_REASON_POPULAR_OPINION"
 		}
 
 		# If the targeted ruler isn't nomadic... time to rumble
@@ -221,10 +221,10 @@
 					NOT = { government_has_flag = government_is_nomadic }
 				}
 			}
-			value = county_opinion
+			value = popular_opinion
 			multiplier = -2
 			
-			desc = "FACTION_REASON_COUNTY_OPINION"
+			desc = "FACTION_REASON_POPULAR_OPINION"
 		}
 		
 		compare_modifier = { # Nomads get it at roughly -30 county opinion
@@ -233,10 +233,10 @@
 					government_has_flag = government_is_nomadic
 				}
 			}
-			value = county_opinion
+			value = popular_opinion
 			multiplier = -1
 			
-			desc = "FACTION_REASON_COUNTY_OPINION"
+			desc = "FACTION_REASON_POPULAR_OPINION"
 		}
 
 		# If the targeted ruler isn't nomadic... time to rumble
@@ -498,7 +498,13 @@
 					}
 				}
 
-				order_by = county_fertility
+				order_by = {
+					value = 0
+					if = {
+						limit = { uses_county_fertility = yes }
+						add = county_fertility
+					}
+				}
 
 				title_province = {
 					save_temporary_scope_as = local_center_of_rebellion
@@ -515,6 +521,7 @@
 				template = new_commander_character
 				location = scope:local_center_of_rebellion
 				faith = root.faction_leader.faith
+				rite = root.faction_leader.rite
 				culture = root.faction_leader.culture
 				save_scope_as = new_populist_commander
 				gender_female_chance = {

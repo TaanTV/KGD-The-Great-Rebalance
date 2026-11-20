@@ -43,7 +43,7 @@ own_war_declaration_law_0 = {
 			NOT = {
 				any_vassal = {
 					is_powerful_vassal = yes
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 			}
 		}
@@ -67,6 +67,10 @@ own_war_declaration_law_0 = {
 
 	ai_will_do = {
 		value = 0
+	}
+
+	requires_approve = {
+		always = no
 	}
 }
 
@@ -103,7 +107,7 @@ own_war_declaration_law_1 = {
 			NOT = {
 				any_vassal = {
 					is_powerful_vassal = yes
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 			}
 		}
@@ -152,6 +156,10 @@ own_war_declaration_law_1 = {
 	ai_will_do = {
 		value = 0	#has no point for AI since it keeps powerful vassals on the council anyway
 	}
+
+	requires_approve = {
+		always = no
+	}
 }
 
 own_war_declaration_law_2 = {
@@ -186,7 +194,7 @@ own_war_declaration_law_2 = {
 			NOT = {
 				any_vassal = {
 					is_powerful_vassal = yes
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 			}
 		}
@@ -227,5 +235,9 @@ own_war_declaration_law_2 = {
 
 	ai_will_do = {
 		value = 1
+	}
+
+	requires_approve = {
+		always = no
 	}
 }

@@ -1,4 +1,68 @@
 ﻿
+frankokratia_leader_protection_value = {
+	#Multiplied at the end of every ai_score_mult in all CBs for now.
+
+	#Fourth Crusade flavor:
+	#We protect the Frankokratia leader to avoid breaking the story cycle.
+	if = {
+		limit = {
+			scope:defender = {
+				any_owned_story = {
+					type = frankokratia_story
+					NOT = { has_variable = franko_war_complete }
+				}
+			}
+		}
+		value = 0
+	}
+	else = {
+		value = 1
+		#ADDED - since this is in every casus belli, i'll use it to nudge AI empires to war against each-other instead of idk whoever else
+		if = {
+			limit = {
+				scope:attacker.highest_held_title_tier >= tier_empire
+				scope:defender.highest_held_title_tier >= tier_empire
+			}
+			multiply = 1.25
+		}
+		else_if = {
+			limit = {
+				#stop vassal-counts from declaring wars while over domain limit
+				scope:attacker = {
+					highest_held_title_tier <= tier_county
+					top_liege != this
+					domain_size > domain_limit
+				}
+			}
+			multiply = 0
+		}
+		#ADDED - and nudge AI to venture into the steppes a bit less 
+		if = {
+			limit = {
+				scope:attacker = {
+					NOR = { 
+						government_has_flag = government_is_nomadic
+						government_has_flag = government_is_tribal
+					}
+				}			
+				scope:defender = {
+					government_has_flag = government_is_nomadic
+					any_character_situation = {
+			    		situation:the_great_steppe ?= this
+			    	}
+				}
+			}
+			multiply = {
+				value = 0.8
+				if = {		#way less likely for vassals coz they're annoying
+					limit = { scope:attacker = { top_liege != this } }
+					add = -0.3
+				}
+			}	
+		}
+	}
+}
+
 relic_artifact_war_ai_score_value = {
 	value = 9			#prev 10
 	scope:attacker = {
@@ -83,202 +147,6 @@ vassalization_size_limit = {
 				}
 			}
 			add = vassalize_growth_per_innovation
-		}
-	}
-}
-
-
-######################
-# AI Decision Making #
-######################
-
-# Compute military strength against *scope:target_military*.
-#
-# This script value and the one after it are to be used in combination as
-# "root_military_strength_higher_than_military_target_value > target_military_strength_root_value"
-# to check player vs enemy strength.
-root_military_strength_higher_than_military_target_value = {
-	value = 0
-	add = max_military_strength # Add num of troops
-	if = {
-		limit = {
-			any_ally = {
-				#NOT = { has_truce = scope:target_military }
-				#ADDED
-				opinion = {
-					target = PREV
-					value > -35
-				}
-			}
-		}
-		every_ally = {
-			limit = {
-				#NOT = { has_truce = scope:target_military }
-				#ADDED
-				opinion = {
-					target = PREV
-					value > -35
-				}
-			}
-			#add = max_military_strength
-			#ADDED CHANGED - players are unreliable creatures
-			add = {
-				value = max_military_strength
-				if = { limit = { is_ai = no } multiply = 0.2 }
-			}
-		}
-	}
-	if = {
-		limit = { exists = var:ai_strength_multiplier }
-		multiply = var:ai_strength_multiplier  # 1.25 == 25% stronger than, remember to potty train your script and have it remove the variable after usage!!
-	}
-}
-
-# One above calcs player strength (plus multiplier), this one is enemy strength.
-target_military_strength_root_value = {
-	value = 0
-	if = {
-		limit = { exists = scope:target_military }
-		add = scope:target_military.max_military_strength # this should be a character, probably a top liege
-		scope:target_military = {
-			every_ally = {
-				limit =	{
-					#NOT = { has_truce = root }
-					#ADDED
-					opinion = {
-						target = PREV
-						value > -35
-					}
-				}
-				#add = max_military_strength
-				#ADDED CHANGED - players are unreliable creatures
-				add = {
-					value = max_military_strength
-					if = { limit = { is_ai = no } multiply = 0.2 }
-				}
-			}
-		}
-	}
-}
-
-# Compute military strength against *scope:recipient*.
-#
-# This script value and the one after it are to be used in combination as
-# "root_military_strength_higher_than_recipient_value  > recipient_strength_root_value"
-# to check player vs enemy strength.
-root_military_strength_higher_than_recipient_value = {
-	value = 0
-	add = max_military_strength # Add num of troops
-	if = {
-		limit = {
-			any_ally = {
-				#NOT = { has_truce = scope:recipient }
-				#ADDED
-				opinion = {
-					target = PREV
-					value > -35
-				}
-			}
-		}
-		every_ally = {
-			limit = {
-				#NOT = { has_truce = scope:recipient }
-				#ADDED
-				opinion = {
-					target = PREV
-					value > -35
-				}
-			}
-			#add = max_military_strength
-			#ADDED CHANGED - players are unreliable creatures
-			add = {
-				value = max_military_strength
-				if = { limit = { is_ai = no } multiply = 0.25 }
-			}
-		}
-	}
-	if = {
-		limit = { exists = var:ai_strength_multiplier }
-		multiply = var:ai_strength_multiplier  # 1.25 == 25% stronger than, remember to potty train your script and have it remove the variable after usage!!
-	}
-}
-
-# One above calcs player strength (plus multiplier), this one is enemy strength.
-recipient_strength_root_value = {
-	value = 0
-	if = {
-		limit = { exists = scope:recipient }
-		add = scope:recipient.max_military_strength # this should be a character, probably a top liege
-		scope:recipient = {
-			every_ally = {
-				limit =	{
-					#NOT = { has_truce = root }
-					#ADDED
-					opinion = {
-						target = PREV
-						value > -35
-					}
-				}
-				#add = max_military_strength
-				#ADDED CHANGED - players are unreliable creatures
-				add = {
-					value = max_military_strength
-					if = { limit = { is_ai = no } multiply = 0.2 }
-				}
-			}
-		}
-	}
-}
-
-frankokratia_leader_protection_value = {
-	#Multiplied at the end of every ai_score_mult in all CBs for now.
-
-	#Fourth Crusade flavor:
-	#We protect the Frankokratia leader to avoid breaking the story cycle.
-	value = 1
-	if = {
-		limit = {
-			scope:defender = {
-				any_owned_story = {
-					type = frankokratia_story
-					NOT = { has_variable = franko_war_complete }
-				}
-			}
-		}
-		multiply = 0
-	}
-	#ADDED - since this is in every casus belli, i'll use it to nudge AI empires to war against each-other instead of idk whoever else
-	else_if = {
-		if = {
-			limit = {
-				scope:attacker.highest_held_title_tier >= tier_empire
-				scope:defender.highest_held_title_tier >= tier_empire
-			}
-			multiply = 1.25
-		}
-		#ADDED - and nudge AI to venture into the steppes a bit less 
-		if = {
-			limit = {
-				scope:attacker = {
-					NOR = { 
-						government_has_flag = government_is_nomadic
-						government_has_flag = government_is_tribal
-					}
-				}			
-				scope:defender = {
-					government_has_flag = government_is_nomadic
-					any_character_situation = {
-			    		situation:the_great_steppe ?= this
-			    	}
-				}
-			}
-			multiply = {
-				value = 0.8
-				if = {		#way less likely for vassals coz they're annoying
-					limit = { scope:attacker = { top_liege != this } }
-					add = -0.3
-				}
-			}	
 		}
 	}
 }

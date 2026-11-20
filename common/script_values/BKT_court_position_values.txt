@@ -5,174 +5,175 @@ tiny_court_position_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply =  {
+				value =  1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply =  {
-			value =  1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
-		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_nomadic
 			}
-		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_ecclesiastical
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_ecclesiastical
+			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
-		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
-			scope:liege = {
+		}
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -182,191 +183,190 @@ minor_court_position_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply =  {
+				value =  1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply =  {
-			value =  1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
-		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_nomadic
 			}
-		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_ecclesiastical
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_ecclesiastical
+			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	# TGP parameters
-	if = {
-		limit = {
-			scope:liege = {
+		# TGP parameters
+		if = {
+			limit = {
 				has_title = title:h_china
 				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
 			}
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = {
-				value = 1
-				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
-			}
-			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
-			}
-			scope:liege = {
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -376,191 +376,196 @@ medium_court_position_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
-		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply = {
+				value = 1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
-		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_nomadic
 			}
-		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_ecclesiastical
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_ecclesiastical
+			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			# Merchant default discount
+			multiply = {
+				value = merchant_court_position_base_cost_mult
+				desc = merchant_court_position_base_cost_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	# TGP parameters
-	if = {
-		limit = {
-			scope:liege = {
+		# TGP parameters
+		if = {
+			limit = {
 				has_title = title:h_china
 				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
 			}
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = {
-				value = 1
-				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
-			}
-			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
-			}
-			scope:liege = {
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 major_court_position_salary = {
@@ -569,191 +574,196 @@ major_court_position_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
-		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply = {
+				value = 1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
-		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_nomadic
 			}
-		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_ecclesiastical
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_ecclesiastical
+			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			# Merchant default discount
+			multiply = {
+				value = merchant_court_position_base_cost_mult
+				desc = merchant_court_position_base_cost_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	# TGP parameters
-	if = {
-		limit = {
-			scope:liege = {
+		# TGP parameters
+		if = {
+			limit = {
 				has_title = title:h_china
 				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
 			}
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = {
-				value = 1
-				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
-			}
-			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
-			}
-			scope:liege = {
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -763,112 +773,130 @@ court_position_physician_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			exists = scope:liege
-		}
-		scope:liege = {
-			culture = {
-				if = {
-					limit = {
-						has_cultural_era_or_later = culture_era_late_medieval
-					}
-					multiply =  {
-						value =  1.75
-						desc = culture_era_late_medieval_salary_mod
-						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-					}
-				}
-				else_if = {
-					limit = {
-						has_cultural_era_or_later = culture_era_high_medieval
-					}
-					multiply = {
-						value = 1.5
-						desc = culture_era_high_medieval_salary_mod
-						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-					}
-				}
-				else_if = {
-					limit = {
-						has_cultural_era_or_later = culture_era_early_medieval
-					}
-					multiply = {
-						value = 1.25
-						desc = culture_era_early_medieval_salary_mod
-						format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-					} 
-				}
-			}
+	scope:liege ?= {
+		culture = {
 			if = {
 				limit = {
-					highest_held_title_tier >= tier_empire
+					has_cultural_era_or_later = culture_era_late_medieval
+				}
+				multiply =  {
+					value =  1.75
+					desc = culture_era_late_medieval_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				}
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+				multiply = {
+					value = 1.5
+					desc = culture_era_high_medieval_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+				}
+			}
+			else_if = {
+				limit = {
+					has_cultural_era_or_later = culture_era_early_medieval
 				}
 				multiply = {
 					value = 1.25
-					desc = empire_salary_mod
+					desc = culture_era_early_medieval_salary_mod
 					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 				} 
 			}
-			#ADDED
+		}
+		if = {
+			limit = {
+				highest_held_title_tier >= tier_empire
+			}
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
+		}
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_tribal
+			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			} 
+		}
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			# Merchant default discount
+			multiply = {
+				value = merchant_court_position_base_cost_mult
+				desc = merchant_court_position_base_cost_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 			if = {
-				limit = {
-					has_perk = at_any_cost_perk
-				}
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
 				multiply = {
-					value = at_any_cost_perk_discount_multiplier
-					desc = at_any_cost_perk_salary_mod
+					value = 0.5
+					desc = merchant_reduction_salary_mod
 					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 				}
 			}
 			if = {
-				limit = {
-					government_has_flag = government_is_tribal
-				}
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
 				multiply = {
 					value = 0.25
-					desc = tribal_salary_mod
-					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-				} 
-			}
-			if = {
-				limit = {
-					government_has_flag = government_is_ecclesiastical
-				}
-				multiply = {
-					value = 0.25
-					desc = ecclesiastical_salary_mod
+					desc = merchant_reduction_salary_mod
 					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 				}
 			}
-			if = {
-				limit = {
-					culture = {
-						has_cultural_parameter = cheaper_court_positions
-					}
-				}
-				multiply = {
-					value = 0.8
-					desc = esteemed_hospitality_salary_mod
-					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_ecclesiastical
+			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
+		}
+		if = {
+			limit = {
+				culture = {
+					has_cultural_parameter = cheaper_court_positions
 				}
 			}
-			if = {
-				limit = {
-					scope:liege = {
-						has_title = title:h_china
-						top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
-					}
-				}
-				multiply = {
-					value = {
-						value = 1
-						add = dynastic_cycle_hegemony_higher_court_position_salaries_value
-					}
-					desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-					format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-				} 
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
+		}
+		if = {
+			limit = {
+				has_title = title:h_china
+				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
+			}
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
 	}
 	if = {
@@ -891,179 +919,186 @@ court_position_antiquarian_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply =  {
+				value =  1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply =  {
-			value =  1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			} 
 		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		} 
-	}
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			} 
 		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		} 
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_ecclesiastical
 			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			# Merchant default discount
+			multiply = {
+				value = merchant_court_position_base_cost_mult
+				desc = merchant_court_position_base_cost_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	# TGP parameters
-	if = {
-		limit = {
-			scope:liege = {
+		# TGP parameters
+		if = {
+			limit = {
 				has_title = title:h_china
 				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
 			}
-		}
-		multiply = {
-			value = {
-				value = 1
-				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
-			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 		}
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
-			}
-			scope:liege = {
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -1073,74 +1108,84 @@ court_position_travel_leader_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	
-	#ADDED
-	if = {
-		limit = {
-			scope:liege = {
-				has_perk = at_any_cost_perk
+	scope:liege = {
+		#ADDED
+		if = {
+			limit = {
+				should_get_bkt_at_any_cost_perk_bonus = yes
+			}
+			multiply = {
+				value = at_any_cost_perk_discount_multiplier
+				desc = at_any_cost_perk_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = at_any_cost_perk_discount_multiplier
-			desc = at_any_cost_perk_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_ecclesiastical
 			}
+			multiply = {
+				value = 0.25
+				desc = ecclesiastical_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.25
-			desc = ecclesiastical_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	# TGP parameters
-	if = {
-		limit = {
-			scope:liege = {
+		# TGP parameters
+		if = {
+			limit = {
 				has_title = title:h_china
 				top_participant_group:dynastic_cycle ?= { has_participant_group_parameter = dynastic_cycle_hegemony_higher_court_position_salaries }
 			}
-		}
-		multiply = {
-			value = {
-				value = 1
-				add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+			multiply = {
+				value = {
+					value = 1
+					add = dynastic_cycle_hegemony_higher_court_position_salaries_value
+				}
+				desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
 			}
-			desc = dynastic_cycle_hegemony_higher_court_position_salaries_desc
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	} 
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
-			}
-			scope:liege = {
+		} 
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -1150,149 +1195,154 @@ medium_court_position_prestige_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
-		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply = {
+				value = 1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
-		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_nomadic
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_nomadic
+			}
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
-		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
-			scope:liege = {
+		}
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 major_court_position_prestige_salary = {
@@ -1301,149 +1351,154 @@ major_court_position_prestige_salary = {
 		desc = COURT_POSITION_SALARY_BREAKDOWN_BASE
 		format = "BASE_VALUE_FORMAT_DECIMALS"
 	}
-	if = {
-		limit = {
-			scope:liege.sub_realm_size >= 120
+	scope:liege = {
+		if = {
+			limit = {
+				sub_realm_size >= 120
+			}
+			multiply = {
+				value = 1.6
+				desc = enormous_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.6
-			desc = enormous_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 90
+			}
+			multiply = {
+				value = 1.4
+				desc = large_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 90
+		else_if = {
+			limit = {
+				sub_realm_size >= 60
+			}
+			multiply = {
+				value = 1.2
+				desc = medium_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.4
-			desc = large_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+		else_if = {
+			limit = {
+				sub_realm_size >= 30
+			}
+			multiply =  {
+				value =  1.1
+				desc = small_realm_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 60
-		}
-		multiply = {
-			value = 1.2
-			desc = medium_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege.sub_realm_size >= 30
-		}
-		multiply =  {
-			value =  1.1
-			desc = small_realm_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_late_medieval
 				}
 			}
+			multiply = {
+				value = 1.75
+				desc = culture_era_late_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.75
-			desc = culture_era_late_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_high_medieval
 				}
 			}
+			multiply = {
+				value = 1.5
+				desc = culture_era_high_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.5
-			desc = culture_era_high_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	else_if = {
-		limit = {
-			scope:liege = {
+		else_if = {
+			limit = {
 				culture = {
 					has_cultural_era_or_later = culture_era_early_medieval
 				}
 			}
+			multiply = {
+				value = 1.25
+				desc = culture_era_early_medieval_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = culture_era_early_medieval_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				highest_held_title_tier >= tier_empire
 			}
+			multiply = {
+				value = 1.25
+				desc = empire_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
+			}
 		}
-		multiply = {
-			value = 1.25
-			desc = empire_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_PLUS_NEGATIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = {
 				government_has_flag = government_is_tribal
 			}
-		}
-		multiply = {
-			value = 0.25
-			desc = tribal_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
-				government_has_flag = government_is_nomadic
+			multiply = {
+				value = 0.25
+				desc = tribal_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
 		}
-		multiply = {
-			value = 0.5
-			desc = nomad_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+		if = {
+			limit = {
+				government_has_flag = government_is_nomadic
+			}
+			multiply = {
+				value = 0.5
+				desc = nomad_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+			}
 		}
-	}
-	if = {
-		limit = {
-			scope:liege = {
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_less } }
+				multiply = {
+					value = 0.5
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+			if = {
+				limit = { house ?= { has_house_unity_parameter = unity_deputy_positions_cost_significantly_less } }
+				multiply = {
+					value = 0.25
+					desc = merchant_reduction_salary_mod
+					format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
+				}
+			}
+		}
+		if = {
+			limit = {
 				culture = {
 					has_cultural_parameter = cheaper_court_positions
 				}
 			}
-		}
-		multiply = {
-			value = 0.8
-			desc = esteemed_hospitality_salary_mod
-			format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
-		}
-	}
-	if = {
-		limit = {
-			OR = {
-				has_game_rule = hard_difficulty
-				has_game_rule = very_hard_difficulty
+			multiply = {
+				value = 0.8
+				desc = esteemed_hospitality_salary_mod
+				format = "BASE_VALUE_FORMAT_DECIMALS_MINUS_POSITIVE"
 			}
-			scope:liege = {
+		}
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = hard_difficulty
+					has_game_rule = very_hard_difficulty
+				}
 				is_ai = yes
 			}
+			multiply = 0
 		}
-		multiply = 0
 	}
 }
 
@@ -1477,8 +1532,14 @@ major_court_position_prestige_revoke_cost = {
 # COURT POSITION OPINIONS
 ############################
 
-regular_court_position_opinion = 10		#prev 5
-ceremonial_court_position_opinion = 20	#prev 10
+regular_court_position_opinion = {
+	value = 10		#prev 5
+	add = merchant_benevolent_intent_court_position_opinion_value
+}
+ceremonial_court_position_opinion = {
+	value = 20	#prev 10
+	add = merchant_benevolent_intent_court_position_opinion_value
+}
 regular_camp_officer_opinion = 5		#prev 2
 high_camp_officer_opinion = 10			#prev 5
 

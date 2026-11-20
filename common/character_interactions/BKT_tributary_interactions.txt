@@ -11,9 +11,25 @@ become_tributary_interaction = {
 
 	desc = become_tributary_interaction_desc
 
+	is_available = {
+		is_landed = yes # Landless have no realm to render tribute from;
+		is_independent_ruler = yes # You have to be independent - This check exists to prevent a lot of edge-cases where you can change liege
+		is_confederation_member = no
+		NOT = {
+			government_has_flag = cannot_be_vassal_or_liege
+		}
+		trigger_if = {
+			limit = {
+				is_ai = yes
+			}
+			is_at_war = no
+			is_available_allow_travelling = yes
+		}
+	}
+
 	is_shown = {
 		scope:recipient = {
-			is_independent_ruler = yes # while it's possible for tributaries to have their own tributaries, it should not be possible to create a tributary relationship with a non-independent ruler
+			this = top_liege # while it's possible for tributaries to have their own tributaries, it should not be possible to create a tributary relationship with a non-independent ruler
 			NOR = {
 				this = scope:actor
 				this = scope:actor.suzerain
@@ -26,6 +42,20 @@ become_tributary_interaction = {
 				limit = { is_ai = yes }
 				current_military_strength < scope:recipient.one_and_a_half_times_current_military_strength
 				primary_title.tier < scope:recipient.primary_title.tier
+				# We skip recipients that ai_will_do weights down so far the AI never picks them
+				scope:recipient = {
+					OR = {
+						government_has_flag = government_is_mandala
+						government_has_flag = government_is_tribal
+						NOR = {
+							government_has_mechanic = administrative
+							government_is_japanese_trigger = yes
+							government_has_flag = government_is_nomadic
+						}
+					}
+				}
+				#ADDED - uhhhh yeah
+				NOT = { has_variable = conqueror }
 			}
 		}
 	}
@@ -34,7 +64,7 @@ become_tributary_interaction = {
 		#These triggers need to match the Tribute Mission Decision
 		trigger_if = {
 			limit = {
-				scope:recipient = { primary_title.tier = tier_hegemony }
+				scope:recipient = { highest_held_title_tier = tier_hegemony }
 			}
 			custom_tooltip = {
 				text = become_tributary_interaction_hegemony_not_neighbor_tt
@@ -266,13 +296,6 @@ become_tributary_interaction = {
 		}
 	}
 
-	is_available = {
-		is_landed = yes # Landless have no realm to render tribute from;
-		top_liege ?= this # You have to be independent - This check exists to prevent a lot of edge-cases where you can change liege
-		is_confederation_member = no
-		NOT = { government_has_flag = cannot_be_vassal_or_liege }
-	}
-
 	ai_targets = {
 		ai_recipients = neighboring_rulers_including_tributary_borders
 		max = 5
@@ -400,7 +423,6 @@ become_tributary_interaction = {
 
 		### MANDALA ###
 		#Added threshold for Mandalas who already are Tributaries
-		#ADDED - fixed those up.
 		modifier = {
 			scope:actor = { is_tributary = yes }
 			NOT = { scope:actor.suzerain = scope:recipient }
@@ -438,7 +460,7 @@ become_tributary_interaction = {
 		modifier = {
 			scope:actor = { government_has_flag = government_is_tribal }
 			scope:recipient = { government_has_flag = government_is_mandala }
-			add = 10	#prev 30
+			add = 20	#prev 30
 			desc = actor_is_a_tribal_government
 		}
 		#Mandala Piety Level - this is only checked if you are not a Devaraja/haven't got a capital temple complex - Otherwise we use Radiance
@@ -467,7 +489,6 @@ become_tributary_interaction = {
 		modifier = {
 			trigger_if = {
 				limit = {
-					scope:recipient = { has_unruined_mandala_capital_trigger = yes }
 					scope:actor = {
 						is_tributary = no
 						OR = {
@@ -475,6 +496,7 @@ become_tributary_interaction = {
 							government_has_flag = government_is_tribal
 						}
 					}
+					scope:recipient = { has_unruined_mandala_capital_trigger = yes }
 				}
 				scope:recipient = {
 					OR = {
@@ -738,7 +760,7 @@ become_tributary_interaction = {
 			scope:recipient = {
 				government_has_flag = government_is_nomadic
 			}
-			add = 100
+			add = 25		#prev 100
 		}
 
 		modifier = {  # Can't flee the conqueror this way
@@ -754,7 +776,7 @@ become_tributary_interaction = {
 				is_rightful_liege_of = scope:actor 
 				NOT = { government_has_flag = government_is_nomadic }
 			}
-			add = -50
+			add = -100
 		}
 
 		modifier = { # Wide difference in rank
@@ -777,6 +799,8 @@ become_tributary_interaction = {
 						any_neighboring_top_liege_realm_owner = { this = scope:recipient }
 					}
 				}
+				exists = scope:actor.capital_province
+				exists = scope:recipient.capital_province
 				scope:actor.capital_province = { squared_distance = { target = scope:recipient.capital_province value < squared_distance_major } }
 			}
 			add = -35			#prev -15
@@ -789,6 +813,8 @@ become_tributary_interaction = {
 						any_neighboring_top_liege_realm_owner = { this = scope:recipient }
 					}
 				}
+				exists = scope:actor.capital_province
+				exists = scope:recipient.capital_province
 				scope:actor.capital_province = { squared_distance = { target = scope:recipient.capital_province value >= squared_distance_major } }
 			}
 			add = -75			#prev -25
@@ -844,7 +870,7 @@ become_tributary_interaction = {
 
 		# CONTRACT OPTIONS
 		modifier = {
-			add = -25
+			add = -35	#prev -25
 			scope:low_obligations = yes
 			desc = CONTRACT_LOW_TRIBUTARY_TAXES_REASON
 		}
@@ -940,6 +966,9 @@ offer_courtier_interaction = {
 
 	is_shown = {
 		scope:actor != scope:recipient
+		scope:actor = {
+			NOT = { government_has_flag = government_is_merchant }
+		}
 		scope:recipient = {
 			is_ruler = yes
 			NOT = { government_has_flag = government_is_herder }
@@ -984,16 +1013,10 @@ offer_courtier_interaction = {
 			}
 		}
 
-		trigger_if = { #For adventurers we check range
-			limit = {
-				scope:actor = {
-					is_landless_adventurer = yes
-				}
-			}
-			ep3_laamp_diplo_range_trigger = {
-				TARGET = scope:recipient
-				LAAMP = scope:actor
-			}
+		#limit range for landless adventurers/merchants
+		exceptional_diplo_range_trigger = {
+			CHARACTER = scope:actor
+			TARGET = scope:recipient
 		}
 	}
 
@@ -1018,16 +1041,6 @@ offer_courtier_interaction = {
 				}
 			}
 		}
-		#ADDED
-		#custom_tooltip = {
-		#	text = no_court_chaplain_can_be_sent_tt
-		#	scope:secondary_actor = {
-		#		NOT = {
-		#			scope:actor.cp:councillor_court_chaplain ?= this
-		#		}
-		#	}
-		#}
-		
 		#ADDED
 		scope:secondary_actor ?= { 
 			has_any_court_position = no
@@ -1069,15 +1082,15 @@ offer_courtier_interaction = {
 					prowess >= extremely_high_skill_rating
 					AND = {
 						diplomacy >= monumentally_high_skill_rating
-						scope:actor.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
+						scope:recipient.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
 					}
 					AND = {
-						stewardship >= monumentally_high_skill_rating	#prev diplomacy
-						scope:actor.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
+						stewardship >= monumentally_high_skill_rating
+						scope:recipient.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
 					}
 					AND = {
-						intrigue >= monumentally_high_skill_rating		#prev diplomacy
-						scope:actor.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
+						intrigue >= monumentally_high_skill_rating
+						scope:recipient.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
 					}
 					has_relation_lover = scope:recipient # Shhh, don't tell anyone, of course you're 'skilled'!
 					trigger_if = {
@@ -1323,15 +1336,15 @@ offer_courtier_interaction = {
 					exists = inspiration
 					AND = {
 						diplomacy >= monumentally_high_skill_rating
-						scope:actor.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
+						scope:recipient.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
 					}
 					AND = {
-						stewardship >= monumentally_high_skill_rating	#prev diplomacy
-						scope:actor.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
+						stewardship >= monumentally_high_skill_rating
+						scope:recipient.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
 					}
 					AND = {
-						intrigue >= monumentally_high_skill_rating		#prev diplomacy
-						scope:actor.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
+						intrigue >= monumentally_high_skill_rating
+						scope:recipient.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
 					}
 					trigger_if = {
 						limit = {
@@ -1646,11 +1659,11 @@ demand_courtier_interaction = {
 						scope:actor.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
 					}
 					AND = {
-						stewardship >= monumentally_high_skill_rating	#prev diplomacy
+						stewardship >= monumentally_high_skill_rating
 						scope:actor.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
 					}
 					AND = {
-						intrigue >= monumentally_high_skill_rating		#prev diplomacy
+						intrigue >= monumentally_high_skill_rating
 						scope:actor.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
 					}
 					trigger_if = {
@@ -1721,6 +1734,7 @@ demand_courtier_interaction = {
 	is_shown = {
 		scope:actor != scope:recipient
 		scope:recipient = {
+			NOT = { government_has_flag = government_is_merchant }
 			OR = {
 				trigger_if = {
 					limit = {
@@ -1733,12 +1747,12 @@ demand_courtier_interaction = {
 				is_tributary_of = scope:actor
 				AND = { # Celestial has this available towards vassals
 					scope:actor = { government_has_flag = government_is_celestial }
-					liege = scope:actor
+					liege ?= scope:actor
 				}
 				AND = { # The minister of personnel can use it against every ruler in the realm
 					scope:actor = { has_title = title:e_minister_of_personnel }
 					is_ruler = yes
-					top_liege = scope:actor.top_liege
+					top_liege ?= scope:actor.top_liege
 					# Except the top liege
 					top_liege != this
 				}
@@ -1943,7 +1957,7 @@ demand_courtier_interaction = {
 		base = 0
 
 		modifier = {
-			add = 100
+			add = 50		#prev 100
 			scope:secondary_actor = {
 				OR = {
 					has_relation_friend = scope:actor
@@ -1957,11 +1971,11 @@ demand_courtier_interaction = {
 						scope:actor.cp:councillor_chancellor ?= { diplomacy < monumentally_high_skill_rating }
 					}
 					AND = {
-						stewardship >= monumentally_high_skill_rating	#prev diplomacy
+						stewardship >= monumentally_high_skill_rating
 						scope:actor.cp:councillor_steward ?= { stewardship < monumentally_high_skill_rating }
 					}
 					AND = {
-						intrigue >= monumentally_high_skill_rating		#prev diplomacy
+						intrigue >= monumentally_high_skill_rating
 						scope:actor.cp:councillor_spymaster ?= { intrigue < monumentally_high_skill_rating }
 					}
 					trigger_if = {
@@ -2095,7 +2109,10 @@ demand_courtier_interaction = {
 						}
 						# Use Hook
 						if = {
-							limit = { scope:hook = yes }
+							limit = {
+								scope:hook = yes
+								has_usable_hook = scope:recipient
+							}
 							use_hook = scope:recipient
 						}
 					}

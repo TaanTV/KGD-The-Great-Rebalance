@@ -305,7 +305,7 @@ end_court_scheme_effect = {
 					scope:court_outcome = flag:failure_hard
 				}
 				culture = {
-					has_cultural_parameter = romance_scheme_bonuses
+					has_cultural_parameter = romance_scheme_penalty
 				}
 			}
 			add_stress = medium_stress_impact_gain

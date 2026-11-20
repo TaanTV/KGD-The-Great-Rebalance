@@ -1,7 +1,7 @@
 ﻿tgp_dipped_into_treasury_modifier = {
 	icon = legitimacy_negative
 	stacking = yes
-	legitimacy_gain_mult = -0.2
+	#legitimacy_gain_mult = -0.2
 	#ADDED
 	monthly_legitimacy_add = -2.5
 	vassal_tax_contribution_add = -0.05
@@ -22,8 +22,8 @@ tgp_minister_dipped_into_treasury_modifier = {
 
 silk_road_exceptional_bounty_province_modifier = {
 	icon = compass_positive
-	tax_mult = 0.1			#prev 0.05
-	development_growth_factor = 0.1
+	artisan_tax_mult = 0.1			#prev 0.05
+	prosperity_growth_factor = 0.1
 	build_gold_cost = -0.05	#prev -0.1
 	#ADDED
 	county_fertility_decline_add = 1
@@ -31,8 +31,8 @@ silk_road_exceptional_bounty_province_modifier = {
 
 silk_road_steady_trading_province_modifier = {
 	icon = compass_positive
-	tax_mult = 0.05			#prev 0.025
-	development_growth_factor = 0.05
+	artisan_tax_mult = 0.05			#prev 0.025
+	prosperity_growth_factor = 0.05
 	build_gold_cost = -0.03	#prev -0.05
 	#ADDED
 	county_fertility_decline_add = 0.5
@@ -40,7 +40,7 @@ silk_road_steady_trading_province_modifier = {
 
 silk_road_hardship_province_modifier = {
 	icon = compass_positive
-	development_growth_factor = small_development_growth_loss
+	prosperity_growth_factor = small_prosperity_growth_loss
 	#ADDED
 	county_fertility_decline_add = -0.5
 }

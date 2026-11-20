@@ -77,22 +77,26 @@ title_revocation_is_tyrannical_trigger = {
 		AND = {
 			$VASSAL$ = {
 				NOT = { vassal_contract_has_flag = religiously_protected }
+				#ADDED
+				faith != $VASSAL$.faith
 			}
 			OR = {
 				AND = {
 					rite = { rite_has_parameter = pluralism_righteous_revocation_tyranny_reduced }
-					faith = {
-						faith_hostility_level = {
-							target = $VASSAL$.faith
+					#ADDED - swapped those to rites
+					rite = {
+						rite_hostility_level = {
+							target = $VASSAL$.rite
 							value = faith_evil_level
 						}
 					}
 				}
 				AND = {
 					rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_minimal }
-					faith = {
-						faith_hostility_level = {
-							target = $VASSAL$.faith
+					#ADDED - swapped those to rites
+					rite = {
+						rite_hostility_level = {
+							target = $VASSAL$.rite
 							value >= faith_hostile_level
 						}
 					}
@@ -100,9 +104,9 @@ title_revocation_is_tyrannical_trigger = {
 				#ADDED
 				AND = {
 					rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_none }
-					faith = {
-						faith_hostility_level = {
-							target = $VASSAL$.faith
+					rite = {
+						rite_hostility_level = {
+							target = $VASSAL$.rite
 							value >= faith_astray_level
 						}
 					}
@@ -122,21 +126,26 @@ vassal_revocation_is_tyrannical_trigger = {
 			}
 		}
 		has_revoke_title_reason = $VASSAL$
+		#ADDED - check for faith too
+		AND = {
+			faith != $VASSAL$.faith
 		OR = {
 			AND = {
 				rite = { rite_has_parameter = pluralism_righteous_revocation_tyranny_reduced }
-				faith = {
-					faith_hostility_level = {
-						target = $VASSAL$.faith
+				#ADDED - swapped those to rites
+				rite = {
+					rite_hostility_level = {
+						target = $VASSAL$.rite
 						value = faith_evil_level
 					}
 				}
 			}
 			AND = {
 				rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_minimal }
-				faith = {
-					faith_hostility_level = {
-						target = $VASSAL$.faith
+				#ADDED - swapped those to rites
+				rite = {
+					rite_hostility_level = {
+						target = $VASSAL$.rite
 						value >= faith_hostile_level
 					}
 				}
@@ -144,13 +153,14 @@ vassal_revocation_is_tyrannical_trigger = {
 			#ADDED
 			AND = {
 				rite = { rite_has_parameter = pluralism_fundamentalist_revocation_tyranny_none }
-				faith = {
-					faith_hostility_level = {
-						target = $VASSAL$.faith
+				rite = {
+					rite_hostility_level = {
+						target = $VASSAL$.rite
 						value >= faith_astray_level
 					}
 				}
 			}
+		}
 		}
 	}
 }

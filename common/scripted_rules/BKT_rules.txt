@@ -312,8 +312,8 @@ ai_wants_grand_wedding_promise = {
 	# Only do Grand Weddings for rulers of your tier or above
 	exists = scope:recipient.primary_title
 	OR = {
-		scope:recipient.primary_title.tier >= primary_title.tier
-		scope:recipient.primary_title.tier >= tier_kingdom
+		scope:recipient.highest_held_title_tier >= primary_title.tier
+		scope:recipient.highest_held_title_tier >= tier_kingdom
 	}
 }
 
@@ -367,7 +367,7 @@ ai_wants_to_migrate = {
 				has_realm_law = nomadic_authority_4
 				has_realm_law = nomadic_authority_5
 			}
-			primary_title.tier < tier_kingdom
+			highest_held_title_tier < tier_kingdom
 		}
 		always = yes
 	}
@@ -405,7 +405,7 @@ ai_wants_to_migrate = {
 ai_should_create_title = {
 	# emperors should not create kingdoms / empires
 	nand = {
-		root.primary_title.tier = tier_empire
+		root.highest_held_title_tier = tier_empire
 		scope:title.tier >= tier_kingdom
 		scope:title.tier <= tier_empire
 		#ADDED - actually create kingdoms if you're low on vassal limit
@@ -417,8 +417,16 @@ ai_should_create_title = {
 
 	# hegemons should not create empires / hegemonies
 	nand = {
-		root.primary_title.tier = tier_hegemony
+		root.highest_held_title_tier = tier_hegemony
 		scope:title.tier >= tier_empire
+	}
+
+	# Republics may not create higher tier titles (they have a special law to gain higher tier titles instead)
+	trigger_if = {
+		limit = {
+			government_has_flag = government_is_republic
+		}
+		highest_held_title_tier > scope:title.tier
 	}
 	
 	#ADDED - actually this weird arrengment to use ?= doesnt help with error logging, oh well

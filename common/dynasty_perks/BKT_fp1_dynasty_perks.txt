@@ -6,7 +6,7 @@ fp1_adventure_legacy_1 = { # Wanderlust
 	can_be_picked = { eligible_for_fp1_dynasty_legacies_trigger = yes }
 
 	character_modifier = {
-		diplomatic_range_mult = 0.2	#prev 0.3
+		diplomatic_range_mult = 0.15	#prev 0.3
 		#opinion_of_different_culture = 10
 		#different_culture_opinion = 10
 		ai_boldness = medium_positive_ai_value
@@ -39,9 +39,9 @@ fp1_adventure_legacy_3 = { # Strange Gods
 	legacy = fp1_adventure_legacy_track
 
 	character_modifier = {
-		faith_conversion_piety_cost_mult = -0.2		#prev -0.5
-		different_faith_county_opinion_mult = -0.5
-		different_faith_opinion = 10				#prev 15
+		faith_conversion_piety_cost_mult = -0.2			#prev -0.5
+		different_faith_popular_opinion_mult = -0.25	#prev -0.5
+		different_faith_opinion = 10					#prev 15
 	}
 
 	effect = {

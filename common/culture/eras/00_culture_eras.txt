@@ -1,0 +1,147 @@
+﻿
+culture_era_tribal = {
+	year = 0
+
+	#ADDED
+	character_modifier = {
+		vassal_limit = -5
+		short_reign_duration_mult = 0.33
+	}
+}
+
+culture_era_early_medieval = {	
+	year = 843
+	invalid_for_government = tribal_government
+	invalid_for_government = nomad_government
+	invalid_for_government = herder_government
+	invalid_for_government = wanua_government
+	
+	culture_modifier = {
+		culture_tradition_max_add = 1
+	}
+
+	character_modifier = {
+		men_at_arms_maintenance = 0.2	#prev 0.15
+		#ADDED
+		levy_maintenance = 0.2
+	}
+
+	custom = unlock_early_medieval_holding_tiers
+	custom = more_expensive_court_positions
+	custom = increased_activity_cost
+	
+	##################################################
+	# MAA Upgrades
+
+	# Cultural 
+	## Longbowmen
+	maa_upgrade = {
+		men_at_arms = longbowmen
+		damage = 10
+		toughness = 2
+	}
+
+	## Gakgung Archers
+	maa_upgrade = {
+		men_at_arms = gakgung_archers
+		damage = 5
+		toughness = 2
+	}
+}
+
+culture_era_high_medieval = {
+	year = 1050
+	invalid_for_government = tribal_government
+	invalid_for_government = nomad_government
+	invalid_for_government = herder_government
+	invalid_for_government = wanua_government
+	
+	culture_modifier = {
+		culture_tradition_max_add = 1
+	}
+	
+	character_modifier = {
+		mercenary_hire_cost_mult = 0.2		#prev 0.15
+		men_at_arms_maintenance = 0.2		#prev 0.15
+		#ADDED
+		levy_maintenance = 0.2
+	}
+
+	custom = unlock_high_medieval_holding_tiers
+	custom = more_expensive_court_positions
+	custom = increased_activity_cost
+	
+	##################################################
+	# MAA Upgrades
+
+	# Cultural 
+	## Longbowmen
+	maa_upgrade = {
+		men_at_arms = longbowmen
+		damage = 10
+		toughness = 2
+	}
+
+	## Gakgung Archers
+	maa_upgrade = {
+		men_at_arms = gakgung_archers
+		damage = 6
+		toughness = 2
+	}
+
+	## Fire Lancers
+	maa_upgrade = {
+		men_at_arms = fire_lancers
+		damage = 5
+		screen = 3
+	}
+}
+
+culture_era_late_medieval = {
+	year = 1200
+	invalid_for_government = tribal_government
+	invalid_for_government = nomad_government
+	invalid_for_government = herder_government
+	invalid_for_government = wanua_government
+	
+	culture_modifier = {
+		culture_tradition_max_add = 1
+	}
+
+	character_modifier = {
+		mercenary_hire_cost_mult = 0.25		#prev 0.15
+		men_at_arms_maintenance = 0.25		#prev 0.15
+		#ADDED
+		levy_maintenance = 0.25
+	}
+
+	custom = unlock_late_medieval_holding_tiers
+	custom = more_expensive_court_positions
+	custom = increased_activity_cost
+	
+
+	##################################################
+	# MAA Upgrades
+
+	# Cultural 
+	## Longbowmen
+	maa_upgrade = {
+		men_at_arms = longbowmen
+		damage = 10
+		toughness = 2
+	}
+
+	## Gakgung Archers
+	maa_upgrade = {
+		men_at_arms = gakgung_archers
+		damage = 8
+		toughness = 2
+	}
+
+	## Fire Lancers
+	maa_upgrade = {
+		men_at_arms = fire_lancers
+		damage = 8
+		screen = 5
+	}
+}

@@ -38,7 +38,9 @@ light_footmen = {
 	toughness = 16
 	pursuit = 12	#prev: 10
 	screen = 16
-	
+
+	control_value = 2
+
 	terrain_bonus = {
 		forest = { damage = 4 toughness = 6 }
 		taiga = { damage = 4 toughness = 6 }
@@ -97,7 +99,9 @@ bowmen = {
 	toughness = 10
 	pursuit = 0
 	screen = 0
-	
+
+	control_value = 2
+
 	terrain_bonus = {
 		hills = { damage = 10 toughness = 4 }
 		forest = { toughness = 4 screen = 4 }
@@ -109,7 +113,10 @@ bowmen = {
 	}
 
 	can_recruit = {
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
 
 	should_show_when_unavailable = {
@@ -152,11 +159,13 @@ bowmen = {
 light_horsemen = {
 	type = light_cavalry
 	
-	damage = 24		#prev 22
+	damage = 22
 	toughness = 16	#prev 15
 	pursuit = 32	#prev 30
 	screen = 32		#prev 30
-	
+
+	control_value = 4
+
 	terrain_bonus = {
 		plains = { damage = 15 }
 		drylands = { damage = 15 }
@@ -165,14 +174,17 @@ light_horsemen = {
 		desert_mountains = { damage = -15 pursuit = -20 }
 		wetlands = { damage = -15 toughness = -10 pursuit = -30 screen = -30 }
 	}
-	
+
 	counters = {
 		archers = 1
 		gunpowder = 1
 	}
 
 	can_recruit = {
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
 
 	should_show_when_unavailable = {
@@ -200,6 +212,7 @@ light_horsemen = {
 		value = culture_ai_weight_light_cavalry
 		add = counter_synergy_ai_weight_light_cavalry
 		#ADDED
+		add = -10		#a bit less
 		if = {
 			limit = {
 				culture ?= { culture_has_light_cavalry_maa = yes }
@@ -223,12 +236,14 @@ light_horsemen = {
 
 pikemen_unit = {
 	type = pikemen
-	
+
 	damage = 22
 	toughness = 26	#prev: 24
 	pursuit = 0
 	screen = 0
-	
+
+	control_value = 4
+
 	terrain_bonus = {
 		mountains = { toughness = 12 }
 		desert_mountains = { toughness = 12 }
@@ -243,7 +258,10 @@ pikemen_unit = {
 	}
 
 	can_recruit = {
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
 
 	should_show_when_unavailable = {
@@ -283,17 +301,17 @@ pikemen_unit = {
 	}
 }
 
-
-
 #Tribal Era
 armored_footmen = {
 	type = heavy_infantry
-	
+
 	damage = 32
 	toughness = 22
 	pursuit = 0
 	screen = 0
-	
+
+	control_value = 4
+
 	# ADDED to all heavy infantry
 	terrain_bonus = {
 		wetlands = { damage = -16 toughness = -6 }
@@ -311,13 +329,16 @@ armored_footmen = {
 		NOT = {
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
-	
+
 	should_show_when_unavailable = {
 		government_allows = subject_men_at_arms
 	}
-	
+
 	buy_cost = { gold = heavy_infantry_recruitment_cost }
 	low_maintenance_cost = { gold = heavy_infantry_low_maint_cost }
 	high_maintenance_cost = { gold = heavy_infantry_high_maint_cost }
@@ -354,10 +375,10 @@ armored_footmen = {
 onager = {
 	type = siege_weapon
 	fights_in_main_phase = no
-	
+
 	damage = 0
 	toughness = 12
-	
+
 	siege_tier = 1
 	siege_value = 0.2
 
@@ -368,18 +389,21 @@ onager = {
 			has_innovation = innovation_catapult
 			culture_uses_eastern_siege_weapons_trigger = no
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
-	
+
 	should_show_when_unavailable = {
 		government_allows = subject_men_at_arms
 	}
-	
+
 	buy_cost = { gold = onager_recruitment_cost }
 	low_maintenance_cost = { gold = onager_low_maint_cost }
 	high_maintenance_cost = { gold = onager_high_maint_cost }
 	provision_cost = @provisions_cost_special_cheap
-	
+
 	stack = 10
 	allowed_in_hired_troops = no
 }
@@ -387,12 +411,14 @@ onager = {
 #Medieval Era
 armored_horsemen = {
 	type = heavy_cavalry
-	
+
 	damage = 100
 	toughness = 35
 	pursuit = 20
 	screen = 0
-	
+
+	control_value = 8
+
 	terrain_bonus = {
 		plains = { damage = 30 }
 		drylands = { damage = 30 }
@@ -411,7 +437,10 @@ armored_horsemen = {
 		culture = {
 			has_innovation = innovation_arched_saddle
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 		NOT = {
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
 		}
@@ -422,7 +451,7 @@ armored_horsemen = {
 		culture = { has_cultural_era_or_later = culture_era_early_medieval }
 		NOT = { has_access_to_maa = nomad_lancers }
 	}
-	
+
 	access_through_subject = {
 		NOT = { has_access_to_maa = nomad_lancers }
 	}
@@ -436,7 +465,7 @@ armored_horsemen = {
 	low_maintenance_cost = { gold = heavy_cavalry_low_maint_cost }
 	high_maintenance_cost = { gold = heavy_cavalry_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_expensive
-	
+
 	stack = 20
 	ai_quality = { 
 		value = culture_ai_weight_heavy_cavalry 
@@ -465,10 +494,10 @@ armored_horsemen = {
 mangonel = {
 	type = siege_weapon
 	fights_in_main_phase = no
-	
+
 	damage = 0
 	toughness = 12
-	
+
 	siege_tier = 2
 	siege_value = 0.3
 
@@ -479,19 +508,22 @@ mangonel = {
 			has_innovation = innovation_mangonel
 			culture_uses_eastern_siege_weapons_trigger = no
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
-	
+
 	should_show_when_unavailable = {
 		government_allows = subject_men_at_arms
 		culture = { has_cultural_era_or_later = culture_era_early_medieval }
 	}
-	
+
 	buy_cost = { gold = mangonel_recruitment_cost }
 	low_maintenance_cost = { gold = mangonel_low_maint_cost }
 	high_maintenance_cost = { gold = mangonel_high_maint_cost }
 	provision_cost = @provisions_cost_special_moderate
-	
+
 	stack = 10
 	allowed_in_hired_troops = no
 }
@@ -499,12 +531,14 @@ mangonel = {
 #High Medieval Era
 crossbowmen = {
 	type = archers
-	
+
 	damage = 34 #prev: 42
 	toughness = 16 #prev: 18
 	pursuit = 0
 	screen = 0
-	
+
+	control_value = 4
+
 	terrain_bonus = {
 		hills = { damage = 10 }
 		plains = { toughness = -8 }
@@ -522,7 +556,10 @@ crossbowmen = {
 		culture = {
 			has_innovation = innovation_advanced_bowmaking
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
 
 	should_show_when_unavailable = {
@@ -540,8 +577,8 @@ crossbowmen = {
 		#ADDED - counter_synergy_ai_weight_crossbowmen already incluced counter_synergy_ai_weight_archers
 		add = 10
 	}
-	
-	
+
+
 	stack = 40
 
 	illustration = {
@@ -560,10 +597,10 @@ crossbowmen = {
 trebuchet = {
 	type = siege_weapon
 	fights_in_main_phase = no
-	
+
 	damage = 0
 	toughness = 12
-	
+
 	siege_tier = 3
 	siege_value = 0.4
 
@@ -574,20 +611,23 @@ trebuchet = {
 			has_innovation = innovation_trebuchet
 			culture_uses_eastern_siege_weapons_trigger = no
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 		
 	}
-	
+
 	should_show_when_unavailable = {
 		government_allows = subject_men_at_arms
 		culture = { has_cultural_era_or_later = culture_era_high_medieval }
 	}
-	
+
 	buy_cost = { gold = trebuchet_recruitment_cost }
 	low_maintenance_cost = { gold = trebuchet_low_maint_cost }
 	high_maintenance_cost = { gold = trebuchet_high_maint_cost }
 	provision_cost = @provisions_cost_special_expensive
-	
+
 	stack = 10
 	allowed_in_hired_troops = no
 
@@ -597,10 +637,10 @@ trebuchet = {
 bombard = {
 	type = siege_weapon
 	fights_in_main_phase = no
-	
+
 	damage = 0
 	toughness = 12
-	
+
 	siege_tier = 4
 	siege_value = 0.6
 
@@ -611,19 +651,22 @@ bombard = {
 			has_cultural_parameter = unlock_late_medieval_gunpowder_units
 			culture_uses_eastern_siege_weapons_trigger = no
 		}
-		NOT = { government_has_flag = government_is_in_steppe }
+		NOR = {
+			government_has_flag = government_is_in_steppe
+			government_has_flag = government_is_merchant
+		}
 	}
-	
+
 	should_show_when_unavailable = {
 		government_allows = subject_men_at_arms
 		culture = { has_cultural_era_or_later = culture_era_late_medieval }
 	}
-	
+
 	buy_cost = { gold = bombard_recruitment_cost }
 	low_maintenance_cost = { gold = bombard_low_maint_cost }
 	high_maintenance_cost = { gold = bombard_high_maint_cost }
 	provision_cost = @provisions_cost_special_bankrupting
-	
+
 	stack = 10
 	allowed_in_hired_troops = no
 }
@@ -636,9 +679,12 @@ handgunners = {
 	pursuit = 0
 	screen = 5
 
+	control_value = 4
+
 	can_recruit = {
 		gunpowder_raise_limit_existing_gunpowder_units < gunpowder_raise_limit_existing_gunpowder_buildings	# one powder magazine must be owned to support three handgunner regiments, regardless of maa size
 		culture = { has_cultural_parameter = unlock_late_medieval_gunpowder_units }
+		NOT = { government_has_flag = government_is_merchant }
 	}
 
 	terrain_bonus = {
@@ -674,7 +720,8 @@ house_guard = {
 		dynasty ?= {
 			has_dynasty_perk = warfare_legacy_5
 		}
-		NOT = {
+		NOR = {
+			government_has_flag = government_is_merchant
 			culture = { has_cultural_parameter = strength_in_numbers_heavy_maa_ban }
 		}
 	}
@@ -683,25 +730,27 @@ house_guard = {
 	toughness = 32
 	pursuit = 0
 	screen = 24
-	
+
+	control_value = 4
+
 	# ADDED to all heavy infantry
 	terrain_bonus = {
 		wetlands = { damage = -20 toughness = -8 }
 	}
-	
+
 	counters = {
 		pikemen = 2
 		peasant_militia = 4
 		archers = 1	#prev 2
 	}
-	
+
 	buy_cost = { gold = house_guard_recruitment_cost }
 	low_maintenance_cost = { gold = house_guard_low_maint_cost }
 	high_maintenance_cost = { gold = house_guard_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_bankrupting
-	
+
 	max_regiments = 1
-	
+
 	stack = 50		#prev 40
 	ai_quality = { 
 		value = 100 
@@ -729,6 +778,8 @@ pikemen_militia = {
 	toughness = 16
 	pursuit = 12		#prev 10
 	screen = 6			#prev 0
+
+	control_value = 4
 
 	terrain_bonus = {
 		mountains = { toughness = 8 }

@@ -7,8 +7,18 @@
 			is_theocratic_lessee = no #Theocratic lessees use other gender checks
 			NOT = { $RULER$ = { government_has_mechanic = administrative } }
 			NOT = {
-				$RULER$.faith = {
-					has_dominant_ruling_gender = scope:title_grantee
+				trigger_if = {
+					limit = {
+						$RULER$ = { government_allows = state_faith }
+					}
+					$RULER$.primary_title.state_rite = {
+						rite_has_dominant_ruling_gender = scope:title_grantee
+					}
+				}
+				trigger_else = {
+					$RULER$.rite = {
+						rite_has_dominant_ruling_gender = scope:title_grantee
+					}
 				}
 			}
 		}

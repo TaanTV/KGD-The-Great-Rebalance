@@ -47,7 +47,7 @@ nomadic_faction_leader_template = {
 		unyielding_defender = { weight = { base = 10 } }
 		flexible_leader = { weight = { base = 10 } }
 		#ADDED - moved from up above
-		open_terrain_expert = { weight = { base = 10 } }
+		open_terrain_expert = { weight = { base = 40 } }
 	}
 	random_traits = no
 	martial = {

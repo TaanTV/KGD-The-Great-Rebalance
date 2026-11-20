@@ -121,7 +121,10 @@ task_fabricate_claim = {
 		# Perk Bonuses
 		if = {
 			limit = {
-				scope:councillor_liege = { has_perk = accomplished_forger_perk }
+				scope:councillor_liege = {
+					has_perk = accomplished_forger_perk
+					NOT = { government_has_flag = government_is_merchant }
+				}
 			}
 			add = {
 				value = scope:councillor.court_chaplain_fabricate_claim_perk_bonus_monthly_increase

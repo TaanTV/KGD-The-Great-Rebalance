@@ -1,4 +1,8 @@
-﻿#WHEN REALM MAINTENANCE COMES:
+﻿
+#Its a silly bonus.
+lifestyle_perk_district_build_cost_discount = 0		#prev -0.3
+
+
 #miniscule_lifestyle_xp = 25
 #minor_lifestyle_xp = 50
 #medium_lifestyle_xp = 100
@@ -75,6 +79,9 @@ travel_major_xp = {
 # MARTIAL
 ################
 
+# Soldiers of Lesser Fortune
+#lifestyle_perk_woodland_tax_mult = 0.15
+#lifestyle_perk_tribal_tax_mult = 0.15
 # Courtship Perk values
 #courtship_court_success_chance_bonus_value = 30
 #elope_court_success_chance_bonus_value = 30
@@ -140,7 +147,7 @@ duty_focus_value = -15	#prev -20
 #clerical_justifications_percentage = 20
 
 # Learn on the Job
-learn_on_the_job_percentage = 15	#prev 20
+#learn_on_the_job_percentage = 10
 
 # Zealous Proselytizer
 #zealous_proselytizer_percentage = 25

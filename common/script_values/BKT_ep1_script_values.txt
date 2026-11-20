@@ -5,13 +5,13 @@ court_grandeur_minimum_expected_value = {
 	divide = 6		#prev 4
 	#ADDED - avg_dev part
 	if = {
-		limit = { NOT = { government_allows = affected_by_development } }
+		limit = { NOT = { government_allows = affected_by_prosperity } }
 		multiply = 3
 	}
 	else = {
 		add = {
-			value = average_sub_realm_development
-			divide = 2
+			value = average_sub_realm_province_size_level
+			multiply = 5
 		}
 	}
 	if = { # Elective Empires have slightly lower expectations (i.e. the HRE)
@@ -124,7 +124,7 @@ ep1_court_grandeur_marriage_acceptance_value = {
 
 # The unmodified, average cost of sponsoring an Inspiration.
 basic_fund_inspiration_cost = {
-	value = 120		#prev 100
+	value = 120		#prev 60
 	if = {
 		limit = {
 			scope:inspiration_sponsor.confederation ?= { has_cohesion_level_parameter = any_member_commission_and_inspiration_reduced }
@@ -149,12 +149,12 @@ court_position_liege_score_base_value = {
 		subtract = {
 			# Less likely to hire for the really expensive positions
 			# But this is a pretty minor impact
-			value = 75		#prev 100
+			value = 100
 			multiply = scope:percent_of_monthly_gold_income
 		}
 		subtract = {
 			# Value decreases as cost of all positions increase
-			value = 400		#prev 600
+			value = 300		#prev 600
 			if = {
 				limit = {
 					ai_should_focus_on_building_in_their_capital = yes
@@ -169,12 +169,12 @@ court_position_liege_score_base_value = {
 				government_has_flag = government_is_ecclesiastical
 			}
 			subtract = {
-				value = 600
+				value = 400	#prev 600
 				if = {
 					limit = {
 						ai_should_focus_on_building_in_their_capital = yes
 					}
-					add = 400
+					add = 100	#prev 400
 				}
 				multiply = court_position_liege_treasury_share_spent_value
 			}

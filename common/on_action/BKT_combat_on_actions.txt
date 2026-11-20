@@ -14,52 +14,32 @@ BKT_commander_value_tracker = {
 		if = {
 			limit = {
 				exists = side_commander 									#the obvious
-				NOT = { side_commander.liege ?= side_commander }			#you arent commanding yourself
+				combat.warscore_value >= 10									#it's a combat of at least some kind of value 
 				side_commander.liege.highest_held_title_tier >= tier_duchy	#not much point tracking it for counts
-				combat = { warscore_value >= 10 }							#it's a combat of at least some kind of value 
+				NOT = { side_commander.liege ?= side_commander }			#you arent commanding yourself
 				enemy_side.side_max_army_size >= { value = side_max_army_size multiply = 0.5 }	#not a total blowout
 			}
-			side_commander = { save_temporary_scope_as = commander }
+			side_commander = { 
+				save_temporary_scope_as = commander 
+				increment_variable_effect = { VAR = total_battles_won VAL = 1 }
+			}
 			side_commander.liege ?= {
-				#This is kind of jank but whatchagonna do
-				if = {
-					limit = {
-						is_target_in_variable_list = { name = valuable_commanders_tier_3 target = scope:commander }
-					}
-					#nothing.
-				}
-				if = {
-					limit = {
-						is_target_in_variable_list = { name = valuable_commanders_tier_2 target = scope:commander }
-					}
-					add_to_variable_list = {
-						name = valuable_commanders_tier_3
-						target = scope:commander
-					}
-					remove_list_variable = {
-						name = valuable_commanders_tier_2
-						target = scope:commander
-					}
-				}
-				else_if = {
-					limit = {
-						is_target_in_variable_list = { name = valuable_commanders_tier_1 target = scope:commander }
-					}
-					add_to_variable_list = {
-						name = valuable_commanders_tier_2
-						target = scope:commander
-					}
-					remove_list_variable = {
-						name = valuable_commanders_tier_1
-						target = scope:commander
-					}
-				}
-				else = {
-					add_to_variable_list = {
-						name = valuable_commanders_tier_1
-						target = scope:commander
-					}
-				}
+				#save_temporary_scope_value_as = {
+				#	name = commander_value
+				#	value = {
+				#		if = {
+				#			limit = { has_variable_map = valuable_commanders exists = variable_map(valuable_commanders|scope:commander) }
+				#			value = variable_map(valuable_commanders|scope:commander)
+				#		}
+				#		add = 1
+				#	}
+				#}
+				#add_to_variable_map = {
+				#	name = valuable_commanders
+				#	key = scope:commander
+				#	value = scope:commander_value
+				#	#years = 25		#you wont be remembered forever
+				#}
 			}
 		}
 	}

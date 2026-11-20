@@ -32,7 +32,7 @@
 			is_ai = no
 		}
 		modifier = {
-			add = 500		#prev 300
+			add = 600		#prev 300
 			has_perk = stalwart_leader_perk
 			is_ai = yes
 		}

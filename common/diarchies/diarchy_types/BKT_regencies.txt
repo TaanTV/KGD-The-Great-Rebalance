@@ -241,6 +241,10 @@ regency = {
 				limit = { liege ?= { age < 12 } }
 				min = 75
 			}
+			else_if = {
+				limit = { liege.puppeteer ?= this }
+				min = 50
+			}
 		}
 	}
 
@@ -269,7 +273,7 @@ regency = {
 			add = diplomacy		#Dip matters more.
 			add = stewardship
 			add = intrigue
-			divide = 2		#Not quite average
+			divide = 3		#Not quite average
 			floor = yes
 			min = 0
 		}
@@ -437,6 +441,10 @@ nomad_regency = {
 				limit = { liege ?= { age < 12 } }
 				min = 75
 			}
+			else_if = {
+				limit = { liege.puppeteer ?= this }
+				min = 50
+			}
 		}
 	}
 
@@ -466,7 +474,7 @@ nomad_regency = {
 			add = diplomacy		#Dip matters more.
 			add = stewardship
 			add = intrigue
-			divide = 2		#Not quite average
+			divide = 3		#Not quite average
 			floor = yes
 			add = -20
 			min = -10

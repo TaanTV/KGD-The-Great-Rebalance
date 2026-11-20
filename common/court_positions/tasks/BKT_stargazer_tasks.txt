@@ -82,6 +82,7 @@ court_astrologer_handling_weather = {
 			limit = {
 				capital_province.county ?= {
 					any_county_situation_sub_region = {
+						situation_sub_region_has_county = prev
 						OR = {
 							sub_region_current_phase = situation_steppe_abundant_grazing_season		#15% herd gain
 							#sub_region_current_phase = situation_steppe_warm_nights_season			#10 vassal opinion

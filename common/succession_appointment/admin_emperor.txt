@@ -288,9 +288,10 @@
 				limit = {
 					exists = top_liege.house
 					house ?= top_liege.house
+					exists = top_liege.capital_county
 				}
 				add = {
-					value = top_liege.capital_county.county_holder_opinion
+					value = top_liege.capital_county.popular_opinion
 					#ADDED
 					min = -50
 					max = 25

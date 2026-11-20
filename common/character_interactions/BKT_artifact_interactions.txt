@@ -19,6 +19,7 @@ gift_artifact_interaction = {
 	ai_targets = {
 		ai_recipients = scripted_relations
 		ai_recipients = liege
+		ai_recipients = suzerain
 		ai_recipients = spouses
 		max = 10
 	}
@@ -47,13 +48,14 @@ gift_artifact_interaction = {
 	}
 
 	can_be_picked_artifact = {
-		scope:target = {
-			is_equipped = no
+		trigger_if = {
+			limit = {
+				scope:actor = { is_ai = no }
+			}
+			scope:target = { is_equipped = no }
 		}
 		scope:puppet_or_actor = {
-			any_character_artifact = {
-				this = scope:target
-			}
+			any_character_artifact = { this = scope:target }
 			trigger_if = {
 				limit = {
 					involved_activity ?= {
@@ -79,7 +81,7 @@ gift_artifact_interaction = {
 			limit = { scope:actor = { is_ai = yes } }
 			trigger_if = {
 				limit = {
-					scope:actor = {
+					scope:puppet_or_actor = {
 						coronation_proper_artifact_crown_trigger = yes
 						coronation_proper_artifact_regalia_trigger = no
 					}
@@ -90,7 +92,7 @@ gift_artifact_interaction = {
 			}
 			trigger_else_if = {
 				limit = {
-					scope:actor = {
+					scope:puppet_or_actor = {
 						coronation_proper_artifact_regalia_trigger = yes
 						coronation_proper_artifact_crown_trigger = no
 					}
@@ -111,13 +113,13 @@ gift_artifact_interaction = {
 	}
 
 	is_available = {
-		has_any_unequipped_artifact = yes
 		trigger_if = {
 			limit = { is_ai = yes }
+			has_any_unequipped_artifact = yes
 			OR = {
 				AND = {
-					ai_greed <= high_positive_ai_value
 					is_adult = yes
+					ai_greed <= high_positive_ai_value
 					# the AI shouldn't give away equipped artifacts
 					NOT = {
 						has_trait = greedy
@@ -136,11 +138,27 @@ gift_artifact_interaction = {
 
 	#You can't give yourself a gift, even if it should count as self-care
 	is_shown = {
-		scope:puppet_or_actor ?= {
-			this != scope:recipient
-		}
 		#ADDED - i wont let u abuse puppets like that
 		scope:actor != scope:recipient
+		scope:recipient != scope:puppet_or_actor
+		scope:puppet_or_actor = {
+			trigger_if = {
+				limit = { exists = involved_activity }
+				NOT = {
+					involved_activity ?= { #do not give out anything during coronation
+						has_activity_type = activity_coronation
+						activity_host = scope:puppet_or_actor
+					}
+				}
+			}
+			trigger_if = { # show gift on non-rulers as a merchant
+				limit = { is_landless_merchant = yes }
+				scope:recipient = { is_ruler = no }
+			}
+			trigger_else = { # only totally hide this interaction for non-merchants
+				has_any_artifact = yes
+			}
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -150,6 +168,13 @@ gift_artifact_interaction = {
 				is_at_war_with = scope:recipient
 			}
 			is_imprisoned = no
+			trigger_if = {
+				limit = { is_ai = no }
+				custom_description = {
+					text = "any_unequipped_artifact_tt"
+					any_character_artifact = { is_equipped = no }
+				}
+			}
 		}
 		# keep this since a bit stricter than common rule
 		trigger_if = {
@@ -165,6 +190,32 @@ gift_artifact_interaction = {
 	}
 
 	on_accept = {
+		# End current story cycles for Merchant Chars
+		hidden_effect = {
+			if = {
+				limit = {
+					gdp_menagerie_artifact_has_active_story_trigger = { CHARACTER = scope:actor ARTIFACT = scope:target }
+				}
+				scope:actor = {
+					random_owned_story = {
+						limit = {
+							story_type = story_cycle_menagerie
+							var:artifact_type ?= scope:target
+						}
+						save_scope_as = menagerie_story
+					}
+				}
+				if = {
+					limit = {
+						scope:recipient = { is_landless_merchant = yes }
+					}
+					scope:menagerie_story = { make_story_owner = scope:recipient }
+				}
+				else = {
+					scope:menagerie_story = { end_story = yes }
+				}	
+			}
+		}
 		# Warning for multiple gifts
 		if = {
 			limit = {
@@ -244,7 +295,7 @@ gift_artifact_interaction = {
 				value = yes
 				days = 1
 			}
-			set_variable = { name = gifted_artifact value = yes days = 9125 }
+			set_variable = { name = gifted_artifact value = scope:puppet_or_actor days = 9125 }
 		}
 		scope:recipient = {
 			# Verify that they could become friend
@@ -276,15 +327,48 @@ gift_artifact_interaction = {
 						else = { show_as_tooltip = { house = { remove_house_artifact_claim = scope:target } } }
 					}
 				}
+				
+				scope:target = {
+					# Save scopes for loc purposes
+					set_variable = {
+						name = og_owner
+						value = artifact_owner
+					}
+					if = {
+						limit = { exists = var:og_owner }
+						## Supress startup errors
+					}
+					save_scope_as = artifact
+					# Transfer artifact
+					if = {
+						limit = {
+							artifact_type = creature
+							scope:recipient = {
+								NOT = { domicile ?= { is_domicile_type = merchant_company } }
+							}
+						}
+						hidden_effect = { set_owner = scope:recipient }
+					}
+					else = { set_owner = scope:recipient }
+					# We reforge domicile artifacts unless the recipient has a company domicile
+					reforge_transferred_artifact_effect = { RECEIVER = scope:recipient }
+				}
 
-				scope:target = { set_owner = scope:recipient }
-
+				scope:recipient = {
+					if = {
+						limit = {
+							scope:target = { artifact_type = creature }
+							NOT = { domicile ?= { is_domicile_type = merchant_company } }
+						}
+						custom_tooltip = artifact_creature_reforged_tt
+					}
+				}
 
 				if = {
 					limit = {
 						scope:target = { is_unique = yes }
 					}
-					add_clan_unity_interaction_effect = {
+					add_house_unity_interaction_effect = {
 						CHARACTER = scope:puppet_or_actor
 						TARGET = scope:recipient
 						VALUE = medium_unity_gain
@@ -298,7 +382,7 @@ gift_artifact_interaction = {
 				}
 				else_if = {# Unity goes here, too!
 					limit = { scope:target = { rarity = masterwork } }
-					add_clan_unity_interaction_effect = {
+					add_house_unity_interaction_effect = {
 						CHARACTER = scope:puppet_or_actor
 						TARGET = scope:recipient
 						VALUE = minor_unity_gain
@@ -312,7 +396,7 @@ gift_artifact_interaction = {
 				}
 				else_if = {
 					limit = { scope:target = { rarity = famed } }
-					add_clan_unity_interaction_effect = {
+					add_house_unity_interaction_effect = {
 						CHARACTER = scope:puppet_or_actor
 						TARGET = scope:recipient
 						VALUE = minor_unity_gain
@@ -326,7 +410,7 @@ gift_artifact_interaction = {
 				}
 				else_if = {
 					limit = { scope:target = { rarity = illustrious } }
-					add_clan_unity_interaction_effect = {
+					add_house_unity_interaction_effect = {
 						CHARACTER = scope:puppet_or_actor
 						TARGET = scope:recipient
 						VALUE = minor_unity_gain
@@ -338,8 +422,11 @@ gift_artifact_interaction = {
 						generous = major_stress_impact_loss
 					}
 				}
+				# Opinion
 				if = {
-					limit = { scope:recipient = { is_ai = yes } }
+					limit = {
+						scope:recipient = { is_ai = yes }
+					}
 					reverse_add_opinion = {
 						target = scope:recipient
 						modifier = gift_artifact_opinion
@@ -455,6 +542,9 @@ gift_artifact_interaction = {
 					scope:recipient = {
 						NOT = { can_equip_artifact = scope:target }
 					}
+					scope:target = {
+						NOT = { artifact_type = creature }
+					}
 				}
 				custom_tooltip = artifact_gift_equip_tt
 			}
@@ -467,11 +557,17 @@ gift_artifact_interaction = {
 				custom_tooltip = artifact_gift_benefit_tt
 			}
 			if = {
-				limit = { scope:recipient.liege = scope:puppet_or_actor }
+				limit = {
+					scope:recipient = { is_ai = yes }
+					scope:recipient.liege = scope:puppet_or_actor
+				}
 				custom_tooltip = artifact_gift_vassal_tt
 			}
 			if = {
-				limit = { scope:recipient = scope:puppet_or_actor.faith.religious_head }
+				limit = {
+					scope:recipient = { is_ai = yes }
+					scope:recipient = scope:puppet_or_actor.faith.religious_head
+				}
 				custom_tooltip = artifact_gift_religious_head_tt
 			}
 		}
@@ -484,7 +580,18 @@ gift_artifact_interaction = {
 					right_icon = scope:target
 
 					show_as_tooltip = {
-						scope:target = { set_owner = scope:recipient }
+						scope:target = {
+							set_owner = scope:recipient
+							if = {
+								limit = {
+									artifact_type = creature
+									scope:recipient = {
+										NOT = { domicile ?= { is_domicile_type = merchant_company } }
+									}
+								}
+								reforge_creature_artifact_effect = yes
+							}
+						}
 						if = {
 							limit = { is_ai = yes }
 							add_opinion = {
@@ -497,7 +604,7 @@ gift_artifact_interaction = {
 						# Unity stuff, scales with tier # If we're a clan this interaction affects unity
 						if = { # In a better world, this would be a switch
 							limit = { scope:target = { rarity = Masterwork } }
-							add_clan_unity_interaction_effect = {
+							add_house_unity_interaction_effect = {
 								CHARACTER = scope:puppet_or_actor
 								TARGET = scope:recipient
 								VALUE = minor_unity_gain
@@ -507,7 +614,7 @@ gift_artifact_interaction = {
 						}
 						else_if = {
 							limit = { scope:target = { rarity = Famed } }
-							add_clan_unity_interaction_effect = {
+							add_house_unity_interaction_effect = {
 								CHARACTER = scope:puppet_or_actor
 								TARGET = scope:recipient
 								VALUE = medium_unity_gain
@@ -517,7 +624,7 @@ gift_artifact_interaction = {
 						}
 						else_if = {
 							limit = { scope:target = { rarity = Illustrious } }
-							add_clan_unity_interaction_effect = {
+							add_house_unity_interaction_effect = {
 								CHARACTER = scope:puppet_or_actor
 								TARGET = scope:recipient
 								VALUE = major_unity_gain
@@ -530,266 +637,13 @@ gift_artifact_interaction = {
 				if = {
 					limit = {
 						is_ruler = no
-						trigger_if = {
-							limit = {
-								scope:target = {
-									artifact_slot_type = primary_armament
-								}
-							}
-							OR = {
-								NOT = {
-									any_equipped_character_artifact = {
-										artifact_slot_type = primary_armament
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = illustrious
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = primary_armament
-										NOT = {
-											rarity = illustrious
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = famed
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = primary_armament
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = masterwork
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = primary_armament
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = common
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = primary_armament
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-											rarity = common
-										}
-									}
-								}
-							}
-						}
-						trigger_if = {
-							limit = {
-								scope:target = {
-									artifact_slot_type = armor
-								}
-							}
-							OR = {
-								NOT = {
-									any_equipped_character_artifact = {
-										artifact_slot_type = armor
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = illustrious
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = armor
-										NOT = {
-											rarity = illustrious
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = famed
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = armor
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = masterwork
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = armor
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = common
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = armor
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-											rarity = common
-										}
-									}
-								}
-							}
-						}
-						trigger_if = {
-							limit = {
-								scope:target = {
-									artifact_slot_type = regalia
-								}
-							}
-							OR = {
-								NOT = {
-									any_equipped_character_artifact = {
-										artifact_slot_type = regalia
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = illustrious
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = regalia
-										NOT = {
-											rarity = illustrious
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = famed
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = regalia
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = masterwork
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = regalia
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = common
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = regalia
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-											rarity = common
-										}
-									}
-								}
-							}
-						}
-						trigger_if = {
-							limit = {
-								scope:target = {
-									artifact_slot_type = helmet
-								}
-							}
-							OR = {
-								NOT = {
-									any_equipped_character_artifact = {
-										artifact_slot_type = helmet
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = illustrious
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = helmet
-										NOT = {
-											rarity = illustrious
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = famed
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = helmet
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = masterwork
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = helmet
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-										}
-									}
-								}
-								AND = {
-									scope:target = {
-										rarity = common
-									}
-									any_equipped_character_artifact = {
-										artifact_slot_type = helmet
-										NOR = {
-											rarity = illustrious
-											rarity = famed
-											rarity = masterwork
-											rarity = common
-										}
-									}
-								}
-							}
-						}
+						can_equip_artifact = scope:target
+						no_or_worse_equipped_artifact_type_trigger = { SLOT_TYPE = primary_armament }
+						no_or_worse_equipped_artifact_type_trigger = { SLOT_TYPE = armor }
+						no_or_worse_equipped_artifact_type_trigger = { SLOT_TYPE = regalia }
+						no_or_worse_equipped_artifact_type_trigger = { SLOT_TYPE = helmet }
 					}
-					scope:target = {
-						equip_artifact_to_owner_replace = yes
-					}
+					scope:target = { equip_artifact_to_owner_replace = yes }
 				}
 			}
 		}
@@ -800,21 +654,47 @@ gift_artifact_interaction = {
 	ai_accept = {
 		base = 0
 		modifier = {
+			add = -1
+			scope:target = {
+				has_variable = {
+					name = ai_to_ai_destroy_in_sieges
+					name = unwanted_artifact
+				}
+			}
+			desc = ARTIFACT_TRASH_REASON
+		}
+		modifier = {
 			add = 100
+			scope:target = {
+				has_none_of_variables = {
+					name = ai_to_ai_destroy_in_sieges
+					name = unwanted_artifact
+				}
+			}
 			desc = ARTIFACT_REASON
 		}
 		modifier = {
-			add = -80
-			NOT = {
-				can_equip_artifact = scope:target
+			add = -200
+			scope:target = {
+				has_variable = cursed_artifact
 			}
+			desc = ARTIFACT_CURSED_REASON
+		}
+		modifier = {
+			add = -80
+			scope:target = {
+				OR = {
+					artifact_slot_type = throne
+					artifact_slot_type = wall_big
+					artifact_slot_type = sculpture
+				}
+			}
+			has_royal_court = no
 			desc = ARTIFACT_NOT_EQUIPPABLE_REASON
 		}
 		modifier = {
 			add = -40
-			NOT = {
-				can_benefit_from_artifact = scope:target
-			}
+			NOT = { can_benefit_from_artifact = scope:target }
 			desc = ARTIFACT_NOT_BENEFIT_REASON
 		}
 		modifier = {
@@ -835,9 +715,7 @@ gift_artifact_interaction = {
 				limit = { exists = scope:target.var:banner_dynasty }
 				scope:target.var:banner_dynasty != scope:recipient.dynasty
 			}
-			trigger_else = {
-				scope:target.var:banner_house != scope:recipient.house
-			}
+			trigger_else = { scope:target.var:banner_house != scope:recipient.house }
 			desc = ARTIFACT_USELESS_BANNER_REASON
 		}
 		# Struggle motive
@@ -845,9 +723,7 @@ gift_artifact_interaction = {
 			desc = AI_STRUGGLE_INTENT
 			scope:recipient = {
 				top_liege = this
-				any_character_struggle = {
-					involvement = involved
-				}
+				any_character_struggle = { involvement = involved }
 			}
 			add = {
 				value = 0
@@ -865,9 +741,7 @@ gift_artifact_interaction = {
 				else_if = {
 					limit = {
 						scope:recipient = {
-							any_character_struggle = {
-								phase_has_catalyst = catalyst_gift_independent_ruler
-							}
+							any_character_struggle = { phase_has_catalyst = catalyst_gift_independent_ruler }
 						}
 					}
 					add = 200
@@ -889,17 +763,15 @@ gift_artifact_interaction = {
 		modifier = {
 			add = 100
 			scope:actor = {
+				#ADDED - opinion check
+				opinion = {
+					target = scope:recipient
+					value >= low_positive_opinion
+				}
 				OR = {
 					has_relation_friend = scope:recipient
 					has_relation_lover = scope:recipient
-					#ADDED - now an AND + opinon check
-					AND = {
-						is_close_or_extended_family_of = scope:recipient
-						opinion = {
-							target = scope:recipient
-							value >= low_positive_opinion
-						}
-					}
+					is_close_or_extended_family_of = scope:recipient
 					AND = {
 						exists = dynasty
 						exists = scope:recipient.dynasty
@@ -929,6 +801,9 @@ gift_artifact_interaction = {
 					}
 				}
 			}
+			
+			scope:target = { is_equipped = no }
+			
 
 			scope:recipient = {
 				OR = {
@@ -940,8 +815,6 @@ gift_artifact_interaction = {
 							}
 						}
 						is_ai = no
-						#ADDED - nuh uh we aint favoring the player in this household
-						always = no
 					}
 					AND = { # Might as well give Court Artifacts to their liege if they cant use them themselves
 						has_royal_court = yes
@@ -1046,9 +919,7 @@ gift_artifact_interaction = {
 						scope:actor = {
 							OR = {
 								has_royal_court = no
-								any_equipped_character_artifact = {
-									artifact_slot_type = throne
-								}
+								any_equipped_character_artifact = { artifact_slot_type = throne }
 							}
 						}
 						NOT = {
@@ -1198,26 +1069,18 @@ gift_artifact_interaction = {
 		}
 
 		modifier = {
-			factor = 2
-			scope:recipient = {
-				#is_ai = no
-				#ADDED - nope
-				always = no
-			}
+			factor = 1	#prev 2
+			scope:recipient = { is_ai = no }
 		}
 
 		modifier = {
 			factor = 0.25
-			scope:recipient = {
-				highest_held_title_tier = tier_barony
-			}
+			scope:recipient = { highest_held_title_tier = tier_barony }
 		}
 
 		modifier = { # Unlanded characters do not equip artifacts, no point in giving them artifacts
 			factor = 0
-			scope:recipient = {
-				is_ruler = no
-			}
+			scope:recipient = { is_ruler = no }
 		}
 
 		modifier = {
@@ -1226,21 +1089,22 @@ gift_artifact_interaction = {
 				has_relation_rival = scope:actor
 			}
 		}
-
+		
 		modifier = {
 			factor = 0
-			scope:target = {
-				has_variable = gifted_artifact
-			}
+			scope:target = { is_equipped = yes }
+		}
+		
+		modifier = {
+			factor = 0
+			scope:target = { has_variable = gifted_artifact }
 		}
 
 		modifier = { # So that the AI doesn't give player toys
 			factor = 0
 			scope:recipient = {
 				is_ai = no
-				NOT = {
-					can_equip_artifact = scope:target
-				}
+				NOT = { can_equip_artifact = scope:target }
 			}
 		}
 
@@ -1266,9 +1130,7 @@ gift_artifact_interaction = {
 				exists = scope:target.var:banner_dynasty
 			}
 			scope:recipient = {
-				NOT = {
-					can_benefit_from_artifact = scope:target
-				}
+				NOT = { can_benefit_from_artifact = scope:target }
 			}
 		}
 
@@ -1289,6 +1151,15 @@ gift_artifact_interaction = {
 			scope:actor.house.house_confederation ?= {
 				has_cohesion_level_parameter = bloc_members_send_leader_gifts
 				leading_house.house_head ?= scope:recipient
+			}
+		}
+
+		modifier = { # could sell
+			scope:puppet_or_actor = { is_landless_merchant = yes }
+			scope:recipient = { is_ruler = yes }
+			add = {
+				value = gdp_merchant_sell_artifact_value
+				multiply = -0.5
 			}
 		}
 	}

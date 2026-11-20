@@ -75,16 +75,16 @@ average_vassal_including_barons_opinion = {
 	}
 }
 
-average_sub_realm_development = {
+average_sub_realm_prosperity = {
 	every_sub_realm_county = {
-		add = development_level
+		add = prosperity_level
 	}
 	divide = {
 		value = sub_realm_size
 		min = 1
 	}
 }
-		
+
 
 ai_greed_plus_ai_boldness = {
 	value = ai_greed
@@ -109,6 +109,10 @@ council_scaled_monthly_income_non_steward = {
 	subtract = 2
 	min = 0.5
 	multiply = 0.5
+	if = {
+		limit = { liege = { is_landed = no } }
+		multiply = 0
+	}
 }
 
 council_position_lite_locked_value = {
@@ -146,7 +150,7 @@ eighty_five_percent_of_sway_max_value = {
 	floor = yes
 }
 
-backwater_development_value = {
+backwater_prosperity_value = {
 	value = 10
 	root.culture = {
 		if = {
@@ -378,90 +382,91 @@ monumental_gold_max_less_scaled_value = {
 }
 
 #province scope
+#this needs to be reworked quite hard i think? Not sure if its even possible to calc this without checking bazillion innovations...
 expected_combined_building_level = {
 	value = 1	#dunno if holding level counts, but 1 is the absolute minimum for sure
-	county.holder.culture ?= {
-		if = {
-			limit = { 
-				has_innovation = innovation_crop_rotation
-				has_innovation = innovation_barracks
-			}
-			add = 1
-		}
-		if = {
-			limit = { 
-				has_innovation = innovation_manorialism
-				has_innovation = innovation_burhs
-			}
-			add = 2
-		}
-		else_if = {		#add some if you have just one of them
-			limit = { 
-				OR = {
-					has_innovation = innovation_manorialism
-					has_innovation = innovation_burhs
-				}
-			}
-			add = 1
-		}
-		if = {
-			limit = { 
-				has_innovation = innovation_guilds 
-				has_innovation = innovation_castle_baileys
-			}
-			add = 2
-		}
-		else_if = {		#add some if you have just one of them
-			limit = { 
-				OR = {
-					has_innovation = innovation_guilds 
-					has_innovation = innovation_castle_baileys
-				}
-			}
-			add = 1
-		}
-		if = {
-			limit = { 
-				has_innovation = innovation_cranes
-				has_innovation = innovation_castle_baileys
-			}
-			add = 2
-		}
-		else_if = {		#add some if you have just one of them
-			limit = { 
-				OR = {
-					has_innovation = innovation_cranes
-					has_innovation = innovation_castle_baileys
-				}
-			}
-			add = 1
-		}
-		
-		
-		if = {
-			limit = { 
-				has_innovation = innovation_machicolations
-			}
-			max = 8
-		}
-		else_if = {
-			limit = { 
-				has_innovation = innovation_hoardings
-			}
-			max = 6
-		}
-		else_if = {
-			limit = { 
-				has_innovation = innovation_battlements
-			}
-			max = 4
-		}
-		else = {
-			max = 2
-		}
-	}
-		
-	multiply = building_slots
+	#county.holder.culture ?= {
+	#	if = {
+	#		limit = { 
+	#			has_innovation = innovation_crop_rotation
+	#			has_innovation = innovation_barracks
+	#		}
+	#		add = 1
+	#	}
+	#	if = {
+	#		limit = { 
+	#			has_innovation = innovation_manorialism
+	#			has_innovation = innovation_burhs
+	#		}
+	#		add = 2
+	#	}
+	#	else_if = {		#add some if you have just one of them
+	#		limit = { 
+	#			OR = {
+	#				has_innovation = innovation_manorialism
+	#				has_innovation = innovation_burhs
+	#			}
+	#		}
+	#		add = 1
+	#	}
+	#	if = {
+	#		limit = { 
+	#			has_innovation = innovation_guilds 
+	#			has_innovation = innovation_castle_baileys
+	#		}
+	#		add = 2
+	#	}
+	#	else_if = {		#add some if you have just one of them
+	#		limit = { 
+	#			OR = {
+	#				has_innovation = innovation_guilds 
+	#				has_innovation = innovation_castle_baileys
+	#			}
+	#		}
+	#		add = 1
+	#	}
+	#	if = {
+	#		limit = { 
+	#			has_innovation = innovation_cranes
+	#			has_innovation = innovation_castle_baileys
+	#		}
+	#		add = 2
+	#	}
+	#	else_if = {		#add some if you have just one of them
+	#		limit = { 
+	#			OR = {
+	#				has_innovation = innovation_cranes
+	#				has_innovation = innovation_castle_baileys
+	#			}
+	#		}
+	#		add = 1
+	#	}
+	#	
+	#	
+	#	if = {
+	#		limit = { 
+	#			has_innovation = innovation_machicolations
+	#		}
+	#		max = 8
+	#	}
+	#	else_if = {
+	#		limit = { 
+	#			has_innovation = innovation_hoardings
+	#		}
+	#		max = 6
+	#	}
+	#	else_if = {
+	#		limit = { 
+	#			has_innovation = innovation_battlements
+	#		}
+	#		max = 4
+	#	}
+	#	else = {
+	#		max = 2
+	#	}
+	#}
+	#	
+	#multiply = building_slots
 }
 
 expected_combined_building_level_halved = { 
@@ -485,12 +490,6 @@ total_barony_levies = {
 	multiply = {
 		# 100% Levy Base
 		value = 1
-
-		# Adds bonus levies from Development (at base 20 development, +20% levies).
-		add = {
-			add = county.development_level
-			multiply = 0.01
-		}
 
 		# Adds bonus levies from cultural innovations.
 		if = {
@@ -538,12 +537,12 @@ council_task_control_multiplier = {
 	if = {
 		limit = {
 			exists = scope:county
-			scope:county.county_control <= 99
+			scope:county.county_control <= 49	#since 50 is now "base" above which u get bonuses
 		}
 		multiply = {
 			value = scope:county.county_control
 			round = yes
-			divide = 100
+			divide = 50
 			min = 0.01
 			desc = bkt_low_county_control_desc
 		}
@@ -609,4 +608,12 @@ total_eldery_trait_levels = {
 	}
 }
 
-total_eldery_trait_levels_except_clouted_eyes = { value = total_eldery_trait_levels_except_clouded_eyes }
+average_sub_realm_province_size_level = {
+	every_sub_realm_county = {
+		add = title_province.province_size_level
+	}
+	divide = {
+		value = sub_realm_size
+		min = 1
+	}
+}

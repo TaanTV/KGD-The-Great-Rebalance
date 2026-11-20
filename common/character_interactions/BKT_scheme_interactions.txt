@@ -36,6 +36,15 @@ study_faith_interaction = {
 		empire = 36
 		hegemony = 36
 	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 216
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
 
 	is_available = {
 		trigger_if = {
@@ -91,18 +100,10 @@ study_faith_interaction = {
 				target_character = scope:recipient
 			}
 		}
-		#limit range for landless adventurers
-		trigger_if = {
-			limit = {
-				scope:puppet_or_actor = {
-					has_government = landless_adventurer_government
-				}
-			}
-			#Has to be used instead of diplo range checks in laamp to landed interactions
-			ep3_laamp_diplo_range_trigger = {
-				TARGET = scope:recipient
-				LAAMP = scope:puppet_or_actor
-			}
+		#limit range for landless adventurers/merchants
+		exceptional_diplo_range_trigger = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
 		}
 		trigger_if = {
 			limit = { scope:is_puppet_action ?= yes }
@@ -579,6 +580,20 @@ study_faith_interaction = {
 			exists = scope:puppet_or_actor.capital_county
 			scope:recipient.faith = scope:puppet_or_actor.capital_county.faith
 		}
+		
+		#ADDED - use options
+		modifier = {
+			add = 1
+			scope:study_faith_ask_directly ?= yes
+		}
+		modifier = {
+			add = 1
+			scope:study_faith_ask_for_emissary ?= yes
+		}
+		modifier = {
+			add = 1
+			scope:study_faith_study_from_afar ?= yes
+		}
 
 		modifier = {
 			factor = 2
@@ -608,13 +623,18 @@ study_faith_interaction = {
 			scope:puppet_or_actor.liege.rite = scope:recipient.rite
 		}
 		
-		#ADDED - dont bother higher tier rulers much
+		#ADDED - dont bother higher tier rulers much unless u want to study from afar or want an emmisary
 		modifier = {
 			factor = {
 				value = 6
 				subtract = scope:recipient.highest_held_title_tier
-				divide = 3
+				divide = 4
+				if = {
+					limit = { scope:study_faith_ask_for_emissary ?= yes }
+					add = 0.25
+				}
 			}
+			NOT = { scope:study_faith_study_from_afar ?= yes }
 			scope:recipient = {
 				is_landed = yes
 				highest_held_title_tier >= tier_duchy
@@ -626,12 +646,11 @@ study_faith_interaction = {
 			factor = {
 				value = 6
 				subtract = scope:puppet_or_actor.highest_held_title_tier
-				divide = 3
+				divide = 4
 				if = {
 					limit = { has_trait = lifestyle_scholar }
-					min = 0.5
+					add = 0.25
 				}
-				else = { min = 0.1 }
 			}
 			scope:puppet_or_actor = {
 				is_landed = yes

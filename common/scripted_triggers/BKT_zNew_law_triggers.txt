@@ -22,9 +22,11 @@ realm_law_use_own_war_declaration_law_trigger = {
 	#}
 	NOR = {
 		government_has_flag = government_is_landless_adventurer
+		government_has_flag = government_is_merchant
 		government_has_flag = government_is_herder
 		government_has_flag = government_is_holy_order
 		government_has_flag = government_is_mercenary
+		government_has_flag = government_has_assembly
 		AND = {
 			government_has_flag = government_is_celestial
 			top_liege = this
@@ -63,7 +65,7 @@ can_declare_war_according_to_laws_trigger = {
 					count > 1
 					is_powerful_vassal = yes
 					age >= 16
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 			}
 		}
@@ -81,7 +83,7 @@ can_declare_war_according_to_laws_trigger = {
 						prev.cp:councillor_spouse ?= this
 						prev.cp:councillor_vizier ?= this
 					}
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 			}
 		}

@@ -578,7 +578,6 @@ start_teach_governor_interaction = {
 		modifier = {
 			exists = scope:actor.house
 			exists = scope:recipient.house
-			exists = scope:actor.house.house_head.top_liege
 			house.house_head.top_liege ?= scope:actor.house.house_head.top_liege
 			add = {
 				value = scope:actor.house.house_power_score

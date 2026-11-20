@@ -181,7 +181,7 @@
 			max_provinces = 100
 
 			creation_cost = {
-				gold = legend_base_cost
+				gold = legend_creation_cost
 			}
 
 			owner_cost = {
@@ -205,8 +205,7 @@
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 10		#prev 5
-					#stationed_maa_damage_mult = 0.05
+					popular_opinion_add = 3
 				}
 				owner_modifier = {
 					monthly_prestige_gain_mult = 0.1
@@ -217,7 +216,7 @@
 					monthly_prestige_gain_mult = 0.02
 					martial = 1
 					#ADDED
-					monthly_legitimacy_add = 0.35
+					monthly_legitimacy_add = 0.75
 				}
 				# Effect run when a legend is completed
 				# root = the owner
@@ -289,7 +288,7 @@
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 1.5
 				}
 			}
@@ -315,8 +314,7 @@
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 20		#prev 10
-					#stationed_maa_damage_mult = 0.1
+					popular_opinion_add = 3
 				}
 				owner_modifier = {
 					monthly_prestige_gain_mult = 0.15
@@ -328,7 +326,7 @@
 					monthly_prestige_gain_mult = 0.06
 					martial = 2
 					#ADDED
-					monthly_legitimacy_add = 0.5
+					monthly_legitimacy_add = 1.2
 				}
 				# Effect run when a legend is completed
 				# root = the owner
@@ -405,7 +403,7 @@
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 2
 				}
 			}
@@ -436,8 +434,7 @@
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 30		#prev 20
-					#stationed_maa_damage_mult = 0.2
+					popular_opinion_add = 10
 				}
 				owner_modifier = {
 					monthly_prestige_gain_mult = 0.25
@@ -449,7 +446,7 @@
 					monthly_prestige_gain_mult = 0.1
 					martial = 4
 					#ADDED
-					monthly_legitimacy_add = 1
+					monthly_legitimacy_add = 2
 				}
 				# Effect run when a legend is completed
 				# root = the owner
@@ -687,7 +684,7 @@ legitimizing = {
 			max_provinces = 100
 
 			creation_cost = {
-				gold = legend_base_cost
+				gold = legend_creation_cost
 				prestige = minor_prestige_value
 			}
 
@@ -712,9 +709,7 @@ legitimizing = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 10		#prev 5
-					#development_growth_factor = 0.01
-					#ADDED
+					popular_opinion_add = 3
 				}
 				owner_modifier = {
 					monthly_dynasty_prestige = 0.1
@@ -727,7 +722,7 @@ legitimizing = {
 					monthly_dynasty_prestige = 0.01
 					stewardship = 1
 					#ADDED
-					monthly_legitimacy_add = 0.75
+					monthly_legitimacy_add = 1.5
 				}
 				
 				# Effect run when a legend is completed
@@ -819,7 +814,7 @@ legitimizing = {
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 1.5
 				}
 				prestige = medium_prestige_value
@@ -846,8 +841,7 @@ legitimizing = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 20		#prev 10
-					#development_growth_factor = 0.02
+					popular_opinion_add = 5
 				}
 				owner_modifier = {
 					monthly_dynasty_prestige = 0.25
@@ -860,7 +854,7 @@ legitimizing = {
 					monthly_dynasty_prestige = 0.04
 					stewardship = 2
 					#ADDED
-					monthly_legitimacy_add = 1.25
+					monthly_legitimacy_add = 2.75
 				}
 				
 				# Effect run when a legend is completed
@@ -959,7 +953,7 @@ legitimizing = {
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 2
 				}
 				prestige = {
@@ -994,8 +988,7 @@ legitimizing = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 30		#prev 20
-					#development_growth_factor = 0.06
+					popular_opinion_add = 10
 				}
 				owner_modifier = {
 					monthly_dynasty_prestige = 0.5
@@ -1009,7 +1002,7 @@ legitimizing = {
 					monthly_dynasty_prestige = 0.1
 					stewardship = 4
 					#ADDED
-					monthly_legitimacy_add = 2
+					monthly_legitimacy_add = 4.25
 				}
 				# Effect run when a legend is completed
 				# root = the owner
@@ -1302,7 +1295,7 @@ holy = {
 			max_provinces = 100
 
 			creation_cost = {
-				gold = legend_base_cost
+				gold = legend_creation_cost
 			}
 
 			owner_cost = {
@@ -1326,8 +1319,7 @@ holy = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 10		#prev 5
-					#monthly_county_control_growth_add = 0.1
+					popular_opinion_add = 3
 				}
 				owner_modifier = {
 					monthly_piety_gain_mult = 0.1
@@ -1338,7 +1330,7 @@ holy = {
 					monthly_piety_gain_mult = 0.02
 					learning = 1
 					#ADDED
-					monthly_legitimacy_add = 0.35
+					monthly_legitimacy_add = 0.75
 				}
 				on_complete = {
 					promoted_legend ?= { save_scope_as = promoted_legend } #For the ending event loc
@@ -1407,7 +1399,7 @@ holy = {
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 1.5
 				}
 			}
@@ -1433,8 +1425,7 @@ holy = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 20		#prev 10
-					#monthly_county_control_growth_add = 0.15
+					popular_opinion_add = 5
 				}
 				owner_modifier = {
 					monthly_piety_gain_mult = 0.15
@@ -1446,7 +1437,7 @@ holy = {
 					monthly_piety_gain_mult = 0.04
 					learning = 2
 					#ADDED
-					monthly_legitimacy_add = 0.5
+					monthly_legitimacy_add = 1.2
 				}
 				on_complete = {
 					promoted_legend ?= { save_scope_as = promoted_legend } #For the ending event loc
@@ -1520,7 +1511,7 @@ holy = {
 			
 			creation_cost = {
 				gold = {
-					value = legend_base_cost
+					value = legend_creation_cost
 					multiply = 2
 				}
 			}
@@ -1551,8 +1542,7 @@ holy = {
 
 			impact = {
 				county_modifier = {		#prev province_modifier
-					county_opinion_add = 30		#prev 20
-					#monthly_county_control_growth_add = 0.25
+					popular_opinion_add = 10
 				}
 				owner_modifier = {
 					monthly_piety_gain_mult = 0.25
@@ -1564,7 +1554,7 @@ holy = {
 					monthly_piety_gain_mult = 0.1
 					learning = 4
 					#ADDED
-					monthly_legitimacy_add = 1
+					monthly_legitimacy_add = 2
 				}
 				# Effect run when a legend is completed
 				# root = the owner
@@ -1578,7 +1568,7 @@ holy = {
 					}
 					if = {
 						limit = {
-							faith = { has_doctrine_parameter = holy_wars_forbidden }
+							rite ?= { rite_has_parameter = holy_wars_forbidden }
 						}
 						custom_tooltip = {
 							text = unlock_legendary_pacifism_spread_tt

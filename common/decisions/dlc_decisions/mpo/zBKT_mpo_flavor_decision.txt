@@ -8,9 +8,9 @@ mpo_call_for_merchants_decision = {
     sort_order = 80
 
     is_shown = {
-        has_character_flag = established_paiza_system
-        government_has_flag = government_is_nomadic
 		has_mpo_dlc_trigger = yes
+        government_has_flag = government_is_nomadic
+        has_character_flag = established_paiza_system
     }
 
     is_valid = {
@@ -34,7 +34,7 @@ mpo_call_for_merchants_decision = {
         trigger_else = {
             always = yes
         }
-        gold >= 800
+        gold >= 400
     }
 
     is_valid_showing_failures_only = {
@@ -136,18 +136,21 @@ mpo_call_for_merchants_small_decision = {
     sort_order = 80
 
     is_shown = {
+        has_mpo_dlc_trigger = yes
         government_has_flag = government_is_nomadic
         NOT = {
             has_character_flag = established_paiza_system
         }   
-        has_mpo_dlc_trigger = yes
+        domicile ?= {
+            has_domicile_building_or_higher = trade_yurt_01
+        }
     }
 
     is_valid = {
         domicile ?= {
             has_domicile_building_or_higher = trade_yurt_01
         }
-        gold >= 400
+            gold >= 200
     }
 
     is_valid_showing_failures_only = {

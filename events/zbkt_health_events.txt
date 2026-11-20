@@ -171,13 +171,7 @@ health.7000 = {
 	theme = physical_health
 
 	trigger = {
-		NOR = {
-			has_trait = infirm
-			has_game_rule = off_elderly_health
-			has_trait_with_flag = is_immortal
-			#ADDED
-			has_variable = eldery_traits_gain_hard_cooldown
-		}
+		age >= 30
 		OR = {
 			age >= 45
 			AND = {
@@ -193,6 +187,13 @@ health.7000 = {
 		NAND = {
 			health >= good_health
 			age < 60
+		}
+		NOR = {
+			has_trait = infirm
+			has_game_rule = off_elderly_health
+			has_trait_with_flag = is_immortal
+			#ADDED
+			has_variable = eldery_traits_gain_hard_cooldown
 		}
 	}
 
@@ -252,6 +253,7 @@ health.7000 = {
 			factor = 3
 		}
 		modifier = { # More likely if you have 2+ elderly traits
+			has_trait_with_flag = age_related_ailment
 			any_character_trait = {
 				count >= 2
 				has_trait_flag = age_related_ailment
@@ -339,6 +341,20 @@ health.7200 = {
 	widget = { gui = event_window_widget_vfx_fog container = foreground_shader_vfx_container }
 
 	trigger = {
+		age >= 25				#prev 30
+		OR = {
+			age >= 50
+			#ADDED
+			stress_level >= 3
+			AND = {
+				age >= 40		#prev 45
+				stress_level >= 1
+			}
+			AND = {
+				age >= 30
+				stress_level >= 2
+			}
+		}
 		static_group_filter = {
 			group = does_not_get_withering_mind
 			match = 0.8
@@ -351,22 +367,6 @@ health.7200 = {
 			has_trait_with_flag = is_immortal
 			#ADDED
 			has_variable = eldery_traits_gain_hard_cooldown
-		}
-		OR = {
-			age >= 50
-			AND = {
-				age >= 40		#prev 45
-				stress_level >= 1
-			}
-			AND = {
-				age >= 30
-				stress_level >= 2
-			}
-			#ADDED
-			AND = {
-				age >= 25
-				stress_level >= 3
-			}
 		}
 	}
 
@@ -590,12 +590,12 @@ health.7300 = {
 	widget = { gui = event_window_widget_vfx_godray container = foreground_shader_vfx_container }
 
 	trigger = {
+		age >= 45
 		static_group_filter = {
 			group = does_not_get_clouded_eyes
 			match = 0.8
 		}
 		is_incapable = no
-		age >= 45
 		NOR = {
 			has_trait = clouded_eyes
 			has_trait = blind
@@ -748,19 +748,7 @@ health.7400 = {
 	}
 
 	trigger = {
-		static_group_filter = {
-			group = does_not_get_faltering_heart
-			match = 0.8
-		}
-		is_incapable = no
-		NOR = {
-			has_trait = faltering_heart
-			has_game_rule = off_elderly_health
-			has_game_rule = infirm_only_elderly_health
-			has_trait_with_flag = is_immortal
-			#ADDED
-			has_variable = eldery_traits_gain_hard_cooldown
-		}
+		age >= 30
 		OR = {
 			age >= 45
 			AND = {
@@ -778,6 +766,19 @@ health.7400 = {
 		NAND = {
 			health >= good_health
 			age < 60
+		}
+		static_group_filter = {
+			group = does_not_get_faltering_heart
+			match = 0.8
+		}
+		is_incapable = no
+		NOR = {
+			has_trait = faltering_heart
+			has_game_rule = off_elderly_health
+			has_game_rule = infirm_only_elderly_health
+			has_trait_with_flag = is_immortal
+			#ADDED
+			has_variable = eldery_traits_gain_hard_cooldown
 		}
 	}
 
@@ -974,15 +975,16 @@ health.7500 = {
 	override_background = { reference = bedchamber }
 
 	trigger = {
-		static_group_filter = {
-			group = does_not_get_fragile_bones
-			match = 0.8
+		age >= 30		#prev 45
+		# Shouldn't happen randomly for healthy characters
+		NAND = {
+			health >= good_health
+			age < 60
 		}
-		is_incapable = no
-		#age >= 45
 		#ADDED - check some stuff too
 		OR = {
 			age >= 45
+			has_trait = wounded_3
 			AND = {
 				age >= 40
 				has_trait = wounded_1
@@ -991,11 +993,12 @@ health.7500 = {
 				age >= 35
 				has_trait = wounded_2
 			}
-			AND = {
-				age >= 30
-				has_trait = wounded_3
-			}
 		}
+		static_group_filter = {
+			group = does_not_get_fragile_bones
+			match = 0.8
+		}
+		is_incapable = no
 		NOR = {
 			has_trait = fragile_bones
 			has_game_rule = off_elderly_health
@@ -1003,11 +1006,6 @@ health.7500 = {
 			has_trait_with_flag = is_immortal
 			#ADDED
 			has_variable = eldery_traits_gain_hard_cooldown
-		}
-		# Shouldn't happen randomly for healthy characters
-		NAND = {
-			health >= good_health
-			age < 60
 		}
 	}
 
@@ -1070,9 +1068,15 @@ health.7500 = {
 			factor = 1.5
 		}
 		modifier = {
-			any_sibling = {
-				even_if_dead = yes
-				has_trait = fragile_bones
+			OR = {
+				any_real_grandparent = {
+					even_if_dead = yes
+					has_trait = fragile_bones
+				}
+				any_real_great_grandparent = {
+					even_if_dead = yes
+					has_trait = fragile_bones
+				}
 			}
 			factor = 1.25
 		}
@@ -1097,7 +1101,7 @@ health.7500 = {
 			has_trait = hashishiyah
 			factor = 1.25
 		}
-		modifier = { # Weight-bearing excercise
+		modifier = { # Weight-bearing exercise
 			has_trait = athletic
 			factor = 0.5
 		}

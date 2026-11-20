@@ -1,0 +1,59 @@
+﻿#starting_gold = {
+#	value = 0
+#	add = {
+#		value = starting_gold_by_income
+#		if = {
+#			limit = {
+#				has_treasury = yes
+#			}
+#			if = {
+#				limit = {
+#					is_independent_ruler = no
+#					highest_held_title_tier < tier_empire # excluding Chinese ministers
+#				}
+#				divide = 4
+#			}
+#			else_if = {
+#				limit = {
+#					is_independent_ruler = yes
+#					NOT = { has_title = title:e_byzantium }
+#				}
+#				multiply = {
+#					value = highest_held_title_tier
+#					subtract = 1
+#					min = 1
+#				}
+#			}
+#			else_if = { # for Chinese ministers
+#				limit = {
+#					highest_held_title_tier = tier_empire
+#					is_independent_ruler = no
+#					is_landed = no
+#				}
+#				add = monumental_gold_value
+#			}
+#		}
+#		min = 1
+#		divide = 4
+#	}
+#	#ADDED
+#	#if = {
+#	#	limit = { is_landed = yes }
+#	#	divide = 12		#down to a year of income 
+#	#	add = {
+#	#		value = {
+#	#			switch = {
+#	#				trigger = highest_held_title_tier
+#	#				tier_barony = { add = 60 }
+#	#				tier_county = { add = 100 }
+#	#				tier_duchy = { add = 75 }
+#	#				tier_kingdom = { add = 50 }
+#	#				#tier_empire = { add = 25 }
+#	#				#tier_hegemony = { add = 10 }
+#	#				fallback = { add = 0 }
+#	#			}
+#	#		}
+#	#		multiply = culture.culture_era_value
+#	#	}
+#	#}
+#}

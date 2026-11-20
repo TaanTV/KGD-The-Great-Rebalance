@@ -53,7 +53,6 @@ BKT_on_empire_destroyed = {
 on_title_gain = {
 	on_actions = {
 		BKT_on_empire_created
-		BKT_on_barony_gained
 	}
 }
 
@@ -85,8 +84,6 @@ BKT_on_empire_created = {
 on_rank_up = { # Will not fire during history execution or for dying characters
 	on_actions = {
 		BKT_on_landed
-		delay = { days = 1 }
-		BKT_on_landed_treasury_fix
 	}
 }
 
@@ -98,6 +95,7 @@ BKT_on_landed = {
 	effect = {
 		if = {
 			limit = { 
+				always = no
 				top_liege != this
 				highest_held_title_tier > tier_barony
 				NOT = { government_has_flag = government_is_tribal }
@@ -117,6 +115,10 @@ BKT_on_landed = {
 				change_government = wanua_government
 			}
 		}
+		if = {
+			limit = { highest_held_title_tier > tier_barony }
+			pam_ai_personal_tenet_pulse_effect = yes
+		}
 	}
 }
 
@@ -128,6 +130,7 @@ BKT_on_landed = {
 on_vassal_change = {
 	on_actions = {
 		BKT_vassal_change_tyrannical_changes_maintenance
+		BKT_vassal_change_council_opinions_cleanup
 	}
 }
 
@@ -191,39 +194,20 @@ BKT_vassal_change_tyrannical_changes_maintenance = {
 	}
 }
 
-BKT_on_barony_gained = {
+BKT_vassal_change_council_opinions_cleanup = {
 	trigger = {
-		OR = {
-			scope:transfer_type = flag:granted
-			scope:transfer_type = flag:appointment
-		}
-		scope:title.tier = tier_barony
-	}
-	effect = { 
-		set_variable = {
-			name = got_barony_granted
-			days = 2
-		}
-	}
-}
-
-BKT_on_landed_treasury_fix = {
-	trigger = {
-		NOT = { exists = scope:title }
-		government_allows = treasury
-		#gold = treasury
-		gold > 0
-		OR = {
-			AND = {
-				highest_held_title_tier = tier_barony
-				has_variable = got_barony_granted
-			}
-			primary_title ?= {
-				recent_history = { type = appointment days = 1 }
+		scope:old_liege ?= {
+			is_alive = yes
+			reverse_has_opinion_modifier = {
+				modifier = same_stance_in_council
+				target = prev
 			}
 		}
 	}
 	effect = {
-		remove_treasury = gold
+		remove_opinion = {
+			modifier = same_stance_in_council
+			target = scope:old_liege
+		}
 	}
 }

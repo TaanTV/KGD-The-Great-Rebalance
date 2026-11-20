@@ -12,6 +12,10 @@ heregeld_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = heregeld_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = heregeld_perk_adventurer_name
 			}
@@ -48,15 +52,15 @@ heregeld_perk = {
 	}
 	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
 		vassal_tax_contribution_mult = 0.05		#prev 0.1
 		tributary_tax_mult = 0.1
 	}
-
+	
 	government_character_modifier = {
-		flag = government_is_clan
-		clan_tax_slot_add = 1
+		flag = government_is_merchant
+		trade_route_length_add = 2
 	}
 	
 	government_character_modifier = {
@@ -78,6 +82,14 @@ golden_aplomb_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_republic }
+				desc = golden_aplomb_perk_republic_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = golden_aplomb_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = golden_aplomb_perk_adventurer_name
 			}
@@ -86,11 +98,28 @@ golden_aplomb_perk = {
 	}
 	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
-		monthly_income_per_stress_level_mult = 0.075	#prev 0.1
+		monthly_income_per_stress_level_mult = 0.05	#prev 0.1
 		#ADDED
 		negate_stewardship_penalty_add = 3
+	}
+	
+
+	government_character_modifier = {
+		flag = government_is_merchant
+		max_trade_goods_on_route = 1
+		trade_expertise_growth_mult = 0.1
+	}
+
+	government_character_modifier = {
+		flag = government_is_republic
+		trade_expertise_growth_mult = 0.1
+	}
+
+	government_character_modifier = {
+		flag = government_is_theocracy
+		#stewardship_per_piety_level = 1
 	}
 	
 	effect = {
@@ -114,13 +143,22 @@ golden_obligations_perk= {
 	icon = node_stewardship
 	
 	parent = golden_aplomb_perk
+
+	government_character_modifier = {
+		flag = government_is_clan
+		clan_tax_slot_add = 1
+	}
 	
 	effect = {
-		#custom_description_no_bullet = {
-		#	text = golden_obligations_perk_effect
-		#}
-		#ADDED
-		custom_tooltip = bkt_golden_obligations_perk_effect
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			custom_description_no_bullet = { text = golden_obligations_perk_merchant_effect }
+		}
+		else = {
+			#custom_description_no_bullet = { text = golden_obligations_perk_effect }
+			#ADDED
+			custom_tooltip = bkt_golden_obligations_perk_effect
+		}
 	}
 	
 }
@@ -138,6 +176,14 @@ war_profiteer_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_republic }
+				desc = war_profiteer_perk_republic_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = war_profiteer_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = war_profiteer_perk_adventurer_name
 			}
@@ -146,9 +192,14 @@ war_profiteer_perk = {
 	}
 	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
-		monthly_war_income_mult = 0.1
+		monthly_war_income_mult = 0.05		#prev 0.1
+	}
+
+	government_character_modifier = {
+		flag = government_has_merchant_company
+		trade_category_all_sell_price_mult = 0.02
 	}
 	
 	effect = {
@@ -176,6 +227,10 @@ fearful_troops_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_has_merchant_company }
+				desc = fearful_troops_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = fearful_troops_perk_adventurer_name
 			}
@@ -184,11 +239,18 @@ fearful_troops_perk = {
 	}
 	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_or_trader_lifestyle_perks
 		invert_check = yes
-		men_at_arms_maintenance_per_dread_mult = -0.0035	#prev -0.005
+		men_at_arms_maintenance_per_dread_mult = -0.003
+		dread_baseline_add = 5		#prev 15
+	}
+
+	government_character_modifier = {
+		flag = government_has_merchant_company
+		#trade_category_all_buy_price_mult = -0.02
+		trade_competitiveness_mult = 0.05
 		#ADDED
-		dread_baseline_add = 5
+		monthly_income_from_trade_mult = 0.02
 	}
 	
 	effect = {
@@ -215,6 +277,10 @@ detailed_ledgers_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = detailed_ledgers_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = detailed_ledgers_perk_adventurer_name
 			}
@@ -223,10 +289,16 @@ detailed_ledgers_perk = {
 	}
 	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_or_trader_lifestyle_perks
 		invert_check = yes
-		republic_government_opinion = 5			#prev 20
-		republic_government_tax_contribution_mult = 0.05			#prev 0.15
+		republic_government_opinion = 10
+		republic_government_tax_contribution_mult = 0.1			#prev 0.15
+	}
+	
+	government_character_modifier = {
+		flag = government_is_merchant
+		trade_expertise_growth_mult = 0.1
+		trade_expertise_decline_mult = -0.5
 	}
 	
 	government_character_modifier = {
@@ -235,18 +307,29 @@ detailed_ledgers_perk = {
 	}
 	
 	government_character_modifier = {
+		flag = government_is_nomadic
+		monthly_income_from_herd_mult = 0.1
+	}
+	
+	government_character_modifier = {
 		flag = government_is_administrative
 		administrative_government_tax_contribution_mult = 0.05		#prev 0.1
 	}
 	
 	government_character_modifier = {
-		flag = government_is_nomadic
-		monthly_income_from_herd_mult = 0.1
+		flag = government_is_republic
+		trade_capacity_mult = 0.05
 	}
 
 	government_character_modifier = {
 		flag = government_has_treasury
 		monthly_treasury_from_salary_budget_mult = 0.1
+	}
+
+	#Ecclesiastical governments have a treasury but no salary budget, so the block above does nothing for them
+	government_character_modifier = {
+		flag = government_is_ecclesiastical
+		domicile_monthly_gold_add = 0.5		#prev 1
 	}
 
 	effect = {
@@ -269,6 +352,14 @@ it_is_my_domain_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_republic }
+				desc = it_is_my_domain_perk_republic_name
+			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = it_is_my_domain_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = it_is_my_domain_perk_adventurer_name
 			}
@@ -282,32 +373,45 @@ it_is_my_domain_perk = {
 	
 	#ADDED
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_or_trader_lifestyle_perks
 		invert_check = yes
-		#domain_limit = 1
-		#stress_gain_mult = 0.2
-		domain_tax_mult = 0.1
+		commerce_tax_mult = 0.1
+		civic_tax_mult = 0.1
+	}
+	
+	#ADDED 
+	government_character_modifier = {
+		flag = government_is_nomadic
+		commerce_tax_mult = -0.1
+		urban_tax_mult = -0.1
+		monthly_income_from_herd_mult = 0.1
 	}
 	
 	government_character_modifier = {
 		flag = government_uses_domicile_but_not_adventurer
 		domicile_monthly_gold_mult = 0.1
 	}
-	
-	#ADDED 
+
 	government_character_modifier = {
-		flag = government_is_nomadic
-		#domain_limit = -1
-		#stress_gain_mult = -0.2
-		domain_tax_mult = -0.1
-		domicile_monthly_gold_mult = 0.05
-		monthly_income_from_herd_mult = 0.15
+		flag = government_is_merchant
+		trade_competitiveness_add = 15
+		trait_track_caravaneer_xp_gain_mult = 0.15
+		different_culture_opinion = 5
+	}
+
+	government_character_modifier = {
+		flag = government_is_republic
+		trade_competitiveness_add = 15
+		trade_competitiveness_mult = 0.1
 	}
 	
 	effect = {
 		if = {
 			limit = {
-				NOT = { government_has_flag = government_is_landless_adventurer }
+				NOR = {
+					government_has_flag = government_uses_landless_lifestyle_perks
+					government_has_flag = government_is_republic
+				}
 			}
 			#custom_description_no_bullet = {
 			#	text = it_is_my_domain_perk_effect
@@ -339,6 +443,10 @@ at_any_cost_perk = {
 	name = {
 		first_valid = {
 			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = at_any_cost_perk_merchant_name
+			}
+			triggered_desc = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = at_any_cost_perk_adventurer_name
 			}
@@ -346,15 +454,21 @@ at_any_cost_perk = {
 		}
 	}
 
-
 	effect = {
 		if = {
 			limit = {
-				NOT = { government_has_flag = government_is_landless_adventurer }
+				NOR = {
+					government_has_flag = government_uses_landless_lifestyle_perks
+					is_landed = no
+				}
 			}
 			custom_description_no_bullet = {
 				text = bkt_at_any_cost_perk_effect	#prev at_any_cost_perk_effect
 			}
+		}
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			custom_description_no_bullet = { text = at_any_cost_perk_merchant_effect }
 		}
 		if = {
 			limit = {
@@ -367,9 +481,9 @@ at_any_cost_perk = {
 	}
 
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
-		#domain_tax_mult = 0.1
+		#domain_tax_mult = 0.05
 		#ADDED
 		men_at_arms_recruitment_cost = -0.15
 		mercenary_hire_cost_mult = -0.15
@@ -388,6 +502,13 @@ at_any_cost_perk = {
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		title_creation_cost_mult = 0.15
+	}
+
+	government_character_modifier = {
+		flag = government_is_merchant
+		#monthly_income_from_trade_mult = 0.05
+		#ADDED
+		trade_category_all_buy_price_mult = -0.05
 	}
 }
 

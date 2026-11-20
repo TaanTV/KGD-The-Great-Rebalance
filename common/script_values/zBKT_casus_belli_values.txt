@@ -280,7 +280,7 @@ common_cb_cost_multiplier_core = {
 	# Imperial Policy Japan
 	if = {
 		limit = {
-			scope:attacker.top_liege = {
+			scope:attacker.top_liege ?= {
 				has_realm_law_flag = vassal_internal_wars_cost_doubled
 				this = scope:defender.top_liege
 			}
@@ -289,6 +289,19 @@ common_cb_cost_multiplier_core = {
 			value = 1
 			add = tgp_disarmament_law_increased_cb_cost_value
 			desc = disarmament_law_increased_cb_cost_desc
+		}
+	}
+	# Attacking a Republic
+	if = {
+		limit = {
+			scope:defender = {
+				government_has_flag = government_is_republic
+			}
+		}
+		multiply = {
+			value = 1
+			add = gdp_attacking_republic_cb_cost_value
+			desc = gdp_attacking_republic_cb_cost_desc
 		}
 	}
 }
@@ -337,6 +350,97 @@ holy_war_cb_piety_cost_multiplier = {
 		multiply = {
 			value = ghazi_religious_war_cost_reduction
 			desc = "CB_ATTACKER_VASSAL_CONTRACT"
+		}
+	}
+
+	if = {
+		limit = {
+			scope:attacker = {
+				any_active_accolade = {
+					accolade_parameter = acclaimed_knight_piety_from_battle_high
+				}
+			}
+		}
+		multiply = {
+			value = accolade_piety_reduction_value_high
+			desc = "fanatic_attribute"
+		}
+	}
+	else_if = {
+		limit = {
+			scope:attacker = {
+				any_active_accolade = {
+					accolade_parameter = acclaimed_knight_piety_from_battle
+				}
+			}
+		}
+		multiply = {
+			value = accolade_piety_reduction_value
+			desc = "fanatic_attribute"
+		}
+	}
+	if = {
+		limit = {
+			scope:attacker = {
+				top_participant_group:the_christian_church ?= {
+					has_participant_group_parameter = the_christian_church_cheaper_religious_wars
+				}
+			}
+		}
+		multiply = {
+			value = 0.75
+			desc = pam_the_christian_church_cheaper_religious_wars_desc
+		}
+	}
+}
+
+
+claim_cb_cost_multiplier_legitimacy = {
+	scope:attacker = {
+		if = {
+			limit = { has_legitimacy_flag = reduced_claim_cb_cost }
+			add = {
+				value = 0.75	#prev 0.5 
+				desc = legitimacy_high_modifier_tt
+			}
+		}
+		else_if = {
+			limit = { has_legitimacy_flag = very_reduced_claim_cb_cost }
+			add = {
+				value = 0.5		#prev 0.25 
+				desc = legitimacy_high_modifier_tt
+			}
+		}
+		else_if = {
+			limit = { has_legitimacy_flag = extra_reduced_claim_cb_cost }
+			add = {
+				value = 0.25	#prev 0.15 
+				desc = legitimacy_high_modifier_tt
+			}
+		}
+		else_if = {
+			limit = { has_legitimacy_flag = increased_claim_cb_cost }
+			add = {
+				value = 1.5
+				desc = legitimacy_low_modifier_tt
+			}
+		}
+		else_if = {
+			limit = { has_legitimacy_flag = very_increased_claim_cb_cost }
+			add = {
+				value = 2
+				desc = legitimacy_low_modifier_tt
+			}
+		}
+		else_if = {
+			limit = { has_legitimacy_flag = massively_increased_claim_cb_cost }
+			add = {
+				value = 2.5
+				desc = legitimacy_low_modifier_tt
+			}
+		}
+		else = {
+			add = 1
 		}
 	}
 }

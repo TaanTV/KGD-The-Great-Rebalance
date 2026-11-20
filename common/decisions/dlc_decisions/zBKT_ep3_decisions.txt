@@ -20,17 +20,17 @@ restore_backwater_counties_decision = {
 	decision_group_type = roman
 
 	is_shown = {
-		is_governor = yes #Unop Gate on being a governor (vassal with a liege) instead of duchy/kingdom tier, so empire-tier vassal governors qualify while independent emperors stay excluded
-		#primary_title ?= {
-		#	OR = {
-		#		tier = tier_duchy
-		#		tier = tier_kingdom
-		#	}
-		#}
+		has_ep3_dlc_trigger = yes
+		primary_title ?= {
+			OR = {
+				tier = tier_duchy
+				tier = tier_kingdom
+				tier = tier_empire
+			}
+		}
 		any_sub_realm_county = {
 			has_county_modifier = backwater_county_modifier
 		}
-		has_ep3_dlc_trigger = yes
 	}
 
 	is_valid = {
@@ -41,7 +41,7 @@ restore_backwater_counties_decision = {
 			any_sub_realm_county = {
 				count >= 1
 				has_county_modifier = backwater_county_modifier
-				development_level >= backwater_development_value	#prev 50
+				prosperity_level >= backwater_prosperity_value	#prev 50
 			}
 		}
 	}
@@ -66,7 +66,7 @@ restore_backwater_counties_decision = {
 								geographical_region = greek_backwater_modifier_region
 							}
 							has_county_modifier = backwater_county_modifier
-							development_level >= backwater_development_value	#prev 50
+							prosperity_level >= backwater_prosperity_value	#prev 50
 						}
 						add = 1
 					}
@@ -90,7 +90,7 @@ restore_backwater_counties_decision = {
 								geographical_region = greek_backwater_modifier_region
 							}
 							has_county_modifier = backwater_county_modifier
-							development_level >= backwater_development_value	#prev 50
+							prosperity_level >= backwater_prosperity_value	#prev 50
 						}
 						add = 1
 					}
@@ -112,7 +112,7 @@ restore_backwater_counties_decision = {
 							geographical_region = greek_backwater_modifier_region
 						}
 						has_county_modifier = backwater_county_modifier
-						development_level >= backwater_development_value	#prev 50
+						prosperity_level >= backwater_prosperity_value	#prev 50
 					}
 				}
 			}
@@ -125,7 +125,7 @@ restore_backwater_counties_decision = {
 						geographical_region = greek_backwater_modifier_region
 					}
 					has_county_modifier = backwater_county_modifier
-					development_level >= backwater_development_value	#prev 50
+					prosperity_level >= backwater_prosperity_value	#prev 50
 				}
 				add_to_list = frontwater_counties
 			}
@@ -222,6 +222,7 @@ retake_eastern_provinces_decision = {
 	decision_group_type = roman
 
 	is_shown = {
+		has_ep3_dlc_trigger = yes
 		has_title = title:e_byzantium
 		NOT = {
 			is_target_in_global_variable_list = {
@@ -229,7 +230,6 @@ retake_eastern_provinces_decision = {
 				target = flag:retake_eastern_provinces_decision
 			}
 		}
-		has_ep3_dlc_trigger = yes
 	}
 
 	is_valid = {
@@ -734,6 +734,7 @@ reinstitute_grain_dole_decision = {
 	decision_group_type = roman
 
 	is_shown = {
+		has_ep3_dlc_trigger = yes
 		is_roman_emperor_trigger = yes
 		NOT = {
 			is_target_in_global_variable_list = {
@@ -741,7 +742,6 @@ reinstitute_grain_dole_decision = {
 				target = flag:reinstitute_grain_dole_decision
 			}
 		}
-		has_ep3_dlc_trigger = yes
 	}
 
 	is_valid = {
@@ -750,7 +750,7 @@ reinstitute_grain_dole_decision = {
 		government_has_mechanic = administrative 
 		OR = {
 			capital_county = title:c_byzantion
-			capital_county = title:c_roma
+			capital_county = title:c_roma_urbs
 		}
 		completely_controls_region = custom_roman_aegyptus
 		custom_tooltip = {
@@ -759,7 +759,7 @@ reinstitute_grain_dole_decision = {
 				region = custom_roman_aegyptus
 				count >= 3
 				any_county_province = {
-					has_building_or_higher = cereal_fields_05
+					has_building_or_higher = farming_fields_5
 				}
 			}
 		}
@@ -836,12 +836,12 @@ reconfirm_grain_dole_decision = {
 	decision_group_type = roman
 
 	is_shown = {
+		has_ep3_dlc_trigger = yes
+		is_roman_emperor_trigger = yes
 		is_target_in_global_variable_list = {
 			name = unavailable_unique_decisions
 			target = flag:reinstitute_grain_dole_decision
 		}
-		is_roman_emperor_trigger = yes
-		has_ep3_dlc_trigger = yes
 	}
 
 	is_valid = {
@@ -850,7 +850,7 @@ reconfirm_grain_dole_decision = {
 		government_has_mechanic = administrative 
 		OR = {
 			capital_county = title:c_byzantion
-			capital_county = title:c_roma
+			capital_county = title:c_roma_urbs
 		}
 		completely_controls_region = custom_roman_aegyptus
 		custom_tooltip = {
@@ -859,7 +859,7 @@ reconfirm_grain_dole_decision = {
 				region = custom_roman_aegyptus
 				count >= 3
 				any_county_province = {
-					has_building_or_higher = cereal_fields_05
+					has_building_or_higher = farming_fields_5
 				}
 			}
 		}
@@ -1121,7 +1121,6 @@ expunge_latin_dominion_decision = {
 			limit = {
 				is_ai = no
 			}
-			NOT = { exists = involved_activity }
 			is_available = yes
 		}
 		trigger_else = {

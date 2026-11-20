@@ -162,6 +162,10 @@ task_kurultai_fertility_1 = {
 	}
 
 	effect_desc = { 
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_fertility_effect_desc 
 		desc = task_kurultai_fertility_gain_desc
 		desc = {
@@ -184,7 +188,7 @@ task_kurultai_fertility_1 = {
 						stewardship >= high_skill_rating
 					}
 				}
-				desc = task_kurultai_fertility_county_opinion
+				desc = task_kurultai_fertility_popular_opinion
 			}
 			## Negative
 			# Lose Fertility
@@ -298,7 +302,7 @@ task_kurultai_control_1 = {
 	ai_county_target = domain
 	task_progress = task_progress_value
 	task_current_value = scope:councillor_liege.marshal_increase_control_current_progress
-	task_max_value = 100 # Highest possible county control
+	task_max_value = scope:councillor_liege.marshal_increase_control_max_progress
 	highlight_own_realm = yes
 	restart_on_finish = yes # If it "finishes" by removing a corruption modifier, there'll still be control to regain
 	
@@ -311,6 +315,10 @@ task_kurultai_control_1 = {
 
 	effect_desc = {
 		desc = task_kurultai_control_effect_desc
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_increase_control_current_status
+		}
 		desc = task_kurultai_increase_control_effect_desc
 		desc = {
 			desc = council_task_possible_side_effects
@@ -465,7 +473,7 @@ task_kurultai_control_1 = {
 		if = {
 			limit = { exists = scope:county }
 			multiply = {
-				value = scope:county.monthly_county_control_growth_factor
+				value = scope:county.monthly_county_control_change
 				desc = MARSHAL_COUNTY_SPEED_MODIFIERS
 			}
 		}
@@ -505,13 +513,10 @@ task_kurultai_control_1 = {
 			custom_description = {
 				text = potential_county_control_task_trigger
 				OR = {
+					county_control < county_control_baseline
 					has_county_corruption_trigger = yes
-					county_control < full_county_control
 				}
 			}
-			# If the growth factor is 0, no amount of trying to control helps
-			# (happens when the county is under siege/occupied most likely)
-			monthly_county_control_growth_factor > 0
 			custom_tooltip = {
 				text = potential_county_control_task_only_one_target
 				scope:county = {
@@ -527,7 +532,7 @@ task_kurultai_control_1 = {
 
 	county_modifier = {
 		name = marshal_increase_control_modifier
-		monthly_county_control_growth_add = 1
+		monthly_control_change_when_below_baseline_add = 0.5
 		scale = marshal_increase_control_total
 	}
 
@@ -559,7 +564,6 @@ task_kurultai_control_1 = {
 					location = scope:county.title_province
 					task_contract_employer = scope:councillor
 					target = scope:councillor.liege
-					destination = scope:county.title_province
 					save_scope_as = task_contract					
 				}
 			}
@@ -807,47 +811,6 @@ task_kurultai_domestic_affairs_1 = {
 		}
 		# Parochial Vassal Opinion
 		desc = task_domestic_affairs_parochial_effect_desc
-		triggered_desc = {
-			trigger = {
-				liege = { has_perk = chains_of_loyalty_perk }
-			}
-			desc = task_domestic_affairs_chains_of_loyalty_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_erudition_legacy_5_perk = yes
-			}
-			desc = task_domestic_affairs_bureaucrats_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_family_business_bonus = yes
-			}
-			desc = task_domestic_affairs_family_business_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_consulted_house_bonus = yes
-			}
-			desc = task_domestic_affairs_consulted_house_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_title = title:c_byzantion
-					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_pandidakterion_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_character_flag = food_improves_opinion
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_food_bonus_desc
-		}
 		# Tyranny Loss
 		desc = task_domestic_affairs_tyranny_effect_desc
 		triggered_desc = {
@@ -1130,6 +1093,10 @@ task_kurultai_exploit_area_1 = {
 	}
 
 	effect_desc = {
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_exploit_effect_desc
 		desc = task_kurultai_exploit_fertility_desc
 		desc = task_kurultai_exploit_income_desc
@@ -1172,7 +1139,7 @@ task_kurultai_exploit_area_1 = {
 						stewardship <= decent_skill_rating
 					}
 				}
-				desc = task_kurultai_exploit_lose_county_opinion
+				desc = task_kurultai_exploit_lose_popular_opinion
 			}
 		}
 	}
@@ -1731,6 +1698,10 @@ task_kurultai_fertility_2 = {
 	}
 
 	effect_desc = { 
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_fertility_effect_desc 
 		desc = task_kurultai_fertility_gain_desc
 		desc = {
@@ -1753,7 +1724,7 @@ task_kurultai_fertility_2 = {
 						stewardship >= high_skill_rating
 					}
 				}
-				desc = task_kurultai_fertility_county_opinion
+				desc = task_kurultai_fertility_popular_opinion
 			}
 			## Negative
 			# Lose Fertility
@@ -1869,7 +1840,7 @@ task_kurultai_control_2 = {
 
 	task_progress = task_progress_value
 	task_current_value = scope:councillor_liege.marshal_increase_control_current_progress
-	task_max_value = 100 # Highest possible county control
+	task_max_value = scope:councillor_liege.marshal_increase_control_max_progress
 
 	highlight_own_realm = yes
 	restart_on_finish = yes # If it "finishes" by removing a corruption modifier, there'll still be control to regain
@@ -1883,6 +1854,10 @@ task_kurultai_control_2 = {
 
 	effect_desc = {
 		desc = task_kurultai_control_effect_desc
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_increase_control_current_status
+		}
 		desc = task_kurultai_increase_control_effect_desc
 		desc = {
 			desc = council_task_possible_side_effects
@@ -2035,13 +2010,6 @@ task_kurultai_control_2 = {
 			}
 		}
 		if = {
-			limit = { exists = scope:county }
-			multiply = {
-				value = scope:county.monthly_county_control_growth_factor
-				desc = MARSHAL_COUNTY_SPEED_MODIFIERS
-			}
-		}
-		if = {
 			limit = {
 				exists = scope:county
 				scope:county = { has_county_modifier = petition_liege_county_control_modifier }
@@ -2077,13 +2045,10 @@ task_kurultai_control_2 = {
 			custom_description = {
 				text = potential_county_control_task_trigger
 				OR = {
+					county_control < county_control_baseline
 					has_county_corruption_trigger = yes
-					county_control < full_county_control
 				}
 			}
-			# If the growth factor is 0, no amount of trying to control helps
-			# (happens when the county is under siege/occupied most likely)
-			monthly_county_control_growth_factor > 0
 			custom_tooltip = {
 				text = potential_county_control_task_only_one_target
 				scope:county = {
@@ -2099,7 +2064,7 @@ task_kurultai_control_2 = {
 
 	county_modifier = {
 		name = marshal_increase_control_modifier
-		monthly_county_control_growth_add = 1
+		monthly_control_change_when_below_baseline_add = 0.5
 		scale = marshal_increase_control_total
 	}
 
@@ -2131,7 +2096,6 @@ task_kurultai_control_2 = {
 					location = scope:county.title_province
 					task_contract_employer = scope:councillor
 					target = scope:councillor.liege
-					destination = scope:county.title_province
 					save_scope_as = task_contract					
 				}
 			}
@@ -2379,47 +2343,6 @@ task_kurultai_domestic_affairs_2 = {
 		}
 		# Parochial Vassal Opinion
 		desc = task_domestic_affairs_parochial_effect_desc
-		triggered_desc = {
-			trigger = {
-				liege = { has_perk = chains_of_loyalty_perk }
-			}
-			desc = task_domestic_affairs_chains_of_loyalty_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_erudition_legacy_5_perk = yes
-			}
-			desc = task_domestic_affairs_bureaucrats_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_family_business_bonus = yes
-			}
-			desc = task_domestic_affairs_family_business_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_consulted_house_bonus = yes
-			}
-			desc = task_domestic_affairs_consulted_house_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_title = title:c_byzantion
-					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_pandidakterion_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_character_flag = food_improves_opinion
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_food_bonus_desc
-		}
 		# Tyranny Loss
 		desc = task_domestic_affairs_tyranny_effect_desc
 		triggered_desc = {
@@ -2702,6 +2625,10 @@ task_kurultai_exploit_area_2 = {
 	}
 
 	effect_desc = {
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_exploit_effect_desc
 		desc = task_kurultai_exploit_fertility_desc
 		desc = task_kurultai_exploit_income_desc
@@ -2744,7 +2671,7 @@ task_kurultai_exploit_area_2 = {
 						stewardship <= decent_skill_rating
 					}
 				}
-				desc = task_kurultai_exploit_lose_county_opinion
+				desc = task_kurultai_exploit_lose_popular_opinion
 			}
 		}
 	}
@@ -3282,6 +3209,10 @@ task_kurultai_fertility_3 = {
 	}
 
 	effect_desc = { 
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_fertility_effect_desc 
 		desc = task_kurultai_fertility_gain_desc
 		desc = {
@@ -3304,7 +3235,7 @@ task_kurultai_fertility_3 = {
 						stewardship >= high_skill_rating
 					}
 				}
-				desc = task_kurultai_fertility_county_opinion
+				desc = task_kurultai_fertility_popular_opinion
 			}
 			## Negative
 			# Lose Fertility
@@ -3421,7 +3352,7 @@ task_kurultai_control_3 = {
 
 	task_progress = task_progress_value
 	task_current_value = scope:councillor_liege.marshal_increase_control_current_progress
-	task_max_value = 100 # Highest possible county control
+	task_max_value = scope:councillor_liege.marshal_increase_control_max_progress
 
 	highlight_own_realm = yes
 	restart_on_finish = yes # If it "finishes" by removing a corruption modifier, there'll still be control to regain
@@ -3435,6 +3366,10 @@ task_kurultai_control_3 = {
 
 	effect_desc = {
 		desc = task_kurultai_control_effect_desc
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_increase_control_current_status
+		}
 		desc = task_kurultai_increase_control_effect_desc
 		desc = {
 			desc = council_task_possible_side_effects
@@ -3587,13 +3522,6 @@ task_kurultai_control_3 = {
 			}
 		}
 		if = {
-			limit = { exists = scope:county }
-			multiply = {
-				value = scope:county.monthly_county_control_growth_factor
-				desc = MARSHAL_COUNTY_SPEED_MODIFIERS
-			}
-		}
-		if = {
 			limit = {
 				exists = scope:county
 				scope:county = { has_county_modifier = petition_liege_county_control_modifier }
@@ -3629,13 +3557,10 @@ task_kurultai_control_3 = {
 			custom_description = {
 				text = potential_county_control_task_trigger
 				OR = {
+					county_control < county_control_baseline
 					has_county_corruption_trigger = yes
-					county_control < full_county_control
 				}
 			}
-			# If the growth factor is 0, no amount of trying to control helps
-			# (happens when the county is under siege/occupied most likely)
-			monthly_county_control_growth_factor > 0
 			custom_tooltip = {
 				text = potential_county_control_task_only_one_target
 				scope:county = {
@@ -3651,7 +3576,7 @@ task_kurultai_control_3 = {
 
 	county_modifier = {
 		name = marshal_increase_control_modifier
-		monthly_county_control_growth_add = 1
+		monthly_control_change_when_below_baseline_add = 0.5
 		scale = marshal_increase_control_total
 	}
 
@@ -3683,7 +3608,6 @@ task_kurultai_control_3 = {
 					location = scope:county.title_province
 					task_contract_employer = scope:councillor
 					target = scope:councillor.liege
-					destination = scope:county.title_province
 					save_scope_as = task_contract					
 				}
 			}
@@ -3931,47 +3855,6 @@ task_kurultai_domestic_affairs_3 = {
 		}
 		# Parochial Vassal Opinion
 		desc = task_domestic_affairs_parochial_effect_desc
-		triggered_desc = {
-			trigger = {
-				liege = { has_perk = chains_of_loyalty_perk }
-			}
-			desc = task_domestic_affairs_chains_of_loyalty_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_erudition_legacy_5_perk = yes
-			}
-			desc = task_domestic_affairs_bureaucrats_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_family_business_bonus = yes
-			}
-			desc = task_domestic_affairs_family_business_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_consulted_house_bonus = yes
-			}
-			desc = task_domestic_affairs_consulted_house_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_title = title:c_byzantion
-					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_pandidakterion_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_character_flag = food_improves_opinion
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_food_bonus_desc
-		}
 		# Tyranny Loss
 		desc = task_domestic_affairs_tyranny_effect_desc
 		triggered_desc = {
@@ -4254,6 +4137,10 @@ task_kurultai_exploit_area_3 = {
 	}
 
 	effect_desc = {
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_exploit_effect_desc
 		desc = task_kurultai_exploit_fertility_desc
 		desc = task_kurultai_exploit_income_desc
@@ -4296,7 +4183,7 @@ task_kurultai_exploit_area_3 = {
 						stewardship <= decent_skill_rating
 					}
 				}
-				desc = task_kurultai_exploit_lose_county_opinion
+				desc = task_kurultai_exploit_lose_popular_opinion
 			}
 		}
 	}
@@ -4834,6 +4721,10 @@ task_kurultai_fertility_4 = {
 	}
 
 	effect_desc = { 
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_fertility_effect_desc 
 		desc = task_kurultai_fertility_gain_desc
 		desc = {
@@ -4856,7 +4747,7 @@ task_kurultai_fertility_4 = {
 						stewardship >= high_skill_rating
 					}
 				}
-				desc = task_kurultai_fertility_county_opinion
+				desc = task_kurultai_fertility_popular_opinion
 			}
 			## Negative
 			# Lose Fertility
@@ -4972,7 +4863,7 @@ task_kurultai_control_4 = {
 
 	task_progress = task_progress_value
 	task_current_value = scope:councillor_liege.marshal_increase_control_current_progress
-	task_max_value = 100 # Highest possible county control
+	task_max_value = scope:councillor_liege.marshal_increase_control_max_progress
 
 	highlight_own_realm = yes
 	restart_on_finish = yes # If it "finishes" by removing a corruption modifier, there'll still be control to regain
@@ -4986,6 +4877,10 @@ task_kurultai_control_4 = {
 
 	effect_desc = {
 		desc = task_kurultai_control_effect_desc
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_increase_control_current_status
+		}
 		desc = task_kurultai_increase_control_effect_desc
 		desc = {
 			desc = council_task_possible_side_effects
@@ -5138,13 +5033,6 @@ task_kurultai_control_4 = {
 			}
 		}
 		if = {
-			limit = { exists = scope:county }
-			multiply = {
-				value = scope:county.monthly_county_control_growth_factor
-				desc = MARSHAL_COUNTY_SPEED_MODIFIERS
-			}
-		}
-		if = {
 			limit = {
 				exists = scope:county
 				scope:county = { has_county_modifier = petition_liege_county_control_modifier }
@@ -5180,13 +5068,10 @@ task_kurultai_control_4 = {
 			custom_description = {
 				text = potential_county_control_task_trigger
 				OR = {
+					county_control < county_control_baseline
 					has_county_corruption_trigger = yes
-					county_control < full_county_control
 				}
 			}
-			# If the growth factor is 0, no amount of trying to control helps
-			# (happens when the county is under siege/occupied most likely)
-			monthly_county_control_growth_factor > 0
 			custom_tooltip = {
 				text = potential_county_control_task_only_one_target
 				scope:county = {
@@ -5202,7 +5087,7 @@ task_kurultai_control_4 = {
 
 	county_modifier = {
 		name = marshal_increase_control_modifier
-		monthly_county_control_growth_add = 1
+		monthly_control_change_when_below_baseline_add = 0.5
 		scale = marshal_increase_control_total
 	}
 
@@ -5234,7 +5119,6 @@ task_kurultai_control_4 = {
 					location = scope:county.title_province
 					task_contract_employer = scope:councillor
 					target = scope:councillor.liege
-					destination = scope:county.title_province
 					save_scope_as = task_contract					
 				}
 			}
@@ -5482,47 +5366,6 @@ task_kurultai_domestic_affairs_4 = {
 		}
 		# Parochial Vassal Opinion
 		desc = task_domestic_affairs_parochial_effect_desc
-		triggered_desc = {
-			trigger = {
-				liege = { has_perk = chains_of_loyalty_perk }
-			}
-			desc = task_domestic_affairs_chains_of_loyalty_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_erudition_legacy_5_perk = yes
-			}
-			desc = task_domestic_affairs_bureaucrats_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_family_business_bonus = yes
-			}
-			desc = task_domestic_affairs_family_business_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				councillor_liege_has_consulted_house_bonus = yes
-			}
-			desc = task_domestic_affairs_consulted_house_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_title = title:c_byzantion
-					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_pandidakterion_bonus_desc
-		}
-		triggered_desc = {
-			trigger = {
-				scope:councillor_liege = {
-					has_character_flag = food_improves_opinion
-				}
-			}
-			desc = chancellor_domestic_affairs_opinion_food_bonus_desc
-		}
 		# Tyranny Loss
 		desc = task_domestic_affairs_tyranny_effect_desc
 		triggered_desc = {
@@ -5805,6 +5648,10 @@ task_kurultai_exploit_area_4 = {
 	}
 
 	effect_desc = {
+		triggered_desc = {
+			trigger = { council_task_not_started_in_county_trigger = yes }
+			desc = task_kurultai_current_fertility_status
+		}
 		desc = task_kurultai_exploit_effect_desc
 		desc = task_kurultai_exploit_fertility_desc
 		desc = task_kurultai_exploit_income_desc
@@ -5847,7 +5694,7 @@ task_kurultai_exploit_area_4 = {
 						stewardship <= decent_skill_rating
 					}
 				}
-				desc = task_kurultai_exploit_lose_county_opinion
+				desc = task_kurultai_exploit_lose_popular_opinion
 			}
 		}
 	}

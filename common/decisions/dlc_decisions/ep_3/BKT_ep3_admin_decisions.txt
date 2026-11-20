@@ -14,7 +14,8 @@ convert_to_administrative_decision = {
 	picture = {
 		reference = "gfx/interface/illustrations/decisions/ep3_cerimonial_decision.dds"
 	}
-	decision_group_type = major
+	decision_group_type = realm
+	sort_order = 40
 	title = {
 		first_valid = {
 			triggered_desc = {
@@ -66,14 +67,18 @@ convert_to_administrative_decision = {
 			government_has_flag = government_is_feudal
 			government_has_flag = government_is_clan
 			government_has_flag = government_is_japan_feudal
+			AND = { # Republic doges may become admin
+				government_has_flag = government_is_republic
+				highest_liege_matching_rule:uses_assembly = this
+			}
 		}
 		trigger_if = {
 			limit = { top_liege != this }
 			liege = { government_has_mechanic = administrative }
 		}
 		OR = {
-			has_ep3_dlc_trigger = yes
 			has_tgp_dlc_trigger = yes
+			has_ep3_dlc_trigger = yes
 		}
 	}
 
@@ -132,6 +137,7 @@ convert_to_administrative_decision = {
 			limit = {
 				top_liege = this
 				is_ai = no
+				NOT = { government_has_flag = government_is_republic }
 			}
 			custom_tooltip = {
 				text = all_powerful_vassals_required_tt
@@ -144,6 +150,12 @@ convert_to_administrative_decision = {
 				}
 			}
 		}
+		trigger_if = { # Republics have to be despots
+			limit = {
+				government_has_flag = government_is_republic
+			}
+			has_realm_law = republican_despot_succession_law
+		}
 		trigger_if = {
 			limit = { is_ai = yes }
 			calc_true_if = {
@@ -153,7 +165,7 @@ convert_to_administrative_decision = {
 				culture = { has_cultural_pillar = ethos_egalitarian }
 				culture = { has_cultural_tradition = tradition_legalistic }
 				has_realm_law = crown_authority_3
-				capital_county = { development_level > medium_development_level }
+				capital_county = { prosperity_level > medium_prosperity_level }
 				rite = { rite_has_tenet = tenet_legalism }
 				dynasty = { has_dynasty_perk = erudition_legacy_5 }
 				dynasty = { has_dynasty_perk = law_legacy_5 }
@@ -174,7 +186,8 @@ convert_to_administrative_decision = {
 				culture = { has_cultural_tradition = tradition_legalistic }
 				culture = { has_cultural_tradition = tradition_ep3_cultivated_sophistication }
 				has_realm_law = crown_authority_3
-				capital_county = { development_level > medium_development_level }
+				capital_county = { prosperity_level > medium_prosperity_level }
+				government_has_flag = government_is_republic
 				rite = { rite_has_tenet = tenet_legalism }
 				dynasty = { has_dynasty_perk = erudition_legacy_5 }
 				dynasty = { has_dynasty_perk = law_legacy_5 }
@@ -632,7 +645,8 @@ convert_to_feudalism_from_administrative_decision = {
 	picture = {
 		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
 	}
-	decision_group_type = major
+	decision_group_type = realm
+	sort_order = 40
 	desc = convert_to_feudalism_from_administrative_decision_desc
 
 	ai_check_interval_by_tier = {
@@ -659,12 +673,11 @@ convert_to_feudalism_from_administrative_decision = {
 	is_valid = {
 		is_landed = yes
 		trigger_if = {
-			limit = {
-				top_liege != this
-			}
-			top_liege ?= {
-				realm_law_authority_level_0 = yes
-			}
+			limit = { is_independent_ruler = no }
+			custom_tooltip = {
+				text = liege_has_realm_law_authority_0_tt
+				top_liege ?= { realm_law_authority_level_0 = yes }
+			}	
 			#ADDED - rewritten the whole "on the border" thing
 			custom_tooltip = {
 				text = governorship_is_on_the_border_or_borders_non_admin_vassal_or_is_island_tt

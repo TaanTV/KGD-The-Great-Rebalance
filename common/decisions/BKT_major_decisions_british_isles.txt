@@ -4,6 +4,7 @@ embrace_english_culture_decision = {
 		reference = "gfx/interface/illustrations/decisions/decision_realm.dds"
 	}
 	decision_group_type = major
+	sort_order = 100
 
 	ai_check_interval_by_tier = {
 		barony = 0
@@ -74,7 +75,7 @@ embrace_english_culture_decision = {
 		has_title = title:k_england
 		trigger_if = {
 			limit = {
-				has_dlc_feature = roads_to_power
+				has_playable_adventurer_dlc_trigger = yes
 			}
 			OR = {
 				custom_description = {

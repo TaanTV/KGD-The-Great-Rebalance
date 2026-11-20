@@ -30,7 +30,9 @@ tgp_child_personality.0002 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0002 }
 		NAND = {
 			#OR = {
 			#	has_trait = arrogant
@@ -42,7 +44,6 @@ tgp_child_personality.0002 = {
 				has_trait = sadistic
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -75,6 +76,10 @@ tgp_child_personality.0002 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0002
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		if = {
@@ -102,11 +107,14 @@ tgp_child_personality.0002 = {
 				save_scope_as = guardian
 			}
 		}
-		create_character = {
-			template = generic_peasant_character
-			gender_female_chance = 0
-			location = root.location
-			save_scope_as = poor_fellow
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = generic_peasant_character
+				gender_female_chance = 0
+				location = root.location
+				save_scope_as = poor_fellow
+			}
 		}
 	}
 
@@ -211,7 +219,7 @@ tgp_child_personality.0002 = {
 		}	
 	}
 	after = {
-		scope:poor_fellow = {
+		scope:poor_fellow ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -234,7 +242,9 @@ tgp_child_personality.0003 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0003 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -265,7 +275,6 @@ tgp_child_personality.0003 = {
 			#	has_trait = arrogant
 			#}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -297,7 +306,10 @@ tgp_child_personality.0003 = {
 		modifier = {
 			add = 2		#prev 5
 			culture = {
-				has_cultural_parameter = honest_trait_more_common
+				OR = {
+					has_cultural_parameter = honest_trait_more_common
+					has_cultural_parameter = good_faith_traits_more_common
+				}
 			}
 			NOR = {
 				has_trait = honest
@@ -307,6 +319,10 @@ tgp_child_personality.0003 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0003
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
@@ -363,7 +379,10 @@ tgp_child_personality.0003 = {
 			modifier = {
 				add = 2		#prev 100
 				culture = {
-					has_cultural_parameter = honest_trait_more_common
+					OR = {
+						has_cultural_parameter = honest_trait_more_common
+						has_cultural_parameter = good_faith_traits_more_common
+					}
 				}
 			}
 		}
@@ -425,7 +444,9 @@ tgp_child_personality.0004 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0004 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -461,7 +482,6 @@ tgp_child_personality.0004 = {
 				has_trait = impatient
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -513,6 +533,10 @@ tgp_child_personality.0004 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0004
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
@@ -644,7 +668,9 @@ tgp_child_personality.0007 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0007 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -660,7 +686,6 @@ tgp_child_personality.0007 = {
 				has_trait = gluttonous
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -702,17 +727,24 @@ tgp_child_personality.0007 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0007
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			location = root.location
-			save_scope_as = gluttonous_servant
-			trait = gluttonous
-			trait = drunkard
-			after_creation = {
-				change_current_weight = 150
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				location = root.location
+				save_scope_as = gluttonous_servant
+				trait = gluttonous
+				trait = drunkard
+				after_creation = {
+					change_current_weight = 150
+				}
 			}
 		}
 	}
@@ -816,7 +848,7 @@ tgp_child_personality.0007 = {
 		}
 	}
 	after = {
-		scope:gluttonous_servant = {
+		scope:gluttonous_servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -835,7 +867,9 @@ tgp_child_personality.0009 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0009 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -851,7 +885,6 @@ tgp_child_personality.0009 = {
 				has_trait = cynical
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -893,6 +926,10 @@ tgp_child_personality.0009 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0009
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 	}
@@ -1017,7 +1054,9 @@ tgp_child_personality.0010 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_0010 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -1054,7 +1093,6 @@ tgp_child_personality.0010 = {
 				has_trait = trusting
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -1086,6 +1124,10 @@ tgp_child_personality.0010 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_0010
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
@@ -1203,7 +1245,9 @@ tgp_child_personality.7000 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7000 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -1239,7 +1283,6 @@ tgp_child_personality.7000 = {
 				has_trait = temperate
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -1281,6 +1324,10 @@ tgp_child_personality.7000 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7000
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
@@ -1402,7 +1449,9 @@ tgp_child_personality.7300 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7300 }
 		NAND = {
 			#OR = {
 			#	has_trait = eccentric
@@ -1415,7 +1464,6 @@ tgp_child_personality.7300 = {
 				has_trait = sadistic
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -1448,6 +1496,10 @@ tgp_child_personality.7300 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7300
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 	}
@@ -1574,7 +1626,9 @@ tgp_child_personality.7010 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7010 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -1633,6 +1687,10 @@ tgp_child_personality.7010 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7010
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 	}
@@ -1756,7 +1814,9 @@ tgp_child_personality.7020 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7020 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -1772,7 +1832,6 @@ tgp_child_personality.7020 = {
 				has_trait = brave
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -1794,13 +1853,20 @@ tgp_child_personality.7020 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7020
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			location = root.location
-			save_scope_as = eyes
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				location = root.location
+				save_scope_as = eyes
+			}
 		}
 	}
 
@@ -1894,7 +1960,7 @@ tgp_child_personality.7020 = {
 		}
 	}
 	after = {
-		scope:eyes = {
+		scope:eyes ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -1913,7 +1979,9 @@ tgp_child_personality.7050 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7050 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -1930,7 +1998,6 @@ tgp_child_personality.7050 = {
 				has_trait = sadistic
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -1962,6 +2029,10 @@ tgp_child_personality.7050 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7050
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 	}
@@ -2089,7 +2160,9 @@ tgp_child_personality.7200 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7200 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -2106,7 +2179,6 @@ tgp_child_personality.7200 = {
 				has_trait = calm
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -2139,13 +2211,20 @@ tgp_child_personality.7200 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7200
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			location = root.location
-			save_scope_as = alarmed_servant
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				location = root.location
+				save_scope_as = alarmed_servant
+			}
 		}
 	}
 
@@ -2252,7 +2331,7 @@ tgp_child_personality.7200 = {
 		}
 	}
 	after = {
-		scope:alarmed_servant = {
+		scope:alarmed_servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -2276,7 +2355,9 @@ tgp_child_personality.7070 = {
 		hide_info = yes
 	}
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7070 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -2312,7 +2393,6 @@ tgp_child_personality.7070 = {
 				has_trait = wrathful
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -2354,14 +2434,21 @@ tgp_child_personality.7070 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7070
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			location = root.location
-			save_scope_as = servant
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				location = root.location
+				save_scope_as = servant
+			}
 		}
 	}
 
@@ -2470,7 +2557,7 @@ tgp_child_personality.7070 = {
 		}
 	}
 	after = {
-		scope:servant = {
+		scope:servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -2489,13 +2576,14 @@ tgp_child_personality.7040 = {
 	}
 
 	trigger = {
-		is_available_child_allow_travel = yes
 		age >= 13 #Because chaste/lustful are only given at age 13
+		is_valid_for_east_asian_events_trigger = yes
+		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7040 }
 		NOR = {
 			has_trait = chaste
 			has_trait = lustful
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -2522,6 +2610,10 @@ tgp_child_personality.7040 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7040
+			years = 16
+		}
 		save_scope_as = child
 	}
 
@@ -2598,7 +2690,9 @@ tgp_child_personality.7080 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7080 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -2615,7 +2709,6 @@ tgp_child_personality.7080 = {
 				has_trait = humble
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -2647,13 +2740,20 @@ tgp_child_personality.7080 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7080
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 8 12 }
-			location = root.location
-			save_scope_as = greedy_child
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 8 12 }
+				location = root.location
+				save_scope_as = greedy_child
+			}
 		}
 	}
 
@@ -2760,7 +2860,7 @@ tgp_child_personality.7080 = {
 		}
 	}
 	after = {
-		scope:greedy_child = {
+		scope:greedy_child ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -2785,7 +2885,9 @@ tgp_child_personality.7030 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7030 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -2802,7 +2904,6 @@ tgp_child_personality.7030 = {
 				has_trait = sadistic
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -2835,26 +2936,33 @@ tgp_child_personality.7030 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7030
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			gender_female_chance = {
-				if = {
-					limit = {
-						root = {
-							is_female = yes
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				gender_female_chance = {
+					if = {
+						limit = {
+							root = {
+								is_female = yes
+							}
 						}
+						add = 100
 					}
-					add = 100
+					else = {
+						add = 0
+					}
 				}
-				else = {
-					add = 0
-				}
+				location = root.location
+				save_scope_as = clumsy_servant
 			}
-			location = root.location
-			save_scope_as = clumsy_servant
 		}
 	}
 
@@ -2962,7 +3070,7 @@ tgp_child_personality.7030 = {
 		}
 	}
 	after = {
-		scope:clumsy_servant = {
+		scope:clumsy_servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -2984,7 +3092,9 @@ tgp_child_personality.7090 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7090 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -3029,29 +3139,46 @@ tgp_child_personality.7090 = {
 				has_trait = impatient
 			}
 		}
+		modifier = {
+			add = 2		#prev 5
+			culture = {
+				has_cultural_parameter = good_faith_traits_more_common
+			}
+			NOR = {
+				has_trait = trusting
+				has_trait = paranoid
+			}
+		}
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7090
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			gender_female_chance = {
-				if = {
-					limit = {
-						root = {
-							is_female = yes
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				gender_female_chance = {
+					if = {
+						limit = {
+							root = {
+								is_female = yes
+							}
 						}
+						add = 100
 					}
-					add = 100
+					else = {
+						add = 0
+					}
 				}
-				else = {
-					add = 0
-				}
+				location = root.location
+				save_scope_as = sorry_servant
 			}
-			location = root.location
-			save_scope_as = sorry_servant
 		}
 	}
 
@@ -3114,6 +3241,12 @@ tgp_child_personality.7090 = {
 				add = -0.5
 				guardian_or_court_tutor_trait_trigger = { TRAIT = paranoid }
 			}
+			modifier = {
+				add = 2		#prev 100
+				culture = {
+					has_cultural_parameter = good_faith_traits_more_common
+				}
+			}
 		}
 	}
 
@@ -3154,7 +3287,7 @@ tgp_child_personality.7090 = {
 		}
 	}
 	after = {
-		scope:sorry_servant = {
+		scope:sorry_servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -3177,7 +3310,9 @@ tgp_child_personality.7060 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7060 }
 		calc_true_if = { 	#NAND
 			amount < 2
 			OR = {
@@ -3193,7 +3328,6 @@ tgp_child_personality.7060 = {
 				has_trait = ambitious
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -3235,13 +3369,20 @@ tgp_child_personality.7060 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7060
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
-		create_character = {
-			template = merchant_template
-			age = { 40 60 }
-			location = root.location
-			save_scope_as = sycophantic_servant
+		if = {
+			limit = { is_ai = no }
+			create_character = {
+				template = merchant_template
+				age = { 40 60 }
+				location = root.location
+				save_scope_as = sycophantic_servant
+			}
 		}
 	}
 
@@ -3350,7 +3491,7 @@ tgp_child_personality.7060 = {
 		}
 	}
 	after = {
-		scope:sycophantic_servant = {
+		scope:sycophantic_servant ?= {
 			silent_disappearance_effect = yes
 		}
 	}
@@ -3372,7 +3513,9 @@ tgp_child_personality.7100 = {
 	}
 
 	trigger = {
+		is_valid_for_east_asian_events_trigger = yes
 		is_available_child_allow_travel = yes
+		NOT = { has_character_flag = had_event_child_personality_7100 }
 		OR = {
 			any_relation = {
 				type = guardian
@@ -3408,7 +3551,6 @@ tgp_child_personality.7100 = {
 				has_trait = patient
 			}
 		}
-		is_valid_for_east_asian_events_trigger = yes
 	}
 
 	weight_multiplier = {
@@ -3430,7 +3572,10 @@ tgp_child_personality.7100 = {
 		modifier = {
 			add = 2		#prev 5
 			culture = {
-				has_cultural_parameter = honest_trait_more_common
+				OR = {
+					has_cultural_parameter = honest_trait_more_common
+					has_cultural_parameter = good_faith_traits_more_common
+				}
 			}
 			NOR = {
 				has_trait = honest
@@ -3440,6 +3585,10 @@ tgp_child_personality.7100 = {
 	}
 
 	immediate = {
+		add_character_flag = {
+			flag = had_event_child_personality_7100
+			years = 16
+		}
 		save_scope_as = child
 		disable_random_event_option_if_not_ai = yes
 		get_guardian_scope_effect = yes
@@ -3476,7 +3625,10 @@ tgp_child_personality.7100 = {
 			modifier = {
 				add = 2		#prev 100
 				culture = {
-					has_cultural_parameter = honest_trait_more_common
+					OR = {
+						has_cultural_parameter = honest_trait_more_common
+						has_cultural_parameter = good_faith_traits_more_common
+					}
 				}
 			}
 		}

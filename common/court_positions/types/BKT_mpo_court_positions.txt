@@ -1475,7 +1475,6 @@ yeke_jarquchi_court_position = { ### MPO
 			NOR = {
 				root ?= { #Unop: We want to check the culture of the court_owner (most likely the player) not the culture of the recipient
 					culture = { has_cultural_pillar = heritage_mongolic }
-					culture = { has_cultural_pillar = heritage_turkic }
 				}
 			}
 		}
@@ -1690,29 +1689,29 @@ yeke_jarquchi_court_position = { ### MPO
 	# These modifiers are employed based on what level the aptitude reaches (levels are defined as breakpoints)
 	scaling_employer_modifiers = {
 		terrible = {
-			character_capital_county_monthly_control_add = 0.1
+			monthly_control_change_when_below_baseline_add = 0.1
 			monthly_legitimacy_add = 0.05	#prev 0.1
 		}
 		poor = {
-			character_capital_county_monthly_control_add = 0.2
+			monthly_control_change_when_below_baseline_add = 0.2
 			monthly_legitimacy_add = 0.1	#prev 0.2
 		}
 		average = {
-			character_capital_county_monthly_control_add = 0.3
+			monthly_control_change_when_below_baseline_add = 0.3
 			monthly_legitimacy_add = 0.15	#prev 0.3
 		}
 		good = {
-			character_capital_county_monthly_control_add = 0.4
+			monthly_control_change_when_below_baseline_add = 0.4
 			monthly_legitimacy_add = 0.25	#prev 0.5
 		}
 		excellent = {
-			character_capital_county_monthly_control_add = 0.5
+			monthly_control_change_when_below_baseline_add = 0.5
 			monthly_legitimacy_add = 0.35	#prev 0.7
 		}
 	}
 
 	modifier = {
-		monthly_county_control_growth_factor = 0.2
+		monthly_control_change_when_below_baseline_mult = 0.2
 		monthly_diplomacy_lifestyle_xp_gain_mult = 0.1
 	}
 

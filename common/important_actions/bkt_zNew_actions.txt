@@ -16,7 +16,7 @@ action_war_declaration_powerful_vassal_approval_denied = {
 				limit = {
 					is_powerful_vassal = yes
 					age >= 16
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 				try_create_important_action = {
 					important_action_type = action_war_declaration_powerful_vassal_approval_denied
@@ -61,7 +61,7 @@ action_war_declaration_council_approval_denied = {
 						prev.cp:councillor_spouse ?= this
 						prev.cp:councillor_vizier ?= this
 					}
-					opposes_succession_law_change_trigger = yes
+					opposes_law_change_trigger = yes
 				}
 				try_create_important_action = {
 					important_action_type = action_war_declaration_council_approval_denied

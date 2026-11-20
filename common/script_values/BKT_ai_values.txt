@@ -1,14 +1,14 @@
 ﻿### Brief: ai_men_at_arms_expense_gold_min
-# The AI will quickly try to spend this much of its gold income on MAA 
-# maintenance. This is referenced in code, so do not rename or remove this 
-# without talking with a programmer about it. 
-# 
-# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa 
+# The AI will quickly try to spend this much of its gold income on MAA
+# maintenance. This is referenced in code, so do not rename or remove this
+# without talking with a programmer about it.
+#
+# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_gold_min = {
 	value = {
@@ -68,16 +68,16 @@ ai_men_at_arms_expense_gold_min = {
 
 ### Brief: ai_men_at_arms_expense_ideal
 # The AI will try to spend this much of its gold income on MAA maintenance. It won't
-# buy beyond this, but might end up higher due to reduced income. This is 
-# referenced in code, so do not rename or remove this without talking with a 
-# programmer about it. 
+# buy beyond this, but might end up higher due to reduced income. This is
+# referenced in code, so do not rename or remove this without talking with a
+# programmer about it.
 #
-# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa 
+# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_gold_ideal = {
 	value = {
@@ -100,7 +100,7 @@ ai_men_at_arms_expense_gold_ideal = {
 			}
 		}
 	}
-	
+
 
 	if = {
 		limit = {
@@ -182,7 +182,7 @@ ai_men_at_arms_expense_gold_ideal = {
 			primary_title ?= {
 				tier < tier_kingdom
 			}
-			monthly_character_income >= 30	#prev 60
+			monthly_character_income >= 60
 		}
 		add = {
 			desc = "lesser ruler, late medieval"
@@ -199,82 +199,84 @@ ai_men_at_arms_expense_gold_ideal = {
 			value = 0.5
 		}
 	}
+	if = {
+		limit = {
+			government_has_flag = government_is_republic
+			is_landless_ruler = yes
+		}
+		value = gdp_ai_landless_republic_maa_expense_gold_ideal_share_value
+	}
 
 	min = 0
 	max = 0.9
 }
 
 ### Brief: ai_men_at_arms_expense_gold_max
-# The AI will disband MAA if it ends up spending more than this amount of its 
+# The AI will disband MAA if it ends up spending more than this amount of its
 # income on maintenance. This is referenced in code, so do not rename or remove
-# this without talking with a programmer about it. 
+# this without talking with a programmer about it.
 #
-# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa 
+# Value between 0 and 1, where 1 eqivalents using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_gold_max = {
 	value = {
 		value = 0.6
 		desc = "default value"
 	}
-	if = {
+	if = { # Late medieval also counts as high medieval
 		limit = {
 			culture ?= {
 				has_cultural_era_or_later = culture_era_high_medieval
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+		}
+		if = {
+			limit = {
+				primary_title ?= {
+					tier >= tier_kingdom
+				}
+			}
+			add = {
+				desc = "significant ruler, high medieval"
+				value = 0.1		#prev 0.2
+			}
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "significant ruler, late medieval"
+					value = 0.1		#prev 0.2
+				}
 			}
 		}
-		add = {
-			desc = "significant ruler, high medieval"
-			value = 0.1		#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
+		else_if = {
+			limit = {
+				primary_title ?= {
+					tier < tier_kingdom
+				}
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+			add = {
+				desc = "lesser ruler, high medieval"
+				value = 0.05
 			}
-		}
-		add = {
-			desc = "significant ruler, late medieval"
-			value = 0.1		#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_high_medieval
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "lesser ruler, late medieval"
+					value = 0.05	#prev 0.1
+				}
 			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, high medieval"
-			value = 0.05
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
-			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, late medieval"
-			value = 0.05	#prev 0.1
 		}
 	}
 	if = {
@@ -296,10 +298,17 @@ ai_men_at_arms_expense_gold_max = {
 			value = 0.3
 		}
 	}
+	if = {
+		limit = {
+			government_has_flag = government_is_republic
+			is_landless_ruler = yes
+		}
+		value = gdp_ai_landless_republic_maa_expense_gold_share_value
+	}
 
 	min = 0
 	max = 0.9
-	
+
 	if = {
 		limit = {
 			OR = {
@@ -313,16 +322,16 @@ ai_men_at_arms_expense_gold_max = {
 }
 
 ### Brief: ai_men_at_arms_expense_prestige_min
-# The AI will quickly try to spend this much of its prestige income on MAA 
-# maintenance. This is referenced in code, so do not rename or remove this 
-# without talking with a programmer about it. 
-# 
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# The AI will quickly try to spend this much of its prestige income on MAA
+# maintenance. This is referenced in code, so do not rename or remove this
+# without talking with a programmer about it.
+#
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_prestige_min = {
 	value = {
@@ -382,16 +391,16 @@ ai_men_at_arms_expense_prestige_min = {
 
 ### Brief: ai_men_at_arms_expense_prestige_ideal
 # The AI will try to spend this much of its income on MAA maintenance. It won't
-# buy beyond this, but might end up higher due to reduced income. This is 
-# referenced in code, so do not rename or remove this without talking with a 
-# programmer about it. 
+# buy beyond this, but might end up higher due to reduced income. This is
+# referenced in code, so do not rename or remove this without talking with a
+# programmer about it.
 #
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_prestige_ideal = {
 	value = {
@@ -497,76 +506,71 @@ ai_men_at_arms_expense_prestige_ideal = {
 }
 
 ### Brief: ai_men_at_arms_expense_prestige_max
-# The AI will disband MAA if it ends up spending more than this amount of its 
+# The AI will disband MAA if it ends up spending more than this amount of its
 # income on maintenance. This is referenced in code, so do not rename or remove
-# this without talking with a programmer about it. 
+# this without talking with a programmer about it.
 #
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_prestige_max = {
 	value = {
 		value = 0.7		#prev 0.6
 		desc = "default value"
 	}
-	if = {
+	if = { # Late medieval also counts as high medieval
 		limit = {
 			culture ?= {
 				has_cultural_era_or_later = culture_era_high_medieval
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+		}
+		if = {
+			limit = {
+				primary_title ?= {
+					tier >= tier_kingdom
+				}
+			}
+			add = {
+				desc = "significant ruler, high medieval"
+				value = 0.1	#prev 0.2
+			}
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "significant ruler, high medieval"
+					value = 0.1	#prev 0.2
+				}
 			}
 		}
-		add = {
-			desc = "significant ruler, high medieval"
-			value = 0.1	#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
+		else_if = {
+			limit = {
+				primary_title ?= {
+					tier < tier_kingdom
+				}
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+			add = {
+				desc = "lesser ruler, high medieval"
+				value = 0.05
 			}
-		}
-		add = {
-			desc = "significant ruler, high medieval"
-			value = 0.1	#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_high_medieval
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "lesser ruler, late medieval"
+					value = 0.05	#prev 0.1
+				}
 			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, high medieval"
-			value = 0.05
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
-			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, late medieval"
-			value = 0.05	#prev 0.1
 		}
 	}
 	if = {
@@ -585,16 +589,16 @@ ai_men_at_arms_expense_prestige_max = {
 }
 
 ### Brief: ai_men_at_arms_expense_treasury_min
-# The AI will quickly try to spend this much of its treasury income on MAA 
-# maintenance. This is referenced in code, so do not rename or remove this 
-# without talking with a programmer about it. 
-# 
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# The AI will quickly try to spend this much of its treasury income on MAA
+# maintenance. This is referenced in code, so do not rename or remove this
+# without talking with a programmer about it.
+#
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_treasury_min = {
 	value = {
@@ -662,16 +666,16 @@ ai_men_at_arms_expense_treasury_min = {
 
 ### Brief: ai_men_at_arms_expense_treasury_ideal
 # The AI will try to spend this much of its treasury income on MAA maintenance. It won't
-# buy beyond this, but might end up higher due to reduced income. This is 
-# referenced in code, so do not rename or remove this without talking with a 
-# programmer about it. 
+# buy beyond this, but might end up higher due to reduced income. This is
+# referenced in code, so do not rename or remove this without talking with a
+# programmer about it.
 #
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_treasury_ideal = {
 	value = {
@@ -789,76 +793,71 @@ ai_men_at_arms_expense_treasury_ideal = {
 }
 
 ### Brief: ai_men_at_arms_expense_treasury_max
-# The AI will disband MAA if it ends up spending more than this treasury amount of its 
+# The AI will disband MAA if it ends up spending more than this treasury amount of its
 # income on maintenance. This is referenced in code, so do not rename or remove
-# this without talking with a programmer about it. 
+# this without talking with a programmer about it.
 #
-# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa 
+# Value between 0 and 1, where 1 equivalents to using 100% of its income on maa
 # maintenance.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_expense_treasury_max = {
 	value = {
 		value = 0.6
 		desc = "default value"
 	}
-	if = {
+	if = { # Late medieval also counts as high medieval
 		limit = {
 			culture ?= {
 				has_cultural_era_or_later = culture_era_high_medieval
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+		}
+		if = {
+			limit = {
+				primary_title ?= {
+					tier >= tier_kingdom
+				}
+			}
+			add = {
+				desc = "significant ruler, high medieval"
+				value = 0.1		#prev 0.2
+			}
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "significant ruler, late medieval"
+					value = 0.1		#prev 0.2
+				}
 			}
 		}
-		add = {
-			desc = "significant ruler, high medieval"
-			value = 0.1		#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
+		else_if = {
+			limit = {
+				primary_title ?= {
+					tier < tier_kingdom
+				}
 			}
-			primary_title ?= {
-				tier >= tier_kingdom
+			add = {
+				desc = "lesser ruler, high medieval"
+				value = 0.05
 			}
-		}
-		add = {
-			desc = "significant ruler, late medieval"
-			value = 0.1		#prev 0.2
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_high_medieval
+			if = {
+				limit = {
+					culture ?= {
+						has_cultural_era_or_later = culture_era_late_medieval
+					}
+				}
+				add = {
+					desc = "lesser ruler, late medieval"
+					value = 0.05		#prev 0.1
+				}
 			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, high medieval"
-			value = 0.05
-		}
-	}
-	if = {
-		limit = {
-			culture ?= {
-				has_cultural_era_or_later = culture_era_late_medieval
-			}
-			primary_title ?= {
-				tier < tier_kingdom
-			}
-		}
-		add = {
-			desc = "lesser ruler, late medieval"
-			value = 0.05	#prev 0.1
 		}
 	}
 	if = {
@@ -884,7 +883,7 @@ ai_men_at_arms_expense_treasury_max = {
 
 	min = 0
 	max = 0.9
-	
+
 	if = {
 		limit = {
 			OR = {
@@ -898,15 +897,15 @@ ai_men_at_arms_expense_treasury_max = {
 }
 
 ### Brief: ai_men_at_arms_chance_expense_below_min
-# Chance the AI will prefer MaA to buildings when spending less than the ideal 
+# Chance the AI will prefer MaA to buildings when spending less than the ideal
 # on MaA.
-# 
+#
 # Value between 0 and 1, where 1 equivalents to a 100% chance of recruiting MaA
 # instead of a building.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_chance_expense_below_min = {
 	value = {
@@ -928,7 +927,7 @@ ai_men_at_arms_chance_expense_below_min = {
 		}
 		add = {
 			desc = ai_conqueror_personality
-			value = 0.6
+			value = 0.34	#prev 0.6
 		}
 	}
 	if = {
@@ -1009,15 +1008,15 @@ ai_men_at_arms_chance_expense_below_min = {
 }
 
 ### Brief: ai_men_at_arms_chance_expense_below_ideal
-# Chance the AI will prefer MaA to buildings when spending less than the ideal 
+# Chance the AI will prefer MaA to buildings when spending less than the ideal
 # on MaA.
-# 
+#
 # Value between 0 and 1, where 1 equivalents to a 100% chance of recruiting MaA
 # instead of a building.
-# 
+#
 # Scopes:
 #	root - character
-#		AI character evaluating the ideal percentile. 
+#		AI character evaluating the ideal percentile.
 #
 ai_men_at_arms_chance_expense_below_ideal = {
 	value = {
@@ -1171,13 +1170,14 @@ ai_title_creation_weight = {
 		}
 		multiply = 10
 	}
-	
-	#ADDED - more for titles lower down if you're hitting vassal limit 
+
+	#ADDED - more for titles lower down if you're hitting vassal limit
 	if = {
 		limit = {
-			root.primary_title.tier > tier_duchy
+			always = no
+			root.highest_held_title_tier > tier_duchy
 			root.highest_held_title_tier > scope:title_tier_rank
-			vassal_limit_available <= 2
+			vassal_limit_available <= 3
 			NOT = { government_has_flag = government_is_nomadic }
 		}
 		multiply = 10

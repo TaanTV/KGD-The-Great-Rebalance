@@ -1,9 +1,9 @@
-version="0.13.5.1"
+version="0.14.0"
 tags={
 	"Balance"
 	"Gameplay"
-	"1.20 'Crozier'"
+	"1.21 'Florin'"
 }
 name="KGD: The Great Rebalance"
-supported_version="1.20.*"
+supported_version="1.21.*"
 remote_file_id="3422759424"

@@ -203,9 +203,7 @@ legend_ending_rewards_legitimizing_effect = {
 				if = {
 					limit = {
 						exists = this.holder
-						NOT = {
-							this.holder = root
-						}
+						this.holder != root
 					}
 					root = {
 						add_pressed_claim = prev
@@ -286,28 +284,22 @@ legend_ending_rewards_holy_effect = {
 # Mythical Legends guaranteed access to Legendary Buildings
 
 give_legendary_building_mythical_holy_tooltip_effect = {
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	give_legendary_building_location_holy_effect = yes
-	#}
-	#set_variable = {
-	#	name = legendary_reward_location
-	#	value = scope:legendary_locale
-	#}
-	#set_variable = {
-	#	name = legendary_figure
-	#	value = scope:protagonist
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		give_legendary_building_location_holy_effect = yes
+	}
 	#ADDED - moved
 	give_legendary_building_location_holy_effect = yes
 	if = {
@@ -324,28 +316,22 @@ give_legendary_building_mythical_holy_tooltip_effect = {
 }
 
 give_legendary_building_mythical_heroic_tooltip_effect = {
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	give_legendary_building_location_heroic_effect = yes
-	#}
-	#set_variable = {
-	#	name = legendary_reward_location
-	#	value = scope:legendary_locale
-	#}
-	#set_variable = {
-	#	name = legendary_figure
-	#	value = scope:protagonist
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		give_legendary_building_location_heroic_effect = yes
+	}
 	#ADDED - moved
 	give_legendary_building_location_heroic_effect = yes
 	if = {
@@ -362,28 +348,22 @@ give_legendary_building_mythical_heroic_tooltip_effect = {
 }
 
 give_legendary_building_mythical_legitimizing_tooltip_effect = {
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	give_legendary_building_location_legitimizing_effect = yes
-	#}
-	#set_variable = {
-	#	name = legendary_reward_location
-	#	value = scope:legendary_locale
-	#}
-	#set_variable = {
-	#	name = legendary_figure
-	#	value = scope:protagonist
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		give_legendary_building_location_legitimizing_effect = yes
+	}
 	#ADDED - moved
 	give_legendary_building_location_legitimizing_effect = yes
 	if = {
@@ -403,33 +383,27 @@ give_legendary_building_mythical_legitimizing_tooltip_effect = {
 
 give_legendary_building_holy_tooltip_effect = { #50% chance
 	# Chance to get legendary building
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	random = {
-	#		chance = {
-	#			value = 50
-	#		}
-	#		give_legendary_building_location_holy_effect = yes
-	#	}
-	#}
-	#set_variable = {
-	#	name = legendary_reward_location
-	#	value = scope:legendary_locale
-	#}
-	#set_variable = {
-	#	name = legendary_figure
-	#	value = scope:protagonist
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		random = {
+			chance = {
+				value = 50
+			}
+			give_legendary_building_location_holy_effect = yes
+		}
+	}
 	#ADDED - moved
 	give_legendary_building_location_holy_effect = yes
 	if = {
@@ -447,33 +421,35 @@ give_legendary_building_holy_tooltip_effect = { #50% chance
 
 give_legendary_building_heroic_tooltip_effect = { #50% chance
 	# Chance to get legendary building
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	random = {
-	#		chance = {
-	#			value = 50
-	#		}
-	#		give_legendary_building_location_heroic_effect = yes
-	#		set_variable = {
-	#			name = legendary_reward_location
-	#			value = scope:legendary_locale
-	#		}
-	#		set_variable = {
-	#			name = legendary_figure
-	#			value = scope:protagonist
-	#		}
-	#	}
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		random = {
+			chance = {
+				value = 50
+			}
+			give_legendary_building_location_heroic_effect = yes
+			set_variable = {
+				name = legendary_reward_location
+				value = scope:legendary_locale
+			}
+			set_variable = {
+				name = legendary_figure
+				value = scope:protagonist
+			}
+		}
+	}
 	#ADDED - moved
 	give_legendary_building_location_heroic_effect = yes
 	if = {
@@ -491,33 +467,27 @@ give_legendary_building_heroic_tooltip_effect = { #50% chance
 
 give_legendary_building_legitimizing_tooltip_effect = { #50% chance
 	# Chance to get legendary building
-	#if = {
-	#	limit = {
-	#		OR = {
-	#			root = {
-	#				locale_valid_for_legendary_buildings = yes
-	#			}
-	#			capital_province = { has_special_building_slot = no }
-	#			any_sub_realm_barony = {
-	#				title_province = { has_special_building_slot = no }
-	#			}
-	#		}
-	#	}
-	#	random = {
-	#		chance = {
-	#			value = 50
-	#		}
-	#		give_legendary_building_location_legitimizing_effect = yes
-	#	}
-	#}
-	#set_variable = {
-	#	name = legendary_reward_location
-	#	value = scope:legendary_locale
-	#}
-	#set_variable = {
-	#	name = legendary_figure
-	#	value = scope:protagonist
-	#}
+	if = {
+		limit = {
+			#ADDED - turned that off kind of 
+			always = no
+			OR = {
+				root = {
+					locale_valid_for_legendary_buildings = yes
+				}
+				capital_province = { has_special_district_slot = no }
+				any_sub_realm_barony = {
+					title_province = { has_special_district_slot = no }
+				}
+			}
+		}
+		random = {
+			chance = {
+				value = 50
+			}
+			give_legendary_building_location_legitimizing_effect = yes
+		}
+	}
 	#ADDED - moved
 	give_legendary_building_location_legitimizing_effect = yes
 	if = {
@@ -544,7 +514,7 @@ give_legendary_building_location_standard_effect = {
 	}
 	else_if = { # Otherwise, get the capital
 		limit = {
-			capital_province = { has_special_building_slot = no }
+			capital_province = { has_special_district_slot = no }
 		}
 		capital_province = { save_scope_as = legendary_locale }
 	}
@@ -552,13 +522,13 @@ give_legendary_building_location_standard_effect = {
 		limit = {
 			any_held_title = {
 				title_tier = county
-				title_province = { has_special_building_slot = no }
+				title_province = { has_special_district_slot = no }
 			}
 		}
 		random_held_title = {
+			title_tier = county
 			limit = {
-				tier = tier_county
-				title_province = { has_special_building_slot = no }
+				title_province = { has_special_district_slot = no }
 			}
 			title_province = { save_scope_as = legendary_locale }
 		}
@@ -568,17 +538,17 @@ give_legendary_building_location_standard_effect = {
 			#ADDED
 			always = no
 			any_held_title = {
-				tier = tier_barony
+				title_tier = barony
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 				}
 			}
 		}
 		random_held_title = {
+			title_tier = barony
 			limit = {
-				tier = tier_barony
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 				}
 			}
 			title_province = {
@@ -593,17 +563,17 @@ give_legendary_building_location_standard_effect = {
 			always = no
 			any_held_title = {
 				tier = tier_county
-				any_county_province = { has_special_building_slot = no }
+				any_county_province = { has_special_district_slot = no }
 			}
 		}
 		random_held_title = {
+			title_tier = county
 			limit = {
-				tier = tier_county
-				any_county_province = { has_special_building_slot = no }
+				any_county_province = { has_special_district_slot = no }
 			}
 			random_county_province = {
 				limit = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 				}
 				save_scope_as = legendary_locale
 			}
@@ -619,7 +589,7 @@ give_legendary_building_location_standard_effect = {
 					holder.liege = scope:legend_owner_scope
 				}
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding_type = castle_holding
 				}
 			}
@@ -634,7 +604,7 @@ give_legendary_building_location_standard_effect = {
 					holder.liege = scope:legend_owner_scope
 				}
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding_type = castle_holding
 				}
 			}
@@ -645,7 +615,7 @@ give_legendary_building_location_standard_effect = {
 					holder.liege = scope:legend_owner_scope
 				}
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding_type = castle_holding
 				}
 			}
@@ -656,7 +626,7 @@ give_legendary_building_location_standard_effect = {
 		limit = {
 			any_sub_realm_county = {		#prev any_sub_realm_barony
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding_type = castle_holding
 				}
 			}
@@ -664,7 +634,7 @@ give_legendary_building_location_standard_effect = {
 		random_sub_realm_county = {		#prev random_sub_realm_barony
 			limit = {
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding_type = castle_holding
 				}
 			}
@@ -675,7 +645,7 @@ give_legendary_building_location_standard_effect = {
 		limit = {
 			any_sub_realm_county = {		#prev any_sub_realm_barony
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding = yes
 				}
 			}
@@ -683,7 +653,7 @@ give_legendary_building_location_standard_effect = {
 		random_sub_realm_county = {		#prev random_sub_realm_barony
 			limit = {
 				title_province = {
-					has_special_building_slot = no
+					has_special_district_slot = no
 					has_holding = yes
 				}
 			}
@@ -723,39 +693,39 @@ give_legendary_building_location_standard_effect = {
 				add_character_flag = legendary_palace_flag
 			}
 		}
-		if = {
-			limit = {
-				OR = {
-					exists = scope:beast
-					has_trait_xp = {
-						trait = lifestyle_hunter
-						track = hunter
-						value >= 62
-					}
-					has_trait_xp = {
-						trait = lifestyle_hunter
-						track = falconer
-						value >= 62
-					}
-					culture ?= {
-						has_cultural_parameter = always_unlock_legendary_hunting_lodge
-					}
+	if = {
+		limit = {
+			OR = {
+				exists = scope:beast
+				has_trait_xp = {
+					trait = lifestyle_hunter
+					track = hunter
+					value >= 62
+				}
+				has_trait_xp = {
+					trait = lifestyle_hunter
+					track = falconer
+					value >= 62
+				}
+				culture ?= {
+					has_cultural_parameter = always_unlock_legendary_hunting_lodge
 				}
 			}
-			custom_tooltip = {
-				text = can_build_legendary_hunting_lodge_tt
-				add_character_flag = legendary_hunting_lodge_flag
-			}
 		}
-		if = {
-			limit = {
-				dynasty ?= { ce1_heroic_track_perks >= 5 }
-			}
-			custom_tooltip = {
-				text = can_build_legendary_watchtower_tt
-				add_character_flag = legendary_watchtower_flag
-			}
+		custom_tooltip = {
+			text = can_build_legendary_hunting_lodge_tt
+			add_character_flag = legendary_hunting_lodge_flag
 		}
+	}
+	if = {
+		limit = {
+			dynasty ?= { ce1_heroic_track_perks >= 5 }
+		}
+		custom_tooltip = {
+			text = can_build_legendary_watchtower_tt
+			add_character_flag = legendary_watchtower_flag
+		}
+	}
 	}
 }
 

@@ -9,6 +9,7 @@ clan_government_tax_default = 0.03			#prev 0.02
 #clan_government_tax_player = 0.25
 
 #the above ones get up to x15-ed by tax collector aptitude i think. WTF.
+#yeah so now i use the value below so its only x10ed 
 
 clan_government_tax_collector_aptitude_multiplier = {
 	value =	{
@@ -84,5 +85,6 @@ extortionate_nomad_tax = 0.35	#prev 0.2
 ## Default Tributary values
 normal_tributary_tax = 0.1			#prev 0.25
 high_tributary_tax = 0.25			#prev 0.50
+subjugated_tributary_tax_mult = 1	#prev 0.5
 #normal_prestige_transfer = 0.1
 #high_prestige_transfer = 0.25

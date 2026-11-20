@@ -944,7 +944,7 @@ ai_main_goal_construct_holdings_kick = {
 					tier = tier_county
 					any_county_province = {
 						has_holding = no
-						has_ongoing_construction = no
+						#has_ongoing_construction = no
 						barony = { barony_cannot_construct_holding = no }
 					}
 				}
@@ -954,7 +954,7 @@ ai_main_goal_construct_holdings_kick = {
 					tier = tier_county 
 					any_county_province = {
 						has_holding = no
-						has_ongoing_construction = no
+						#has_ongoing_construction = no
 						barony = { barony_cannot_construct_holding = no }
 					}
 				}
@@ -968,7 +968,7 @@ ai_main_goal_construct_holdings_kick = {
 				random_county_province = {
 					limit = { 
 						has_holding = no 
-						has_ongoing_construction = no 
+						#has_ongoing_construction = no 
 						barony = { barony_cannot_construct_holding = no }
 					}
 					weight = {

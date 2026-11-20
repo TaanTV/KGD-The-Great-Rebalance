@@ -106,7 +106,7 @@ special_contract = {
 			subject_modifier = {
 				men_at_arms_maintenance = -0.33			#prev -0.2
 				#ADDED
-				development_growth_factor = 0.25
+				prosperity_growth_factor = 0.25
 			}
 
 			flag = has_scutage_contract
@@ -424,10 +424,10 @@ religious_rights = {
 			parent = religious_rights_none
 			position = { 1 0 }
 
-			subject_opinion = 20		#prev 5
+			subject_opinion = 30		#prev 5
 
 			subject_modifier = {
-				county_opinion_add = 5
+				popular_opinion_add = 5
 			}
 
 			flag = religiously_protected
@@ -511,12 +511,12 @@ coinage_rights = {
 			position = { 1 0 }
 
 			liege_modifier = {
-				development_growth_factor = -0.04	#prev -0.02
+				prosperity_growth_factor = -0.04	#prev -0.02
 			}
 			subject_modifier = {
-				character_capital_county_monthly_development_growth_add = 0.05	#prev 0.3
+				character_capital_county_monthly_prosperity_growth_add = 0.05	#prev 0.3
 				#ADDED
-				tax_mult = 0.1
+				all_tax_mult = 0.05
 			}
 			
 			#ADDED
@@ -748,7 +748,7 @@ jizya_special_rights = {
 			parent = jizya_special_rights_default
 			position = { 1 0 }
 
-			subject_opinion = 20
+			subject_opinion = 30		#prev 20
 			tax_factor = 0.4
 			levies_factor = -0.4
 

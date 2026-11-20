@@ -136,27 +136,19 @@ build_murder_targets_trigger = {
 	trigger_if = { # Greedy people have no qualms murdering their way up the succession...
 		limit = {
 			ai_greed >= low_positive_ai_value
-			exists = dynasty
 		}
-		dynasty = {
-			any_dynasty_member = {
-				count = all
-				trigger_if = {
-					limit = {
-						is_good_familial_murder_target_trigger = yes
-					}
-					add_to_temporary_list = murder_targets
-				}
-			}
-		}
-		any_close_or_extended_family_member = {
+		any_heir_title = {
 			count = all
 			trigger_if = {
-				limit = {
-					NOT = { is_in_list = murder_targets }
-					is_good_familial_murder_target_trigger = yes
-				}
-				add_to_temporary_list = murder_targets
+				limit = { tier >= root.highest_held_title_tier }
+				add_succession_murder_targets_from_title_trigger = yes
+			}
+		}
+		any_pretender_title = {
+			count = all
+			trigger_if = {
+				limit = { tier >= root.highest_held_title_tier }
+				add_succession_murder_targets_from_title_trigger = yes
 			}
 		}
 	}
@@ -210,6 +202,7 @@ build_murder_targets_trigger = {
 		count = all
 		trigger_if = {
 			limit = {
+				exposed_cheating_on_spouse_trigger = { SPOUSE = root }
 				root = {
 					ai_compassion <= 0
 					can_start_scheme = {
@@ -217,7 +210,6 @@ build_murder_targets_trigger = {
 						type = murder
 					}
 				}
-				exposed_cheating_on_spouse_trigger = { SPOUSE = root }
 			}
 			add_to_temporary_list = murder_targets
 		}
@@ -225,19 +217,21 @@ build_murder_targets_trigger = {
 	trigger_if = { # Certain vassals will plot against their liege under certain conditions
 		limit = {
 			highest_held_title_tier > tier_barony
-			exists = liege
+			is_independent_ruler = no 	#ADDED - liege check is faulty because you are your own liege if independent
 			#liege ?= {
 			#	tyranny >= medium_tyranny
 			#}
+			#ai_rationality >= medium_positive_ai_value
+			#ADDED - the next two
+			ai_compassion <= low_negative_ai_value	#just in case
+			ai_honor <= 90							#very honorable would never step that low (i think its already covered elsewhere but euh)
 			opinion = {
 				target = liege
 				value <= high_negative_opinion
 			}
-			#ai_rationality >= medium_positive_ai_value
 			#ADDED - half-rewritten all that stuff lol
-			is_independent_ruler = no 	#liege check is faulty because you are your own liege if independent
-			ai_compassion <= low_negative_ai_value	#just in case
 			OR = {
+				has_execute_reason = liege
 				AND = {
 					ai_boldness >= medium_positive_ai_value
 					ai_vengefulness >= very_high_positive_ai_value
@@ -257,9 +251,6 @@ build_murder_targets_trigger = {
 					liege.cp:councillor_spymaster = this
 					ai_boldness >= very_low_positive_ai_value
 					ai_honor <= 90
-				}
-				AND = {
-					has_any_crime_related_opinion_of_character = { CHARACTER = liege }
 				}
 			}
 					
@@ -394,4 +385,5 @@ has_access_to_claim_throne_scheme_trigger = {
 			any_liege_or_above = { has_title = title:h_china }
 		}
 	}
+	NOT = { government_has_flag = government_is_republic }
 }

@@ -272,9 +272,15 @@ scripted_effect mpo_hunt_0010_success_effect = {
 	}
 	else_if = {
 		limit = {
+			#ADDED - the OR and the AND just so you can become loves with your wifes/concubines
+			OR = {
+			AND = {
 			might_cheat_on_every_partner_trigger = yes
 			scope:target = {
 				might_cheat_on_every_partner_trigger = yes
+			}
+			}
+			scope:target = { is_consort_of = root }
 			}
 			can_set_relation_lover_trigger = { CHARACTER = scope:target }
 		}

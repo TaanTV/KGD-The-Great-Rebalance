@@ -26,11 +26,14 @@ innovation_sanitation = {
 	flag = global_regional
 	flag = high_medieval_era_regional
 	
-	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 		if = {
-			limit = { NOT = { has_cultural_era_or_later = culture_era_high_medieval } }
+			limit = {
+				NOT = {
+					has_cultural_era_or_later = culture_era_high_medieval
+				}
+			}
 			multiply = 0.001
 		}
 	}

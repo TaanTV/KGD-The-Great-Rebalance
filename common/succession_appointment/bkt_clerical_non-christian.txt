@@ -5,7 +5,7 @@ clerical_generic = {
 	allow_children = no
 	use_investment_cap = no
 	allowed_candidate_tier = any
-	keep_top_tier_titles_together = yes
+	limit_to_de_jure = no
 	allow_out_of_realm_investment = landless
 	cooldown = yes
 
@@ -157,7 +157,10 @@ clerical_generic = {
 				limit = {
 					is_ruler = yes
 					is_landless_adventurer = no
-					NOT = { government_has_flag = government_is_theocracy }
+					NOR = { 
+						government_has_flag = government_is_theocracy
+						government_has_flag = government_is_holy_order
+					}
 				}
 				subtract = {
 					value = 1000

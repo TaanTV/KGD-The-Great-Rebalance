@@ -4,6 +4,7 @@ form_portugal_decision = {
 		reference = "gfx/interface/illustrations/decisions/decision_found_kingdom.dds"
 	}
 	decision_group_type = major
+	sort_order = 110
 	ai_check_interval_by_tier = {
 		barony = 0
 		county = 0
@@ -24,6 +25,12 @@ form_portugal_decision = {
 		}
 		title:k_portugal = {
 			is_title_created = no
+		}
+		OR = {
+			has_title = title:d_porto
+			has_title = title:d_coimbra
+			has_title = title:d_beja
+			has_title = title:d_algarve
 		}
 	}
 
@@ -70,7 +77,7 @@ form_portugal_decision = {
 		completely_controls = title:d_porto
 		completely_controls = title:d_coimbra
 		completely_controls = title:d_beja
-		completely_controls = title:d_algarve
+		#completely_controls = title:d_algarve
 	}
 	
 	is_valid_showing_failures_only = {

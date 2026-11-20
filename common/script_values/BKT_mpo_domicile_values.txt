@@ -51,9 +51,16 @@ nomadic_capital_main_building_2 = {
 	}
 	#ADDED
 	if = {
-		limit = { free_external_domicile_building_slots > 4 }
-		multiply = 0.01
+		limit = {
+			monthly_character_balance < 3
+		}
+		add = nomadic_capital_omega_invaluable_building
 	}
+#	#ADDED
+#	if = {
+#		limit = { free_external_domicile_building_slots > 4 }
+#		multiply = 0.01
+#	}
 }
  
 nomadic_capital_main_building_3 = {
@@ -181,6 +188,12 @@ nomadic_capital_main_building_6 = {
 		limit = { owner.highest_held_title_tier < tier_empire }
 		multiply = 0
 	}
+}
+
+############################################################################################################
+### LOW priority
+low_priority = {
+	value = 1
 }
 
 #nomadic_capital_interior_building_1 = {

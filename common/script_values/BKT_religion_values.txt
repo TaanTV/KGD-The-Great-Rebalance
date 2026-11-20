@@ -117,9 +117,7 @@
 		}
 		add = 50
 	}
-	
-	
-		
+
 	if = {
 		limit = {
 			scope:recipient = {

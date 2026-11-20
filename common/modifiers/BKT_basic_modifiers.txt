@@ -1,4 +1,13 @@
 ﻿
+
+
+# Modifiers applied per amount of dread
+dread_modifier = {
+	popular_opinion_add = -0.2
+	control_baseline_add = 0.2
+	trade_competitiveness_mult = 0.002
+}
+
 # Skill modifiers, applied to each character
 # *_with_offset versions first subtract the NCharacter.SKILL_MODIFIER_OFFSET value from the skill
 
@@ -8,18 +17,22 @@ diplomacy_modifier = {
 diplomacy_modifier_with_offset = {
 	monthly_prestige_gain_mult = 0.01
 	#herd_gain_mult = 0.01
+	trade_category_all_buy_price_mult = -0.0008
+	maritime_tax_mult = 0.01
+	civic_tax_mult = 0.01
 	#ADDED
 	owned_scheme_secrecy_add = 0.5
 	vassal_herd_contribution_mult = 0.02
 }
 
-intrigue_modifier_with_offset = {
+intrigue_modifier = {
+	enemy_scheme_secrecy_add = -1		#prev -0.5
 	owned_scheme_secrecy_add = 1.5		#prev 2
 }
 
-intrigue_modifier = {
-	enemy_scheme_secrecy_add = -1		#prev -0.5
-	#owned_scheme_secrecy_add = 2
+intrigue_modifier_with_offset = {
+	trade_competitiveness_mult = 0.01
+	commerce_tax_mult = 0.01
 }
 
 #stewardship_modifier = {
@@ -27,27 +40,34 @@ intrigue_modifier = {
 #	monthly_barter_goods_mult = 0.01
 #}
 stewardship_modifier_with_offset = {
-	domain_tax_mult = 0.02
-	domicile_monthly_gold_mult = 0.03	#prev 0.04
-	monthly_income_from_herd_mult = 0.02
-	#build_gold_cost = -0.02
-	#holding_build_gold_cost = -0.02
+	agricultural_tax_mult = 0.01
+	mining_tax_mult = 0.01
+	artisan_tax_mult = 0.01
+	domicile_monthly_gold_mult = 0.015
+	monthly_income_from_herd_mult = 0.015
+	#supply_capacity_add = 5
+	monthly_income_from_trade_mult = 0.005
+	prosperity_growth_factor = 0.01
 }
 
 martial_modifier = {
 	character_travel_safety = 0.5	#prev 1
 	knight_limit = 0.2
+	mercenary_hire_limit = 0.1
 }
 martial_modifier_with_offset = {
 	levy_reinforcement_rate = 0.025
-	army_maintenance_mult = -0.005	#prev -0.01
-	#counter_efficiency = -0.02
-	#army_toughness_mult = 0.01
+	army_toughness_mult = 0.01
 	herd_conversion = 0.002			#prev 0.005
+	tribal_tax_mult = 0.01
+	woodland_tax_mult = 0.01
 }
 
 learning_modifier_with_offset = {
 	county_fertility_growth_mult = 0.02
+	trade_expertise_growth_mult = 0.01
+	religious_tax_mult = 0.01
+	urban_tax_mult = 0.01
 	#ADDED
 	owned_scheme_secrecy_add = 0.5
 }
@@ -56,7 +76,7 @@ learning_modifier = {
 	monthly_piety = 0.05	#prev 0.1
 	#ADDED
 	character_innovation_progress_chance_from_fascination_add = 0.25
-	development_growth_factor = 0.01 
+	#prosperity_growth_factor = 0.01 
 }
 
 prowess_modifier = {
@@ -70,7 +90,7 @@ unlanded_modifier = {
 	stress_gain_mult = -0.25 #unlanded characters have less reason to be stressed
 	owned_hostile_scheme_success_chance_max_add = 10
 	owned_hostile_scheme_success_chance_growth_add = 0.2
-	owned_scheme_secrecy_add = 5 #unlanded characters have less resources to scheme
+	owned_scheme_secrecy_add = 15 #unlanded characters have less resources to scheme. Plus, who knows what hobo is tartgetting u
 }
 
 baron_modifier = {
@@ -78,9 +98,8 @@ baron_modifier = {
 	# Barons don't get to have knights
 	monthly_treasury_from_liege_mult = -0.55	#prev -0.6
 	#ADDED
-	stress_gain_mult = -0.2 		# Barons can't destress much.
-	stress_loss_mult = 0.25 		# Barons can't destress much.
-	monthly_income = 0.15			# A bit of money
+	stress_gain_mult = -0.1 		# Being a baron is less stressful. 
+	stress_loss_mult = 0.35 		# Barons can't destress much.
 	diplomatic_range_mult = -0.2	# Consistent with counts
 	#knight_limit = -100			# "Barons don't get to have knights"	#UPD: actually that would be hilarious for revolts
 	accolades = -100				# Or accolades really
@@ -97,15 +116,13 @@ count_modifier = {
 	ai_war_chance = -0.4	#prev -0.9
 	monthly_treasury_from_liege_mult = -0.35	#prev -0.4
 	#ADDED 
-	stress_gain_mult = -0.1 		# Being a count is less stressful. 
+	stress_gain_mult = -0.1 					# Being a count is less stressful. 
+	barons_and_minor_landholders_opinion = 10	#theoretically u get to know them better and stuff
+	diplomatic_range_mult = -0.2				#u r small and small
+	men_at_arms_limit = -1
 	levy_attack = 1
 	levy_toughness = 1
-	barons_and_minor_landholders_opinion = 15
-	vassal_tax_contribution_mult = 0.2
-	vassal_levy_contribution_mult = 0.2
-	vassal_herd_contribution_mult = 0.2
-	diplomatic_range_mult = -0.2
-	men_at_arms_limit = -1
+	#monthly_control_change_when_below_baseline_add = -0.1	#added to all title tiers
 }
 
 duke_modifier = {
@@ -114,12 +131,13 @@ duke_modifier = {
 	vassal_limit = 5		#prev 20
 	tax_slot_add = 1
 	mercenary_hire_cost_mult = 0.1
-	enemy_scheme_secrecy_add = -10
+	enemy_scheme_secrecy_add = -5			#prev -10
 	monthly_treasury_from_liege_mult = -0.25	#prev -0.3
 	#ADDED 
 	vassal_tax_contribution_mult = 0.05
 	vassal_levy_contribution_mult = 0.05
 	vassal_herd_contribution_mult = 0.05
+	monthly_control_change_when_below_baseline_add = -0.1	#added to all title tiers
 }
 
 king_modifier = {
@@ -129,18 +147,14 @@ king_modifier = {
 	accolades = 1
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.3
+	mercenary_hire_limit = 1
 	enemy_scheme_secrecy_add = -10			#prev -20
 	county_fertility_growth_mult = 0.25
 	monthly_merit_mult = 0.5
 	monthly_treasury_from_liege_mult = -0.15
 	#ADDED 
-	#vassal_tax_contribution_mult = -0.1
-	#vassal_levy_contribution_mult = -0.1
-	#vassal_herd_contribution_mult = -0.1
-	#happy_powerful_vassal_tax_contribution_mult = 0.1
-	#happy_powerful_vassal_levy_contribution_mult = 0.1
-	#happy_powerful_vassal_herd_contribution_mult = 0.1
 	monthly_influence = 0.25
+	monthly_control_change_when_below_baseline_add = -0.15	#added to all title tiers
 }
 
 emperor_modifier = {
@@ -151,20 +165,16 @@ emperor_modifier = {
 	accolades = 2
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.5			#prev 0.6
+	mercenary_hire_limit = 2
 	enemy_scheme_secrecy_add = -15			#prev -30
 	county_fertility_growth_mult = 0.5
 	monthly_merit_mult = 1
 	#ADDED 
-	#vassal_tax_contribution_mult = -0.25
-	#vassal_levy_contribution_mult = -0.25
-	#vassal_herd_contribution_mult = -0.25
-	#happy_powerful_vassal_tax_contribution_mult = 0.25
-	#happy_powerful_vassal_levy_contribution_mult = 0.25
-	#happy_powerful_vassal_herd_contribution_mult = 0.25
 	monthly_influence = 0.5
 	stress_loss_mult = -0.1
 	men_at_arms_limit = 2
 	capital_additional_fort_level = 1
+	monthly_control_change_when_below_baseline_add = -0.2	#added to all title tiers
 }
 
 hegemon_modifier = {
@@ -175,13 +185,16 @@ hegemon_modifier = {
 	accolades = 2
 	tax_slot_add = 2
 	mercenary_hire_cost_mult = 0.7		#prev 0.8
+	mercenary_hire_limit = 3
 	enemy_scheme_secrecy_add = -20		#prev -40
 	county_fertility_growth_mult = 0.65
+	trade_route_length_mult = 0.50
 	#ADDED 
 	monthly_influence = 1
 	stress_loss_mult = -0.15
 	men_at_arms_limit = 2
 	capital_additional_fort_level = 1
+	monthly_control_change_when_below_baseline_add = -0.25	#added to all title tiers
 }
 
 # These modifiers are applied to the holder of a title of the respective tier (per title)
@@ -270,6 +283,7 @@ prestige_level_0 = {
 	icon = icon_prestige_00
 	hide_effects = yes # Custom description will generate the full level information
 	herd_capacity_mult = -0.1
+	trade_competitiveness_mult = -0.1	#prev -0.04
 	knight_limit = -1
 	#ADDED
 	hostile_scheme_phase_duration_add = -20
@@ -285,6 +299,7 @@ prestige_level_2 = {
 	hide_effects = yes # Custom description will generate the full level information
 	knight_limit = 1
 	herd_capacity_mult = 0.2
+	trade_competitiveness_mult = 0.08
 	ai_amenity_target_baseline = 0.2
 	#ADDED
 	enemy_hostile_scheme_phase_duration_add = -3
@@ -294,6 +309,7 @@ prestige_level_3 = {
 	hide_effects = yes # Custom description will generate the full level information
 	knight_limit = 2
 	herd_capacity_mult = 0.3
+	trade_competitiveness_mult = 0.12
 	ai_amenity_target_baseline = 0.3
 	#ADDED
 	enemy_hostile_scheme_phase_duration_add = -5
@@ -303,6 +319,7 @@ prestige_level_4 = {
 	hide_effects = yes # Custom description will generate the full level information
 	knight_limit = 3
 	herd_capacity_mult = 0.4
+	trade_competitiveness_mult = 0.16
 	ai_amenity_target_baseline = 0.4
 	#ADDED
 	enemy_hostile_scheme_phase_duration_add = -10
@@ -312,6 +329,7 @@ prestige_level_5 = {
 	hide_effects = yes # Custom description will generate the full level information
 	knight_limit = 4
 	herd_capacity_mult = 0.5
+	trade_competitiveness_mult = 0.2
 	ai_amenity_target_baseline = 0.5
 	#ADDED
 	enemy_hostile_scheme_phase_duration_add = -20
@@ -354,18 +372,24 @@ stress_level_1 = {
 	#ADDED
 	health = -0.5
 	monthly_lifestyle_xp_gain_mult = -0.05
+	
+	ai_rationality = very_low_negative_ai_value
 }
 stress_level_2 = {
 	fertility = -0.45		#prev -0.3
 	health = -1
 	#ADDED
 	monthly_lifestyle_xp_gain_mult = -0.1
+	
+	ai_rationality = medium_negative_ai_value
 }
 stress_level_3 = {
 	fertility = -0.95		#prev -0.5
 	health = -2
 	#ADDED
 	monthly_lifestyle_xp_gain_mult = -0.2
+	
+	ai_rationality = high_negative_ai_value
 }
 
 hard_difficulty = {
@@ -425,11 +449,11 @@ ai_extreme_conqueror_modifier = {
 	enemy_hostile_scheme_success_chance_max_add = -60
 	enemy_hostile_scheme_success_chance_growth_add = -10
 	#army_siege_value_mult = 1		#Not like that
-	siege_weapon_siege_value_mult = 1.5
+	siege_weapon_siege_value_mult = 1
 	siege_phase_time = -0.5
 	advantage = 30					#prev 25
 	maa_siege_value_add = 0.2		#prev 1		#No?.. Maybe a bit.
-	monthly_county_control_growth_add = 5
+	monthly_control_change_when_below_baseline_add = 5
 	#movement_speed = 0.25			#No?
 	domain_limit_min = 5
 	domain_limit_max = 15

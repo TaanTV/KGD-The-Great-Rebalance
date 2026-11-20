@@ -29,17 +29,7 @@ fp1_scandi_adventurer_conquest = {
 	}
 
 	should_invalidate = {
-		NOT = {
-			any_in_list = {
-				list = target_titles
-				any_in_de_jure_hierarchy = {
-					tier = tier_county
-					holder = {
-						target_is_same_character_or_above = scope:defender
-					}
-				}
-			}
-		}
+		war_should_invalidate_defender_lost_target_lands_trigger = yes
 	}
 
 	on_invalidated_desc = msg_religious_war_invalidation_region_message
@@ -66,6 +56,13 @@ fp1_scandi_adventurer_conquest = {
 				}
 			}
 		}
+		#ADDED
+		scope:attacker = {
+			set_variable = {
+				name = fp1_scandinavian_adventurers_cooldown
+				years = 10
+			}
+		}
 	}
 
 	on_victory_desc = {
@@ -79,8 +76,7 @@ fp1_scandi_adventurer_conquest = {
 	}
 
 	on_victory = {
-		# Legitimacy
-		add_legitimacy_attacker_victory_effect = yes
+		on_victory_aggressive_war_effect = yes
 		
 		#EP2 accolade glory gain for winning against higher ranked enemy
 		scope:attacker = { accolade_attacker_war_end_glory_gain_med_effect = yes }
@@ -96,55 +92,9 @@ fp1_scandi_adventurer_conquest = {
 		every_in_list = {
 			list = target_titles
 			custom_tooltip = CONQUEST_CB_TITLE
-			every_in_de_jure_hierarchy = {
-				continue = {
-					OR = {
-						NOT = {	exists = holder }
-						NOT = {
-							holder = { target_is_liege_or_above = scope:defender }
-						}
-						AND = {
-							scope:attacker.faith = {
-								faith_hostility_level_comparison = { prev.holder.faith <= scope:defender.faith }
-							}
-							holder = {
-								OR = {
-									this = scope:defender
-									target_is_liege_or_above = scope:defender
-								}
-							}
-						}
-					}
-					tier > tier_county
-				}
-				limit = {
-					tier <= tier_duchy
-					holder ?= {
-						OR = {
-							this = scope:defender
-							target_is_liege_or_above = scope:defender
-						}
-					}
-				}
 
-				if = {
-					limit = {
-						OR = {
-							scope:attacker.faith = {
-								faith_hostility_level_comparison = {
-									prev.holder.faith >= scope:defender.faith
-								}
-							}
-							holder.primary_title.tier >= scope:attacker.primary_title.tier
-						}
-					}
-					add_to_temporary_list = titles_taken
-				}
-				else = {
-					holder = {
-						add_to_temporary_list = vassals_taken
-					}
-				}
+			conquest_cb_title_transfer = {
+				RELIGIOUS_WAR = no
 			}
 		}
 
@@ -184,63 +134,10 @@ fp1_scandi_adventurer_conquest = {
 			LOSER_ALLY_FAME_SCALE = 1
 		}
 
-		# Truce
-		add_truce_attacker_victory_effect = yes
-
-		#Clean-up adventurer things.
-		scope:attacker = { clean_scandinavian_adventurer_effect = yes }
-
-		# FP1: note the victory for future memorialisation via stele (if applicable).
-		scope:attacker = { fp1_remember_recent_conquest_victory_effect = yes }
-
-		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold
-		laamp_as_mercenary_payout_tooltip_effect = yes
-
-		#Mandalas gain or lose piety/devotion depending on Decree
-		mandala_war_victory_effects = yes
-		
 		#ADDED
 		hidden_effect = {
 			scope:attacker = {
-				if = {
-					limit = { government_has_flag = government_is_nomadic exists = culture }
-					culture = { save_temporary_scope_as = old_culture }
-					create_divergent_culture_with_side_effects_excluding_cost = yes 
-					culture ?= {
-						copy_all_traditions_from = scope:old_culture
-						random_tradition = {
-							limit = {		#not those 2 though.
-								this != culture_tradition:tradition_fp1_coastal_warriors
-								this != culture_tradition:tradition_hird
-							}
-							weight = {
-								base = 1
-								modifier = {	#prefer ones norse dont start with
-									add = 1000
-									this != culture_tradition:tradition_fp1_performative_honour
-									this != culture_tradition:tradition_poetry
-									this != culture_tradition:tradition_fp1_northern_stories
-									this != culture_tradition:tradition_runestones
-									this != culture_tradition:tradition_malleable_invaders
-								}
-								modifier = {	#just in case
-									factor = 0
-									OR = {
-										this != culture_tradition:tradition_fp1_coastal_warriors
-										this != culture_tradition:tradition_hird
-									}
-								}
-							}
-							scope:attacker.culture = { remove_culture_tradition = prev }
-						}
-						add_culture_tradition = tradition_devoted_horsemanship
-					}
-					every_sub_realm_county = {
-						limit = { culture = scope:old_culture }
-						set_county_culture = scope:attacker.culture
-					}
-					domicile ?= { set_domicile_culture = prev.culture }
-				}
+				clean_scandinavian_adventurer_effect = yes
 			}
 		}
 	}
@@ -256,6 +153,7 @@ fp1_scandi_adventurer_conquest = {
 	}
 
 	on_white_peace = {
+		on_white_peace_effect = yes
 		#EP2 accolade glory gain for doing ok against higher ranked enemy
 		scope:defender = { accolade_defender_war_end_glory_gain_low_effect = yes }
 
@@ -323,11 +221,9 @@ fp1_scandi_adventurer_conquest = {
 	}
 
 	on_defeat = {
-		# Legitimacy
-		add_legitimacy_attacker_defeat_effect = yes
-		
-		scope:defender = { 
-			mandala_peacemaker_perk_serenity_effect = yes
+		on_defeat_aggressive_war_effect = yes
+
+		scope:defender = {
 			#EP2 accolade glory gain for winning against higher ranked enemy
 			accolade_defender_war_end_glory_gain_med_effect = yes
 		}
@@ -360,14 +256,6 @@ fp1_scandi_adventurer_conquest = {
 			WINNER_ALLY_FAME_SCALE = 1
 			LOSER_ALLY_FAME_SCALE = 1
 		}
-
-		add_truce_attacker_defeat_effect = yes
-
-		scope:attacker = {
-			save_temporary_scope_as = loser
-		}
-
-		on_lost_aggression_war_discontent_loss = yes
 
 		# Give scope:defender some goodies.
 		scope:defender = {
@@ -424,19 +312,14 @@ fp1_scandi_adventurer_conquest = {
 			if = {
 				limit = { is_landed = no }
 				every_held_title = {
-				limit = { NOT = { has_variable = temporary_title } }
+					limit = { NOT = { has_variable = temporary_title } }
 					save_scope_as = destroyable_title
 					scope:attacker = { destroy_title = scope:destroyable_title }
-				}
-				if = {
-					limit = { has_trait = nomadic_philosophy }
-					remove_trait = nomadic_philosophy
 				}
 			}
 		}
 
 		# Since they lost, take away their efficacy loan.
-		#save_temporary_scope_as = war
 		scope:attacker = { 
 			remove_short_term_gold = scandinavian_adventurer_efficacy_loan_value 
 			#ADDED CHANGED please pay something to the defender
@@ -472,7 +355,7 @@ fp1_scandi_adventurer_conquest = {
 							}
 						}
 						scope:attacker = {
-							set_character_faith = scope:defender.faith
+							set_character_rite = scope:defender.rite
 							add_opinion = {
 								modifier = compelled_me_to_convert_opinion
 								target = scope:defender
@@ -483,12 +366,6 @@ fp1_scandi_adventurer_conquest = {
 				}
 			}
 		}
-
-		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold
-		laamp_as_mercenary_payout_tooltip_effect = yes
-
-		#Mandalas gain or lose piety/devotion depending on Decree
-		mandala_war_defeat_effects = yes
 	}
 
 	transfer_behavior = transfer

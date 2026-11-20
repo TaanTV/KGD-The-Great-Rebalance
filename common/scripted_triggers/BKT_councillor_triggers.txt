@@ -1,0 +1,26 @@
+﻿
+# Whether this character is a suitable landed Realm Priest for $COURT_OWNER$.
+can_be_landed_realm_priest_trigger = {
+	is_vassal_of = $COURT_OWNER$ # liege resolves to self for independent rulers, so don't compare lieges here
+	#ADDED - plz shut up
+	highest_held_title_tier > tier_barony
+	is_physically_able_adult = yes
+	government_has_flag = government_is_theocracy
+	rite = $COURT_OWNER$.rite
+	can_be_court_chaplain_trigger = { COURT_OWNER = $COURT_OWNER$ }
+}
+
+#can_be_vizier_councillor_trigger = {
+#	save_temporary_scope_as = confidant
+#
+#	# Ahead of the basics, since it rules out nearly every candidate in a council search
+#	$COUNCIL_OWNER$ = {
+#		OR = {
+#			scope:confidant = diarch
+#			any_consort = {
+#				scope:confidant = this
+#			}
+#		}
+#	}
+#	can_be_councillor_basics_trigger = yes
+#}

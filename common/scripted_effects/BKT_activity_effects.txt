@@ -1,6 +1,7 @@
 ﻿disburse_feast_activity_rewards = {
 	# for the loc
 	save_scope_as = root_scope
+	gdp_trader_feast_expertise_reward_effect = yes
 
 	# Rewards based on Activity Options
 
@@ -29,36 +30,41 @@
 
 					#Max Food Option will make Courtly Vassals more happy than other guests.
 					#Court Amenities can increase this further.
-
-					every_vassal_or_below = {
-						vassal_stance = courtly
+					if = {
 						limit = {
-							is_participant_in_activity = scope:activity
+							NOT = { government_has_flag = government_is_merchant }
 						}
-						custom = every_courtly_vassal
-						add_opinion = {
-							modifier = hosted_feast_opinion
-							target = root
-							opinion = feast_opinion_max_food_value
-						}
-					}
-					# Vassal Opinion
-					scope:activity = {
-						every_attending_character = {
+
+						every_vassal_or_below = {
+							vassal_stance = courtly
 							limit = {
-								this != root
-								trigger_if = {
-									limit = {
-										is_vassal_of = root
-									}
-									NOT = { has_vassal_stance = courtly }
-								}
+								is_participant_in_activity = scope:activity
 							}
-							custom = custom.every_attending_character_but_courtly
+							custom = every_courtly_vassal
 							add_opinion = {
+								modifier = hosted_feast_opinion
 								target = root
-								modifier = impressed_opinion
 								opinion = feast_opinion_max_food_value
+							}
+						}
+						# Vassal Opinion
+						scope:activity = {
+							every_attending_character = {
+								limit = {
+									this != root
+									trigger_if = {
+										limit = {
+											is_vassal_of = root
+										}
+										NOT = { has_vassal_stance = courtly }
+									}
+								}
+								custom = custom.every_attending_character_but_courtly
+								add_opinion = {
+									target = root
+									modifier = impressed_opinion
+									opinion = feast_opinion_max_food_value
+								}
 							}
 						}
 					}
@@ -90,37 +96,42 @@
 
 					#With Middle Food Option Courtly vassals have slightly higher opinion gain than others
 					#Very High Court Amenities can increase it slightly.
-
-					# Courtly Vassal Opinion
-					every_vassal_or_below = {
-						vassal_stance = courtly
+					if = {
 						limit = {
-							is_participant_in_activity = scope:activity
+							NOT = { government_has_flag = government_is_merchant }
 						}
-						custom = every_courtly_vassal
-						add_opinion = {
-							modifier = hosted_feast_opinion
-							target = root
-							opinion = feast_opinion_medium_food_value
-						}
-					}
-					# Vassal Opinion
-					scope:activity = {
-						every_attending_character = {
+
+						# Courtly Vassal Opinion
+						every_vassal_or_below = {
+							vassal_stance = courtly
 							limit = {
-								this != root
-								trigger_if = {
-									limit = {
-										is_vassal_of = root
-									}
-									NOT = { has_vassal_stance = courtly }
-								}
+								is_participant_in_activity = scope:activity
 							}
-							custom = custom.every_attending_character_but_courtly
+							custom = every_courtly_vassal
 							add_opinion = {
+								modifier = hosted_feast_opinion
 								target = root
-								modifier = impressed_opinion
 								opinion = feast_opinion_medium_food_value
+							}
+						}
+						# Vassal Opinion
+						scope:activity = {
+							every_attending_character = {
+								limit = {
+									this != root
+									trigger_if = {
+										limit = {
+											is_vassal_of = root
+										}
+										NOT = { has_vassal_stance = courtly }
+									}
+								}
+								custom = custom.every_attending_character_but_courtly
+								add_opinion = {
+									target = root
+									modifier = impressed_opinion
+									opinion = feast_opinion_medium_food_value
+								}
 							}
 						}
 					}
@@ -142,37 +153,42 @@
 					# Host Rewards
 
 					#With Low food option the opinion gain with Courtly vassals is always lower than for normal guests. Even if you have very high court amenities (though they do mitigate it a bit).
-					every_vassal_or_below = {
-						vassal_stance = courtly
+					if = {
 						limit = {
-							is_participant_in_activity = scope:activity
+							NOT = { government_has_flag = government_is_merchant }
 						}
-						custom = every_courtly_vassal
-						add_opinion = {
-							modifier = hosted_mediocre_feast_opinion
-							target = root
-							opinion = feast_opinion_mediocre_food_value
-						}
-					}
-
-					# Vassal Opinion
-					scope:activity = {
-						#Other guests
-						every_attending_character = {
+						every_vassal_or_below = {
+							vassal_stance = courtly
 							limit = {
-								this != root
-								trigger_if = {
-									limit = {
-										is_vassal_of = root
-									}
-									NOT = { has_vassal_stance = courtly }
-								}
+								is_participant_in_activity = scope:activity
 							}
-							custom = custom.every_attending_character_but_courtly
+							custom = every_courtly_vassal
 							add_opinion = {
+								modifier = hosted_mediocre_feast_opinion
 								target = root
-								modifier = impressed_opinion
 								opinion = feast_opinion_mediocre_food_value
+							}
+						}
+
+						# Vassal Opinion
+						scope:activity = {
+							#Other guests
+							every_attending_character = {
+								limit = {
+									this != root
+									trigger_if = {
+										limit = {
+											is_vassal_of = root
+										}
+										NOT = { has_vassal_stance = courtly }
+									}
+								}
+								custom = custom.every_attending_character_but_courtly
+								add_opinion = {
+									target = root
+									modifier = impressed_opinion
+									opinion = feast_opinion_mediocre_food_value
+								}
 							}
 						}
 					}
@@ -432,6 +448,7 @@
 					option = feast_wine_extensive
 				}
 			}
+			scope:host = { government_has_flag = government_has_influence }
 		}
 		scope:activity = {
 			add_activity_log_entry = {
@@ -500,6 +517,7 @@
 					option = feast_wine_normal
 				}
 			}
+			scope:host = { government_has_flag = government_has_influence }
 		}
 		scope:activity = {
 			add_activity_log_entry = {
@@ -568,6 +586,7 @@
 					option = feast_wine_limited
 				}
 			}
+			scope:host = { government_has_flag = government_has_influence }
 		}
 		scope:activity = {
 			add_activity_log_entry = {

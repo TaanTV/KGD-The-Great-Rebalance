@@ -105,18 +105,10 @@ purchase_truce_interaction = {
 				NOT = { any_truce_holder = { this = scope:recipient } }
 			}
 		}
-		#limit range for landless adventurers
-		trigger_if = {
-			limit = {
-				scope:puppet_or_actor = {
-					has_government = landless_adventurer_government
-				}
-			}
-			#Has to be used instead of diplo range checks in laamp to landed interactions
-			ep3_laamp_diplo_range_trigger = {
-				TARGET = scope:recipient
-				LAAMP = scope:puppet_or_actor
-			}
+		#limit range for landless adventurers/merchants
+		exceptional_diplo_range_trigger = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
 		}
 	}
 	
@@ -190,7 +182,7 @@ purchase_truce_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_gain
@@ -237,7 +229,7 @@ purchase_truce_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:recipient
 			TARGET = scope:puppet_or_actor
 			VALUE = minor_unity_loss
@@ -608,6 +600,15 @@ purchase_truce_interaction = {
 		barony = 0
 		county = 60
 		duchy = 60
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 180
+		duchy = 0
 		kingdom = 0
 		empire = 0
 		hegemony = 0
@@ -1023,7 +1024,7 @@ contract_assistance_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:actor
 			TARGET = scope:recipient
 			VALUE = medium_unity_loss
@@ -1037,7 +1038,7 @@ contract_assistance_interaction = {
 		scope:actor = { trigger_event = char_interaction.0236 }
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:recipient
 			TARGET = scope:actor
 			VALUE = minor_unity_gain
@@ -1469,14 +1470,24 @@ request_contract_assistance_interaction = {
 
 	cooldown_against_recipient = { years = 5 }
 
+	is_available = {
+		is_at_war = yes
+		any_character_struggle = {
+			involvement = involved
+			has_struggle_phase_parameter = unlocks_contract_assistance_interaction
+		}
+		trigger_if = {
+			limit = { is_ai = yes }
+			gold >= ai_war_chest_desired_gold_value
+			is_at_war = no
+			# the AI cannot use it for now so let's block it
+			is_imprisoned = no
+		}
+	}
+
 	is_shown = {
 		# Actor is Involved in Struggle
 		scope:actor = {
-			any_character_struggle = {
-				involvement = involved
-				has_struggle_phase_parameter = unlocks_contract_assistance_interaction
-			}
-			is_at_war = yes
 			NOR = {
 				this = scope:recipient
 				is_at_war_with = scope:recipient
@@ -1658,7 +1669,7 @@ request_contract_assistance_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:actor
 			TARGET = scope:recipient
 			VALUE = medium_unity_loss
@@ -1672,7 +1683,7 @@ request_contract_assistance_interaction = {
 		scope:actor = { trigger_event = char_interaction.0236 }
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:recipient
 			TARGET = scope:actor
 			VALUE = minor_unity_gain
@@ -1793,12 +1804,6 @@ request_contract_assistance_interaction = {
 		}
 	}
 
-	ai_potential = {
-		# the AI cannot use it for now so let's block it
-		is_imprisoned = no
-		is_at_war = no
-		gold >= ai_war_chest_desired_gold_value
-	}
 	ai_target_quick_trigger = { adult = yes }
 	ai_targets = {
 		ai_recipients = neighboring_rulers

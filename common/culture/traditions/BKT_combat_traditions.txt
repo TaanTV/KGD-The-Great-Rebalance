@@ -691,6 +691,7 @@ tradition_jungle_warriors = {
 		jungle_stalker_trait_more_common = yes
 		jungle_trait_bonuses = yes
 		can_recruit_jungle_specialist = yes
+		jungle_warriors_jungle_fort = yes
 	}
 	character_modifier = {
 		jungle_travel_danger = jungle_low_danger_reduction
@@ -1040,7 +1041,7 @@ tradition_strength_in_numbers = {
 	}
 
 	parameters = {
-		strength_in_numbers_maa_limit_bonus = yes
+		strength_in_numbers_levy_buildings_bonuses = yes
 		strength_in_numbers_heavy_maa_ban = yes
 	}
 	
@@ -1180,6 +1181,7 @@ tradition_frugal_armorsmiths = {
 		heavy_cavalry_toughness_mult = -0.5		#prev -0.3
 		pikemen_toughness_mult = -0.25			#prev -0.15
 		heavy_infantry_toughness_mult = -0.35	#prev -0.25
+		trade_good_iron_buy_price_mult = -0.01
 	}
 	
 	cost = {
@@ -1316,7 +1318,7 @@ tradition_swords_for_hire = {
 		mercenary_count_mult = 1
 	}
 	character_modifier = {
-		same_culture_mercenary_hire_cost_mult = -0.3	#prev -0.15
+		same_culture_mercenary_hire_cost_mult = -0.25	#prev -0.15
 		character_travel_speed_mult = 0.1
 		character_travel_safety_mult = 0.1
 	}
@@ -1352,7 +1354,7 @@ tradition_swords_for_hire = {
 						NOT = {
 							any_ruler = {
 								count >= 5
-								culture = prev
+								culture_filter = root
 								primary_title.tier >= tier_county
 								has_trait = education_martial_4
 							}
@@ -1406,7 +1408,7 @@ tradition_reverence_for_veterans = {
 	parameters = {
 		wounds_and_scars_give_bonuses = yes
 		guardians_can_transfer_commander_traits = yes
-		warrior_lodges_lift_restrictions = yes
+		reverence_for_veterans_military_infirmaries_bonuses = yes
 	}
 	
 	cost = {
@@ -1440,7 +1442,7 @@ tradition_reverence_for_veterans = {
 						NOT = {
 							any_ruler = {
 								count >= 5
-								culture = prev
+								culture_filter = root
 								primary_title.tier >= tier_county
 								OR = {
 									has_trait = scarred
@@ -1494,7 +1496,7 @@ tradition_stalwart_defenders = {
 		can_end_defensive_wars_earlier = yes
 		more_fame_for_successful_defensive_wars = yes
 		more_gold_for_successful_defensive_wars = yes
-		next_level_fortification = yes
+		stalwart_defenders_walls_building_slot = yes
 		stalwart_defenders_internal_yurt_unlock = yes
 	}
 	character_modifier = {
@@ -1832,7 +1834,7 @@ tradition_adaptive_skirmishing = {
 	}
 
 	parameters = {
-		next_level_military_camps = yes
+		adaptive_skirmishing_militia_camps_bonuses = yes
 		skirmisher_nomadic_cultrad_stationing_bonus = yes
 	}
 	
@@ -1963,7 +1965,7 @@ tradition_formation_fighting = {
 	}
 
 	parameters = {
-		next_level_barracks = yes
+		formation_fighting_archery_ranges_bonuses = yes
 		formation_fighting_strategist = yes
 		formation_nomadic_cultrad_stationing_bonus = yes
 	}
@@ -2108,8 +2110,10 @@ tradition_horse_breeder = {
 	}
 
 	parameters = {
-		next_level_stables = yes
+		horse_breeder_cavalry_buildings_bonuses = yes
 		horse_breeder_internal_yurt_unlock = yes
+		horse_breeder_productivity_bonus = yes
+		training_grounds_cavalry_horse_need = yes
 	}
 	
 	character_modifier = {
@@ -2120,6 +2124,12 @@ tradition_horse_breeder = {
 		heavy_cavalry_recruitment_cost_mult = -0.25
 		archer_cavalry_maintenance_mult = -0.15
 		archer_cavalry_recruitment_cost_mult = -0.25
+		trade_category_beasts_of_burden_xp_gain_mult = 0.2
+		trade_good_horses_sell_price_mult = 0.02
+	}
+
+	county_modifier = {
+		trade_good_horses_production_mult = 0.2
 	}
 
 	cost = {
@@ -2241,6 +2251,7 @@ tradition_longbow_competitions = {
 	
 	parameters = {
 		unlock_maa_longbowmen = yes
+		perk_tactician_archers = yes
 		archer_era_improvement = yes
 	}
 	character_modifier = {

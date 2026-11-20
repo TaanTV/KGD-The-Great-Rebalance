@@ -45,6 +45,14 @@ grant_vassal_interaction = {
 			}
 		}
 		scope:recipient.highest_held_title_tier > tier_barony
+		scope:actor = {
+			trigger_if = {
+				limit = {
+					government_has_flag = government_is_republic
+				}
+				is_landed = yes
+			}
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -281,7 +289,7 @@ grant_vassal_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = miniscule_unity_gain
@@ -439,7 +447,7 @@ grant_vassal_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:recipient
 			TARGET = scope:puppet_or_actor
 			VALUE = miniscule_unity_loss
@@ -525,6 +533,15 @@ retract_vassal_interaction = {
 				}
 				custom_description = {
 					text = "has_law_allowing_vassal_retraction_admin"
+					has_realm_law_flag = vassal_retraction_allowed
+				}
+			}
+			trigger_else_if = {
+				limit = {
+					government_has_flag = government_is_republic
+				}
+				custom_description = {
+					text = "has_law_allowing_vassal_retraction_republic"
 					has_realm_law_flag = vassal_retraction_allowed
 				}
 			}
@@ -633,7 +650,12 @@ retract_vassal_interaction = {
 		#ADDED - this if and put the war into ELSE
 		if = {
 			limit = {
-				scope:puppet_or_actor = { has_legitimacy_flag = vassals_refuse_retract_with_no_war }
+				scope:puppet_or_actor = {
+					OR = {
+					has_realm_law_flag = republic_vassal_refusal_allowed
+					has_legitimacy_flag = vassals_refuse_retract_with_no_war 
+					}
+				}
 			}
 			scope:puppet_or_actor = { 
 				add_prestige = medium_prestige_loss
@@ -958,6 +980,15 @@ retract_vassal_interaction = {
 			}
 			desc = VASSALS_REFUSAL_indomitable_azatani
 		}
+		#GG modifier
+		modifier = {
+			add = -50
+			OR = {
+				gg_first_and_second_are_opposite_sides_trigger = { FIRST = scope:actor SECOND = scope:recipient }
+				scope:recipient = { is_gg_undecided_trigger = yes }
+			}
+			desc = RECIPIENT_IS_NOT_YOUR_GG
+		}
 	}
 
 	#Use hook
@@ -1210,9 +1241,7 @@ retract_vassal_interaction = {
 			scope:puppet_or_actor = {
 				OR = {
 					has_relation_friend = scope:recipient
-					has_relation_best_friend = scope:recipient
 					has_relation_lover = scope:recipient
-					has_relation_soulmate = scope:recipient
 					is_heir_of = scope:recipient
 				}
 			}
@@ -1272,6 +1301,13 @@ retract_vassal_interaction = {
 					highest_held_title_tier = tier_barony
 				}
 			}
+		}
+
+		modifier = {
+			scope:actor = {
+				gg_hre_causes_additional_tyranny_trigger = { TARGET = scope:recipient }
+			}
+			factor = 0
 		}
 	}
 }
@@ -1334,14 +1370,14 @@ stop_attacker_vassal_war_interaction = {
 			object = scope:recipient
 			#ADDED - OR and the bottom part of it
 			OR = {
-				NOT = {
-					scope:recipient = {
-						has_opinion_modifier = {
-							target = scope:actor
-							modifier = attempt_to_force_end_war_opinion
-						}
+			NOT = {
+				scope:recipient = {
+					has_opinion_modifier = {
+						target = scope:actor
+						modifier = attempt_to_force_end_war_opinion
 					}
 				}
+			}
 				scope:recipient = { is_imprisoned_by = scope:actor }
 			}
 		}
@@ -1406,7 +1442,7 @@ stop_attacker_vassal_war_interaction = {
 					exists = scope:actor.house
 					scope:recipient.house != scope:actor.house
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:actor
 					TARGET = scope:target.primary_defender
 					VALUE = medium_unity_gain
@@ -1420,7 +1456,7 @@ stop_attacker_vassal_war_interaction = {
 					exists = scope:target.primary_defender.house
 					scope:target.primary_defender.house != scope:actor.house
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:actor
 					TARGET = scope:recipient
 					VALUE = medium_unity_loss
@@ -1503,14 +1539,14 @@ stop_defender_vassal_war_interaction = {
 			object = scope:recipient
 			#ADDED - OR and the bottom part of it
 			OR = {
-				NOT = {
-					scope:recipient = {
-						has_opinion_modifier = {
-							target = scope:actor
-							modifier = attempt_to_force_surrender_opinion
-						}
+			NOT = {
+				scope:recipient = {
+					has_opinion_modifier = {
+						target = scope:actor
+						modifier = attempt_to_force_surrender_opinion
 					}
 				}
+			}
 				scope:recipient = { is_imprisoned_by = scope:actor }
 			}
 		}
@@ -1570,7 +1606,7 @@ stop_defender_vassal_war_interaction = {
 					exists = scope:target.primary_attacker.house
 					scope:target.primary_attacker.house != scope:actor.house
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:actor
 					TARGET = scope:recipient
 					VALUE = medium_unity_loss
@@ -1584,7 +1620,7 @@ stop_defender_vassal_war_interaction = {
 					exists = scope:recipient.house
 					scope:recipient.house != scope:actor.house
 				}
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:actor
 					TARGET = scope:target.primary_attacker
 					VALUE = medium_unity_gain
@@ -1789,7 +1825,7 @@ ask_for_pardon_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_gain
@@ -1847,7 +1883,7 @@ ask_for_pardon_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:recipient
 			TARGET = scope:actor
 			VALUE = minor_unity_loss
@@ -2245,7 +2281,7 @@ pardon_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_gain
@@ -2276,9 +2312,7 @@ pardon_interaction = {
 			scope:recipient = {
 				OR = {
 					has_relation_friend = scope:puppet_or_actor
-					has_relation_best_friend = scope:puppet_or_actor
 					has_relation_lover = scope:puppet_or_actor
-					has_relation_soulmate = scope:puppet_or_actor
 					is_primary_heir_of = scope:puppet_or_actor
 				}
 			}

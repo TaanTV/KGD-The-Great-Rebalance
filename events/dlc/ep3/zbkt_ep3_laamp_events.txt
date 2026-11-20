@@ -23,7 +23,6 @@
 #      BRÖTHER
 # I CRAVE THE LAAMP
 
-
 ##################################################
 # Become Adventurer - Succession
 # by Joe Parkin
@@ -41,25 +40,7 @@ ep3_laamps.0011 = {
 		save_temporary_scope_as = heir_temp
 		any_sibling = {
 			#ADDED - only ones standing to inherit 
-			trigger_if = {
-				limit = { 
-					scope:heir_temp = {
-						is_male = yes
-						OR = { has_realm_law = male_only_law has_realm_law = male_preference_law }
-					} 
-				}
-				is_male = yes
-			}
-			trigger_else_if = {
-				limit = { 
-					scope:heir_temp = {
-						is_female = yes 
-						OR = { has_realm_law = female_only_law has_realm_law = female_preference_law } 
-					}
-				}
-				is_female = yes
-			}
-			trigger_else = { }
+			this_is_ruling_gender_according_to_target_laws = { TARGET = scope:heir_temp }
 			ep3_laamp_interesting_sibling_trigger = { COMPARISON = scope:heir_temp }
 		}
 	}
@@ -70,25 +51,7 @@ ep3_laamps.0011 = {
 		ordered_sibling = {
 			limit = {
 				#ADDED - only ones standing to inherit 
-				trigger_if = {
-					limit = { 
-						scope:heir = {
-							is_male = yes
-							OR = { has_realm_law = male_only_law has_realm_law = male_preference_law }
-						} 
-					}
-					is_male = yes
-				}
-				trigger_else_if = {
-					limit = { 
-						scope:heir = {
-							is_female = yes 
-							OR = { has_realm_law = female_only_law has_realm_law = female_preference_law }
-						}
-					}
-					is_female = yes
-				}
-				trigger_else = { }
+				this_is_ruling_gender_according_to_target_laws = { TARGET = scope:heir }
 				ep3_laamp_interesting_sibling_trigger = { COMPARISON = scope:heir }
 			}
 			order_by = ep3_laamp_chance_score_value
@@ -98,7 +61,7 @@ ep3_laamps.0011 = {
 			chance = 0
 			modifier = { # Bonus for players
 				is_ai = no
-				add = 25
+				add = 15	#prev 25
 			}
 			modifier = { add = scope:potential_laamp.ep3_laamp_chance_score_value }
 			if = {
@@ -141,7 +104,7 @@ ep3_laamps.0012 = {
 	id_override_priority = 228
 
 	trigger = {
-		has_ep3_dlc_trigger = yes
+		has_playable_adventurer_dlc_trigger = yes
 		is_landed = yes
 		#ADDED
 		save_temporary_scope_as = deceased_scope

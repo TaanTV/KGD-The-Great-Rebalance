@@ -1,8 +1,4 @@
-﻿remove_all_filthy_rich_related_modifiers = {
-	remove_character_modifier = filthy_rich_basic_modifier
-}
-
-# THIS = mercenary_company_leader, PREV = mercenary_company. ROOT does not exist.
+﻿# THIS = mercenary_company_leader, PREV = mercenary_company. ROOT does not exist.
 mercenary_castles_pulse_effect = {
 	save_scope_as = rich_mercenary_leader
 	if = {
@@ -25,7 +21,7 @@ mercenary_castles_pulse_effect = {
 				}
 				any_county_province = {
 					has_holding = no
-					has_ongoing_construction = no 
+					#has_ongoing_construction = no 
 					barony = { barony_cannot_construct_holding = no }
 				}
 				OR = {
@@ -80,7 +76,7 @@ mercenary_castles_pulse_effect = {
 					}
 					any_county_province = {
 						has_holding = no
-						has_ongoing_construction = no 
+						#has_ongoing_construction = no 
 						barony = { barony_cannot_construct_holding = no }
 					}
 					OR = {
@@ -326,19 +322,12 @@ on_get_position_councillor_firing_cooldown_effect = {
 				has_variable = block_fire_councillor
 				var:block_fire_councillor = liege_or_court_owner
 			}
-		}
-		if = {
-			limit = { NOT = { has_variable = very_recently_fired } }
-			set_variable = {
-				name = block_fire_councillor
-				value = liege_or_court_owner
-				years = 5
-			}
+			NOT = { is_set = scope:swapped_position }
 		}
 		set_variable = {
-			name = very_recently_hired
-			value = 1
-			days = 1
+			name = block_fire_councillor
+			value = liege_or_court_owner
+			years = 5
 		}
 	}
 }
@@ -554,6 +543,10 @@ mental_break_opt_out_faltering_heart_chance = {
 				chance = {
 					value = $STRESS_LEVEL_CHANCE$
 					if = {
+						limit = { has_variable = stress_faltering_heart_chance_increase }
+						add = var:stress_faltering_heart_chance_increase
+					}
+					if = {
 						limit = { is_ai = yes }
 						max = 3		#AIs would roll this way too often, i suspect.
 					}
@@ -567,11 +560,16 @@ mental_break_opt_out_faltering_heart_chance = {
 				random = {
 					chance = {
 						value = $STRESS_LEVEL_CHANCE$
+						if = {
+							limit = { has_variable = stress_faltering_heart_chance_increase }
+							add = var:stress_faltering_heart_chance_increase
+						}
 					}
 					add_trait = faltering_heart
 				}
 			}
 		}
+		increment_variable_effect = { VAR = stress_faltering_heart_chance_increase VAL = 1 }
 	}
 }
 
@@ -635,7 +633,7 @@ baron_start_refusal_war = {
 		capital_province = {
 			if = {
 				limit = { 
-					NOT = { has_schizo_balance_loaded_trigger = yes }
+					#NOT = { has_schizo_balance_loaded_trigger = yes }
 					fort_level < 1
 				}
 				while = {

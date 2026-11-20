@@ -6,6 +6,7 @@ special_doctrine_is_islamic_faith = {
 
 	parameters = {
 		islamic_syncretic_recipient
+		amber_prayer_beads
 		#ADDED
 		pluralism_fundamentalist_characters_stick_to_extreme_gender_laws
 	}
@@ -19,6 +20,10 @@ special_doctrine_is_islamic_faith = {
 		parameter_opinion_override = {
 			islamic_syncretic_actor = 30
 		}
+	}
+
+	character_modifier = {
+		trade_good_spices_buy_price_mult = -0.0075
 	}
 }
 
@@ -51,8 +56,11 @@ unreformed_faith_doctrine = {
 		clan_government_vassal_opinion = -20
 		feudal_government_vassal_opinion = -20
 		republic_government_vassal_opinion = -20
+		trade_good_horses_sell_price_mult = 0.01
+		trade_good_furs_buy_price_mult = -0.01
+		trade_good_ivory_buy_price_mult = -0.015
 		#ADDED
-		different_faith_county_opinion_mult = -0.33
+		different_faith_popular_opinion_mult = -0.33
 	}
 }
 west_african_unreformed_faith_doctrine = {
@@ -82,7 +90,7 @@ west_african_unreformed_faith_doctrine = {
 	character_modifier = {
 		monthly_prestige_gain_mult = 0.1
 		#ADDED
-		different_faith_county_opinion_mult = -0.33
+		different_faith_popular_opinion_mult = -0.33
 	}
 }
 

@@ -38,3 +38,12 @@
 		fallback = { always = no }
 	}
 }
+
+#same conditions as in the perk's effects
+should_get_bkt_at_any_cost_perk_bonus = {
+	has_perk = at_any_cost_perk
+	NOR = { 
+		government_has_flag = government_uses_landless_lifestyle_perks 
+		is_landed = no
+	}
+}

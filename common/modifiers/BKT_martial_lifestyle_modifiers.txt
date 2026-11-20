@@ -6,7 +6,7 @@
 #}
 
 warfare_greedy_strategy_modifier = {
-	icon = martial_positive
+	icon = martial_positive		#prev martial_mixed
 	hostile_county_attrition = -0.25
 	supply_duration = 0.20
 	siege_phase_time = -0.1
@@ -20,9 +20,9 @@ warfare_greedy_strategy_modifier = {
 #}
 
 warfare_craven_strategy_modifier = {
-	icon = martial_positive
+	icon = martial_positive		#prev martial_mixed
 	retreat_losses = -0.25
-	movement_speed = 0.1
+	movement_speed = 0.05		#prev 0.1
 	#attacker_advantage = -5
 	hard_casualty_modifier = -0.1
 }

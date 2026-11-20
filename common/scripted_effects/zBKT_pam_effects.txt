@@ -64,6 +64,162 @@
 #pam_evangelize_personal_tenet_effect
 #pam_evangelize_personal_tenet_decline_effect
 
+
+# Called from five_year_playable_pulse. Root is the character.
+pam_ai_personal_tenet_pulse_effect = {
+	if = {
+		limit = {
+			is_physically_able_ai = yes
+		}
+
+		# Phase 0: cardinals may hold beliefs their rite prohibits, so a new pontiff can arrive carrying one
+		# Ahead of Phase 1 so the freed slot refills this pulse; on_personal_tenet_loss clears the secret
+		if = {
+			limit = {
+				pam_holds_college_elected_church_seat_trigger = yes
+				pam_has_forbidden_personal_tenet_trigger = yes
+			}
+			faith.main_rite = { save_temporary_scope_as = pam_pontiff_rite }
+			while = {
+				count = 8
+				limit = { pam_has_forbidden_personal_tenet_trigger = yes }
+				random_personal_tenet = {
+					limit = {
+						scope:pam_pontiff_rite = {
+							has_tenet_status = {
+								tenet = prev
+								status = prohibited
+							}
+						}
+					}
+					root = { remove_personal_tenet = prev }
+				}
+			}
+		}
+
+		# Phase 1: fill every empty personal tenet slot. No chance gate - empty slots are wasted SF and immersion.
+		# 8 = safety upper bound on slot cap (base 1 + up to ~5 from piety levels, with headroom).
+		while = {
+			count = 8
+			limit = {
+				free_personal_tenet_slots > 0
+				any_desired_tenet = {
+					only_positive = yes
+					threshold = 1
+					selection_count = 15	#prev 97
+					pam_ai_personal_tenet_candidate_trigger = yes
+				}
+			}
+
+			random_desired_tenet = {
+				only_positive = yes
+				threshold = 1
+				selection_count = 15	#prev 97
+				limit = { pam_ai_personal_tenet_candidate_trigger = yes }
+				weight = {
+					base = 10
+					modifier = {
+						factor = root.anathema_to_faith_personal_tenet_weight_factor
+						tenet_is_anathema_to_faith_trigger = { FAITH = root.faith }
+					}
+					modifier = {
+						factor = root.intrinsic_to_faith_personal_tenet_weight_factor
+						tenet_is_intrinsic_to_faith_trigger = { FAITH = root.faith }
+					}
+				}
+				root = { set_personal_tenet = prev }
+			}
+		}
+
+		# Nothing known would raise their fulfillment: fill the rest with harmless core tenets of their own rite, as at game start
+		while = {
+			count = 8
+			limit = {
+				free_personal_tenet_slots > 0
+				rite = {
+					any_rite_tenet = { pam_ai_personal_tenet_fallback_trigger = yes }
+				}
+			}
+
+			rite = {
+				random_rite_tenet = {
+					limit = { pam_ai_personal_tenet_fallback_trigger = yes }
+					root = { set_personal_tenet = prev }
+				}
+			}
+		}
+
+		# Phase 2: chance-gated swap, only when there are no free slots left to fill.
+		# Only a tenet that gives no fulfillment is swapped out.
+		if = {
+			limit = {
+				free_personal_tenet_slots <= 0
+				any_personal_tenet = { pam_personal_tenet_gives_no_fulfillment_trigger = yes }
+				any_desired_tenet = {
+					only_positive = yes
+					threshold = 1
+					selection_count = 3		#prev 97
+					pam_ai_personal_tenet_candidate_trigger = yes
+				}
+			}
+
+			random = {
+				chance = 30
+				modifier = {
+					add = 15
+					has_trait = zealous
+				}
+				modifier = {
+					add = -15
+					has_trait = cynical
+				}
+				modifier = {
+					add = {
+						value = ai_zeal
+						divide = 5
+					}
+				}
+				modifier = {
+					add = {
+						value = ai_boldness
+						divide = 5
+					}
+				}
+
+				# Pick the new tenet - Random of any positive-SF known tenet, not strictly the best.	#ADDED - nah, strictly the best ones
+				random_desired_tenet = {
+					only_positive = yes
+					threshold = 1
+					selection_count = 3		#prev 97
+					limit = { pam_ai_personal_tenet_candidate_trigger = yes }
+					weight = {
+						base = 10
+						modifier = {
+							factor = root.anathema_to_faith_personal_tenet_weight_factor
+							tenet_is_anathema_to_faith_trigger = { FAITH = root.faith }
+						}
+						modifier = {
+							factor = root.intrinsic_to_faith_personal_tenet_weight_factor
+							tenet_is_intrinsic_to_faith_trigger = { FAITH = root.faith }
+						}
+					}
+					save_temporary_scope_as = pam_personal_tenet_replacement
+					root = {
+						random_personal_tenet = {
+							limit = { pam_personal_tenet_gives_no_fulfillment_trigger = yes }
+							root = {
+								remove_personal_tenet = prev
+								set_personal_tenet = scope:pam_personal_tenet_replacement
+							}
+						}
+					}
+					root = { force_set_personal_tenet = prev }
+				}
+			}
+		}
+	}
+}
+
 pam_levy_the_tithes_decision_effects = {
 	every_vassal = {
 		limit = {
@@ -73,21 +229,18 @@ pam_levy_the_tithes_decision_effects = {
 			}
 		}
 		custom = every_theocratic_vassal_tt
-		#ADDED - send a notification at least
 		send_interface_message = {
-			type = send_interface_message_bad
+			type = event_gold_bad
 			title = pam_levy_the_tithes_decision
-			left_icon = this
-			right_icon = prev
-		pay_short_term_gold = {
-			target = root
-			gold = minor_gold_value
-		}
-			#ADDED - they should be at least mildly annoyed, no?
+			left_icon = root
+			pay_short_term_gold = {
+				target = root
+				gold = minor_gold_value
+			}
 			add_opinion = {
-				target = prev
-				modifier = annoyed_opinion
-				opinion = -30
+				modifier = tithed_opinion
+				target = root
+				opinion = -30	#prev -25
 			}
 		}
 		if = { 
@@ -126,7 +279,7 @@ pam_levy_the_tithes_decision_effects = {
 			add_opinion = {
 				target = prev
 				modifier = annoyed_opinion
-				opinion = -25
+				opinion = -20
 			}
 		}
 		save_scope_as = tither

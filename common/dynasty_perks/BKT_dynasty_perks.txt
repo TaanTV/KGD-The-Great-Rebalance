@@ -13,8 +13,8 @@ blood_legacy_1 = { # Noble Veins
 		value = 11
 		#ADDED 
 		if = {
-			limit = { num_of_good_genetic_traits >= 1 }
-			add = 89
+			limit = { num_of_good_genetic_traits >= 2 }
+			add = 39
 		}
 		if = {
 			limit = {
@@ -55,7 +55,7 @@ warfare_legacy_1 = { # House of Warriors
 	ai_chance = {
 		value = 11
 		#ADDED 
-		add = { value = martial multiply = 4 }
+		add = { value = martial multiply = 2 }
 		if = {
 			limit = {
 				can_start_new_legacy_track_trigger = no
@@ -72,7 +72,7 @@ law_legacy_1 = { # Mostly Fair
 	legacy = law_legacy_track
 
 	character_modifier = {
-		county_opinion_add = 5
+		popular_opinion_add = 5
 	}
 	
 	effect = {
@@ -84,7 +84,7 @@ law_legacy_1 = { # Mostly Fair
 	ai_chance = {
 		value = 11
 		#ADDED 
-		add = { value = stewardship multiply = 4 }
+		add = { value = stewardship multiply = 2 }
 		if = {
 			limit = {
 				can_start_new_legacy_track_trigger = no
@@ -100,7 +100,7 @@ law_legacy_2 = { # Faithful Magistrates
 
 	character_modifier = {
 		name = law_legacy_2_name
-		monthly_county_control_growth_add = 0.1		#prev 0.2
+		monthly_control_change_when_below_baseline_add = 0.1		#prev 0.2
 		title_creation_cost_mult = -0.1				#prev -0.2
 	}
 }
@@ -140,7 +140,7 @@ guile_legacy_1 = { # Ominous Reputation
 	ai_chance = {
 		value = 11
 		#ADDED 
-		add = { value = intrigue multiply = 4 }
+		add = { value = intrigue multiply = 2 }
 		if = {
 			limit = {
 				can_start_new_legacy_track_trigger = no
@@ -197,7 +197,7 @@ erudition_legacy_1 = { # Vibrant Court
 	ai_chance = {
 		value = 11
 		#ADDED 
-		add = { value = learning multiply = 4 }
+		add = { value = learning multiply = 2 }
 		if = {
 			limit = {
 				can_start_new_legacy_track_trigger = no
@@ -226,7 +226,7 @@ glory_legacy_1 = { # Desirable Match
 	ai_chance = {
 		value = 11
 		#ADDED 
-		add = { value = diplomacy multiply = 4 }
+		add = { value = diplomacy multiply = 2 }
 		if = {
 			limit = {
 				can_start_new_legacy_track_trigger = no

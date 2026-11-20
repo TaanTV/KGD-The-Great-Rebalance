@@ -10,14 +10,22 @@ open_minded_perk = {
 	
 	parent = pedagogy_perk
 	
-	character_modifier = {
-		different_culture_opinion = 10	#prev 15
+	government_character_modifier = {
+		flag = government_is_theocracy
+		invert_check = yes
+		different_culture_opinion = 10
+	}
+	
+	government_character_modifier = {
+		flag = government_is_theocracy
+		different_faith_popular_opinion_mult = -0.15
+		minority_tax_contribution_mult = 0.1
 	}
 	
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		invert_check = yes
-		minority_opinion = 10			#prev 15
+		minority_opinion = 10
 		cultural_head_acceptance_gain_mult = 0.2
 	}
 	
@@ -75,8 +83,10 @@ apostate_perk = {
 scientific_perk = {
 	lifestyle = learning_lifestyle
 	tree = scholarship
-	position = { 2 0 }
+	position = { 2 2 }
 	icon = node_learning
+
+	parent = planned_cultivation_perk
 	
 	name = {
 		first_valid = {
@@ -84,42 +94,27 @@ scientific_perk = {
 				trigger = { has_government = landless_adventurer_government }
 				desc = scientific_perk_adventurer_name
 			}
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = scientific_perk_merchant_name
+			}
 			desc = scientific_perk_name
 		}
 	}
 	
-	auto_selection_weight = {
-		value = 11
-		if = {
-			limit = {
-				has_education_learning_trigger = yes
-			}
-			add = 1989
-		}
-		if = {
-			limit = {
-				has_focus = learning_scholarship_focus
-			}
-			multiply = 5
-		}
-		if = {
-			limit = {
-				can_start_new_lifestyle_tree_trigger = no
-				NOT = { has_perk = pedagogy_perk }
-			}
-			multiply = 0
-		}
-	}
-	
 	government_character_modifier = {
-		flag = government_is_landless_adventurer
+		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
-		cultural_head_fascination_mult = 0.1		#prev 0.20
+		cultural_head_fascination_mult = 0.15		#prev 0.20
 	}
 	government_character_modifier = {
 		flag = government_is_landless_adventurer
 		counter_efficiency = 0.25
 		siege_phase_time = -0.15
+	}
+	government_character_modifier = {
+		flag = government_is_merchant
+		trade_capacity_mult = 0.05
 	}
 	
 	effect = {
@@ -129,6 +124,14 @@ scientific_perk = {
 			}
 			custom_tooltip = {
 				text = adventurer_scientific_perk_effect
+			}
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_merchant
+			}
+			custom_description_no_bullet = {
+				text = scientific_perk_merchant_effect
 			}
 		}
 	}

@@ -722,6 +722,7 @@ stress_threshold_special.2001 = {
 				trait = honest
 				trait = ambitious
 				faith = this.faith
+				rite = this.rite
 				culture = this.culture
 				diplomacy = { 10 12 }
 				intrigue = { 14 16 }
@@ -757,7 +758,6 @@ stress_threshold_special.2001 = {
 					NOR = {
 						has_relation_potential_lover = scope:target
 						has_relation_lover = scope:target
-						has_relation_soulmate = scope:target
 					}
 				}
 				set_relation_potential_lover = scope:target
@@ -781,7 +781,6 @@ stress_threshold_special.2001 = {
 		else_if = {
 			limit = { rite = { trait_is_virtue_rite = lustful }}
 			add_piety = major_piety_loss
-			add_piety_experience = major_piety_loss
 		}
 		stress_impact = {
 			base = major_stress_impact_gain

@@ -16,7 +16,7 @@
 			}
 			save_scope_as = new_head
 			house = {
-				set_house_name_from_dynasty = dynasty
+				set_house_name_from_dynasty = house_dynasty
 				save_scope_as = new_house
 			}
 			create_noble_family_effect = { GOVERNMENT_GIVER = this }
@@ -69,7 +69,7 @@
 			}
 			save_scope_as = new_head
 			house = {
-				set_house_name_from_dynasty = dynasty
+				set_house_name_from_dynasty = house_dynasty
 				save_scope_as = new_house
 			}
 			create_noble_family_effect = { GOVERNMENT_GIVER = this }
@@ -179,7 +179,7 @@
 					}
 					save_scope_as = new_head
 					house = {
-						set_house_name_from_dynasty = dynasty
+						set_house_name_from_dynasty = house_dynasty
 						save_scope_as = new_house
 					}
 					if = {
@@ -285,9 +285,9 @@
 
 	hidden_effect = {
 		## Spawn holdings in tribal counties
-		
 		every_sub_realm_county = { # Spawn temples in your holy sites
 			limit = {
+				NOT = { scope:feudalize_bonus_holdings ?= no }
 				any_county_province = {
 					has_holding_type = tribal_holding
 				}
@@ -313,20 +313,11 @@
 				}
 				set_holding_type = church_holding
 			}
-			hidden_effect = {
-				if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier }
-					remove_county_modifier = mpo_siberian_permafrost_modifier
-				}
-				else_if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier_bad }
-					remove_county_modifier = mpo_siberian_permafrost_modifier_bad
-				}
-			}
 		}
-		
+
 		every_sub_realm_county = { # Spawn a City
 			limit = {
+				NOT = { scope:feudalize_bonus_holdings ?= no }
 				any_county_province = {
 					has_holding_type = tribal_holding
 				}
@@ -349,7 +340,7 @@
 						terrain = terraced_hills
 					}
 					is_coastal = yes
-					has_special_building_slot = no
+					has_special_district_slot = no
 					barony_cannot_construct_holding = no
 				}
 				alternative_limit = {
@@ -360,7 +351,7 @@
 						terrain = farmlands
 						terrain = terraced_hills
 					}
-					has_special_building_slot = no
+					has_special_district_slot = no
 					barony_cannot_construct_holding = no
 				}
 				alternative_limit = {
@@ -380,9 +371,9 @@
 				random = {
 					chance = 10	#prev 60
 					modifier = {
-						#add = county.development_level
+						#add = county.prosperity_level
 						#ADDED - now this, 100% chance at 18ish dev considering the above
-						add = { value = county.development_level multiply = 5 }
+						add = { value = county.prosperity_level multiply = 5 }
 					}
 					modifier = {
 						add = 15	#prev 50
@@ -400,20 +391,11 @@
 					set_holding_type = city_holding
 				}
 			}
-			hidden_effect = {
-				if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier }
-					remove_county_modifier = mpo_siberian_permafrost_modifier
-				}
-				else_if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier_bad }
-					remove_county_modifier = mpo_siberian_permafrost_modifier_bad
-				}
-			}
 		}
 		
 		every_sub_realm_county = { # Spawn a Temple
 			limit = {
+				NOT = { scope:feudalize_bonus_holdings ?= no }
 				any_county_province = {
 					has_holding_type = tribal_holding
 				}
@@ -436,7 +418,7 @@
 						terrain = terraced_hills
 					}
 					is_coastal = yes
-					has_special_building_slot = no
+					has_special_district_slot = no
 					barony_cannot_construct_holding = no
 				}
 				alternative_limit = {
@@ -447,7 +429,7 @@
 						terrain = farmlands
 						terrain = terraced_hills
 					}
-					has_special_building_slot = no
+					has_special_district_slot = no
 					barony_cannot_construct_holding = no
 				}
 				alternative_limit = {
@@ -467,9 +449,9 @@
 				random = {
 					chance = 10	#prev 60
 					modifier = {
-						#add = county.development_level
+						#add = county.prosperity_level
 						#ADDED - now this, 100% chance at 18ish dev considering the above
-						add = { value = county.development_level multiply = 5 }
+						add = { value = county.prosperity_level multiply = 5 }
 					}
 					modifier = {
 						add = 15	#prev 50
@@ -485,16 +467,6 @@
 						}
 					}
 					set_holding_type = church_holding
-				}
-			}
-			hidden_effect = {
-				if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier }
-					remove_county_modifier = mpo_siberian_permafrost_modifier
-				}
-				else_if = {
-					limit = { has_county_modifier = mpo_siberian_permafrost_modifier_bad }
-					remove_county_modifier = mpo_siberian_permafrost_modifier_bad
 				}
 			}
 		}
@@ -516,51 +488,11 @@
 				add_to_list = feudal_conversion
 			}
 		}
-
+		
 		every_in_list = {
 			list = feudal_conversion
-			set_variable = {
-				name = tribal_to_feudal_building_level
-				value = combined_building_level
-				days = 1
-			}
-			#ADDED - I think it counts holding level too. and also to make it a bit less guaranteed.
-			#READDED - actually the while below uses > 1 meaning it wont trigger for the base 1 
-			if = {
-				limit = { combined_building_level > 4 }
-				random = {
-					chance = 50
-					change_variable = {
-						name = tribal_to_feudal_building_level
-						subtract = 1
-					}
-				}
-			}
-			set_holding_type = castle_holding
-			while = {
-				limit = {
-					var:tribal_to_feudal_building_level > 1
-				}
-				generate_building = yes
-				change_variable = {
-					name = tribal_to_feudal_building_level
-					subtract = 1
-				}
-			}
-			remove_variable = tribal_to_feudal_building_level
+			holding_convert_tribal_keeping_buildings_effect = { HOLDING = castle_holding }
 			remove_from_list = feudal_conversion
-			hidden_effect = {
-				county = {
-					if = {
-						limit = { has_county_modifier = mpo_siberian_permafrost_modifier }
-						remove_county_modifier = mpo_siberian_permafrost_modifier
-					}
-					else_if = {
-						limit = { has_county_modifier = mpo_siberian_permafrost_modifier_bad }
-						remove_county_modifier = mpo_siberian_permafrost_modifier_bad
-					}
-				}
-			}
 		}
 	}
 }

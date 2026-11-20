@@ -204,8 +204,8 @@ BKT_more_player_truces_defender = {
 BKT_conqueror_war_attacker_win = {
 	trigger = {
 		#In this order coz attackers get deleted sometimes, defenders are usually permament characters
-		scope:defender = { has_variable = conqueror }
-		scope:attacker = { has_variable = conqueror }
+		scope:defender ?= { is_alive = yes has_variable = conqueror }
+		scope:attacker ?= { is_alive = yes has_variable = conqueror }
 	}
 	effect = {
 		scope:defender = {
@@ -230,7 +230,7 @@ BKT_conqueror_war_defender_win = {
 				name = lost_wars
 				value = 10
 			}
-			trigger_event = conqueror.0002
+			trigger_event = { id = conqueror.0002 delayed = yes }
 		}
 	}
 }

@@ -24,12 +24,12 @@ house_relation_decreased_marriage_acceptance = -20	#prev -25
 #	multiply = 4 #Since we know we are in Japan to use the interaction
 #}
 
-innovation_block_printing_development_growth_value_1 = 0.01	#prev 0.02
-innovation_block_printing_development_growth_value_2 = 0.01	#prev 0.03
-innovation_block_printing_development_growth_value_3 = 0.02	#prev 0.04
-innovation_block_printing_development_growth_value_4 = 0.02	#prev 0.05
+innovation_block_printing_prosperity_growth_value_1 = 0.01	#prev 0.02
+innovation_block_printing_prosperity_growth_value_2 = 0.01	#prev 0.03
+innovation_block_printing_prosperity_growth_value_3 = 0.02	#prev 0.04
+innovation_block_printing_prosperity_growth_value_4 = 0.02	#prev 0.05
 
-innovation_coking_development_growth_value_1 = 0			#prev 0.02
-innovation_coking_development_growth_value_2 = 0			#prev 0.03
-innovation_coking_development_growth_value_3 = 0			#prev 0.04
-innovation_coking_development_growth_value_4 = 0			#prev 0.05
+innovation_coking_prosperity_growth_value_1 = 0			#prev 0.02
+innovation_coking_prosperity_growth_value_2 = 0			#prev 0.03
+innovation_coking_prosperity_growth_value_3 = 0			#prev 0.04
+innovation_coking_prosperity_growth_value_4 = 0			#prev 0.05

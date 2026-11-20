@@ -15,7 +15,7 @@ tgp_should_become_meritocratic_trigger = {
 				is_independent_ruler = yes
 				liege = {
 					NOT = {
-						government_has_flag = government_is_administrative
+						government_has_mechanic = administrative
 					}
 				}
 			}
@@ -23,7 +23,6 @@ tgp_should_become_meritocratic_trigger = {
 				OR = {
 					geographical_region = world_asia
 					geographical_region = world_tibet
-					geographical_region = world_burma
 					geographical_region = world_steppe_east
 				}
 			}

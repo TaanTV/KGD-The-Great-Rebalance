@@ -3,10 +3,16 @@
 	$ACTOR$ = { save_temporary_scope_as = potential_puppeteer }
 	$RECIPIENT$ = {
 		save_temporary_scope_as = potential_puppet
-		OR = {												#either...
+		OR = {											#either...
 			custom_tooltip = {
-				text = same_realm_tt
-				top_liege = $ACTOR$.top_liege			#in same realm...
+				text = same_realm_tt					#in same realm...
+				trigger_if = {
+					limit = { $ACTOR$ = { is_landed = yes } }
+					top_liege = $ACTOR$.top_liege
+				}
+				trigger_else = {
+					$ACTOR$.primary_title.title_capital_county.holder.top_liege ?= top_liege
+				}
 			}
 			is_allied_to = $ACTOR$						#or an ally of actor...
 			is_consort_of = $ACTOR$						#or a spouse of actor...
@@ -14,6 +20,7 @@
 			has_relation_lover = $ACTOR$				#or a lover of actor...
 			has_relation_friend = $ACTOR$				#or a friend of actor...
 			has_relation_guardian = $ACTOR$				#or a ward of actor...
+			has_relation_elder = $ACTOR$				#or a disciple of actor...
 			is_tributary_of_suzerain_or_above = $ACTOR$ #or a tributary of actor (not the other way around)...
 			AND = {
 				$ACTOR$ = { government_has_flag = government_is_theocracy }
@@ -113,6 +120,27 @@
 			AND = {
 				exists = $RECIPIENT$.rite.head_of_rite
 				$RECIPIENT$.rite.head_of_rite = $ACTOR$
+			}
+			AND = {
+				$ACTOR$ = {
+					is_guelph_leader_trigger = yes
+				}
+				$RECIPIENT$ = {
+					is_guelph_trigger = yes
+				}
+			}
+			AND = {
+				$ACTOR$ = {
+					is_ghibelline_leader_trigger = yes
+				}
+				$RECIPIENT$ = {
+					is_ghibelline_trigger = yes
+				}
+			}
+			$ACTOR$ = {
+				government_has_flag = government_is_merchant
+				has_realm_law = company_purpose_creditor
+				has_hook = $RECIPIENT$
 			}
 		}
 	}

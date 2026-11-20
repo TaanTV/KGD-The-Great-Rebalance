@@ -4,6 +4,7 @@
 
 is_valid_for_ai_goals_system = {
 	highest_held_title_tier >= tier_duchy
+	is_ruler = yes
 	is_landed = yes
 }
 
@@ -93,7 +94,7 @@ ai_main_goal_construct_buildings_check = {
 			tier = tier_barony
 			title_province = {
 				free_building_slots > 0
-				has_ongoing_construction = no
+				#has_ongoing_construction = no
 			}
 		}
 	}
@@ -106,7 +107,7 @@ ai_main_goal_construct_holdings_check = {
 			tier = tier_county
 			any_county_province = {
 				has_holding = no
-				has_ongoing_construction = no
+				#has_ongoing_construction = no
 				barony = { barony_cannot_construct_holding = no }
 			}
 		}

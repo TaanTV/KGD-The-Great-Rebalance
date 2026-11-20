@@ -26,6 +26,14 @@ on_diarch_change = {
 					days = 1
 				}
 			}
+			if = {
+				limit = {
+					exists = scope:diarch.liege
+					scope:diarch.liege != this
+					NOT = { has_relation_puppet_liege = scope:diarch.liege }
+				}
+				set_relation_puppet_liege = scope:diarch.liege
+			}
 		}
 		# First, check what kind of change we're dealing with.
 		## Death.
@@ -211,6 +219,17 @@ on_diarch_change = {
 				vizierate_remove_extravagance_modifiers_effect = yes
 				# Remove their co-ruler title.
 				remove_variable = use_co_ruler_title
+				if = {
+					limit = {
+						any_relation = {
+							type = puppet_liege
+						}
+					}
+					random_relation = {
+						type = puppet_liege
+						remove_relation_puppet_diarch = scope:old_diarch
+					}
+				}
 			}
 		}
 		# Invalidate grand weddings

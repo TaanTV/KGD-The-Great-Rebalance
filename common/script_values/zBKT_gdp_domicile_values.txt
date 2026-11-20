@@ -1,0 +1,30 @@
+﻿
+merchant_company_move_cost_value = {
+	value = {
+		value = major_gold_value		#prev medium_gold_value
+		format = "BASE_VALUE_FORMAT"
+		desc = "BASE_VALUE"
+	}
+	if = {
+		limit = { company_size_value = 2 }
+		multiply = 1.5	#prev 1.25
+		desc = company_size_medium
+	}
+	else_if = {
+		limit = { company_size_value = 3 }
+		multiply = 2	#prev 1.5
+		desc = company_size_large
+	}
+	else_if = {
+		limit = { company_size_value = 4 }
+		multiply = 4	#prev 2
+		desc = company_size_huge
+	}
+	if = {
+		limit = {
+			domicile ?= { has_domicile_parameter = diaspora_network_cheaper_move }
+		}
+		multiply = 0.1
+		desc = merchant_company_diaspora_network_01_domicile_building
+	}
+}

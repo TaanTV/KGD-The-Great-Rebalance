@@ -188,16 +188,21 @@ BKT_succession_truces = {
 				save_temporary_scope_as = primary_heir_scope 
 			}
 		}
+		every_heir = {
+			add_to_list = list_of_potential_heirs
+		}
 		every_held_title = {
 			title_tier >= county
-			current_heir ?= { add_to_list = list_of_potential_heirs }
+			current_heir ?= { 
+				add_to_list = list_of_potential_heirs 
+			}
 		}
-		every_in_list = {		#every_heir doesnt seem to work properly
+		every_in_list = {	
 			list = list_of_potential_heirs
 			limit = { is_alive = yes }
 			save_temporary_scope_as = some_heir_scope
 			add_to_list = got_their_truces_already
-			every_in_list = {		#every_heir doesnt seem to work properly
+			every_in_list = {	
 				list = list_of_potential_heirs
 				limit = { NOT = { is_in_list = got_their_truces_already } }
 				add_truce_both_ways = {

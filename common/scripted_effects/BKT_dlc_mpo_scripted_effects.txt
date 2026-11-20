@@ -102,7 +102,16 @@ add_random_yurt_external_building_effect = {
 				}
 				add = -1000
 			}
+			owner ?= { 
+				set_variable = {
+					name = bypass_trade_yurt_reqs
+					days = 1
+				}
+			}
 			add_domicile_building = trade_yurt_01
+			owner ?= { 
+				remove_variable = bypass_trade_yurt_reqs
+			}
 		}
 	}
 }

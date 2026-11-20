@@ -10,8 +10,8 @@ spread_chance_epidemics_mult_value = {
 				is_riverside_province = yes
 			}
 			#NOR = {
-			#	has_building_or_higher = common_tradeport_04
-			#	num_buildings > 4
+			#	has_building_or_higher = pb_port_02
+			#	num_districts > 2
 			#}
 			#ADDED - but not if its already infected
 			NOT = {
@@ -34,8 +34,8 @@ spread_chance_epidemics_mult_value = {
 				is_coastal = yes
 				is_riverside_province = yes
 			}
-			has_building_or_higher = common_tradeport_06
-			num_buildings > 10
+			has_building_or_higher = pb_port_03
+			num_districts > 4
 		}
 		add = spread_increase_mult_high
 	}
@@ -50,17 +50,15 @@ spread_chance_epidemics_mult_value = {
 			}
 		}
 		add = spread_increase_mult_very_high
-		#ADDED - twice.
-		add = spread_increase_mult_high
 	}
 	#ADDED - less patchy plzplzplz
 	else = {
-		add = spread_decrease_mult_low
+		add = spread_decrease_mult_medium
 	}
 
-	#Development
+	#Prosperity
 	add = {
-		value = county.development_level
+		value = county.prosperity_level
 		multiply = 0.025
 	}
 
@@ -199,4 +197,5 @@ spread_chance_epidemics_mult_value = {
 		}
 		add = spread_decrease_mult_unlikely
 	}
+	multiply = spread_settlement_size_mult_value
 }

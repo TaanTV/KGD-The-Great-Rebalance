@@ -40,24 +40,20 @@ tradition_fp3_irrigation_experts = {
 	parameters = {
 		innovative_traits_more_valued = yes
 		unlocks_qanat_building = yes
-		plantations_building_bonuses = yes
 		drylands_hunt_success_chance = yes
+		desert_villages_building_slot = yes
+		dryland_dwellers_irrigation_network_bonuses = yes
 	}
 	character_modifier = {
 		negate_health_penalty_add = 0.1
 		desert_travel_danger = desert_medium_danger_reduction
 		drylands_travel_danger = drylands_medium_danger_reduction
 		desert_mountains_travel_danger = desert_mountains_medium_danger_reduction
+		trade_good_sugar_buy_price_mult = -0.0075
 	}
 	county_modifier = {
-		desert_development_growth_factor = 0.65			#prev 0.35
-		drylands_development_growth_factor = 0.2		#prev 0.15
-	}
-	province_modifier = {
-		desert_construction_gold_cost = -0.05			#prev -0.1
-		drylands_construction_gold_cost = -0.1
-		desert_holding_construction_gold_cost = -0.1
-		drylands_holding_construction_gold_cost = -0.05	#prev -0.1
+		desert_prosperity_growth_factor = 0.65			#prev 0.35
+		drylands_prosperity_growth_factor = 0.2		#prev 0.15
 	}
 	
 	cost = {

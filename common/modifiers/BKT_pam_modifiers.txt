@@ -30,8 +30,9 @@ pam_patron_saint_john = {
 pam_patron_saint_matthew = {
 	icon = piety_positive
 	stewardship = 2			#prev medium_skill_bonus
-	domain_tax_mult = 0.05	#prev 0.1
+	#domain_tax_mult = 0.1
 	#ADDED
+	religious_tax_mult = 0.1
 	diplomacy = -2
 }
 
@@ -39,7 +40,7 @@ pam_patron_saint_mark = {
 	icon = piety_positive
 	martial = 1				#prev medium_skill_bonus
 	prowess = 2				#prev medium_skill_bonus
-	monthly_county_control_growth_add = 0.1
+	monthly_control_change_when_below_baseline_add = 0.1
 	#ADDED
 	stewardship = -2
 }

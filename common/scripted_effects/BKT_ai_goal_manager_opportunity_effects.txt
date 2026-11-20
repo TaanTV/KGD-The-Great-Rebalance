@@ -249,6 +249,7 @@ ai_goal_manager_opportunity_pulse_war_effect = {
 	else_if = {
 		limit = {
 			exists = scope:can_wage_war
+			is_ruler = yes			#why do i need to double-check that?....
 		}
 		ai_start_best_war = {
 			cb = {
@@ -473,7 +474,7 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 				}
 				modifier = {	#to feudalise 
 					government_has_flag = government_is_tribal
-					factor = 2
+					factor = 3
 				}
 				trigger = {
 					NOT = { government_allows = deny_powerful_vassal }
@@ -816,24 +817,17 @@ ai_goal_manager_opportunity_pulse_sway_effect = {
 					limit = {
 						gold >= major_gold_value
 						NOT = { has_trait = greedy }
-						scope:target_scope.current_military_strength > current_military_strength
-						is_character_interaction_valid = {
-							interaction = gift_interaction
-							recipient = scope:target_scope
-						}
-						NOR = {
+						NOT = {
 							reverse_has_opinion_modifier = {
 								target = scope:root_scope
 								modifier = gift_opinion
 							}
-							is_liege_or_above_of = scope:root_scope
-							AND = {
-								is_vassal_or_below_of = scope:root_scope 
-								NAND = {
-									government_has_flag = can_call_vassals_into_wars
-									scope:root_scope = { government_has_flag = can_call_vassals_into_wars }
-								}
-							}
+						}
+						this_is_real_ally_of_target = { TARGET = scope:root_scope }
+						scope:target_scope.current_military_strength > current_military_strength
+						is_character_interaction_valid = {
+							interaction = gift_interaction
+							recipient = scope:target_scope
 						}
 					}
 					run_interaction = {

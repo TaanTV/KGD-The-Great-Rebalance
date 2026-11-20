@@ -1,0 +1,32 @@
+﻿
+# Code on-action: when a character swaps out or removes a new personal tenet successfully this onaction is called.
+# Root is character picking the tenet
+# scope:tenet is the tenet they just dropped
+on_personal_tenet_loss = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				NOT = { has_fulfillment_parameter = default_sf_personal_tenet_change_no_stress }
+			}
+			if = {
+				limit = { culture = { has_cultural_parameter = civic_religion_reduced_tenet_change_stress } }
+				add_stress = major_stress_gain		#prev medium_stress_gain
+			}
+			else = {
+				add_stress = massive_stress_gain	#prev major_stress_gain
+			}
+		}
+		hedonistic_obesity_modifier_sync_effect = yes
+		if = {
+			limit = {
+				NOT = { has_personal_tenet_flag = tenet_divine_liturgy_well_sung_liturgy }
+				has_character_modifier = tenet_divine_liturgy_officiant_modifier
+			}
+			remove_character_modifier = tenet_divine_liturgy_officiant_modifier
+		}
+		pam_remove_forbidden_personal_tenet_secret_if_invalid_effect = yes
+		# Tenet popularity
+		pam_tenet_popularity_on_personal_tenet_loss_effect = yes
+	}
+}

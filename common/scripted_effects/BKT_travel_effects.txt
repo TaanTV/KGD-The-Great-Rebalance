@@ -7,7 +7,8 @@
 	if = {
 		limit = { is_ruler = yes is_playable_character = yes }
 		if = {
-			limit = { scope:province = { has_building_with_flag = travel_point_of_interest_mummification } }
+			#limit = { scope:province = { has_building_with_flag = travel_point_of_interest_mummification } }
+			limit = { scope:province = { has_building = the_pyramids_01 } }
 			add_known_doctrine = doctrine_funeral_mummification
 		}
 		else_if = {

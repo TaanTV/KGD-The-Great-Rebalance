@@ -1,37 +1,37 @@
 ﻿hunt_normal_option_cost = {
-	value = 8		#prev 10
+	value = 5		#prev 7
 	#multiply = activity_cost_scale_by_tier
 	#multiply = activity_cost_scale_by_era
 	#ADDED - do it PROPERLY
 	add = {
-		value = 8		#prev 10
+		value = 5		#prev 7
 		multiply = activity_cost_scale_by_tier
-		subtract = 8	#prev 10
+		subtract = 5	#prev 7
 		desc = activity_cost_scale_by_tier_desc
 	}
 	add = {
-		value = 8		#prev 10
+		value = 5		#prev 7
 		multiply = activity_cost_scale_by_era
-		subtract = 8	#prev 10
+		subtract = 5	#prev 7
 		desc = activity_cost_scale_by_era_desc
 	}
 }
 
 hunt_good_option_cost = {
-	value = 30		#prev 35
+	value = 20		#prev 23
 	#multiply = activity_cost_scale_by_tier
 	#multiply = activity_cost_scale_by_era
 	#ADDED - do it PROPERLY
 	add = {
-		value = 30		#prev 35
+		value = 20		#prev 23
 		multiply = activity_cost_scale_by_tier
-		subtract = 30	#prev 35
+		subtract = 20	#prev 23
 		desc = activity_cost_scale_by_tier_desc
 	}
 	add = {
-		value = 30		#prev 35
+		value = 20		#prev 23
 		multiply = activity_cost_scale_by_era
-		subtract = 30		#prev 35
+		subtract = 20		#prev 23
 		desc = activity_cost_scale_by_era_desc
 	}
 }
@@ -694,7 +694,7 @@ hunt_prestige_reward_value = {
 					var:animal_type ?= flag:aurochs
 				}
 			}
-			multiply = 4	#prev 6
+			multiply = 3	#prev 6
 		}
 		else_if ={
 			limit = {
@@ -706,9 +706,9 @@ hunt_prestige_reward_value = {
 					hunt_activity_exotic_bird_trigger = { VAR = var:animal_type }
 				}
 			}
-			multiply = 6		#prev 8
+			multiply = 5		#prev 8
 		}
-		else = { multiply = 2 }	#prev 4
+		else = { multiply = 1.5 }	#prev 4
 		if = {
 			limit = {
 				has_activity_option = { category = hunt_option_party_size option = hunt_party_size_normal }

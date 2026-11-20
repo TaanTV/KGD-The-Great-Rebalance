@@ -96,6 +96,7 @@ eradicate_house_cb = {
 	}
 
 	on_victory = {
+		on_victory_aggressive_war_effect = yes
 		scope:attacker = {
 			if = {
 				limit = {
@@ -107,11 +108,6 @@ eradicate_house_cb = {
 				}
 			}
 		}
-
-		scope:attacker = { show_pow_release_message_effect = yes }
-
-		# Legitimacy
-		add_legitimacy_attacker_victory_effect = yes
 
 		#EP2 Accolade glory gain from winning against higher ranked enemy
 		scope:attacker = { accolade_attacker_war_end_glory_gain_low_effect = yes }
@@ -172,13 +168,6 @@ eradicate_house_cb = {
 			WINNER_ALLY_FAME_SCALE = 1
 			LOSER_ALLY_FAME_SCALE = 1
 		}
-
-		# Truce
-		add_truce_attacker_victory_effect = yes
-
-		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold
-		laamp_as_mercenary_payout_tooltip_effect = yes
-
 		#Eradicate House follow up event
 		scope:defender = {
 			trigger_event = tgp_japan_general.9550
@@ -199,12 +188,8 @@ eradicate_house_cb = {
 		desc = eradicate_house_cb_white_peace_desc
 	}
 	on_white_peace = {
+		on_white_peace_effect = yes
 		scope:attacker = {
-			show_pow_release_message_effect = yes
-			stress_and_fulfillment_impact = {
-				ambitious = medium_stress_impact_gain
-				arrogant = medium_stress_impact_gain
-			}
 			add_prestige = medium_prestige_loss
 		}
 
@@ -216,18 +201,6 @@ eradicate_house_cb = {
 			WINNER_ALLY_FAME_SCALE = 1
 			LOSER_ALLY_FAME_SCALE = 1
 		}
-
-		scope:defender = {
-			stress_and_fulfillment_impact = {
-				arrogant = medium_stress_impact_gain
-			}
-		}
-
-		# Truce
-		add_truce_attacker_victory_effect = yes
-
-		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold
-		laamp_as_mercenary_payout_tooltip_effect = yes
 	}
 
 	on_defeat_desc = {
@@ -235,13 +208,9 @@ eradicate_house_cb = {
 	}
 
 	on_defeat = {
-		scope:attacker = { show_pow_release_message_effect = yes }
-
-		# Legitimacy
-		add_legitimacy_attacker_defeat_effect = yes
+		on_defeat_aggressive_war_effect = yes
 
 		scope:defender = {
-			mandala_peacemaker_perk_serenity_effect = yes
 			#EP2 accolade glory gain for winning against higher ranked enemy
 			accolade_defender_war_end_glory_gain_high_effect = yes
 		}
@@ -282,9 +251,7 @@ eradicate_house_cb = {
 					custom = every_close_family_house_member_in_court_cb_lose_desc
 					limit = {
 						house = scope:attacker.house
-						NOT = {
-							this = scope:attacker.primary_heir
-						}
+						this != scope:attacker.primary_heir
 					}
 					death = {
 						death_reason = death_eradicated
@@ -301,15 +268,6 @@ eradicate_house_cb = {
 			WINNER_ALLY_FAME_SCALE = 1
 			LOSER_ALLY_FAME_SCALE = 1
 		}
-
-		# Truce
-		add_truce_attacker_defeat_effect = yes
-
-		scope:attacker = { save_temporary_scope_as = loser }
-		on_lost_aggression_war_discontent_loss = yes
-
-		# EP3: note gold gained from military assistance/join war contracts and their war contribution threshold
-		laamp_as_mercenary_payout_tooltip_effect = yes
 		#Eradicate House follow up event
 		scope:attacker = {
 			trigger_event = tgp_japan_general.9550

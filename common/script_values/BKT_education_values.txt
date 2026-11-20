@@ -6,6 +6,6 @@ educator_skill_modifier_factor = 0.5				#prev 0.4
 educator_learning_skill_modifier_factor = 0.15		#prev 0.2
 
 #Values to trigger outcome events from (How well did the child do?)
-education_level_1 = 8	#prev 7 # Required for education rank 2
-education_level_2 = 14	#prev 12 # Required for education rank 3
-education_level_3 = 20	#prev 17 # Required for education rank 4
+education_level_1 = 8	#prev 7  # Required for education rank 2
+education_level_2 = 13	#bkt prev 14	#prev 12 # Required for education rank 3
+education_level_3 = 18	#bkt prev 20	#prev 17 # Required for education rank 4

@@ -1025,6 +1025,16 @@ request_excommunication_interaction = {
 			}
 		}
 		modifier = {
+			add = 40
+			scope:actor = { has_character_modifier = favored_by_pope_modifier }
+			desc = FAVORED_BY_POPE
+		}
+		modifier = {
+			add = -40
+			scope:actor = { has_character_modifier = scorned_pope_modifier }
+			desc = HAS_SCORNED_POPE
+		}
+		modifier = {
 			add = 20
 			scope:puppet_or_actor = { # PAM - Reform phase
 				top_participant_group:the_christian_church ?= {
@@ -1148,7 +1158,7 @@ request_excommunication_interaction = {
 					}
 				}
 				# If we're a clan this interaction affects unity
-				add_clan_unity_interaction_effect = {
+				add_house_unity_interaction_effect = {
 					CHARACTER = scope:puppet_or_actor
 					TARGET = scope:recipient
 					VALUE = medium_unity_loss
@@ -1171,7 +1181,7 @@ request_excommunication_interaction = {
 				HOOK = excommunication_hook
 				PIETY_VALUE = massive_piety_value
 			}
-		}	
+		}
 	}
 
 	on_decline = {
@@ -1187,7 +1197,7 @@ request_excommunication_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = miniscule_unity_gain
@@ -1217,6 +1227,15 @@ request_excommunication_interaction = {
 		kingdom = 12
 		empire = 12
 		hegemony = 12
+	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 144
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
 	}
 
 	ai_will_do = {

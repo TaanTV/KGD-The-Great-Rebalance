@@ -61,7 +61,14 @@ sale_of_titles_decision = {
 	}
 
 	cost = {
-		prestige = @sale_of_titles_prestige_cost
+		prestige = {
+			value = 250
+			multiply = {
+				value = root.highest_held_title_tier
+				subtract = 1
+				min = 1
+			}
+		}
 	}
 
 	effect = {
@@ -83,7 +90,11 @@ sale_of_titles_decision = {
 			}
 		}
 
-		add_gold = major_gold_value
+		add_gold = {
+			value = medium_gold_value
+			divide = 2
+		}
+
 
 		custom_tooltip = sale_of_titles_side_effects_tt
 
@@ -140,7 +151,10 @@ extort_subjects_decision = {
 			has_character_modifier = fp3_justification_for_taxation_modifier
 			has_character_modifier = fp3_excuses_for_extortion_modifier
 		}
-		is_landless_adventurer = no
+		NOR = {
+			government_has_flag = government_is_republic
+			government_has_flag = government_uses_landless_lifestyle_perks # Adventurers and merchants should not have this
+		}
 	}
 
 	is_valid_showing_failures_only = {

@@ -4,7 +4,7 @@
 	layers = {
 		0 = martial
 		1 = mena
-		4 = indomitable_azatani.dds 
+		4 = indomitable_azatani.dds
 	}
 
 	is_shown = {
@@ -30,8 +30,10 @@
 
 	parameters = {
 		unlock_maa_ayrudzi = yes
+		perk_tactician_light_cavalry = yes
 		house_hostility_more_common = yes
 		vassals_more_likely_to_refuse_demands = yes
+		training_grounds_cavalry_horse_need = yes
 	}
 	character_modifier = {
 		light_cavalry_maintenance_mult = -0.15
@@ -158,7 +160,7 @@ tradition_ep3_cultivated_sophistication = {
 	parameters = {
 		less_likely_to_culture_convert = yes
 		other_cultures_more_likely_to_hybridize = yes
-		estate_building_upgrade_development_gain = yes
+		estate_building_upgrade_prosperity_gain = yes
 		allows_noble_family_adoption = yes
 		#ADDED
 		ai_less_likely_to_have_foreign_court_language = yes
@@ -167,6 +169,7 @@ tradition_ep3_cultivated_sophistication = {
 		monthly_influence_mult = 0.1
 		diplomatic_range_mult = 0.2
 		cultural_head_fascination_mult = -0.10
+		trade_good_silk_sell_price_mult = 0.0075
 	}
 
 	cost = {
@@ -195,14 +198,14 @@ tradition_ep3_cultivated_sophistication = {
 						scope:character = {
 							capital_county ?= {
 								tier = tier_county
-								development_level >= 30
+								prosperity_level >= 30
 							}
 						}
 					}
 				}
 				add = {
 					value = tradition_unfulfilled_criteria_penalty
-					desc = capital_province_development_level_desc
+					desc = capital_province_prosperity_level_desc
 				}
 			}
 

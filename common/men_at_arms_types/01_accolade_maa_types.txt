@@ -58,6 +58,8 @@ accolade_maa_archers = {
 	pursuit = 0
 	screen = 0
 	
+	control_value = 2
+
 	terrain_bonus = {
 		hills = { damage = 20 toughness = 8 }
 		forest = { toughness = 8 screen = 8 }
@@ -73,12 +75,12 @@ accolade_maa_archers = {
 	high_maintenance_cost = { gold = bowmen_high_maint_cost }
 	provision_cost = @provisions_cost_infantry_cheap
 
-	
+
 	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_archers
-		add = 200 # change 50
+		add = 1000 # change 50 # does not hire archers # We’re short by 500 units, so it comes to a thousand—something’s been messed up with the weights.
 		#ADDED
 		add = counter_synergy_ai_weight_archers
 	}
@@ -116,6 +118,8 @@ accolade_maa_skirmishers = {
 	pursuit = 20	#prev 16
 	screen = 30		#prev 20
 	
+	control_value = 2
+
 	terrain_bonus = {
 		forest = { damage = 8 toughness = 12 }
 		taiga = { damage = 8 toughness = 12 }
@@ -177,6 +181,8 @@ accolade_maa_pikes = {
 	pursuit = 0
 	screen = 0
 	
+	control_value = 4
+
 	terrain_bonus = {
 		mountains = { toughness = 24 }
 		desert_mountains = { toughness = 24 }
@@ -201,7 +207,7 @@ accolade_maa_pikes = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_pikemen
-		add = 50
+		add = 1000 # change 50 
 		#ADDED
 		add = counter_synergy_ai_weight_pikemen
 	}
@@ -239,6 +245,8 @@ accolade_maa_outriders = {
 	pursuit = 40
 	screen = 40
 	
+	control_value = 4
+
 	terrain_bonus = {
 		plains = { damage = 30 }
 		drylands = { damage = 30 }
@@ -268,7 +276,7 @@ accolade_maa_outriders = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_light_cavalry
-		add = 200 # chaner 50 
+		add = 1000 # change 50 # does not hire cavalry # 200 units is definitely not enough. For the AI ​​to pick it up
 		#ADDED
 		add = counter_synergy_ai_weight_light_cavalry
 	}
@@ -309,11 +317,14 @@ accolade_maa_vanguards = {
 	pursuit = 0
 	screen = 0
 	
+	control_value = 4
+
+
 	# ADDED to all heavy infantry
 	terrain_bonus = {
 		wetlands = { damage = -16 toughness = -6 }
 	}
-	
+
 	counters = {
 		pikemen = 2
 		peasant_militia = 4
@@ -325,12 +336,12 @@ accolade_maa_vanguards = {
 	provision_cost = @provisions_cost_infantry_accolade_bankrupting
 
 
-	
+
 	stack = 40
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_infantry
-		add = 1000 # change 75
+		add = 1000 # change 75 # Fixed! The "cultural infantry" from the Baltic states and the Arab world outweighed all of that.
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_infantry
 	}
@@ -371,6 +382,8 @@ accolade_maa_lancers = {
 	pursuit = 40
 	screen = 0
 	
+	control_value = 8
+
 	terrain_bonus = {
 		plains = { damage = 60 }
 		drylands = { damage = 60 }
@@ -401,7 +414,7 @@ accolade_maa_lancers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_cavalry
-		add = 1000 # change 100
+		add = 1000 # change 100 # One of the strongest units in the game; it would be foolish not to recruit them if you can. For the glory of Byzantium!
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_cavalry
 	}
@@ -439,6 +452,8 @@ accolade_maa_crossbowers = {
 	pursuit = 0
 	screen = 0
 	
+	control_value = 4
+
 	terrain_bonus = {
 		hills = { damage = 20 }
 		plains = { toughness = -4 }
@@ -501,6 +516,8 @@ accolade_maa_cameliers = {
 	pursuit = 30
 	screen = 30
 	
+	control_value = 2
+
 	terrain_bonus = {
 		desert = { damage = 40 toughness = 16 }
 		drylands = { damage = 30 toughness = 16 }
@@ -532,7 +549,7 @@ accolade_maa_cameliers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_camels
-		add = 75
+		add = 1000 # change 75 
 		#ADDED
 		add = counter_synergy_ai_weight_camel_cavalry
 	}
@@ -566,6 +583,8 @@ accolade_maa_elephantiers = {
 	
 	siege_value = 0.2
 	
+	control_value = 8
+
 	terrain_bonus = {
 		jungle = { damage = 100 }
 		terraced_hills = { damage = 25 }
@@ -589,14 +608,14 @@ accolade_maa_elephantiers = {
 	high_maintenance_cost = { gold = war_elephant_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_accolade_elephants
 	
-	max_sub_regiments = 4
+#	max_sub_regiments = 4
 	
 	stack = 10
 	hired_stack_size = 5 #prev 10
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_elephants
-		add = 1000 # change 100
+		add = 1000 # change 100 # One of the strongest units in the game; it would be foolish not to recruit them if you can. 
 		#ADDED
 		add = counter_synergy_ai_weight_elephant_cavalry
 	}
@@ -625,6 +644,8 @@ accolade_maa_horse_archers = {
 	pursuit = 40
 	screen = 30
 	
+	control_value = 4
+
 	terrain_bonus = {
 		steppe = { damage = 45 }
 		plains = { damage = 20 }
@@ -649,7 +670,7 @@ accolade_maa_horse_archers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = @cultural_maa_extra_ai_score
-		add = 200 # change 100
+		add = 100
 		#ADDED
 		add = counter_synergy_ai_weight_archer_cavalry
 	}
@@ -665,6 +686,8 @@ accolade_maa_handgunners = {
 	toughness = 20 # ARMOR
 	pursuit = 0
 	screen = 5
+
+	control_value = 4
 
 	can_recruit = {
 		any_accolade = {

@@ -2,7 +2,6 @@
 # Root does not exist
 yearly_global_pulse = {
 	on_actions = {
-		#BKT_global_development_update_pulse
 		BKT_serious_empire_wars_maintenance
 		BKT_landless_renown_fix
 		delay = { days = 1 }
@@ -84,14 +83,6 @@ BKT_landless_renown_fix = {
 	}
 }
 
-BKT_global_development_update_pulse = {
-	effect = {
-		#every_county = {
-		#	remove_county_modifier = development_county_modifier
-		#	add_county_modifier = development_county_modifier
-		#}
-	}
-}
 
 BKT_mercenary_castles_pulse = {
 	trigger = {
@@ -126,7 +117,7 @@ random_yearly_playable_pulse = {
 	on_actions = {
 		BKT_councillor_stance_opinions_maintenance
 		BKT_weak_nomad_culling_2_0
-		currencies_loss_pulse
+		BKT_currencies_loss_pulse
 	}
 }
 
@@ -140,16 +131,16 @@ BKT_councillor_stance_opinions_maintenance = {
 	}
 }
 	
-currencies_loss_pulse_non_playable = {
+BKT_currencies_loss_pulse_non_playable = {
 	trigger = {
 		is_ruler = no
 	}
 	on_actions = {
-		currencies_loss_pulse
+		BKT_currencies_loss_pulse
 	}
 }
 
-currencies_loss_pulse = {
+BKT_currencies_loss_pulse = {
 	on_actions = {
 		BKT_herd_decay
 		delay = { days = 1 }
@@ -353,7 +344,7 @@ BKT_herd_decay = {
 # Root is the character
 five_year_everyone_pulse = {
 	on_actions = {
-		currencies_loss_pulse_non_playable
+		BKT_currencies_loss_pulse_non_playable
 	}
 }
 
@@ -625,7 +616,7 @@ BKT_additional_difficulty_buildings_cheat = {
 		any_held_county = {
 			is_landless_type_title = no
 			title_province = { 
-				has_ongoing_construction = no
+				#has_ongoing_construction = no
 				is_occupied = no
 				NOR = {
 					has_holding_type = tribal_holding
@@ -656,7 +647,7 @@ BKT_additional_difficulty_buildings_cheat = {
 				limit = { 
 					is_landless_type_title = no
 					title_province = { 
-						has_ongoing_construction = no
+						#has_ongoing_construction = no
 						is_occupied = no
 						NOR = {
 							has_holding_type = tribal_holding
@@ -919,7 +910,7 @@ BKT_reaffirm_doctrine_pulse = {
 				#ADDED - fervor is dying! and the next two too
 				modifier = {
 					faith.fervor < 50
-					add = { value = 50 subtract = fervor multiply = 2 }
+					add = { value = 50 subtract = faith.fervor multiply = 2 }
 				}
 				modifier = {
 					faith.fervor > 50
@@ -947,7 +938,7 @@ BKT_weak_nomad_culling_2_0 = {
 		years_from_game_start > 3
 		government_has_flag = government_is_nomadic
 		domicile ?= {
-			herd < 1000
+			herd < 950	#from a quite small sample i saw that about a third of culled nomads nomads had 950-1000 herd left wheen this was 1000
 			has_ongoing_domicile_construction = no						#if they're building its fine, let them build
 			NOT = { has_domicile_building_or_higher = yurt_main_04 }	#we dont touch those at all
 		}
@@ -1002,6 +993,10 @@ BKT_weak_nomad_culling_2_0 = {
 				}
 			}
 			capital_county ?= { save_temporary_scope_as = capital }
+			save_temporary_scope_value_as = {
+				name = herd_value
+				value = { add = 0 domicile ?= { value = herd } }
+			}
 			debug_log = "weak nomad CULLED"
 			debug_log_scopes = yes
 			#Grant any vassals independence or transfer to liege

@@ -63,10 +63,14 @@ innovation_varangian_adventurers = {
 	
 	custom = unlock_varangian_adventurer_cb
 	
+	character_modifier = {
+		heavy_infantry_damage_mult = 0.05
+		heavy_infantry_maintenance_mult = 0.05
+	}
+	
 	flag = global_regional
 	flag = tribal_era_regional
 	
-	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}
@@ -89,7 +93,6 @@ innovation_all_things = {
 	flag = global_regional
 	flag = tribal_era_regional
 	
-	#ADDED
 	ai_weight_for_fascination = {
 		value = 250	#cute
 	}

@@ -20,7 +20,7 @@ base_legitimacy_value = { # Split into separate values for easy debugging/visibi
 	#add = base_legitimacy_track_perks_value
 
 	# COUNTY OPINION - derived from average of held counties
-	add = base_legitimacy_county_opinion_value
+	add = base_legitimacy_popular_opinion_value
 
 	# PREVIOUS HOLDER DYNASTY
 	add = base_legitimacy_dynasty_of_predecessor_value
@@ -79,7 +79,7 @@ base_legitimacy_value = { # Split into separate values for easy debugging/visibi
 	#ADDED - seems like legitimacy is being pretty bad at game start sooooo
 	if = {
 		limit = { months_from_game_start <= 0 }
-		multiply = 1.5
+		multiply = 1.25
 	}
 
 	min = 100 # No one starts with Level 0
@@ -104,10 +104,13 @@ succession_legitimacy_value = { # Split into separate values for easy debugging/
 	#add = base_legitimacy_track_perks_value
 
 	# COUNTY OPINION - derived from average of held counties
-	add = base_legitimacy_county_opinion_value
+	add = base_legitimacy_popular_opinion_value
 
 	# PREVIOUS HOLDER DYNASTY
 	add = base_legitimacy_dynasty_of_predecessor_value
+
+	# DYNASTIC CRYPT - same-dynasty heir with a Royal Mausoleum in the capital
+	add = succession_legitimacy_dynastic_crypt_value
 
 	# WHO WAS YOUR PARENT
 	add = succession_legitimacy_ancestor_tier_value

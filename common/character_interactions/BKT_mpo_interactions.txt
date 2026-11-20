@@ -457,7 +457,7 @@ mpo_make_blood_brother = {
 		}
 		flag = normal
 		localization = BLOOD_BROTHER_NORMAL
-		starts_enabled = { always = yes	}
+		starts_enabled = { always = yes }
 	}
 
 	cost = {
@@ -633,7 +633,7 @@ mpo_make_blood_brother = {
 			}
 		}
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_gain
@@ -713,7 +713,7 @@ mpo_make_blood_brother = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:actor
 			TARGET = scope:recipient
 			VALUE = minor_unity_loss
@@ -942,6 +942,16 @@ mpo_retrieve_land_from_herder_interaction = {
 	is_shown = {
 		scope:recipient = {
 			government_has_flag = government_is_herder
+			#ADDED - dont revoke nomadic lands off herders if you're not nomadic plz
+			trigger_if = {
+				limit = { scope:puppet_or_actor = { is_ai = yes NOT = { government_has_flag = government_is_nomadic } } }
+				capital_province = { 
+					NOR = { 
+						has_holding_type = nomad_holding 
+						has_holding_type = herder_holding
+					} 
+				}
+			}
 		}
 	}
 
@@ -978,10 +988,7 @@ mpo_retrieve_land_from_herder_interaction = {
 					is_vassal_of = scope:actor
 				}
 			}
-			custom_tooltip = {
-				text = mpo_retrieve_land_migration_tt
-				capital_county = { is_migration_target = no }
-			}
+			capital_county = { is_migration_target = no }
 		}
 	}
 
@@ -1073,11 +1080,9 @@ mpo_retrieve_land_from_herder_interaction = {
 		
 		#ADDED
 		hidden_effect = {
-			scope:actor = {
-				if = {
-					limit = { scope:landed_title.title_province ?= { has_holding_type = herder_holding } } 
-					scope:landed_title.title_province ?= { set_holding_type = nomad_holding }
-				}
+			if = {
+				limit = { scope:landed_title.title_province ?= { has_holding_type = herder_holding } } 
+				scope:landed_title.title_province ?= { set_holding_type = nomad_holding }
 			}
 		}
 	}
@@ -1121,7 +1126,7 @@ mpo_retrieve_land_from_herder_interaction = {
 			scope:actor = { government_has_flag = government_is_landless_adventurer }
 			add = {
 				value = scope:actor.military_power
-				divide = 100
+				divide = 40		#prev 100
 			}
 			desc = ADVENTURER_MILITARY_POWER_REASON
 		}
@@ -1561,7 +1566,7 @@ mpo_negotiate_obedience_interaction = {
 		flag = hook
 		localization = GENERIC_SPEND_A_HOOK
 	}
-	
+
 	send_option = {
 		is_valid = {
 			scope:actor = {
@@ -1571,7 +1576,7 @@ mpo_negotiate_obedience_interaction = {
 		flag = gold
 		localization = OFFER_GOLD_FOR_BETTER_AI_ACCEPTANCE
 	}
-	
+
 	send_option = {
 		is_valid = {
 			scope:actor = {

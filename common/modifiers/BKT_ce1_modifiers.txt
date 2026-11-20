@@ -7,39 +7,38 @@
 
 county_epidemic_recovered_minor_modifier = {
 	icon = rat_positive
-	development_growth = 0.5	#BKT prev 0.75	#prev 2
+	prosperity_growth = 0.5	#BKT prev 0.75	#prev 2
 	#ADDED
 	epidemic_resistance = 25	#prev 15
-	development_growth_factor = 0.5
+	prosperity_growth_factor = 0.5
 }
 
 county_epidemic_recovered_tiny_modifier = {
 	icon = rat_positive
-	development_growth = 0.4	#BKT prev 0.5	#prev 1
+	prosperity_growth = 0.4	#BKT prev 0.5	#prev 1
 	#ADDED
 	epidemic_resistance = 10	#prev 5
-	development_growth_factor = 0.25
+	prosperity_growth_factor = 0.25
 }
 
 county_epidemic_recovered_medium_modifier = {
 	icon = rat_positive
-	development_growth = 0.75	#BKT prev 1.5	#prev 5
+	prosperity_growth = 0.75	#BKT prev 1.5	#prev 5
 	#ADDED
 	epidemic_resistance = 35	#prev 25
-	development_growth_factor = 1
+	prosperity_growth_factor = 1
 }
 
 county_epidemic_recovered_strong_modifier = {
 	icon = rat_positive
-	development_growth = 1		#BKT prev 3		#prev 10
+	prosperity_growth = 1		#BKT prev 3		#prev 10
 	#ADDED
 	epidemic_resistance = 50	#prev 35
-	development_growth_factor = 2
+	prosperity_growth_factor = 2
 }
 
 ### ARTIFACT MODIFIERS
 artifact_physician_aptitude_1_modifier = {
-	#parameter = artifact_physician_aptitude_1_modifier_desc - TODO_CE1 - uncomment and make sure this works after getting code support for parameters in artifacts.
 	icon = treatment_positive
 	learning = 5 # Makes the Court Physician more useful
 }
@@ -74,7 +73,7 @@ mummy_modifier_tier_5 = {
 mummy_modifier_tier_6 = {
 	icon = piety_positive
 	court_grandeur_baseline_add = 4			#prev 10
-	zealot_opinion = 7						#prev 15
+	zealot_opinion = 10						#prev 15
 	#learning_per_piety_level = 1
 	legitimacy_gain_mult = 0.05
 	monthly_piety = 0.3						#prev 2

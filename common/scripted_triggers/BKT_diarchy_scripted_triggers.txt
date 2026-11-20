@@ -21,12 +21,6 @@ character_hates_scope_due_to_strife_guts_trigger = {
 
 # And *this* needs to be added to guest activity intents to keep diarchs from showing up to the same parties as their liege.
 bannable_serving_diarch_trigger = {
-	liege ?= {
-		NOR = {
-			is_landless_adventurer = yes
-			has_diarchy_type = grand_secretariat
-		}
-	}
 	OR = {
 		# Diarchs with official responsibilities can't come out to play.
 		is_diarch = yes
@@ -39,20 +33,10 @@ bannable_serving_diarch_trigger = {
 		#	is_diarchy_successor = yes
 		#}
 	}
-}
-
-regency_for_personal_reasons_trigger = {
-	custom_tooltip = {
-		text = regency_for_personal_reasons_trigger.tt.cannot_govern_by_themselves
-		OR = {
-			AND = {
-				is_adult = no
-				NOT = {
-					liege ?= { has_diarchy_parameter = diarchy_type_is_junior_emperorship }
-				}
-			}
-			is_incapable = yes
-			#has_character_modifier = isolating_modifier
+	liege ?= {
+		NOR = {
+			is_landless_adventurer = yes
+			has_diarchy_type = grand_secretariat
 		}
 	}
 }

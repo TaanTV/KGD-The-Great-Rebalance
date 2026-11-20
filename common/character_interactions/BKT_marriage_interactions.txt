@@ -26,14 +26,16 @@ break_betrothal_interaction = {
 	}
 
 	populate_actor_list = {
-		# breaking your own betrothal to recipient or their courtier or unplayable child
-		if = {
-			limit = {
-				betrothed ?= {
-					break_betrothal_valid_target_trigger = { CHARACTER = scope:recipient }
+		scope:puppet_or_actor = {
+			# breaking your own betrothal to recipient or their courtier or unplayable child
+			if = {
+				limit = {
+					betrothed ?= {
+						break_betrothal_valid_target_trigger = { CHARACTER = scope:recipient }
+					}
 				}
+				add_to_list = characters
 			}
-			add_to_list = characters
 		}
 		scope:recipient = {
 			if = {
@@ -578,7 +580,7 @@ break_betrothal_interaction = {
 		}
 
 		# If we're a clan this interaction affects unity
-		add_clan_unity_interaction_effect = {
+		add_house_unity_interaction_effect = {
 			CHARACTER = scope:puppet_or_actor
 			TARGET = scope:recipient
 			VALUE = major_unity_loss
@@ -588,4 +590,1636 @@ break_betrothal_interaction = {
 	}
 
 	auto_accept = yes
+}
+
+divorce_character_house_head_interaction = {
+	category = interaction_category_diplomacy
+	use_diplomatic_range = no
+	icon = icon_marriage
+
+	cost = {
+		piety = {
+			value = divorce_cost
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				multiply = 0
+			}
+		}
+	}
+
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+		}
+		if = {
+			limit = {
+				exists = scope:puppet_or_actor.house.house_head
+			}
+			scope:puppet_or_actor.house.house_head = {
+				save_scope_as = recipient
+			}
+		}
+	}
+
+	greeting = positive
+	notification_text = ASK_FOR_DIVORCE_NOTIFICATION
+
+	#ADDED - mostly a port of the other one's is_avaliable but without clerical stuff
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_married = yes
+			rite ?= { rite_has_doctrine = doctrine_divorce_approval }
+			NOR = {
+				culture = { has_cultural_parameter = cannot_divorce }
+				has_character_modifier = rekindled_marriage_modifier
+				#ADDED - no point, also filter out govs where it doesnt make much sense
+				can_have_children = no
+				is_playable_character = no
+			}
+		}
+	}
+
+	is_shown = {
+		scope:puppet_or_actor.rite ?= {
+			rite_has_doctrine = doctrine_divorce_approval
+		}
+		exists = scope:puppet_or_actor.house.house_head
+		scope:puppet_or_actor != scope:puppet_or_actor.house.house_head # no need to ask yourself
+		# A clerical ruler needs no religious blessing, so their house head is the only approval left to seek
+		trigger_if = {
+			limit = {
+				scope:puppet_or_actor ?= { pam_grants_own_divorce_trigger = no }
+			}
+			NAND = {
+				exists = scope:puppet_or_actor.faith.religious_head
+				scope:puppet_or_actor.faith = {
+					has_doctrine = doctrine_spiritual_head
+				}
+			}
+		}
+		scope:secondary_recipient ?= {
+			is_spouse_of = scope:puppet_or_actor
+			is_concubine = no # Can set aside Concubines at any time
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		trigger_if = {
+			limit = { scope:actor = scope:puppet_or_actor }
+			custom_tooltip = {
+				NOT = {
+					scope:puppet_or_actor.culture = {
+						has_cultural_parameter = cannot_divorce
+					}
+				}
+				text = CULTURE_FORBIDS_DIVORCE
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				NOT = {
+					scope:puppet_or_actor.culture = {
+						has_cultural_parameter = cannot_divorce
+					}
+				}
+				text = CULTURE_FORBIDS_DIVORCE_puppeteer
+			}
+		}
+		NOT = {
+			scope:secondary_recipient = { has_strong_hook = scope:puppet_or_actor }
+		}
+		scope:puppet_or_actor = {
+			trigger_if = {
+				limit = { scope:actor = scope:puppet_or_actor }
+				custom_tooltip = {
+					NOT = {
+						var:family_widow_forbidden_divorce ?= scope:secondary_recipient
+					}
+					text = BOUND_TO_FAMILY_WIDOW
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					NOT = {
+						var:family_widow_forbidden_divorce ?= scope:secondary_recipient
+					}
+					text = BOUND_TO_FAMILY_WIDOW_puppeteer
+				}
+			}
+		}
+		trigger_if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				piety >= divorce_cost
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 0 # Should be 0 for all interactions
+
+		divorce_character_ai_accept_modifier = yes
+
+		modifier = { # Infertility
+			add = 20
+			desc = DIVORCE_INFERTILE
+			scope:puppet_or_actor = {
+				fertility > 0.1
+			}
+			scope:secondary_recipient = {
+				fertility < 0.1
+				is_eunuch_trigger = no
+				NOT = {
+					any_child = {
+						is_child_of = scope:puppet_or_actor
+					}
+				}
+			}
+		}
+
+		modifier = { # Negative for having given you children
+			add = -50
+			desc = DIVORCE_GIVEN_CHILDREN
+			scope:secondary_recipient = {
+				any_child = {
+					count >= 3
+					is_child_of = scope:puppet_or_actor
+					dynasty ?= scope:puppet_or_actor.dynasty
+
+				}
+			}
+		}
+
+		modifier = { # They are of the same dynasty as the House Head
+			trigger = { scope:recipient != scope:secondary_recipient }
+			add = -10
+			desc = THEY_ARE_MY_DYNASTY_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				exists = dynasty
+				NOR = {
+					is_cousin_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+				}
+				dynasty = scope:secondary_recipient.dynasty
+				NOR = {
+					house = scope:secondary_recipient.house
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					AND = {
+						exists = scope:puppet_or_actor.dynasty
+						scope:recipient.dynasty = scope:puppet_or_actor.dynasty
+					}
+				}
+			}
+		}
+
+		modifier = { # They are of the same house as the House Head
+			trigger = { scope:recipient != scope:secondary_recipient }
+			add = -20
+			desc = THEY_ARE_MY_HOUSE_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				NOR = {
+					is_cousin_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+				}
+				house = scope:secondary_recipient.house
+				NOR = {
+					house = scope:puppet_or_actor.house
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					scope:recipient.house = scope:puppet_or_actor.house
+				}
+			}
+		}
+
+		modifier = { # They are close kin to the House Head
+			trigger = { scope:recipient != scope:secondary_recipient }
+			add = -35
+			desc = THEY_ARE_MY_CLOSE_KIN
+			scope:recipient = {
+				OR = {
+					is_cousin_of = scope:secondary_recipient
+					is_close_or_extended_family_of = scope:secondary_recipient
+				}
+			}
+		}
+
+		modifier = {
+			add = intimidated_reason_value
+			scope:recipient = {
+				target_is_liege_or_above = scope:puppet_or_actor
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 1
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+		modifier = {
+			add = cowed_reason_value
+			scope:recipient = {
+				target_is_liege_or_above = scope:puppet_or_actor
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 2
+				}
+			}
+			desc = COWED_REASON
+		}
+
+		modifier = {
+			add = intimidated_external_reason_value
+			scope:recipient = {
+				NOT = { target_is_liege_or_above = scope:puppet_or_actor }
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 1
+				}
+			}
+			desc = INTIMIDATED_REASON
+		}
+		modifier = {
+			add = cowed_external_reason_value
+			scope:recipient = {
+				NOT = { target_is_liege_or_above = scope:puppet_or_actor }
+				has_dread_level_towards = {
+					target = scope:puppet_or_actor
+					level = 2
+				}
+			}
+			desc = COWED_REASON
+		}
+
+		modifier = { # You're in a same-sex marriage and your faith doesn't allow it
+			add = 100
+			desc = SAME_SEX_MARRIAGE_FAITH_REASON_ACTOR
+			scope:puppet_or_actor.faith = scope:recipient.faith
+			scope:puppet_or_actor = {
+				sex_same_as = scope:secondary_recipient
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+
+		modifier = { # You're in a same-sex marriage and their faith doesn't allow it
+			add = 100
+			desc = SAME_SEX_MARRIAGE_FAITH_REASON
+			scope:secondary_recipient.faith = scope:recipient.faith
+			scope:secondary_recipient = {
+				sex_same_as = scope:puppet_or_actor
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+
+		# Unity modifiers
+		evaluate_action_decreasing_house_unity = {
+			VALUE = 100
+		}
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:puppet_or_actor
+			object = scope:recipient
+			scope:divorce_hook = yes
+		}
+	}
+
+	send_option = {
+		is_shown = {
+			scope:puppet_or_actor != scope:recipient
+		}
+		is_valid = {
+			scope:puppet_or_actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = divorce_hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	should_use_extra_icon = {
+		scope:puppet_or_actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	ai_min_reply_days = 1
+	ai_max_reply_days = 5
+
+	on_accept = {
+		if = {
+			limit = { always = scope:divorce_hook }
+			scope:puppet_or_actor = {
+				if = {
+					limit = {
+						has_usable_hook = scope:recipient
+					}
+					use_hook = scope:recipient
+				}
+			}
+		}
+		if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				add_piety = { value = { add = divorce_cost max = piety multiply = -1 } }
+			}
+			scope:actor = {
+				send_interface_toast = {
+					type = event_toast_effect_neutral
+					title = divorce_interaction_notification_puppeteer
+					left_icon = scope:puppet_or_actor
+					right_icon = scope:secondary_recipient
+				}
+			}
+		}
+		if = {
+			limit = {
+				scope:puppet_or_actor = scope:puppet_or_actor.house.house_head
+			}
+			scope:puppet_or_actor = {
+				divorce_effect = {
+					DIVORCER = scope:puppet_or_actor
+					DIVORCEE = scope:secondary_recipient
+				}
+			}
+		}
+		else = {
+			show_as_tooltip = {
+				scope:puppet_or_actor = {
+					divorce_effect = {
+						DIVORCER = scope:puppet_or_actor
+						DIVORCEE = scope:secondary_recipient
+					}
+				}
+			}
+			scope:puppet_or_actor = {
+				trigger_event = religious_interaction.2
+			}
+		}
+		#ADDED
+		if = {
+			limit = { scope:actor = { is_ai = yes } }
+			save_temporary_scope_value_as = {
+				name = wife_fertility
+				value = scope:secondary_recipient.fertility
+			}
+			debug_log = "ai divorce"
+			debug_log_scopes = yes
+		}
+
+		# If we're a clan this interaction affects unity
+		add_house_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = major_unity_loss
+			DESC = clan_unity_divorce_grant.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	on_decline = {
+		scope:puppet_or_actor = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = divorce_character_rel_head_interaction_decline_notification
+				right_icon = scope:puppet_or_actor.house.house_head
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_house_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_loss
+			DESC = clan_unity_divorce_grant_refusal.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = spouses
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+	#ADDED - ported this one over coz why not
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 216
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = { # The AI wants to divorce should they not have an heir that is their own child, and their spouse is infertile
+			add = 100
+			scope:puppet_or_actor = {
+				fertility > 0.1
+				#NOT = {
+				#	any_child = {
+				#		is_heir_of = scope:puppet_or_actor
+				#	}
+				#}
+			}
+			scope:secondary_recipient = {
+				#is_ai = yes
+				fertility < 0.1
+			}
+			#ADDED - basically rewrote all this
+			scope:puppet_or_actor = {
+				exists = dynasty
+				trigger_if = {
+					limit = { 
+						OR = { 
+							has_realm_law_flag = appointment_type_succession 
+							has_realm_law_flag = elective_succession_law
+							primary_title ?= { 
+								OR = {
+									has_title_law_flag = elective_succession_law
+									has_title_law_flag = appointment_type_succession
+								}
+							}
+						} 
+					}
+					NOT = {
+						any_child = {
+							dynasty ?= scope:puppet_or_actor.dynasty
+							this_is_ruling_gender_according_to_target_laws = { TARGET = scope:puppet_or_actor }
+						}
+					}
+				}
+				trigger_else = {
+					NOT = {
+						primary_heir ?= {
+							dynasty ?= scope:puppet_or_actor.dynasty
+							OR = {
+								is_child_of = scope:puppet_or_actor
+								is_grandchild_of = scope:puppet_or_actor
+								is_great_grandchild_of = scope:puppet_or_actor
+							}
+							this_is_ruling_gender_according_to_target_laws = { TARGET = scope:puppet_or_actor }
+						}
+					}
+				}
+			}
+		}
+
+		modifier = { # The AI will only use a Hook if they couldn't otherwise do this
+			scope:divorce_hook = yes
+			add = -1
+		}
+
+		modifier = { # You're in a same-sex marriage and your faith doesn't allow it
+			add = 100
+			scope:puppet_or_actor = {
+				sex_same_as = scope:secondary_recipient
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+	}
+}
+
+divorce_character_rel_head_interaction = {
+	category = interaction_category_diplomacy
+	use_diplomatic_range = no
+	icon = icon_marriage
+
+	cost = {
+		piety = {
+			value = divorce_cost
+			if = {
+				limit = { scope:is_puppet_action ?= yes }
+				multiply = 0
+			}
+		}
+	}
+
+	redirect = {
+		scope:recipient = {
+			save_scope_as = secondary_recipient
+		}	
+		#Recipient should be cleric or hof
+		if = {
+			limit = {
+				scope:puppet_or_actor = {
+					government_has_flag = government_is_theocracy
+					exists = superior
+				}
+			}
+			scope:puppet_or_actor.superior = { save_scope_as = recipient }
+		}
+		#Redirect to bishop superior of court chaplain
+		else_if = {
+			limit = {
+				OR = {
+					scope:puppet_or_actor.highest_held_title_tier < tier_kingdom
+					scope:puppet_or_actor.faith = {
+						NOR = {
+							has_doctrine = doctrine_spiritual_head
+							exists = scope:faith.religious_head
+						}
+					}
+				}
+				scope:puppet_or_actor.cp:councillor_court_chaplain ?= {
+					highest_held_title_tier < tier_duchy
+					superior ?= {
+						highest_held_title_tier >= tier_duchy
+						is_clergy = yes
+					}
+				}
+			}
+			scope:puppet_or_actor.cp:councillor_court_chaplain.superior = {
+				save_scope_as = recipient
+			}
+		}
+		#Redirect to bishop
+		else_if = {
+			limit = {
+				OR = {
+					scope:puppet_or_actor.highest_held_title_tier < tier_kingdom
+					scope:puppet_or_actor.faith = {
+						NOR = {
+							has_doctrine = doctrine_spiritual_head
+							exists = scope:faith.religious_head
+						}
+					}
+				}
+				scope:puppet_or_actor.cp:councillor_court_chaplain ?= {
+					highest_held_title_tier >= tier_duchy
+					is_clergy = yes
+				}
+			}
+			scope:puppet_or_actor.cp:councillor_court_chaplain = {
+				save_scope_as = recipient
+			}
+		}
+		else = {
+			scope:puppet_or_actor.faith.religious_head ?= {
+				save_scope_as = recipient
+			}
+		}
+	}
+
+	greeting = positive
+	notification_text = {
+		desc = ASK_FOR_DIVORCE_NOTIFICATION
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor = {
+						faith = scope:recipient.faith
+						sex_same_as = scope:secondary_recipient
+						allowed_to_marry_same_sex_trigger = no
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_SAME_SEX
+			}
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor = {
+						relation_with_character_is_incestuous_in_my_faith_trigger = { CHARACTER = scope:secondary_recipient }
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_INCESTUOUS
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						any_relation = {
+							type = lover
+							NOR = {
+								this = scope:puppet_or_actor
+								this = scope:recipient
+							}
+							relation_with_character_is_incestuous_in_my_rite_trigger = { CHARACTER = scope:secondary_recipient }
+						}
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_INCESTUOUS_LOVER
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						is_female = no
+						is_eunuch_trigger = yes
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_EUNUCH
+			}
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor = {
+						has_opinion_modifier = {
+							modifier = attempted_murder_me_crime
+							target = scope:secondary_recipient
+						}
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_ATTEMPTED_MURDER
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						has_character_modifier = wedding_accused_impotency_modifier
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_IMPOTENCE
+			}
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor = {
+						any_consort = {
+							is_alive = yes
+							this != scope:secondary_recipient
+						}
+						any_consort = {
+							this = scope:secondary_recipient
+						}
+					}
+					scope:secondary_recipient = {
+						culture = { NOT = { has_cultural_tradition = tradition_polygamous } }
+						rite = { NOT = { rite_has_doctrine = doctrine_polygamy } }
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_MULTIPLE_CONSORTS
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient.faith = {
+						faith_hostility_level = {
+							target = scope:recipient.faith
+							value >= faith_hostile_level
+						}
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_HOSTILE_FAITH
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						exposed_cheating_on_spouse_trigger = { SPOUSE = scope:puppet_or_actor }
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_EXPOSED_CHEATING
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						fertility < 0.1
+						NOT = {
+							any_child = {
+								any_parent = {
+									this = scope:puppet_or_actor
+								}
+							}
+						}
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_INFERTILITY
+			}
+			triggered_desc = {
+				trigger = {
+					scope:secondary_recipient = {
+						has_trait = adulterer
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_ADULTERY_TRAIT
+			}
+			triggered_desc = {
+				trigger = {
+					scope:puppet_or_actor = {
+						opinion = {
+							target = scope:secondary_recipient
+							value < -50
+						}
+					}
+				}
+				desc = ASK_FOR_DIVORCE_NOTIFICATION_HATRED
+			}
+			desc = ASK_FOR_DIVORCE_NOTIFICATION_NOT_JUSTIFIED
+		}
+	}
+
+	is_available = {
+		trigger_if = {
+			limit = { is_ai = yes }
+			is_married = yes
+			rite ?= { rite_has_doctrine = doctrine_divorce_approval }
+			pam_grants_own_divorce_trigger = no
+			NOR = {
+				has_trait = excommunicated
+				has_character_modifier = promised_pilgrimage_to_clergy_modifier
+				culture = { has_cultural_parameter = cannot_divorce }
+				has_character_modifier = rekindled_marriage_modifier
+				#ADDED - no point, also filter out govs where it doesnt make much sense
+				can_have_children = no
+				is_playable_character = no
+			}
+			has_clergy_to_petition_for_divorce_trigger = yes
+		}
+	}
+
+	is_shown = {
+		scope:puppet_or_actor.rite ?= { rite_has_doctrine = doctrine_divorce_approval }
+		# A clerical ruler grants their own divorce and never petitions for one, least of all themselves
+		scope:puppet_or_actor ?= {
+			pam_grants_own_divorce_trigger = no
+			has_clergy_to_petition_for_divorce_trigger = yes
+		}
+		scope:secondary_recipient ?= {
+			is_spouse_of = scope:puppet_or_actor
+			is_concubine = no # Can set aside Concubines at any time
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:puppet_or_actor = {
+			NOT = { has_trait = excommunicated }
+		}
+		trigger_if = {
+			limit = { scope:actor = scope:puppet_or_actor }
+			custom_tooltip = {
+				NOT = {
+					scope:puppet_or_actor.culture = {
+						has_cultural_parameter = cannot_divorce
+					}
+				}
+				text = CULTURE_FORBIDS_DIVORCE
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				NOT = {
+					scope:puppet_or_actor.culture = {
+						has_cultural_parameter = cannot_divorce
+					}
+				}
+				text = CULTURE_FORBIDS_DIVORCE_puppeteer
+			}
+		}
+		NOT = {
+			scope:secondary_recipient = { has_strong_hook = scope:puppet_or_actor }
+		}
+		scope:puppet_or_actor = {
+			trigger_if = {
+				limit = { scope:actor = scope:puppet_or_actor }
+				custom_tooltip = {
+					NOT = {
+						var:family_widow_forbidden_divorce ?= scope:secondary_recipient
+					}
+					text = BOUND_TO_FAMILY_WIDOW
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					NOT = {
+						var:family_widow_forbidden_divorce ?= scope:secondary_recipient
+					}
+					text = BOUND_TO_FAMILY_WIDOW_puppeteer
+				}
+			}
+		}
+		scope:puppet_or_actor = {
+			NOT = {
+				has_character_modifier = promised_pilgrimage_to_clergy_modifier
+			}
+		}
+		trigger_if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:puppet_or_actor = {
+				piety >= divorce_cost
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 0 # Should be 0 for all interactions
+
+		divorce_character_ai_accept_modifier = yes
+
+		modifier = { # Divine Family is part of the faith
+			add = -100
+			desc = DIVORCE_INCESTUOUS
+
+			scope:puppet_or_actor = {
+				is_close_or_extended_family_of = scope:secondary_recipient
+				rite = { rite_has_tenet = tenet_divine_marriage }
+			}
+		}
+
+		modifier = { # More likely if the marriage is incestuous, unless Divine Family is part of the faith
+			add = 100
+			desc = DIVORCE_INCESTUOUS
+
+			scope:puppet_or_actor = {
+				relation_with_character_is_incestuous_in_my_faith_trigger = { CHARACTER = scope:secondary_recipient	}
+			}
+		}
+
+		modifier = { # They are of the same dynasty as the Head of Faith
+			add = -5
+			desc = THEY_ARE_MY_DYNASTY_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				exists = dynasty
+				exists = scope:secondary_recipient.dynasty
+				dynasty = scope:secondary_recipient.dynasty
+				NOR = {
+					house = scope:secondary_recipient.house
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					scope:recipient.dynasty = scope:puppet_or_actor.dynasty
+				}
+			}
+		}
+
+		modifier = { # You are of the same dynasty as the Head of Faith
+			add = 5
+			desc = YOU_ARE_MY_DYNASTY_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				exists = dynasty
+				exists = scope:puppet_or_actor.dynasty
+				dynasty = scope:puppet_or_actor.dynasty
+				NOR = {
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					scope:recipient.dynasty = scope:secondary_recipient.dynasty
+				}
+			}
+		}
+
+		modifier = { # They are of the same house as the Head of Faith
+			add = -10
+			desc = THEY_ARE_MY_HOUSE_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				exists = house
+				exists = scope:secondary_recipient.house
+				house = scope:secondary_recipient.house
+				NOR = {
+					house = scope:puppet_or_actor.house
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					scope:recipient.house = scope:puppet_or_actor.house
+				}
+			}
+		}
+
+		modifier = { # You are of the same house as the Head of Faith
+			add = 10
+			desc = YOU_ARE_MY_HOUSE_MEMBER
+			scope:recipient = {
+				is_lowborn = no
+				exists = house
+				exists = scope:puppet_or_actor.house
+				house = scope:puppet_or_actor.house
+				NOR = {
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+					is_child_of = scope:puppet_or_actor
+					scope:recipient.house = scope:secondary_recipient.house
+				}
+			}
+		}
+
+		modifier = { # Related to the Head of Faith
+			add = 25
+			desc = YOU_ARE_MY_RELATIVE
+			scope:recipient = {
+				OR = {
+					is_close_or_extended_family_of = scope:puppet_or_actor
+					is_cousin_of = scope:puppet_or_actor
+				}
+				NOT = { is_child_of = scope:puppet_or_actor }
+			}
+		}
+
+		modifier = { # Parent of the Head of Faith
+			add = 50
+			desc = PARENTS #YOU_ARE_MY_PARENT
+			scope:recipient = {
+				is_child_of = scope:puppet_or_actor
+			}
+		}
+
+		modifier = {
+			add = {
+				add = 10
+				multiply = scope:puppet_or_actor.num_virtuous_traits
+			}
+			scope:puppet_or_actor.num_virtuous_traits > 0
+			desc = I_AM_VIRTUOUS
+		}
+
+		modifier = {
+			add = {
+				add = -10
+				multiply = scope:secondary_recipient.num_virtuous_traits
+			}
+			scope:secondary_recipient.num_virtuous_traits > 0
+			desc = THEY_ARE_VIRTUOUS
+		}
+
+		modifier = {
+			add = {
+				add = -10
+				multiply = scope:puppet_or_actor.num_sinful_traits
+			}
+			scope:puppet_or_actor.num_sinful_traits > 0
+			desc = I_AM_SINFUL
+		}
+
+		modifier = {
+			add = {
+				add = 10
+				multiply = scope:secondary_recipient.num_sinful_traits
+			}
+			scope:secondary_recipient.num_sinful_traits > 0
+			desc = THEY_ARE_SINFUL
+		}
+
+		modifier = { # You're in a same-sex marriage and your faith doesn't allow it
+			add = 100
+			desc = SAME_SEX_MARRIAGE_FAITH_REASON_ACTOR
+			scope:puppet_or_actor.faith = scope:recipient.faith
+			scope:puppet_or_actor = {
+				sex_same_as = scope:secondary_recipient
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+
+		modifier = { # You're in a same-sex marriage and their faith doesn't allow it
+			add = 100
+			desc = SAME_SEX_MARRIAGE_FAITH_REASON
+			scope:secondary_recipient.faith = scope:recipient.faith
+			scope:secondary_recipient = {
+				sex_same_as = scope:puppet_or_actor
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+
+		modifier = { # You have denounced them as impotent (ep2_wedding.1061)
+			add = 30
+			desc = THEY_ARE_ACCUSED_IMPOTENCY
+			scope:secondary_recipient = {
+				has_character_modifier = wedding_accused_impotency_modifier
+			}
+		}
+		# Unity modifiers
+		evaluate_action_decreasing_house_unity = {
+			VALUE = 100
+		}
+		modifier = {
+			add = 40
+			scope:actor = { has_character_modifier = favored_by_pope_modifier }
+			desc = FAVORED_BY_POPE
+		}
+		modifier = {
+			add = -40
+			scope:actor = { has_character_modifier = scorned_pope_modifier }
+			desc = HAS_SCORNED_POPE
+		}
+		modifier = {
+			add = 100
+			scope:puppet_or_actor.puppet:theological_agent_puppet ?= scope:recipient
+			desc = IS_YOUR_PUPPET
+		}
+
+		modifier = {
+			add = {
+				value = 25
+				if = {
+					limit = {
+						pam_actor_rite_has_core_simony_trigger = yes
+					}
+					multiply = 5
+				}
+			}
+			scope:donate_faith ?= yes
+			scope:puppet_or_actor.medium_gold_value < scope:recipient.minor_gold_value
+			desc = DONATE_FAITH_INTERACTION_OPTION_REASON
+		}
+		modifier = {
+			add = {
+				value = 50
+				if = {
+					limit = {
+						pam_actor_rite_has_core_simony_trigger = yes
+					}
+					multiply = 5
+				}
+			}
+			scope:donate_faith ?= yes
+			scope:puppet_or_actor.medium_gold_value < scope:recipient.major_gold_value
+			scope:puppet_or_actor.medium_gold_value >= scope:recipient.minor_gold_value
+			desc = DONATE_FAITH_INTERACTION_OPTION_REASON
+		}
+		modifier = {
+			add = {
+				value = 75
+				if = {
+					limit = {
+						pam_actor_rite_has_core_simony_trigger = yes
+					}
+					multiply = 5
+				}
+			}
+			scope:donate_faith ?= yes
+			scope:puppet_or_actor.medium_gold_value >= scope:recipient.major_gold_value
+			scope:puppet_or_actor.medium_gold_value < scope:recipient.monumental_gold_value
+			desc = DONATE_FAITH_INTERACTION_OPTION_REASON
+		}
+		modifier = {
+			add = {
+				value = 100
+				if = {
+					limit = {
+						pam_actor_rite_has_core_simony_trigger = yes
+					}
+					multiply = 5
+				}
+			}
+			scope:donate_faith ?= yes
+			scope:puppet_or_actor.medium_gold_value >= scope:recipient.monumental_gold_value
+			desc = DONATE_FAITH_INTERACTION_OPTION_REASON
+		}
+		modifier = {
+			add = 25
+			scope:divorce_justified ?= yes
+			desc = JUSTIFY_DIVORCE_REASON
+		}
+		modifier = {
+			add = {
+				value = 20
+				if = {
+					limit = {
+						scope:puppet_or_actor.highest_held_title_tier > scope:recipient.highest_held_title_tier
+					}
+					multiply = {
+						value = scope:puppet_or_actor.highest_held_title_tier
+						subtract = scope:recipient.highest_held_title_tier
+						add = 1
+					}
+				}
+				else_if = {
+					limit = {
+						scope:puppet_or_actor.highest_held_title_tier < scope:recipient.highest_held_title_tier_minus_one
+					}
+					multiply = 0.25
+				}
+				else_if = {
+					limit = {
+						scope:puppet_or_actor.highest_held_title_tier < scope:recipient.highest_held_title_tier
+					}
+					multiply = 0.5
+				}
+				if = {
+					limit = {
+						OR = {
+							is_liege_or_above_of = scope:recipient
+							liege ?= scope:recipient.liege
+							capital_county.holder ?= {
+								OR = {
+									this = scope:puppet_or_actor
+									any_liege_or_above = {
+										this = scope:puppet_or_actor
+									}
+								}
+							}
+						}
+					}
+					multiply = 3
+				}
+				else_if = {
+					limit = {
+						scope:recipient = {
+							OR = {
+								any_neighboring_top_liege_realm_owner = {
+									this = scope:puppet_or_actor
+								}
+								capital_county = {
+									any_neighboring_county = {
+										OR = {
+											holder = scope:puppet_or_actor
+											holder = {
+												any_liege_or_above = {
+													this = scope:puppet_or_actor
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					multiply = 2
+				}
+			}
+			scope:threaten_priest = yes
+			desc = THREATEN_PRIEST_INTERACTION_OPTION_REASON
+		}
+		modifier = {
+			add = pam_offer_pilgrimage_acceptance_value
+			scope:offer_pilgrimage = yes
+			desc = OFFER_PILGRIMAGE_INTERACTION_OPTION_REASON
+		}
+		secular_to_ecclesiastical_pam_factors_acceptance_modifier = yes
+	}
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:puppet_or_actor
+			object = scope:recipient
+			scope:divorce_hook = yes
+		}
+	}
+	options_heading = DIVORCE_INDUCEMENTS
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {
+				custom_tooltip = {
+					text = divorce_justified_tt
+					divorce_is_justified_trigger = { DIVORCER = scope:puppet_or_actor }
+				}
+			}
+		}
+		flag = divorce_justified
+		localization = JUSTIFY_DIVORCE_INTERACTION_OPTION
+	}
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {
+				dread >= medium_dread_value
+				current_military_strength > scope:recipient.current_military_strength
+				custom_tooltip = {
+					text = must_neighbor_recipient_tt
+					OR = {
+						any_vassal_or_below = {
+							this = scope:recipient
+						}
+						any_sub_realm_county = {
+							OR = {
+								clerical_region_title ?= {
+									holder ?= scope:recipient
+								}
+								any_neighboring_county = {
+									holder = {
+										OR = {
+											this = scope:recipient
+											any_liege_or_above = {
+												this = scope:recipient
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			scope:recipient = {
+				NOR = {
+					has_trait = stubborn
+					has_trait = brave
+					has_trait = arrogant
+					has_trait = ambitious
+				}
+			}
+		}
+		flag = threaten_priest
+		localization = THREATEN_PRIEST_INTERACTION_OPTION
+	}
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {
+				trigger_if = {
+					limit = {
+						scope:actor = {
+							is_ai = yes
+						}
+					}
+					short_term_gold >= monumental_gold_value
+				}
+				trigger_else = {
+					gold >= medium_gold_value
+				}
+			}
+		}
+		flag = donate_faith
+		localization = DONATE_TO_THE_FAITH_INTERACTION_OPTION
+	}
+	send_option = {
+		is_valid = {
+			scope:puppet_or_actor = {
+				has_usable_hook = scope:recipient
+			}
+		}
+		flag = divorce_hook
+		localization = GENERIC_SPEND_A_HOOK
+	}
+	send_option = {
+		is_shown = {
+			has_pam_dlc_trigger = yes
+			pam_offer_pilgrimage_option_shown_trigger = { ACTOR = scope:puppet_or_actor }
+		}
+		is_valid = {
+			pam_offer_pilgrimage_option_valid_trigger = { ACTOR = scope:puppet_or_actor }
+		}
+		flag = offer_pilgrimage
+		localization = OFFER_PILGRIMAGE_INTERACTION_OPTION
+	}
+	should_use_extra_icon = {
+		scope:puppet_or_actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	ai_min_reply_days = 1
+	ai_max_reply_days = 5
+
+	on_send = {
+		#Make sure AI always justifies divorce when valid
+		scope:puppet_or_actor = {
+			if = {
+				limit = {
+					scope:actor = { is_ai = yes }
+					divorce_is_justified_trigger = { DIVORCER = scope:puppet_or_actor }
+					NOT = {
+						scope:divorce_justified ?= yes
+					}
+				}
+				save_scope_as = ai_divorce_justified
+			}
+		}
+	}
+
+	on_accept = {
+		scope:puppet_or_actor = {
+			save_scope_as = divorcer
+		}
+		if = {
+			limit = { scope:is_puppet_action ?= yes }
+			scope:actor = {
+				scope:puppet_or_actor = { add_piety = { value = { add = divorce_cost max = piety multiply = -1 } } }
+				send_interface_toast = {
+					type = event_toast_effect_neutral
+					title = divorce_interaction_notification_puppeteer
+					left_icon = scope:puppet_or_actor
+					right_icon = scope:secondary_recipient
+				}
+			}
+		}
+		scope:recipient = {
+			if = {
+				limit = {
+					#No inducement given
+					NOR = {
+						scope:divorce_hook ?= yes
+						scope:donate_faith ?= yes
+						scope:divorce_justified ?= yes
+						exists = scope:ai_divorce_justified
+						scope:threaten_priest ?= yes
+						scope:offer_pilgrimage ?= yes
+					}
+					#One of the methods is possible
+					OR = {
+						divorce_can_cause_house_feud_trigger = yes
+						divorce_can_cause_holy_order_lease_trigger = yes
+						divorce_can_cause_hook_trigger = yes
+						divorce_can_put_spouse_in_monastery_trigger = yes
+					}
+				}
+				custom_tooltip = cleric_divorce_fuckery_tt
+				if = {
+					limit = {
+						divorce_can_cause_house_feud_trigger = yes
+					}
+					custom_tooltip = cleric_cause_house_feud_tt
+				}
+				if = {
+					limit = {
+						divorce_can_cause_holy_order_lease_trigger = yes
+					}
+					custom_tooltip = cleric_force_holy_order_lease_tt
+				}
+				if = {
+					limit = {
+						divorce_can_cause_hook_trigger = yes
+					}
+					custom_tooltip = cleric_get_hook_tt
+				}
+				if = {
+					limit = {
+						divorce_can_put_spouse_in_monastery_trigger = yes
+					}
+					custom_tooltip = cleric_put_spouse_in_monastery_tt
+				}
+				save_scope_as = no_inducement
+			}
+		}
+		if = {
+			limit = { always = scope:divorce_hook }
+			scope:puppet_or_actor = {
+				if = {
+					limit = {
+						has_usable_hook = scope:recipient
+					}
+					use_hook = scope:recipient
+				}
+			}
+		}
+		pam_offer_pilgrimage_effect = {
+			ACTOR = scope:puppet_or_actor
+			CLERIC = scope:recipient
+		}
+		show_as_tooltip = {
+			scope:divorcer = {
+				divorce_effect = {
+					DIVORCER = scope:divorcer
+					DIVORCEE = scope:secondary_recipient
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					scope:divorce_justified ?= yes
+					exists = scope:ai_divorce_justified
+				}
+			}
+			if = {
+				limit = {
+					scope:recipient = {
+						is_ai = no
+					}
+				}
+				scope:recipient = {
+					change_spiritual_fulfillment = minor_spiritual_fulfillment_loss
+				}
+			}
+			else = {
+				hidden_effect = {
+					scope:recipient = {
+						change_spiritual_fulfillment = miniscule_spiritual_fulfillment_loss
+					}
+				}
+			}
+		}
+		else = {
+			scope:recipient = { add_piety = minor_piety_gain }
+		}
+		scope:puppet_or_actor = {
+			if = {
+				limit = {
+					scope:donate_faith ?= yes
+				}
+				pay_short_term_gold = {
+					target = scope:recipient
+					gold = scope:puppet_or_actor.medium_gold_value
+				}
+			}
+		}
+		#Recipient is free to fuck with the divorce
+		if = {
+			limit = {
+				exists = scope:no_inducement
+			}
+			scope:recipient = {
+				trigger_event = pam_interactions_events.0060
+			}
+		}
+		#Divorcer (the puppet when puppeted) gets confirmation directly
+		else = {
+			scope:divorcer = {
+				trigger_event = religious_interaction.1
+			}
+		}
+		#ADDED
+		if = {
+			limit = { scope:actor = { is_ai = yes } }
+			save_temporary_scope_value_as = {
+				name = wife_fertility
+				value = scope:secondary_recipient.fertility
+			}
+			debug_log = "ai divorce"
+			debug_log_scopes = yes
+		}
+
+		# If we're a clan this interaction affects unity
+		add_house_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = major_unity_loss
+			DESC = clan_unity_alliance.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	on_decline = {
+		scope:puppet_or_actor = {
+			send_interface_toast = {
+				type = event_toast_effect_bad
+				title = divorce_character_rel_head_interaction_decline_notification
+
+				right_icon = scope:puppet_or_actor.faith.religious_head
+				clerical_interaction_refusal_minor_effect = yes
+			}
+		}
+		if = {
+			limit = {
+				scope:recipient = {
+					is_ai = no
+				}
+				scope:actor = {
+					is_ai = yes
+				}
+			}
+			scope:recipient = {
+				if = {
+					limit = {
+						learning > extremely_high_skill_rating
+						scope:actor = {
+							is_ai = yes
+						}
+						NOR = {
+							rite = {
+								trait_is_virtue_rite = lustful
+							}
+							rite = {
+								trait_is_sin_rite = chaste
+							}
+							scope:puppet_or_actor = {
+								has_trait = lustful
+							}
+						}
+					}
+					custom_tooltip = refuse_divorce_celibacy_tt
+				}
+				if = {
+					limit = {
+						scope:puppet_or_actor = {
+							is_imprisoned = no
+							is_incapable = no
+						}
+						scope:secondary_recipient = {
+							is_imprisoned = no
+							is_incapable = no
+						}
+					}
+					custom_tooltip = refuse_divorce_comfort_tt
+				}
+				custom_tooltip = refuse_divorce_condemn_tt
+				trigger_event = {
+					id = pam_interactions_events.0050
+					days = 1
+				}
+				#Gain stress for ignoring threat from actor
+				if = {
+					limit = {
+						
+						scope:threaten_priest ?= yes
+					}
+					if = {
+						limit = {
+							ai_boldness < 0
+						}
+						add_stress = major_stress_gain
+					}
+					else = {
+						add_stress = medium_stress_gain
+					}
+				}
+			}
+		}
+
+		# If we're a clan this interaction affects unity
+		add_house_unity_interaction_effect = {
+			CHARACTER = scope:puppet_or_actor
+			TARGET = scope:recipient
+			VALUE = minor_unity_loss
+			DESC = clan_unity_alliance.desc
+			REVERSE_NON_HOUSE_TARGET = no
+		}
+	}
+
+	# AI
+	ai_targets = {
+		ai_recipients = spouses
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 72
+		duchy = 36
+		kingdom = 36
+		empire = 36
+		hegemony = 36
+	}
+	ai_frequency_by_tier_government_override = {
+		government = merchant_government
+		barony = 0
+		county = 216
+		duchy = 0
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+
+	ai_will_do = {
+		base = 0
+
+		modifier = { # The AI wants to divorce should they not have an heir that is their own child, and their spouse is infertile
+			add = 100
+			scope:puppet_or_actor = {
+				fertility > 0.1
+				#NOT = {
+				#	any_child = {
+				#		is_heir_of = scope:puppet_or_actor
+				#	}
+				#}
+			}
+			scope:secondary_recipient = {
+				#is_ai = yes
+				fertility < 0.1
+			}
+			#ADDED - basically rewrote all this
+			scope:puppet_or_actor = {
+				exists = dynasty
+				trigger_if = {
+					limit = { 
+						OR = { 
+							has_realm_law_flag = appointment_type_succession 
+							has_realm_law_flag = elective_succession_law
+							primary_title ?= { 
+								OR = {
+									has_title_law_flag = elective_succession_law
+									has_title_law_flag = appointment_type_succession
+								}
+							}
+						} 
+					}
+					NOT = {
+						any_child = {
+							dynasty ?= scope:puppet_or_actor.dynasty
+							this_is_ruling_gender_according_to_target_laws = { TARGET = scope:puppet_or_actor }
+						}
+					}
+				}
+				trigger_else = {
+					NOT = {
+						primary_heir ?= {
+							dynasty ?= scope:puppet_or_actor.dynasty
+							OR = {
+								is_child_of = scope:puppet_or_actor
+								is_grandchild_of = scope:puppet_or_actor
+								is_great_grandchild_of = scope:puppet_or_actor
+							}
+							this_is_ruling_gender_according_to_target_laws = { TARGET = scope:puppet_or_actor }
+						}
+					}
+				}
+			}
+		}
+
+		modifier = { # The AI will only use a Hook if they couldn't otherwise do this
+			scope:divorce_hook = yes
+			add = -1
+		}
+
+		modifier = { # You're in a same-sex marriage and your faith doesn't allow it
+			add = 100
+			scope:puppet_or_actor = {
+				sex_same_as = scope:secondary_recipient
+				allowed_to_marry_same_sex_trigger = no
+			}
+		}
+		modifier = {
+			add = -66
+			scope:puppet_or_actor = {
+				NOT = { divorce_is_justified_trigger = { DIVORCER = scope:puppet_or_actor } }
+			}
+		}
+	}
 }

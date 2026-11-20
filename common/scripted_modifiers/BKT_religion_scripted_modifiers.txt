@@ -1824,12 +1824,25 @@ theocratic_related_puppet_acceptance_factors_modifier = {
 		}
 		desc = CHRISTIAN_SITUATION_PHASE_REASON_SECULAR
 	}
+	modifier = {
+		add = -30
+		scope:actor = {
+			is_ghibelline_trigger = yes
+		}
+		scope:recipient = {
+			is_clergy = yes
+			is_ruler = yes
+			is_ghibelline_trigger = no
+		}
+		desc = GHIBELLINE_CLERICAL_PUPPET_REASON
+	}
 	#Capital is far from yours
 	modifier = {
 		add = -20
 		scope:recipient = {
 			is_ruler = yes
 			exists = capital_province
+			exists = scope:actor.capital_province
 			"capital_province.squared_distance(scope:actor.capital_province)" >= squared_distance_large
 			"capital_province.squared_distance(scope:actor.capital_province)" < squared_distance_huge
 		}
@@ -1840,6 +1853,7 @@ theocratic_related_puppet_acceptance_factors_modifier = {
 		scope:recipient = {
 			is_ruler = yes
 			exists = capital_province
+			exists = scope:actor.capital_province
 			"capital_province.squared_distance(scope:actor.capital_province)" >= squared_distance_huge
 			"capital_province.squared_distance(scope:actor.capital_province)" < squared_distance_massive
 		}
@@ -1850,6 +1864,7 @@ theocratic_related_puppet_acceptance_factors_modifier = {
 		scope:recipient = {
 			is_ruler = yes
 			exists = capital_province
+			exists = scope:actor.capital_province
 			"capital_province.squared_distance(scope:actor.capital_province)" >= squared_distance_massive
 		}
 		desc = DISTANCE_FROM_YOU_REASON
