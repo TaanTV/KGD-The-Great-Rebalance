@@ -806,6 +806,273 @@ disciplinarian_attribute = {
 	}
 }
 
+fanatic_attribute = {
+	adjective = accolade_fanatical
+	noun = accolade_fanatic
+	icon = "gfx/interface/icons/knight_badge/icons/accolade_trait_ethical_blue.dds"
+	portrait_pose = "wedding_priest"
+	#grouping accolades
+	accolade_categories = { common personality righteous learning army_bonus disliked militant ethical forceful aggressive }
+# ADDED 
+	squire_perfect_fit = {
+		fanatic_attribute_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes # block AI
+			}
+		}
+	}
+	squire_acceptable_fit = {
+		fanatic_attribute_acceptable_trigger = yes
+		NOR = {
+			liege ?= {
+				is_ai = yes # block AI
+			}
+		}
+	}
+	weight = {
+		value = accolade_uninteresting_base_value
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = erudition_legacy_3
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					exists = dynasty
+					dynasty = {
+						has_dynasty_perk = ep1_culture_legacy_3
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_warrior_monks
+							has_cultural_tradition = tradition_faith_bound
+						}
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_tradition = tradition_xenophilic
+							has_cultural_tradition = tradition_religion_blending
+							has_cultural_tradition = tradition_steppe_tolerance
+						}
+					}
+				}
+			}
+			add = -100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					culture = {
+						OR = {
+							has_cultural_pillar = ethos_spiritual
+							has_cultural_tradition = tradition_by_the_sword
+							has_cultural_tradition = tradition_zealous_people
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						rite_has_doctrine = doctrine_pluralism_fundamentalist
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pursuit_of_power
+							rite_has_tenet = tenet_unrelenting_faith
+							rite_has_tenet = tenet_struggle_submission
+							rite_has_tenet = tenet_warmonger
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					rite = {
+						OR = {
+							rite_has_tenet = tenet_pacifism
+							rite_has_tenet = tenet_dharmic_pacifism	
+						}
+					}
+				}
+			}
+			add = -75
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_tradition = tradition_xenophilic
+						has_cultural_tradition = tradition_religion_blending
+						has_cultural_tradition = tradition_steppe_tolerance
+					}
+				}
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				culture = {
+					OR = {
+						has_cultural_pillar = ethos_spiritual
+						has_cultural_tradition = tradition_by_the_sword
+						has_cultural_tradition = tradition_zealous_people
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = compassionate
+						has_trait = forgiving
+					}
+				}
+			}
+			add = -75
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = lifestyle_mystic
+						has_trait = faith_warrior
+					}
+				}
+			}
+			add = 75
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = holy_warrior
+						has_trait = zealous
+						has_trait = crusader_king
+						has_trait = order_member
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = lifestyle_mystic
+					has_trait = faith_warrior
+					has_trait = devoted
+					has_trait = order_member
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = compassionate
+					has_trait = forgiving
+				}
+			}
+			add = -50
+		}
+		#weight for opinion
+		if = {
+			limit = {
+				exists = liege
+			}
+			multiply = accolade_opinion_multiplier_value
+		}
+		if = {
+			limit = {
+				scope:owner ?= {
+					OR = {
+						has_trait = cynical
+						rite = {
+							rite_has_doctrine = doctrine_pluralism_pluralistic
+						}
+					}
+				}
+			}
+			multiply = 0
+		}
+	}
+
+	#accolade ranks from Glory XP
+	ranks = {
+		# glory_requirement =  { modifiers and unlocks }
+		1 = {
+			#ADDED
+			knight_modifier = {
+				monthly_prestige = 0.25
+			} # rank 1
+			liege_modifier = {
+				zealot_opinion = 3	#prev 10
+			}
+		}
+		2 = {
+			#ADDED
+			knight_modifier = {
+				monthly_prestige = 0.5
+			} # Rank 2
+			liege_modifier = {
+				zealot_opinion = 6	#prev 15
+			}
+			accolade_parameters = {
+				acclaimed_knight_piety_from_battle
+			}
+		}
+		3 = {
+			#ADDED
+			knight_modifier = {
+				monthly_prestige = 0.75
+			} # Rank 3
+			liege_modifier = {
+				zealot_opinion = 10	#prev 25
+			}
+			accolade_parameters = {
+				acclaimed_knight_piety_from_battle_high
+			}
+		}
+	}
+}
+
 valiant_attribute = {
 	adjective = accolade_valiant
 	noun = accolade_valiant
