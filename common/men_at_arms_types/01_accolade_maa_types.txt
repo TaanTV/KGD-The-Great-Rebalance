@@ -80,7 +80,7 @@ accolade_maa_archers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_archers
-		add = 1000 # change 50 # does not hire archers # We’re short by 500 units, so it comes to a thousand—something’s been messed up with the weights.
+		add = 50
 		#ADDED
 		add = counter_synergy_ai_weight_archers
 	}
@@ -207,7 +207,7 @@ accolade_maa_pikes = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_pikemen
-		add = 1000 # change 50 
+		add = 50
 		#ADDED
 		add = counter_synergy_ai_weight_pikemen
 	}
@@ -276,7 +276,7 @@ accolade_maa_outriders = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_light_cavalry
-		add = 1000 # change 50 # does not hire cavalry # 200 units is definitely not enough. For the AI ​​to pick it up
+		add = 50
 		#ADDED
 		add = counter_synergy_ai_weight_light_cavalry
 	}
@@ -341,7 +341,7 @@ accolade_maa_vanguards = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_infantry
-		add = 1000 # change 75 # Fixed! The "cultural infantry" from the Baltic states and the Arab world outweighed all of that.
+		add = 75
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_infantry
 	}
@@ -414,7 +414,7 @@ accolade_maa_lancers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_heavy_cavalry
-		add = 1000 # change 100 # One of the strongest units in the game; it would be foolish not to recruit them if you can. For the glory of Byzantium!
+		add = 100
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_cavalry
 	}
@@ -549,7 +549,7 @@ accolade_maa_cameliers = {
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_camels
-		add = 1000 # change 75 
+		add = 75
 		#ADDED
 		add = counter_synergy_ai_weight_camel_cavalry
 	}
@@ -607,15 +607,13 @@ accolade_maa_elephantiers = {
 	low_maintenance_cost = { gold = war_elephant_low_maint_cost }
 	high_maintenance_cost = { gold = war_elephant_high_maint_cost }
 	provision_cost = @provisions_cost_cavalry_accolade_elephants
-	
-#	max_sub_regiments = 4
-	
+		
 	stack = 10
 	hired_stack_size = 5 #prev 10
 	allowed_in_hired_troops = no
 	ai_quality = {
 		value = culture_ai_weight_elephants
-		add = 1000 # change 100 # One of the strongest units in the game; it would be foolish not to recruit them if you can. 
+		add = 100
 		#ADDED
 		add = counter_synergy_ai_weight_elephant_cavalry
 	}

@@ -60,6 +60,18 @@ frankokratia_leader_protection_value = {
 				}
 			}	
 		}
+		#ADDED - and make AI not attack their friends and lovers as much like holy cow
+		if = {
+			limit = {
+				scope:attacker = {
+					OR = { 
+						has_relation_friend = scope:defender
+						has_relation_lover = scope:defender
+					}
+				}
+			}
+			multiply = 0.5
+		}
 	}
 }
 
@@ -149,4 +161,59 @@ vassalization_size_limit = {
 			add = vassalize_growth_per_innovation
 		}
 	}
+}
+
+# EXPECTS: paying character scope. Currency matches pay_treasury_or_gold.
+reparations_max_payment_value = {
+	#ADDED
+	if = {
+		limit = { scope:war ?= { has_variable = yearly_character_income_reparations } }
+		add = scope:war.var:yearly_character_income_reparations
+	}
+	else = {
+	value = yearly_character_income
+	}
+	multiply = reparations_max_debt_years_value
+	if = {
+		limit = {
+			has_treasury = yes
+			government_allows = replace_gold_cost_by_treasury
+		}
+		if = {
+			limit = { treasury > 0 }
+			add = treasury
+		}
+		else = {
+			divide = reparations_treasury_debt_divisor_value
+		}
+	}
+	else_if = {
+		limit = { gold > 0 }
+		add = gold
+	}
+	else = {
+		divide = reparations_gold_debt_divisor_value
+	}
+	min = 1
+}
+
+# EXPECTS: paying character scope, for reparations paid in gold only
+reparations_max_gold_payment_value = {
+	#ADDED
+	if = {
+		limit = { scope:war ?= { has_variable = yearly_character_income_reparations } }
+		add = scope:war.var:yearly_character_income_reparations
+	}
+	else = {
+	value = yearly_character_income
+	}
+	multiply = reparations_max_debt_years_value
+	if = {
+		limit = { gold > 0 }
+		add = gold
+	}
+	else = {
+		divide = reparations_gold_debt_divisor_value
+	}
+	min = 1
 }

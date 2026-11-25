@@ -1,4 +1,29 @@
-﻿ethos_stoic = {
+﻿ethos_bellicose = {
+	type = ethos
+	character_modifier = {
+		prowess = 2
+
+		herd_conversion = 0.005						#prev 0.01
+		men_at_arms_recruitment_cost = -0.1
+		men_at_arms_maintenance = -0.1
+		minority_different_culture_opinion = -10
+		
+		ai_war_chance = 0.5
+		ai_war_cooldown = -0.25
+	}
+	province_modifier = {
+		levy_size = 0.1
+	}
+	culture_modifier = {
+		mercenary_count_mult = 0.5
+	}
+
+	ai_will_do = {
+		value = 1
+	}
+}
+
+ethos_stoic = {
 	type = ethos
 	character_modifier = {
 		hard_casualty_modifier = -0.15

@@ -65,7 +65,7 @@ BKT_landless_renown_fix = {
 	effect = {
 		every_in_global_list = {
 			variable = laamps_tally
-			holder = {
+			holder ?= {
 				if = {
 					limit = { 
 						NOR = { 
@@ -360,7 +360,6 @@ five_year_playable_pulse = {
 		BKT_reaffirm_doctrine_pulse
 		delay = { days = { 60 130 } }
 		BKT_settled_nomads_culture_diverge_hybridize
-		BKT_rich_courtiers_pulse
 	}
 }
 
@@ -1032,123 +1031,6 @@ BKT_weak_nomad_culling_2_0 = {
 			add_character_flag = {
 				flag = weakish_nomad_2
 				months = 30
-			}
-		}
-	}
-}
-
-BKT_rich_courtiers_pulse = {
-	trigger = { is_landed = yes }	#yeah sorry no noble families and stuff
-	effect = {
-		random = {
-			chance = 0	#50
-			save_scope_as = liege_scope
-			#Boo! Scary premature optimisations coz i cant be bothered to measure the performance impact it of running it through all courtiers
-			while = {
-				count = 10
-				random_courtier = {
-					limit = {
-						NOT = { is_in_list = courtier_list }
-						gold > 100
-					}
-					weight = {
-						base = 100
-						modifier = {
-							OR = {
-								is_councillor = yes
-								is_close_family_of = scope:liege_scope
-								is_consort_of = scope:liege_scope
-							}
-							add = 50
-						}
-						modifier = {
-							is_close_or_extended_family_of = scope:liege_scope
-							add = 50
-						}
-						modifier = {
-							has_any_court_position = yes
-							add = 10
-						}
-						modifier = {
-							gold > 200
-							add = { value = gold subtract = 150 multiply = 0.1 }
-						}
-					}
-					add_to_temporary_list = courtier_list
-				}
-			}
-			every_in_list = {
-				list = courtier_list
-				save_temporary_scope_value_as = {
-					name = gold_to_lose
-					value = { -95 -50 }
-				}
-				random_list = {
-					100 = { }
-					500 = { # Destress
-						trigger = {
-							stress > 50
-						}
-						modifier = {
-							factor = 4
-							stress > 100
-						}
-						add_stress = major_stress_impact_loss
-						remove_short_term_gold = scope:gold_to_lose
-					}
-					200 = { # Get some prestige
-						modifier = {
-							factor = 1.5
-							is_claimant = yes
-						}
-						modifier = {
-							factor = 4
-							prestige < 0
-						}
-						add_prestige = medium_prestige_value
-						random = {
-							chance = 1
-							add_diplomacy_skill = 1
-						}
-						remove_short_term_gold = 100
-					}
-					200 = { # Get some piety
-						modifier = {
-							factor = 1.5
-							is_clergy = yes
-						}
-						modifier = {
-							factor = 4
-							piety < 0
-						}
-						add_piety = medium_piety_value
-						random = {
-							chance = 1
-							add_learning_skill = 1
-						}
-						remove_short_term_gold = scope:gold_to_lose
-					}
-					150 = { # Get some influence
-						trigger = {
-							scope:liege_scope = { government_has_flag = government_has_influence }
-						}
-						change_influence = minor_influence_value
-						remove_short_term_gold = scope:gold_to_lose
-					}
-					50 = {	# Make liege not hate you as much
-						trigger = { 
-							NOT = { has_relation_rival = scope:liege_scope }
-							"reverse_opinion(scope:liege_scope)" < 5 
-						}
-						reverse_add_opinion = {
-							target = scope:liege_scope
-							modifier = friendliness_opinion
-							opinion = 15
-						}
-						remove_short_term_gold = scope:gold_to_lose
-					}
-					
-				}
 			}
 		}
 	}

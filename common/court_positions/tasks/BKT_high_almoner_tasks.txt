@@ -93,7 +93,7 @@ high_almoner_attend_poor = {
 		if = {
 			limit = { 
 				any_held_county = {
-					popular_opinion < 0
+					#popular_opinion < 0
 					title_is_a_faction_member = yes
 				}
 			}
@@ -104,7 +104,13 @@ high_almoner_attend_poor = {
 			limit = { 
 				piety < { value = highest_held_title_tier add = -1 multiply = 250 }
 			}
-			add = 100
+			add = 200
+		}
+		if = {
+			limit = { 
+				piety_level < 1
+			}
+			add = 200
 		}
 		if = {
 			limit = {

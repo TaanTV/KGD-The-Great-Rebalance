@@ -1009,7 +1009,13 @@ pay_short_term_gold_reparations_effect = {
 		save_temporary_scope_value_as = {
 			name = total_gold_to_pay
 			value = {
-				add = medium_gold_value
+				if = {
+					limit = { scope:war ?= { has_variable = medium_gold_value_reparations } }
+					add = scope:war.var:medium_gold_value_reparations
+				}
+				else = {
+					add = medium_gold_value
+				}
 				multiply = $GOLD_VALUE$
 				if = {
 					limit= {
@@ -1039,7 +1045,13 @@ pay_short_term_gold_reparations_effect = {
 		save_temporary_scope_value_as = {
 			name = total_gold_to_pay
 			value = {
-				add = yearly_character_income
+				if = {
+					limit = { scope:war ?= { has_variable = yearly_character_income_reparations } }
+					add = scope:war.var:yearly_character_income_reparations
+				}
+				else = {
+					add = yearly_character_income
+				}
 				multiply = $GOLD_VALUE$
 				if = {
 					limit= {
@@ -1051,6 +1063,9 @@ pay_short_term_gold_reparations_effect = {
 			}
 		}
 	}
+	add_gold = { value = scope:war.var:yearly_character_income_reparations multiply = $GOLD_VALUE$ }
+	add_prestige = { value = scope:defender.yearly_character_income multiply = $GOLD_VALUE$ }
+	add_piety = reparations_max_gold_payment_value
 	#ADDED - this is where the fun begins.
 	#"scope:war.war_contribution(scope:laamp_temp)"
 	#owed_contract_assistance_war = scope:target

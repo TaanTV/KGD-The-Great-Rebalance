@@ -185,6 +185,13 @@ offer_vassalization_interaction_ai_acceptance_religion_and_culture = {
 						faith = scope:actor.faith
 						rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 					}
+					#ADDED - righteous dont care
+					rite = {
+						rite_hostility_level = {
+							target = scope:actor.rite
+							value >= faith_astray_level
+						}
+					}
 				}
 			}
 			add = {
@@ -231,6 +238,13 @@ offer_vassalization_interaction_ai_acceptance_religion_and_culture = {
 						scope:actor.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 					}
 					rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+					#ADDED - righteous dont care
+					rite = {
+						rite_hostility_level = {
+							target = scope:actor.rite
+							value >= faith_astray_level
+						}
+					}
 				}
 			}
 			add = {
@@ -275,6 +289,13 @@ offer_vassalization_interaction_ai_acceptance_religion_and_culture = {
 					faith != scope:actor.faith
 					scope:actor.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 					rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+					#ADDED - righteous dont care
+					rite = {
+						rite_hostility_level = {
+							target = scope:actor.rite
+							value >= faith_astray_level
+						}
+					}
 				}
 			}
 			add = {

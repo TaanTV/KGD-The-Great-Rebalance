@@ -376,6 +376,10 @@ start_teach_governor_interaction = {
 		ai_recipients = family
 		max = 10
 	}
+	#ADDED
+	ai_targets = {
+		ai_recipients = children
+	}
 
 	ai_frequency_by_tier = {
 		barony = 0
@@ -732,11 +736,11 @@ start_teach_governor_interaction = {
 		}
 		# Family
 		modifier = {
-			add = 25	#prev 10
+			add = 50	#prev 10
 			scope:actor = { is_parent_of = scope:recipient }
 		}
 		modifier = {
-			add = 15	#prev 5
+			add = 25	#prev 5
 			scope:actor = { is_close_family_of = scope:recipient }
 		}
 		#Feuds
@@ -763,6 +767,11 @@ start_teach_governor_interaction = {
 				}
 			}
 			is_in_same_movement_as = { TARGET = scope:recipient }
+		}
+		#ADDED
+		modifier = {
+			factor = 4
+			scope:recipient = { is_primary_heir_of = scope:actor }
 		}
 	}
 }

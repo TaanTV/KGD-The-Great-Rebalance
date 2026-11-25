@@ -7,6 +7,7 @@
 				highest_held_title_tier = tier_county
 				#ADDED 
 				stress < 75
+				gold < major_gold_max_value
 			}
 			ai_sociability >= 75	#prev 100
 		}

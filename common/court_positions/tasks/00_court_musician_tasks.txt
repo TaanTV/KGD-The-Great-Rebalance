@@ -83,6 +83,15 @@ court_musician_court_position_task_bolster_legitimacy = {
 			}
 			add = 2000
 		}
+		#ADDED - this thing is very good.
+		if = {
+			limit = {
+				highest_held_title_tier >= tier_kingdom
+				has_legitimacy = yes	#just in case
+				is_in_debt = no
+			}
+			add = 200
+		}
 		if = {
 			limit = {
 				has_treasury = no

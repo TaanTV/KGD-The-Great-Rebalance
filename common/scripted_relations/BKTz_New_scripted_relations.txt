@@ -1,0 +1,4 @@
+﻿title_grant_target_relation = {
+	hidden = yes
+	title_grant_target = yes
+}

@@ -49,22 +49,6 @@ inspection_empty_lands_border_modifier = {
 	holding_build_speed = -0.15		#prev -0.3
 }
 
-inspection_fighting_guilds_innkeepers_guild_modifier = {
-	icon = county_modifier_prosperity_positive
-	prosperity_growth_factor = 0.15
-	popular_opinion_add = 10
-	civic_tax_mult = 0.15
-	building_slot_add = -1
-	supply_limit_mult = 0.2
-}
-
-inspection_fighting_guilds_artists_guild_modifier = {
-	icon = county_modifier_prosperity_positive
-	prosperity_growth_factor = 0.15
-	popular_opinion_add = 25
-	building_slot_add = -1
-	travel_danger = -10
-}
 
 inspection_fire_spreading_modifier = {
 	icon = county_modifier_prosperity_positive

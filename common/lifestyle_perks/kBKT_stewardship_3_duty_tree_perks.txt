@@ -1,9 +1,8 @@
 ﻿
 ### STEWARDSHIP - VASSAL AND LIEGE PERKS
 
-
-# Positions of Power
-positions_of_power_perk = {
+# Chains of Loyalty
+chains_of_loyalty_perk = {
 	lifestyle = stewardship_lifestyle
 	tree = duty
 	position = { 1 0 }
@@ -30,6 +29,135 @@ positions_of_power_perk = {
 			multiply = 0
 		}
 	}
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = chains_of_loyalty_perk_merchant_name
+			}
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = chains_of_loyalty_perk_adventurer_name
+			}
+			desc = chains_of_loyalty_perk_name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_uses_landless_lifestyle_perks }
+			}
+			custom_description_no_bullet = {
+				text = chains_of_loyalty_perk_effect
+			}
+		}
+		if = {
+			limit = {
+				NOT = { government_has_flag = government_uses_landless_lifestyle_perks }
+				government_has_flag = government_is_settled_non_tribal
+			}
+			custom_description_no_bullet = {
+				text = chains_of_loyalty_seneschal_effect
+			}
+		}
+		if = {
+			limit = { government_has_flag = government_is_merchant }
+			custom_description_no_bullet = { text = chains_of_loyalty_perk_merchant_effect }
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_tooltip = {
+				text = adventurer_chains_of_loyalty_perk_effect
+			}
+		}
+	}
+
+	government_character_modifier = {
+		flag = government_uses_landless_lifestyle_perks
+		invert_check = yes
+		learn_language_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value
+	}
+	government_character_modifier = {
+		flag = government_is_merchant
+		suzerain_opinion = 10
+	}
+}
+
+# Likable
+likable_perk = {
+	lifestyle = stewardship_lifestyle
+	tree = duty
+	position = { 0 1 }
+	icon = node_stewardship
+	
+	parent = chains_of_loyalty_perk
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { government_has_flag = government_is_merchant }
+				desc = likable_perk_merchant_name
+			}
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = likable_perk_adventurer_name
+			}
+			desc = likable_perk_name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_tooltip = {
+				text = adventurer_likable_perk_effect
+			}
+		}
+		if = {
+			limit = {
+				government_has_flag = government_is_landless_adventurer
+			}
+			custom_tooltip = {
+				text = adventurer_likable_perk_2_effect
+			}
+		}
+	}
+
+	government_character_modifier = {
+		flag = government_is_settled
+		direct_vassal_opinion = 5
+		liege_opinion = 10
+		tributary_opinion = 10
+		suzerain_opinion = 10
+	}
+	government_character_modifier = {
+		flag = government_is_nomadic
+		direct_vassal_opinion = 5
+		liege_opinion = 10
+		tributary_opinion = 10
+		suzerain_opinion = 10
+	}
+	government_character_modifier = {
+		flag = government_is_merchant
+		suzerain_opinion = 10
+		dynasty_house_opinion = 5
+	}
+}
+
+# Positions of Power
+positions_of_power_perk = {
+	lifestyle = stewardship_lifestyle
+	tree = duty
+	position = { 0 2 }
+	icon = node_stewardship
+	
+	parent = likable_perk
 
 	name = {
 		first_valid = {
@@ -106,139 +234,7 @@ positions_of_power_perk = {
 			}
 		}
 	}
-}
-
-
-# Likable
-likable_perk = {
-	lifestyle = stewardship_lifestyle
-	tree = duty
-	position = { 0 1 }
-	icon = node_stewardship
-	
-	parent = positions_of_power_perk
-
-	name = {
-		first_valid = {
-			triggered_desc = {
-				trigger = { government_has_flag = government_is_merchant }
-				desc = likable_perk_merchant_name
-			}
-			triggered_desc = {
-				trigger = { has_government = landless_adventurer_government }
-				desc = likable_perk_adventurer_name
-			}
-			desc = likable_perk_name
-		}
-	}
-
-	effect = {
-		if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-			}
-			custom_tooltip = {
-				text = adventurer_likable_perk_effect
-			}
-		}
-		if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-			}
-			custom_tooltip = {
-				text = adventurer_likable_perk_2_effect
-			}
-		}
-	}
-
-	government_character_modifier = {
-		flag = government_is_settled
-		direct_vassal_opinion = 5
-		liege_opinion = 10
-		tributary_opinion = 10
-		suzerain_opinion = 10
-	}
-	government_character_modifier = {
-		flag = government_is_nomadic
-		direct_vassal_opinion = 5
-		liege_opinion = 10
-		tributary_opinion = 10
-		suzerain_opinion = 10
-	}
-	government_character_modifier = {
-		flag = government_is_merchant
-		suzerain_opinion = 10
-		dynasty_house_opinion = 5
-	}
-}
-
-
-# Chains of Loyalty
-chains_of_loyalty_perk = {
-	lifestyle = stewardship_lifestyle
-	tree = duty
-	position = { 0 2 }
-	icon = node_stewardship
-	
-	parent = likable_perk
-
-	name = {
-		first_valid = {
-			triggered_desc = {
-				trigger = { government_has_flag = government_is_merchant }
-				desc = chains_of_loyalty_perk_merchant_name
-			}
-			triggered_desc = {
-				trigger = { has_government = landless_adventurer_government }
-				desc = chains_of_loyalty_perk_adventurer_name
-			}
-			desc = chains_of_loyalty_perk_name
-		}
-	}
-
-	effect = {
-		if = {
-			limit = {
-				NOT = { government_has_flag = government_uses_landless_lifestyle_perks }
-			}
-			custom_description_no_bullet = {
-				text = chains_of_loyalty_perk_effect
-			}
-		}
-		if = {
-			limit = {
-				NOT = { government_has_flag = government_uses_landless_lifestyle_perks }
-				government_has_flag = government_is_settled_non_tribal
-			}
-			custom_description_no_bullet = {
-				text = chains_of_loyalty_seneschal_effect
-			}
-		}
-		if = {
-			limit = { government_has_flag = government_is_merchant }
-			custom_description_no_bullet = { text = chains_of_loyalty_perk_merchant_effect }
-		}
-		if = {
-			limit = {
-				government_has_flag = government_is_landless_adventurer
-			}
-			custom_tooltip = {
-				text = adventurer_chains_of_loyalty_perk_effect
-			}
-		}
-	}
-
-	government_character_modifier = {
-		flag = government_uses_landless_lifestyle_perks
-		invert_check = yes
-		learn_language_scheme_phase_duration_add = major_scheme_phase_duration_bonus_value
-	}
-	government_character_modifier = {
-		flag = government_is_merchant
-		suzerain_opinion = 10
-	}
-}
-
+} 
 
 # Meritocracy
 meritocracy_perk = {
@@ -247,7 +243,7 @@ meritocracy_perk = {
 	position = { 0 3 }
 	icon = node_stewardship
 	
-	parent = chains_of_loyalty_perk
+	parent = positions_of_power_perk
 	name = {
 		first_valid = {
 			triggered_desc = {
@@ -315,7 +311,7 @@ large_levies_perk = {
 	position = { 2 1 }
 	icon = node_stewardship
 	
-	parent = positions_of_power_perk #meritocracy_perk
+	parent = chains_of_loyalty_perk
 
 	name = {
 		first_valid = {

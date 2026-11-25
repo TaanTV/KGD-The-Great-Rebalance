@@ -80,8 +80,8 @@ travel_major_xp = {
 ################
 
 # Soldiers of Lesser Fortune
-#lifestyle_perk_woodland_tax_mult = 0.15
-#lifestyle_perk_tribal_tax_mult = 0.15
+lifestyle_perk_woodland_tax_mult = 0.1				#prev 0.15
+lifestyle_perk_tribal_tax_mult = 0.1				#prev 0.15
 # Courtship Perk values
 #courtship_court_success_chance_bonus_value = 30
 #elope_court_success_chance_bonus_value = 30
@@ -106,6 +106,12 @@ bellum_justum_discount_percentage = 80		#prev 50
 # DIPLOMACY
 #################
 
+# Defensive Negotiations
+lifestyle_perk_commerce_tax_mult = 0.1			#prev 0.15
+
+# Inspiring Rule
+lifestyle_perk_urban_tax_mult = 0.1				#prev 0.15
+
 # Adaptive Traditions Perk
 #adaptive_traditions_perk_impact_percent = 25
 
@@ -127,6 +133,11 @@ thicker_than_water_bonus = 15	#prev 25
 ################
 # STEWARDSHIP
 ################
+# Toe the Line
+lifestyle_perk_civic_tax_mult = 0.1				#prev 0.15
+
+# Land Clearance
+lifestyle_perk_agricultural_tax_mult = 0.1		#prev 0.15
 
 # Tax Man
 tax_man_perk_percentage = 35		#prev 25
@@ -142,6 +153,15 @@ duty_focus_value = -15	#prev -20
 ###############
 # LEARNING
 ###############
+
+# Faithful
+lifestyle_perk_religious_tax_mult = 0.1		#prev 0.15
+
+# Planned Cultivation
+lifestyle_perk_artisan_tax_mult = 0.1		#prev 0.15
+
+# Eye for Details (local_inspection_perk)
+lifestyle_perk_mining_tax_mult = 0.1		#prev 0.15
 
 # Clerical Justifications
 #clerical_justifications_percentage = 20
@@ -185,3 +205,11 @@ duty_focus_value = -15	#prev -20
 #	value = 0
 #	subtract = massive_buy_claim_piety_value
 #}
+
+
+################################
+# LIFESTYLE WANDERER VALUES
+################################
+
+# Journey Planner
+lifestyle_perk_maritime_tax_mult = 0.1		#prev 0.15

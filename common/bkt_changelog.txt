@@ -64,13 +64,52 @@ Very soon:
 #TODO: maybe make chars lose opinion of you if you marry them to a lowborn/shit renown spouse? and possibly try to kill her? or get -210312030210% fertility penalty???
 #TODO: rework contract_assistance_interaction to scale cost with the assister MAA maintaince or smth like that
 #TODO: an event when defeating northmen army instead of the effect being fixed, maybe?
-#TODO: idk make calling on admin troops more expensive with lower legitimacy or just modify influence gain in legitimacy itself
 #TODO: make a decision to elevate your head of faith to kingdom-tier title (the effect is already done btw)
 
 #TODO: remove trait gains from personal tenets (all params end with _trait), replace with some bonuses for those traits maybe?
 #TODO: purge_excess_baron_gold_effect could be used for something else
 #TODO: consider: https://forum.paradoxplaza.com/forum/threads/council-rights-guaranteed-shouldnt-be-a-vassal-contract-option.1942600/post-31610258
+#TODO: is_grant_government_valid scripted rule - forbid tribals from granting advanced governments (and maybe restrict republics somewhat)
 
+
+####	0.14.1	###
+- Factions whose leader has a callable ally stronger than the faction target have reduced power threshold now
+- War reparations are now scaled attacker's income at the start of the war (most of the time)
+
+- Increased base mercenary limit to 2
+- Increased prestige gain from feasts a bit
+- Increased prestige modifiers of artifacts a tiny bit
+- Added monthly influence bonus/malus to legitimacy levels
+- Added settlement size growth and baseline bonuses to Disease recovery county modifiers
+- Added minimum capital settlement size requirement to Adopt Centralized Administration decision
+- Swapped capital prosperity requirement for capital province size requirement in Adopt Centralized Administration decision
+- Swapped gloryhound opinion for character travel speed bonus in Valiant accolade 
+- Reduced (by a lot) and standardized damage, toughness, MAA size and MAA maintenance bonuses of all accolades
+- Reduced payout of Debase the Coinage decision, it now requires higher debt level to appear
+- Reduced cultural tradition and struggle impact on prestige gain from worse feast options
+- Reduced chracter fertility a tiny bit
+- Reduced herd conversion modifiers from yurts, traditions, culture ethos, court positions and martial skill
+- Reverted Senechal back to only giving control bonus in the capital
+- Lifestyle perk changes:
+- - Reduced tacked-on tax-category tax bonuses of random perks to +10%
+- - Reverted At Any Cost (Avaricious) perk effects back to vanilla
+- - Buffed This is MY domain (Avaricious) perk effects a bit
+- - Added district cost discount to Thriving Markets (Architect) perk
+- - Swapped Positions of Power and Chains of Loyalty (Administrator) perk positions in the tree
+- Made Train for Tournament decision increase Blademaster trait xp
+- Made Embrace local Traditions decision require knowing the culture's language
+- Made Adopt Feudal/Clan Ways decision require 50+ opinion with all tribal powerful vassals instead of just all powerful vassals
+- Made Adopt Republican Ways decision have similar costs and restrictions to Adopt Feudal/Clan Ways
+- Made AI wanuas very rarely reform into republics
+- Made AI never accept matrilinealy marrying out its knights and commanders (while at war), sponsored inspirations and acclaimed knights
+- Made AI more likely to accept vassalisation if its faith is different to actor's one but considers it righteous
+- Made AI more likely to accept vassalisation or administrative rule if its a populist leader and actor is of same culture and same rite
+- Made AI kings and emperors use Bolster Legitimacy court musician task a lot more
+- Made AI fill Chronicler and Personal Champion court positions more often
+- Made AI better at using Personal Champion court positions tasks
+- Fixed AI never increasing retinue elephantry regiments size
+- Fixed AI nerge anti-fail weights sometimes not working properly 
+- Updated localization files
 
 ####	0.14.0.2###
 Updatd to 1.21.0.3 
@@ -78,12 +117,14 @@ Updatd to 1.21.0.3
 - Increased administrative/celestial/meritocratic levy size penalty back to pre-hotfix value
 - Swapped martial per stress level for mercenary limit bonus for Scoundrel accolade
 - Added +1 mercenary limit to Mercenary Sponsor modifier
+- Added district building speed reduction to Royal Architect court position bonuses
 - Added capital county fertility bonus and reduced general county fertility bonus of Millet Storage yurt
 - Removed Loot Storage and Improved Pasturages (both from Main Yurt) Internal yurts
 - Restricted granting republican barons titles for non-republican lieges
 - Restricted granting city baronies to non-bastard charaters with a dynasty for non-republican lieges
 - Made AI merchants more likely to accept marriages from republican rulers
 - Made AI maybe tiny bit slightly even more better-er at building yurts 
+- Made AI counts with lots of gold host more activities
 - Fixed accidental reversion of county fertility modifiers from held nomadic/tribal holdings
 - Updated localization files
 

@@ -58,7 +58,7 @@ martial_modifier = {
 martial_modifier_with_offset = {
 	levy_reinforcement_rate = 0.025
 	army_toughness_mult = 0.01
-	herd_conversion = 0.002			#prev 0.005
+	herd_conversion = 0.001			#prev 0.005
 	tribal_tax_mult = 0.01
 	woodland_tax_mult = 0.01
 }
@@ -154,7 +154,6 @@ king_modifier = {
 	monthly_merit_mult = 0.5
 	monthly_treasury_from_liege_mult = -0.15
 	#ADDED 
-	monthly_influence = 0.25
 	monthly_control_change_when_below_baseline_add = -0.15	#added to all title tiers
 }
 
@@ -171,7 +170,6 @@ emperor_modifier = {
 	county_fertility_growth_mult = 0.5
 	monthly_merit_mult = 1
 	#ADDED 
-	monthly_influence = 0.5
 	stress_loss_mult = -0.1
 	men_at_arms_limit = 2
 	capital_additional_fort_level = 1
@@ -191,7 +189,6 @@ hegemon_modifier = {
 	county_fertility_growth_mult = 0.65
 	trade_route_length_mult = 0.50
 	#ADDED 
-	monthly_influence = 1
 	stress_loss_mult = -0.15
 	men_at_arms_limit = 2
 	capital_additional_fort_level = 1

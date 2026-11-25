@@ -85,7 +85,7 @@ can_start_new_lifestyle_tree_trigger = {
 	}
 	OR = {
 		#NOT = { has_perk = meritocracy_perk }			#Commented out coz i changed the starting perk
-		NOT = { has_perk = positions_of_power_perk }
+		NOT = { has_perk = chains_of_loyalty_perk }
 		has_perk = administrator_perk
 		has_focus_stewardship = no
 	}

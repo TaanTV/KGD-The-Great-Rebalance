@@ -837,9 +837,11 @@ mpo_nerge.1005 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				scope:dissenter.martial < decent_skill_rating
 				factor = 0
 			}
@@ -878,9 +880,11 @@ mpo_nerge.1005 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				prowess < 20
 				factor = 20
 			}
@@ -1061,6 +1065,8 @@ mpo_nerge.1010 = {
 			modifier = {
 				factor = 1.5
 				intent_target ?= scope:chaser
+				#ADDED - check the intent too
+				has_activity_intent = dreadful_nerge_intent
 			}
 		}
 	}
@@ -1128,10 +1134,18 @@ mpo_nerge.1010 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
-				NOt = { has_activity_intent = dreadful_nerge_intent }
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
+				NAND = {
+					OR = {
+						has_activity_intent = dreadful_nerge_intent 
+						has_activity_intent = impose_obedience_intent 
+					}
+					intent_target ?= scope:chaser
+				}
 				factor = 20
 			}
 		}
@@ -1386,9 +1400,11 @@ mpo_nerge.1015 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				factor = 20
 			}
 		}
@@ -1652,9 +1668,11 @@ mpo_nerge.1020 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				factor = 20
 			}
 		}
@@ -2316,9 +2334,11 @@ mpo_nerge.1030 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				factor = 0
 			}
 		}
@@ -3070,9 +3090,11 @@ mpo_nerge.1040 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				factor = 20
 			}
 		}
@@ -3567,9 +3589,11 @@ mpo_nerge.1050 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				NOR = {
 					prowess > very_high_skill_rating
 					scope:hunter.prowess > very_high_skill_rating
@@ -3832,9 +3856,11 @@ mpo_nerge.1060 = {
 			#ADDED - make AI a bit less dead at this
 			modifier = {
 				exists = involved_activity
-				involved_activity.activity_host = this
-				exists = involved_activity.var:activity_special_type_progression
-				involved_activity.var:activity_special_type_progression < 25
+				involved_activity = {
+					activity_host = prev
+					has_variable = activity_special_type_progression
+					var:activity_special_type_progression < 25
+				}
 				factor = 20
 			}
 		}

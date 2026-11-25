@@ -661,6 +661,16 @@ study_faith_interaction = {
 				}
 			}
 		}
+		
+		#ADDED - use options
+		modifier = {
+			factor = 0
+			NOR = {
+				scope:study_faith_ask_directly ?= yes
+				scope:study_faith_ask_for_emissary ?= yes
+				scope:study_faith_study_from_afar ?= yes
+			}
+		}
 	}
 }
 

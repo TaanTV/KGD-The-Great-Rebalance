@@ -11,6 +11,8 @@ county_epidemic_recovered_minor_modifier = {
 	#ADDED
 	epidemic_resistance = 25	#prev 15
 	prosperity_growth_factor = 0.5
+	monthly_province_size_change_when_below_baseline_mult = 0.2
+	province_size_baseline_add = 20
 }
 
 county_epidemic_recovered_tiny_modifier = {
@@ -19,6 +21,8 @@ county_epidemic_recovered_tiny_modifier = {
 	#ADDED
 	epidemic_resistance = 10	#prev 5
 	prosperity_growth_factor = 0.25
+	monthly_province_size_change_when_below_baseline_mult = 0.1
+	province_size_baseline_add = 10
 }
 
 county_epidemic_recovered_medium_modifier = {
@@ -27,6 +31,8 @@ county_epidemic_recovered_medium_modifier = {
 	#ADDED
 	epidemic_resistance = 35	#prev 25
 	prosperity_growth_factor = 1
+	monthly_province_size_change_when_below_baseline_mult = 0.3
+	province_size_baseline_add = 30
 }
 
 county_epidemic_recovered_strong_modifier = {
@@ -35,6 +41,8 @@ county_epidemic_recovered_strong_modifier = {
 	#ADDED
 	epidemic_resistance = 50	#prev 35
 	prosperity_growth_factor = 2
+	monthly_province_size_change_when_below_baseline_mult = 0.4
+	province_size_baseline_add = 40
 }
 
 ### ARTIFACT MODIFIERS

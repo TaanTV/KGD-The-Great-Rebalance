@@ -209,7 +209,9 @@ cutting_corners_perk = {
 		flag = government_is_settled_non_tribal
 		guild_district_district_build_gold_cost = lifestyle_perk_district_build_cost_discount
 		market_district_district_build_gold_cost = lifestyle_perk_district_build_cost_discount
-		build_gold_cost = -0.1		#prev -0.15
+		build_gold_cost = -0.05			#prev -0.15
+		#ADDED
+		district_build_gold_cost = -0.05
 	}
 	government_character_modifier = {
 		flag = government_is_tribal

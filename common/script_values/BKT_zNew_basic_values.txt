@@ -483,7 +483,6 @@ total_barony_levies = {
 	title_province = {
 		add = building_levies
 		add = combined_building_level
-		add = building_max_garrison
 	}
 
 	# Levy size multipliers (excluding ruler-specific modifiers, such as Martial skill).
@@ -500,6 +499,11 @@ total_barony_levies = {
 			}
 			add = 0.1
 		}
+	}
+	
+	min = {
+		value = building_max_garrison
+		multiply = 1.2
 	}
 }
 

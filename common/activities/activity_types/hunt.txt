@@ -30,6 +30,7 @@
 					NOR = {
 						top_liege = this
 						stress > 75
+						gold > major_gold_max_value
 					}
 				}
 				ai_boldness >= 75		#prev 100

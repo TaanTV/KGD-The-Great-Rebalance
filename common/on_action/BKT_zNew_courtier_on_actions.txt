@@ -1,0 +1,103 @@
+﻿random_yearly_playable_pulse = {
+	on_actions = {
+		delay = { days = { 2 60 } }
+		BKT_rich_courtiers_pulse
+	}
+}
+
+BKT_rich_courtiers_pulse = {
+	trigger = { 
+		always = no
+		has_game_rule = bkt_additional_content_enabled
+		is_landed = yes			#yeah sorry no noble families and stuff
+	}
+	effect = {
+		if = {
+			limit = { 
+				is_ai = yes 
+				highest_held_title_tier < tier_empire
+			}
+			random = {
+				chance = {
+					value = highest_held_title_tier
+					pow = 3		#8, 27, 64
+					min = 10
+					max = 100
+				}
+				save_temporary_scope_value_as = {
+					name = proceed
+					value = 1
+				}
+			}
+		}
+		else = {
+			save_temporary_scope_value_as = {
+				name = proceed
+				value = 1
+			}
+		}
+		
+		if = {
+			limit = { exists = scope:proceed }
+			save_scope_as = liege_scope
+			random_courtier = {
+				limit = {
+					gold > 100
+					trigger_if = {
+						limit = { 
+							scope:liege_scope.cp:councillor_court_chaplain ?= this
+						}
+						gold > massive_gold_value
+					}
+					is_available_adult = yes
+				}
+				weight = {
+					base = 50
+					modifier = {
+						OR = {
+							is_councillor = yes
+							is_close_family_of = scope:liege_scope
+							is_consort_of = scope:liege_scope
+						}
+						add = 25
+					}
+					modifier = {		#yes this also includes close family
+						is_close_or_extended_family_of = scope:liege_scope
+						add = 25
+					}
+					modifier = {
+						stress > 50
+						add = 25
+					}
+					modifier = {
+						has_any_court_position = yes
+						add = 10
+					}
+					modifier = {
+						is_acclaimed = yes
+						add = 10
+					}
+					modifier = {
+						gold > 200
+						add = { value = gold subtract = 150 multiply = 0.1 }
+					}
+					modifier = {
+						scope:liege_scope.cp:councillor_court_chaplain ?= this
+						factor = 0.2
+					}
+				}
+				#add_to_temporary_list = courtier_list
+				save_scope_as = courtier_scope
+			}
+			scope:courtier_scope ?= {
+				courtier_gold_spending_effect = yes
+				if = {	#if you still have quite a bit of gold you might as well spend it too
+					limit = {
+						gold > 150
+					}
+					courtier_gold_spending_effect = yes
+				}
+			}
+		}
+	}
+}

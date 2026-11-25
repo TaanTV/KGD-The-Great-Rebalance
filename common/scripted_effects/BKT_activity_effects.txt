@@ -257,7 +257,7 @@
 				root = {
 					# Host Rewards
 					add_prestige = {
-						value = 225
+						value = 300		#prev 225
 						scope:host = {
 							if = {
 								limit = {
@@ -266,6 +266,17 @@
 									amenity_level = { target = court_food_quality value >= 5 }
 								}
 								multiply = 1.5
+							}
+							#ADDED - where?...
+							else_if = {
+								limit = {
+									scope:host = {
+										has_royal_court = yes
+										has_dlc_feature = royal_court
+										amenity_level = { target = court_food_quality value >= 3 }
+									}
+								}
+								multiply = 1.25
 							}
 							multiply = court_brewmaster_multiplier
 						}
@@ -318,7 +329,7 @@
 				root = {
 					# Host Rewards
 					add_prestige = {
-						value = 115
+						value = 150		#prev 115
 						scope:host = {
 							if = {
 								limit = {
@@ -328,7 +339,7 @@
 										amenity_level = { target = court_food_quality value >= 5 }
 									}
 								}
-								multiply = 2
+								multiply = 1.5	#prev 2
 							}
 							else_if = {
 								limit = {
@@ -338,7 +349,7 @@
 										amenity_level = { target = court_food_quality value >= 3 }
 									}
 								}
-								multiply = 1.5
+								multiply = 1.25	#prev 1.5
 							}
 							multiply = court_brewmaster_multiplier
 						}
@@ -350,7 +361,7 @@
 									has_cultural_parameter = refined_feasts
 								}
 							}
-							add = major_prestige_gain
+							add = medium_prestige_gain		#prev major_prestige_gain
 						}
 						if = {
 							limit = {
@@ -359,7 +370,7 @@
 									has_struggle_phase_parameter = struggle_prestige_from_feast
 								}
 							}
-							add = medium_prestige_gain
+							add = minor_prestige_gain		#prev medium_prestige_gain
 						}
 						if = {
 							limit = {
@@ -385,7 +396,7 @@
 				root = {
 					# Host Rewards
 					add_prestige = {
-						value = 35
+						value = 75		#prev 35
 						scope:host = {
 							if = {
 								limit = {
@@ -395,7 +406,7 @@
 										amenity_level = { target = court_food_quality value >= 5 }
 									}
 								}
-								multiply = 2
+								multiply = 1.5		#prev 2
 							}
 							else_if = {
 								limit = {
@@ -405,7 +416,7 @@
 										amenity_level = { target = court_food_quality value >= 3 }
 									}
 								}
-								multiply = 1.5
+								multiply = 1.25		#prev 1.5
 							}
 							multiply = court_brewmaster_multiplier
 						}
@@ -416,7 +427,7 @@
 									has_cultural_parameter = refined_feasts
 								}
 							}
-							add = major_prestige_gain
+							add = minor_prestige_gain		#prev major_prestige_gain
 						}
 						if = {
 							limit = {
@@ -425,7 +436,7 @@
 									has_struggle_phase_parameter = struggle_prestige_from_feast
 								}
 							}
-							add = medium_prestige_gain
+							add = miniscule_prestige_gain		#prev medium_prestige_gain
 						}
 						if = {
 							limit = {

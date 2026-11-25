@@ -545,7 +545,7 @@ counter_synergy_ai_weight_skirmishers = {
 }
 
 counter_synergy_ai_weight_archers = {
-	value = 0
+	value = 10
 	if = {
 		limit = {
 			number_maa_regiments_of_base_type = {
@@ -1077,7 +1077,12 @@ counter_synergy_ai_weight_heavy_cavalry = {
 				monthly_character_treasury_income < 20
 			}
 			trigger_else = {
-				monthly_character_income <  20
+				monthly_character_income < 20
+			}
+			NOR = {
+				government_allows = regiments_prestige_as_gold
+				has_game_rule = hard_difficulty
+				has_game_rule = very_hard_difficulty
 			}
 		}
 		add = -500
@@ -1312,6 +1317,13 @@ counter_synergy_ai_weight_elephant_cavalry = {
 	if = {
 		limit = { is_landed = no }
 		if = {
+			limit = { government_has_flag = government_is_landless_adventurer }
+			if = {
+				limit = { any_maa_regiment = { is_unit_type = elephant_cavalry } }
+				add = -8000		# Keep one stack around 
+			}
+		}
+		if = {
 			limit = {
 				NOR = {
 					government_has_flag = government_is_mercenary
@@ -1320,13 +1332,6 @@ counter_synergy_ai_weight_elephant_cavalry = {
 				}
 			}
 			add = -20000
-		}
-		if = {
-			limit = { government_has_flag = government_is_landless_adventurer }
-			if = {
-				limit = { any_maa_regiment = { is_unit_type = elephant_cavalry } }
-				add = -8000		# Keep one stack around 
-			}
 		}
 	}
 	else_if = {

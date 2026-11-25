@@ -1026,7 +1026,7 @@ herd_conversion_main_yurt_01 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 	}
 
 	ai_value = {
@@ -1055,7 +1055,7 @@ herd_conversion_main_yurt_02 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 	}
 
 	ai_value = {
@@ -1084,7 +1084,7 @@ herd_conversion_main_yurt_03 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		herd_capacity_mult = 0.02
 	}
 
@@ -1115,7 +1115,7 @@ herd_conversion_main_yurt_04 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		herd_capacity_mult = 0.02
 	}
 
@@ -1146,7 +1146,7 @@ herd_conversion_main_yurt_05 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		herd_capacity_mult = 0.02
 	}
 
@@ -1823,7 +1823,7 @@ herd_welfare_yurt_01 = {
 		#ADDED
 		if = {
 			limit = { 
-				free_external_domicile_building_slots <= 3
+				free_external_domicile_building_slots <= 4
 			}
 			value = nomadic_capital_omega_invaluable_building
 		}
@@ -5911,7 +5911,7 @@ mass_warfare_yurt_04 = {
 			limit = {
 				has_domicile_building_or_higher = yurt_main_04
 			}
-			value = nomadic_capital_extremely_important_building # You are wealthy; the rest of the world must bow before your army.
+			value = nomadic_capital_extremely_important_building 
 		}
 		
 		
@@ -5962,7 +5962,7 @@ mass_warfare_yurt_05 = {
 			limit = {
 				has_domicile_building_or_higher = yurt_main_04
 			}
-			value = nomadic_capital_literally_invaluable_building # You are wealthy; the rest of the world must bow before your army.
+			value = nomadic_capital_extremely_important_building 
 		}
 		
 		
@@ -6717,7 +6717,7 @@ herd_conversion_yurt_01 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		supply_capacity_add = 100
 	}
 
@@ -6747,7 +6747,7 @@ herd_conversion_yurt_02 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		supply_capacity_add = 50
 	}
 
@@ -6777,7 +6777,7 @@ herd_conversion_yurt_03 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		supply_capacity_add = 50
 	}
 
@@ -6809,7 +6809,7 @@ herd_conversion_yurt_04 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		supply_capacity_add = 50
 	}
 
@@ -6841,7 +6841,7 @@ herd_conversion_yurt_05 = {
 	}
 
 	character_modifier = {
-		herd_conversion = 0.004	#prev 0.005
+		herd_conversion = 0.003	#prev 0.005
 		supply_capacity_add = 50
 	}
 
@@ -13801,8 +13801,7 @@ merchant_yurt_01 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
 	}
 
 	character_modifier = {
@@ -13839,8 +13838,7 @@ merchant_yurt_02 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_1 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_1 = yes
 	}
 
 	ai_value = {
@@ -13875,8 +13873,7 @@ merchant_yurt_03 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13911,8 +13908,7 @@ merchant_yurt_04 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13947,8 +13943,7 @@ merchant_yurt_05 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_2 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_2 = yes
 	}
 
 	ai_value = {
@@ -13983,8 +13978,7 @@ merchant_yurt_06 = {
 	}
 
 	parameters = {
-		nomad_yurt_paiza_more_gold_lvl_3 = yes
-
+		nomad_yurt_paiza_more_gold_lvl_3 = yes
 	}
 
 	ai_value = {

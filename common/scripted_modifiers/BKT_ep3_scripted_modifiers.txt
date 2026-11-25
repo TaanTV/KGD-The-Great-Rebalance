@@ -76,7 +76,7 @@ demand_admin_acceptance_modifier = {
 			government_has_mechanic = administrative
 		}
 		desc = is_already_administrative
-		add = 35	#prev 25
+		add = 50	#prev 25
 	}
 
 
@@ -183,6 +183,18 @@ demand_admin_acceptance_modifier = {
 			}
 		}
 		desc = "HISTORICAL_ADMIN_REASON"
+	}
+	#ADDED - populists are fine becoming admin in their cool same-culture-same-rite realm
+	modifier = { 
+		desc = INTERACTION_POPULIST_LEADER
+		trigger = {
+			scope:recipient = {
+				has_trait = populist_leader
+				scope:recipient.culture ?= scope:actor.culture
+				scope:recipient.rite ?= scope:actor.rite
+			}
+		}
+		add = 50
 	}
 	# Warning
 	modifier = {

@@ -361,6 +361,13 @@ become_tributary_interaction = {
 						faith = scope:recipient.faith
 						rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
 					}
+					#ADDED - righteous dont care
+					rite = {
+						rite_hostility_level = {
+							target = scope:recipient.rite
+							value >= faith_astray_level
+						}
+					}
 				}
 			}
 			add = {
@@ -587,6 +594,13 @@ become_tributary_interaction = {
 				NOR = { # Of two different faiths AND the potential tributary's faith is not pluralistic
 					scope:recipient.faith = scope:actor.faith
 					scope:recipient.rite = { rite_has_doctrine = doctrine_pluralism_pluralistic }
+				}
+				#ADDED - righteous dont care
+				rite = {
+					rite_hostility_level = {
+						target = scope:recipient.rite
+						value >= faith_astray_level
+					}
 				}
 			}
 			add = {

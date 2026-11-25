@@ -375,15 +375,15 @@ it_is_my_domain_perk = {
 	government_character_modifier = {
 		flag = government_uses_landless_or_trader_lifestyle_perks
 		invert_check = yes
-		commerce_tax_mult = 0.1
-		civic_tax_mult = 0.1
+		commerce_tax_mult = 0.15	#prev 0.1
+		civic_tax_mult = 0.15		#prev 0.1
 	}
 	
 	#ADDED 
 	government_character_modifier = {
 		flag = government_is_nomadic
-		commerce_tax_mult = -0.1
-		urban_tax_mult = -0.1
+		commerce_tax_mult = -0.15
+		urban_tax_mult = -0.15
 		monthly_income_from_herd_mult = 0.1
 	}
 	
@@ -463,7 +463,7 @@ at_any_cost_perk = {
 				}
 			}
 			custom_description_no_bullet = {
-				text = bkt_at_any_cost_perk_effect	#prev at_any_cost_perk_effect
+				text = at_any_cost_perk_effect
 			}
 		}
 		if = {
@@ -483,32 +483,12 @@ at_any_cost_perk = {
 	government_character_modifier = {
 		flag = government_uses_landless_lifestyle_perks
 		invert_check = yes
-		#domain_tax_mult = 0.05
-		#ADDED
-		men_at_arms_recruitment_cost = -0.15
-		mercenary_hire_cost_mult = -0.15
-	}
-	
-	#ADDED
-	government_character_modifier = {
-		flag = government_is_mandala
-		title_creation_piety_cost_mult = -0.15
-	}
-	government_character_modifier = {
-		flag = government_is_mandala
-		invert_check = yes
-		title_creation_cost_mult = -0.15
-	}
-	government_character_modifier = {
-		flag = government_is_landless_adventurer
-		title_creation_cost_mult = 0.15
+		domain_tax_mult = 0.05
 	}
 
 	government_character_modifier = {
 		flag = government_is_merchant
-		#monthly_income_from_trade_mult = 0.05
-		#ADDED
-		trade_category_all_buy_price_mult = -0.05
+		monthly_income_from_trade_mult = 0.05
 	}
 }
 

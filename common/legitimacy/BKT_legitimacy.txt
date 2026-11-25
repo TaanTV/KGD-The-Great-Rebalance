@@ -259,6 +259,7 @@ king_legitimacy = {
 			control_baseline_add = -15
 			#ADDED
 			monthly_legitimacy_add = 1.5		#prev 1
+			monthly_influence_mult = -0.75
 		}
 		flag = very_reduced_marriage_acceptance
 		flag = very_increased_claim_cb_cost
@@ -284,6 +285,7 @@ king_legitimacy = {
 			control_baseline_add = -10
 			#ADDED
 			monthly_legitimacy_add = 0.75		#prev 0.5
+			monthly_influence_mult = -0.5
 		}
 		flag = reduced_marriage_acceptance
 		flag = increased_claim_cb_cost
@@ -302,6 +304,7 @@ king_legitimacy = {
 			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.35		#prev 0.25
+			monthly_influence_mult = -0.25
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_vassalization_acceptance
@@ -325,6 +328,7 @@ king_legitimacy = {
 			short_reign_duration_mult = -0.25
 			#ADDED
 			monthly_legitimacy_add = -1.5
+			monthly_influence_mult = 0.25
 		}
 		flag = increased_marriage_acceptance
 		flag = reduced_claim_cb_cost
@@ -381,6 +385,7 @@ emperor_legitimacy = {
 			control_baseline_add = -20
 			#ADDED
 			monthly_legitimacy_add = 2			#prev 1.5
+			monthly_influence_mult = -0.9
 		}
 		flag = massively_reduced_marriage_acceptance
 		flag = massively_increased_claim_cb_cost
@@ -405,6 +410,7 @@ emperor_legitimacy = {
 			control_baseline_add = -10
 			#ADDED
 			monthly_legitimacy_add = 1.25		#prev 1
+			monthly_influence_mult = -0.75
 		}
 		flag = very_reduced_marriage_acceptance
 		flag = very_increased_claim_cb_cost
@@ -429,6 +435,7 @@ emperor_legitimacy = {
 			control_baseline_add = -5
 			#ADDED
 			monthly_legitimacy_add = 0.75		#prev 0.5
+			monthly_influence_mult = -0.5
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_alliance_acceptance
@@ -446,6 +453,7 @@ emperor_legitimacy = {
 			short_reign_duration_mult = 0.15
 			#ADDED
 			monthly_legitimacy_add = 0.35		#prev 0.25
+			monthly_influence_mult = -0.25
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_vassalization_acceptance
@@ -470,6 +478,7 @@ emperor_legitimacy = {
 			popular_opinion_add = 10
 			#ADDED
 			monthly_legitimacy_add = -3
+			monthly_influence_mult = 0.25
 		}
 		flag = increased_marriage_acceptance
 		flag = reduced_claim_cb_cost
@@ -512,6 +521,7 @@ hegemon_legitimacy = {
 			popular_opinion_add = -40
 			#ADDED
 			monthly_legitimacy_add = 3.0
+			monthly_influence_mult = -0.9
 		}
 		flag = massively_reduced_marriage_acceptance
 		flag = massively_increased_claim_cb_cost
@@ -535,6 +545,7 @@ hegemon_legitimacy = {
 			popular_opinion_add = -30
 			#ADDED
 			monthly_legitimacy_add = 2.0
+			monthly_influence_mult = -0.75
 		}
 		flag = very_reduced_marriage_acceptance
 		flag = very_increased_claim_cb_cost
@@ -558,6 +569,7 @@ hegemon_legitimacy = {
 			popular_opinion_add = -20
 			#ADDED
 			monthly_legitimacy_add = 1.0
+			monthly_influence_mult = -0.5
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_alliance_acceptance
@@ -575,6 +587,7 @@ hegemon_legitimacy = {
 			short_reign_duration_mult = 0.2
 			#ADDED
 			monthly_legitimacy_add = 0.5
+			monthly_influence_mult = -0.25
 		}
 		flag = reduced_marriage_acceptance
 		flag = reduced_vassalization_acceptance
@@ -598,6 +611,7 @@ hegemon_legitimacy = {
 			popular_opinion_add = 5
 			#ADDED
 			monthly_legitimacy_add = -3.25
+			monthly_influence_mult = 0.25
 		}
 		flag = increased_marriage_acceptance
 		flag = reduced_claim_cb_cost

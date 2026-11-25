@@ -329,6 +329,19 @@ offer_vassalization_interaction = {
 				}
 				add = 5
 			}
+			
+			#ADDED - populists like being in same-culture same-rite realms
+			modifier = { 
+				desc = INTERACTION_POPULIST_LEADER
+				trigger = {
+					scope:recipient = {
+						has_trait = populist_leader
+						scope:recipient.culture ?= scope:actor.culture
+						scope:recipient.rite ?= scope:actor.rite
+					}
+				}
+				add = 25
+			}
 
 		# CONTRACT OPTIONS
 			modifier = {

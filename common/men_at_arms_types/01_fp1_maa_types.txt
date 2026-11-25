@@ -115,9 +115,9 @@ bondi = {
 	
 	stack = 40
 	ai_quality = { 
-		value = @cultural_maa_extra_ai_score
+		value = @cultural_maa_extra_ai_score 
 		#ADDED
-		add = -80 # change -30 
+		add = -30
 		add = counter_synergy_ai_weight_pikemen
 	}
 	icon = bondi

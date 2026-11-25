@@ -24,6 +24,11 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 		scope:marshal = {
 			add_character_flag = wear_armor
 		}
+		#ADDED
+		save_scope_value_as = {
+			name = blademaster_xp_value
+			value = { 1 4 }
+		}
 	}
 
 	option = { #get prowess
@@ -37,7 +42,7 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 					trigger = {
 						root.prowess >= 16
 						#ADDED
-						NOT = { has_trait = strong }
+						root = { NOT = { has_trait = strong } }
 					}
 					compare_modifier = {
 						value = scope:duel_value
@@ -129,6 +134,22 @@ ep2_decision_events.0001 = { #by Veronica Pazos
 						}
 					}
 				}
+			}
+			#ADDED
+			if = {
+				limit = { has_trait = lifestyle_blademaster }
+				add_trait_xp = { 
+					trait = lifestyle_blademaster 
+					value = scope:blademaster_xp_value
+				}
+			}
+		}
+		#ADDED
+		if = {
+			limit = { has_trait = lifestyle_blademaster }
+			add_trait_xp = { 
+				trait = lifestyle_blademaster 
+				value = scope:blademaster_xp_value
 			}
 		}
 		every_knight = {

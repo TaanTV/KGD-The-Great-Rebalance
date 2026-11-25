@@ -153,6 +153,8 @@
  abandon_holy_site_decision_county_holder_incorrect_faith: "The [county|E] holding [selected_item.GetName] is #bold not#! held by a [actor.GetFaith.GetAdjective] [ruler]"
  custom.every_close_family_member_of_defender: "$custom.every_close_family_member$ of [defender.GetShortUIName]
  AI_HELD_COURT_POSITIONS: "[recipient.GetShortUIName]'s held [court_positions|E]: $VALUE|=+0$"
+ FACTION_POWER_LEADER_STRONG_ALLIES: "Faction leader has strong allies: #V $VALUE|0$#!
+ all_powerful_tribal_vassals_required_tt: "All [tribal_i|E] [tribal|E] [powerful_vassals|E] must have #P 50#! or more [opinion|E] of #V you#!"
  
 
  bkt_culture_head_small_soldiers_desc: "You do not have #V 200#! [skirmishers|E] and #V 200#! [archers|E]"

@@ -119,6 +119,12 @@ BKT_on_landed = {
 			limit = { highest_held_title_tier > tier_barony }
 			pam_ai_personal_tenet_pulse_effect = yes
 		}
+		liege ?= {
+			if = {
+				limit = { has_relation_title_grant_target_relation = prev }
+				remove_relation_title_grant_target_relation = prev
+			}
+		}	
 	}
 }
 

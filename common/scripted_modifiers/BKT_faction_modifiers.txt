@@ -1,4 +1,149 @@
-﻿common_faction_modifiers = {
+﻿
+dynamic_power_threshold_scripted_modifier = {
+	#Lower the threshold depending on the state of other factions
+	#Check if the factions types passed in parameter are:
+	#Is at war: -20
+	#Exists and is above its power theshold: -10
+	#Exists and is below its power theshold: -5
+	modifier = {
+		add = {
+			value = 0
+
+			if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE1$
+							faction_is_at_war = yes
+						}
+					}
+				}
+				add = -20
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE1$
+							faction_is_at_war = no
+							faction_power >= faction_power_threshold
+						}
+					}
+				}
+				add = -10
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE1$
+							faction_is_at_war = no
+						}
+					}
+				}
+				add = -5
+			}
+
+			if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE2$
+							faction_is_at_war = yes
+						}
+					}
+				}
+				add = -20
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE2$
+							faction_is_at_war = no
+							faction_power >= faction_power_threshold
+						}
+					}
+				}
+				add = -10
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE2$
+							faction_is_at_war = no
+						}
+					}
+				}
+				add = -5
+			}
+
+			if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE3$
+							faction_is_at_war = yes
+						}
+					}
+				}
+				add = -20
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE3$
+							faction_is_at_war = no
+							faction_power >= faction_power_threshold
+						}
+					}
+				}
+				add = -10
+			}
+			else_if = {
+				limit = {
+					faction_target = {
+						any_targeting_faction = {
+							faction_is_type = $FACTION_TYPE3$
+							faction_is_at_war = no
+						}
+					}
+				}
+				add = -5
+			}
+			#security to never reach a power threshold equals to 0
+			min = -70
+		}
+		desc = "FACTION_POWER_INTERNAL_ISSUES"
+	}
+	
+	#ADDED - make faction more likely to revolt if they have a strong ally backing them
+	modifier = {
+		faction_target ?= { save_temporary_scope_as = faction_target_scope }
+		faction_leader ?= {
+			any_ally = {
+				current_military_strength > scope:faction_target_scope.current_military_strength
+				NOR = {
+					is_allied_to = scope:faction_target_scope
+					is_at_war_with = scope:faction_target_scope
+					is_liege_or_above_of = scope:faction_target_scope
+					AND = {
+						is_vassal_or_below_of = scope:faction_target_scope
+						NOT = { is_vassal_or_below_of = prev }
+					}
+					scope:faction_target_scope = { is_tributary_of = prev }
+				}
+				this_is_real_ally_of_target = { TARGET = prev }
+			}
+		}
+		add = -20
+		desc = "FACTION_POWER_LEADER_STRONG_ALLIES"
+	}
+}
+
+common_faction_modifiers = {
 	# +/- 40 join weight at -/+100 opinion
 	opinion_modifier = {
 		who = root

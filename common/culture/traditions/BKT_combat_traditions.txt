@@ -1050,7 +1050,7 @@ tradition_strength_in_numbers = {
 	}
 	character_modifier = {
 		supply_limit_mult = 0.5
-		herd_conversion = 0.04
+		herd_conversion = 0.03	#prev 0.04
 		#ADDED
 		heavy_infantry_maintenance_mult = 0.5
 		heavy_cavalry_maintenance_mult = 0.5
@@ -2117,7 +2117,7 @@ tradition_horse_breeder = {
 	}
 	
 	character_modifier = {
-		herd_conversion = 0.02
+		herd_conversion = 0.01		#prev 0.02
 		light_cavalry_maintenance_mult = -0.15
 		light_cavalry_recruitment_cost_mult = -0.15
 		heavy_cavalry_maintenance_mult = -0.15

@@ -1,0 +1,452 @@
+﻿
+# Adopt Republican Ways - tribal equivalent of Adopt Feudal Ways
+gdp_adopt_republican_ways_decision = {
+	title = gdp_adopt_republican_ways_decision
+	desc = gdp_adopt_republican_ways_decision_desc
+	selection_tooltip = gdp_adopt_republican_ways_decision_tooltip
+	picture = {
+		reference = "gfx/interface/illustrations/event_story/gdp_republican.dds"
+	}
+
+	sort_order = 100
+	decision_group_type = major
+
+	cost = {
+		prestige = {
+			value = 500
+			if = {
+				limit = { 
+					top_liege != this
+					highest_held_title_tier = tier_county
+					
+				}
+				multiply = 2
+			}
+			if = {
+				limit = { is_ai = no capital_province = { has_holding_type = tribal_holding } }
+				multiply = 2
+			}
+		}
+	}
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 120
+		duchy = 60
+		kingdom = 0
+		empire = 0
+		hegemony = 0
+	}
+
+	is_shown = {
+		has_gdp_dlc_trigger = yes
+		government_has_flag = government_is_tribal
+		is_landed = yes
+		highest_held_title_tier < tier_kingdom
+	}
+
+	is_valid = {
+		save_temporary_scope_as = founding_ruler
+		custom_description = {
+			text = faith_is_reformed
+			subject = root
+			faith = { NOT = { has_doctrine_parameter = unreformed } }
+		}
+		prestige_level >= 2
+		capital_county = {
+			#ADDED - let AI wanua reform.
+			trigger_if = {	
+				limit = { 
+					OR = {
+						NOT = { government_has_flag = government_is_wanua }
+						is_ai = no
+					}
+				}
+			popular_opinion >= 20
+			}
+		}
+		highest_held_title_tier < tier_kingdom
+		capital_province.province_size_level >= 3
+		custom_description = { #You need to have 70% of all (non-regional/unique) tribal innovations!
+			text = has_all_tribal_innovations
+			subject = root.culture
+			culture = {
+				calc_true_if = {
+					amount >= 10
+					has_innovation = innovation_motte
+					has_innovation = innovation_catapult
+					has_innovation = innovation_barracks
+					has_innovation = innovation_mustering_grounds
+					has_innovation = innovation_bannus
+					has_innovation = innovation_quilted_armor
+					has_innovation = innovation_pattern_welding
+					has_innovation = innovation_gavelkind
+					has_innovation = innovation_crop_rotation
+					has_innovation = innovation_city_planning
+					has_innovation = innovation_casus_belli
+					has_innovation = innovation_plenary_assemblies
+					has_innovation = innovation_ledger
+					has_innovation = innovation_prosperity_01
+					has_innovation = innovation_currency_01
+				}
+			}
+		}
+		OR = {
+			is_independent_ruler = yes
+			trigger_if = {
+				limit = {
+					has_variable = has_liege_permission_to_found_republic
+					var:has_liege_permission_to_found_republic = liege
+				}
+				custom_tooltip = {
+					text = liege_has_granted_city_charter_duration
+					has_variable = has_liege_permission_to_found_republic
+					var:has_liege_permission_to_found_republic = liege
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = liege_has_granted_city_charter
+					has_variable = has_liege_permission_to_found_republic
+					var:has_liege_permission_to_found_republic = liege
+				}
+			}
+		}
+		#ADDED - more requirements! 
+		trigger_if = {
+			limit = {
+				#top_liege = this
+				#is_ai = no
+				highest_held_title_tier > tier_county
+			}
+			custom_tooltip = {
+				text = all_powerful_tribal_vassals_required_tt
+				any_powerful_vassal = {
+					count = all
+					OR = {
+						NOT = { government_has_flag = government_is_tribal }
+						opinion = {
+							target = root
+							value >= 50
+						}
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = { 
+				top_liege != this
+				liege = { government_has_flag = government_is_tribal } 
+			}
+			OR = {
+				NOT = { liege = { has_realm_law = tribal_authority_3 } }
+				prestige_level >= 4
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		custom_tooltip = {
+			text = permafrost_feudal_ban
+			NOT = { culture = { has_cultural_parameter = permafrost_cannot_become_feudal } }
+		}
+		is_available_quick = {
+			adult = yes
+			at_war = no
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	effect = {
+		show_as_tooltip = { # Actual effect is applied in follow-up event
+			custom_tooltip = {
+				text = gdp_tribal_capital_becomes_city_tt
+			}
+			custom_tooltip = {
+				text = gdp_other_tribal_holdings_become_castles_tt
+			}
+			if = {
+				limit = {
+					any_vassal_or_below = {
+						government_has_flag = government_is_tribal
+					}
+				}
+				custom_tooltip = {
+					text = gdp_tribal_vassals_will_feudalize_tt
+				}
+			}
+			if = {
+				limit = {
+					any_sub_realm_county = {
+						OR = {
+							has_county_modifier = mpo_siberian_permafrost_modifier
+							has_county_modifier = mpo_siberian_permafrost_modifier_bad
+						}
+					}
+				}
+				custom_tooltip = {
+					text = all_permafrost_will_clear
+				}
+			}
+			gdp_found_a_republic_effect = yes
+		}
+		trigger_event = republic_event.0002
+	}
+
+	ai_potential = {
+		is_independent_ruler = yes
+		NOT = { mpo_has_gok_mongol_empire_trigger = yes }
+		#ADDED
+		trigger_if = {
+			limit = {
+				government_has_flag = government_is_wanua
+				static_group_filter = {
+					group = wanua_to_republic_candidates
+					match = 0.05
+				}
+			}
+			always = yes
+		}
+		trigger_else = {
+		capital_province ?= {
+			is_coastal = yes
+			geographical_region = world_europe
+		}
+		culture ?= {
+			OR = {
+				has_cultural_pillar = heritage_central_germanic
+				has_cultural_pillar = heritage_north_germanic
+				has_cultural_pillar = heritage_east_slavic
+				has_cultural_tradition = tradition_republican_legacy
+			}
+		}
+		}
+		#ADDED
+		NOR = { 
+			has_trait = stubborn 		#stuck in their own ways
+			has_trait = lazy 			#way too much effort
+			has_trait = arrogant 		#republic-specific: giving power is uncool
+			has_trait = greedy 			#republic-specific: giving power is uncool x2
+			has_trait = arbitrary 		#republic-specific: giving power is uncool x3
+			has_variable = conqueror	#that would slow them down
+		}
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}
+
+### Debase the Coinage ###
+debase_the_coinage_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/decision_spend_money.dds"
+	}
+	desc = debase_the_coinage_decision_desc
+	selection_tooltip = debase_the_coinage_decision_tooltip
+	decision_group_type = major
+
+	cooldown = { years = 10 }
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 60
+		empire = 24
+		hegemony = 24
+	}
+
+	is_shown = {
+		is_independent_ruler = yes
+		is_landed = yes
+		highest_held_title_tier >= tier_kingdom
+		NOT = {
+			government_has_flag = government_is_nomadic
+		}
+		OR = {
+			AND = {
+				NOT = {
+					government_has_flag = government_has_treasury
+				}
+				debt_level >= 2				#prev 1
+			}
+			AND = {
+				government_has_flag = government_has_treasury
+				treasury_debt_level >= 2	#prev 1
+			}
+		}
+		has_gdp_dlc_trigger = yes
+	}
+
+	is_valid = {
+
+	}
+
+	is_valid_showing_failures_only = {
+		is_available_quick = {
+			adult = yes
+			imprisoned = no
+			incapable = no
+		}
+	}
+
+	cost = {
+		prestige = massive_prestige_value
+	}
+
+	effect = {
+		add_treasury_or_gold = {
+			value = 0
+			every_sub_realm_county = {
+				add = {
+					value = 0.37
+					if = {
+						limit = {
+							prosperity_level > 0
+						}
+						multiply = prosperity_level
+					}
+					divide = {
+						value = root.realm_size
+						divide = 50
+						min = 1
+					}
+				}
+			}
+			add = 100	#prev 215
+			min = 250
+			max = 1500
+		}
+
+		every_sub_realm_county = {
+			custom = debase_the_coinage_decision_county_custom
+
+			change_prosperity_level = -10
+			add_county_modifier = {
+				modifier = debase_coinage_county_modifier
+				years = 20
+			}
+		}
+
+		add_character_modifier = {
+			modifier = debase_coinage_ruler_modifier
+			years = 20
+		}
+
+		stress_impact = {
+			just = major_stress_impact_gain
+			content = minor_stress_impact_gain
+			diligent = minor_stress_impact_gain
+		}
+	}
+
+	ai_potential = {
+		is_independent_ruler = yes
+		highest_held_title_tier >= tier_kingdom
+		OR = {
+			AND = {
+				NOT = {
+					government_has_flag = government_has_treasury
+				}
+				debt_level >= 3
+			}
+			AND = {
+				government_has_flag = government_has_treasury
+				treasury_debt_level >= 3
+			}
+		}
+		NOT = {
+			any_vassal_or_below = {
+				is_ai = no # don't economically devastate the vassal player
+			}
+		}
+	}
+
+	ai_will_do = {
+		base = -20
+		modifier = {
+			add = {
+				value = 5
+				multiply = debt_level
+			}
+		}
+		modifier = {
+			treasury_debt_level > debt_level
+			add = {
+				value = 8
+				multiply = treasury_debt_level
+			}
+		}
+		modifier = {
+			has_trait = greedy
+			add = 8
+		}
+		modifier = {
+			has_trait = deceitful
+			add = 6
+		}
+		modifier = {
+			has_trait = callous
+			add = 5
+		}
+		modifier = {
+			has_trait = arbitrary
+			add = 4
+		}
+		modifier = {
+			has_trait = ambitious
+			add = 4
+		}
+		modifier = {
+			has_trait = paranoid
+			add = 3
+		}
+		modifier = {
+			has_trait = wrathful
+			add = 2
+		}
+		modifier = {
+			has_trait = just
+			add = -12
+		}
+		modifier = {
+			has_trait = honest
+			add = -10
+		}
+		modifier = {
+			has_trait = shrewd
+			add = -8
+		}
+		modifier = {
+			has_trait = generous
+			add = -6
+		}
+		modifier = {
+			has_trait = compassionate
+			add = -5
+		}
+		modifier = {
+			has_trait = content
+			add = -4
+		}
+		modifier = {
+			has_trait = diligent
+			add = -3
+		}
+		modifier = {
+			stewardship >= 14
+			add = -8
+		}
+		modifier = {
+			stewardship >= 10
+			stewardship < 14
+			add = -4
+		}
+		modifier = {
+			stewardship <= 4
+			add = 4
+		}
+	}
+}

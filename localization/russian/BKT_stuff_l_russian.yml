@@ -152,6 +152,8 @@
  abandon_holy_site_decision_county_holder_incorrect_faith: "[Concept('county', 'Графство')|E] со святым местом [selected_item.GetName] #bold не #! находится в руках #L [actor.GetFaith.GetName|l]ого#! [Concept('ruler', 'правителя')]"
  custom.every_close_family_member_of_defender: "$custom.every_close_family_member$ с [defender.GetShortUIName]
  AI_HELD_COURT_POSITIONS: "[recipient.GetShortUIName] — занимаемые [Concept('court_positions', 'Придворные Должности')|E]: $VALUE|=+0$"
+ FACTION_POWER_LEADER_STRONG_ALLIES: "Лидер фракции имеет сильные союзы: #V $VALUE|0$#!
+ all_powerful_tribal_vassals_required_tt: "[Concept('opinion', 'Мнение')|E] всех [tribal_i|E] [Concept('tribal', 'племенных')|E] [Concept('powerful_vassals', 'могущественных вассалов')|E] о #V вас#! должно быть не ниже #P 50#!"
 
 
  bkt_culture_head_small_soldiers_desc: "У вас нет #V 200#! [Concept( 'skirmishers', 'застрельщиков' )|E] и #V 200#! [Concept( 'archers', 'лучников' )|E]"

@@ -162,21 +162,31 @@ convert_to_administrative_decision = {
 				amount >= 2
 				culture = { has_cultural_pillar = ethos_bureaucratic }
 				culture = { has_cultural_pillar = ethos_courtly }
-				culture = { has_cultural_pillar = ethos_egalitarian }
+				#culture = { has_cultural_pillar = ethos_egalitarian }
 				culture = { has_cultural_tradition = tradition_legalistic }
 				has_realm_law = crown_authority_3
-				capital_county = { prosperity_level > medium_prosperity_level }
+				#capital_county = { prosperity_level > medium_prosperity_level }
 				rite = { rite_has_tenet = tenet_legalism }
 				dynasty = { has_dynasty_perk = erudition_legacy_5 }
 				dynasty = { has_dynasty_perk = law_legacy_5 }
 				#ADDED
 				culture = { has_cultural_tradition = tradition_ep3_cultivated_sophistication }
+				culture = { has_cultural_tradition = tradition_roman_law }
+				capital_province = { province_size_level >= 6 }
+				government_has_flag = government_is_republic
+			}
+			#ADDED - should be trivial to clear but still.
+			capital_province = {
+				province_size_level >= 3
 			}
 		}
 		#ADDED - actually do this for players too.
 		trigger_else_if = {
 			limit = {
 				top_liege = { NOT = { government_has_mechanic = administrative } }
+			}
+			capital_province = {
+				province_size_level >= 3
 			}
 			calc_true_if = {
 				amount >= 3
@@ -185,15 +195,21 @@ convert_to_administrative_decision = {
 				#culture = { has_cultural_pillar = ethos_egalitarian }
 				culture = { has_cultural_tradition = tradition_legalistic }
 				culture = { has_cultural_tradition = tradition_ep3_cultivated_sophistication }
+				culture = { has_cultural_tradition = tradition_roman_law }
 				has_realm_law = crown_authority_3
-				capital_county = { prosperity_level > medium_prosperity_level }
+				#capital_county = { prosperity_level > medium_prosperity_level }
+				capital_province = { province_size_level >= 6 }
 				government_has_flag = government_is_republic
 				rite = { rite_has_tenet = tenet_legalism }
 				dynasty = { has_dynasty_perk = erudition_legacy_5 }
 				dynasty = { has_dynasty_perk = law_legacy_5 }
 			}
 		}
-		trigger_else = { }
+		trigger_else = {
+			capital_province = {
+				province_size_level >= 2
+			}
+		}
 	}
 
 	is_valid_showing_failures_only = {
@@ -783,11 +799,6 @@ convert_to_feudalism_from_administrative_decision = {
 				has_realm_law = japanese_bureaucracy_3
 			}
 		}
-		#ADDED - unop claims AI doesnt take decisions that cost influence, so lets do it like that
-		trigger_if = {
-			limit = { is_ai = yes }
-			influence > 150
-		}
 	}
 
 	cost = {
@@ -958,14 +969,8 @@ convert_to_feudalism_from_administrative_decision = {
 				}
 			}
 		}
-		#ADDED - unop claims AI doesnt take decisions that cost influence, so lets do it like that
-		influence = {
-			value = 0
-			if = {
-				limit = { is_ai = no }
-				value = 150
-			}
-		}
+		#ADDED
+		influence = 150
 	}
 
 	effect = {
@@ -981,11 +986,6 @@ convert_to_feudalism_from_administrative_decision = {
 			}
 			#ADDED
 			set_variable = unbecame_admin
-			#ADDED - unop claims AI doesnt take decisions that cost influence, so lets do it like that
-			if = {
-				limit = { is_ai = yes }
-				change_influence = -150
-			}
 		}
 	}
 

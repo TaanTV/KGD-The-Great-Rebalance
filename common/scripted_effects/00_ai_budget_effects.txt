@@ -179,6 +179,7 @@ ai_budget_manipulation_effect = {
 			}
 			else_if = {		#also try not to be in debt plz
 				limit = {
+					treasury < 0
 					ai_greed < 90
 					OR = {
 						ai_greed < 0
@@ -186,7 +187,6 @@ ai_budget_manipulation_effect = {
 						gold > massive_gold_value
 					}
 					gold > medium_gold_value
-					treasury < 0
 				}
 				remove_short_term_gold = minor_gold_value
 				add_treasury = minor_gold_value

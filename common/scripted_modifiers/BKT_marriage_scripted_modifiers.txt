@@ -1015,7 +1015,7 @@ marriage_ai_accept_opinion_relationship_modifier = {
 	}
 	
 	#ADDED
-	modifier = { #Rivalry modifier.
+	modifier = { #friend modifier.
 		desc = offer_vassalization_interaction_aibehavior_friend_tt
 		trigger = {
 			scope:recipient = {
@@ -2198,6 +2198,17 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 				}
 				multiply = 0.5
 			}
+			if = {			#cap the penalty pretty low if recipient is any of the landless types
+				limit = { 
+					scope:recipient = {
+						OR = {
+							government_has_flag = government_is_landless_adventurer
+							government_has_flag = government_is_merchant
+						}
+					}
+				}
+				min = -5
+			}
 		}
 		desc = AI_DYNASTY_PRESTIGE_REASON_LOWBORN
 	}
@@ -2337,99 +2348,81 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 	modifier = {
 		add = {
 			value = -20		#prev -10
-			#ADDED All of the below
-			if = {
-				limit = {		#Basically if you're stealing the courtier
-					scope:secondary_recipient = {
-						OR = {
-							AND = {
-								NOT = { always = scope:matrilineal }
-								is_female = yes
-							}
-							AND = {
-								always = scope:matrilineal
-								is_male = yes
-							}
-						}
-					}
-				}
-				if = {
+			#ADDED - All of the below
+			scope:secondary_recipient = {
+				if = {			#hard-block stealing of VERY important characters
 					limit = { 
-						scope:secondary_recipient = {
+						OR = { 
+							is_acclaimed = yes 
+							AND = {
+								exists = inspiration
+								inspiration = {
+									exists = inspiration_sponsor
+									inspiration_sponsor = scope:recipient
+								}
+							}
+							trigger_if = {
+								limit = { scope:recipient = { is_at_war = yes } }
+								OR = {
+									is_knight = yes
+									is_commanding_army = yes
+								}
+							}
+						} 
+					}
+					value = -1000
+				}
+				else = {		#do the rest of the calculations for everyone else
+					if = {
+						limit = { 
 							is_councillor_of = scope:recipient
 						}
+						multiply = 5
 					}
-					multiply = 5
-				}
-				else_if = {
-					limit = { 
-						scope:secondary_recipient = {
+					else_if = {
+						limit = { 
 							has_any_court_position = yes
 						}
-					}
-					multiply = 2
-				}
-				if = {
-					limit = {
-						scope:secondary_recipient = {
-							is_knight_of = scope:recipient
-						}
-					}
-					add = {
-						value = scope:secondary_recipient.prowess
-						subtract = 8
-						if = {
-							limit = { scope:secondary_recipient.prowess > 12 }
-							add = scope:secondary_recipient.prowess
-							subtract = 12
-						}
-						if = {
-							limit = { scope:secondary_recipient.prowess > 16 }
-							add = scope:secondary_recipient.prowess
-							subtract = 16
-						}
-						multiply = -2
-					}
-					if = {
-						limit = { scope:secondary_recipient = { is_acclaimed = yes } }
-						add = -5
 						multiply = 2
 					}
-				}
-				if = {
-					limit = {
-						scope:secondary_recipient = {
-							exists = inspiration
-							inspiration = {
-								exists = inspiration_sponsor
-								inspiration_sponsor = scope:recipient
+					if = {
+						limit = {
+							is_knight_of = scope:recipient
+						}
+						add = {
+							value = prowess
+							subtract = 8
+							if = {
+								limit = { prowess > 12 }
+								add = prowess
+								subtract = 12
+							}
+							if = {
+								limit = { prowess > 16 }
+								add = prowess
+								subtract = 16
+							}
+							multiply = -2
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								has_relation_lover = scope:recipient
+								has_relation_soulmate = scope:recipient
+								has_relation_friend = scope:recipient
+								has_relation_best_friend = scope:recipient
 							}
 						}
+						multiply = 4
 					}
-					add = -40
+					#multiply = 2
 				}
-				multiply = 2
-			}
-			if = {
-				limit = {
-					scope:secondary_recipient = {
-						OR = {
-							has_relation_lover = scope:recipient
-							has_relation_soulmate = scope:recipient
-							has_relation_friend = scope:recipient
-							has_relation_best_friend = scope:recipient
-						}
-					}
-				}
-				multiply = 4
 			}
 		}
 		scope:secondary_recipient = {
 			is_adult = yes
-			#ADDED - no. and ONLY if you're stealing them
-			NOT = {
-				is_close_or_extended_family_of = scope:recipient
-			}
+			#ADDED - ONLY if you're stealing them and packed old checks into a trigger_else
 			OR = {
 				AND = {
 					is_male = yes
@@ -2441,6 +2434,17 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 				}
 				scope:secondary_actor = { is_ruler = yes }
 			}
+			trigger_if = {
+				limit = { is_close_or_extended_family_of = scope:recipient }
+				OR = {	#no "knight and at war" here coz euhhhh its ok
+					is_acclaimed = yes
+					is_commanding_army = yes
+					inspiration ?= {
+						inspiration_sponsor ?= scope:recipient
+					}
+				}
+			}
+			trigger_else = {
 			OR = {
 				is_councillor_of = scope:recipient
 				has_relation_lover = scope:recipient
@@ -2451,6 +2455,8 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 				}
 				#ADDED
 				has_any_court_position = yes
+				is_commanding_army = yes
+			}
 			}
 		}
 		desc = MARRY_CARES_ABOUT_COURTIER_REASON
@@ -3544,7 +3550,8 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 		scope:puppet_or_actor = { government_has_flag = government_is_republic }
 		scope:recipient = {
 			NOT = { government_has_flag = government_is_republic }
-			#ADDED
+			#ADDED - easier to marry with merchants and lowborns coz lol why
+			is_lowborn = no
 			NOT = { government_has_flag = government_is_merchant }
 		}
 		add = -40
@@ -3555,7 +3562,15 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 			NOT = { government_has_flag = government_is_republic }
 		}
 		scope:recipient = { government_has_flag = government_is_republic }
-		add = -40
+		#add = -40
+		#ADDED - slightly lower penalty for merchants 
+		add = {
+			value = -40
+			if = {
+				limit = { scope:puppet_or_actor = { government_has_flag = government_is_merchant } }
+				value = -20
+			}
+		}
 		desc = recipient_is_republic_value_desc
 	}
 

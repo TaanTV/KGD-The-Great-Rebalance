@@ -1,0 +1,330 @@
+﻿#Expects THIS to be scope:courtier_scope
+courtier_gold_spending_effect = {
+	save_temporary_scope_value_as = {
+		name = gold_to_lose
+		value = { -95 -50 }
+	}
+	if = {
+		limit = { stress > 60 }
+		add_stress = major_stress_impact_loss
+		remove_short_term_gold = scope:gold_to_lose
+	}
+	else = {
+		random_list = {
+			200 = {
+				modifier = {
+					ai_greed > 0
+					add = { subtract = ai_greed multiply = 2 }
+				}
+			}
+			200 = { # Destress
+				trigger = {
+					stress > 40
+				}
+				add_stress = major_stress_impact_loss
+				remove_short_term_gold = scope:gold_to_lose
+			}
+			200 = { # Get some prestige
+				modifier = {
+					add = ai_energy
+				}
+				modifier = {
+					add = 200
+					prestige_level < 0
+				}
+				modifier = {
+					factor = 1.5
+					is_claimant = yes
+				}
+				modifier = {
+					factor = 5
+					prestige < 0
+				}
+				add_prestige = medium_prestige_value
+				random = {
+					chance = 1
+					add_diplomacy_skill = 1
+				}
+				random = {
+					chance = diplomacy
+					scope:liege_scope = {
+						random_courtier = {
+							limit = { 
+								this != scope:courtier_scope 
+								NOR = {
+									has_relation_grudge = scope:courtier_scope 
+									has_relation_rival = scope:courtier_scope 
+									scope:liege_scope.cp:councillor_court_chaplain ?= this
+								}
+							}
+							add_opinion = {
+								target = scope:courtier_scope
+								modifier = respect_opinion
+								opinion = 20
+							}
+						}
+					}
+				}
+				remove_short_term_gold = 100
+			}
+			200 = { # Get some piety
+				modifier = {
+					add = ai_zeal
+				}
+				modifier = {
+					add = 200
+					piety_level < 0
+				}
+				modifier = {
+					factor = 1.5
+					is_clergy = yes
+				}
+				modifier = {
+					factor = 5
+					piety < 0
+				}
+				add_piety = medium_piety_value
+				random = {
+					chance = 1
+					add_learning_skill = 1
+				}
+				if = {
+					limit = { NOT = { scope:liege_scope.cp:councillor_court_chaplain ?= this } }
+					random = {
+						chance = learning
+						scope:liege_scope.cp:councillor_court_chaplain ?= {
+							add_opinion = {
+								target = prev
+								modifier = pious_opinion
+								opinion = 20
+							}
+						}
+					}
+				}
+				remove_short_term_gold = scope:gold_to_lose
+			}
+			100 = {	# Make a cute gift to your wife
+				trigger = {
+					ai_greed < 0
+					primary_spouse ?= { 
+						is_ai = yes 
+					}
+					NOR = {
+						has_relation_grudge = primary_spouse
+						has_relation_rival = primary_spouse
+						"opinion(primary_spouse)" < ai_greed
+					}
+				}
+				modifier = {
+					add = { subtract = ai_greed }
+				}
+				modifier = {
+					primary_spouse ?= {
+						OR = {
+							has_character_modifier = wolf_pelt_modifier
+							has_character_modifier = necklace_modifier
+							has_character_modifier = orchid_modifier
+						}
+					}
+					factor = 0.2
+				}
+				modifier = {
+					primary_spouse ?= {
+						is_ruler = yes
+					}
+					factor = 0.5
+				}
+				random_list = {
+					1 = { 
+						save_temporary_scope_value_as = {
+							name = no_gift
+							value = 1
+						}
+					}
+					100 = {
+						trigger = { primary_spouse = { NOT = { has_character_modifier = wolf_pelt_modifier } } }
+						modifier = {
+							add = primary_spouse.ai_energy
+						}
+						primary_spouse ?= {
+							add_character_modifier = {
+								modifier = wolf_pelt_modifier
+								years = 20
+							}
+						}
+					}
+					100 = {
+						trigger = { primary_spouse = { NOT = { has_character_modifier = necklace_modifier } } }
+						modifier = {
+							add = primary_spouse.ai_greed
+						}
+						primary_spouse ?= {
+							add_character_modifier = {
+								modifier = necklace_modifier
+								years = 20
+							}
+						}
+					}
+					100 = {
+						trigger = { primary_spouse = { NOT = { has_character_modifier = orchid_modifier } } }
+						modifier = {
+							add = primary_spouse.ai_compassion
+						}
+						primary_spouse ?= {
+							add_character_modifier = {
+								modifier = orchid_modifier
+								years = 20
+							}
+						}
+					}
+				}
+				if = {
+					limit = { NOT = { is_set = scope:no_gift } }
+					primary_spouse ?= {
+						add_stress = medium_stress_impact_loss
+						add_opinion = {
+							target = prev
+							modifier = friendliness_opinion
+							opinion = 30
+						}
+					}
+					remove_short_term_gold = scope:gold_to_lose
+				}
+			}
+			100 = { # Help your friend out
+				trigger = {
+					any_relation = {
+						type = friend
+						is_in_the_same_court_as = prev
+						is_ruler = no
+						is_ai = yes
+					}
+				}
+				modifier = {
+					add = ai_compassion
+				}
+				random_relation = {
+					type = friend
+					limit = {
+						is_in_the_same_court_as = prev
+						is_ruler = no
+						is_ai = yes
+					}
+					add_gold = { 10 25 }
+					add_stress = medium_stress_impact_loss
+					add_opinion = {
+						target = prev
+						modifier = friendliness_opinion
+						opinion = 20
+					}
+				}
+				add_stress = miniscule_stress_impact_loss
+				remove_short_term_gold = scope:gold_to_lose
+			}
+			100 = { # Troll your rival
+				trigger = {
+					any_relation = {
+						type = rival
+						is_in_the_same_court_as = prev
+						is_ruler = no
+						is_ai = yes
+					}
+				}
+				modifier = {
+					add = ai_vengefulness
+				}
+				random_relation = {
+					type = rival
+					limit = {
+						is_in_the_same_court_as = prev
+						is_ruler = no
+						is_ai = yes
+					}
+					add_prestige = minor_prestige_loss
+					add_stress = medium_stress_impact_gain
+					add_opinion = {
+						target = prev
+						modifier = hate_opinion
+						opinion = -20
+					}
+				}
+				add_stress = miniscule_stress_impact_loss
+				remove_short_term_gold = scope:gold_to_lose
+			}
+			100 = {	# Make liege not hate you as much
+				trigger = { 
+					NOR = {
+						has_relation_grudge = scope:liege_scope
+						has_relation_rival = scope:liege_scope 
+					}
+					"reverse_opinion(scope:liege_scope)" < 25 
+				}
+				reverse_add_opinion = {
+					target = scope:liege_scope
+					modifier = friendliness_opinion
+					opinion = 15
+				}
+				remove_short_term_gold = scope:gold_to_lose
+			}
+			100 = {	# Make liege consider granting you a title
+				trigger = {
+					ai_energy > 0
+					age < 60
+					OR = {
+						any_child = { exists = this }
+						age < 40
+					}
+					scope:liege_scope = {
+						NOR = { 
+							is_close_family_of = prev
+							has_relation_title_grant_target_relation = prev 
+							has_relation_friend = prev 
+							has_relation_lover = prev 
+						}
+						"opinion(prev)" > 25
+						is_ai = yes
+					}
+					can_be_granted_titles_by = { RULER = scope:liege_scope }
+				}
+				modifier = {
+					add = ai_greed
+				}
+				modifier = {
+					liege.cp:councillor_court_chaplain ?= this
+					factor = {
+						value = 0.25
+						if = {
+							limit = { rite = { NOT = { rite_has_parameter = lay_clergy } } }
+							valu = 0.001
+						}
+					}
+				}
+				random_list = {
+					500 = { }
+					0 = {
+						modifier = {
+							add = gold
+						}
+						modifier = {
+							is_lowborn = yes
+							factor = 0.5
+						}
+						scope:liege_scope = { 
+							set_relation_title_grant_target_relation = prev
+							add_opinion = {
+								target = prev
+								modifier = respect_opinion
+								opinion = 25
+							}
+						}
+						remove_short_term_gold = scope:gold_to_lose
+						
+						debug_log = "courtier got title grant target"
+						debug_log_scopes = yes
+					}
+				}
+			}
+		}
+	}
+}
+	

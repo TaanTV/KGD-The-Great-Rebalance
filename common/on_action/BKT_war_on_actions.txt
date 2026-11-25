@@ -1,4 +1,30 @@
-﻿# called for when a casus belli resolves in one of the following ways.
+﻿
+on_war_started = {
+	on_actions = {
+		BKT_on_war_started_setup_reparation_variables
+	}
+}
+
+#im being EXTRA sure to not log any errors here coz i'll tear my hair out if it does.
+BKT_on_war_started_setup_reparation_variables = {
+	effect = {
+		scope:war ?= {
+			if = {
+				limit = { exists = scope:attacker }
+				set_variable = {
+					name = medium_gold_value_reparations
+					value = scope:attacker.medium_gold_value
+				}
+				set_variable = {
+					name = yearly_character_income_reparations
+					value = scope:attacker.yearly_character_income
+				}
+			}
+		}
+	}
+}
+
+# called for when a casus belli resolves in one of the following ways.
 # same scopes are available in these events as in the CBs themselves, this just fires for all CBs instead of a specific CB.
 # note that any events/effects fired here WILL NOT show up in the war summary tooltip; they fire at the same time as the war resolution, but are not actually part of the war resolution itself.
 # Rebalance note: this shit is uglyyyyyy. No other way to do it though.
