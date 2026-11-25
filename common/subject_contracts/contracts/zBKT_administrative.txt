@@ -140,6 +140,8 @@ administrative_themes = {
 				men_at_arms_maintenance = -0.2
 				monthly_treasury_from_military_budget_base = 1
 				governor_efficiency_per_martial_add = 0.005
+				#ADDED
+				levy_size = 0.25
 			}
 			
 			flag = admin_martial_obligation_bonus
@@ -196,7 +198,7 @@ administrative_themes = {
 			tax_factor = -0.2
 
 			subject_modifier = {
-				fort_level = 2
+				additional_fort_level = 2
 				defender_advantage = 6
 				hostile_county_attrition = -0.3
 				hostile_raid_time = 0.75
@@ -206,6 +208,8 @@ administrative_themes = {
 				ai_rationality = -15
 				monthly_treasury_from_military_budget_base = 1.5
 				governor_efficiency_per_prowess_add = 0.005
+				#ADDED
+				levy_size = 0.25
 			}
 			
 			flag = admin_prowess_obligation_bonus

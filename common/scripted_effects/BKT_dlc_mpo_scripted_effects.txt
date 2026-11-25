@@ -44,7 +44,7 @@ adopt_nomadic_ways_decision_event_effect = {
 #ADDED - swapped some numbers around
 add_random_yurt_external_building_effect = {
 	random_list = {
-		100 = {
+		1000 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = herd_welfare_yurt_01 }
 			}
@@ -66,31 +66,22 @@ add_random_yurt_external_building_effect = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = court_yurt_01 }
 			}
-			#ADDED
-			modifier = {
-				owner.highest_held_title_tier >= tier_kingdom
-				OR = {
-					has_game_rule = hard_difficulty
-					has_game_rule = very_hard_difficulty
-				}
-				add = 9999
-			}
 			add_domicile_building = court_yurt_01
 		}
-		100 = {
+		1 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = family_yurt_01 }
 			}
 			add_domicile_building = family_yurt_01
 		}
-		1 = {
+		0 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = mystical_yurt_01 }
 			}
 			add_domicile_building = mystical_yurt_01
 		}
 		#ADDED - where.
-		10000 = {
+		100000 = {
 			trigger = {
 				NOT = { has_domicile_building_or_higher = trade_yurt_01 }
 			}
@@ -160,7 +151,7 @@ upgrade_random_yurt_external_building_effect = {
 				mass_warfare_yurt_02 = { add_domicile_building = mass_warfare_yurt_03 }
 			}
 		}
-		100 = {
+		1 = {
 			trigger = {
 				has_domicile_building_or_higher = court_yurt_01
 				NOT = {
@@ -173,7 +164,7 @@ upgrade_random_yurt_external_building_effect = {
 				court_yurt_02 = { add_domicile_building = court_yurt_03 }
 			}
 		}
-		10 = {
+		1 = {
 			trigger = {
 				has_domicile_building_or_higher = family_yurt_01
 				NOT = {

@@ -10,11 +10,11 @@ blood_legacy_1 = { # Noble Veins
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		if = {
 			limit = { num_of_good_genetic_traits >= 2 }
-			add = 39
+			add = 44
 		}
 		if = {
 			limit = {
@@ -53,7 +53,7 @@ warfare_legacy_1 = { # House of Warriors
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		add = { value = martial multiply = 2 }
 		if = {
@@ -82,7 +82,7 @@ law_legacy_1 = { # Mostly Fair
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		add = { value = stewardship multiply = 2 }
 		if = {
@@ -138,7 +138,7 @@ guile_legacy_1 = { # Ominous Reputation
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		add = { value = intrigue multiply = 2 }
 		if = {
@@ -195,7 +195,7 @@ erudition_legacy_1 = { # Vibrant Court
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		add = { value = learning multiply = 2 }
 		if = {
@@ -224,7 +224,7 @@ glory_legacy_1 = { # Desirable Match
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED 
 		add = { value = diplomacy multiply = 2 }
 		if = {
@@ -270,10 +270,10 @@ kin_legacy_1 = { # Bounteous Loins
 	}
 	
 	ai_chance = {
-		value = 11
+		value = 6	#prev 11
 		#ADDED - those 2
 		every_child = {
-			add = 10
+			add = 5
 		}
 		if = {
 			limit = { has_trait = family_first }

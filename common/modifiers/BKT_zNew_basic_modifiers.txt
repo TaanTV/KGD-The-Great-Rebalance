@@ -48,8 +48,9 @@ bkt_difficulty_higher_player = {
 }
 
 bkt_difficulty_higher_ai = {
+	courtier_and_guest_opinion = 40 # added
 	vassal_opinion = 10		#prev 20
-	accolade_glory_gain_mult = 0.8 # 0.1 test
+	accolade_glory_gain_mult = 0.1
 	men_at_arms_recruitment_cost = -0.8 
 	title_creation_cost_mult = -0.65
 	short_reign_duration_mult = -0.5

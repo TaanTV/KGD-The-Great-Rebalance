@@ -1,4 +1,4 @@
-accolade_creation_prestige_cost = {
+﻿accolade_creation_prestige_cost = {
 	value = 0
 	if = {
 		limit = {
@@ -72,8 +72,6 @@ accolade_uninteresting_base_value = 0
 accolade_standard_base_value = 200
 accolade_fascinating_base_value = 400
 accolade_must_have_base_value = 800
-accolade_omega_must_have_base_value = 1500 # ADDED It was introduced because the AI ​​chooses defense over attack.
-
 
 accolade_weighted_up_in_earlier_eras_value = {
 	value = 0

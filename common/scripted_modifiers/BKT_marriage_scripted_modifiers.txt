@@ -3544,6 +3544,8 @@ marriage_ai_accept_modifier = { ###MARRIAGE SCRIPTED MODIFIERS###
 		scope:puppet_or_actor = { government_has_flag = government_is_republic }
 		scope:recipient = {
 			NOT = { government_has_flag = government_is_republic }
+			#ADDED
+			NOT = { government_has_flag = government_is_merchant }
 		}
 		add = -40
 		desc = you_are_republic_value_desc

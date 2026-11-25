@@ -1,0 +1,48 @@
+﻿# Determines if a character is allowed to be granted specific title by another character
+# Root is the target character
+# scope:liege is the granter
+# scope:landed_title is the title in question
+# scope:government_type the government type to be switched to (not set: default government type)
+allowed_to_be_granted_titles_by = {
+	trigger_if = {
+		limit = {
+			scope:landed_title = {
+				tier <= tier_county
+				title_province = { has_holding_type = church_holding }
+			}
+			scope:liege.rite = {
+				NOT = { rite_has_parameter = lay_clergy }
+			}
+		}
+		custom_tooltip = {
+			text = grant_title_clerical_gender_tt
+			can_be_granted_theocratic_titles_by = { RULER = scope:liege }
+		}
+	}
+	trigger_else = {
+		can_be_granted_titles_by = { RULER = scope:liege }
+	}
+	
+	#ADDED - cant grant cities to nobles if you're not a republic
+	trigger_if = {
+		limit = { 
+			is_ruler = no
+			scope:landed_title.title_province ?= { has_holding_type = city_holding }
+		}
+		OR = {
+			is_lowborn = yes
+			has_trait = bastard
+			scope:liege = { government_has_flag = government_is_republic }
+		}
+	}
+	
+	#ADDED - cant create republics for free as non-republics
+	trigger_if = {
+		limit = { 
+			is_ruler = yes
+			government_has_flag = government_is_republic
+			highest_held_title_tier = tier_barony
+		}
+		scope:liege = { government_has_flag = government_is_republic }
+	}
+}

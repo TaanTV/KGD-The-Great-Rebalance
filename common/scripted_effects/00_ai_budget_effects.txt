@@ -155,6 +155,43 @@ ai_budget_manipulation_effect = {
 			}
 			add_character_flag = { flag = ai_revoke_recheck_cooldown years = 6 }
 		}
+		
+		#ADDED - lets try make admin-and-such AIs not hoard gold if they're generous and honorable and want to work for the state
+		if = {
+			limit = {
+				highest_held_title_tier >= tier_county
+				has_treasury = yes
+			}
+			if = {
+				limit = {
+					ai_greed < 0
+					OR = {
+						has_trait = loyal
+						AND = {
+							ai_greed < -90
+							ai_honor > 0
+						}
+					}
+					gold > major_gold_max_value
+				}
+				remove_short_term_gold = medium_gold_value
+				add_treasury = medium_gold_value
+			}
+			else_if = {		#also try not to be in debt plz
+				limit = {
+					ai_greed < 90
+					OR = {
+						ai_greed < 0
+						top_liege = this
+						gold > massive_gold_value
+					}
+					gold > medium_gold_value
+					treasury < 0
+				}
+				remove_short_term_gold = minor_gold_value
+				add_treasury = minor_gold_value
+			}
+		}
 
 		if = { # Conquerors are special; they don't care about states or eras - they just want to conquer, and put their resources towards just that.
 			limit = {
@@ -745,6 +782,8 @@ purge_excess_baron_gold_effect = {
 		limit = {
 			highest_held_title_tier = tier_barony
 			gold > major_gold_max_value
+			#ADDED
+			is_ai = yes
 		}
 		random = {
 			chance = 50

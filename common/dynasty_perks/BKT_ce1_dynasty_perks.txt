@@ -24,7 +24,7 @@ ce1_heroic_legacy_1 = { # Heroes of Old
 	}
 
 	ai_chance = {
-		value = 5			#prev 11
+		value = 3			#prev 11
 		if = {
 			limit = {
 				dynasty = {
@@ -62,7 +62,7 @@ ce1_legitimacy_legacy_1 = { # Sons of our Fathers
 					dynasty_prestige_level >= high_dynasty_prestige_level
 				}
 			}
-			multiply = 10
+			multiply = 5	#prev 10
 		}
 		if = {
 			limit = {

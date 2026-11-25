@@ -143,7 +143,7 @@ tradition_saharan_nomads = {
 	}
 	character_modifier = {
 		light_cavalry_maintenance_mult = -0.25
-		light_cavalry_recruitment_cost_mult = -0.25
+		light_cavalry_recruitment_cost_mult = -0.15
 		#oasis_prosperity_growth_factor = 0.1
 
 		# Nullify the maluses from world_africa_sahara_provisions_usage_multiplier_modifier.

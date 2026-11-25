@@ -104,8 +104,9 @@ baron_modifier = {
 	#knight_limit = -100			# "Barons don't get to have knights"	#UPD: actually that would be hilarious for revolts
 	accolades = -100				# Or accolades really
 	mercenary_hire_cost_mult = -0.33	#hehe
+	mercenary_hire_limit = 1			#heheh
 	levy_attack = 2						#hehehe
-	levy_toughness = 2					#hehehehe	
+	levy_toughness = 2					#heheheh
 }
 
 count_modifier = {

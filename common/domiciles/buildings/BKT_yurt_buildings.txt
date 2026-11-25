@@ -420,7 +420,7 @@ yurt_main_06 = {
 
 raid_main_yurt_01 = {
 	construction_time = @yurt_internal_construction_time_tier_1
-	allowed_domicile_types = { yurt }
+	#allowed_domicile_types = { yurt }
 	slot_type = internal
 	previous_building = yurt_main_01
 
@@ -437,7 +437,7 @@ raid_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0	#prev nomadic_capital_interior_building_1 # Getting this for the sake of a 200-point cap increase is absolute nonsense at this stage of the game.
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -618,7 +618,7 @@ raid_main_yurt_06 = {
 
 herd_main_yurt_01 = {
 	construction_time = @yurt_internal_construction_time_tier_1
-	allowed_domicile_types = { yurt }
+	#allowed_domicile_types = { yurt }
 	slot_type = internal
 	previous_building = yurt_main_01
 
@@ -634,7 +634,7 @@ herd_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0 # change nomadic_capital_interior_building_8		#prev nomadic_capital_extremely_important_building  # Please, stop the AI ​​from building this structure.
+		value = nomadic_capital_interior_building_8		#prev nomadic_capital_extremely_important_building
 		multiply = ai_building_domicile_factor
 	}
 
@@ -1030,7 +1030,7 @@ herd_conversion_main_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_extremely_important_building # change nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1 ### he’s rushing things too much with her
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -1211,7 +1211,7 @@ lifestyle_xp_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building # change nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1 # There are other improvements as well; let’s give them a chance.
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -1814,21 +1814,18 @@ herd_welfare_yurt_01 = {
 		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 600
 		#ADDED
-		county_fertility_growth_add = 0.2
+		county_fertility_growth_add = 0.15
+		character_capital_monthly_county_fertility_growth_add = 0.15
 	}
 
 	ai_value = {
-		value = nomadic_capital_extremely_important_building # change nomadic_capital_very_important_building	#prev nomadic_capital_extremely_important_building # Build it sooner; this is very important. 
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_extremely_important_building
 		#ADDED
 		if = {
 			limit = { 
-				free_external_domicile_building_slots <= 4
-				OR = {
-					free_external_domicile_building_slots <= 3 
-					owner.highest_held_title_tier >= tier_kingdom
-				}
+				free_external_domicile_building_slots <= 3
 			}
-			value = nomadic_capital_omega_invaluable_building # Build it sooner; this is very important.
+			value = nomadic_capital_omega_invaluable_building
 		}
 		multiply = ai_building_domicile_factor
 	}
@@ -1858,22 +1855,21 @@ herd_welfare_yurt_02 = {
 		#county_fertility_growth_mult = 0.05
 		herd_capacity_add = 400
 		#ADDED
-		county_fertility_growth_add = 0.2
+		county_fertility_growth_add = 0.15
+		character_capital_monthly_county_fertility_growth_add = 0.15
 	}
 
 	ai_value = {
 		value = nomadic_capital_exterior_building_1
-		# ADDED
 		if = {
 			limit = {
-				OR = {
-					herd >= 9000
-					herd >= { value = max_herd multiply = 0.8 }
+				herd >= {
+					value = max_herd
+					multiply = 0.8
 				}
 			}
-			value = nomadic_capital_literally_invaluable_building # change nomadic_capital_extremely_important_building ## Stop upgrading the tacticians' damn yurt; you're hitting the limit
+			value = nomadic_capital_extremely_important_building
 		}
-
 		multiply = ai_building_domicile_factor
 	}
 
@@ -1902,19 +1898,20 @@ herd_welfare_yurt_03 = {
 		herd_capacity_add = 600
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
 		#ADDED
-		county_fertility_growth_add = 0.2
+		county_fertility_growth_add = 0.15
+		character_capital_monthly_county_fertility_growth_add = 0.15
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building # nomadic_capital_exterior_building_1	#prev nomadic_capital_exterior_building_2 ## Built 2, finish building the 3rd one—need a mini slot.
+		value = nomadic_capital_exterior_building_1	#prev nomadic_capital_exterior_building_2
 		if = {
 			limit = {
-				OR = {
-					herd >= 9000
-					herd >= { value = max_herd multiply = 0.8 }
+				herd >= {
+					value = max_herd
+					multiply = 0.8
 				}
 			}
-			add = nomadic_capital_literally_invaluable_building # change nomadic_capital_extremely_important_building ## Stop upgrading the tacticians' damn yurt; you're hitting the limit
+			add = nomadic_capital_extremely_important_building
 		}
 		
 		multiply = ai_building_domicile_factor
@@ -1951,7 +1948,8 @@ herd_welfare_yurt_04 = {
 		herd_capacity_add = 1000
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
 		#ADDED
-		county_fertility_growth_add = 0.2
+		county_fertility_growth_add = 0.15
+		character_capital_monthly_county_fertility_growth_add = 0.15
 	}
 
 	province_modifier = {
@@ -1959,20 +1957,18 @@ herd_welfare_yurt_04 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building # nomadic_capital_exterior_building_1	#prev nomadic_capital_exterior_building_2 ## Built 2, finish building the 3rd one—need a mini slot.
+		value = nomadic_capital_exterior_building_3
 		if = {
 			limit = {
-				OR = {
-					herd >= 9000
-					herd >= { value = max_herd multiply = 0.8 }
+				herd >= {
+					value = max_herd
+					multiply = 0.8
 				}
 			}
-			add = nomadic_capital_literally_invaluable_building # change nomadic_capital_extremely_important_building ##  The AI ​​got carried away with improving the bahaturs' yurts.
+			add = nomadic_capital_extremely_important_building
 		}
-		
 		multiply = ai_building_domicile_factor
 	}
-
 
 	asset = {
 		icon = "gfx/interface/icons/domicile_building/domicile_herd_welfare_yurt.dds"
@@ -2005,7 +2001,8 @@ herd_welfare_yurt_05 = {
 		herd_capacity_add = 2000
 		vassal_herd_contribution_mult = 0.01	#prev 0.03
 		#ADDED
-		county_fertility_growth_add = 0.2
+		county_fertility_growth_add = 0.15
+		character_capital_monthly_county_fertility_growth_add = 0.15
 	}
 
 	ai_value = {
@@ -2054,6 +2051,7 @@ herd_welfare_yurt_06 = {
 		vassal_herd_contribution_mult = 0.02	#prev 0.03
 		#ADDED
 		county_fertility_growth_add = 0.25
+		character_capital_monthly_county_fertility_growth_add = 0.25
 	}
 
 	province_modifier = {
@@ -4028,7 +4026,7 @@ herd_wealth_yurt_01 = {
 
 	character_modifier = {
 		herd_capacity_add = 200
-		monthly_income_from_herd_mult = 0.03		#prev 0.01 
+		monthly_income_from_herd_mult = 0.03		#prev 0.01
 	}
 
 	ai_value = {
@@ -4127,13 +4125,13 @@ herd_wealth_yurt_04 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_4
-		# ADDED  ## If gold is scarce but you have herds, keep building up your economy.
+		#ADDED
 		if = {
 			limit = {
 				herd >= 10000
-				monthly_character_balance < 5
+				owner.monthly_character_balance < 5
 			}
-			value = nomadic_capital_extremely_important_building # prev nomadic_capital_extremely_important_building
+			value = nomadic_capital_extremely_important_building
 		}
 		
 		multiply = ai_building_domicile_factor
@@ -4166,14 +4164,15 @@ herd_wealth_yurt_05 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_5
-		# ADDED  ## If gold is scarce but you have herds, keep building up your economy.
+		#ADDED
 		if = {
 			limit = {
 				herd >= 10000
-				monthly_character_balance < 5
+				owner.monthly_character_balance < 5
 			}
 			value = nomadic_capital_extremely_important_building
-		}			
+		}
+		
 		multiply = ai_building_domicile_factor
 	}
 
@@ -4204,15 +4203,14 @@ herd_wealth_yurt_06 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_6
-		# ADDED  ## If gold is scarce but you have herds, keep building up your economy.
+		#ADDED
 		if = {
 			limit = {
 				herd >= 10000
-				monthly_character_balance < 5
+				owner.monthly_character_balance < 5
 			}
 			value = nomadic_capital_extremely_important_building
-		}	
-		
+		}
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -4489,6 +4487,13 @@ character_warfare_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_exterior_building_1
+		#ADDED
+		if = {
+			limit = { 
+				free_external_domicile_building_slots <= 3
+			}
+			value = nomadic_capital_omega_invaluable_building
+		}
 		multiply = ai_building_domicile_factor
 	}
 
@@ -5776,13 +5781,6 @@ mass_warfare_yurt_01 = {
 
 	ai_value = {
 		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_very_important_building
-		# ADDED
-		if = {
-			limit = {
-				monthly_character_balance < 2 # We’re reducing the weight so the AI ​​builds a trade yurt and hires some damn professionals.
-			}
-			value = nomadic_capital_extremely_important_building
-		}	
 		multiply = ai_building_domicile_factor
 	}
 
@@ -5908,13 +5906,14 @@ mass_warfare_yurt_04 = {
 
 	ai_value = {
 		value = nomadic_capital_interior_building_2		#prev nomadic_capital_interior_building_3
-		# ADDED 
+		#ADDED
 		if = {
 			limit = {
-				monthly_character_balance >= 15
+				has_domicile_building_or_higher = yurt_main_04
 			}
 			value = nomadic_capital_extremely_important_building # You are wealthy; the rest of the world must bow before your army.
-		}	
+		}
+		
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -5958,13 +5957,13 @@ mass_warfare_yurt_05 = {
 
 	ai_value = {
 		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_4
-		# ADDED 
+		#ADDED
 		if = {
 			limit = {
-				monthly_character_balance >= 15
+				has_domicile_building_or_higher = yurt_main_04
 			}
-			value = nomadic_capital_extremely_important_building # You are wealthy; the rest of the world must bow before your army.
-		}	
+			value = nomadic_capital_literally_invaluable_building # You are wealthy; the rest of the world must bow before your army.
+		}
 		
 		
 		multiply = ai_building_domicile_factor
@@ -6016,13 +6015,7 @@ mass_warfare_yurt_06 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_5
-		if = {
-			limit = {
-				monthly_character_balance >= 15
-			}
-			value = nomadic_capital_omega_invaluable_building # You are wealthy; the rest of the world must bow before your army.
-		}	
+		value = nomadic_capital_omega_invaluable_building	#prev nomadic_capital_interior_building_5
 		
 		
 		multiply = ai_building_domicile_factor
@@ -6918,7 +6911,7 @@ raiding_yurt_01 = {
 	}
 
 	ai_value = {
-		value = low_priority # add nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_1 # Don't get distracted from your core buildings; you need to maintain tempo in the game. Once the core is done, you'll have time to finish building the rest.
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -6949,7 +6942,7 @@ raiding_yurt_02 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_2
+		value = nomadic_capital_interior_building_2
 		multiply = ai_building_domicile_factor
 	}
 
@@ -6982,7 +6975,7 @@ raiding_yurt_03 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_3
+		value = nomadic_capital_interior_building_3
 		
 		
 		multiply = ai_building_domicile_factor
@@ -7015,7 +7008,7 @@ raiding_yurt_04 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_4
+		value = nomadic_capital_interior_building_4
 		
 		
 		multiply = ai_building_domicile_factor
@@ -7048,7 +7041,7 @@ raiding_yurt_05 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_5
+		value = nomadic_capital_interior_building_5
 		
 		
 		multiply = ai_building_domicile_factor
@@ -7083,7 +7076,7 @@ raiding_yurt_06 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_6
+		value = nomadic_capital_interior_building_6
 		
 		
 		multiply = ai_building_domicile_factor
@@ -7367,21 +7360,11 @@ court_yurt_01 = {
 	}
 
 	ai_value = {
-		value =  nomadic_capital_interior_building_5 # change nomadic_capital_exterior_building_1 # Free up slot 3
+		value = nomadic_capital_exterior_building_1
 		#ADDED
 		if = {
 			limit = { 
 				free_external_domicile_building_slots <= 2
-			}
-			value = nomadic_capital_extremely_important_building
-		} 
-		else_if = {
-			limit = {
-				owner.highest_held_title_tier >= tier_kingdom
-				OR = {
-					has_game_rule = hard_difficulty
-					has_game_rule = very_hard_difficulty
-				}
 			}
 			value = nomadic_capital_literally_invaluable_building
 		}
@@ -8497,7 +8480,7 @@ feast_yurt_01 = {
 	}
 
 	ai_value = {
-		value = low_priority # 1 # add nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1 # ## There’s a building dedicated to fear and the hunt for subversion—that’s a bit more interesting.
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -8921,7 +8904,7 @@ dynasty_court_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0 # change nomadic_capital_interior_building_1     ###AI doesn’t know how to use a yurt. Negative utility.
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -9354,7 +9337,7 @@ family_yurt_01 = {
 	}
 
 	ai_value = {
-		value =  nomadic_capital_interior_building_7 # nomadic_capital_extremely_important_building		#prev nomadic_capital_exterior_building_1 # AI finding wives = low priority
+		value = nomadic_capital_interior_building_4		#prev nomadic_capital_exterior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -10139,7 +10122,7 @@ personal_chamber_yurt_04 = {
 	}
 
 	ai_value = {
-		value = low_priority # change nomadic_capital_interior_building_4
+		value = nomadic_capital_interior_building_8		#prev nomadic_capital_interior_building_4
 		
 		
 		multiply = ai_building_domicile_factor
@@ -10175,7 +10158,7 @@ personal_chamber_yurt_05 = {
 	}
 
 	ai_value = {
-		value = low_priority # add nomadic_capital_interior_building_5
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_5
 		
 		
 		multiply = ai_building_domicile_factor
@@ -10211,7 +10194,7 @@ personal_chamber_yurt_06 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_6
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_interior_building_6
 		
 		
 		multiply = ai_building_domicile_factor
@@ -10550,7 +10533,7 @@ marriage_yurt_04 = {
 	}
 
 	ai_value = {
-		value = low_priority # change nomadic_capital_interior_building_3	#prev nomadic_capital_interior_building_4
+		value = nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_4
 		
 		
 		multiply = ai_building_domicile_factor
@@ -10585,7 +10568,7 @@ marriage_yurt_05 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_5
+		value = nomadic_capital_interior_building_2	#prev nomadic_capital_interior_building_5
 		
 		
 		multiply = ai_building_domicile_factor
@@ -10620,7 +10603,7 @@ marriage_yurt_06 = {
 	}
 
 	ai_value = {
-		value = low_priority # nomadic_capital_interior_building_4	#prev nomadic_capital_interior_building_6
+		value = nomadic_capital_interior_building_6	#prev nomadic_capital_interior_building_6
 		
 		
 		multiply = ai_building_domicile_factor
@@ -11287,7 +11270,7 @@ mystical_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0 # change nomadic_capital_exterior_building_1 # low_priority There are already plenty of buildings and enough variety as it is.
+		value = nomadic_capital_interior_building_8	#prev nomadic_capital_exterior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -13072,23 +13055,6 @@ trade_yurt_01 = {
  
 	ai_value = {
 		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_1
-		#ADDED 
-		if = {
-			limit = {
-				owner.highest_held_title_tier >= tier_kingdom
-				OR = {
-					has_game_rule = hard_difficulty
-					has_game_rule = very_hard_difficulty
-				}
-			}
-			value = nomadic_capital_exterior_building_1
-		}
-		else_if = {
-			limit = {
-				monthly_character_balance < 3
-			}
-			value = nomadic_capital_omega_invaluable_building # # No money. That means no professionals.
-		}
 		multiply = ai_building_domicile_factor
 	}
 
@@ -13139,12 +13105,8 @@ trade_yurt_02 = {
 
 	ai_value = {
 		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_exterior_building_2
-		else_if = {
-			limit = {
-				monthly_character_balance < 3
-			}
-			value = nomadic_capital_omega_invaluable_building
-		}
+		
+		
 		multiply = ai_building_domicile_factor
 	}
 
@@ -13195,12 +13157,7 @@ trade_yurt_03 = {
 
 	ai_value = {
 		value = nomadic_capital_very_important_building	#prev nomadic_capital_exterior_building_3
-		else_if = {
-			limit = {
-				monthly_character_balance < 3
-			}
-			value = nomadic_capital_omega_invaluable_building
-		}
+		
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -13257,18 +13214,7 @@ trade_yurt_04 = {
 
 	ai_value = {
 		value = nomadic_capital_exterior_building_4
-		else_if = {
-			limit = {
-				gold >= 2000
-			}
-			value = nomadic_capital_omega_invaluable_building
-		}
-		else_if = {
-			limit = {
-				monthly_character_balance < 3
-			}
-			value = nomadic_capital_omega_invaluable_building
-		}		
+		
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -13429,7 +13375,7 @@ paiza_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_omega_invaluable_building # change nomadic_capital_literally_invaluable_building # prev nomadic_capital_interior_building_1  # Damn it, stop building a merchant_yurt in front of this.
+		value = nomadic_capital_literally_invaluable_building	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -13650,7 +13596,7 @@ innovation_yurt_01 = {
 	}
 
 	ai_value = {
-		value = 0 # change nomadic_capital_interior_building_1 # Innovations among nomads?
+		value = nomadic_capital_interior_building_8		#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -14501,16 +14447,11 @@ char_trade_yurt_01 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.03 # change 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.03	#prev 0.01
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_1
-		# ADDED
-		if = {
-			limit = { herd > 15000 }
-			value = nomadic_capital_omega_invaluable_building
-		}
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_1
 		multiply = ai_building_domicile_factor
 	}
 
@@ -14539,17 +14480,11 @@ char_trade_yurt_02 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.03 # change 0.02	#prev 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.03	#prev 0.01
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_2
-		# ADDED 
-		if = {
-			limit = { herd > 15000 }
-			value = nomadic_capital_omega_invaluable_building
-		}
-
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_2
 		multiply = ai_building_domicile_factor
 	}
 
@@ -14579,15 +14514,11 @@ char_trade_yurt_03 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.03 # change 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.03	#prev 0.01
 	}
 
 	ai_value = {
-		value = nomadic_capital_interior_building_3
-		if = {
-			limit = { herd > 15000 }
-			value = nomadic_capital_omega_invaluable_building
-		}	
+		value = nomadic_capital_extremely_important_building	#prev nomadic_capital_interior_building_3
 		multiply = ai_building_domicile_factor
 	}
 
@@ -14617,20 +14548,19 @@ char_trade_yurt_04 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.03 # change 0.02	#prev 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.03	#prev 0.01
 	}
 
 	ai_value = {
 		value = nomadic_capital_interior_building_4
-		# ADDED
+		#ADDED
 		if = {
-			limit = { herd > 15000 }
-			value = nomadic_capital_omega_invaluable_building
-		}	
-		if = {
-			limit = { herd < 5000 }
-			value = low_priority # 1
-		}		
+			limit = {
+				herd >= 10000
+				owner.monthly_character_balance < 5
+			}
+			value = nomadic_capital_extremely_important_building
+		}
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -14661,17 +14591,19 @@ char_trade_yurt_05 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.04 # change 0.02	#prev 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.04	#prev 0.01
 	}
 
 	ai_value = {
 		value = nomadic_capital_interior_building_5
-		# ADDED
+		#ADDED
 		if = {
-			limit = { herd < 5000 }
-			value = low_priority # 1
-		}	
-		
+			limit = {
+				herd >= 10000
+				owner.monthly_character_balance < 5
+			}
+			value = nomadic_capital_extremely_important_building
+		}
 		
 		multiply = ai_building_domicile_factor
 	}
@@ -14702,17 +14634,20 @@ char_trade_yurt_06 = {
 	}
 
 	character_modifier = {
-		monthly_income_from_herd_mult = 0.04 # change 0.02	#prev 0.01 # like golden fleeces
+		monthly_income_from_herd_mult = 0.04	#prev 0.01
 	}
 
 	ai_value = {
 		value = nomadic_capital_interior_building_6
-		# ADDED
+		#ADDED
 		if = {
-			limit = { herd < 5000 }
-			value = low_priority # 1
-		}	
-
+			limit = {
+				herd >= 10000
+				owner.monthly_character_balance < 5
+			}
+			value = nomadic_capital_extremely_important_building
+		}
+		
 		multiply = ai_building_domicile_factor
 	}
 
@@ -15764,15 +15699,12 @@ loyal_soldiers_yurt_01 = {
 	}
 
 	ai_value = {
-		value = nomadic_capital_very_important_building # change change nomadic_capital_omega_invaluable_building	#prev nomadic_capital_interior_building_1 
+		value = nomadic_capital_very_important_building	#prev nomadic_capital_interior_building_1
 		if = {
 			limit = {
-				OR = {
-					owner.highest_held_title_tier = tier_kingdom
-					owner.highest_held_title_tier = tier_empire
-				}
+				owner.highest_held_title_tier >= tier_kingdom
 			}
-			value = nomadic_capital_omega_invaluable_building	# Kings and emperors, I beg you: do not fall apart.
+			value = nomadic_capital_omega_invaluable_building
 		}
 		multiply = ai_building_domicile_factor
 	}

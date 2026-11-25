@@ -72,6 +72,27 @@ Very soon:
 #TODO: consider: https://forum.paradoxplaza.com/forum/threads/council-rights-guaranteed-shouldnt-be-a-vassal-contract-option.1942600/post-31610258
 
 
+####	0.14.0.2###
+Updatd to 1.21.0.3 
+- Increased title creation costs back to pre-hotfix values
+- Increased administrative/celestial/meritocratic levy size penalty back to pre-hotfix value
+- Swapped martial per stress level for mercenary limit bonus for Scoundrel accolade
+- Added +1 mercenary limit to Mercenary Sponsor modifier
+- Added capital county fertility bonus and reduced general county fertility bonus of Millet Storage yurt
+- Removed Loot Storage and Improved Pasturages (both from Main Yurt) Internal yurts
+- Restricted granting republican barons titles for non-republican lieges
+- Restricted granting city baronies to non-bastard charaters with a dynasty for non-republican lieges
+- Made AI merchants more likely to accept marriages from republican rulers
+- Made AI maybe tiny bit slightly even more better-er at building yurts 
+- Fixed accidental reversion of county fertility modifiers from held nomadic/tribal holdings
+- Updated localization files
+
+####	0.14.0.1###
+Updatd to 1.21.0 Hotfix
+- Added +25% levy size bonus to military/frontier province types of all admin governments
+- Reduced mercenary cost penalty of all admin governments a bit
+- Made AI transfer some of their gold into treasury if it's treasury-bunkrupt and not very greedy 
+- Made AI sometimes transfer their gold into treasury if it's generous enough and has a lot of gold
 
 ####	0.14.0	###
 Updated to 1.21.0

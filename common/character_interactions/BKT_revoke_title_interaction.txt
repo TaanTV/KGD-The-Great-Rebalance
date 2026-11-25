@@ -506,6 +506,17 @@
 				trigger_event = char_interaction.0199
 			}
 		}
+		# Code hands the revoked primary title's treasury to the revoker, so empty a baron's treasury first
+		scope:recipient = {
+			if = {
+				limit = {
+					scope:landed_title.tier = tier_barony
+					primary_title = scope:landed_title
+					has_treasury = yes
+				}
+				hidden_effect = { empty_treasury_when_abandoning_landed_life_effect = yes }
+			}
+		}
 		revoke_title_interaction_effect = yes
 
 		if = {
@@ -708,6 +719,17 @@
 					}
 					scope:recipient = {
 						baron_start_refusal_war = { CB = refused_liege_demand_war TARGET = scope:puppet_or_actor }
+						hidden_effect = {
+							if = {
+								limit = { has_treasury = yes }
+								save_temporary_scope_value_as = {
+									name = gold_to_transfer
+									value = { add = gold multiply = 0.75 }
+								}
+								remove_short_term_gold = scope:gold_to_transfer
+								add_treasury = scope:gold_to_transfer
+							}
+						}
 					}
 				}
 				else = { add_prestige = minor_prestige_loss }

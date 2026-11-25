@@ -1,4 +1,4 @@
-﻿# standard costs
+# standard costs
 @maa_buy_cost = 150
 @maa_low_maintenance_cost = 1.0
 @maa_high_maintenance_cost = 5.0
@@ -131,7 +131,7 @@ tarkhan = {
 	
 	stack = 20
 	ai_quality = { 
-		value = @[cultural_maa_extra_ai_score + 20] 
+		value = @[cultural_maa_extra_ai_score + 500] # change 20 # 580 too match
 		#ADDED
 		add = counter_synergy_ai_weight_heavy_cavalry
 	}
